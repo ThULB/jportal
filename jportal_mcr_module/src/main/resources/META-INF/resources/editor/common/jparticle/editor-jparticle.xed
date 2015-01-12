@@ -12,37 +12,37 @@
       <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed" ref="participants" />
       <xed:include uri="xslStyle:jp-editor-template?xedIncParam=jportal_class_00000008:webapp:/editor/common/editor-common.xed" ref="dates" />
 
-      <xed:repeat xpath="refs[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/ref[@inherited='0'][@form='plain']" min="0" max="10">
+      <xed:repeat xpath="refs[@class='MCRMetaLangText']/ref[@inherited='0'][@form='plain']" min="0" max="10">
         <jp:template name="textInput" xpath="." i18n="editormask.labels.pub_reference" maxlength="128" />
       </xed:repeat>
 
-      <xed:repeat xpath="identis[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/identi[@inherited='0'][@form='plain']" min="0" max="10">
+      <xed:repeat xpath="identis[@class='MCRMetaLangText']/identi[@inherited='0'][@form='plain']" min="0" max="10">
         <jp:template name="selectInput" xpath="@type" i18n="metaData.jpjournal.identi.issn" buttons="true" classification="jportal_class_00000010" validate="interdependentSelect" />
         <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="64" />
       </xed:repeat>
 
-      <jp:template name="textInput" xpath="sizes[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/size[@inherited='0'][@form='plain']" i18n="editormask.labels.size"
+      <jp:template name="textInput" xpath="sizes[@class='MCRMetaLangText']/size[@inherited='0'][@form='plain']" i18n="editormask.labels.size"
         maxlength="48" />
     </jp:section>
 
     <jp:section title="{i18n:metaData.headlines.contantdiscr}">
       <jp:template name="title" i18n="metaData.headlines.contantdiscr" />
 
-      <xed:repeat xpath="keywords[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/keyword[@inherited='0'][@form='plain']" min="0" max="60">
+      <xed:repeat xpath="keywords[@class='MCRMetaLangText']/keyword[@inherited='0'][@form='plain']" min="0" max="60">
         <jp:template name="textInput" xpath="." i18n="editormask.labels.keyword" maxlength="64" buttons="true" />
       </xed:repeat>
 
-      <xed:repeat xpath="abstracts[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/abstract[@inherited='0'][@form='plain']" min="0" max="3">
+      <xed:repeat xpath="abstracts[@class='MCRMetaLangText']/abstract[@inherited='0'][@form='plain']" min="0" max="3">
         <jp:template name="textArea" xpath="." i18n="editormask.labels.abstract" buttons="true" />
       </xed:repeat>
 
-      <xed:repeat xpath="notes[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/note[@inherited='0'][@form='plain']" min="0" max="10">
+      <xed:repeat xpath="notes[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain']" min="0" max="10">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.note" buttons="true" classification="jportal_class_00000060" validate="interdependentSelect" />
         <jp:template name="textArea" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:repeat>
 
       <xed:if test="$journal/metadata/hidden_pubTypesID/hidden_pubTypeID">
-        <xed:repeat xpath="types[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/type[@inherited='0']" min="0" max="10">
+        <xed:repeat xpath="types[@class='MCRMetaClassification']/type[@inherited='0']" min="0" max="10">
           <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_pubTypesID/hidden_pubTypeID" buttons="true"
             loadLabel="xClassificationLabel:{$journal/@ID}:hidden_pubTypesID/hidden_pubTypeID" />
           <xed:bind xpath="@classid">
@@ -51,7 +51,7 @@
         </xed:repeat>
       </xed:if>
       <xed:if test="$journal/metadata/hidden_rubricsID/hidden_rubricID">
-        <xed:repeat xpath="rubrics[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/rubric[@inherited='0']" min="0" max="10">
+        <xed:repeat xpath="rubrics[@class='MCRMetaClassification']/rubric[@inherited='0']" min="0" max="10">
           <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_rubricsID/hidden_rubricID" buttons="true"
             loadLabel="xClassificationLabel:{$journal/@ID}:hidden_rubricsID/hidden_rubricID" />
           <xed:bind xpath="@classid">
@@ -60,7 +60,7 @@
         </xed:repeat>
       </xed:if>
       <xed:if test="$journal/metadata/hidden_classispub/hidden_classipub">
-        <xed:repeat xpath="classispub[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/classipub[@inherited='0']" min="0" max="10">
+        <xed:repeat xpath="classispub[@class='MCRMetaClassification']/classipub[@inherited='0']" min="0" max="10">
           <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_classispub/hidden_classipub" buttons="true"
             loadLabel="xClassificationLabel:{$journal/@ID}:hidden_classispub/hidden_classipub" />
           <xed:bind xpath="@classid">
@@ -69,7 +69,7 @@
         </xed:repeat>
       </xed:if>
       <xed:if test="$journal/metadata/hidden_classispub2/hidden_classipub2">
-        <xed:repeat xpath="classispub2[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/classipub2[@inherited='0']" min="0" max="10">
+        <xed:repeat xpath="classispub2[@class='MCRMetaClassification']/classipub2[@inherited='0']" min="0" max="10">
           <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_classispub2/hidden_classipub2" buttons="true"
             loadLabel="xClassificationLabel:{$journal/@ID}:hidden_classispub2/hidden_classipub2" />
           <xed:bind xpath="@classid">
@@ -78,7 +78,7 @@
         </xed:repeat>
       </xed:if>
       <xed:if test="$journal/metadata/hidden_classispub3/hidden_classipub3">
-        <xed:repeat xpath="classispub3[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/classipub3[@inherited='0']" min="0" max="10">
+        <xed:repeat xpath="classispub3[@class='MCRMetaClassification']/classipub3[@inherited='0']" min="0" max="10">
           <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_classispub3/hidden_classipub3" buttons="true"
             loadLabel="xClassificationLabel:{$journal/@ID}:hidden_classispub3/hidden_classipub3" />
           <xed:bind xpath="@classid">
@@ -87,7 +87,7 @@
         </xed:repeat>
       </xed:if>
       <xed:if test="$journal/metadata/hidden_classispub4/hidden_classipub4">
-        <xed:repeat xpath="classispub4[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/classipub4[@inherited='0']" min="0" max="10">
+        <xed:repeat xpath="classispub4[@class='MCRMetaClassification']/classipub4[@inherited='0']" min="0" max="10">
           <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_classispub4/hidden_classipub4" buttons="true"
             loadLabel="xClassificationLabel:{$journal/@ID}:hidden_classispub4/hidden_classipub4" />
           <xed:bind xpath="@classid">

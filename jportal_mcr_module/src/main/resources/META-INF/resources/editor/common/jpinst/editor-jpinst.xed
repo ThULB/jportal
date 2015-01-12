@@ -5,14 +5,14 @@
     <jp:section title="{i18n:metaData.headlines.jpinst.names}">
       <jp:template name="title" i18n="metaData.headlines.jpinst.names" />
 
-      <xed:bind xpath="names[@class='MCRMetaInstitutionName'][@heritable='true'][@notinherit='false']/name[@inherited='0']">
+      <xed:bind xpath="names[@class='MCRMetaInstitutionName']/name[@inherited='0']">
         <jp:template name="textInput" xpath="fullname" i18n="editormask.labels.AINameName" maxlength="128"
           validate="required" />
         <jp:template name="textInput" xpath="nickname" i18n="editormask.labels.AINameNick" maxlength="32" />
         <jp:template name="textInput" xpath="property" i18n="editormask.labels.AINameProp" maxlength="32" />
       </xed:bind>
 
-      <xed:repeat xpath="alternatives[@class='MCRMetaXML'][@heritable='true'][@notinherit='true']/alternative[@inherited='0']" min="0" max="1024">
+      <xed:repeat xpath="alternatives[@class='MCRMetaXML']/alternative[@inherited='0']" min="0" max="1024">
         <jp:template name="textInput" xpath="name" i18n="editormask.person.Lalternative" maxlength="128"
           buttons="true" />
           <xed:cleanup-rule xpath="//alternative" relevant-if="(string-length(name/text()) > 0)" />
@@ -22,7 +22,7 @@
     <jp:section title="{i18n:metaData.headlines.jpinst.address}">
       <jp:template name="title" i18n="metaData.headlines.jpinst.address" />
 
-      <xed:bind xpath="addresses[@class='MCRMetaAddress'][@heritable='true'][@notinherit='false']/address[@inherited='0']">
+      <xed:bind xpath="addresses[@class='MCRMetaAddress']/address[@inherited='0']">
         <jp:template name="textInput" xpath="country" i18n="editormask.labels.AAddressCountry" maxlength="128" />
         <jp:template name="textInput" xpath="zipcode" i18n="editormask.labels.AAddressZIP" maxlength="10" />
         <jp:template name="textInput" xpath="city" i18n="editormask.labels.AAddressCity" maxlength="128" />
@@ -35,7 +35,7 @@
       <jp:template name="title" i18n="metaData.headlines.jpinst.contact" />
 
       <xed:repeat
-        xpath="phones[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/phone[@xml:lang='de'][@inherited='0'][@form='plain']"
+        xpath="phones[@class='MCRMetaLangText']/phone[@xml:lang='de'][@inherited='0'][@form='plain']"
         min="1" max="5">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.LPhone" buttons="true"
           maxlength="128"  option="true" validate="interdependentSelect">
@@ -46,14 +46,14 @@
         <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
       </xed:repeat>
 
-      <xed:bind xpath="urls[@class='MCRMetaLink'][@heritable='true'][@notinherit='false']/url[@inherited='0'][@xlink:type='locator']">
+      <xed:bind xpath="urls[@class='MCRMetaLink']/url[@inherited='0'][@xlink:type='locator']">
         <jp:template name="textInput" xpath="@xlink:title" i18n="editormask.labels.LURL" maxlength="128"
            placeholder="editormask.labels.AURLTitle" bottom="littleSpace" />
         <jp:template name="textInput" xpath="@xlink:href" placeholder="editormask.labels.AURLReference" maxlength="128" />
       </xed:bind>
 
       <jp:template name="textInput"
-        xpath="emails[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/email[@inherited='0'][@form='plain']" i18n="editormask.labels.LEmail"
+        xpath="emails[@class='MCRMetaLangText']/email[@inherited='0'][@form='plain']" i18n="editormask.labels.LEmail"
         maxlength="128" />
     </jp:section>
 
@@ -61,9 +61,9 @@
       <jp:template name="title" i18n="metaData.headlines.misc" />
 
       <jp:template name="textArea"
-        xpath="notes[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/note[@inherited='0'][@form='plain']" i18n="editormask.labels.LNote" />
+        xpath="notes[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain']" i18n="editormask.labels.LNote" />
 
-      <xed:repeat xpath="identifiers[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/identifier[@inherited='0'][@form='plain']"
+      <xed:repeat xpath="identifiers[@class='MCRMetaLangText']/identifier[@inherited='0'][@form='plain']"
         min="0" max="10">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
            option="true" validate="interdependentSelect">
@@ -75,7 +75,7 @@
       </xed:repeat>
 
       <jp:template name="textInput"
-        xpath="def.doubletOf[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/doubletOf[@inherited='0'][@form='plain']"
+        xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']"
         i18n="editormask.labels.LdoubletOf" maxlength="128" />
     </jp:section>
   </xed:template>
