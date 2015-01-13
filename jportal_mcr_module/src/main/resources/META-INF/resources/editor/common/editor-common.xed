@@ -48,7 +48,7 @@
 
   <xed:template id="subtitles">
     <xed:repeat
-      xpath="subtitles[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/subtitle[@inherited='0'][@form='plain']" min="0" max="20">
+      xpath="subtitles[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/subtitle[@inherited='0'][@form='plain']" min="0">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.subtitle" buttons="true"
         classification="jportal_class_00000006"  validate="interdependentSelect" />
       <jp:template name="textArea" xpath="." selectXpath="@type" validate="interdependentInput" />
