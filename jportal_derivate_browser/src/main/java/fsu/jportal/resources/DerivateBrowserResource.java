@@ -48,7 +48,6 @@ import org.xml.sax.SAXException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
 import fsu.jportal.backend.Derivate;
@@ -304,9 +303,9 @@ public class DerivateBrowserResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("upload")
-    public Response getUpload(@FormDataParam("file") InputStream inputStream, @FormDataParam("file") FormDataContentDisposition header, @FormDataParam("size") long filesize, @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID, @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite){
+    public Response getUpload(@FormDataParam("file") InputStream inputStream, @FormDataParam("filename") String filename, @FormDataParam("size") long filesize, @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID, @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite){
         if (overwrite){
-            if (DerivateTools.delete(MCRPath.getPath(derivateID, path + "/" + header.getFileName())) != 1){
+            if (DerivateTools.delete(MCRPath.getPath(derivateID, path + "/" + filename)) != 1){
                 return Response.serverError().build();
             }
         }
@@ -315,7 +314,7 @@ public class DerivateBrowserResource {
         try {
             handler.startUpload(1);
             session.commitTransaction();
-            handler.receiveFile(path + "/" + header.getFileName(), inputStream, filesize, null);
+            handler.receiveFile(path + "/" + filename, inputStream, filesize, null);
             session.beginTransaction();
             handler.finishUpload();
             handler.unregister();

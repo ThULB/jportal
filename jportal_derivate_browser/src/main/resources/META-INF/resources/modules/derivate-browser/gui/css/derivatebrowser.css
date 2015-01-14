@@ -312,6 +312,19 @@ span.btn{
 	max-height: 200px;
 }
 
+.img-placeholder-popover{
+	vertical-align: top;
+	max-width: 50%;
+	max-height: 200px;
+}
+
+.img-placeholder-startfile{
+	max-width: 400px;
+	max-height: 200px;
+	overflow: hidden;
+	margin: auto;
+}
+
 .checked{
 /* 	background-color: #3276B1; */
 /* 	background-color:  #3f51b5; */
@@ -337,6 +350,7 @@ span.btn{
 
 .popover {
     max-width: 552px;
+    color: #000;
 }
 
 .popover-content dl {
@@ -568,6 +582,11 @@ li.derivate-browser-breadcrumb-entry{
 	max-width: 100px;
 }
 
+.img-placeholder-upload{
+	max-height: 50px;
+	max-width: 100px;
+}
+
 .upload-preview-name{
 	padding-left: 5px;
 	width: 150px;
@@ -690,9 +709,17 @@ li.derivate-browser-breadcrumb-entry{
 }
 
 .overwrite-img{
-	width: 50%;
 	vertical-align: top;
 	box-shadow: 0px 1px 1px 0px rgba(50, 50, 50, 0.2);
+	max-width: 250px;
+	max-height: 150px;
+}
+
+.img-placeholder-overwrite{
+	vertical-align: top;
+	box-shadow: 0px 1px 1px 0px rgba(50, 50, 50, 0.2);
+	max-width: 250px;
+	max-height: 150px;
 }
 
 .overwrite-label{
@@ -744,13 +771,18 @@ li.derivate-browser-breadcrumb-entry{
 	z-index: 20;
 }
 
-#drag-img{
+#drag-img-div{
 	position: absolute;
 	max-width: 200px;
 	max-height: 200px;
 	z-index: 20;
 	box-shadow: 0px 2px 10px 0px rgba(50, 50, 50, 0.8);
 	background-size: 100%; 
+}
+
+#drag-img-div > img{
+	max-width: 200px;
+	max-height: 200px;
 }
 
 #drag-doc > span{
@@ -872,6 +904,7 @@ li.derivate-browser-breadcrumb-entry{
 #lightbox-upload-overwrite-save{
 	display: inline-block;
 	float:right;
+	width: 100%;
 }
 
 #lightbox-upload-overwrite-buttons{

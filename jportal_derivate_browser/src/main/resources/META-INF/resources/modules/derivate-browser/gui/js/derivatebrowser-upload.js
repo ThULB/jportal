@@ -5,6 +5,7 @@ function Upload(docID, deriID, path, file) {
 	this.name = file.name;
 	this.size = getReadableSize(file.size, 0);
 	this.rawSize = file.size;
+	this.type = file.type;
 	this.lastmodified = file.lastModifiedDate.toLocaleDateString() + " " + file.lastModifiedDate.toLocaleTimeString();
 	this.file = file;
 	this.exists = undefined;
@@ -15,9 +16,7 @@ function Upload(docID, deriID, path, file) {
 Upload.prototype.getStatus = function() {
 	var template = $("#upload-entry-template").html();
 	var status = $(Mustache.render(template, this));
-	if (this.file.type.match(/image.*/)){
-		readImg(this.file, $(status).find("img.upload-preview-image"));
-	}
+	readImg(this.file, $(status).find("img.upload-preview-image"), this);
 	return status;
 }
 
@@ -27,6 +26,7 @@ Upload.prototype.getFormData = function() {
     data.append("documentID", this.docID);
     data.append("derivateID", this.deriID);
     data.append("path", this.path);
+    data.append("filename", this.name);
     data.append("size", this.rawSize);
     data.append("file", this.file);
 	data.append("overwrite", this.exists);
@@ -54,7 +54,7 @@ Upload.prototype.getCheckJson = function() {
 }
 
 Upload.prototype.getaddToBrowserJson = function() {
-	var currentDate = new Date()
+	var currentDate = new Date();
 	var json ={
 			name: this.name,
 			size: this.rawSize,
@@ -71,11 +71,12 @@ Upload.prototype.askOverwrite = function(existingFile, deriID, path) {
 	var uploadOverwriteTemplate = $("#upload-overwrite-template").html();
 	var originalFileOutput = $(Mustache.render(uploadOverwriteTemplate, existingFile));
 	//var newFileOutput = $(Mustache.render(fileEntryTemplate, file));
+	derivateBrowserTools.setImgPath($(originalFileOutput).find(".overwrite-img"), deriID, path + "/" + existingFile.name);
 	$(originalFileOutput).find(".img-size").html(getReadableSize($(originalFileOutput).find(".img-size").html(),0));
 	$("#lightbox-upload-overwrite-original-file").html(originalFileOutput);
 	
 	var newFileOutput = $(Mustache.render(uploadOverwriteTemplate, this));
-	readImg(this.file, $(newFileOutput).find("img.overwrite-img"));
+	readImg(this.file, $(newFileOutput).find("img.overwrite-img"), this);
 	$("#lightbox-upload-overwrite-new-file").html(newFileOutput);
 	$("#lightbox-upload-overwrite-filename").html(existingFile.name);
 	showModalWhenReady();
@@ -115,17 +116,30 @@ function convertSize(sizeAndUnit){
 	return {number: sizeAndUnit.number, unit: sizeAndUnit.unit};
 }
 
-function readImg(file, display) {
-	if (this.img != undefined){
-		display.attr("src", this.img);
+function readImg(file, display, upload) {
+	if (!upload.type.endsWith("pdf")){
+		if (file.size < 2097152){
+			if (upload.img != undefined){
+				display.attr("src", upload.img);
+				$(display).siblings(".img-placeholder").addClass("hidden");
+				$(display).removeClass("hidden");
+			}
+			else{
+				var reader = new FileReader();
+				reader.onload =  function(e) {
+					display.attr("src", reader.result);
+					upload.img = reader.result;
+					$(display).siblings(".img-placeholder").addClass("hidden");
+					$(display).removeClass("hidden");
+				}
+				reader.readAsDataURL(file);
+			}
+		}
 	}
 	else{
-		var reader = new FileReader();
-		reader.onload =  function(e) {
-			display.attr("src", reader.result);
-			this.img = reader.result;
-		}
-		reader.readAsDataURL(file);
+		display.attr("src", "/images/adobe-logo.svg");
+		$(display).siblings(".img-placeholder").addClass("hidden");
+		$(display).removeClass("hidden");
 	}
 }
 

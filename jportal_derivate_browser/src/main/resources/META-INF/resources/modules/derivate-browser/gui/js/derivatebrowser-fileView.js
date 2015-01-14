@@ -54,12 +54,10 @@ var derivateBrowserFileView = (function () {
 	}
 	
 	function addFileToView(file , mainDoc) {
-		var popoverTemplate = $("#popover-template").html();
 		var fileEntryTemplate = $("#file-entry-template").html();
-		var popOverOutput = $(Mustache.render(popoverTemplate, file));
 		var fileEntryOutput = $(Mustache.render(fileEntryTemplate, file));
-		$(popOverOutput).find(".img-size").html(getReadableSize($(popOverOutput).find(".img-size").html(),0));
-		$(fileEntryOutput).find(".popover-file").popover({content: popOverOutput, html: true});
+		$(fileEntryOutput).find(".popover-file").data("lastMod", file.lastmodified);
+		$(fileEntryOutput).find(".popover-file").data("size", getReadableSize(file.size,0));
 		$(fileEntryOutput).data("path", file.absPath);
 		$(fileEntryOutput).data("deriID", file.deriID);
 		$(fileEntryOutput).data("docID", file.deriID);
@@ -111,7 +109,7 @@ var derivateBrowserFileView = (function () {
 		}
 		var path = data.maindocName;
 		if (path.indexOf("/") != 0) path = "/" + path;
-		$("#panel-img").attr("src", "/servlets/MCRFileNodeServlet/" + deriName + path);
+		derivateBrowserTools.setImgPath($("#panel-img"), deriName, path);
 		$("#derivat-panel-startfile").data("startfile", path);
 		$("#derivat-panel").removeClass("hidden");
 	}

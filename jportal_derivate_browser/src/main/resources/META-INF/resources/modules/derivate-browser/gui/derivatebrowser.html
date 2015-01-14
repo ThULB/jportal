@@ -21,7 +21,6 @@
 		</div>
 		<div id="file-view" ondragover="return false">
 			<div id="alert-area" class="alert alert-danger">...</div>
-<!-- 			<div id="drag-and-drop-info"><span id="hide-drag-drop-info" class="glyphicon glyphicon-remove"></span></div> -->
 			<div id="files">
 				<div id="upload-overlay" class="hidden"></div>
 				<div id="derivate-browser" class="hidden">
@@ -40,7 +39,8 @@
 									<div id="derivat-panel-startfile">
 										<label><text class="i18n" i18n="db.label.startFile" i18n-def="Startdatei"></text></label>
 										<figure>
-											<img id='panel-img' src=''>
+											<img class='img-placeholder img-placeholder-startfile' src='/images/file-logo.svg'>
+											<img id='panel-img' class="hidden" src=''>
 										    <div id="derivat-panel-startfile-overlay-div" class="hidden">
 										    	<div id="derivat-panel-startfile-overlay-label">
 										    		<text class="i18n" i18n="db.label.dragAndDrop" i18n-def="Drag and Drop zum ändern"></text>
@@ -194,17 +194,18 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<script id="popover-template" type="text/mustache">
-	<div>
-		<img class='popover-img' src='/servlets/MCRFileNodeServlet/{{deriID}}{{absPath}}'>
-		<dl>
-			<dt>Size</dt>
-			<dd class="img-size">{{size}}</dd>
-			<dt>last modified</dt>
-			<dd>{{lastmodified}}</dd>
-		</dl>
-	</div>
+		<div class="popover-template">
+			<img class='popover-img hidden' src=''>
+			<img class='img-placeholder img-placeholder-popover' src='/images/file-logo.svg'>
+			<dl>
+				<dt>Size</dt>
+				<dd class="img-size">{{size}}</dd>
+				<dt>last modified</dt>
+				<dd>{{lastmodified}}</dd>
+			</dl>
+		</div>
 	</script>
 	
 	<script id="file-entry-template" type="text/mustache">
@@ -281,7 +282,7 @@
 	
 	<script id="upload-entry-template" type="text/mustache">
 		<tr class="upload-entry">
-			<td><img class='upload-preview-image'></img></td>
+			<td><img class='img-placeholder img-placeholder-upload' src='/images/file-logo.svg'><img class='upload-preview-image hidden'></img></td>
 			<td class="upload-preview-name" title="{{name}}">{{name}}</td>
 			<td class="upload-preview-size" title="{{size}}">{{size}}</td>
 			<td class="upload-preview-status"><div class='statusbar-progress'><div class='statusbar-progress-status'></div></div></td>
@@ -290,7 +291,8 @@
 	
 	<script id="upload-overwrite-template" type="text/mustache">
 		<div>
-			<img class='overwrite-img' src='/servlets/MCRFileNodeServlet/{{deriID}}{{path}}/{{name}}'>
+			<img class='overwrite-img hidden' src=''>
+			<img class='img-placeholder img-placeholder-overwrite' src='/images/file-logo.svg'>
 			<dl>
 				<dt>Size</dt>
 				<dd class="img-size">{{size}}</dd>
@@ -309,6 +311,7 @@
  	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-treeEntry.js"></script>
 	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-navigation.js"></script>
 	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-fileView.js"></script>
+	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-tools.js"></script>
  	<script type="text/javascript" src="/js/jp-subselect.js" ></script>
 </body>
 </html>

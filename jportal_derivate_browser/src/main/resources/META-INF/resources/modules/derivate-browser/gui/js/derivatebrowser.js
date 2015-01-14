@@ -15,6 +15,13 @@ var DerivateBrowser = function(){
 	return {
 		init: function() {
 			
+			$("body").on("keydown", function(key) {
+				if(key.which == 163){
+					console.log("Ninja change");
+					showAlert(geti18n("db.alert.rename.success","/Test".substr("/Test".lastIndexOf("/")+1) , "Test2"), true);
+				}
+			});
+			
 			$.address.internalChange(function() {
 //				console.log("internal");
 			});
@@ -95,7 +102,21 @@ var DerivateBrowser = function(){
 				$(this).data("open", true);		
 			});
 			
-			
+			$("body").on("mouseenter", ".popover-file", function(event) {
+				if (!$(this).hasClass("popoverAdded")){
+					var parent = $(this).closest(".browser-table-entry");
+					var file =[];
+					file.lastmodified = $(this).data("lastMod");
+					file.size = $(this).data("size");
+					var popoverTemplate = $("#popover-template").html();
+					var popOverOutput = $(Mustache.render(popoverTemplate, file));
+					$(this).popover({content: popOverOutput, html: true});
+					derivateBrowserTools.setImgPath($(popOverOutput).find(".popover-img"), $(parent).data("deriID"), $(parent).data("path"));
+					$(this).addClass("popoverAdded");
+					$(this).popover("show");
+				}
+			});
+						
 			$("body").on("mousedown", ".popover-file", function(event) {
 				mouseDown = true;
 				//mouseY = event.pageY;
@@ -138,9 +159,10 @@ var DerivateBrowser = function(){
 			        		dragObj = elm;
 			        	}
 			        	if ($(dragElm).hasClass("browser-table-file")){
-				        	var img = $('<img id="drag-img" src="/servlets/MCRFileNodeServlet/' + dragElm.data("deriID") + dragElm.data("path") + '">');
-							$("body").append(img);
-							dragObj = img;
+			        		var div = $('<div id="drag-img-div"><img class="img-placeholder img-placeholder-startfile" src="/images/file-logo.svg"><img id="drag-img" class="hidden"></div>');
+			        		derivateBrowserTools.setImgPath($(div).find("#drag-img"), dragElm.data("deriID"), dragElm.data("path"));
+							$("body").append(div);
+							dragObj = div;
 			        	}
 						window.getSelection().removeAllRanges();
 		        		$("body").attr('unselectable','on')
@@ -433,6 +455,7 @@ var DerivateBrowser = function(){
 					$(parent).removeClass("checked");
 					$(parent).removeData("checked");
 					$(this).addClass("glyphicon-unchecked");
+					$(this).removeClass("glyphicon-check");
 					checkIfNothingSelected();
 				}
 
@@ -646,6 +669,7 @@ var DerivateBrowser = function(){
 						$("#derivat-panel-startfile").data("startfile", $(entry).data("path"));
 						setStartFile(entry);
 					}
+					showAlert(geti18n("db.alert.rename.success", oldName.substr(oldName.lastIndexOf("/")+1), newName), true);
 				},
 				409: function(error) {
 					$(entry).find(".browser-table-file-name").addClass("has-error");
@@ -699,6 +723,15 @@ var DerivateBrowser = function(){
 					if (notAll > 0){
 						showAlert(geti18n("db.alert.delete.notAll", notAll) , false);
 					}
+					else{
+						if (data.files.length == 1){
+							showAlert(geti18n("db.alert.delete.success", data.files[0].path.substr(data.files[0].path.lastIndexOf("/")+1)), true);
+						}
+						else{
+							showAlert(geti18n("db.alert.delete.successAll"), true);
+						}
+						
+					}
 					$(".delete").removeClass("delete");
 				},
 				500: function(error) {
@@ -718,6 +751,7 @@ var DerivateBrowser = function(){
 			statusCode: {
 				200: function() {
 					derivateBrowserFileView.tempToFolder(input, temp);
+					showAlert(geti18n("db.alert.newFolder.success", input), true);
 				},
 				500: function(error) {
 					showAlert(geti18n("db.alert.newFolder.error", input), false);
@@ -801,6 +835,9 @@ var DerivateBrowser = function(){
 					$('#lightbox-multi-move').modal('hide');
 					if (notMoved > 0){
 						showAlert(geti18n("db.alert.move.notAll", notMoved), false);
+					}
+					else{
+						showAlert(geti18n("db.alert.move.success"), true);
 					}
 				},
 				500: function(error) {
@@ -887,9 +924,10 @@ var DerivateBrowser = function(){
 							}
 						});	
 					}
+					showAlert(geti18n("db.alert.urn.success"), true)
 				},
 				500: function(error) {
-					showAlert(geti18n("db.alert.urn"), false);
+					showAlert(geti18n("db.alert.urn.error"), false);
 				}
 			}
 		});
@@ -961,7 +999,7 @@ var DerivateBrowser = function(){
 			return $(this).data("startfile") == true;
 		}).removeData("startfile");
 		$(entry).data("startfile", true);
-		$("#panel-img").attr("src", "/servlets/MCRFileNodeServlet/" + $(entry).data("deriID") + $(entry).data("path"));
+		derivateBrowserTools.setImgPath($("#panel-img"), $(entry).data("deriID"), $(entry).data("path"));
 		$("#derivat-panel-startfile-label").html($(entry).data("path"));
 	}
 
