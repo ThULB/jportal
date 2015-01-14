@@ -289,7 +289,6 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	float: left;
 	margin-bottom: 10px;
 	padding-left: 10px;
-	word-break: break-all;
 }
 .jp-layout-metadataList .address dt {
 	width: 90px;
@@ -327,7 +326,6 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 
 p.jp-layout-metadata-list {
 	margin-top: 0px;
-	word-break: break-all; 
 }
 
 #viewerContainerWrapper {
@@ -1103,7 +1101,6 @@ textarea {
 		margin-left: 0 !important;
 		margin-right: 0 !important;
 		padding-right: 15px !important;
-		word-break: break-all; 
 	}
 	
 	.jp-layout-maintitle.jp-layout-border{
