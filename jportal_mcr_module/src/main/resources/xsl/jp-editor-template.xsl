@@ -157,20 +157,18 @@
 		</xed:validate>
 	</xsl:template>
 
-	<xsl:template match="jp:template[@validate='interdependentSelect']"
-		mode="required">
-		<xed:validate display="here"
-			test="((string-length(.) = 0) and (string-length(..) = 0)) or ((string-length(.) > 0) and (string-length(..) = 0)) or ((string-length(.) > 0) and (string-length(..) > 0))">
-			<div class="alert alert-danger" role="alert">
-				<xed:output i18n="jp.editor.requiredSelect" />
-			</div>
-		</xed:validate>
-	</xsl:template>
+    <xsl:template match="jp:template[@validate='interdependentSelect']" mode="required">
+      <xed:validate display="here" test="not(string-length(.) = 0 and string-length(..) != 0)">
+        <div class="alert alert-danger" role="alert">
+          <xed:output i18n="jp.editor.requiredSelect" />
+        </div>
+      </xed:validate>
+    </xsl:template>
 
 	<xsl:template match="jp:template[@validate='interdependentInput']"
 		mode="required">
 		<xed:validate display="here"
-			test="((string-length({@selectXpath}) = 0) and (string-length(text()) = 0)) or ((string-length({@selectXpath}) = 0) and (string-length(text()) > 0)) or ((string-length({@selectXpath}) > 0) and (string-length(text()) > 0))">
+			test="not(string-length({@selectXpath}) = 0 and string-length(text()) != 0)">
 			<div class="alert alert-danger" role="alert">
 				<xed:output i18n="jp.editor.requiredInput" />
 			</div>
@@ -196,20 +194,6 @@
 		</xed:validate>
 	</xsl:template>
 
-	<xsl:template
-		match="jp:template[@validate='date' and @classDatePick and @selectXpath]"
-		mode="required">
-		<span style="display: table-row">
-			<xed:validate display="here" type="datetime"
-				format="dd.MM.yyyy;MM.dd.yyyy;yyyy.MM.dd;yyyy;yyyy-MM;yyyy-MM-dd;dd-MM-yyyy;MM-dd-yyyy"
-				test="((string-length({@selectXpath}) = 0) and (string-length(text()) = 0)) or ((string-length({@selectXpath}) = 0) and (string-length(text()) > 0)) or ((string-length({@selectXpath}) > 0) and (string-length(text()) > 0))">
-				<div class="alert alert-danger" role="alert">
-					<xed:output i18n="editormask.labels.date_howToUse" />
-				</div>
-			</xed:validate>
-		</span>
-	</xsl:template>
-
 	<xsl:template match="jp:template[@name='textArea']" mode="input">
 		<textarea class="form-control" wrap="" rows="3" cols="48"
 			tabindex="1" />
@@ -223,9 +207,11 @@
 	<xsl:template match="jp:template[@classification]" mode="input_select">
 		<!-- load classification -->
 		<select class="form-control" id="type" tabindex="1" size="1">
-			<option value="" selected="">
-				<xed:output i18n="editor.common.select" />
-			</option>
+            <xsl:if test="not(@noPleaseSelect) or @noPleaseSelect = 'false'">
+    			<option value="" selected="">
+    				<xed:output i18n="editor.common.select" />
+    			</option>
+            </xsl:if>
 			<xsl:variable name="classID">
 				<xsl:choose>
 					<xsl:when test="@classification = '{xedIncParam}'">

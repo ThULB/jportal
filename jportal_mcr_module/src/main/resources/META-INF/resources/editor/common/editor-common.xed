@@ -58,7 +58,7 @@
   <xed:template id="dates">
     <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']" min="0" max="2">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.date_label" buttons="true"
-        classification="{xedIncParam}"  validate="interdependentSelect" />
+        classification="{xedIncParam}" noPleaseSelect="true" />
       <jp:template name="textInput" xpath="." selectXpath="@type" validate="date" maxlength="128" classDatePick="datetimepicker6"/>
     </xed:repeat>
   </xed:template>

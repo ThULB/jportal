@@ -64,7 +64,7 @@
 
       <xed:bind
         xpath="def.gender[@class='MCRMetaClassification']/gender[@inherited='0'][@classid='urmel_class_00000001']">
-        <jp:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender" classification="urmel_class_00000001" validate="required" />
+        <jp:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender" classification="urmel_class_00000001" validate="required" noPleaseSelect="true" />
       </xed:bind>
 
       <xed:repeat xpath="def.contact[@class='MCRMetaLangText']/contact[@inherited='0'][@form='plain']" min="0" max="9">
