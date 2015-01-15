@@ -169,7 +169,6 @@
     <dependency>
       <groupId>org.mycore.mets</groupId>
       <artifactId>mets-model</artifactId>
-      <version>0.5-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
