@@ -53,7 +53,10 @@
 
 	<xsl:template name="searchBreadcrumb">
 		<xsl:param name="objID" />
-		<xsl:param name="currentPageName" />
+		<xsl:param name="returnURL" />
+		<xsl:param name="returnHash" />
+		<xsl:param name="returnID" />
+		<xsl:param name="returnName" />
 		<div id="jp-breadcrumb-container">
 			<ol class="breadcrumb jp-layout-mcbreadcrumb">
 				<xsl:variable name="hash">
@@ -91,8 +94,33 @@
 						</a>
 					</li>
 				</xsl:if>
+				<xsl:if test="$returnURL">
+					<li>
+						<a href="{$returnURL}">
+							<xsl:if test="$returnHash"><xsl:attribute name="href"><xsl:value-of select="concat($returnURL,'#',$returnHash)"/></xsl:attribute></xsl:if>
+							<xsl:choose>
+								<xsl:when test="$returnName">
+									<xsl:value-of select="i18n:translate($returnName)"/>
+								</xsl:when>
+								<xsl:when test="$returnID">
+									<xsl:apply-templates mode="jp.printListEntryContent" select="document(concat('mcrobject:',$returnID))/mycoreobject/metadata/maintitles/maintitle" />
+								</xsl:when>
+								<xsl:otherwise>
+									no data for name
+								</xsl:otherwise>
+							</xsl:choose>
+						</a>
+					</li>
+				</xsl:if>
 				<li>
-					<xsl:value-of select="i18n:translate($currentPageName)"/>
+					<xsl:choose>
+						<xsl:when test="$returnURL">
+							<xsl:value-of select="i18n:translate('jp.metadata.search.result')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="i18n:translate('jp.metadata.search.search')"/>
+						</xsl:otherwise>
+					</xsl:choose>
 				</li>
 			</ol>
 		</div>

@@ -1,4 +1,6 @@
 var startKeyword = window.location.hash.substring(1);
+var docID = document.URL.split("/").pop();
+docID = docID.split(/[#?]+/)[0];
 function loadKeywords() {
 	var mainDiv = $('<div class="keywords"></div>');
 	var parents = "keywordIndex";
@@ -60,7 +62,7 @@ function attachToElement(element, keywords, parents) {
 			var docUrl = document.URL.split("#");
 			docUrl = docUrl[0];
 			a.text(keyword.labels[0].text);
-			a.attr("href", jp.baseURL + "servlets/solr/select?q=+volContentClassi1:" + categID + "&XSL.returnURL=" + docUrl + "#" + parents); 
+			a.attr("href", jp.baseURL + "servlets/solr/select?q=+volContentClassi1:" + categID + "&XSL.returnURL=" + docUrl + "&XSL.returnHash=" + parents +"&XSL.returnID=" + docID); 
 			a.appendTo(li);
 			
 			if(containsKeyword(keyword.id.categid)){
@@ -80,3 +82,4 @@ function containsKeyword(toSearch){
 	}
 	return false;
 }
+

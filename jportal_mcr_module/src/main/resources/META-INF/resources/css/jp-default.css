@@ -669,14 +669,16 @@ p.jp-layout-metadata-list {
 	margin: 0px;
 	list-style-type: none;
 }
-.jp-layout-globalmessage-editor table {
-	width: 650px;
-}
-.jp-layout-globalmessage-editor table tr td textarea {
-	width: 100%;
-	height: 150px;
+
+#jp-layout-globalmessage-editor #message {
+	height: 8.5em;
 }
 
+@media (max-width: 767px) {
+	#jp-layout-globalmessage-editor .panel-body div:not(:last-child), #jp-layout-globalmessage-editor .panel-body > div > div, #jp-layout-globalmessage-editor .panel-body > div > label{
+		padding: 0;
+	}
+}
 .jp-import-sru {
 	margin-top: 12px;
 }
@@ -1215,7 +1217,21 @@ textarea {
 		border-right: 1px solid #9c9e9f;
 		padding-left: 0;
 	}
-
+	
+	.jp-layout-sharpBorderRight {
+		border-top-right-radius: 0; 
+		border-bottom-right-radius: 0; 
+		border-right: 0 none
+	}
+	
+	.jp-layout-sharpBorderLeft {
+		border-top-left-radius: 0; 
+		border-bottom-left-radius: 0;
+	}
+	
+	.jp-layout-floatLeftNoXS {
+		float: left !important;
+	}
 }
 
 .jp-layout-mcbreadcrumb{
@@ -1261,4 +1277,8 @@ textarea {
 
 .jp-layout-colorBlue{
 	color: #008cc9; 
+}
+
+#inputContainer {
+	margin-top: 5px;
 }

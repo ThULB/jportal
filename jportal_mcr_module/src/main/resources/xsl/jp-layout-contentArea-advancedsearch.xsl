@@ -63,6 +63,7 @@
           <input type="hidden" name="fq" value="journalID:{$journalID}"/>           
         </xsl:if>
         <input type="hidden" name="q" value="" />
+        <input type="hidden" name="XSL.returnName" value="jp.metadata.search.advanced" />
         <div class="col-sm-12">
         	<input id="submitButton" type="submit" class="btn btn-primary pull-right">
       			<xsl:attribute name="value">

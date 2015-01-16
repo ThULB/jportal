@@ -4,6 +4,9 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
 
   <xsl:param name="returnURL" />
+  <xsl:param name="returnHash" />
+  <xsl:param name="returnID" />
+  <xsl:param name="returnName" />
     
   <!-- facets without selected -->
   <xsl:variable name="filteredFacetsXML">
@@ -47,7 +50,12 @@
   <xsl:template match="/response">
   	<xsl:call-template name="searchBreadcrumb" >
   		<xsl:with-param name="objID" select="$journalID" />
-  		<xsl:with-param name="currentPageName" select="'jp.metadata.search.search'" />
+  		<xsl:with-param name="returnURL" select="$returnURL" />
+  		<xsl:with-param name="returnHash" select="$returnHash" />
+  		<!-- returnID = is something like jportal_jpjournal_00000024 also id from where you came -->
+  		<xsl:with-param name="returnID" select="$returnID" />
+  		<!-- returnName = if no id then give a name, like advanced search or law search (only i18n format)-->
+  		<xsl:with-param name="returnName" select="$returnName" />
   	</xsl:call-template>
     <xsl:if test="$selectedFacets/lst/lst/int">
       <div id="resultListHeader" class="row">

@@ -19,6 +19,11 @@ function buildQuery() {
 		fq += " +date.published:[* TO " + until + "]";
 	}
 	$("#fq").attr("value", fq);
+	
+	var returnURl = $('<input id="XSL.returnURL" type="hidden" name="XSL.returnURL"></input>');
+	var construct = document.URL.split(/[#?]+/)[0] + "?XSL.qry=" + searchTerm + "&XSL.fq=" + territory + "&XSL.date_from=" + from + "&XSL.date_to=" + until;
+	returnURl.attr("value", construct);
+	returnURl.insertAfter($("#fq"));
 }
 
 function setLogo(baseURL) {
