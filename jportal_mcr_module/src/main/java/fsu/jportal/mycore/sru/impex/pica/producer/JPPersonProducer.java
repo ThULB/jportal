@@ -7,19 +7,6 @@ import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
 public class JPPersonProducer extends PersonProducer {
 
     @Override
-    protected Element createMetadataElement() {
-        addBiographicHistoricalNotes();
-        return super.createMetadataElement();
-    }
-
-    protected void addBiographicHistoricalNotes() {
-        String value = this.record.getValue("050G", "b");
-        if (value != null) {
-            appendToNotes(value, "\n");
-        }
-    }
-
-    @Override
     protected Element createNotesElement() {
         Element defNotes = super.createNotesElement();
         if (defNotes != null) {
