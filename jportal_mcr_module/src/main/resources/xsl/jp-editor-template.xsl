@@ -132,7 +132,6 @@
         </xsl:attribute>
 			</xsl:if>
 			<xsl:if test="@classDatePick">
-				<xsl:attribute name="data-date-format">YYYY-MM-DD</xsl:attribute>
 				<span class="input-group-addon btn btn-default jp-layout-white">
 					<span class="glyphicon glyphicon-calendar"></span>
 				</span>
