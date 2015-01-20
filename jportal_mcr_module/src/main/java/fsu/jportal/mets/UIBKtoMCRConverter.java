@@ -19,6 +19,7 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.File;
 import org.mycore.mets.model.files.FileGrp;
+import org.mycore.mets.model.struct.AbstractLogicalDiv;
 import org.mycore.mets.model.struct.Area;
 import org.mycore.mets.model.struct.Fptr;
 import org.mycore.mets.model.struct.LOCTYPE;
@@ -30,6 +31,11 @@ import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.Seq;
 
+/**
+ * Converts the llz output format from uibk to the mycore mets format.
+ * 
+ * @author Matthias Eichner
+ */
 public class UIBKtoMCRConverter {
 
     public Document convert(Document uibkMetsDocument) throws ConvertException {
@@ -107,40 +113,37 @@ public class UIBKtoMCRConverter {
         LogicalDiv volume = new LogicalDiv(volumeDiv.getAttributeValue("ID"), "volume",
             volumeDiv.getAttributeValue("LABEL"));
         structMap.setDivContainer(volume);
-        handleLogicalRootDivs(volumeDiv, volume);
+        handleLogicalDivs(volumeDiv, volume);
     }
 
-    private void handleLogicalRootDivs(Element volumeDiv, LogicalDiv volume) {
-        List<Element> children = volumeDiv.getChildren("div", IMetsElement.METS);
-        for (Element div : children) {
-            String type = div.getAttributeValue("TYPE").toLowerCase();
-            if (type.equals("issue")) {
-                handleIssue(div, volume);
-            } else if (type.equals("volumeparts")) {
-                handleVolumeParts(div, volume);
+    private void handleLogicalDivs(Element divElement, AbstractLogicalDiv div) {
+        List<Element> children = divElement.getChildren("div", IMetsElement.METS);
+        for (Element subDivElement : children) {
+            // create sub div
+            String type = subDivElement.getAttributeValue("TYPE").toLowerCase();
+            LogicalSubDiv subdDiv = getLogicalDiv(subDivElement);
+            if(type.equals("issue") || type.equals("volumeparts")) {
+                handleLogicalDivs(subDivElement, subdDiv);
+            } else if (type.equals("rezension")) {
+                handleRecension(subDivElement, subdDiv);
+            } else if (type.equals("tp")) {
+                subdDiv.setLabel("Titelblatt");
+                subdDiv.setType("titlepage");
+            } else if (type.equals("preface")) {
+                subdDiv.setLabel("Vorwort");
+                subdDiv.setType("preface");
+            } else if (type.equals("toc")) {
+                subdDiv.setLabel("Register");
+                subdDiv.setType("toc");
+            } else {
+                continue;
             }
+            handleLogicalFilePointer(subDivElement, subdDiv);
+            div.add(subdDiv);
         }
     }
 
-    private void handleVolumeParts(Element div, LogicalDiv volume) {
-        // TODO Auto-generated method stub
-
-    }
-
-    private void handleIssue(Element issueDiv, LogicalDiv volume) {
-        LogicalSubDiv issue = getLogicalDiv(issueDiv);
-        List<Element> children = issueDiv.getChildren("div", IMetsElement.METS);
-        for (Element child : children) {
-            String type = child.getAttributeValue("TYPE").toLowerCase();
-            if (type.equals("rezension")) {
-                handleRecension(child, issue);
-            }
-        }
-        volume.add(issue);
-    }
-
-    private void handleRecension(Element recensionDiv, LogicalSubDiv issue) {
-        LogicalSubDiv recension = getLogicalDiv(recensionDiv);
+    private void handleRecension(Element recensionDiv, LogicalSubDiv recension) {
         // type
         recension.setType("article");
         // label
@@ -156,10 +159,12 @@ public class UIBKtoMCRConverter {
         if (recension.getLabel() == null) {
             recension.setLabel("unknown " + recension.getType());
         }
-        // fptr
+    }
+
+    private void handleLogicalFilePointer(Element divElement, AbstractLogicalDiv div) {
         XPathExpression<Element> areaExp = XPathFactory.instance().compile(
             "mets:div/mets:fptr/mets:area[contains(@FILEID, 'INDEXALTO')]", Filters.element(), null, IMetsElement.METS);
-        List<Element> areas = areaExp.evaluate(recensionDiv);
+        List<Element> areas = areaExp.evaluate(divElement);
         String lastFileID = null, lastContentID = null;
         Fptr fptr = new Fptr();
         Seq seq = new Seq();
@@ -183,9 +188,8 @@ public class UIBKtoMCRConverter {
         }
         if (area != null) {
             area.setEnd(lastContentID);
-            recension.getFptrList().add(fptr);
+            div.getFptrList().add(fptr);
         }
-        issue.add(recension);
     }
 
     private LogicalSubDiv getLogicalDiv(Element divElement) {
