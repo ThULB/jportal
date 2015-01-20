@@ -62,3 +62,4 @@ update permission administrate-jportal for id POOLPRIVILEGE with rulefile xml/gr
 update permission create-class for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
 update permission administrate-users for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
 update permission create-user for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
+update permission move-objects for id POOLPRIVILEGE with rulefile xml/grant-journalgroup.xml described by journalgroup
