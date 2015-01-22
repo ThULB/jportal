@@ -4,6 +4,7 @@ function introEditor(journalID) {
 	var ckEditorMainButtonCtr = function(tmpElem) {
 		$('#ckeditorButton').hide();
 		var introFrame = $('#intro');
+		introFrame.removeClass("hidden");
 		introFrame
 				.ckeditor({
 					resize_enabled : false,

@@ -55,9 +55,11 @@
   
       <!-- journal text -->
       <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
-        <xsl:apply-templates mode="renderIntroTxt" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
+        <div id="intro" class="jp-layout-intro jp-content-block row hidden">
+          <xsl:apply-templates mode="renderIntroTxt" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
+        </div>
       </xsl:if>
-  
+
       <!-- metadata & derivate -->
       <xsl:if test="$showMetadataAndDerivate">
         <div class="jp-content-block row">
@@ -106,9 +108,10 @@
   </xsl:template>
 
   <xsl:template mode="renderIntroTxt" match="section[@xml:lang='de']">
-    <div id="intro" class="jp-layout-intro jp-content-block row">
-      <xsl:copy-of select="@*|node()" />
-    </div>
+    <xsl:attribute name="class">
+      <xsl:value-of select="'jp-layout-intro jp-content-block row'" />
+    </xsl:attribute>
+    <xsl:copy-of select="@*|node()" />
   </xsl:template>
 
   <xsl:template mode="printTitle" match="heading[@inherited='0']">
