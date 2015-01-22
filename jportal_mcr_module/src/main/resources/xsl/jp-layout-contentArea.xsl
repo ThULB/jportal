@@ -52,10 +52,10 @@
           <xsl:with-param name="id" select="./@ID" />
         </xsl:call-template>
       </xsl:if>
-  
+
       <!-- journal text -->
       <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
-        <div id="intro" class="jp-layout-intro jp-content-block row hidden">
+        <div id="intro">
           <xsl:apply-templates mode="renderIntroTxt" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
         </div>
       </xsl:if>

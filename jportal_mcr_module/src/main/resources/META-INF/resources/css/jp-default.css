@@ -602,7 +602,7 @@ p.jp-layout-metadata-list {
 	width: auto;
 }
 
-#main .jp-content-block:not(:first-child) {
+#main .jp-content-block ~ .jp-content-block {
 	border-top: 1px solid #dbdbdb;
 	padding-top: 15px;
 	margin-top: 15px;
