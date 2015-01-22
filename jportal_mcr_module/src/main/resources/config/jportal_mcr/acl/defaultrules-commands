@@ -26,7 +26,7 @@ update permission writedb for id default_jpinst with rulefile xml/grant-editorsg
 update permission writedb for id default_derivate with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 update permission writedb for id default_class with rulefile xml/grant-journalgroup.xml described by journalgroup
 
-update permission deletedb for id default_jpjournal with rulefile xml/grant-admin.xml described by journalgroup
+update permission deletedb for id default_jpjournal with rulefile xml/grant-journalgroup.xml described by journalgroup
 update permission deletedb for id default_jpvolume with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 update permission deletedb for id default_jparticle with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 update permission deletedb for id default_person with rulefile xml/grant-editorsgroup.xml described by editorsgroup
