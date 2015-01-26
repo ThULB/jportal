@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://org.mycore.urn.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-  xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml mcrurn acl encoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
+  xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://org.mycore.urn.MCRXMLFunctions"
+  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
+  xmlns:encoder="xalan://java.net.URLEncoder" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml jpxml mcrurn acl encoder">
 
   <xsl:template name="derivatePreview">
     <xsl:param name="mcrObj" />
@@ -89,63 +88,92 @@
     <xsl:variable name="showDerivate" select="layoutTools:getDerivateDisplay(@xlink:href) = 'true'" />
 
     <xsl:if test="$deleteDB or $showDerivate">
-    <div class="jp-layout-derivate">
-      <xsl:choose>
-        <xsl:when test="$iviewFile != ''">
-          <xsl:call-template name="iview2Entry">
+      <div class="jp-layout-derivate">
+        <xsl:choose>
+          <xsl:when test="$iviewFile != ''">
+            <xsl:call-template name="iview2Entry">
+              <xsl:with-param name="derivID" select="@xlink:href" />
+              <xsl:with-param name="file" select="$iviewFile" />
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="derivEntry">
+              <xsl:with-param name="derivate" select="$derivate" />
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:if test="$mode = 'metadata' and $iviewFile != ''">
+          <xsl:call-template name="dfgViewerLink">
             <xsl:with-param name="derivID" select="@xlink:href" />
-            <xsl:with-param name="file" select="$iviewFile" />
           </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="derivEntry">
-            <xsl:with-param name="derivate" select="$derivate" />
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:if test="$mode = 'metadata' and $iviewFile != ''">
-        <xsl:call-template name="dfgViewerLink">
-          <xsl:with-param name="derivID" select="@xlink:href" />
-        </xsl:call-template>
-      </xsl:if>
-      <xsl:if test="$mode = 'metadata' and $editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
-        <ul class="edit">
-          <li>
-            <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}/">Details</a>
-          </li>
-          <li>
-            <a
-              href="{$WebApplicationBaseURL}servlets/derivate/update?id={@xlink:href}&amp;objectid={$objID}">Dateien hinzufügen</a>
-          </li>
-          <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
-            <xsl:if test="not(mcrurn:hasURNDefined(@xlink:href))">
+        </xsl:if>
+        <xsl:if test="$mode = 'metadata' and $editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
+          <ul class="edit">
+            <li>
+              <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}/">Details</a>
+            </li>
+            <li>
+              <a href="{$WebApplicationBaseURL}servlets/derivate/update?id={@xlink:href}&amp;objectid={$objID}">Dateien hinzufügen</a>
+            </li>
+            <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
+              <xsl:if test="not(mcrurn:hasURNDefined(@xlink:href))">
+                <li>
+                  <a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a>
+                </li>
+              </xsl:if>
               <li>
-                <a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a>
+                <a href="{$WebApplicationBaseURL}metseditor/start_mets_editor.xml?derivate={@xlink:href}&amp;useExistingMets=true">Mets Editor</a>
+              </li>
+            </xsl:if>
+            <xsl:if test="$deleteDB">
+              <li>
+                <a href="{$WebApplicationBaseURL}servlets/MCRDisplayHideDerivateServlet?derivate={@xlink:href}">
+                  <xsl:choose>
+                    <xsl:when test="$showDerivate">
+                      Derivat verstecken
+                    </xsl:when>
+                    <xsl:otherwise>
+                      Derivat anzeigen
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </a>
+              </li>
+              <li>
+                <a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a>
               </li>
             </xsl:if>
             <li>
-              <a href="{$WebApplicationBaseURL}metseditor/start_mets_editor.xml?derivate={@xlink:href}&amp;useExistingMets=true">Mets Editor</a>
+              <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{$derivate/derivate/linkmetas/linkmeta/@xlink:role}');">Derivat Kontext</a>
             </li>
-          </xsl:if>
-          <xsl:if test="$deleteDB">
-            <li>
-              <a href="{$WebApplicationBaseURL}servlets/MCRDisplayHideDerivateServlet?derivate={@xlink:href}">
-                <xsl:choose>
-                  <xsl:when test="$showDerivate">Derivat verstecken</xsl:when>
-                  <xsl:otherwise>Derivat anzeigen</xsl:otherwise>
-                </xsl:choose>
-              </a>
-            </li>
-            <li>
-              <a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a>
-            </li>
-          </xsl:if>
-          <li>
-            <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{$derivate/derivate/linkmetas/linkmeta/@xlink:role}');">Derivat Kontext</a>
-          </li>
-        </ul>
-      </xsl:if>
-    </div>
+            <xsl:if test="jpxml:isMetsImportable(@xlink:href)">
+              <a href="javascript:;" data-toggle="modal" data-target="#importMetsDialog">METS Import</a>
+              <div class="modal fade" id="importMetsDialog" tabindex="-1" role="dialog" data-backdrop="static" data-id="{@xlink:href}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">METS Import</h4>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-2" id="importMetsDialogIcon">
+                          <i class='fa fa-3x fa-circle-o-notch fa-spin'></i>
+                        </div>
+                        <div class="col-md-10" id="importMetsDialogContent">
+                          Derivat wird überprüft. Bitte warten...
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal" id="importMetsDialogClose">Schließen</button>
+                      <button type="button" class="btn btn-primary" disabled="disabled" id="importMetsDialogStart">Importvorgang starten</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </xsl:if>
+          </ul>
+        </xsl:if>
+      </div>
     </xsl:if>
   </xsl:template>
 
@@ -172,7 +200,7 @@
   <xsl:template name="iview2Entry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-    <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}/{mcrxml:encodeURIPath($file)}" class="thumbnail" >
+    <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}/{mcrxml:encodeURIPath($file)}" class="thumbnail">
       <div class="jp-layout-hidden-Button"></div>
       <img src="{$WebApplicationBaseURL}servlets/MCRTileCombineServlet/MIN/{$derivID}/{mcrxml:encodeURIPath($file)}?centerThumb=no" />
     </a>
@@ -193,13 +221,13 @@
       <div class="jp-layout-hidden-Button"></div>
       <xsl:choose>
         <xsl:when test="$fileType = 'PDF'">
-          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$derivID}/{$encodedMaindoc}" />  
+          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$derivID}/{$encodedMaindoc}" />
         </xsl:when>
         <xsl:when test="$fileType = 'XML'">
-          <img src="{$WebApplicationBaseURL}images/xml-logo.svg" />  
+          <img src="{$WebApplicationBaseURL}images/xml-logo.svg" />
         </xsl:when>
         <xsl:when test="$fileType = 'SVG'">
-          <img src="{$derivbase}{$encodedMaindoc}" />  
+          <img src="{$derivbase}{$encodedMaindoc}" />
         </xsl:when>
         <xsl:otherwise>
           <img src="{$WebApplicationBaseURL}images/file-logo.svg" />

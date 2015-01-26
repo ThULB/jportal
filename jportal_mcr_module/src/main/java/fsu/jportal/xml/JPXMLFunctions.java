@@ -1,6 +1,5 @@
 package fsu.jportal.xml;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -15,15 +14,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.frontend.MCRURL;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import fsu.jportal.mets.LLZMetsUtils;
 
 public class JPXMLFunctions {
 
@@ -63,12 +64,12 @@ public class JPXMLFunctions {
         if (date != null && !date.equals("")) {
             String split[] = date.split("-");
             switch (split.length) {
-            case 1:
-                return MCRTranslation.translate("metaData.dateYear");
-            case 2:
-                return MCRTranslation.translate("metaData.dateYearMonth");
-            case 3:
-                return MCRTranslation.translate("metaData.dateYearMonthDay");
+                case 1:
+                    return MCRTranslation.translate("metaData.dateYear");
+                case 2:
+                    return MCRTranslation.translate("metaData.dateYearMonth");
+                case 3:
+                    return MCRTranslation.translate("metaData.dateYearMonthDay");
             }
         }
         return MCRTranslation.translate("metaData.date");
@@ -97,10 +98,10 @@ public class JPXMLFunctions {
      */
     public static boolean resourceExist(String webResource) {
         InputStream resource = JPXMLFunctions.class.getResourceAsStream("/META-INF/resources/" + webResource);
-        
-        if(resource == null){
+
+        if (resource == null) {
             return false;
-        }else{
+        } else {
             try {
                 resource.close();
             } catch (IOException e) {
@@ -163,6 +164,21 @@ public class JPXMLFunctions {
         } catch (Exception exc) {
             return "";
         }
+    }
+
+    /**
+     * Checks if the given derivate contains a importable mets file. 
+     * 
+     * @return
+     */
+    public static boolean isMetsImportable(String derivateId) {
+        try {
+            org.jdom2.Document mets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
+            LLZMetsUtils.fastCheck(mets);
+        } catch (Exception exc) {
+            return false;
+        }
+        return true;
     }
 
     /**

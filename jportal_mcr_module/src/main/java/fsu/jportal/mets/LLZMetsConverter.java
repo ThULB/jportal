@@ -36,17 +36,17 @@ import org.mycore.mets.model.struct.Seq;
  * 
  * @author Matthias Eichner
  */
-public class UIBKtoMCRConverter {
+public class LLZMetsConverter {
 
-    public Document convert(Document uibkMetsDocument) throws ConvertException {
+    public Mets convert(Document llzDocument) throws ConvertException {
         try {
             Mets mets = new Mets();
-            Element uibk = uibkMetsDocument.getRootElement();
-            handleFileSection(uibk, mets);
-            handlePhysicalStructure(uibk, mets);
-            handleLogicalStructure(uibk, mets);
+            Element llz = llzDocument.getRootElement();
+            handleFileSection(llz, mets);
+            handlePhysicalStructure(llz, mets);
+            handleLogicalStructure(llz, mets);
             new StructLinkGenerator().generate(mets);
-            return mets.asDocument();
+            return mets;
         } catch (Exception exc) {
             throw new ConvertException("Unable to convert mets document", exc);
         }
@@ -61,12 +61,12 @@ public class UIBKtoMCRConverter {
         mcr.getFileSec().addFileGrp(altoGroup);
     }
 
-    private FileGrp handleFileGroup(Element uibk, String fileGroup, String xpath, String mimeType,
+    private FileGrp handleFileGroup(Element llzElement, String fileGroup, String xpath, String mimeType,
         FileHrefStrategy hrefStrategy) throws URISyntaxException {
         FileGrp group = new FileGrp(fileGroup);
         XPathExpression<Element> xpathExp = XPathFactory.instance().compile(xpath, Filters.element(), null,
             IMetsElement.METS);
-        List<Element> files = xpathExp.evaluate(uibk);
+        List<Element> files = xpathExp.evaluate(llzElement);
         for (Element fileElement : files) {
             String id = fileElement.getAttributeValue("ID");
             Element flocatElement = fileElement.getChild("FLocat", IMetsElement.METS);
@@ -78,7 +78,7 @@ public class UIBKtoMCRConverter {
         return group;
     }
 
-    private void handlePhysicalStructure(Element uibk, Mets mets) {
+    private void handlePhysicalStructure(Element llzElement, Mets mets) {
         PhysicalStructMap structMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
         PhysicalDiv physicalDiv = new PhysicalDiv();
         structMap.setDivContainer(physicalDiv);
@@ -86,7 +86,7 @@ public class UIBKtoMCRConverter {
         XPathExpression<Element> xpathExp = XPathFactory.instance().compile(
             "mets:structMap[@TYPE='physical_structmap']//mets:div[mets:fptr]", Filters.element(), null,
             IMetsElement.METS);
-        List<Element> divs = new ArrayList<Element>(xpathExp.evaluate(uibk));
+        List<Element> divs = new ArrayList<Element>(xpathExp.evaluate(llzElement));
         Collections.sort(divs, new Comparator<Element>() {
             @Override
             public int compare(Element e1, Element e2) {
@@ -105,11 +105,11 @@ public class UIBKtoMCRConverter {
         }
     }
 
-    private void handleLogicalStructure(Element uibk, Mets mets) {
+    private void handleLogicalStructure(Element llzElement, Mets mets) {
         LogicalStructMap structMap = (LogicalStructMap) mets.getStructMap(LogicalStructMap.TYPE);
         XPathExpression<Element> xpathExp = XPathFactory.instance().compile(
             "mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null, IMetsElement.METS);
-        Element volumeDiv = xpathExp.evaluateFirst(uibk);
+        Element volumeDiv = xpathExp.evaluateFirst(llzElement);
         LogicalDiv volume = new LogicalDiv(volumeDiv.getAttributeValue("ID"), "volume",
             volumeDiv.getAttributeValue("LABEL"));
         structMap.setDivContainer(volume);
@@ -122,7 +122,7 @@ public class UIBKtoMCRConverter {
             // create sub div
             String type = subDivElement.getAttributeValue("TYPE").toLowerCase();
             LogicalSubDiv subdDiv = getLogicalDiv(subDivElement);
-            if(type.equals("issue") || type.equals("volumeparts")) {
+            if (type.equals("issue") || type.equals("volumeparts")) {
                 handleLogicalDivs(subDivElement, subdDiv);
             } else if (type.equals("rezension")) {
                 handleRecension(subDivElement, subdDiv);
@@ -147,14 +147,9 @@ public class UIBKtoMCRConverter {
         // type
         recension.setType("article");
         // label
-        XPathExpression<Element> bibExp = XPathFactory.instance().compile(
-            "mets:div[@TYPE='Bibliographischer Eintrag']", Filters.element(), null, IMetsElement.METS);
-        Element bibEntry = bibExp.evaluateFirst(recensionDiv);
-        if (bibEntry != null) {
-            String label = bibEntry.getAttributeValue("LABEL");
-            if (label != null) {
-                recension.setLabel(label);
-            }
+        String bibLabel = LLZMetsUtils.getBibLabel(recensionDiv);
+        if (bibLabel != null) {
+            recension.setLabel(bibLabel);
         }
         if (recension.getLabel() == null) {
             recension.setLabel("unknown " + recension.getType());

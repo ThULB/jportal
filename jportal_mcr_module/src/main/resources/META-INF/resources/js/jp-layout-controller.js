@@ -377,3 +377,67 @@ $(document).ready(function() {
 		window.location = url;
 	}
 });
+
+// METS IMPORT
+$(document).ready(function() {
+
+	var dialog = $("#importMetsDialog");
+	var dialogIcon = $("#importMetsDialogIcon");
+	var dialogContent = $("#importMetsDialogContent");
+	var startImportButton = $("#importMetsDialogStart");
+	var closeButton = $("#importMetsDialogClose");
+	var derivateId = dialog.attr("data-id");
+
+	dialog.on("show.bs.modal", function(e) {
+		$.get(jp.baseURL + "rsc/mets/llz/check/" + derivateId).done(function(e) {
+			if(e.check) {
+				importable();
+			} else {
+				failed(e);
+			}
+		}).fail(function(e) {
+			console.log(e);
+			failed(e);
+		});
+	});
+
+	function importable() {
+		dialogIcon.html("<i class='fa fa-3x fa-check' />");
+		dialogContent.html("Überprüfung erfolgreich. Sie können den Importvorgang jetzt starten.");
+		startImportButton.removeAttr("disabled");
+		startImportButton.on("click", startImport);
+	}
+
+	function failed(e) {
+		dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+		if(e.status == "401") {
+			dialogContent.html("Sie haben nicht die notwendige Berechtigung um den Importvorgang zu starten!");
+		} else {
+			dialogContent.html("Dieses Derivat kann nicht importiert werden!" +
+				" Bitte wenden Sie sich an den Administrator wenn Sie denken das dies ein Fehler ist.");
+		}
+	}
+
+	function startImport() {
+		dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin'></i>");
+		dialogContent.html("Importiere. Bitte warten...");
+		startImportButton.remove();
+		$.post(jp.baseURL + "rsc/mets/llz/import/" + derivateId).done(function() {
+			dialogIcon.html("<i class='fa fa-3x fa-check' />");
+			dialogContent.html("Import erfolgreich!");
+			closeButton.on("click", function() {
+				location.reload();
+			});
+		}).fail(function(e) {
+			console.log(e);
+			dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+			var msg = "Es ist ein Fehler während des Importvorgangs aufgetreten. " +
+				"Bitte wenden Sie sich an den Adminstrator!"
+			if(e.status == "401") {
+				msg = "Sie haben nicht die notwendigen Rechte.";
+			}
+			dialogContent.html(msg);
+		});
+	}
+
+});
