@@ -69,6 +69,10 @@ public abstract class DerivateLinkUtil {
         if (!MCRAccessManager.checkPermission(mcrObjId, "writedb")) {
             return;
         }
+        setLink(mcrObj, pathOfImage);
+    }
+
+    public static void setLink(MCRObject mcrObj, String pathOfImage) throws MCRActiveLinkException {
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
         if (derLinks == null) {
             derLinks = new MCRMetaElement();
@@ -85,7 +89,9 @@ public abstract class DerivateLinkUtil {
             link.setSubTag(DERIVATE_LINK);
             link.setReference(pathOfImage, null, null);
             derLinks.addMetaObject(link);
-            MCRMetadataManager.update(mcrObj);
+            if(MCRMetadataManager.exists(mcrObj.getId())) {
+                MCRMetadataManager.update(mcrObj);
+            }
         }
     }
 

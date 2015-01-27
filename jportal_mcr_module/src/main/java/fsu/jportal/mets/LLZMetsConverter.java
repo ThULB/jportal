@@ -1,12 +1,10 @@
 package fsu.jportal.mets;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -30,6 +28,10 @@ import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.Seq;
+
+import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
+import fsu.jportal.mets.LLZMetsUtils.FileHrefStrategy;
+import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
 
 /**
  * Converts the llz output format from uibk to the mycore mets format.
@@ -194,29 +196,6 @@ public class LLZMetsConverter {
         String order = divElement.getAttributeValue("ORDER");
         LogicalSubDiv div = new LogicalSubDiv(id, type, label, Integer.valueOf(order));
         return div;
-    }
-
-    // hell, how bad i'm waiting for java 8...
-    private static interface FileHrefStrategy {
-        public String get(String href) throws URISyntaxException;
-    }
-
-    private static class TiffHrefStrategy implements FileHrefStrategy {
-        private static Pattern JPG_PATTERN = Pattern.compile("\\.jpg", Pattern.CASE_INSENSITIVE);
-
-        @Override
-        public String get(String href) throws URISyntaxException {
-            URI uri = new URI(href);
-            return JPG_PATTERN.matcher(uri.getPath().replaceAll("^[^\\w]*", "")).replaceAll(".tiff");
-        }
-    }
-
-    private static class AltoHrefStrategy implements FileHrefStrategy {
-        @Override
-        public String get(String href) throws URISyntaxException {
-            URI uri = new URI(href);
-            return uri.getPath().replaceAll("^[^\\w]*", "").replaceFirst("idx_alto", "alto");
-        }
     }
 
 }

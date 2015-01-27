@@ -1,11 +1,14 @@
 package fsu.jportal.mets;
 
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -22,10 +25,12 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.IMetsElement;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
 
 /**
  * LLZ METS importer class.
@@ -46,23 +51,35 @@ public class LLZMetsImporter {
 
     private static final XPathExpression<Text> HEADING_EXPRESSION;
 
+    private static final XPathExpression<Attribute> FILEID_EXPRESSION;
+
+    private static final XPathExpression<Attribute> FILE_EXPRESSION;
+
     static {
         NS_LIST = new ArrayList<>();
         NS_LIST.add(MCRConstants.METS_NAMESPACE);
         NS_LIST.add(MCRConstants.MODS_NAMESPACE);
+        NS_LIST.add(MCRConstants.XLINK_NAMESPACE);
         Map<String, Object> vars = new HashMap<String, Object>();
         vars.put("id", null);
         LOGICAL_STRUCTMAP_EXPRESSION = XPathFactory.instance().compile(
             "mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null, NS_LIST);
         MODS_EXPRESSION = XPathFactory.instance().compile("mets:dmdSec[@ID=$id]/mets:mdWrap/mets:xmlData/mods:mods",
             Filters.element(), vars, NS_LIST);
-        TITLE_EXPRESSION = XPathFactory.instance().compile("mods:recordInfo/mods:recordOrigin/text()", Filters.text(), null,
-            NS_LIST);
+        TITLE_EXPRESSION = XPathFactory.instance().compile("mods:recordInfo/mods:recordOrigin/text()", Filters.text(),
+            null, NS_LIST);
         HEADING_EXPRESSION = XPathFactory.instance().compile("/add/doc/field[@name='heading_base']/text()",
             Filters.text());
+        FILEID_EXPRESSION = XPathFactory.instance().compile(
+            "mets:div/mets:fptr/mets:area/@FILEID[ends-with(., '-OCRMASTER')]", Filters.attribute(), null, NS_LIST);
+        FILE_EXPRESSION = XPathFactory.instance().compile(
+            "mets:fileSec/mets:fileGrp/mets:fileGrp[@ID='OCRMasterFiles']/mets:file[@ID=$id]/mets:FLocat/@xlink:href",
+            Filters.attribute(), vars, NS_LIST);
     }
 
     private Document mets;
+
+    private MCRDerivate derivate;
 
     private String lastHeading;
 
@@ -90,7 +107,7 @@ public class LLZMetsImporter {
 
         try {
             // get corresponding mycore objects
-            MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivateId);
+            derivate = MCRMetadataManager.retrieveMCRDerivate(derivateId);
             MCRObjectID volumeId = derivate.getOwnerID();
             MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(volumeId);
             JPVolume volume = new JPVolume(mcrObject);
@@ -116,7 +133,10 @@ public class LLZMetsImporter {
                 handleLogicalDivs(div, issue);
                 volume.addChild(issue);
             } else if (type.equals("volumeparts")) {
-                handleLogicalDivs(div, volume);
+                JPVolume vp = new JPVolume();
+                vp.setTitle("Volume Parts");
+                handleLogicalDivs(div, vp);
+                volume.addChild(vp);
             } else if (type.equals("rezension")) {
                 JPArticle article = buildArticle(div);
                 if (article != null) {
@@ -211,13 +231,40 @@ public class LLZMetsImporter {
         // heading
         if (lastHeading != null) {
             try {
-                article.addHeading(lastHeading);
+                /* we disable heading cause the ocr text is so bad that we would
+                   create a bunch of unnecessary categories */
+                // article.addHeading(lastHeading);
             } catch (Exception exc) {
-                LOGGER.error("Unable to set heading to logical div " + logicalDiv, exc);
-                getErrorList().add(articleId + ": Unable to set heading to logical div " + logicalId);
+                String msg = articleId + ": Unable to set heading of logical div " + logicalId;
+                LOGGER.error(msg, exc);
+                getErrorList().add(msg);
             }
         }
-        // TODO: derivate link
+        // derivate link
+        Attribute fileIdAttr = FILEID_EXPRESSION.evaluateFirst(logicalDiv);
+        if (fileIdAttr != null) {
+            String fileId = fileIdAttr.getValue();
+            FILE_EXPRESSION.setVariable("id", fileId);
+            Attribute hrefAttr = FILE_EXPRESSION.evaluateFirst(mets.getRootElement());
+            if (hrefAttr != null) {
+                String href = hrefAttr.getValue();
+                try {
+                    String newHref = new TiffHrefStrategy().get(href);
+                    MCRPath path = MCRPath.getPath(derivate.getId().toString(), newHref);
+                    if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
+                        article.setDerivateLink(derivate, newHref);
+                    } else {
+                        String msg = articleId + ": There is no image " + newHref + " in this derivate.";
+                        getErrorList().add(msg);
+                        LOGGER.warn(msg);
+                    }
+                } catch (Exception exc) {
+                    String msg = articleId + ": Unable to add derivate link " + href + " of logical div " + logicalId;
+                    getErrorList().add(msg);
+                    LOGGER.error(msg, exc);
+                }
+            }
+        }
 
         return article;
     }

@@ -4,7 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.util.regex.Pattern;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.jdom2.Attribute;
@@ -180,6 +183,37 @@ public abstract class LLZMetsUtils {
             return participantObject.getId();
         } else {
             return MCRObjectID.getInstance(mcrId);
+        }
+    }
+
+    /**
+     * Strategy to convert a llz @xlink:href to a mycore one.
+     */
+    static interface FileHrefStrategy {
+        public String get(String href) throws URISyntaxException;
+    }
+
+    /**
+     * Converts a llz *.tiff file href to mycore style href .
+     */
+    static class TiffHrefStrategy implements FileHrefStrategy {
+        private static Pattern JPG_PATTERN = Pattern.compile("\\.jpg", Pattern.CASE_INSENSITIVE);
+
+        @Override
+        public String get(String href) throws URISyntaxException {
+            URI uri = new URI(href);
+            return JPG_PATTERN.matcher(uri.getPath().replaceAll("^[^\\w]*", "")).replaceAll(".tif");
+        }
+    }
+
+    /**
+     * Alto files should be in an alto folder containing all *xml's.
+     */
+    static class AltoHrefStrategy implements FileHrefStrategy {
+        @Override
+        public String get(String href) throws URISyntaxException {
+            URI uri = new URI(href);
+            return uri.getPath().replaceAll("^[^\\w]*", "").replaceFirst("idx_alto", "alto");
         }
     }
 
