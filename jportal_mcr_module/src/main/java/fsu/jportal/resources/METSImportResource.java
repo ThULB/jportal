@@ -1,8 +1,11 @@
 package fsu.jportal.resources;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,12 +21,17 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.mycore.common.MCRJSONManager;
+import org.mycore.common.MCRUtils;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
+import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import fsu.jportal.mets.ConvertException;
@@ -67,7 +75,8 @@ public class METSImportResource {
 
     @POST
     @Path("import/{id}")
-    public void importMets(@PathParam("id") String derivateId) throws FileNotFoundException, IOException,
+    @Produces(MediaType.APPLICATION_JSON)
+    public String importMets(@PathParam("id") String derivateId) throws FileNotFoundException, IOException,
         JDOMException, ConvertException {
         checkPermission(derivateId);
         // load mets
@@ -75,33 +84,48 @@ public class METSImportResource {
         // import
         LLZMetsImporter importer = new LLZMetsImporter();
         importer.importMets(uibkMets, MCRObjectID.getInstance(derivateId));
+        Gson gson = MCRJSONManager.instance().createGson();
+        return gson.toJson(importer.getErrorList()).toString();
     }
 
-    /**
-     * 
-     * @param derivateId
-     * @return
-     * @throws JDOMException 
-     * @throws IOException 
-     * @throws FileNotFoundException 
-     * @throws ConvertException 
-     */
-    @GET
+    @POST
     @Path("convert/{id}")
+    public void convert(@PathParam("id") String derivateId) throws FileNotFoundException, IOException, JDOMException,
+        ConvertException, ValidationException {
+        Document mcrMets = convertMets(derivateId);
+        byte[] bytes = MCRUtils.getByteArray(mcrMets);
+        // check with METSValidator
+        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+        METSValidator validator = new METSValidator(in);
+        List<ValidationException> exceptionList = validator.validate();
+        if (!exceptionList.isEmpty()) {
+            throw exceptionList.get(0);
+        }
+        // replace with new mets.xml
+        MCRPath path = MCRPath.getPath(derivateId, "/mets.xml");
+        Files.write(path, bytes);
+    }
+
+    @GET
+    @Path("print/{id}")
     @Produces(MediaType.APPLICATION_XML)
-    public String convert(@PathParam("id") String derivateId) throws FileNotFoundException, IOException, JDOMException,
-        ConvertException {
-        checkPermission(derivateId);
-        // load mets
-        Document uibkMets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
-        // convert
-        LLZMetsConverter converter = new LLZMetsConverter();
-        Document mcrMets = converter.convert(uibkMets).asDocument();
-        // output
+    public String print(@PathParam("id") String derivateId) throws IOException, JDOMException, ConvertException {
+        Document mcrMets = convertMets(derivateId);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         StringWriter writer = new StringWriter();
         out.output(mcrMets, writer);
         return writer.toString();
+    }
+
+    private Document convertMets(String derivateId) throws FileNotFoundException, IOException, JDOMException,
+        ConvertException {
+        checkPermission(derivateId);
+        MCRJerseyUtil.checkPermission(derivateId, "writedb");
+        // load mets
+        Document uibkMets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
+        // convert
+        LLZMetsConverter converter = new LLZMetsConverter();
+        return converter.convert(uibkMets).asDocument();
     }
 
     /**

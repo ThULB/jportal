@@ -7,6 +7,7 @@ import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
 import org.apache.solr.client.solrj.SolrServerException;
@@ -34,6 +35,8 @@ import fsu.jportal.util.GndUtil;
 
 public abstract class LLZMetsUtils {
 
+    public final static DecimalFormat EIGHT_DIGIT_FORMAT;
+
     private static final XPathExpression<Attribute> BIB_LABEL_EXP;
 
     private static final XPathExpression<Attribute> DMDID_EXP;
@@ -43,7 +46,7 @@ public abstract class LLZMetsUtils {
             Filters.attribute(), null, IMetsElement.METS);
         DMDID_EXP = XPathFactory.instance().compile("mets:div[@TYPE='Bibliographischer Eintrag']/@DMDID",
             Filters.attribute(), null, IMetsElement.METS);
-
+        EIGHT_DIGIT_FORMAT = new DecimalFormat("00000000");
     }
 
     /**
@@ -60,6 +63,12 @@ public abstract class LLZMetsUtils {
         if (!rootElement.getName().toLowerCase().equals("mets")) {
             ValidatorUtil.throwException(rootElement, "Invalid root element name. It should be 'mets'.");
         }
+        // check profile
+        String profile = rootElement.getAttributeValue("PROFILE");
+        if (!profile.equals("DEA_METSALTO_WITH_IDREFS")) {
+            ValidatorUtil.throwException(rootElement, "Invalid PROFILE. Its '" + profile
+                + "' but should be 'DEA_METSALTO_WITH_IDREFS'.");
+        }
         // check agent
         String agent = ValidatorUtil
             .checkXPath(rootElement, "mets:metsHdr/mets:agent/mets:name/text()", Filters.text()).getText();
@@ -75,7 +84,7 @@ public abstract class LLZMetsUtils {
      * @throws ValidationException when something is invalid
      */
     public static void deepCheck(Document metsDocument) throws ValidationException {
-        // root element and agent check
+        // root element, profile and agent check
         fastCheck(metsDocument);
         // schema check
         SchemaValidator schemaValidator = new SchemaValidator();

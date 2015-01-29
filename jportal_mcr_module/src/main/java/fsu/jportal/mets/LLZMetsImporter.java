@@ -71,7 +71,7 @@ public class LLZMetsImporter {
         HEADING_EXPRESSION = XPathFactory.instance().compile("/add/doc/field[@name='heading_base']/text()",
             Filters.text());
         FILEID_EXPRESSION = XPathFactory.instance().compile(
-            "mets:div/mets:fptr/mets:area/@FILEID[ends-with(., '-OCRMASTER')]", Filters.attribute(), null, NS_LIST);
+            "mets:div/mets:fptr/mets:area/@FILEID", Filters.attribute(), null, NS_LIST);
         FILE_EXPRESSION = XPathFactory.instance().compile(
             "mets:fileSec/mets:fileGrp/mets:fileGrp[@ID='OCRMasterFiles']/mets:file[@ID=$id]/mets:FLocat/@xlink:href",
             Filters.attribute(), vars, NS_LIST);
@@ -128,15 +128,9 @@ public class LLZMetsImporter {
         for (Element div : children) {
             String type = div.getAttributeValue("TYPE").toLowerCase();
             if (type.equals("issue")) {
-                JPVolume issue = new JPVolume();
-                issue.setTitle(div.getAttributeValue("LABEL"));
-                handleLogicalDivs(div, issue);
-                volume.addChild(issue);
+                volume.addChild(buildVolume(div, div.getAttributeValue("LABEL")));
             } else if (type.equals("volumeparts")) {
-                JPVolume vp = new JPVolume();
-                vp.setTitle("Volume Parts");
-                handleLogicalDivs(div, vp);
-                volume.addChild(vp);
+                volume.addChild(buildVolume(div, "Volume Parts"));
             } else if (type.equals("rezension")) {
                 JPArticle article = buildArticle(div);
                 if (article != null) {
@@ -156,6 +150,8 @@ public class LLZMetsImporter {
                 JPArticle article = new JPArticle();
                 String title = type.equals("tp") ? "Titelblatt" : type.equals("preface") ? "Vorwort" : "Register";
                 article.setTitle(title);
+                handleArticleOrder(div, article);
+                handleDerivateLink(div, article);
                 volume.addChild(article);
             } else if (type.equals("heading")) {
                 lastHeading = div.getAttributeValue("LABEL");
@@ -163,9 +159,28 @@ public class LLZMetsImporter {
         }
     }
 
+    private JPVolume buildVolume(Element logicalDiv, String defaultTitle) throws ConvertException {
+        JPVolume volume = new JPVolume();
+        MCRObjectID volumeId = volume.getObject().getId();
+        // title
+        volume.setTitle(defaultTitle);
+        // order
+        String order = logicalDiv.getAttributeValue("ORDER");
+        if (order != null) {
+            volume.setHiddenPosition(Integer.valueOf(order));
+        } else {
+            String msg = volumeId + ": ORDER attribute of logical div " + logicalDiv.getAttributeValue("ID")
+                + " is not set!";
+            LOGGER.warn(msg);
+            getErrorList().add(msg);
+        }
+        // recursive calls for children
+        handleLogicalDivs(logicalDiv, volume);
+        return volume;
+    }
+
     private JPArticle buildArticle(Element logicalDiv) throws ConvertException {
         String dmdId = LLZMetsUtils.getDmDId(logicalDiv);
-        // handle dmd id is null!
         if (dmdId == null) {
             return null;
         }
@@ -197,17 +212,19 @@ public class LLZMetsImporter {
             article.setTitle(title.getTextNormalize());
         } else {
             article.setTitle("undefined");
-            String msg = articleId + ": Missing mods:titleInfo/mods:title of logical div " + logicalId;
+            String msg = articleId + ": Missing mods:recordInfo/mods:recordOrigin of logical div " + logicalId;
             LOGGER.warn(msg);
             getErrorList().add(msg);
         }
-        // participants - we just create participants which have a gnd id
+        // participants - we only create participants which have a gnd id
         for (Element name : mods.getChildren("name", MCRConstants.MODS_NAMESPACE)) {
             try {
+                // get or create person
                 MCRObjectID participantId = LLZMetsUtils.getOrCreatePerson(name);
                 if (participantId == null) {
                     continue;
                 }
+                // link with article
                 MCRContent participantContent = MCRXMLMetadataManager.instance().retrieveContent(participantId);
                 MCRContentTransformer transformer = MCRLayoutTransformerFactory.getTransformer("mycoreobject-solr");
                 MCRContent solrContent = transformer.transform(participantContent);
@@ -220,14 +237,7 @@ public class LLZMetsImporter {
             }
         }
         // order
-        String order = logicalDiv.getAttributeValue("ORDER");
-        if (order != null) {
-            article.setSize(Integer.valueOf(order));
-        } else {
-            String msg = articleId + ": ORDER attribute of logical div " + logicalId + " is not set!";
-            LOGGER.warn(msg);
-            getErrorList().add(msg);
-        }
+        handleArticleOrder(logicalDiv, article);
         // heading
         if (lastHeading != null) {
             try {
@@ -240,10 +250,40 @@ public class LLZMetsImporter {
                 getErrorList().add(msg);
             }
         }
+        // id's
+        List<Element> identifiers = mods.getChildren("identifier", MCRConstants.MODS_NAMESPACE);
+        for (Element identifier : identifiers) {
+            String type = identifier.getAttributeValue("type").toLowerCase();
+            type = type.equals("gbv") ? "ppn" : type;
+            String id = identifier.getTextNormalize();
+            if(id.startsWith("(")) {
+                // don't store the queries
+                article.setIdenti(type, id.substring(6));
+            }
+        }
         // derivate link
+        handleDerivateLink(logicalDiv, article);
+        return article;
+    }
+
+    private void handleArticleOrder(Element logicalDiv, JPArticle article) {
+        String order = logicalDiv.getAttributeValue("ORDER");
+        if (order != null) {
+            article.setSize(Integer.valueOf(order));
+        } else {
+            String msg = article.getObject().getId() + ": ORDER attribute of logical div "
+                + logicalDiv.getAttributeValue("ID") + " is not set!";
+            LOGGER.warn(msg);
+            getErrorList().add(msg);
+        }
+    }
+
+    private void handleDerivateLink(Element logicalDiv, JPArticle article) {
+        String logicalId = logicalDiv.getAttributeValue("ID");
+        MCRObjectID articleId = article.getObject().getId();
         Attribute fileIdAttr = FILEID_EXPRESSION.evaluateFirst(logicalDiv);
         if (fileIdAttr != null) {
-            String fileId = fileIdAttr.getValue();
+            String fileId = fileIdAttr.getValue().replaceAll("-INDEXALTO", "-OCRMASTER");
             FILE_EXPRESSION.setVariable("id", fileId);
             Attribute hrefAttr = FILE_EXPRESSION.evaluateFirst(mets.getRootElement());
             if (hrefAttr != null) {
@@ -265,8 +305,6 @@ public class LLZMetsImporter {
                 }
             }
         }
-
-        return article;
     }
 
     public List<String> getErrorList() {

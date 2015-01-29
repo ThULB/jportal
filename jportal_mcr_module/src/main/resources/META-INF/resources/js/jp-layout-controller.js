@@ -378,18 +378,18 @@ $(document).ready(function() {
 	}
 });
 
-// METS IMPORT
+// METS IMPORT & CONVERT
 $(document).ready(function() {
 
+	// IMPORT
 	var dialog = $("#importMetsDialog");
 	var dialogIcon = $("#importMetsDialogIcon");
 	var dialogContent = $("#importMetsDialogContent");
 	var startImportButton = $("#importMetsDialogStart");
 	var closeButton = $("#importMetsDialogClose");
-	var derivateId = dialog.attr("data-id");
 
 	dialog.on("show.bs.modal", function(e) {
-		$.get(jp.baseURL + "rsc/mets/llz/check/" + derivateId).done(function(e) {
+		$.get(jp.baseURL + "rsc/mets/llz/check/" + dialog.attr("data-id")).done(function(e) {
 			if(e.check) {
 				importable();
 			} else {
@@ -422,9 +422,10 @@ $(document).ready(function() {
 		dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin'></i>");
 		dialogContent.html("Importiere. Bitte warten...");
 		startImportButton.remove();
-		$.post(jp.baseURL + "rsc/mets/llz/import/" + derivateId).done(function() {
+		$.post(jp.baseURL + "rsc/mets/llz/import/" + dialog.attr("data-id")).done(function(data) {
 			dialogIcon.html("<i class='fa fa-3x fa-check' />");
-			dialogContent.html("Import erfolgreich!");
+			dialogContent.html("Import erfolgreich! Sie können die mets.xml jetzt konvertieren.");
+			console.log(data);
 			closeButton.on("click", function() {
 				location.reload();
 			});
@@ -439,5 +440,34 @@ $(document).ready(function() {
 			dialogContent.html(msg);
 		});
 	}
+
+	// CONVERT
+	var convertDialog = $("#convertMetsDialog");
+	var convertDialogIcon = $("#convertMetsDialogIcon");
+	var convertDialogContent = $("#convertMetsDialogContent");
+	var convertClose = $("#convertMetsDialogClose");
+	var convertStart = $("#convertMetsDialogStart");
+
+	convertStart.on("click", function() {
+		convertDialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin'></i>");
+		convertDialogContent.html("Konvertiere. Bitte warten...");
+		convertStart.remove();
+		$.post(jp.baseURL + "rsc/mets/llz/convert/" + convertDialog.attr("data-id")).done(function(data) {
+			convertDialogIcon.html("<i class='fa fa-3x fa-check' />");
+			convertDialogContent.html("Konvertierung erfolgreich!");
+			convertClose.on("click", function() {
+				location.reload();
+			});
+		}).fail(function(e) {
+			console.log(e);
+			convertDialogIcon.html("<i class='fa fa-3x fa-ban' />");
+			var msg = "Es ist ein Fehler während der Konvertierung aufgetreten. " +
+				"Bitte wenden Sie sich an den Adminstrator!"
+			if(e.status == "401") {
+				msg = "Sie haben nicht die notwendigen Rechte.";
+			}
+			convertDialogContent.html(msg);
+		});
+	});
 
 });

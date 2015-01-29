@@ -17,8 +17,13 @@ import org.apache.log4j.Logger;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRURL;
+import org.mycore.mets.validator.validators.ValidationException;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
@@ -167,18 +172,61 @@ public class JPXMLFunctions {
     }
 
     /**
-     * Checks if the given derivate contains a importable mets file. 
+     * Checks if the given derivate contains an uibk mets file
+     * and the corresponding mycore object has no children. 
      * 
      * @return
      */
     public static boolean isMetsImportable(String derivateId) {
+        boolean uibkMets = isUIBKMets(derivateId);
+        boolean children = hasChildren(derivateId);
+        return uibkMets && !children;
+    }
+
+    /**
+     * Checks if the given derivate contains an uibk mets file
+     * and the corresponding mycore object has children.
+     * 
+     * @param derivateId
+     * @return
+     */
+    public static boolean isMetsConvertable(String derivateId) {
+        boolean uibkMets = isUIBKMets(derivateId);
+        boolean children = hasChildren(derivateId);
+        return uibkMets && children;
+    }
+
+    /**
+     * Checks if the given derivate contains a uibk mets file.
+     * 
+     * @param derivateId
+     * @return
+     */
+    private static boolean isUIBKMets(String derivateId) {
         try {
             org.jdom2.Document mets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
             LLZMetsUtils.fastCheck(mets);
-        } catch (Exception exc) {
+            return true;
+        } catch (ValidationException ve) {
+            return false;
+        } catch (Exception e) {
+            LOGGER.error(e);
             return false;
         }
-        return true;
+    }
+
+    /**
+     * Checks if the corresponding mycore object has children.
+     * 
+     * @param derivateId
+     * @return true if there are children
+     */
+    private static boolean hasChildren(String derivateId) {
+        MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
+        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(mcrDerivateId);
+        MCRObjectID ownerID = derivate.getOwnerID();
+        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(ownerID);
+        return mcrObject.getStructure().getChildren().size() > 0;
     }
 
     /**

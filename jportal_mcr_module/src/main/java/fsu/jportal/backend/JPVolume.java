@@ -14,6 +14,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import fsu.jportal.mets.LLZMetsUtils;
+
 /**
  * Volume abstraction. Be aware that this class is not complete.
  * 
@@ -71,6 +73,20 @@ public class JPVolume implements JPContainer {
         MCRMetaElement maintitles = new MCRMetaElement(MCRMetaLangText.class, "maintitles", true, false, null);
         maintitles.addMetaObject(new MCRMetaLangText("maintitle", null, null, 0, null, title));
         volume.getMetadata().setMetadataElement(maintitles);
+    }
+
+    public void setHiddenPosition(String position) {
+        if (position == null) {
+            volume.getMetadata().removeMetadataElement("hidden_positions");
+            return;
+        }
+        MCRMetaElement positions = new MCRMetaElement(MCRMetaLangText.class, "hidden_positions", false, false, null);
+        positions.addMetaObject(new MCRMetaLangText("hidden_position", null, null, 0, "plain", position));
+        volume.getMetadata().setMetadataElement(positions);
+    }
+
+    public void setHiddenPosition(int position) {
+        setHiddenPosition(LLZMetsUtils.EIGHT_DIGIT_FORMAT.format(Integer.valueOf(position)));
     }
 
     public MCRObject getObject() {

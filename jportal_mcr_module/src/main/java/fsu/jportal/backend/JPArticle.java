@@ -1,6 +1,5 @@
 package fsu.jportal.backend;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +16,7 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
+import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -28,18 +28,14 @@ import org.mycore.frontend.util.DerivateLinkUtil;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
+import fsu.jportal.mets.LLZMetsUtils;
+
 /**
  * Simple java abstraction of a jportal article. This class is not complete at all.
  * 
  * @author Matthias Eichner
  */
 public class JPArticle implements JPComponent, Cloneable {
-
-    final static DecimalFormat EIGHT_DIGIT_FORMAT;
-
-    static {
-        EIGHT_DIGIT_FORMAT = new DecimalFormat("00000000");
-    }
 
     private MCRObject article;
 
@@ -91,7 +87,7 @@ public class JPArticle implements JPComponent, Cloneable {
     }
 
     public void setSize(int size) {
-        setSize(EIGHT_DIGIT_FORMAT.format(Long.valueOf(size)));
+        setSize(LLZMetsUtils.EIGHT_DIGIT_FORMAT.format(Integer.valueOf(size)));
     }
 
     public String getSize() {
@@ -106,6 +102,15 @@ public class JPArticle implements JPComponent, Cloneable {
         return size.getText();
     }
 
+    public void setIdenti(String type, String id) {
+        MCRMetaElement identis = article.getMetadata().getMetadataElement("identis");
+        if (identis == null) {
+            identis = new MCRMetaElement(MCRMetaLangText.class, "identis", false, true, null);
+            article.getMetadata().setMetadataElement(identis);
+        }
+        identis.addMetaObject(new MCRMetaLangText("identi", null, type, 0, "plain", id));
+    }
+
     public void addParticipant(MCRObjectID id, String title, String type) {
         MCRMetaElement participants = article.getMetadata().getMetadataElement("participants");
         if (participants == null) {
@@ -114,6 +119,7 @@ public class JPArticle implements JPComponent, Cloneable {
         }
         MCRMetaLinkID link = new MCRMetaLinkID("participant", id, null, title);
         link.setType(type);
+        participants.addMetaObject(link);
     }
 
     public List<MCRMetaLinkID> getParticipants() {
@@ -160,6 +166,29 @@ public class JPArticle implements JPComponent, Cloneable {
         rubrics.addMetaObject(metaClassification);
     }
 
+    public void setDerivateLink(MCRDerivate derivate, String href) throws MCRActiveLinkException {
+        String pathOfImage = derivate.getId().toString() + "/" + href;
+        DerivateLinkUtil.setLink(article, pathOfImage);
+    }
+
+    public void setDerivateLink(String link) throws MCRActiveLinkException {
+        DerivateLinkUtil.setLink(article, link);
+    }
+
+    /**
+     * The derivate link in form of derivateId/pathToFile or null.
+     * 
+     * @return derivate link as string
+     */
+    public String getDerivateLink() {
+        MCRMetaElement derivateLinks = article.getMetadata().getMetadataElement("derivateLinks");
+        if (derivateLinks == null) {
+            return null;
+        }
+        MCRMetaDerivateLink derivateLink = (MCRMetaDerivateLink) derivateLinks.getElementByName("derivateLink");
+        return derivateLink.getXLinkHref();
+    }
+
     /**
      * Creates a clone of the current article. Be aware that a new id is generated.
      */
@@ -168,16 +197,19 @@ public class JPArticle implements JPComponent, Cloneable {
         JPArticle clone = new JPArticle();
         clone.setTitle(getTitle());
         clone.setSize(getSize());
+        String derivateLink = getDerivateLink();
+        if (derivateLink != null) {
+            try {
+                clone.setDerivateLink(derivateLink);
+            } catch (Exception exc) {
+                throw new RuntimeException("Unable to set derivate link " + derivateLink + " to object "
+                    + clone.getObject().getId(), exc);
+            }
+        }
         // TODO: rubrics (heading)
         for (MCRMetaLinkID id : getParticipants()) {
             clone.addParticipant(id.getXLinkHrefID(), id.getXLinkLabel(), id.getType());
         }
         return clone;
     }
-
-    public void setDerivateLink(MCRDerivate derivate, String href) throws MCRActiveLinkException {
-        String pathOfImage = derivate.getId().toString() + "/" + href;
-        DerivateLinkUtil.setLink(article, pathOfImage);
-    }
-
 }

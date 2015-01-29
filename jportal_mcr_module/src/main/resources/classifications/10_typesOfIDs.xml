@@ -54,5 +54,8 @@
             <label xml:lang="de" text="PPN" />
             <label xml:lang="en" text="PPN" />
         </category>
+        <category ID="bvb">
+            <label xml:lang="de" text="Bibliotheksverbund Bayern" />
+        </category>
     </categories>
 </mycoreclass>
