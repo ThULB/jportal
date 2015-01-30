@@ -126,7 +126,9 @@ public class LLZMetsConverter {
             LogicalSubDiv subdDiv = getLogicalDiv(subDivElement);
             if (type.equals("issue") || type.equals("volumeparts")) {
                 handleLogicalDivs(subDivElement, subdDiv);
-            } else if (type.equals("rezension")) {
+                div.add(subdDiv);
+                continue;
+            } else if (type.equals("rezension") && subDivElement.getChildren().size() > 0) {
                 handleRecension(subDivElement, subdDiv);
             } else if (type.equals("tp")) {
                 subdDiv.setLabel("Titelblatt");
