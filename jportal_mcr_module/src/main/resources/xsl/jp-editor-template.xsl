@@ -240,7 +240,7 @@
 	</xsl:template>
 
 	<xsl:template match="jp:template[@option]" mode="input_select">
-		<select class="form-control" id="type" tabindex="1" size="1">
+		<select class="form-control jp-personSelect-select" id="type" tabindex="1" size="1">
 			<option value="" selected="">
 				<xed:output i18n="editor.common.select" />
 			</option>
@@ -253,36 +253,56 @@
 	</xsl:template>
 
 	<xsl:template match="jp:template[@type='subselect']" mode="subselect">
-		<xed:bind xpath="{@xpath}">
-			<xed:output value="@xlink:title" />
-		</xed:bind>
-		<xed:bind xpath="{@xpath2}">
-			<xed:output value="@xlink:href" />
-		</xed:bind>
-
-		<xed:if test="@xlink:title != ''">
-			<xed:output value="@xlink:title" />
-		</xed:if>
-		<xed:if test="@xlink:href != ''">
-			<label>
-				(
+		<div class="jp-personSelect-name">
+			<xed:bind xpath="{@xpath}">
+				<xed:output value="@xlink:title" />
+			</xed:bind>
+			<xed:bind xpath="{@xpath2}">
 				<xed:output value="@xlink:href" />
-				)
-			</label>
-		</xed:if>
+			</xed:bind>
+	
+			<xed:if test="@xlink:title != ''">
+				<xed:output value="@xlink:title" />
+			</xed:if>
+			<xed:if test="@xlink:href != ''">
+				<label>
+					(
+					<xed:output value="@xlink:href" />
+					)
+				</label>
+			</xed:if>
+		</div>
 
 		<!-- 2 buttons for selection of person or institution _ subselect -->
 		<div class="form-group">
 			<button type="submit" xed:target="subselect"
 				xed:href="{concat('solr/subselect?XSL.subselect.type=person&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=', @value)}"
-				class="btn btn-default" tabindex="1">
+				class="btn btn-default jp-personSelect-person" tabindex="1">
 				<xed:output i18n="jp.editor.person.select" />
 			</button>
 			<button type="submit" xed:target="subselect"
 				xed:href="{concat('solr/subselect?XSL.subselect.type=jpinst&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=', @value)}"
-				class="btn btn-default" tabindex="1">
+				class="btn btn-default jp-personSelect-inst" tabindex="1">
 				<xed:output i18n="jp.editor.inst.select" />
 			</button>
+		</div>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="personSelect-modal" tabindex="-1" role="dialog" aria-labelledby="personSelect-modal-title" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close personSelect-cancel" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+		        <h4 class="modal-title" id="personSelect-modal-title"></h4>
+		      </div>
+		      <div id="personSelect-modal-body" class="modal-body">
+		      </div>
+		      <div class="modal-footer">
+		        <button id="personSelect-cancel-button" type="button" class="btn btn-danger personSelect-cancel" data-dismiss="modal"></button>
+		        <button id="personSelect-send" type="button" class="btn btn-primary" disabled="disabled"></button>
+		      </div>
+		    </div>
+		  </div>
 		</div>
 	</xsl:template>
 </xsl:stylesheet>

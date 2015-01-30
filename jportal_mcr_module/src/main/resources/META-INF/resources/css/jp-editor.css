@@ -228,3 +228,16 @@ label.editorText {
 .twoButtons {
 	padding-right: 5px;
 }
+
+/*personSelect*/
+#personSelect-modal > .modal-dialog{
+	width: 930px;
+}
+
+#personSelect-modal-body{
+	padding-bottom: 0px;
+}
+
+#personSelect-select .popover-content{
+	height: 310px;
+}

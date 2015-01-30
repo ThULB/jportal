@@ -10,6 +10,8 @@
             <link href="{$WebApplicationBaseURL}bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />
             <script type="text/javascript" src="{$WebApplicationBaseURL}moment/min/moment-with-locales.js"></script>
             <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js"></script>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js"></script>
             <script type="text/javascript">
               $(function () {
                 $('.datetimepicker6').datetimepicker({
