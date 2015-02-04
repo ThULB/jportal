@@ -342,8 +342,10 @@ public class DerivateBrowserResource {
         Boolean all = jsonObject.get("completeDeri").getAsBoolean();
         MCRURNAdder urnAdder = new MCRURNAdder();
         if (all) {
-            urnAdder.addURNToDerivates(deriID);
-            return Response.ok().build();
+            if(urnAdder.addURNToDerivates(deriID)){
+                return Response.ok().build();
+            }
+            return Response.serverError().build();
         }
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonO = jsonArray.get(i).getAsJsonObject();

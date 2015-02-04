@@ -164,18 +164,20 @@ var derivateBrowserFileView = (function () {
 		$(html).find("input[name='_xed_submit_servlet:CreateObjectServlet']").remove();
 		$(html).find("input[name='_xed_submit_cancel']").remove();
         if ($("#journal-info").hasClass("loaded")) {
-            $(html).find("script:not('#datetimepicker-script')").remove();
-            $(html).find("link").remove();
+            $(html).find("script:not('.jp-db-reload')").remove();
+        }
+        else{
+            $(html).find("script:not('.jp-db-load')").remove();
         }
         $("#journal-info-button-save").data("mode", mode);
         $("#journal-info-button-whileEdit").removeClass("hidden");
         $("#journal-info-button-notEdit").addClass("hidden");
-        $("#journal-info-text").html(html);
 		if ($("#journal-info").hasClass("hidden")){
 			$("#journal-info").removeClass("hidden");
 			$("#derivate-browser").addClass("hidden");
 		}
         $("#journal-info").addClass("loaded");
+        $("#journal-info-text").html(html);
 	}
 
     //ajax Methods

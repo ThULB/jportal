@@ -27,8 +27,7 @@ $(function () {
 			data: $("#main").find("form").first().serialize() + "&" + encodeURIComponent(name),
 			success: function(data) {
 						var html = $("<div></div>").append(data);
-						$(html).find("script:not('#datetimepicker-script')").remove();
-						$(html).find("link").remove();
+						$(html).find("script:not('.jp-db-reload')").remove();
 						$("#main").html($(html).find("#main").html());
 						$("#main").trigger("changed");
 					},

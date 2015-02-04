@@ -918,13 +918,13 @@ var DerivateBrowser = function(){
 								$(".browser-table-file").filter(function() {
 									return ($(this).data("deriID") == dID) && ($(this).data("path") == file.path);
 								}).find("td.browser-table-file-urn").html(file.URN);
+                                derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.success"), true)
 							}
 							else{
-                                derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn"), false);
+                                derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.error"), false);
 							}
 						});
 					}
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.success"), true)
 				},
 				500: function() {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.error"), false);

@@ -90,6 +90,7 @@ $(function () {
 		$("#personSelect-modal-title").html($("#personSelect-select > div > h2").html());
 		$("#personSelect-modal").on('hidden.bs.modal', function() {
 			$("#personSelect-modal-body").html("");
+			$("#personSelect-send").attr("disabled", "");
 		});
         $("#personSelect-modal").modal("show");
 	}

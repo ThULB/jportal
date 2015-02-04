@@ -8,11 +8,11 @@
         <xed:when test="$acl/@permission = 'true'">
           <xed:if test="$type != 'jpinst'">
             <link href="{$WebApplicationBaseURL}bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />
-            <script type="text/javascript" src="{$WebApplicationBaseURL}moment/min/moment-with-locales.js"></script>
-            <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
-            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js"></script>
-            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js"></script>
-            <script type="text/javascript" id="datetimepicker-script">
+            <script type="text/javascript" src="{$WebApplicationBaseURL}moment/min/moment-with-locales.js" class="jp-db-load"></script>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" class="jp-db-load"></script>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js" class="jp-db-load"></script>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js" class="jp-db-load"></script>
+            <script type="text/javascript" class="jp-db-load jp-reload">
               $(function () {
                 $('.datetimepicker6').datetimepicker({
                   language: $('#hiddenLanguage').text(),

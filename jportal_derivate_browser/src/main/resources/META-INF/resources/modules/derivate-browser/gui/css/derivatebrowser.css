@@ -1015,3 +1015,13 @@ li.derivate-browser-breadcrumb-entry{
     width: 130px;
     margin-bottom: 4px;
 }
+
+.jp-popover-container .jp-metadata dt:after {
+    content: ": ";
+}
+
+.jp-popover-container .jp-metadata dd {
+    float: left;
+    margin-bottom: 4px;
+    margin-left: 22px;
+}
