@@ -16,6 +16,15 @@ public class WebResourceTransformer implements ClassFileTransformer {
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         ClassReader cr = new ClassReader(classfileBuffer);
+        if(className.contains("WebAppContext")){
+            LOGGER.info("Info for Class: " + className);
+            String[] interfaces = cr.getInterfaces();
+            for (String string : interfaces) {
+                LOGGER.info("Interface: " + string);
+            }
+            LOGGER.info("Class loader: " + loader);
+            LOGGER.info("End Info for Class: " + className);
+        }
         ClassWriter cw = new ClassWriter(cr,0);
         cr.accept(new WebResourceVisitor(cw), 0);
         return cw.toByteArray();
