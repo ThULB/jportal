@@ -10,10 +10,20 @@
       <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed" ref="subtitles" />
 
       <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed" ref="participants" />
-      
-<!--   need published already selected  -->
-      <xed:bind xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0'][@type='published']" />
-      <xed:include uri="xslStyle:jp-editor-template?xedIncParam=jportal_class_00000008:webapp:/editor/common/editor-common.xed" ref="dates" />
+			
+			<jp:template name="selectInput" xpath="blank" i18n="editormask.labels.date_label"
+        option="true" noXpath="dateSelect" noPleaseSelect="true" bottom="littleSpace">
+					<option i18n="metaData.jpjournal.date.published" value="published" />
+					<option i18n="editormask.labels.coverage_from" value="published_original" />
+					<option i18n="editormask.labels.coverage_from_until" value="published_from" />
+   		</jp:template>
+	
+			<jp:template name="date_select" xpath="dates[@class='MCRMetaISO8601Date']" validate="date">
+				<jp:template type="date" id_container="dateContainer" class="input-group" span_date="after" id_input="publshDate" xpath="date[@inherited='0'][@type='published']" />
+				<jp:template type="date" id_container="dateOriginalContainer" class="input-group" span_date="after" id_input="publshOriginalDate" xpath="date[@inherited='0'][@type='published_Original']" />
+				<jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 jp-layout-floatLeftNoXS" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_Original_From']" seperator="true" />
+				<jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="untilDate" xpath="date[@inherited='0'][@type='published_Original_Till']" />
+			</jp:template>
 
       <xed:repeat xpath="refs[@class='MCRMetaLangText']/ref[@inherited='0'][@form='plain']" min="0" max="10">
         <jp:template name="textInput" xpath="." i18n="editormask.labels.pub_reference" maxlength="128" />

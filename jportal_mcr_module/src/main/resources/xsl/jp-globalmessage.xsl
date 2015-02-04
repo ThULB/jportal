@@ -20,7 +20,7 @@
           <xsl:value-of select="head" />
         </strong>
         <p>
-          <xsl:value-of select="message" />
+          <xsl:value-of select="message" disable-output-escaping="yes"/>
         </p>
       </div>
     </div>

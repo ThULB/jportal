@@ -65,10 +65,12 @@
 			<label class="col-sm-2" for="message">
 				<xsl:value-of select="i18n:translate('jp.site.globalMsgEditor.msg')" />
 			</label>
-			<div class="col-sm-10">
-				<textarea id="message" class="form-control">
+			<div id="testCkeditor" class="col-sm-10">
+<!-- 				<textarea id="message" class="form-control" > -->
+				<textarea id="message" class="ckeditor" >
 					<xsl:value-of select="$gm/message" />
 				</textarea>
+				<xsl:call-template name="jp.globalmessage.ckeditor.settings" />
 			</div>
 		</div>
 		<div class="col-sm-12 text-right row">
@@ -79,12 +81,14 @@
 	</xsl:template>
 
 	<xsl:template name="jp.globalmessage.editor.js">
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
 		<script type="text/javascript">
 		  $(document).ready(function() {
 			$('#submit').on('click', function () {
 			  var visibility = $('#visibility').val();
 			  var head = $('#head').val();
-			  var message = $('#message').val();
+<!-- 			  var message = $('#message').val(); -->
+				var message = CKEDITOR.instances.message.getData();  
 			  $.ajax({
 				url: jp.baseURL + "rsc/globalMessage/save",
 			    type:"POST",
@@ -103,6 +107,22 @@
 			  });
 			});
 		  });
+		</script>
+	</xsl:template>
+
+	<xsl:template name="jp.globalmessage.ckeditor.settings">
+		<script type="text/javascript">
+		  CKEDITOR.replace('message',{
+    		resize_enabled : false,
+    		entities: false,
+    		enterMode: CKEDITOR.ENTER_BR,
+    		entities_processNumerical: 'force',
+    		tabSpaces: 4,
+    		fillEmptyBlocks: false,
+    		height : '200px',
+    		toolbar : [ [ 'Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-',
+    		             'Link', 'Unlink', 'Source', 'Save' ] ]
+    	});
 		</script>
 	</xsl:template>
 

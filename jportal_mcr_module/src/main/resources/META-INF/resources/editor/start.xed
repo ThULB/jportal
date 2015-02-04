@@ -25,6 +25,9 @@
               <xed:output value="$CurrentLang" />
             </span>
           </xed:if>
+          <span id="currentType" style="display:none">
+              <xed:output value="$type" />
+          </span>
           <xed:source uri="mcrobject:{$id}" />
           <xed:bind xpath="/mycoreobject[@version='2.0']">
             <span id="journalID" style="display:none">
@@ -59,11 +62,7 @@
               </div>
             </xed:bind>
           </xed:bind>
-          <script type="text/javascript">
-            $(document).ready(function() {
-              document.title = $("#xeditor-title").text().trim() + " " + document.title;
-            });
-          </script>
+          <script type="text/javascript" src="../js/jp-editor.js" />
         </xed:when>
         <xed:otherwise>
           <div class="alert alert-danger">Permission denied</div>

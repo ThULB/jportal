@@ -31,7 +31,7 @@
 
   <xed:template id="participants">
     <xed:repeat
-      xpath="participants[@class='MCRMetaLinkID'][@heritable='false'][@notinherit='false']/participant[@inherited='0'][@xlink:type='locator']">
+      xpath="participants[@class='MCRMetaLinkID']/participant[@inherited='0'][@xlink:type='locator']">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.participants_label" buttons="true"
         classification="jportal_class_00000007" validate="subselect">
         <jp:template type="subselect" value="editor%2Fstart.xed%3Ftype%3D{$type}%26action%3D{$action}%26id%3D{$id}%26parent%3D{$parent}"
@@ -42,13 +42,13 @@
 
   <xed:template id="maintitle">
     <jp:template name="textArea"
-      xpath="maintitles[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/maintitle[@inherited='0'][@form='plain']"
+      xpath="maintitles[@class='MCRMetaLangText']/maintitle[@inherited='0'][@form='plain']"
       i18n="editormask.labels.bibdescript" validate="required" />
   </xed:template>
 
   <xed:template id="subtitles">
     <xed:repeat
-      xpath="subtitles[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/subtitle[@inherited='0'][@form='plain']" min="0">
+      xpath="subtitles[@class='MCRMetaLangText']/subtitle[@inherited='0'][@form='plain']" min="0">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.subtitle" buttons="true"
         classification="jportal_class_00000006"  validate="interdependentSelect" />
       <jp:template name="textArea" xpath="." selectXpath="@type" validate="interdependentInput" />
@@ -56,10 +56,16 @@
   </xed:template>
 
   <xed:template id="dates">
-    <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']" min="0" max="2">
-      <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.date_label" buttons="true"
-        classification="{xedIncParam}" noPleaseSelect="true" />
-      <jp:template name="textInput" xpath="." selectXpath="@type" validate="date" maxlength="128" classDatePick="datetimepicker6"/>
-    </xed:repeat>
+  	<jp:template name="selectInput" xpath="blank" i18n="editormask.labels.date_label"
+        option="true" noXpath="dateSelect" noPleaseSelect="true" bottom="littleSpace">
+        	<option i18n="metaData.jpjournal.date.published" value="published" />
+        	<option i18n="metaData.jpjournal.date.published_from_until" value="published_from" />
+    </jp:template>
+  
+	  <jp:template name="date_select" xpath="dates[@class='MCRMetaISO8601Date']">
+		    <jp:template type="date" id_container="dateContainer" class="input-group" id_input="publshDate" span_date="after" xpath="date[@inherited='0'][@type='published']" />
+		    <jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 jp-layout-floatLeftNoXS" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_from']" seperator="true" />
+		    <jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="untilDate" xpath="date[@inherited='0'][@type='published_until']" />
+	  </jp:template>
   </xed:template>
 </xed:template>

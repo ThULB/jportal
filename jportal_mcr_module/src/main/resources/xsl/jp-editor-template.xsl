@@ -56,13 +56,13 @@
 		select) and 3. buttons -->
 	<!-- Form: titel | input | buttons -->
 	<xsl:template
-		match="jp:template[contains('textInput|textInputSm|selectInput|textArea', @name)]">
+		match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select', @name)]">
 		<div class="row">
 			<xsl:if test="@small">
 				<xsl:attribute name="class"></xsl:attribute>
 			</xsl:if>
 
-			<!-- 1. part: title class="form-group col-md-12" -->
+			<!-- 1. part: title -->
 			<div class="col-md-2 text-right">
 				<xsl:if test="@small">
 					<xsl:attribute name="class">col-md-3</xsl:attribute>
@@ -71,7 +71,7 @@
 				<xsl:apply-templates select="." mode="title" />
 			</div>
 
-			<!-- 2. part: input class="form-group col-md-8" -->
+			<!-- 2. part: input -->
 			<div class="col-md-8">
 				<xsl:if test="@small">
 					<xsl:attribute name="class">col-md-9</xsl:attribute>
@@ -79,7 +79,7 @@
 				</xsl:if>
 				<xed:bind xpath="{@xpath}">
 					<xsl:apply-templates select="jp:template[@name='textInput']" />
-					<xsl:if test="@name!='textInputSm'">
+					<xsl:if test="@name!='textInputSm' and @name!='date_select'">
 						<div>
 							<xsl:attribute name="class">form-group {$xed-validation-marker}</xsl:attribute>
 							<xsl:if test="@classDatePick">
@@ -94,11 +94,15 @@
 							<xsl:apply-templates select="." mode="required" />
 						</div>
 					</xsl:if>
+					<xsl:if test="@name='date_select'">
+						<div class="form-group">
+							<xsl:apply-templates select="jp:template[@type='date']" mode="date_select" />
+						</div>
+					</xsl:if>
 				</xed:bind>
 				<!-- add text <span> -->
 				<xsl:apply-templates select="span[@type='addT']" />
-				<xsl:apply-templates select="jp:template[@type='subselect']"
-					mode="subselect" />
+				<xsl:apply-templates select="jp:template[@type='subselect']" mode="subselect" />
 			</div>
 			<!-- 3.part: buttons -->
 			<xsl:apply-templates select="." mode="buttons" />
@@ -206,11 +210,11 @@
 	<xsl:template match="jp:template[@classification]" mode="input_select">
 		<!-- load classification -->
 		<select class="form-control" id="type" tabindex="1" size="1">
-            <xsl:if test="not(@noPleaseSelect) or @noPleaseSelect = 'false'">
-    			<option value="" selected="">
-    				<xed:output i18n="editor.common.select" />
-    			</option>
-            </xsl:if>
+      <xsl:if test="not(@noPleaseSelect) or @noPleaseSelect = 'false'">
+    		<option value="" selected="">
+    			<xed:output i18n="editor.common.select" />
+    		</option>
+      </xsl:if>
 			<xsl:variable name="classID">
 				<xsl:choose>
 					<xsl:when test="@classification = '{xedIncParam}'">
@@ -241,11 +245,26 @@
 
 	<xsl:template match="jp:template[@option]" mode="input_select">
 		<select class="form-control jp-personSelect-select" id="type" tabindex="1" size="1">
-			<option value="" selected="">
-				<xed:output i18n="editor.common.select" />
-			</option>
+			<xsl:if test="@noXpath">
+						<xsl:attribute name="name"></xsl:attribute>
+						<xsl:attribute name="id"><xsl:value-of select="@noXpath" /></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="not(@noPleaseSelect) or @noPleaseSelect = 'false'">
+				<option value="">
+					<xsl:if test="@selected != ''">
+							<xsl:attribute name="selected">selected</xsl:attribute>
+					</xsl:if>
+					<xed:output i18n="editor.common.select" />
+				</option>
+			</xsl:if>
 			<xsl:for-each select="option">
 				<option style="padding-left: 0px;" value="{@value}">
+					<xsl:attribute name="title">
+						<xsl:value-of select="concat('{i18n:', @i18n, '}')" />
+					</xsl:attribute>
+					<xsl:if test="@selected">
+						<xsl:attribute name="selected"></xsl:attribute>
+					</xsl:if>
 					<xed:output i18n="{@i18n}" />
 				</option>
 			</xsl:for-each>
@@ -303,6 +322,42 @@
 		      </div>
 		    </div>
 		  </div>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="jp:template[@type='date']" mode="date_select" >
+		<div>
+			<xsl:attribute name="id">
+				<xsl:value-of select="@id_container" />
+			</xsl:attribute>
+			<xsl:attribute name="class">
+				<xsl:value-of select="@class" />
+			</xsl:attribute>
+			<xsl:if test="@span_date = 'before'">
+				<span class="input-group-addon btn btn-default jp-layout-white">
+		      <span class="glyphicon-calendar glyphicon"></span>
+		    </span>
+			</xsl:if>
+	 	  <xed:bind xpath="{@xpath}">
+	  	  <input class="form-control date-field" type="text" placeholder="yyyy-MM-dd" maxlength="10">
+		  	  <xsl:attribute name="id">
+						<xsl:value-of select="@id_input" />
+					</xsl:attribute>	 
+		  	  <xsl:if test="@class_input">
+		  	  	<xsl:attribute name="class">
+							<xsl:value-of select="@class_input" />
+						</xsl:attribute>	
+					</xsl:if>
+				</input>
+	  	</xed:bind>
+	  	<xsl:if test="@seperator='true'">
+	  		<span id="dateSeperator" class="input-group-addon hidden-xs jp-layout-sharpBorderRight">-</span>
+	  	</xsl:if>
+	  	<xsl:if test="@span_date = 'after'">
+		  	<span class="input-group-addon btn btn-default jp-layout-white">
+		      <span class="glyphicon-calendar glyphicon"></span>
+		    </span>
+	    </xsl:if>
 		</div>
 	</xsl:template>
 </xsl:stylesheet>
