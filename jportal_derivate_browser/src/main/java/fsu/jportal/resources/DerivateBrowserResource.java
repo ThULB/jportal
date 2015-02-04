@@ -1,5 +1,7 @@
 package fsu.jportal.resources;
 
+import static org.mycore.access.MCRAccessManager.PERMISSION_DELETE;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
@@ -32,15 +34,18 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.frontend.cli.MCRObjectCommands;
-import org.mycore.frontend.fileupload.MCRUploadHandler;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
+import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
 import org.xml.sax.SAXException;
@@ -116,18 +121,27 @@ public class DerivateBrowserResource {
          InputStream mainGui = getClass().getResourceAsStream("/META-INF/resources/modules/derivate-browser/gui/derivatebrowser.html");
          return Response.ok(mainGui).build();
      }
-
-//    @DELETE
-//    @Path("{derivID}{path:(/.*)*}")
-//    //    @MCRRestrictedAccess(ResourceAccess.class)
-//    public Response deleteFile(@PathParam("derivID") String derivID, @PathParam("path") String path) {
-//        int status;
-//        status = DerivateTools.delete(MCRPath.getPath(derivID, path));
-//        if (status == 1) return Response.ok().build();
-//        if (status == 2) return Response.status(Status.NOT_FOUND).build();
-//        return Response.serverError().build();
-//    }
-    
+     
+    @DELETE
+    @Path("{derivID}{path:(/.*)*}")
+    //    @MCRRestrictedAccess(ResourceAccess.class)
+    public Response deleteDoc(@PathParam("derivID") String docID) {
+        MCRObjectID mcrId = MCRJerseyUtil.getID(docID);
+//        MCRJerseyUtil.checkPermission(mcrId, PERMISSION_DELETE);
+        if (mcrId.getTypeId().equals("derivate")) {
+            MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(mcrId);
+            MCRMetadataManager.delete(mcrDer);
+        } else {
+            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+            try {
+                MCRMetadataManager.delete(mcrObj);
+            } catch (MCRActiveLinkException mcrActExc) {
+                return Response.status(Status.FORBIDDEN).entity(mcrActExc.getMessage()).build();
+            }
+        }
+        return Response.ok().build();
+    }
+   
     @DELETE
     @Path("multiple")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -206,25 +220,12 @@ public class DerivateBrowserResource {
 
         return Response.ok().build();
     }
-    
-//    @GET
-//    @Path("{derivID}/urnUpdate")
-//    public Response urnUpdate(@PathParam("derivID") String derivID) throws IOException {
-//        List<MCRURN> urnList = MCRURNManager.get(MCRObjectID.getInstance(derivID));
-//        for (MCRURN mcrurn : urnList) {
-//            mcrurn.setRegistered(false);
-//            MCRURNManager.update(mcrurn);
-//        }
-//        return Response.ok().build();
-//    }
-    
+        
     @GET
     @Path("deriid/{derivID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDeriID(@PathParam("derivID") String derivID) throws IOException, JDOMException, SAXException {
-//        MCRXMLMetadataManager metaManger = MCRXMLMetadataManager.instance();
         MCRObjectID mcrid =MCRObjectID.getInstance(derivID);
-//        Document doc = metaManger.retrieveXML(mcrid);
         List<MCRObjectID> derivateIds = MCRMetadataManager.getDerivateIds(mcrid, 0, TimeUnit.MILLISECONDS);
         JsonArray jsonArray = new JsonArray();
         for (MCRObjectID objid : derivateIds){
@@ -269,7 +270,6 @@ public class DerivateBrowserResource {
         Derivate derivate = new Derivate(deriID);
         MCRDirectory node;
         List<String> fileTyps = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
-//        MCRFilesystemNode node;
         if (path != null && !"".equals(path.trim())) {
             node = (MCRDirectory) derivate.getChildByPath(path);
         } else {
@@ -295,7 +295,6 @@ public class DerivateBrowserResource {
             else{
                 jsonFile.addProperty("exists", "2");
             }
-
         }
         return Response.ok(jsonObject.toString()).build();
     }
@@ -305,12 +304,19 @@ public class DerivateBrowserResource {
     @Path("upload")
     public Response getUpload(@FormDataParam("file") InputStream inputStream, @FormDataParam("filename") String filename, @FormDataParam("size") long filesize, @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID, @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite){
         if (overwrite){
-            if (DerivateTools.delete(MCRPath.getPath(derivateID, path + "/" + filename)) != 1){
+            if (DerivateTools.delete(MCRPath.getPath(documentID, path + "/" + filename)) != 1){
                 return Response.serverError().build();
             }
         }
+        if (derivateID.equals("")){
+            derivateID = null;
+        }
         MCRSession session = MCRSessionMgr.getCurrentSession();
-        MCRUploadHandler handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
+        if (derivateID == null){
+            String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
+            derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
+        }
+        MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
         try {
             handler.startUpload(1);
             session.commitTransaction();
@@ -322,7 +328,7 @@ public class DerivateBrowserResource {
             e.printStackTrace();
             return Response.serverError().build();
         }
-        return Response.ok().build();
+        return Response.ok(derivateID).build();
     }
     
     @POST

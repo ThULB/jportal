@@ -2,39 +2,38 @@ $(function () {
 	var personSelectSessionID = "";
 	var submit = "";
     var type = "";
-
-    $("#main > .section").on("click",".jp-personSelect-person", function(event) {
+    
+    $("#main").parent().on("click",".jp-personSelect-person", function(event) {
 		event.preventDefault();
-        console.log("blub");
         type = "person";
         $(this).addClass("personSelect-use");
         setSubmit($(this));
 		getPersonSelect("","score+desc", 0, getModal);
 	});
 	
-	$("#main > .section").on("click",".jp-personSelect-inst", function(event) {
+    $("#main").parent().on("click",".jp-personSelect-inst", function(event) {
 		event.preventDefault();
         type = "jpinst";
     	setSubmit($(this));
 		getPersonSelect("","score+desc", 0, getModal);
 	});
 
-	$("#main > .section").on("click", "#submitButton", function(event) {
+    $("#main").parent().on("click", "#submitButton", function(event) {
 		event.preventDefault();
 		getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
 	});
 	
-	$("#main > .section").on("click", "#personSelect-send", function() {
+    $("#main").parent().on("click", "#personSelect-send", function() {
 		var entry = $("#personSelect-select .list-group-item.active");
 		var title = $(entry).attr("data-submit-url").split("@xlink:title=")[1];
 		sendPerson(entry.attr("data-jp-mcrid"), title, personSelectSessionID);
 	});
 
-	$("#main > .section").on("change", "#personSelect-searchBar select", function() {
+    $("#main").parent().on("change", "#personSelect-searchBar select", function() {
 		getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
 	});
 	
-	$("#main > .section").on("click", "#personSelect-select ul.pagination > li:not(.active)", function(event) {
+    $("#main").parent().on("click", "#personSelect-select ul.pagination > li:not(.active)", function(event) {
 		event.preventDefault();
 		var link = $(this).find("a").attr("href").split("start=");
 		if (link.length == 2){
@@ -45,11 +44,11 @@ $(function () {
 		}
 	});
 	
-	$("#main > .section").on("click", "#personSelect-select .list-group-item ", function() {
+    $("#main").parent().on("click", "#personSelect-select .list-group-item ", function() {
 		$("#personSelect-send").removeAttr("disabled");
 	});
 	
-	$("#main > .section").on("click", ".personSelect-cancel", function() {
+    $("#main").parent().on("click", ".personSelect-cancel", function() {
         $("#personSelect-modal").modal("hide");
 	});
 
@@ -74,7 +73,7 @@ $(function () {
 			dataType: "text",
 			success: function(data) {
 						$("input[name='_xed_session']").val(data);
-						$(".personSelect-use").parent().prev(".jp-personSelect-name").html(title + " <label>( " + href +  " )</label>");
+						$(".personSelect-use").parent().prev(".jp-personSelect-name").html(title + " " + "<label>( " + href + " )</label>");
 						$(this).removeClass("personSelect-use");
 						$("#personSelect-modal").modal("hide");
 					},

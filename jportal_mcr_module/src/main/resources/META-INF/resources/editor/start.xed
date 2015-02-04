@@ -12,7 +12,7 @@
             <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
             <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js"></script>
             <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js"></script>
-            <script type="text/javascript">
+            <script type="text/javascript" id="datetimepicker-script">
               $(function () {
                 $('.datetimepicker6').datetimepicker({
                   language: $('#hiddenLanguage').text(),

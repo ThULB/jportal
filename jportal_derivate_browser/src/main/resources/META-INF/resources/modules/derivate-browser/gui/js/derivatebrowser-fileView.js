@@ -1,12 +1,15 @@
 
 var derivateBrowserFileView = (function () {
 
-    //private Properties
-    var currentDocID = "",
-        currentPath = "";
-
-
     //private Methods
+    $("body").on("changed", "#main", function(){
+        console.log("main changed");
+        $("#main").find("form").attr("id", "doc-editor-form");
+        $("#main").find("input[name='_xed_submit_servlet:UpdateObjectServlet']").remove();
+        $("#main").find("input[name='_xed_submit_servlet:CreateObjectServlet']").remove();
+        $("#main").find("input[name='_xed_submit_cancel']").remove();
+    });
+
 	function showDerivatOrFolder(deriID, data){
 		$("#journal-info").addClass("hidden");
 		$(".btn-delete-all").addClass("faded");
@@ -19,40 +22,19 @@ var derivateBrowserFileView = (function () {
 			showPanel(data, false);
 		}
 		$("#browser-table-files").html("");
-//		var popoverTemplate = $("#popover-template").html();
-//		var fileEntryTemplate = $("#file-entry-template").html();
-//		var folderEntryTemplate = $("#folder-entry-template").html();
 		$.each(data.children, function(i, file) {
 			file.deriID = deriID;
 			if (file.type == "file"){
 				addFileToView(file, data.mainDoc);
-//				var popOverOutput = $(Mustache.render(popoverTemplate, file));
-//				var fileEntryOutput = $(Mustache.render(fileEntryTemplate, file));
-//				$(popOverOutput).find(".img-size").html(getReadableSize($(popOverOutput).find(".img-size").html(),0));
-//				$(fileEntryOutput).find(".popover-file").popover({content: popOverOutput, html: true});
-//				$(fileEntryOutput).data("path", file.absPath);
-//				$(fileEntryOutput).data("deriID", deriID);
-//				$(fileEntryOutput).data("docID", deriID);
-//				if (data.maindocName == file.absPath){
-//					$(fileEntryOutput).data("startfile", true);
-//				}
-//				$(fileEntryOutput).appendTo("#browser-table-files");
 			}
 			else{
 				addFolderToView(file, data.absPath);
-//				var folderEntryOutput = $(Mustache.render(folderEntryTemplate, file));
-//				$(folderEntryOutput).data("path", file.absPath);
-//				$(folderEntryOutput).data("deriID", deriID);
-//				$(folderEntryOutput).appendTo("#browser-table-files");
-//				$(derivateBrowserNavigation).trigger("DerivatFolder", [file.name, file.absPath, deriID, data.absPath]);
-//				//nicht so!!!
-////				derivateBrowserNavigation.addChildToDerivat(file.name, file.absPath, deriID, data.absPath)
 			}
 		});
 		$("#derivate-browser").removeClass("hidden");
 		createBreadcrumb(deriID, data.absPath);
 	}
-	
+
 	function addFileToView(file , mainDoc) {
 		var fileEntryTemplate = $("#file-entry-template").html();
 		var fileEntryOutput = $(Mustache.render(fileEntryTemplate, file));
@@ -66,7 +48,7 @@ var derivateBrowserFileView = (function () {
 		}
 		$(fileEntryOutput).appendTo("#browser-table-files");
 	}
-	
+
 	function addFolderToView(folder, path) {
 		var folderEntryTemplate = $("#folder-entry-template").html();
 		var folderEntryOutput = $(Mustache.render(folderEntryTemplate, folder));
@@ -74,7 +56,7 @@ var derivateBrowserFileView = (function () {
 		$(folderEntryOutput).data("deriID", folder.deriID);
 		$(folderEntryOutput).appendTo("#browser-table-files");
 		if (!folder.temp){
-			$(derivateBrowserNavigation).trigger("DerivatFolder", [folder.name, folder.absPath, folder.deriID, path]);			
+			$(derivateBrowserNavigation).trigger("DerivatFolder", [folder.name, folder.absPath, folder.deriID, path]);
 		}
 		else{
 			$(folderEntryOutput).find("input.input-new").data("temp", folder.temp);
@@ -84,8 +66,9 @@ var derivateBrowserFileView = (function () {
 	function showPanel(data, child) {
 		var deriName = "";
 		if (child){
-			if ($("#derivat-panel-name").html() != data.parentName){
-				$("#derivat-panel-name").html(data.parentName);
+			var panelName = $("#derivat-panel-name");
+			if ($(panelName).html() != data.parentName){
+				$(panelName).html(data.parentName);
 				$("#derivat-panel-size").html(getReadableSize(data.parentSize, 0));
 				$("#derivat-panel-last").html(data.parentLastMod);
 				deriName = data.parentName;
@@ -113,13 +96,14 @@ var derivateBrowserFileView = (function () {
 		$("#derivat-panel-startfile").data("startfile", path);
 		$("#derivat-panel").removeClass("hidden");
 	}
-	
+
 	function createBreadcrumb(deriID, path) {
-		$("#derivate-browser-breadcrumb").html("");
+		var breadcrumb = $("#derivate-browser-breadcrumb");
+		$(breadcrumb).html("");
 		var firstli = $('<li class="derivate-browser-breadcrumb-entry">' + deriID + '</li>');
 		firstli.data("deriID", deriID);
 		firstli.data("path", "");
-		$("#derivate-browser-breadcrumb").append(firstli);
+		$(breadcrumb).append(firstli);
 		if (path != "/"){
 			var tempPath = "";
 			path = path.substring(1);
@@ -132,47 +116,180 @@ var derivateBrowserFileView = (function () {
 			});
 		}
 	}
-	
+
 	function showDoc(docID) {
-		$("#derivate-browser").addClass("hidden");
-		$("#derivat-panel").addClass("hidden");
-		$("#browser-table-files").html("");
-		jp.subselect.get(docID, addInfo);
+		if (!docID.contains("derivate")){
+            $("#journal-info-text").html("");
+			$("#derivate-browser").addClass("hidden");
+			$("#derivat-panel").addClass("hidden");
+			$("#browser-table-files").html("");
+			$("#journal-info-button-whileEdit").addClass("hidden");
+			$("#journal-info-button-notEdit").removeClass("hidden");
+			getDocument(docID, addInfo);
+		}
+		else{
+			$("#journal-info").addClass("hidden");
+			$("#derivate-browser").removeClass("hidden");
+		}
 	}
-	
+
 	function addInfo(info) {
 		$("#journal-info-text").html(info);
 		$("#journal-info").removeClass("hidden");
 	}
-	
+
 	function convertTempFolder(input, temp){
 		var parent = $("#temp-folder-" + temp).parents(".browser-table-folder");
-		parent.data("path", currentPath + "/" + input);
+		parent.data("path", derivateBrowserTools.getCurrentPath() + "/" + input);
 		parent.find(".browser-table-file-name").html(input);
-		$(derivateBrowserNavigation).trigger("DerivatFolder", [input, currentPath + "/" + input, currentDocID, currentPath]);
+		$(derivateBrowserNavigation).trigger("DerivatFolder", [input, derivateBrowserTools.getCurrentPath() + "/" + input, derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath()]);
 	}
-	
+
 	function findFile(path) {
 		return $(".browser-table-entry").filter(function() {
 					return ($(this).data("path") == path);
 				});
 	}
-    
-    //ajax Methods   
+
+	function removeFromView(){
+		var parentID = derivateBrowserNavigation.getParentDocID(derivateBrowserTools.getCurrentDocID());
+		derivateBrowserNavigation.removeDocPerID(derivateBrowserTools.getCurrentDocID(), "");
+		derivateBrowserTools.goTo(parentID, "");
+	}
+
+	function showEditor(data, mode){
+		var html = $("<div></div>").append(data).find("#main");
+		$(html).find("form").attr("id", "doc-editor-form");
+		$(html).find("input[name='_xed_submit_servlet:UpdateObjectServlet']").remove();
+		$(html).find("input[name='_xed_submit_servlet:CreateObjectServlet']").remove();
+		$(html).find("input[name='_xed_submit_cancel']").remove();
+        if ($("#journal-info").hasClass("loaded")) {
+            $(html).find("script:not('#datetimepicker-script')").remove();
+            $(html).find("link").remove();
+        }
+        $("#journal-info-button-save").data("mode", mode);
+        $("#journal-info-button-whileEdit").removeClass("hidden");
+        $("#journal-info-button-notEdit").addClass("hidden");
+        $("#journal-info-text").html(html);
+		if ($("#journal-info").hasClass("hidden")){
+			$("#journal-info").removeClass("hidden");
+			$("#derivate-browser").addClass("hidden");
+		}
+        $("#journal-info").addClass("loaded");
+	}
+
+    //ajax Methods
 	function getDerivate(deriID, path){
 		$.ajax({
 			url: "/rsc/derivatebrowser/" + deriID + path,
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
-						showDerivatOrFolder(deriID, data);
+					showDerivatOrFolder(deriID, data);
 					},
 			error: function(error) {
-						alert(error);
+                    console.log(error);
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.loadFailed", deriID), false);
 					}
 		});
 	}
-    
+
+	function getDocument(docID, callback) {
+		$.ajax({
+			url: "/rsc/render/object/" + docID,
+			type: "GET",
+			dataType: "html",
+			success: function(data) {
+					callback(data);
+				},
+			error: function(error) {
+                    console.log(error);
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.loadFailed", docID), false);
+				}
+		});
+	}
+
+	function updateDocument(mode) {
+		var target = "&_xed_submit_servlet:UpdateObjectServlet=save";
+		if (mode == "create") {
+			target = "&_xed_submit_servlet:CreateObjectServlet=create";
+		}
+		$.ajax({
+			url: "/servlets/XEditor",
+			type: "GET",
+			data: $('#doc-editor-form').serialize() + target,
+			success: function(data, textStatus, request) {
+                    if (data.contains("help-inline")){
+                        showEditor(data, mode);
+                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.editorNotComplete"));
+                    }
+                    else{
+                        var docID = request.getResponseHeader("Content-Disposition");
+                        docID = docID.substr(docID.indexOf("filename") + 10);
+                        docID = docID.substring(0, docID.lastIndexOf("."));
+                        var type = docID.match("_(.*?)_")[1];
+                        if (mode != "create"){
+                            showDoc(derivateBrowserTools.getCurrentDocID(), "");
+                            var title = ($("<div></div>").append(data).find("#jp-maintitle").html());
+                            title = title.substring(0, title.indexOf("<"));
+                            derivateBrowserNavigation.renameDoc(derivateBrowserTools.getCurrentDocID(), "", title);
+                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.edited"), true);
+                        }
+                        else{
+                            var name = $("#doc-editor-form textarea[name='/mycoreobject/metadata/maintitles/maintitle']").val();
+                            $("#journal-info-text").html("");
+                            derivateBrowserNavigation.addTempDoc(docID, name, type, derivateBrowserTools.getCurrentDocID());
+                            derivateBrowserTools.goTo(docID, "");
+                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.created"), true);
+                        }
+                    }
+				},
+			error: function(error) {
+                    console.log(error);
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.error"), false);
+				}
+		});
+	}
+
+	function getDocEditor(type, mode, docID) {
+		var url = "/editor/start.xed?&type=" + type + "&action=" + mode;
+		if(mode != "create" && (docID != "" || docID != undefined)){
+			url = url + "&id=" + docID;
+		}
+        if(mode == "create" && (docID != "" || docID != undefined) && type != "jpjournal"){
+            url = url + "&parent=" + docID;
+        }
+		$.ajax({
+			url: url,
+			type: "GET",
+			dataType: "html",
+			statusCode: {
+				200: function(data) {
+					showEditor(data, mode);
+				},
+				500: function(error) {
+					alert(error);
+				}
+			}
+		});
+	}
+
+	function deleteDocument(docID, callback) {
+		$.ajax({
+			url: "/rsc/derivatebrowser/" + docID,
+			type: "DELETE",
+
+			success: function() {
+					callback();
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.deleted"), true);
+				},
+			error: function(error) {
+                    console.log(error);
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.delete.error"), false);
+				}
+		});
+	}
+
     return {
         //public
         init: function() {
@@ -180,41 +297,59 @@ var derivateBrowserFileView = (function () {
         },
 
         showDerivateOrDoc: function(docID, path){
-        	currentDocID = docID;
-            currentPath = path;
             if (docID.search("derivate") != -1){
-            	getDerivate(docID, path);            	
+            	getDerivate(docID, path);
             }
             else{
             	showDoc(docID);
             }
         },
-        
+
         createTempFolder: function() {
 			var folder = {
 					"temp": Math.floor((Math.random() * 1000) + 1),
-					"deriID": currentDocID,
-					"absPath": currentPath + "/temp"
+					"deriID": derivateBrowserTools.getCurrentDocID(),
+					"absPath": derivateBrowserTools.getCurrentPath() + "/temp"
 				};
-			addFolderToView(folder, currentPath);
+			addFolderToView(folder, derivateBrowserTools.getCurrentPath());
 		},
-        
+
         tempToFolder: function(input, temp) {
         	convertTempFolder(input, temp);
 		},
-		
+
 		removeFileWithPath: function(path) {
 			var node = findFile(path);
 			this.removeFile(node);
 		},
-		
+
 		removeFile: function(node) {
 			node.remove();
 		},
-		
+
 		addFile: function(json) {
 			addFileToView(json);
+		},
+
+		updateDoc: function(mode) {
+			updateDocument(mode);
+		},
+
+		cancelEditDoc: function() {
+			showDoc(derivateBrowserTools.getCurrentDocID(), "");
+		},
+
+		editDoc: function() {
+			docID = derivateBrowserTools.getCurrentDocID();
+			getDocEditor(docID.substring(docID.indexOf("_") + 1, docID.lastIndexOf("_")), "update", derivateBrowserTools.getCurrentDocID());
+		},
+
+		deleteDoc: function() {
+			deleteDocument(derivateBrowserTools.getCurrentDocID(), removeFromView);
+		},
+
+		newDoc: function(type) {
+			getDocEditor(type, "create", derivateBrowserTools.getCurrentDocID());
 		}
-		
     };
 })();

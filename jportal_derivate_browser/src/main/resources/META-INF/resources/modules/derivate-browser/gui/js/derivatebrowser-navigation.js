@@ -2,9 +2,7 @@
 var derivateBrowserNavigation = (function () {
 
     //private Properties
-    var currentDocID = "",
-        currentPath = "",
-        tempTree = [];
+    var    tempTree = [];
 
 
     //private Methods
@@ -14,13 +12,13 @@ var derivateBrowserNavigation = (function () {
     }
     
     function highlightCurrent () {
-    	highlight(findDoc(currentDocID, currentPath));
+    	highlight(findDoc(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath()));
     }
 
     function pushDocAndGetChilds (response) {
         if (response.numFound > 0){
             var doc = response.docs[0],
-                entry = new TreeEntry(doc, currentPath);
+                entry = new TreeEntry(doc, derivateBrowserTools.getCurrentPath());
             tempTree.push(entry);
             entry.getChildsAndDeris(getNextDoc);
         }
@@ -33,14 +31,13 @@ var derivateBrowserNavigation = (function () {
        else {
            $("#folder-list-ul").html("");
            buildTree();
-//           drawDoc(tempTree.pop());
        }
     }
 
     function buildTree() {
-        entry = tempTree.pop();
+        var entry = tempTree.pop();
         if (tempTree.length > 0){
-            node = findDoc(entry.docID);
+            var node = findDoc(entry.docID);
             if (node.length > 0) {
             	expandEntry(node);
             	drawChildren(entry, node);
@@ -63,15 +60,17 @@ var derivateBrowserNavigation = (function () {
             default :
             	highlightCurrent();
             }
-//        	if (entry.type == "derivate" /*&& currentPath != ""*/){
-////        		 $(derivateBrowserNavigation).trigger("Test");
-//        		getDeriFolders(entry.docID, highlightCurrent);
-//        	}
-//        	else{
-////        		 $(derivateBrowserNavigation).trigger("Test");
-//        		highlightCurrent();
-//        	}
         }
+    }
+
+    function drawTempDoc(docID, name, type, parentID){
+        var json = {
+            "docID": docID,
+            "title": name,
+            "type": type,
+            "parentID": parentID
+        };
+        drawDoc(json);
     }
 
     function drawDoc(doc) {
@@ -98,7 +97,6 @@ var derivateBrowserNavigation = (function () {
                 $(li).prepend("<span class='glyphicon glyphicon-file icon'></span>");
         }
         $(li).data("docID", doc.docID);
-        //really needed?
         if (doc.type == "derivate"){
         	$(li).data("deriID", doc.docID);
         }
@@ -152,18 +150,19 @@ var derivateBrowserNavigation = (function () {
         	drawDoc(deri);
         });
     }
-    
+
     function drawDeriFolders(deriID, data, parent) {
     	if (parent == undefined){
     		parent = findDoc(deriID)
     	}
     	$.each(data.children, function(i, child) {
-        	var li = drawDeriFolder(child.name, child.absPath, deriID, parent)
+        	var li = drawDeriFolder(child.name, child.absPath, deriID, parent);
         	if (child.hasChildren) {
         		drawDeriFolders(deriID, child, li);
         	}
     	});
 	}
+    
     function drawDeriFolder(childName, childPath, deriID, parent) {
     	var ul = checkForChildren(parent);
     	var li = findDoc(deriID, childPath);
@@ -171,13 +170,12 @@ var derivateBrowserNavigation = (function () {
     		li = $("<li class='derivat-folder'><div class='no-button'>&nbsp;</div><span class='glyphicon glyphicon-folder-close icon'></span><div class='folder-name'>" + childName + "</div></li>").appendTo(ul);
     		$(li).data("deriID", deriID);
     		$(li).data("path", childPath);
-    		//really needed?
     		$(li).data("id", deriID + childPath);
     	}
     	return li;
 	}
     
-    function drawDocChilds(data) {
+    function drawDocChilds() {
 		var entry = tempTree.pop();
 		var node = findDoc(entry.docID);
 		drawChildren(entry, node);
@@ -198,22 +196,7 @@ var derivateBrowserNavigation = (function () {
 			button.addClass("button-contract glyphicon-minus");
 		}
 	}
-	
-	function getJournals(query, start) {
-		var url = "/servlets/solr/select?q=" + query + "&start=" + start +  "&rows=10&fq=objectType%3Ajpjournal&sort=maintitle+asc&wt=json&indent=true";
-		$.getJSON(url, function(search){
-			if(search.response.numFound > 0){
-				var results = search.response.docs;
-				for (result in results){
-					createFolder($("#folder-list-ul"), results[result]);
-				}
-			}
-			if(search.response.numFound > 10){
-				getJournals(start + 10);
-			}
-		});		
-	}
-	
+
 	function addDocToParent(response) {
 		if (response.numFound > 0){
            drawDoc(new TreeEntry(response.docs[0], ""));
@@ -236,7 +219,7 @@ var derivateBrowserNavigation = (function () {
     	if ($(parent).children("ul").children().length == 0){
     		$(parent).children("ul").remove();
     		if ($(parent).children("span.button").length != 0){
-    			$(parent).children("span.button").remove()
+    			$(parent).children("span.button").remove();
     			$(parent).prepend("<div class='no-button'></div>");
     		}
     	}
@@ -250,7 +233,7 @@ var derivateBrowserNavigation = (function () {
             callback(search.response);
         });
     }
-    
+
 	function getDeriFolders(deriID, callback){
 		$.ajax({
 			url: "/rsc/derivatebrowser/folders/" + deriID,
@@ -273,9 +256,9 @@ var derivateBrowserNavigation = (function () {
 		$.getJSON(url, function(search){
 			if(search.response.numFound > 0){
 				var results = search.response.docs;
-				for (result in results){
-					callback(new TreeEntry(results[result], ""));
-				}
+				$.each(results, function(i, result){
+					callback(new TreeEntry(result, ""));
+				});
 			}
 			if(search.response.numFound > start + 10){
 				getJournals(query, start + 10, callback);
@@ -290,25 +273,16 @@ var derivateBrowserNavigation = (function () {
         },
 
         goToDocument: function(docID, path){
-        	currentDocID = docID;
-            currentPath = path;
             var node = findDoc(docID, path);
             if (node.length > 0){
             	highlight(node);
             }
             else{
             	 getDocPerID(docID, pushDocAndGetChilds);
-            }           
+            }
         },
         
         selectDocument: function(node){
-        	if (node != undefined){
-        		currentDocID = $(node).data("docID");
-        		if (currentDocID == undefined) {
-        			currentDocID = $(node).data("deriID");
-        		}
-                currentPath = $(node).data("path");
-        	}
         	highlight(node);
         },
         
@@ -343,6 +317,29 @@ var derivateBrowserNavigation = (function () {
 		
 		addDoc: function(docID) {
 			getDocPerID(docID, addDocToParent);
-		}
+		},
+		
+		getParentDocID: function(childDocID) {
+			var node = findDoc(childDocID, "");
+			return $(node).parent().closest('li.folder').data("docID");
+		},
+
+		gotDerivateChilds: function(docID, callback){
+			return getDocPerID(docID, callback);
+		},
+
+        addTempDoc: function(docID, name, type, parentID){
+            drawTempDoc(docID, name, type, parentID);
+        },
+
+        renameDoc: function(docID, path, name) {
+            var doc = findDoc(docID, path);
+            doc.children("div.folder-name").html(name);
+            if (doc.data("path") != undefined){
+                var oldPath = doc.data("path");
+                doc.data("path", oldPath.substring(0, oldPath.lastIndexOf("/") + 1) + name);
+                doc.data("id", doc.data("derID") + doc.data("path"));
+            }
+        }
     };
 })();

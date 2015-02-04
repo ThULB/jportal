@@ -18,7 +18,7 @@ Upload.prototype.getStatus = function() {
 	var status = $(Mustache.render(template, this));
 	readImg(this.file, $(status).find("img.upload-preview-image"), this);
 	return status;
-}
+};
 
 Upload.prototype.getFormData = function() {
 	if (this.exists == undefined) return undefined;
@@ -31,39 +31,39 @@ Upload.prototype.getFormData = function() {
     data.append("file", this.file);
 	data.append("overwrite", this.exists);
     return data;
-}
+};
 
 Upload.prototype.getID = function() {
 	if (this.path == ""){
-		return this.deriID + "/" + this.name;
+		return this.docID + "/" + this.name;
 	}
-    return this.deriID + this.path + "/" + this.name;
-}
+    return this.docID + this.path + "/" + this.name;
+};
 
 Upload.prototype.getCompletePath = function() {
     return this.path + "/" + this.name;
-}
+};
 
 Upload.prototype.getCheckJson = function() {
-	var json ={
+	return {
 			file: this.name,
 			id: this.getID(),
 			fileType: this.file.type
-	}
-	return json;
-}
+	};
+	//return json;
+};
 
 Upload.prototype.getaddToBrowserJson = function() {
 	var currentDate = new Date();
-	var json ={
+	return {
 			name: this.name,
 			size: this.rawSize,
 			lastmodified: currentDate.toLocaleDateString() + " " + currentDate.toLocaleTimeString(),
 			absPath: this.getCompletePath(),
-			deriID: this.deriID
-	}
-	return json;
-}
+			deriID: this.docID
+	};
+	//return json;
+};
 
 Upload.prototype.askOverwrite = function(existingFile, deriID, path) {
 	existingFile.deriID = deriID;
@@ -80,7 +80,7 @@ Upload.prototype.askOverwrite = function(existingFile, deriID, path) {
 	$("#lightbox-upload-overwrite-new-file").html(newFileOutput);
 	$("#lightbox-upload-overwrite-filename").html(existingFile.name);
 	showModalWhenReady();
-}
+};
 
 
 function getReadableSize(size, unit) {
@@ -126,12 +126,12 @@ function readImg(file, display, upload) {
 			}
 			else{
 				var reader = new FileReader();
-				reader.onload =  function(e) {
+				reader.onload =  function() {
 					display.attr("src", reader.result);
 					upload.img = reader.result;
 					$(display).siblings(".img-placeholder").addClass("hidden");
 					$(display).removeClass("hidden");
-				}
+				};
 				reader.readAsDataURL(file);
 			}
 		}
