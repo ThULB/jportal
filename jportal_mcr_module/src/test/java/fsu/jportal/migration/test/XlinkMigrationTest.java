@@ -2,6 +2,7 @@ package fsu.jportal.migration.test;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -13,17 +14,22 @@ import org.jdom2.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfigurationLoader;
+import org.mycore.common.config.MCRConfigurationLoaderFactory;
 import org.mycore.common.xml.MCRXSLTransformation;
 
 public class XlinkMigrationTest {
     @Before
     public void init() {
-        System.setProperty("MCR.Configuration.File", "config/test.properties");
-        MCRConfiguration instance = MCRConfiguration.instance();
-        instance.set("MCR.Metadata.Type.jpjournal", "true");
-        instance.set("MCR.Metadata.Type.jpvolume", "true");
-        instance.set("MCR.Metadata.Type.jpinst", "true");
-        instance.set("MCR.Metadata.Type.person", "true");
+        MCRConfiguration mcrConf = MCRConfiguration.instance();
+        MCRConfigurationLoader configurationLoader = MCRConfigurationLoaderFactory.getConfigurationLoader();
+        Map<String, String> load = configurationLoader.load();
+        mcrConf.initialize(load, true);
+        mcrConf.set("MCR.Metadata.Type.jpjournal", "true");
+        mcrConf.set("MCR.Metadata.Type.jpvolume", "true");
+        mcrConf.set("MCR.Metadata.Type.jpinst", "true");
+        mcrConf.set("MCR.Metadata.Type.person", "true");
+        mcrConf.set("MCR.CommandLineInterface.SystemName", "JUnit Test");
     }
 
     @Test
