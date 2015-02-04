@@ -51,7 +51,7 @@
     <xsl:if test="$filePath != ''">
       <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)" />
       <xsl:call-template name="metadataDisplayURNItem">
-        <xsl:with-param name="urn" select="urn" />
+        <xsl:with-param name="urn" select="$urn" />
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
