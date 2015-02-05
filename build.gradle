@@ -57,7 +57,8 @@ subprojects {
             //        compile "org.mycore:mycore-handle:$mcrVersion"
             compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
             compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
-            compile 'org.mycore.mets:mets-model:0.5-SNAPSHOT'
+            compile 'org.mycore.mets:mets-model:0.6-SNAPSHOT'
+            compile 'org.mycore.mets:mets-validator:1.1-SNAPSHOT'
             compile 'javax.servlet:javax.servlet-api:3.1.0'
             compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
             testCompile group: 'junit', name: 'junit', version: '4.+'
@@ -264,3 +265,7 @@ project(':jportal_jetty_tools'){
 }
 
 configurations.all { resolutionStrategy.cacheDynamicVersionsFor 0, 'minutes' }
+
+task wrapper(type: Wrapper){
+    gradleVersion = '2.2.1'
+}
