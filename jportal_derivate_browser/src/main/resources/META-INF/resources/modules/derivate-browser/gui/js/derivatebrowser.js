@@ -677,7 +677,7 @@ var DerivateBrowser = function(){
                     derivateBrowserNavigation.renameDoc(derivateBrowserTools.getCurrentDocID(), oldName, newName);
 					if (start == "true"){
 						$("#derivat-panel-startfile").data("startfile", $(entry).data("path"));
-						setStartFile(entry);
+						setStartFile(entry, false);
 					}
                     $(entry).find(".btn-edit").removeData("edit");
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.rename.success", oldName.substr(oldName.lastIndexOf("/")+1), newName), true);
@@ -764,14 +764,14 @@ var DerivateBrowser = function(){
 			statusCode: {
 				200: function() {
 					$("#derivat-panel-startfile").data("startfile", $(entry).data("path"));
-					setStartFile(entry);
+					setStartFile(entry, true);
 				},
 				500: function() {
 					var oldStartfile = $("#derivat-panel-startfile").data("startfile");
 					var oldEntry = $(".browser-table-file").filter(function() {
 						return $(this).data("path") == oldStartfile;
 					});
-					setStartFile(oldEntry);
+					setStartFile(oldEntry, false);
 					$("#derivat-panel-startfile").data("startfile", $(oldEntry).data("path"));
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.startfile"), false);
 				}
@@ -979,13 +979,15 @@ var DerivateBrowser = function(){
 		});
 	}
 
-	function setStartFile(entry) {
+	function setStartFile(entry, loadImg) {
 		$(".startfile").removeClass("startfile");
 		$(".browser-table-file").filter(function() {
 			return $(this).data("startfile") == true;
 		}).removeData("startfile");
 		$(entry).data("startfile", true);
-		derivateBrowserTools.setImgPath($("#panel-img"), $(entry).data("deriID"), $(entry).data("path"));
+        if (loadImg){
+            derivateBrowserTools.setImgPath($("#panel-img"), $(entry).data("deriID"), $(entry).data("path"));
+        }
 		$("#derivat-panel-startfile-label").html($(entry).data("path"));
 	}
 

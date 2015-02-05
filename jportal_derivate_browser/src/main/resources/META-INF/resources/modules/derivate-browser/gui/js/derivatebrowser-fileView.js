@@ -25,7 +25,7 @@ var derivateBrowserFileView = (function () {
 		$.each(data.children, function(i, file) {
 			file.deriID = deriID;
 			if (file.type == "file"){
-				addFileToView(file, data.mainDoc);
+				addFileToView(file, data.maindocName);
 			}
 			else{
 				addFolderToView(file, data.absPath);
