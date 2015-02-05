@@ -61,7 +61,7 @@
               </div>
             </xed:bind>
           </xed:bind>
-          <script type="text/javascript" src="{$WebApplicationBaseURL}/js/jp-editor.js" class="jp-db-load jp-db-reload"/>
+          <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-editor.js" class="jp-db-load jp-db-reload"/>
         </xed:when>
         <xed:otherwise>
           <div class="alert alert-danger">Permission denied</div>
