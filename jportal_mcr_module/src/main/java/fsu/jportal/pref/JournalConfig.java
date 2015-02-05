@@ -21,7 +21,7 @@ public class JournalConfig {
     }
     
     public String getKey(String key){
-        return getKey(key, null);
+        return getKey(key, "");
     }
     
     public String getKey(String key, String defaultVal){

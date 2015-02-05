@@ -116,6 +116,10 @@ $(document).ready(function(){
 		var activeItem = select.find('.active');
 		
 		masterCtr.getImprintID(function(imprintID){
+			if(imprintID == ""){
+				select.addOption(null, "Kein Eintrag", true);
+				return;
+			}
 			masterCtr.getBackend().list(function(idList){
 				idList.sort();
 				if(idList.length != 0) {
@@ -123,7 +127,7 @@ $(document).ready(function(){
 						select.addOption(idList[i], idList[i], imprintID == idList[i]);
 					}
 				} else {
-					select.addOption(null, "Keine Eintrag", true);
+					select.addOption(null, "Kein Eintrag", true);
 				}
 				
 				masterCtr.add(select);

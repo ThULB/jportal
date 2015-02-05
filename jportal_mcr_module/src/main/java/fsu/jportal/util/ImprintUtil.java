@@ -22,7 +22,8 @@ public abstract class ImprintUtil {
      * @return true if an imprint is assigned, otherwise false
      */
     public static boolean has(String objID, String fsType) {
-        return getImprintID(objID, fsType) != null;
+        String imprintID = getImprintID(objID, fsType);
+        return imprintID != null && !imprintID.equals("");
     }
 
     public static JournalConfig getJournalConf(String objID) {

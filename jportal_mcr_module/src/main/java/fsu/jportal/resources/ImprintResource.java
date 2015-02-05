@@ -200,9 +200,9 @@ public class ImprintResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("objID") String objID) {
         String imprintID = getImprintID(objID, fsType);
-        if (imprintID == null) {
-            return Response.status(Status.NOT_FOUND).entity("no imprint id found").build();
-        }
+//        if (imprintID == null) {
+//            return Response.status(Status.NOT_FOUND).entity("no imprint id found").build();
+//        }
         return Response.ok(imprintID).build();
     }
 
