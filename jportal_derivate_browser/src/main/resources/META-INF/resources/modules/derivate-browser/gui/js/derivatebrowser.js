@@ -688,7 +688,10 @@ var DerivateBrowser = function(){
 				},
 				500: function() {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.rename.error", oldName), false);
-				}
+				},
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
 			}
 		});
 	}
@@ -730,7 +733,10 @@ var DerivateBrowser = function(){
 				500: function() {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.errorMulti"), false);
 					$(".delete").removeClass("delete");
-				}
+				},
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
 			}
 		});
 	}
@@ -751,7 +757,10 @@ var DerivateBrowser = function(){
 				},
 				409: function() {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.newFolder.already", input), false);
-				}
+				},
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
 			}
 		});
 	}
@@ -774,7 +783,10 @@ var DerivateBrowser = function(){
 					setStartFile(oldEntry, false);
 					$("#derivat-panel-startfile").data("startfile", $(oldEntry).data("path"));
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.startfile"), false);
-				}
+				},
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
 			}
 		});
 	}
@@ -835,7 +847,10 @@ var DerivateBrowser = function(){
 				},
 				500: function() {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.move.error"), false);
-				}
+				},
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
 			}
 		});
 	}
@@ -893,8 +908,13 @@ var DerivateBrowser = function(){
                             }
                         }
 					},
-			error: function() {
-                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.upload.error"), false);
+			error: function(error) {
+                        if (error.status == 401) {
+                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                        }
+                        else{
+                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.upload.error"), false);
+                        }
 					}
 		});
 	}
@@ -928,7 +948,10 @@ var DerivateBrowser = function(){
 				},
 				500: function() {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.error"), false);
-				}
+				},
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
 			}
 		});
 	}
@@ -953,7 +976,10 @@ var DerivateBrowser = function(){
 				},
 				500: function() {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.upload.error"), false);
-				}
+				},
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
 			}
 		});
 	}
@@ -969,12 +995,12 @@ var DerivateBrowser = function(){
 					derivateBrowserNavigation.removeDocPerID(json[0].objId);
 					derivateBrowserNavigation.addDoc(json[0].objId);
 				},
-				401: function() {
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.unauthorized"), false);
-				},
 				500: function() {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.move.error"), false);
-				}
+				},
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
 			}
 		});
 	}

@@ -287,7 +287,12 @@ var derivateBrowserFileView = (function () {
 				},
 			error: function(error) {
                     console.log(error);
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.delete.error"), false);
+                    if (error.status == 401) {
+                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                    }
+                    else{
+                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.delete.error"), false);
+                    }
 				}
 		});
 	}

@@ -1,7 +1,5 @@
 package fsu.jportal.resources;
 
-import static org.mycore.access.MCRAccessManager.PERMISSION_DELETE;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
@@ -46,6 +44,7 @@ import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
+import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
 import org.xml.sax.SAXException;
@@ -91,7 +90,6 @@ public class DerivateBrowserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response browsePath(@PathParam("derivID") String derivID, @PathParam("path") String path) {
         Derivate derivate = new Derivate(derivID);
-
         MCRFilesystemNode node;
         MCRPath mcrPath = MCRPath.getPath(derivID, path);
         if (path != null && !"".equals(path.trim())) {
@@ -99,7 +97,6 @@ public class DerivateBrowserResource {
         } else {
             node = derivate.getRootDir();
         }
-
         if (!Files.exists(mcrPath)) {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -117,6 +114,7 @@ public class DerivateBrowserResource {
      @GET
      @Path("start")
      @Produces(MediaType.TEXT_HTML)
+     @MCRRestrictedAccess(DerivateBrowserPermission.class)
      public Response start(@PathParam("derivID") String derivID) {
          InputStream mainGui = getClass().getResourceAsStream("/META-INF/resources/modules/derivate-browser/gui/derivatebrowser.html");
          return Response.ok(mainGui).build();
@@ -124,10 +122,9 @@ public class DerivateBrowserResource {
      
     @DELETE
     @Path("{derivID}{path:(/.*)*}")
-    //    @MCRRestrictedAccess(ResourceAccess.class)
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response deleteDoc(@PathParam("derivID") String docID) {
         MCRObjectID mcrId = MCRJerseyUtil.getID(docID);
-//        MCRJerseyUtil.checkPermission(mcrId, PERMISSION_DELETE);
         if (mcrId.getTypeId().equals("derivate")) {
             MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(mcrId);
             MCRMetadataManager.delete(mcrDer);
@@ -146,7 +143,7 @@ public class DerivateBrowserResource {
     @Path("multiple")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    //    @MCRRestrictedAccess(ResourceAccess.class)
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response deleteFiles(String data) {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
@@ -162,6 +159,7 @@ public class DerivateBrowserResource {
     
     @POST
     @Path("{derivID}{path:(/.*)*}")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response createFolder(@PathParam("derivID") String derivID, @PathParam("path") String path) throws Exception {
         if (!DerivateTools.mkdir(derivID + ":" + path)){
             return Response.status(Status.CONFLICT).build();
@@ -171,6 +169,7 @@ public class DerivateBrowserResource {
 
     @POST
     @Path("rename")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response rename(@QueryParam("file") String file, @QueryParam("name") String name, @QueryParam("mainFile") String start) {
         try{
             DerivateTools.rename(file, name);
@@ -192,6 +191,7 @@ public class DerivateBrowserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("moveDeriFiles")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response moveDeriFiles(String data) throws Exception {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
@@ -213,11 +213,10 @@ public class DerivateBrowserResource {
 
     @PUT
     @Path("{derivID}{path:(/.*)*}/main")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response setMainDoc(@PathParam("derivID") String derivID, @PathParam("path") String path) throws IOException {
-        //        if (MCRAccessManager.checkPermission(derivID, PERMISSION_WRITE)) {
         Derivate derivate = new Derivate(derivID);
         derivate.setMaindoc(path);
-
         return Response.ok().build();
     }
         
@@ -261,6 +260,7 @@ public class DerivateBrowserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("exists")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response existsCheck(String data) throws Exception {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
@@ -302,6 +302,7 @@ public class DerivateBrowserResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("upload")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response getUpload(@FormDataParam("file") InputStream inputStream, @FormDataParam("filename") String filename, @FormDataParam("size") long filesize, @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID, @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite){
         if (overwrite){
             if (DerivateTools.delete(MCRPath.getPath(documentID, path + "/" + filename)) != 1){
@@ -334,6 +335,7 @@ public class DerivateBrowserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("addURN")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response addURN(String data) throws Exception{
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
@@ -362,6 +364,7 @@ public class DerivateBrowserResource {
     
     @PUT
     @Path("moveDocs")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response moveDocs(String data) {
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonArray = jsonParser.parse(data).getAsJsonArray();
