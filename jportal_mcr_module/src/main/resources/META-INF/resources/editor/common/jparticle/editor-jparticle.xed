@@ -21,7 +21,7 @@
 			<jp:template name="date_select" xpath="dates[@class='MCRMetaISO8601Date']" validate="date">
 				<jp:template type="date" id_container="dateContainer" class="input-group" span_date="after" id_input="publshDate" xpath="date[@inherited='0'][@type='published']" />
 				<jp:template type="date" id_container="dateOriginalContainer" class="input-group" span_date="after" id_input="publshOriginalDate" xpath="date[@inherited='0'][@type='published_Original']" />
-				<jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 jp-layout-floatLeftNoXS" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_Original_From']" seperator="true" />
+				<jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 pull-left" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_Original_From']" seperator="true" />
 				<jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="untilDate" xpath="date[@inherited='0'][@type='published_Original_Till']" />
 			</jp:template>
 

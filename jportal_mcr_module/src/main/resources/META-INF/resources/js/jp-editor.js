@@ -1,9 +1,12 @@
 $(document)
 		.ready(
-				function() {
-					document.title = $("#xeditor-title").text().trim() + " "
-							+ document.title;
-					
+				function() {					
+	                $('.datetimepicker6').datetimepicker({
+	                    language: $('#hiddenLanguage').text(),
+	                    pickTime: false,
+	                    minDate:`0-0-0001`
+	                  });
+	                
 					if ($("#currentType").text() == 'jparticle'
 							|| $("#currentType").text() == 'jpjournal'
 							|| $("#currentType").text() == 'jpvolume') {

@@ -12,13 +12,12 @@
             <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" class="jp-db-load"></script>
             <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js" class="jp-db-load"></script>
             <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js" class="jp-db-load"></script>
-            <script type="text/javascript" class="jp-db-load jp-reload">
+            <script type="text/javascript">
               $(function () {
-                $('.datetimepicker6').datetimepicker({
-                  language: $('#hiddenLanguage').text(),
-                  pickTime: false,
-                  minDate:`0-0-0001`
-                });
+              	var newDocTitle = $("#xeditor-title").text().trim() + " ";
+				if (document.title.indexOf(newDocTitle) == -1){
+					document.title = newDocTitle + document.title;					
+				}
               });
             </script>
             <span id="hiddenLanguage" style="display:none">
@@ -62,7 +61,7 @@
               </div>
             </xed:bind>
           </xed:bind>
-          <script type="text/javascript" src="../js/jp-editor.js" />
+          <script type="text/javascript" src="{$WebApplicationBaseURL}/js/jp-editor.js" class="jp-db-load jp-db-reload"/>
         </xed:when>
         <xed:otherwise>
           <div class="alert alert-danger">Permission denied</div>

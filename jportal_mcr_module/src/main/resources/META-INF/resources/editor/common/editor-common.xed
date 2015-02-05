@@ -64,7 +64,7 @@
   
 	  <jp:template name="date_select" xpath="dates[@class='MCRMetaISO8601Date']">
 		    <jp:template type="date" id_container="dateContainer" class="input-group" id_input="publshDate" span_date="after" xpath="date[@inherited='0'][@type='published']" />
-		    <jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 jp-layout-floatLeftNoXS" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_from']" seperator="true" />
+		    <jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 pull-left" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_from']" seperator="true" />
 		    <jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="untilDate" xpath="date[@inherited='0'][@type='published_until']" />
 	  </jp:template>
   </xed:template>
