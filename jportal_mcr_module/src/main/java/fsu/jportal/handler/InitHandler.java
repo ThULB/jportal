@@ -6,11 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 
@@ -90,16 +92,24 @@ public class InitHandler implements AutoExecutable{
         info("creating default classifications ...");
         
         try {
-            JarResource jarResource = new JarResource("/classifications");
+            Enumeration<URL> resources = getClass().getClassLoader().getResources("classifications");
             MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
-            for (Path child : jarResource.listFiles()) {
-                InputStream classiXMLIS = Files.newInputStream(child);
+            while (resources.hasMoreElements()) {
+                URL url = (URL) resources.nextElement();
+                info("Classi location: " + url.toString());
+                JarResource resource = new JarResource(url);
                 
-                Document xml = MCRXMLParserFactory.getParser().parseXML(new MCRStreamContent(classiXMLIS));
-                MCRCategory category = MCRXMLTransformer.getCategory(xml);
-                DAO.addCategory(null, category);
+                for (Path child : resource.listFiles()) {
+                    info("Found classi: " + child.toString());
+                    InputStream classiXMLIS = Files.newInputStream(child);
+                    
+                    Document xml = MCRXMLParserFactory.getParser().parseXML(new MCRStreamContent(classiXMLIS));
+                    MCRCategory category = MCRXMLTransformer.getCategory(xml);
+                    DAO.addCategory(null, category);
+                }
+                
+                resource.close();
             }
-            jarResource.close();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (MCRException e) {
