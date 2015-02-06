@@ -73,8 +73,8 @@ public class ServletContextExtFiddle implements ServletContext {
 
     @Override
     public URL getResource(String path) throws MalformedURLException {
-//        ServletContextExt contextExt = new ServletContextExt();
-        URL resource = ServletContextExt._getResource(path);
+        ServletContextExt contextExt = new ServletContextExt();
+        URL resource = contextExt._getResource(path);
         if (resource != null) {
             return resource;
         }

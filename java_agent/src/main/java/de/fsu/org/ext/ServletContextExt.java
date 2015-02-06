@@ -15,7 +15,7 @@ import de.fsu.org.instrumentation.JavaAgent;
 public class ServletContextExt {
     static final Logger LOGGER = Logger.getLogger(ServletContextExt.class);
         
-    public static URL _getResource(String path) throws MalformedURLException {
+    public URL _getResource(String path) throws MalformedURLException {
         String[] resources = JavaAgent.getArgsArrays();
         if(!path.startsWith("/")){
             path = "/" + path;
