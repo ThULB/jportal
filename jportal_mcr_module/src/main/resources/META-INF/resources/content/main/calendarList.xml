@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <journalList mode="javascript">
+    <template>template_calendar</template>
     <listTitle>jp.site.home.calendar</listTitle>
     <additionalQuery>%2BobjectType:jpjournal %2BcontentClassi1:calendar</additionalQuery>
 </journalList>

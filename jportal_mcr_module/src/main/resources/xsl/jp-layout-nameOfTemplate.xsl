@@ -3,7 +3,8 @@
   xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan layoutTools mcrxml xlink">
 
-  <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response" />
+  <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response|/journalList" />
+<!--   <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response" /> -->
   <xsl:variable name="tagsWithSearchModeInfo" select="/response|/MyCoReWebPage" />
 
   <!-- *************************************************** -->
@@ -13,6 +14,10 @@
     <xsl:apply-templates mode="nameOfTemplate" select="$tagsWithTemplateInfo" />
   </xsl:template>
 
+  <xsl:template mode="nameOfTemplate" match="journalList">
+    <xsl:value-of select="template" />
+  </xsl:template>
+  
   <xsl:template mode="nameOfTemplate" match="mycoreobject[@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd']">
     <xsl:value-of select="metadata/hidden_templates/hidden_template" />
   </xsl:template>
@@ -53,6 +58,10 @@
     <xsl:value-of select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
   </xsl:template>
 
+  <xsl:template mode="journalID" match="journalList">
+        <xsl:value-of select="''" />
+  </xsl:template>
+  
   <xsl:template mode="journalID" match="MyCoReWebPage">
         <xsl:apply-templates mode="journalID" select="journalID|section/form/span[@id='journalID']" />
   </xsl:template>
