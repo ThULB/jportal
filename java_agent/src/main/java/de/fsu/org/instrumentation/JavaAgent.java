@@ -24,7 +24,7 @@ public class JavaAgent {
         argsArrays = args.split(",");
         inst.addTransformer(new MCRXSLTransformerTransformer());
         inst.addTransformer(new ClassLoaderTransformer());
-        inst.addTransformer(new WebResourceTransformer());
+        inst.addTransformer(new ServletContextTransformer());
     }
 
 }

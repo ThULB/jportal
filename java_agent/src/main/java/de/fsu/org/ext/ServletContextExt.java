@@ -1,5 +1,7 @@
 package de.fsu.org.ext;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -29,6 +31,17 @@ public class ServletContextExt {
                 LOGGER.info("Using resource: " + resourcePath.toString());
                 return resourcePath.toUri().toURL();
             }
+        }
+        
+        return null;
+    }
+
+    public InputStream _getResourceAsStream(String path) {
+        try {
+            return _getResource(path).openStream();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         
         return null;

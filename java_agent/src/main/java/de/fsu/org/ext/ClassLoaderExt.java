@@ -1,6 +1,7 @@
 package de.fsu.org.ext;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -14,11 +15,11 @@ import de.fsu.org.instrumentation.JavaAgent;
 
 public class ClassLoaderExt {
     static final Logger LOGGER = Logger.getLogger(ClassLoaderExt.class);
-            
-    public static ArrayList<URL> getResources(String name) throws IOException {
+
+    public ArrayList<URL> _getResources(String name) throws IOException {
         ArrayList<URL> arrayList = new ArrayList<URL>();
         String[] resourcePaths = JavaAgent.getArgsArrays();
-        
+
         for (String path : resourcePaths) {
             Path classPath = Paths.get(path);
             Path resourcePath = classPath.resolve(name);
@@ -33,8 +34,36 @@ public class ClassLoaderExt {
                 }
             }
         }
-        
+
         return arrayList;
     }
-    
+
+    public URL _getResource(String name) {
+        String[] resourcePaths = JavaAgent.getArgsArrays();
+
+        for (String path : resourcePaths) {
+            Path classPath = Paths.get(path);
+            Path resourcePath = classPath.resolve(name);
+            if (Files.exists(resourcePath)) {
+                LOGGER.info("Using resource: " + resourcePath.toString());
+                try {
+                    return resourcePath.toUri().toURL();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
+    public InputStream _getResourceAsStream(String name) {
+        try {
+            return _getResource(name).openStream();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
