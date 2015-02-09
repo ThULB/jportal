@@ -3,7 +3,8 @@ import java.util.HashSet;
 
 //def mcrVersion = '2014.07-SNAPSHOT'
 def mcrVersion = '2015.01-SNAPSHOT'
-def jettyVersion = "9.2.2.v20140723"
+//def jettyVersion = "9.2.2.v20140723"
+def jettyVersion = "9.2.7.v20150116"
 def hibernateVersion = "4.3.4.Final"
 
 def resourcePaths = new HashSet<File>();
