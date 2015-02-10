@@ -376,8 +376,13 @@
 	
 	<script id="upload-entry-template" type="text/mustache">
 		<tr class="upload-entry">
-			<td><img class='img-placeholder img-placeholder-upload' src='/images/file-logo.svg'><img class='upload-preview-image hidden'></img></td>
-			<td class="upload-preview-name" title="{{name}}">{{name}}</td>
+			<td><img class='img-placeholder img-placeholder-upload' src=''><img class='upload-preview-image hidden'></img></td>
+			{{#inFolder}}
+			    <td class="upload-preview-name" title="{{name}}">{{path}}/{{name}}</td>
+            {{/inFolder}}
+            {{^inFolder}}
+                <td class="upload-preview-name" title="{{name}}">{{name}}</td>
+            {{/inFolder}}
 			<td class="upload-preview-size" title="{{size}}">{{size}}</td>
 			<td class="upload-preview-status"><div class='statusbar-progress progress'><div class='statusbar-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></td>
 		</tr>

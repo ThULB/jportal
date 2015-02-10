@@ -11,30 +11,24 @@ var DerivateBrowser = function(){
 		init: function() {
 
             $("body").on("drop", "#lightbox-new-derivate-main", function(event) {
+                $("#lightbox-new-derivate-hint").addClass("hidden");
+                $("#lightbox-new-derivate-table").removeClass("hidden");
                 event.preventDefault();
                 event.stopPropagation();
-                //noinspection JSUnresolvedVariable
-                var files = event.originalEvent.dataTransfer.files;
-                $.each(files, function(i, file) {
-                    if (file.type != ""){
-                        var upload = new Upload(derivateBrowserTools.getCurrentDocID(), "", derivateBrowserTools.getCurrentPath(), file);
-                        if (uploadList[upload.getID()] == undefined){
-                            upload.exists = false;
-                            upload.statusbar = upload.getStatus();
-                            $("#lightbox-new-derivate-table").append(upload.statusbar);
-                            uploadList[upload.getID()] = upload;
-                        }
-                        else{
-                            console.log("already in there");
-                        }
+                var files = event.originalEvent.dataTransfer.items;
+                if (files != undefined){
+                    for (var i = 0; i < files.length; ++i){
+                        var entry = files[i].webkitGetAsEntry();
+                        getWebkitFiles(entry);
                     }
-                    else{
-                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype"), false);
-                    }
-                });
-                $("#lightbox-new-derivate-hint").addClass("hidden");
-                $("#lightbox-new-derivate-table .statusbar-progress").addClass("invisable");
-                $("#lightbox-new-derivate-table").removeClass("hidden");
+                }
+                else{
+                    files = event.originalEvent.dataTransfer.files;
+                    $.each(files, function(i, file) {
+                        addFileToUplodlist(file, "");
+
+                    });
+                }
             });
 
             $("body").on("click", "#lightbox-new-derivate-confirm", function() {
@@ -1134,6 +1128,44 @@ var DerivateBrowser = function(){
 			showDeleteDocAlert("journal");
 		}
 	}
+
+    function addFileToUplodlist(file, path) {
+        if (file.type != ""){
+            var upload = new Upload(derivateBrowserTools.getCurrentDocID(), "", derivateBrowserTools.getCurrentPath() + path, file);
+            if (path != "") upload.isInFolder();
+            if (uploadList[upload.getID()] == undefined){
+                upload.exists = false;
+                upload.statusbar = upload.getStatus();
+                $("#lightbox-new-derivate-table").append(upload.statusbar);
+                $("#lightbox-new-derivate-table .statusbar-progress").addClass("invisable");
+                uploadList[upload.getID()] = upload;
+            }
+            else{
+                console.log("already in there");
+            }
+        }
+        else{
+            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype"), false);
+        }
+    }
+
+    function getWebkitFiles(item, path) {
+        path = path || "";
+        if (item.isFile) {
+            // Get file
+            item.file(function(file) {
+                addFileToUplodlist(file, path);
+            });
+        } else if (item.isDirectory) {
+            // Get folder contents
+            var dirReader = item.createReader();
+            dirReader.readEntries(function(entries) {
+                for (var i=0; i<entries.length; i++) {
+                    getWebkitFiles(entries[i], path + "/" + item.name);
+                }
+            });
+        }
+    }
 };
 
 $(document).ready(function() {

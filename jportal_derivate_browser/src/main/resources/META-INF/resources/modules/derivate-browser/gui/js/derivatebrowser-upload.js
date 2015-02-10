@@ -11,6 +11,7 @@ function Upload(docID, deriID, path, file) {
 	this.exists = undefined;
 	this.img = undefined;
 	this.statusbar = undefined;
+    this.inFolder = false;
 }
 
 Upload.prototype.getStatus = function() {
@@ -42,6 +43,10 @@ Upload.prototype.getID = function() {
 
 Upload.prototype.getCompletePath = function() {
     return this.path + "/" + this.name;
+};
+
+Upload.prototype.isInFolder = function() {
+    this.inFolder = true;
 };
 
 Upload.prototype.getCheckJson = function() {
