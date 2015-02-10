@@ -228,7 +228,7 @@ var derivateBrowserNavigation = (function () {
 
     //ajax Methods
     function getDocPerID(docID, callback) {
-        var url = "/servlets/solr/select?q=id%3A" + docID + "&start=0&rows=10&sort=maintitle+asc&wt=json&indent=true";
+        var url = jp.baseURL + "servlets/solr/select?q=id%3A" + docID + "&start=0&rows=10&sort=maintitle+asc&wt=json&indent=true";
         $.getJSON(url, function(search) {
             callback(search.response);
         });
@@ -236,7 +236,7 @@ var derivateBrowserNavigation = (function () {
 
 	function getDeriFolders(deriID, callback){
 		$.ajax({
-			url: "/rsc/derivatebrowser/folders/" + deriID,
+			url: "folders/" + deriID,
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
@@ -252,7 +252,7 @@ var derivateBrowserNavigation = (function () {
 	}
 	
 	function getJournals(query, start, callback) {
-		var url = "/servlets/solr/select?q=" + query + "&start=" + start +  "&rows=10&fq=objectType%3Ajpjournal&sort=maintitle+asc&wt=json&indent=true";
+		var url = jp.baseURL + "servlets/solr/select?q=" + query + "&start=" + start +  "&rows=10&fq=objectType%3Ajpjournal&sort=maintitle+asc&wt=json&indent=true";
 		$.getJSON(url, function(search){
 			if(search.response.numFound > 0){
 				var results = search.response.docs;

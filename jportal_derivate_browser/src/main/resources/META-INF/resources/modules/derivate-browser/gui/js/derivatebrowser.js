@@ -227,7 +227,8 @@ var DerivateBrowser = function(){
 			        		dragObj = elm;
 			        	}
 			        	if ($(dragElm).hasClass("browser-table-file")){
-			        		var div = $('<div id="drag-img-div"><img class="img-placeholder img-placeholder-startfile" src="/images/file-logo.svg"><img id="drag-img" class="hidden"></div>');
+			        		var div = $('<div id="drag-img-div"><img class="img-placeholder img-placeholder-startfile"><img id="drag-img" class="hidden"></div>');
+                            $(div).children(".img-placeholder").attr("src", jp.baseURL + "images/file-logo.svg");
 			        		derivateBrowserTools.setImgPath($(div).find("#drag-img"), dragElm.data("deriID"), dragElm.data("path"));
 							$("body").append(div);
 							dragObj = div;
@@ -666,7 +667,7 @@ var DerivateBrowser = function(){
 
 	function renameFile(oldName, deriID, newName, start, entry){
 		$.ajax({
-			url: "/rsc/derivatebrowser/rename?file=" + deriID + ":" + oldName + "&name=" +  newName + "&mainFile=" + start,
+			url: "rename?file=" + deriID + ":" + oldName + "&name=" +  newName + "&mainFile=" + start,
 			type: "POST",
 			dataType: "json",
 			statusCode: {
@@ -698,7 +699,7 @@ var DerivateBrowser = function(){
 
 	function deleteMultipleFiles(json){
 		$.ajax({
-			url: "/rsc/derivatebrowser/multiple",
+			url: "multiple",
 			type: "DELETE",
 			contentType: 'application/json',
 			dataType: "json",
@@ -744,7 +745,7 @@ var DerivateBrowser = function(){
 	function newFolder(input, temp) {
 		var path = derivateBrowserTools.getCurrentDocID() + derivateBrowserTools.getCurrentPath() + "/" +  input;
 		$.ajax({
-			url: "/rsc/derivatebrowser/" + path ,
+			url: "./" + path ,
 			type: "POST",
 			dataType: "json",
 			statusCode: {
@@ -767,7 +768,7 @@ var DerivateBrowser = function(){
 
 	function changeStartFile(entry){
 		$.ajax({
-			url: "/rsc/derivatebrowser/" + entry.data("deriID") + entry.data("path") + "/main",
+			url: "./" + entry.data("deriID") + entry.data("path") + "/main",
 			type: "PUT",
 			dataType: "json",
 			statusCode: {
@@ -793,7 +794,7 @@ var DerivateBrowser = function(){
 
 	function getTargetFolders(deriID){
 		$.ajax({
-			url: "/rsc/derivatebrowser/folders/" + deriID,
+			url: "folders/" + deriID,
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
@@ -814,7 +815,7 @@ var DerivateBrowser = function(){
 
 	function moveFiles(json) {
 		$.ajax({
-			url: "/rsc/derivatebrowser/moveDeriFiles",
+			url: "moveDeriFiles",
 			type: "POST",
 			contentType: 'application/json',
 			dataType: "json",
@@ -857,7 +858,7 @@ var DerivateBrowser = function(){
 
 	function uploadFile(upload, mode){
 		$.ajax({
-			url: "/rsc/derivatebrowser/upload",
+			url: "upload",
 			type: "POST",
 			processData: false,
 			contentType : false,
@@ -921,7 +922,7 @@ var DerivateBrowser = function(){
 
 	function addURN(json) {
 		$.ajax({
-			url: "/rsc/derivatebrowser/addURN",
+			url: "addURN",
 			type: "POST",
 			contentType: 'application/json',
 			dataType: "json",
@@ -958,7 +959,7 @@ var DerivateBrowser = function(){
 
 	function doExistsCheck(json) {
 		$.ajax({
-			url: "/rsc/derivatebrowser/exists",
+			url: "exists",
 			type: "POST",
 			contentType: 'application/json',
 			dataType: "json",
@@ -1136,8 +1137,6 @@ var DerivateBrowser = function(){
 };
 
 $(document).ready(function() {
-	var jp = jp || {};
-	jp.baseURL = "/";
 	var DerivateBrowserInstance = new DerivateBrowser();
 	DerivateBrowserInstance.init();
 });

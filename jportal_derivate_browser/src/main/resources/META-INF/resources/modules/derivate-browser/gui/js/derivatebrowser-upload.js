@@ -135,9 +135,14 @@ function readImg(file, display, upload) {
 				reader.readAsDataURL(file);
 			}
 		}
+        else{
+            display.attr("src", jp.baseURL + "images/file-logo.svg");
+            $(display).siblings(".img-placeholder").addClass("hidden");
+            $(display).removeClass("hidden");
+        }
 	}
 	else{
-		display.attr("src", "/images/adobe-logo.svg");
+		display.attr("src", jp.baseURL + "images/adobe-logo.svg");
 		$(display).siblings(".img-placeholder").addClass("hidden");
 		$(display).removeClass("hidden");
 	}

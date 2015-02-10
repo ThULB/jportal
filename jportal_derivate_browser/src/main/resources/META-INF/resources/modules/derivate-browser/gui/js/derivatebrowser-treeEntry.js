@@ -38,7 +38,7 @@ TreeEntry.prototype.getChildsAndDeris = function(callback) {
 
 TreeEntry.prototype.getChilds = function(start, callback) {
 	var entry = this;
-	$.getJSON("/servlets/solr/select?q=%2Bparent%3A" + entry.docID + "&start=" + start + "&rows=100&wt=json&sort=maintitle%20asc&wt=json", function(search){
+	$.getJSON(jp.baseURL + "servlets/solr/select?q=%2Bparent%3A" + entry.docID + "&start=" + start + "&rows=100&wt=json&sort=maintitle%20asc&wt=json", function(search){
 		if(search.response.numFound > 0){
 			var results = search.response.docs;
 			$.each(results, function(i, result){
@@ -57,7 +57,7 @@ TreeEntry.prototype.getChilds = function(start, callback) {
 
 TreeEntry.prototype.getDeris = function(start, callback) {
 	var entry = this;
-	$.getJSON("/servlets/solr/select?q=%2BderivateOwner%3A" + entry.docID + "&start=" + start + "&rows=100&wt=json&sort=maintitle%20asc&wt=json", function(search){
+	$.getJSON(jp.baseURL + "servlets/solr/select?q=%2BderivateOwner%3A" + entry.docID + "&start=" + start + "&rows=100&wt=json&sort=maintitle%20asc&wt=json", function(search){
 		if(search.response.numFound > 0){
 			var results = search.response.docs;
 			$.each(results, function(i, result){

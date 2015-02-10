@@ -8,15 +8,16 @@ var derivateBrowserTools = (function () {
 
     //private Methods   
 	function getPDFImg(img, deriID, path){
-		$(img).siblings(".img-placeholder").attr( "src", "/images/adobe-logo.svg");
-		$(img).attr( "src", "/img/pdfthumb/" + deriID + path).on("load", function() {
+		$(img).siblings(".img-placeholder").attr( "src", jp.baseURL + "images/adobe-logo.svg");
+		$(img).attr( "src", jp.baseURL + "img/pdfthumb/" + deriID + path).on("load", function() {
 			$(img).siblings(".img-placeholder").addClass("hidden");
 			$(img).removeClass("hidden");
 		});
 	}
 	
 	function getImg(img, deriID, path){
-		$(img).attr( "src", "/servlets/MCRTileCombineServlet/MIN/" + deriID + path).on("load", function() {
+        $(img).siblings(".img-placeholder").attr( "src", jp.baseURL + "images/file-logo.svg");
+		$(img).attr( "src", jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + deriID + path).on("load", function() {
 			$(img).siblings(".img-placeholder").addClass("hidden");
 			$(img).removeClass("hidden");
 		});
@@ -112,7 +113,7 @@ var derivateBrowserTools = (function () {
     }
 
     function loadI18nKeys(lang) {
-        jQuery.getJSON("../../servlets/MCRLocaleServlet/" + lang + "/db.*", function(data) {
+        jQuery.getJSON(jp.baseURL + "servlets/MCRLocaleServlet/" + lang + "/db.*", function(data) {
             i18nKeys = data;
             changeAllI18n();
         });

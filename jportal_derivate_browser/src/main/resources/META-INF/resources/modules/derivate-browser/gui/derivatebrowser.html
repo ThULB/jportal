@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-	<link href="/rsc/derivatebrowser/gui/css/derivatebrowser.css" rel="stylesheet" type="text/css">
+	<link href="gui/css/derivatebrowser.css" rel="stylesheet" type="text/css">
 <title>Jportal Derivate Browser</title>
 </head>
 <body>
@@ -22,13 +22,13 @@
                 <button id="folder-list-new-button-journal" class="btn btn-default browser-button folder-list-new-button" type="button">
                     <text class="i18n" i18n="db.label.newJournal" i18n-def="Zeitschrift anlegen"></text>
                 </button>
-                <button id="folder-list-new-button-volume" class="btn btn-default browser-button folder-list-new-button" type="button">
+                <button id="folder-list-new-button-volume" class="btn btn-default browser-button folder-list-new-button" type="button" disabled="disabled">
                     <text class="i18n" i18n="db.label.newVolume" i18n-def="Band anlegen"></text>
                 </button>
-                <button id="folder-list-new-button-article" class="btn btn-default browser-button folder-list-new-button" type="button">
+                <button id="folder-list-new-button-article" class="btn btn-default browser-button folder-list-new-button" type="button" disabled="disabled">
                     <text class="i18n" i18n="db.label.newArticle" i18n-def="Artikel anlegen"></text>
                 </button>
-                <button id="folder-list-new-button-derivate" class="btn btn-default browser-button folder-list-new-button" type="button">
+                <button id="folder-list-new-button-derivate" class="btn btn-default browser-button folder-list-new-button" type="button" disabled="disabled">
                     <text class="i18n" i18n="db.label.newDerivate" i18n-def="Derivat anlegen"></text>
                 </button>
             </div>
@@ -41,6 +41,11 @@
 		<div id="file-view" ondragover="return false">
 			<div id="alert-area" class="alert alert-danger">...</div>
 			<div id="files">
+                <div id="editor-loading"  class="hidden">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
 				<div id="upload-overlay" class="hidden"></div>
 				<div id="derivate-browser" class="hidden">
 					<div id="derivate-browser-header">
@@ -63,14 +68,14 @@
 											</button>
 											<button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button">
 				 									<span class="glyphicon glyphicon glyphicon-trash button-glyphicon"></span>
-                                                    <text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen">
+                                                    <text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>
 											</button>
 										</div>
 									</div>
 									<div id="derivat-panel-startfile">
 										<label><text class="i18n" i18n="db.label.startFile" i18n-def="Startdatei"></text></label>
 										<figure>
-											<img class='img-placeholder img-placeholder-startfile' src='/images/file-logo.svg'>
+											<img class='img-placeholder img-placeholder-startfile'>
 											<img id='panel-img' class="hidden" src=''>
 										    <div id="derivat-panel-startfile-overlay-div" class="hidden">
 										    	<div id="derivat-panel-startfile-overlay-label">
@@ -287,7 +292,7 @@
 	<script id="popover-template" type="text/mustache">
 		<div class="popover-template">
 			<img class='popover-img hidden' src=''>
-			<img class='img-placeholder img-placeholder-popover' src='/images/file-logo.svg'>
+			<img class='img-placeholder img-placeholder-popover' src=''>
 			<dl>
 				<dt>Size</dt>
 				<dd class="img-size">{{size}}</dd>
@@ -381,7 +386,7 @@
 	<script id="upload-overwrite-template" type="text/mustache">
 		<div>
 			<img class='overwrite-img hidden' src=''>
-			<img class='img-placeholder img-placeholder-overwrite' src='/images/file-logo.svg'>
+			<img class='img-placeholder img-placeholder-overwrite' src=''>
 			<dl>
 				<dt>Size</dt>
 				<dd class="img-size">{{size}}</dd>
@@ -391,20 +396,21 @@
 		</div>
 	</script>
 	<script type="text/javascript">
+		var getUrl = window.location;
 		var jp = jp || {};
-		jp.baseURL = "/";
+		jp.baseURL = getUrl .protocol + "//" + getUrl.host + getUrl.pathname.split('rsc/')[0];
 	</script>
 	
  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
  	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
- 	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser.js"></script>
- 	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-upload.js"></script>
- 	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-treeEntry.js"></script>
-	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-navigation.js"></script>
-	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-fileView.js"></script>
-	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-tools.js"></script>
- 	<script type="text/javascript" src="/js/jp-subselect.js" ></script>
+ 	<script type="text/javascript" src="gui/js/derivatebrowser.js"></script>
+ 	<script type="text/javascript" src="gui/js/derivatebrowser-upload.js"></script>
+ 	<script type="text/javascript" src="gui/js/derivatebrowser-treeEntry.js"></script>
+	<script type="text/javascript" src="gui/js/derivatebrowser-navigation.js"></script>
+	<script type="text/javascript" src="gui/js/derivatebrowser-fileView.js"></script>
+	<script type="text/javascript" src="gui/js/derivatebrowser-tools.js"></script>
+<!--  	<script type="text/javascript" src="jp-subselect.js" ></script> -->
 </body>
 </html>

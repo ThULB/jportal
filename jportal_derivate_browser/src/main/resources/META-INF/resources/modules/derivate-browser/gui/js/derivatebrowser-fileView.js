@@ -172,6 +172,7 @@ var derivateBrowserFileView = (function () {
         $("#journal-info-button-save").data("mode", mode);
         $("#journal-info-button-whileEdit").removeClass("hidden");
         $("#journal-info-button-notEdit").addClass("hidden");
+        $("#editor-loading").addClass("hidden");
 		if ($("#journal-info").hasClass("hidden")){
 			$("#journal-info").removeClass("hidden");
 			$("#derivate-browser").addClass("hidden");
@@ -180,10 +181,18 @@ var derivateBrowserFileView = (function () {
         $("#journal-info-text").html(html);
 	}
 
+    function hideCurrentView(){
+        $("#journal-info").addClass("hidden");
+        $("#derivate-browser").addClass("hidden");
+        $("#editor-loading").removeClass("hidden");
+        $("#journal-info-button-whileEdit").addClass("hidden");
+        $("#journal-info-button-notEdit").addClass("hidden");
+    }
+
     //ajax Methods
 	function getDerivate(deriID, path){
 		$.ajax({
-			url: "/rsc/derivatebrowser/" + deriID + path,
+			url: "./" + deriID + path,
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
@@ -198,7 +207,7 @@ var derivateBrowserFileView = (function () {
 
 	function getDocument(docID, callback) {
 		$.ajax({
-			url: "/rsc/render/object/" + docID,
+			url: jp.baseURL + "rsc/render/object/" + docID,
 			type: "GET",
 			dataType: "html",
 			success: function(data) {
@@ -217,7 +226,7 @@ var derivateBrowserFileView = (function () {
 			target = "&_xed_submit_servlet:CreateObjectServlet=create";
 		}
 		$.ajax({
-			url: "/servlets/XEditor",
+			url: jp.baseURL + "servlets/XEditor",
 			type: "GET",
 			data: $('#doc-editor-form').serialize() + target,
 			success: function(data, textStatus, request) {
@@ -254,7 +263,8 @@ var derivateBrowserFileView = (function () {
 	}
 
 	function getDocEditor(type, mode, docID) {
-		var url = "/editor/start.xed?&type=" + type + "&action=" + mode;
+        hideCurrentView();
+		var url = jp.baseURL + "editor/start.xed?&type=" + type + "&action=" + mode;
 		if(mode != "create" && (docID != "" || docID != undefined)){
 			url = url + "&id=" + docID;
 		}
@@ -278,7 +288,7 @@ var derivateBrowserFileView = (function () {
 
 	function deleteDocument(docID, callback) {
 		$.ajax({
-			url: "/rsc/derivatebrowser/" + docID,
+			url: "./" + docID,
 			type: "DELETE",
 
 			success: function() {
