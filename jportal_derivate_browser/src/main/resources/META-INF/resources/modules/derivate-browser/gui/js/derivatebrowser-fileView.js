@@ -43,7 +43,7 @@ var derivateBrowserFileView = (function () {
 		$(fileEntryOutput).data("path", file.absPath);
 		$(fileEntryOutput).data("deriID", file.deriID);
 		$(fileEntryOutput).data("docID", file.deriID);
-		if (mainDoc == file.absPath){
+		if ((mainDoc == file.absPath) || ("/" + mainDoc == file.absPath)){
 			$(fileEntryOutput).data("startfile", true);
 		}
 		$(fileEntryOutput).appendTo("#browser-table-files");
