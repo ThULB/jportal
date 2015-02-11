@@ -93,10 +93,12 @@ public class BaseIntegrationTest {
         }
         MAVEN_OUTPUT_DIRECTORY = new File(MAVEN_OUTPUT_DIRECTORY, "failed-it");
         LOGGER.info("Using " + MAVEN_OUTPUT_DIRECTORY.getAbsolutePath() + " as replacement.");
-        String port = System.getProperty("it.port", "8080");
+//        String port = System.getProperty("it.port", "8080");
+        String port = System.getProperty("it.port", "8291");
         LOCAL_PORT = Integer.parseInt(port);
         TEST_APP = System.getProperty("it.context", "");
-        START_URL = "http://localhost:" + LOCAL_PORT + "/" + TEST_APP;
+//        START_URL = "http://localhost:" + LOCAL_PORT + "/" + TEST_APP;
+        START_URL = "http://localhost:" + LOCAL_PORT + "/jportal" + TEST_APP;
         LOGGER.info("Server running on '" + START_URL + "'");
         DRIVER = new FirefoxDriver();
     }
