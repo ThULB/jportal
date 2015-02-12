@@ -82,9 +82,11 @@
 					<xsl:if test="@name!='textInputSm' and @name!='date_select'">
 						<div>
 							<xsl:attribute name="class">form-group {$xed-validation-marker}</xsl:attribute>
-							<xsl:if test="@classDatePick">
-								<xsl:attribute name="class">form-group input-group {$xed-validation-marker} <xsl:value-of
-									select="@classDatePick" /></xsl:attribute>
+							<xsl:if test="contains(@inputClass, 'date-field')">
+								<xsl:attribute name="class">form-group input-group</xsl:attribute>
+							</xsl:if>
+							<xsl:if test="@containerId">
+								<xsl:attribute name="id"><xsl:value-of select="@containerId"></xsl:value-of></xsl:attribute>
 							</xsl:if>
 							<xsl:if
 								test="@validate='interdependentSelect' or @bottom='littleSpace'">
@@ -135,7 +137,12 @@
           <xsl:value-of select="concat('{i18n:', @placeholder, '}')" />
         </xsl:attribute>
 			</xsl:if>
-			<xsl:if test="@classDatePick">
+			<xsl:if test="@inputClass">
+				<xsl:attribute name="class">
+          <xsl:value-of select="@inputClass" />
+        </xsl:attribute>
+			</xsl:if>
+			<xsl:if test="contains(@inputClass, 'date-field')">
 				<span class="input-group-addon btn btn-default jp-layout-white">
 					<span class="glyphicon glyphicon-calendar"></span>
 				</span>
@@ -184,15 +191,6 @@
 			test="((string-length(.) = 0) and (string-length(../@xlink:href) = 0)) or ((string-length(.) > 0) and (string-length(../@xlink:href) > 0))">
 			<div class="alert alert-danger" role="alert">
 				<xed:output i18n="jp.editor.select_help" />
-			</div>
-		</xed:validate>
-	</xsl:template>
-
-	<xsl:template match="jp:template[@validate='date']" mode="required">
-		<xed:validate display="here" type="datetime"
-			format="dd.MM.yyyy;MM.dd.yyyy;yyyy.MM.dd;yyyy;yyyy-MM;yyyy-MM-dd;dd-MM-yyyy;MM-dd-yyyy">
-			<div class="alert alert-danger" role="alert">
-				<xed:output i18n="editormask.labels.date_howToUse" />
 			</div>
 		</xed:validate>
 	</xsl:template>

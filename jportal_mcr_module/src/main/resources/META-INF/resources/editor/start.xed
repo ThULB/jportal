@@ -12,6 +12,7 @@
             <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" class="jp-db-load"></script>
             <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js" class="jp-db-load"></script>
             <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js" class="jp-db-load"></script>
+            
             <script type="text/javascript">
               $(function () {
               	var newDocTitle = $("#xeditor-title").text().trim() + " ";
@@ -61,10 +62,12 @@
               </div>
             </xed:bind>
           </xed:bind>
-          <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-editor.js" class="jp-db-load jp-db-reload"/>
+          <xed:if test="$type != 'jpinst'">
+          	<script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-editor.js" class="jp-db-load jp-db-reload"/>
+          </xed:if>
         </xed:when>
         <xed:otherwise>
-          <div class="alert alert-danger">Permission denied</div>
+          <div class="alert alert-danger">Permission denied!</div>
         </xed:otherwise>
       </xed:choose>
     </xed:form>

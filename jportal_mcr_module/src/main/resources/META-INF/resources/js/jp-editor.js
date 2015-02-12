@@ -1,18 +1,6 @@
-$(document)
-		.ready(
-				function() {					
-	                $('.datetimepicker6').datetimepicker({
-	                    language: $('#hiddenLanguage').text(),
-	                    pickTime: false,
-	                    minDate:`0-0-0001`
-	                  });
-	                
-					if ($("#currentType").text() == 'jparticle'
-							|| $("#currentType").text() == 'jpjournal'
-							|| $("#currentType").text() == 'jpvolume') {
-						createDate();
-					}
-				});
+$(document).ready(function() {			
+	createDate();
+});
 
 function createDate() {
 	var formSelector = $("#dateSelect");
