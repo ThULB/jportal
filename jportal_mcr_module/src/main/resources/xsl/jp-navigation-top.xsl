@@ -75,7 +75,7 @@
           <span class="caret"></span>
         </a>
 
-        <ul role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
+        <ul id="languageList" role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
           <xsl:for-each select="$languages/lang">
             <xsl:if test="$CurrentLang != text()">
               <li>
