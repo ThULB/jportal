@@ -1282,3 +1282,8 @@ textarea {
 #inputContainer {
 	margin-top: 5px;
 }
+
+.jp-layout-errorBox {
+	clear: both;
+	margin-bottom: 0;
+}
