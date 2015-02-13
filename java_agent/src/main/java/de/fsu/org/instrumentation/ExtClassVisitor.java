@@ -38,10 +38,12 @@ public abstract class ExtClassVisitor extends ClassVisitor {
         try {
             // if has extender method for 'name' exist then exec
             // if no extender method exists NoSuchMethodException will be throw, no modification for method with 'name'
-            Method extMethod = getClass().getMethod("ext_" + name, MethodVisitor.class);
-            Method method = getEXT_CLASS().getMethod(name, String.class);
+            Method extMethod = getClass().getDeclaredMethod("ext_" + name, MethodVisitor.class);
+            Class<?>[] params = getParams(desc);
+            Method method = getEXT_CLASS().getDeclaredMethod(name, params);
+            int modifiers = method.getModifiers();
             String descriptor = Type.getMethodDescriptor(method);
-            if (desc.equals(descriptor) && access == ACC_PUBLIC) {
+            if (desc.equals(descriptor) && access == modifiers) {
                 LOGGER.info("Change method " + name + " " + desc + " for " + className);
                 MethodVisitor mv_redirect = cv.visitMethod(access, name, desc, signature, exceptions);
                 extMethod.invoke(this, mv_redirect);
@@ -56,9 +58,24 @@ public abstract class ExtClassVisitor extends ClassVisitor {
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     
         return super.visitMethod(access, name, desc, signature, exceptions);
+    }
+    
+    private Class<?>[] getParams(String methodDescriptor) throws ClassNotFoundException {
+        Type[] argumentTypes = Type.getArgumentTypes(methodDescriptor);
+        Class<?>[] classArray = new Class<?>[argumentTypes.length];
+        for (int i = 0; i < argumentTypes.length; i++) {
+            Type type = argumentTypes[i];
+            Class<?> clazz = Class.forName(type.getClassName());
+            classArray[i] = clazz;            
+        }
+        
+        return classArray;
     }
 
     public Class<?> getEXT_CLASS() {

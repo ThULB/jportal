@@ -25,6 +25,7 @@ public class JavaAgent {
         inst.addTransformer(new MCRXSLTransformerTransformer());
         inst.addTransformer(new ClassLoaderTransformer());
         inst.addTransformer(new ServletContextTransformer());
+        inst.addTransformer(new ServletTransformer());
     }
 
 }
