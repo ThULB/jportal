@@ -64,7 +64,7 @@ $(document).ready(function() {
 		infoDiv.html("Dokument wird gelöscht. Bitte warten...");
 
 		$.ajax({
-			url: "/rsc/object/" + objectID,
+			url: jp.baseURL + "rsc/object/" + objectID,
 			type: "delete",
 			dataType: 'text'
 		}).done(function() {
