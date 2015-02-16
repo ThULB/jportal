@@ -65,6 +65,13 @@ subprojects {
             testCompile group: 'junit', name: 'junit', version: '4.+'
         }
     }
+		
+		if(project.name == "jportal_web_tests"){
+			dependencies{
+			compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.+'
+			testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.+'
+			}
+		}
 
     def noJPModuleDep = [
         "jportal-commons",
@@ -72,7 +79,8 @@ subprojects {
         "jportal_iview2_plugin",
         "jportal_emb_hsql",
         "jportal_jetty_tools",
-        "java_agent"
+        "java_agent",
+				"jportal_web_tests"
     ]
 
     if(project.name != 'jportal_mcr_module' && !(project.name in noJPModuleDep)){
@@ -178,6 +186,7 @@ project(':jportal_webapp'){
     }
 
     task runJetty(type: JavaExec) {
+				description = "run the jetty"
         dependencies {
             jetty("org.eclipse.jetty:jetty-runner:$jettyVersion"){
                 exclude group: 'org.ow2.asm'
