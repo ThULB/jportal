@@ -19,46 +19,76 @@
 
   <xsl:template name="jp.admin.show">
     <xsl:variable name="isAdmin" select="mcrxml:isCurrentUserInRole('admin')" />
-    <h2>Editoren</h2>
-    <ul>
-      <xsl:if test="$isAdmin">
-        <li>
-          <a href="{$WebApplicationBaseURL}rsc/ACLE/start">ACL-Editor</a>
-        </li>
-      </xsl:if>
-      <li>
-        <a href="{$WebApplicationBaseURL}jp-classeditor.xml">Klassifikations Editor</a>
-      </li>
-    </ul>
+    <div class="panel-primary col-sm-4">
+	    <div class="panel-heading">
+		    <h2 class="panel-title">Editoren</h2>
+		  </div>
+	    <div class="panel-body">
+		    <ul>
+		      <xsl:if test="$isAdmin">
+		        <li>
+		          <a href="{$WebApplicationBaseURL}rsc/ACLE/start">ACL-Editor</a>
+		        </li>
+		      </xsl:if>
+		      <li>
+		        <a href="{$WebApplicationBaseURL}jp-classeditor.xml">Klassifikations Editor</a>
+		      </li>
+		    </ul>
+		  </div>
+		</div>
     <xsl:if test="$isAdmin">
-      <h2>WebCLI</h2>
-      <input type="button" value="Start" onclick="window.open(jp.baseURL + 'modules/webcli/start.xml','','width=900,height=900,resizable,locationbar=false,menubar=false,personalbar=false,toolbar=false');"/>
+    	<div class="panel-primary col-sm-4">
+	    	<div class="panel-heading">
+      		<h2 class="panel-title">WebCLI</h2>
+      	</div>
+      	<div class="panel-body">
+      		<input type="button" value="Start" onclick="window.open(jp.baseURL + 'modules/webcli/start.xml','','width=900,height=900,resizable,locationbar=false,menubar=false,personalbar=false,toolbar=false');"/>
+    		</div>
+    	</div>
     </xsl:if>
-    <h2>Benutzer</h2>
-    <ul>
-      <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet">Suchen und verwalten</a>
-      </li>
-      <li>
-        <a href="{$WebApplicationBaseURL}authorization/new-user.xed?action=save">Nutzer anlegen</a>
-      </li>
-      <li>
-        <a href="{$WebApplicationBaseURL}authorization/roles-editor.xml">Gruppen verwalten</a>
-      </li>
-    </ul>
+   	<div class="panel-primary col-sm-4">
+    	<div class="panel-heading">
+    		<h2 class="panel-title">Benutzer</h2>
+    	</div>
+    	<div class="panel-body">
+		    <ul>
+		      <li>
+		        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet">Suchen und verwalten</a>
+		      </li>
+		      <li>
+		        <a href="{$WebApplicationBaseURL}authorization/new-user.xed?action=save">Nutzer anlegen</a>
+		      </li>
+		      <li>
+		        <a href="{$WebApplicationBaseURL}authorization/roles-editor.xml">Gruppen verwalten</a>
+		      </li>
+		    </ul>
+		  </div>
+		</div>
     <xsl:if test="$isAdmin">
-      <h2>Sitzungen</h2>
-      <ul>
-        <li>
-          <a href="{$WebApplicationBaseURL}servlets/MCRSessionListingServlet">Aktive Sitzungen</a>
-        </li>
-      </ul>
-      <h2>Einstellungen</h2>
-      <ul>
-        <li>
-          <a href="{$WebApplicationBaseURL}jp-globalmessage-editor.xml">Globale Nachricht Bearbeiten</a>
-        </li>
-      </ul>
+ 			<div class="panel-primary col-sm-4">
+    		<div class="panel-heading">
+      		<h2 class="panel-title">Sitzungen</h2>
+      	</div>
+      	<div class="panel-body">
+		      <ul>
+		        <li>
+		          <a href="{$WebApplicationBaseURL}servlets/MCRSessionListingServlet">Aktive Sitzungen</a>
+		        </li>
+		      </ul>
+		    </div>
+		  </div>
+		  <div class="panel-primary col-sm-4">
+    		<div class="panel-heading">
+      		<h2 class="panel-title">Einstellungen</h2>
+      	</div>
+      	<div class="panel-body">
+		      <ul>
+		        <li>
+		          <a href="{$WebApplicationBaseURL}jp-globalmessage-editor.xml">Globale Nachricht Bearbeiten</a>
+		        </li>
+		      </ul>
+		    </div>
+		  </div>
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>

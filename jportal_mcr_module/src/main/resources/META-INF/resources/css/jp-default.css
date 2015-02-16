@@ -669,6 +669,9 @@ p.jp-layout-metadata-list {
 	margin: 0px;
 	list-style-type: none;
 }
+.jp-layout-admin > h1 {
+	margin-left: 0.5em;
+}
 
 #jp-layout-globalmessage-editor #message {
 	height: 8.5em;
