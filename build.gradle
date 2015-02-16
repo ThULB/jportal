@@ -213,6 +213,7 @@ project(':jportal_webapp'){
         jvmArgs '-Xdebug'
         jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
         jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath+"=$agentOp"
+        jvmArgs '-XX:MaxPermSize=128m'
         args '--config', 'jetty/jetty-config.xml'
         args '--path', '/solr', solrWarFilePath
         args '--path', '/jportal', war.archivePath
