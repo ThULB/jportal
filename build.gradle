@@ -66,12 +66,7 @@ subprojects {
         }
     }
 		
-		if(project.name == "jportal_web_tests"){
-			dependencies{
-			compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.+'
-			testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.+'
-			}
-		}
+		
 
     def noJPModuleDep = [
         "jportal-commons",
@@ -88,7 +83,8 @@ subprojects {
     }
 
     def mcrModule = [
-        "jportal_mcr_module"
+        "jportal_mcr_module",
+        "jportal_derivate_browser"
     ]
 
     if(project.name in mcrModule){
