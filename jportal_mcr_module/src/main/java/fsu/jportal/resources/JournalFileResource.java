@@ -64,28 +64,44 @@ public class JournalFileResource {
     @Consumes(MediaType.APPLICATION_XHTML_XML)
     public Response postAddFile(@PathParam("filename") String filename, String fileContent) throws JDOMException,
         IOException {
-        String rootName = "MyCoReWebPage";
-        Element root = new Element(rootName);
-        Element section = new Element("section");
-        section.setAttribute("lang", "de", Namespace.XML_NAMESPACE);
-        section.setAttribute("title", journalID);
-
-        root.addContent(section);
-        Document document = new Document(root);
-        DocType doctype = new DocType(rootName);
-        document.setDocType(doctype);
-
-        addStringContent(section, fileContent);
-        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-        try {
-            java.nio.file.Path introXMl = getJournalFileFolderPath().resolve("intro.xml");
-            BufferedWriter introWriter = Files.newBufferedWriter(introXMl, StandardCharsets.UTF_8);
-            xmlOutputter.output(document, introWriter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return Response.created(URI.create("../")).build();
+    		if(!fileContent.equals("")) {
+	        String rootName = "MyCoReWebPage";
+	        Element root = new Element(rootName);
+	        Element section = new Element("section");
+	        section.setAttribute("lang", "de", Namespace.XML_NAMESPACE);
+	        section.setAttribute("title", journalID);
+	
+	        root.addContent(section);
+	        Document document = new Document(root);
+	        DocType doctype = new DocType(rootName);
+	        document.setDocType(doctype);
+	
+	        addStringContent(section, fileContent);
+	        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+	        try {
+	            java.nio.file.Path introXMl = getJournalFileFolderPath().resolve("intro.xml");
+	            BufferedWriter introWriter = Files.newBufferedWriter(introXMl, StandardCharsets.UTF_8);
+	            xmlOutputter.output(document, introWriter);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+    		} else {
+    			deleteFile();
+    		}
+    		return Response.created(URI.create("../")).build();
+    }
+    
+    private void deleteFile() throws IOException{
+    	java.nio.file.Path journalFolder = null;
+    	java.nio.file.Path introXMl = null;
+    	try {
+    		introXMl = getJournalFileFolderPath().resolve("intro.xml");
+    		journalFolder = getJournalFileFolderPath();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	Files.deleteIfExists(introXMl);
+    	Files.deleteIfExists(journalFolder);
     }
 
     private void addStringContent(Element element, String s) throws JDOMException, IOException {

@@ -63,11 +63,20 @@ $(document).ready(function() {
 		imageDiv.html("<i class='fa fa-circle-o-notch fa-spin fa-5x'></i>");
 		infoDiv.html("Dokument wird gelöscht. Bitte warten...");
 
+		
 		$.ajax({
 			url: jp.baseURL + "rsc/object/" + objectID,
 			type: "delete",
 			dataType: 'text'
 		}).done(function() {
+			if(objectID.match("jpjournal") != null) {
+				$.ajax({
+					url : jp.baseURL + 'rsc/journalFile/' + objectID + '/intro.xml',
+					type : 'POST',
+					data : '',
+					contentType : 'application/xhtml+xml'
+				});
+			}
 			imageDiv.html("<i class='fa fa-check fa-5x'></i>");
 			infoDiv.html("Löschen erfolgreich!");
 			closeButton.on("click", onCloseClicked);
