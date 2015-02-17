@@ -1,6 +1,12 @@
 package fsu.jportal.resources;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -24,7 +30,7 @@ public class GlobalMessageResource {
     static Logger LOGGER = Logger.getLogger(GlobalMessageResource.class);
 
     private static JAXBContext JAXB_CONTEXT;
-    private static File GLOBAL_MESSAGE_FILE;
+    private static java.nio.file.Path GLOBAL_MESSAGE_FILE;
 
     static {
         try {
@@ -33,8 +39,17 @@ public class GlobalMessageResource {
             LOGGER.error("Unable to create jaxb context", exc);
         }
         try {
-            String webappDir = MCRConfiguration.instance().getString("MCR.WebApplication.basedir");
-            GLOBAL_MESSAGE_FILE = new File(webappDir, "config/jp-globalmessage.xml");
+            String mcrDataDir = MCRConfiguration.instance().getString("MCR.datadir");
+            java.nio.file.Path confDir = Paths.get(mcrDataDir, "config");
+            String confFileName = "jp-globalmessage.xml";
+            GLOBAL_MESSAGE_FILE = confDir.resolve(confFileName);
+            
+            if(!Files.exists(confDir)){
+            	Files.createDirectories(confDir);
+            	
+            	InputStream origMsgFile = GlobalMessageResource.class.getResourceAsStream("/META-INF/resources/config/" + confFileName);
+            	Files.copy(origMsgFile, GLOBAL_MESSAGE_FILE);
+            }
         } catch(Exception exc) {
             LOGGER.error("Unable to get globalmessage file", exc);
         }
@@ -48,7 +63,14 @@ public class GlobalMessageResource {
         GlobalMessage msg = gson.fromJson(json, GlobalMessage.class);
         Marshaller m = JAXB_CONTEXT.createMarshaller();
         synchronized(m) {
-            m.marshal(msg, GLOBAL_MESSAGE_FILE);
+        	OutputStream msgOutputStream;
+					try {
+						msgOutputStream = Files.newOutputStream(GLOBAL_MESSAGE_FILE);
+						m.marshal(msg, msgOutputStream);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
         }
         return Response.ok().build();
     }

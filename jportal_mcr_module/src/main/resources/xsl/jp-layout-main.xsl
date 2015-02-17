@@ -177,7 +177,7 @@
           </div>
         </div>
 
-        <xsl:apply-templates select="document('webapp:config/jp-globalmessage.xml')/globalmessage" />
+        <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage" />
         <div id="logo"></div>
 
         <!-- searchbar -->

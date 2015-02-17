@@ -31,7 +31,7 @@
 	<xsl:template name="jp.globalmessage.editor">
 		<xsl:call-template name="jp.globalmessage.editor.js" />
 		<xsl:variable name="gm"
-			select="document('webapp:config/jp-globalmessage.xml')/globalmessage" />
+			select="document('getData:config/jp-globalmessage.xml')/globalmessage" />
 		<div class="form-group col-sm-12">
 			<label class="col-sm-2" for="visibility">
 				<xsl:value-of select="i18n:translate('jp.site.globalMsgEditor.visibility')" />
