@@ -1,11 +1,12 @@
 package fsu.jportal.it.test;
 
-import junit.framework.TestCase;
+//import junit.framework.TestCase;
 
-//import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -13,7 +14,8 @@ import fsu.jportal.it.BaseIntegrationTest;
 import fsu.jportal.it.TestUtils;
 
 public class BaseITCase extends BaseIntegrationTest {
-
+	WebDriverWait wait = new WebDriverWait(DRIVER, 5);
+	
     @Test
     public void loginAndLogout() throws Exception {
         TestUtils.home(DRIVER);
@@ -29,13 +31,13 @@ public class BaseITCase extends BaseIntegrationTest {
         TestUtils.home(DRIVER);
         DRIVER.findElement(By.xpath("//li[@id='languageMenu']/a")).click();
         DRIVER.findElement(By.xpath("//ul[@id='languageList']/li[1]/a")).click();
-        TestCase.assertEquals("language not changed - content does not match", "Welcome to journals@UrMEL!", DRIVER
+        assertEquals("language not changed - content does not match", "Welcome to journals@UrMEL!", DRIVER
             .findElement(By.xpath("//div[@class='jp-layout-index-intro']/h1")).getText());
 
         DRIVER.get(START_URL + "/content/below/index.xml");
         DRIVER.findElement(By.xpath("//li[@id='languageMenu']/a")).click();
         DRIVER.findElement(By.xpath("//ul[@id='languageList']/li[1]/a")).click();
-        TestCase.assertEquals("language not changed - content does not match", "Willkommen bei journals@UrMEL", DRIVER
+        assertEquals("language not changed - content does not match", "Willkommen bei journals@UrMEL", DRIVER
             .findElement(By.xpath("//div[@class='jp-layout-index-intro']/h1")).getText());
     }
 
@@ -45,7 +47,7 @@ public class BaseITCase extends BaseIntegrationTest {
     		TestUtils.login(DRIVER);
     		TestUtils.creatMinJournal(DRIVER, "Der Spiegel");
         DRIVER.get(START_URL + "/content/main/journalList.xml");
-        WebDriverWait wait = new WebDriverWait(DRIVER, 5);
+        
         // click d
         By d = By.xpath("//ul[@id='tabNav']/li[text()='D']");
         wait.until(ExpectedConditions.elementToBeClickable(d));
@@ -54,7 +56,7 @@ public class BaseITCase extends BaseIntegrationTest {
         wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Der Spiegel")));
         // click
         DRIVER.findElement(By.linkText("Der Spiegel")).click();
-        TestCase.assertEquals("header does not match", "Der Spiegel", DRIVER.findElement(By.id("jp-maintitle"))
+        assertEquals("header does not match", "Der Spiegel", DRIVER.findElement(By.id("jp-maintitle"))
             .getText());
         TestUtils.deletObj(DRIVER, "Der Spiegel");
         TestUtils.logout(DRIVER);
@@ -100,7 +102,7 @@ public class BaseITCase extends BaseIntegrationTest {
         DRIVER.findElement(By.xpath("//span[@class='glyphicon glyphicon-search glyphSearchBar']")).submit();
         DRIVER.findElement(By.linkText("Schiller und die Räuber")).click();
 
-        TestCase.assertEquals("header does not match", "Schiller und die Räuber",
+        assertEquals("header does not match", "Schiller und die Räuber",
             DRIVER.findElement(By.id("jp-maintitle")).getText());
 
     		//search inst
@@ -109,11 +111,44 @@ public class BaseITCase extends BaseIntegrationTest {
         DRIVER.findElement(By.xpath("//span[@class='glyphicon glyphicon-search glyphSearchBar']")).submit();
         DRIVER.findElement(By.linkText("Spiegel-Verlag")).click();
 
-        TestCase.assertEquals("header does not match", "Spiegel-Verlag", DRIVER.findElement(By.id("jp-maintitle"))
+        assertEquals("header does not match", "Spiegel-Verlag", DRIVER.findElement(By.id("jp-maintitle"))
             .getText());
         
         TestUtils.deletObj(DRIVER, "Der Spiegel");
         TestUtils.deletObj(DRIVER, "Spiegel-Verlag");
         TestUtils.logout(DRIVER);
     }
+    
+		@Test
+    public void advancedSearch() throws Exception {
+				TestUtils.home(DRIVER);
+				TestUtils.login(DRIVER);
+				//create person
+				TestUtils.createMinPerson(DRIVER, "Schiller");
+				TestUtils.home(DRIVER);
+				DRIVER.findElement(By.id("searchDropDownButton")).click();
+				DRIVER.findElement(By.linkText("Erweiterte Suche")).click();
+				
+				//select search field
+	      WebElement searchField = DRIVER.findElement(By.name("XSL.field1"));
+	      searchField.findElement(By.xpath("option[@value='names_de']")).click();
+	      //search value 
+	      DRIVER.findElement(By.name("XSL.value1")).sendKeys("Schiller");
+	      
+	      DRIVER.findElement(By.id("submitButton")).click();
+	      
+	      assertEquals("text does not match", "Schiller", DRIVER.findElement(By.linkText("Schiller")).getText());
+	      
+				DRIVER.findElement(By.id("searchDropDownButton")).click();
+				DRIVER.findElement(By.linkText("Erweiterte Suche bearbeiten")).click();
+				
+				searchField = DRIVER.findElement(By.name("XSL.field1"));
+				assertEquals("text does not match", "Person/Institution", searchField.findElement(By.xpath("option[@value='names_de']")).getText());
+				assertEquals("text does not match", "Schiller", DRIVER.findElement(By.name("XSL.value1")).getAttribute("value"));
+				
+				TestUtils.deletObj(DRIVER, "Schiller");
+				
+				TestUtils.home(DRIVER);
+				TestUtils.logout(DRIVER);
+		}
 }

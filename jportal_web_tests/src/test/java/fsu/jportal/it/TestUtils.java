@@ -1,6 +1,7 @@
 package fsu.jportal.it;
 
-import junit.framework.TestCase;
+//import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +13,7 @@ public abstract class TestUtils {
 
     public static void home(WebDriver driver) {
         driver.get(BaseIntegrationTest.getHomeAddress());
-        TestCase.assertEquals("invald index page - title does not match", "journals@UrMEL - JPortal", driver.getTitle());
+        assertEquals("invald index page - title does not match", "journals@UrMEL - JPortal", driver.getTitle());
     }
 
     public static void login(WebDriver driver) {
@@ -28,7 +29,7 @@ public abstract class TestUtils {
 
     public static void logout(WebDriver driver) {
         driver.findElement(By.xpath("//div[@id='navbar-collapse-globalHeader']/ul/li[5]/a")).click();
-//        TestCase.assertEquals("logout failed", 2, driver.findElements(By.xpath("//div[@id='globalMenu']/ul/li")).size());
+//        assertEquals("logout failed", 2, driver.findElements(By.xpath("//div[@id='globalMenu']/ul/li")).size());
     }
 
     public static void saveForm(WebDriver driver) {
@@ -100,7 +101,7 @@ public abstract class TestUtils {
     	saveForm(driver);
     }
     
-    public static void deletObj(WebDriver driver, String toDelete) {
+    public static void deletObj(WebDriver driver, String toDelete) throws Exception {
       TestUtils.home(driver);
       //find
       goToObj(driver, toDelete);
@@ -113,13 +114,21 @@ public abstract class TestUtils {
 		  wait.until(ExpectedConditions.elementToBeClickable(deletOk));
 		  driver.findElement(deletOk).click();
 		  
+		  //wait until its deleted
+		  Thread.sleep(600);
+		  //check if ok
+	    assertEquals("testObj didn't deleted successfully", "Löschen erfolgreich!", driver.findElement(By.id("delete-dialog-info")).getText());
+		  
     	driver.findElement(By.id("delete-dialog-close")).click();
     }
     
     public static void goToObj(WebDriver driver, String where) {
     	driver.findElement(By.id("inputField")).sendKeys(where);
     	driver.findElement(By.xpath("//span[@class='glyphicon glyphicon-search glyphSearchBar']")).submit();
-    	driver.findElement(By.linkText(where)).click();
+    	WebDriverWait wait = new WebDriverWait(driver, 2);
+    	By waitForSearch = By.linkText(where);
+    	wait.until(ExpectedConditions.elementToBeClickable(waitForSearch));
+    	driver.findElement(waitForSearch).click();
     }
 
 }

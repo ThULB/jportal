@@ -1,6 +1,8 @@
 package fsu.jportal.it.test;
 
-import junit.framework.TestCase;
+//import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -8,14 +10,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import static org.hamcrest.CoreMatchers.containsString;
+
 import fsu.jportal.it.BaseIntegrationTest;
 import fsu.jportal.it.TestUtils;
 
 public class CRUDITCase extends BaseIntegrationTest {
-	WebDriverWait wait = new WebDriverWait(DRIVER, 10);
+	WebDriverWait wait = new WebDriverWait(DRIVER, 2);
 	
     @Test
-    public void createPerson() {
+    public void createPerson() throws Exception {
         TestUtils.home(DRIVER);
         TestUtils.login(DRIVER);
 	      By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
@@ -23,7 +27,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 	      DRIVER.findElement(adminButton).click();
         
         DRIVER.findElement(By.name("Neue Person")).click();
-        TestCase.assertEquals("language not changed - content does not match", "Neue Person anlegen", DRIVER
+        assertEquals("language not changed - content does not match", "Neue Person anlegen", DRIVER
             .findElement(By.id("xeditor-title")).getText());
         
         // fill form
@@ -46,15 +50,16 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.saveForm(DRIVER);
 
         // test page
-        TestCase.assertEquals("title does not match", "Goethe, Johann Wolfgang - JPortal", DRIVER.getTitle());
-        TestCase.assertEquals("header does not match", "Goethe, Johann Wolfgang von",
+        assertEquals("title does not match", "Goethe, Johann Wolfgang - JPortal", DRIVER.getTitle());
+        assertEquals("header does not match", "Goethe, Johann Wolfgang von",
             DRIVER.findElement(By.id("jp-maintitle")).getText());
         TestUtils.deletObj(DRIVER, "Goethe, Johann Wolfgang von");
+        TestUtils.home(DRIVER);
         TestUtils.logout(DRIVER);
     }
 
     @Test
-    public void createInstitution() {
+    public void createInstitution() throws Exception {
         TestUtils.home(DRIVER);
         TestUtils.login(DRIVER);
         By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
@@ -62,7 +67,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         DRIVER.findElement(adminButton).click();
         
         DRIVER.findElement(By.name("Neue Institution")).click();
-        TestCase.assertEquals("language not changed - content does not match", "Neue Institution anlegen", DRIVER
+        assertEquals("language not changed - content does not match", "Neue Institution anlegen", DRIVER
             .findElement(By.id("xeditor-title")).getText());
 
         // fill form
@@ -80,11 +85,12 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.saveForm(DRIVER);
 
         // test page
-        TestCase.assertEquals("title does not match", "Thüringer Universitäts- und Landesbibliothek Jena - JPortal",
+        assertEquals("title does not match", "Thüringer Universitäts- und Landesbibliothek Jena - JPortal",
             DRIVER.getTitle());
-        TestCase.assertEquals("header does not match", "Thüringer Universitäts- und Landesbibliothek Jena", DRIVER
+        assertEquals("header does not match", "Thüringer Universitäts- und Landesbibliothek Jena", DRIVER
             .findElement(By.id("jp-maintitle")).getText());
         TestUtils.deletObj(DRIVER, "Thüringer Universitäts- und Landesbibliothek Jena");
+        TestUtils.home(DRIVER);
         TestUtils.logout(DRIVER);
     }
 
@@ -101,7 +107,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         DRIVER.findElement(adminButton).click();
         
         DRIVER.findElement(By.name("Neue Zeitschrift")).click();
-        TestCase.assertEquals("language not changed - content does not match", "Neue Zeitschrift anlegen", DRIVER
+        assertEquals("language not changed - content does not match", "Neue Zeitschrift anlegen", DRIVER
             .findElement(By.id("xeditor-title")).getText());
 
         // bibl. beschreibung
@@ -138,10 +144,10 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.saveForm(DRIVER);
 
         // Tests
-        TestCase
-            .assertEquals("header does not match", "Die Horen", DRIVER.findElement(By.id("jp-maintitle")).getText());
+        assertEquals("header does not match", "Die Horen", DRIVER.findElement(By.id("jp-maintitle")).getText());
         TestUtils.deletObj(DRIVER, "Die Horen");
         TestUtils.deletObj(DRIVER, "testPerson");
+        TestUtils.home(DRIVER);
         TestUtils.logout(DRIVER);
     }
 
@@ -149,7 +155,6 @@ public class CRUDITCase extends BaseIntegrationTest {
     public void createVolume() throws Exception {
         TestUtils.home(DRIVER);
         TestUtils.login(DRIVER);
-//        DRIVER.get(START_URL + "/editor/start.xed?type=jpvolume&action=create&parent=jportal_jpjournal_00000001");
         TestUtils.creatMinJournal(DRIVER, "testJournal");
         TestUtils.clickCreatSelect(DRIVER, "Neuer Band");
         // bibl. Beschreibung
@@ -160,9 +165,10 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.saveForm(DRIVER);
 
         // Tests
-        TestCase.assertEquals("header does not match", "Zweite Ausgabe", DRIVER.findElement(By.id("jp-maintitle"))
+        assertEquals("header does not match", "Zweite Ausgabe", DRIVER.findElement(By.id("jp-maintitle"))
             .getText());
         TestUtils.deletObj(DRIVER, "testJournal");
+        TestUtils.home(DRIVER);
         TestUtils.logout(DRIVER);
     }
 
@@ -184,9 +190,10 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.saveForm(DRIVER);
 
         // Tests
-        TestCase.assertEquals("header does not match", "Heim ins Frankreich", DRIVER.findElement(By.id("jp-maintitle"))
+        assertEquals("header does not match", "Heim ins Frankreich", DRIVER.findElement(By.id("jp-maintitle"))
             .getText());
         TestUtils.deletObj(DRIVER, "testJournal");
+        TestUtils.home(DRIVER);
         TestUtils.logout(DRIVER);
     }
 
@@ -202,7 +209,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         DRIVER.findElement(By.name("Neue Institution")).click();
         DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/fullname")).sendKeys("Uni Jena");
         TestUtils.saveForm(DRIVER);
-        TestCase.assertEquals("header does not match", "Uni Jena", DRIVER.findElement(By.id("jp-maintitle")).getText());
+        assertEquals("header does not match", "Uni Jena", DRIVER.findElement(By.id("jp-maintitle")).getText());
 
         // delete
         By deletButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
@@ -215,9 +222,74 @@ public class CRUDITCase extends BaseIntegrationTest {
         wait.until(ExpectedConditions.elementToBeClickable(deletOk));
         DRIVER.findElement(deletOk).click();
 
-        TestCase.assertEquals("title does not match", "Das Löschen der Daten war erfolgreich. - JPortal",DRIVER
-        		.findElement(By.xpath("//div[@id='delete-dialog-info']/p")).getText());
+        //wait a bit until it deleted
+        Thread.sleep(500);
+        //check if ok
+        assertEquals("delet failed", "Löschen erfolgreich!",DRIVER
+        		.findElement(By.id("delete-dialog-info")).getText());
         DRIVER.findElement(By.id("delete-dialog-close")).click();
+        TestUtils.home(DRIVER);
         TestUtils.logout(DRIVER);
     }
+
+    @Test
+    public void importObj() throws Exception {
+		  TestUtils.home(DRIVER);
+		  TestUtils.login(DRIVER);
+		  TestUtils.clickCreatSelect(DRIVER, "Person/Institution importieren");
+
+		  //gnd for Bach, Wilhelm Friedemann
+		  DRIVER.findElement(By.id("inputField")).sendKeys("118505548");
+		  DRIVER.findElement(By.id("search")).click();
+		  
+		  By waitImport = By.id("doubletCheck");
+	    wait.until(ExpectedConditions.elementToBeClickable(waitImport));
+		  
+	    assertEquals("title does not match", "Datensatz kann importiert werden. Keine Dubletten (identische GND-ID) gefunden.", DRIVER
+	    		.findElement(waitImport).getText());
+		  
+	    assertEquals("title does not match", "Bach, Wilhelm Friedemann", DRIVER
+	    		.findElement(By.xpath("//div[@id='result']/div/dd[1]")).getText());
+	    
+	    DRIVER.findElement(By.linkText("Datensatz importieren")).click();
+	    
+	    //wait for it to be loaded
+	    Thread.sleep(600);
+	    //check if ok
+	    assertThat(DRIVER.findElement(By.xpath("//div[@class='result']/p")).getText(), containsString("Datensatz erfolgreich importiert."));
+	    
+	    DRIVER.findElement(By.linkText("Link zum Objekt")).click();
+	    
+	    TestUtils.deletObj(DRIVER, "Bach, Wilhelm Friedemann");
+	    
+		  TestUtils.home(DRIVER);
+		  TestUtils.logout(DRIVER);
+    }
+	
+		@Test
+		public void writeComments() throws Exception {
+		  TestUtils.home(DRIVER);
+		  TestUtils.login(DRIVER);
+		  TestUtils.creatMinJournal(DRIVER, "TestJournal");
+		  
+		  TestUtils.clickCreatSelect(DRIVER, "Beschreibung bearbeiten");
+
+		  By waitForFrame = By.className("cke_wysiwyg_frame");
+		  wait.until(ExpectedConditions.elementToBeClickable(waitForFrame));
+		  DRIVER.switchTo().frame(DRIVER.findElement(waitForFrame));
+		  waitForFrame = By.cssSelector(".cke_editable_themed");
+		  wait.until(ExpectedConditions.elementToBeClickable(waitForFrame));
+		  DRIVER.findElement(waitForFrame).sendKeys("Dies soll ein Test sein!");
+		  
+		  DRIVER.switchTo().defaultContent();
+		  
+	    DRIVER.findElement(By.id("ckeditorSaveButton")).click();
+		  
+		  assertEquals("text does not match", "Dies soll ein Test sein!", DRIVER.findElement(By.id("intro")).getText());
+		  
+		  TestUtils.deletObj(DRIVER, "TestJournal");
+		  
+		  TestUtils.home(DRIVER);
+		  TestUtils.logout(DRIVER);
+		}
 }
