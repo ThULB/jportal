@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 	<link href="gui/css/derivatebrowser.css" rel="stylesheet" type="text/css">
 <title>Jportal Derivate Browser</title>
 </head>
-<body>
+<body ondragover="return false">
 	<div id="filebrowser">
 		<div id="folder-list-div">
 		   	<div id="folder-list-search" class="input-group">
@@ -66,10 +66,14 @@
 				 									<span class="glyphicon glyphicon glyphicon-tags button-glyphicon"></span>
 				 									<text class="i18n" i18n="db.label.assignUrn" i18n-def=" URN für Derivat vergeben"></text>
 											</button>
-											<button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button">
-				 									<span class="glyphicon glyphicon glyphicon-trash button-glyphicon"></span>
-                                                    <text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>
-											</button>
+                                            <button id="btn-viewer" type="button" class="btn btn-default browser-button">
+                                                <span class="glyphicon glyphicon-sound-stereo button-glyphicon"></span>
+                                                <text class="i18n" i18n="db.label.goToViewer" i18n-def="in Viewer ansehen"></text>
+                                            </button>
+                                            <button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button">
+                                                <span class="glyphicon glyphicon glyphicon-trash button-glyphicon"></span>
+                                                <text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>
+                                            </button>
 										</div>
 									</div>
 									<div id="derivat-panel-startfile">
@@ -125,15 +129,32 @@
 				</div>
 				<div id="journal-info" class="hidden">					
 					<div id="journal-info-text"></div>
+                    <div id="journal-info-linklist" class="invisible"></div>
 					<div id="journal-browser-footer">
 						<div id="journal-browser-bottom-btns" class="bottom-btns">
 							<div id="journal-info-button-notEdit">
-								<button id="journal-info-button-delete" type="button" class="btn btn-danger browser-button"><text class="i18n" i18n="db.alert.delete.label" i18n-def="Löschen"></text></button>
-								<button id="journal-info-button-edit" type="button" class="btn btn-primary browser-button"><text class="i18n" i18n="db.label.edit" i18n-def="Bearbeiten"></text></button>
+                                <button id="journal-info-button-goToPage" type="button" class="btn btn-default browser-button pull-left">
+                                    <span class="glyphicon glyphicon-list-alt button-glyphicon"></span>
+                                    <text class="i18n" i18n="db.label.goTo" i18n-def="go To"></text>
+                                </button>
+								<button id="journal-info-button-delete" type="button" class="btn btn-danger browser-button">
+                                    <span class="glyphicon glyphicon glyphicon-trash button-glyphicon"></span>
+                                    <text class="i18n" i18n="db.alert.delete.label" i18n-def="Löschen"></text>
+                                </button>
+								<button id="journal-info-button-edit" type="button" class="btn btn-primary browser-button">
+                                    <span class="glyphicon glyphicon-edit button-glyphicon"></span>
+                                    <text class="i18n" i18n="db.label.edit" i18n-def="Bearbeiten"></text>
+                                </button>
 							</div>
 							<div id="journal-info-button-whileEdit" class="hidden">
-								<button id="journal-info-button-save" type="button" class="btn btn-primary browser-button"><text class="i18n" i18n="db.label.save" i18n-def="Speichern"></text></button>
-								<button id="journal-info-button-cancel" type="button" class="btn btn-default browser-button"><text class="i18n" i18n="db.label.cancel" i18n-def="Abbrechen"></text></button>
+								<button id="journal-info-button-save" type="button" class="btn btn-primary browser-button">
+                                    <span class="glyphicon glyphicon-save button-glyphicon"></span>
+                                    <text class="i18n" i18n="db.label.save" i18n-def="Speichern"></text>
+                                </button>
+								<button id="journal-info-button-cancel" type="button" class="btn btn-default browser-button">
+                                    <span class="glyphicon glyphicon-remove button-glyphicon"></span>
+                                    <text class="i18n" i18n="db.label.cancel" i18n-def="Abbrechen"></text>
+                                </button>
 							</div>
 						</div>
 					</div>
@@ -274,7 +295,9 @@
                 </div>
                 <div class="modal-body">
                     <div id="lightbox-new-derivate-main" class="dl-horizontal" ondragover="return false">
-                        <p id="lightbox-new-derivate-hint"><text class="i18n" i18n="db.label.dragAndDropUpload" i18n-def="Drag and Drop zum hochladen"></text></p>
+                        <p id="lightbox-new-derivate-hint" ondragover="return false">
+                            <text class="i18n" i18n="db.label.dragAndDropUpload" i18n-def="Drag and Drop zum hochladen" ondragover="return false"></text>
+                        </p>
                         <table>
                             <tbody id="lightbox-new-derivate-table" class="hidden">
                             </tbody>
@@ -309,9 +332,9 @@
 				class="glyphicon glyphicon-picture popover-file"></span></td>
 			<td>
 				<div class="btns">
-					<span class="glyphicon glyphicon-unchecked btn-check btn invisable"></span>
-					<span class="glyphicon glyphicon-edit btn-edit btn invisable"></span>
-					<span class="glyphicon glyphicon-trash btn-delete btn invisable"></span>
+					<span class="glyphicon glyphicon-unchecked btn-check btn invisible"></span>
+					<span class="glyphicon glyphicon-edit btn-edit btn invisible"></span>
+					<span class="glyphicon glyphicon-trash btn-delete btn invisible"></span>
 				</div>
 			</td>
 			<td class="browser-table-file-name">{{name}}</td>
@@ -321,7 +344,7 @@
 				{{/urn}}
 				{{^urn}}
 					<div class="no-urn">-</div>
-					<span class="glyphicon glyphicon-tag btn-new-urn btn invisable"></span>
+					<span class="glyphicon glyphicon-tag btn-new-urn btn invisible"></span>
 				{{/urn}}
 			</td>
 		</tr>
@@ -332,9 +355,9 @@
 			<td><span class="glyphicon glyphicon-folder-close btn-folder"></span></td>
 			<td>
 				<div class="btns">
-					<span class="glyphicon glyphicon-unchecked btn-check btn invisable"></span>
-					<span class="glyphicon glyphicon-edit btn-edit btn invisable"></span>
-					<span class="glyphicon glyphicon-trash btn-delete btn invisable"></span>
+					<span class="glyphicon glyphicon-unchecked btn-check btn invisible"></span>
+					<span class="glyphicon glyphicon-edit btn-edit btn invisible"></span>
+					<span class="glyphicon glyphicon-trash btn-delete btn invisible"></span>
 				</div>
 			</td>
 			{{#temp}}
@@ -409,7 +432,7 @@
  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
  	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
  	<script type="text/javascript" src="gui/js/derivatebrowser.js"></script>
  	<script type="text/javascript" src="gui/js/derivatebrowser-upload.js"></script>
  	<script type="text/javascript" src="gui/js/derivatebrowser-treeEntry.js"></script>

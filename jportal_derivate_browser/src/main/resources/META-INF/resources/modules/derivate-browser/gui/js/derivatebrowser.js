@@ -7,8 +7,20 @@ var DerivateBrowser = function(){
 	var dragElm = null;
 	var dragObj = null;
 
-	return {
+    return {
 		init: function() {
+
+            $("body").on("click", ".btn-remove-link", function() {
+                removeLink(derivateBrowserTools.getCurrentDocID(), $(this).closest(".link-preview").data("path"));
+            });
+
+            $("body").on("click", "#journal-info-button-goToPage", function() {
+                window.location.href = jp.baseURL + "receive/" + derivateBrowserTools.getCurrentDocID();
+            });
+
+            $("body").on("click", "#btn-viewer", function() {
+                window.location.href = jp.baseURL + "rsc/viewer/" + derivateBrowserTools.getCurrentDocID() + $("#derivat-panel-startfile").data("startfile");
+            });
 
             $("body").on("drop", "#lightbox-new-derivate-main", function(event) {
                 $("#lightbox-new-derivate-hint").addClass("hidden");
@@ -197,15 +209,23 @@ var DerivateBrowser = function(){
 			                top: e.pageY - 1 /*- ($(dragObj).height() / 2)*/,
 			                left: e.pageX + 1 //- ($(dragObj).width() / 2)
 			            }, 1);
+                        //TODO evtl. flackern
 //			        	$(dragObj).addClass("hidden");
-			        	if ($(dragElm).hasClass("folder")){
-			        		$(".drag-elm-hover").removeClass("drag-elm-hover");
-			        		var hoverObj = document.elementFromPoint(e.pageX, e.pageY).closest(".folder");
-			        		$(hoverObj).addClass("drag-elm-hover");
-			        	}
+                        $(".drag-elm-hover").removeClass("drag-elm-hover");
+                        $(".drag-info").addClass("hidden");
+                        var hoverObj = document.elementFromPoint(e.pageX, e.pageY).closest(".folder, #derivat-panel-startfile");
+                        if ($(hoverObj).closest(".folder").length > 0 && !$(hoverObj).hasClass("derivat") && ($(hoverObj).data("faded") == undefined)){
+                            $("#drag-info-link").removeClass("hidden");
+                            $(hoverObj).addClass("drag-elm-hover");
+                        }
+                        if ($(hoverObj).closest("#derivat-panel-startfile").length > 0){
+                            console.log("bla");
+                            $("#drag-info-start").removeClass("hidden");
+                        }
 //		        		$(dragObj).removeClass("hidden");
 			        }
 			        if ((dragObj == null) /*&& (Math.abs(mouseY - e.pageY) > 20)*/){
+                        $("li.derivat").addClass("faded");
 			        	if ($(dragElm).hasClass("folder")){
 			        		var elm = $("<div id='drag-doc'></div>");
 			        		$(elm).append($(dragElm).children("span.icon").clone());
@@ -221,7 +241,10 @@ var DerivateBrowser = function(){
 			        		dragObj = elm;
 			        	}
 			        	if ($(dragElm).hasClass("browser-table-file")){
+                            derivateBrowserNavigation.fadeEntry($(".aktiv").closest(".folder:not('.derivat')"));
 			        		var div = $('<div id="drag-img-div"><img class="img-placeholder img-placeholder-startfile"><img id="drag-img" class="hidden"></div>');
+                            div.append('<div id="drag-info-link" class="hidden drag-info">' + derivateBrowserTools.getI18n("db.label.link") + '</div>');
+                            div.append('<div id="drag-info-start" class="hidden drag-info">' + derivateBrowserTools.getI18n("db.label.changeStart") + '</div>');
                             $(div).children(".img-placeholder").attr("src", jp.baseURL + "images/file-logo.svg");
 			        		derivateBrowserTools.setImgPath($(div).find("#drag-img"), dragElm.data("deriID"), dragElm.data("path"));
 							$("body").append(div);
@@ -243,6 +266,14 @@ var DerivateBrowser = function(){
 						dragObj.remove();
 						changeStartFile(dragElm);
 					}
+                    if (($(dropObj).closest(".folder").length > 0) && $(dragElm).hasClass("browser-table-file")){
+                        console.log("drop");
+                        console.log($(dropObj).data("faded"));
+                        if (!$(dropObj).closest(".folder").hasClass("derivat") && ($(dropObj).closest(".folder").data("faded") == undefined)){
+                            dragObj.remove();
+                            setLink($(dropObj).closest(".folder").data("docID"), $(dragElm).data("docID") + $(dragElm).data("path"));
+                        }
+                    }
 					if (($(dropObj).closest(".folder").length > 0) && $(dragElm).hasClass("folder")){
 						var moveTo = $(dropObj).closest(".folder");
 						if (!$(moveTo).hasClass("faded") && !($(dragElm).parent().closest(".folder")[0] == $(moveTo)[0])){
@@ -257,18 +288,19 @@ var DerivateBrowser = function(){
 						}
 					}
 					$(".drag-elm-hover").removeClass("drag-elm-hover");
-	        		$(dragObj).animate({
+                    $(dragObj).animate({
 						top: $(dragElm).offset().top,
 						left: $(dragElm).offset().left + 20
 					},400, function() {
 						$(dragElm).removeClass("faded");
+                        $("li.derivat").removeClass("faded");
+                        derivateBrowserNavigation.unFadeEntry($(".aktiv").closest(".folder:not('.derivat')"));
 						dragObj.remove();
 						dragElm = null;
 						dragObj = null;
 					});
 					$("body").removeAttr('unselectable')
 				     .removeClass("noSelect").bind('selectstart', function(){ return true; });
-
 				}
 			});
 
@@ -459,7 +491,7 @@ var DerivateBrowser = function(){
 					$(parent).addClass("checked");
 					$(parent).data("checked", true);
 					$(this).removeClass("glyphicon-unchecked");
-					$(this).removeClass("invisable");
+					$(this).removeClass("invisible");
 					$(this).addClass("glyphicon-check");
 					checkIfNothingSelected();
 				}
@@ -482,7 +514,7 @@ var DerivateBrowser = function(){
 						$(node).addClass("checked");
 						$(node).data("checked", true);
 						$(node).find(".btn-check").removeClass("glyphicon-unchecked");
-						$(node).find(".btn-check").removeClass("invisable");
+						$(node).find(".btn-check").removeClass("invisible");
 						$(node).find(".btn-check").addClass("glyphicon-check");
 					});
 					checkIfNothingSelected();
@@ -495,7 +527,7 @@ var DerivateBrowser = function(){
 						$(node).removeClass("checked");
 						$(node).removeData("checked");
 						$(node).find(".btn-check").addClass("glyphicon-unchecked");
-						$(node).find(".btn-check").addClass("invisable");
+						$(node).find(".btn-check").addClass("invisible");
 						$(node).find(".btn-check").removeClass("glyphicon-check");
 					});
 					checkIfNothingSelected();
@@ -563,17 +595,17 @@ var DerivateBrowser = function(){
 			});
 
 			$("body").on("mouseenter", ".browser-table-entry", function() {
-				$(this).find("span.btn").removeClass("invisable");
+				$(this).find("span.btn").removeClass("invisible");
 				$(this).find("div.no-urn").addClass("hidden");
 			});
 
 			$("body").on("mouseleave", ".browser-table-entry", function() {
 				var file = $(this);
-				$(this).find("span.btn").addClass("invisable");
+				$(this).find("span.btn").addClass("invisible");
 				$(this).find("div.no-urn").removeClass("hidden");
 				$(this).find("span.btn-check").filter(function() {
 					return file.data("checked") == true;
-				}).removeClass("invisable");
+				}).removeClass("invisible");
 			});
 
 			$("body").on("click", "#collapse-btn", function() {
@@ -858,7 +890,7 @@ var DerivateBrowser = function(){
 			contentType : false,
 			data: upload.getFormData(),
 			xhr: function() {
-                        $(upload.statusbar).find("div.statusbar-progress").removeClass("invisable");
+                        $(upload.statusbar).find("div.statusbar-progress").removeClass("invisible");
 						var xhr = new window.XMLHttpRequest();
 						xhr.upload.addEventListener("progress", function(evt) {
 							if (evt.lengthComputable){
@@ -1000,6 +1032,45 @@ var DerivateBrowser = function(){
 		});
 	}
 
+    function setLink(docID, imgPath) {
+        $.ajax({
+            url: "link?docID=" + docID  + "&imgPath=" + imgPath,
+            type: "POST",
+            statusCode: {
+                200: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.link.add.success"), true);
+                },
+                500: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.link.add.error"), false);
+                },
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
+            }
+        });
+    }
+
+    function removeLink(docID, imgPath) {
+        console.log(docID);
+        console.log(imgPath);
+        $.ajax({
+            url: "link?docID=" + docID  + "&imgPath=" + imgPath,
+            type: "DELETE",
+            statusCode: {
+                200: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.link.remove.success"), true);
+                    derivateBrowserFileView.removeLink(imgPath);
+                },
+                500: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.link.remove.error"), false);
+                },
+                401: function() {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
+            }
+        });
+    }
+
 	function setStartFile(entry, loadImg) {
 		$(".startfile").removeClass("startfile");
 		$(".browser-table-file").filter(function() {
@@ -1137,7 +1208,7 @@ var DerivateBrowser = function(){
                 upload.exists = false;
                 upload.statusbar = upload.getStatus();
                 $("#lightbox-new-derivate-table").append(upload.statusbar);
-                $("#lightbox-new-derivate-table .statusbar-progress").addClass("invisable");
+                $("#lightbox-new-derivate-table .statusbar-progress").addClass("invisible");
                 uploadList[upload.getID()] = upload;
             }
             else{

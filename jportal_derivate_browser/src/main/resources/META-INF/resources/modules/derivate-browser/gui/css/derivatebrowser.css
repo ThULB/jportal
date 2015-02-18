@@ -261,7 +261,7 @@ span.btn{
 	background-color: #9A9898;
 }
 
-.invisable{
+.invisible{
 	opacity: 0;
 }
 
@@ -563,7 +563,7 @@ li.derivate-browser-breadcrumb-entry{
     font-size: 16px;
     left: 7px;
     position: absolute;
-    top: -5px;
+    top: -8px;
     z-index: 10;
 }
 
@@ -571,17 +571,8 @@ li.derivate-browser-breadcrumb-entry{
     font-size: 14px;
     left: 8px;
     position: absolute;
-    top: -4px;
+    top: -8px;
     z-index: 20;
-}
-
-.btn-add3{
-    color: #FFFFFF;
-    font-size: 16px;
-    left: 7px;
-    position: absolute;
-    top: -7px;
-    z-index: 10;
 }
 
 .bottom-btns{
@@ -856,7 +847,7 @@ li.derivate-browser-breadcrumb-entry{
 }
 
 #journal-info-text{
-	height: calc(100% - 49px);
+	height: calc(100% - 151px);
 	overflow: auto;
 	padding: 20px;
 
@@ -897,7 +888,7 @@ li.derivate-browser-breadcrumb-entry{
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-    padding-top: 8px;
+    padding-top: 9px;
     padding-bottom: 9px;
 }
 
@@ -967,6 +958,74 @@ li.derivate-browser-breadcrumb-entry{
 #editor-loading .bounce2 {
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
+}
+
+#btn-urnAll{
+    display: block;
+    margin-bottom: 5px;
+}
+
+#journal-info-linklist{
+    position: relative;
+    background-color: #FAFAFA;
+    border-top: 1px solid #DDD;
+    height: 101px;
+    padding-top: 10px;
+    white-space: nowrap;
+    overflow-y: auto;
+}
+
+.link-preview {
+    /*max-width: 160px;*/
+    display: inline-block;
+    margin-left: 10px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.1);
+}
+
+.link-preview:hover {
+    box-shadow: 0 3px 3px 0 rgba(50, 50, 50, 0.3);
+}
+
+.link-preview:hover .link-info{
+    opacity: 1;
+}
+.link-info{
+    opacity: 0;
+    /*cursor: pointer;*/
+    position: absolute;
+    top: 0;
+    right: 0;
+    /*width: 100%;*/
+    background-color: rgba(77,77,77,0.8);
+    padding-bottom: 5px;
+    padding-left: 5px;
+ }
+
+.btn-remove-link{
+    /*opacity: 0;*/
+    cursor: pointer;
+    /*position: absolute;*/
+    right: 2px;
+    top: 2px;
+    /*font-size: 18px;*/
+    float: right;
+    color: #FAFAFA;
+}
+
+.link-preview-img {
+    max-height: 70px;
+    display: block;
+}
+
+.drag-info{
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    background-color: rgba(77,77,77,0.8);
+    color: #FAFAFA;
+    text-align: center;
 }
 
 /******************************************************

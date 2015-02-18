@@ -45,6 +45,7 @@ import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
+import org.mycore.frontend.util.DerivateLinkUtil;
 import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
 import org.xml.sax.SAXException;
@@ -390,6 +391,42 @@ public class DerivateBrowserResource {
 
         }
         return Response.ok().build();
+    }
+    
+    @POST
+    @Path("link")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    public Response setLink(@QueryParam("docID") String docID, @QueryParam("imgPath") String imgPath) {
+        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null && !imgPath.equals("")){
+            try {
+                DerivateLinkUtil.setLink(MCRJerseyUtil.getID(docID), imgPath);
+            } catch (MCRActiveLinkException e) {
+                e.printStackTrace();
+                return Response.serverError().build();
+            }
+            return Response.ok().build();
+        }
+        else{
+            return Response.serverError().build();
+        }        
+    }
+    
+    @DELETE
+    @Path("link")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    public Response removeLink(@QueryParam("docID") String docID, @QueryParam("imgPath") String imgPath) {
+        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null && !imgPath.equals("")){
+            try {
+                DerivateLinkUtil.removeLink(MCRJerseyUtil.getID(docID), imgPath);
+            } catch (MCRActiveLinkException e) {
+                e.printStackTrace();
+                return Response.serverError().build();
+            }
+            return Response.ok().build();
+        }
+        else{
+            return Response.serverError().build();
+        }        
     }
     
     private JsonArray getFolderChildren(MCRFilesystemNode[] childs){

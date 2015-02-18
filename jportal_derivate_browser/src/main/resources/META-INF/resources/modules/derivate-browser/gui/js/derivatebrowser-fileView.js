@@ -126,6 +126,7 @@ var derivateBrowserFileView = (function () {
 			$("#journal-info-button-whileEdit").addClass("hidden");
 			$("#journal-info-button-notEdit").removeClass("hidden");
 			getDocument(docID, addInfo);
+            getDocLinks(docID);
 		}
 		else{
 			$("#journal-info").addClass("hidden");
@@ -187,6 +188,25 @@ var derivateBrowserFileView = (function () {
         $("#editor-loading").removeClass("hidden");
         $("#journal-info-button-whileEdit").addClass("hidden");
         $("#journal-info-button-notEdit").addClass("hidden");
+    }
+
+    function addLinksToView(links){
+        if (links != undefined){
+            $("#journal-info-linklist").html("");
+            $.each(links, function(i, link) {
+                var img = $("<div class='link-preview'><img class='link-preview-img' src='http://localhost:8291/jportal/servlets/MCRTileCombineServlet/MIN/" + link + "?centerThumb=no'></div>");
+                $(img).append("<div class='link-info'><span class='btn-remove-link glyphicon glyphicon-remove'></span></div>");
+                $(img).data("path", link);
+                $("#journal-info-linklist").append(img);
+            });
+            $("#journal-info-linklist").removeClass("invisible");
+        }
+    }
+
+    function removeLinkFromView(path) {
+        $(".link-preview").filter(function() {
+            return ($(this).data("path") == path);
+        }).remove();
     }
 
     //ajax Methods
@@ -307,6 +327,15 @@ var derivateBrowserFileView = (function () {
 		});
 	}
 
+    function getDocLinks(docID) {
+        var url = jp.baseURL + "servlets/solr/select?q=id%3A" + docID + "&start=0&rows=10&sort=maintitle+asc&wt=json&indent=true";
+        $.getJSON(url, function(search) {
+            if (search.response.numFound > 0){
+                addLinksToView(search.response.docs[0].derivateLink);
+            }
+        });
+    }
+
     return {
         //public
         init: function() {
@@ -367,6 +396,13 @@ var derivateBrowserFileView = (function () {
 
 		newDoc: function(type) {
 			getDocEditor(type, "create", derivateBrowserTools.getCurrentDocID());
-		}
+		},
+
+        removeLink: function(path) {
+            removeLinkFromView(path);
+            if ($("#journal-info-linklist").children().length == 0){
+                $("#journal-info-linklist").addClass("invisible");
+            }
+        }
     };
 })();

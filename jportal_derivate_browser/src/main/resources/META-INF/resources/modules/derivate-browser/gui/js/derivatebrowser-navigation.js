@@ -340,6 +340,16 @@ var derivateBrowserNavigation = (function () {
                 doc.data("path", oldPath.substring(0, oldPath.lastIndexOf("/") + 1) + name);
                 doc.data("id", doc.data("derID") + doc.data("path"));
             }
+        },
+
+        fadeEntry: function(node) {
+            $(node).children().not(".children").addClass("faded");
+            $(node).data("faded", true);
+        },
+
+        unFadeEntry: function(node) {
+            $(node).children().not(".children").removeClass("faded");
+            $(node).removeData("faded");
         }
     };
 })();
