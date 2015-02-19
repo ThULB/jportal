@@ -73,7 +73,8 @@ subprojects {
         "jportal_emb_hsql",
         "jportal_jetty_tools",
         "java_agent",
-				"jportal_web_tests"
+				"jportal_web_tests",
+				"jportal_doublet_finder_module"
     ]
 
     if(project.name != 'jportal_mcr_module' && !(project.name in noJPModuleDep)){
@@ -107,6 +108,7 @@ project(':jportal_mcr_module'){
         compile project(':jportal-commons')
         compile project(':jportal_ext_web_lib')
         compile project(':jportal_iview2_plugin')
+				compile project(':jportal_doublet_finder_module')
         compile 'de.uni-jena.thulb:JPJaxbPojos:0.0.1-SNAPSHOT'
         compile 'de.uni-jena.thulb.oai:archive-oai-resources:0.0.1-SNAPSHOT'
         compile 'log4j:log4j:1.2.17'

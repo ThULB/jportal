@@ -3,7 +3,7 @@
 <MyCoReWebPage>
   <section xml:lang="all" title="Dubletten Check">
     <div id="jportal_doublet_finder_module">
-      <link href="/rsc/doublets/gui/css/webpage.css" rel="stylesheet" type="text/css" />
+      <link href="../rsc/doublets/gui/css/webpage.css" rel="stylesheet" type="text/css" />
       <div id="header" class="jp-layout-maintitle jp-layout-border">
         <span>
           Dubletten-Check
@@ -12,16 +12,16 @@
       <p id="person_doublets">
         Anzahl der Dubletten bei Person:
         <span type="person" class="numDub"></span>
-        <a class="doubletsLink" href="/servlets/solr/select?q=%2BdoubletOf:*+%2BobjectType:person">(Dubletten von Personen anzeigen...)</a>
+        <a class="doubletsLink" href="../servlets/solr/select?q=%2BdoubletOf:*+%2BobjectType:person">(Dubletten von Personen anzeigen...)</a>
       </p>
       <p id="jpinst_doublets">
         Anzahl der Dubletten bei Institution:
         <span type="jpinst" class="numDub"></span>
-        <a class="doubletsLink" href="/servlets/solr/select?q=%2BdoubletOf:*+%2BobjectType:jpinst">(Dubletten von Institutionen anzeigen...)</a>
+        <a class="doubletsLink" href="../servlets/solr/select?q=%2BdoubletOf:*+%2BobjectType:jpinst">(Dubletten von Institutionen anzeigen...)</a>
       </p>
       <input type="button" id="delDubButton" value="Dubletten bereinigen" name="Dubletten bereinigen" />
       <span id="progressMsg" class="message">(Dubletten werden gelöscht)</span>
-      <script type="text/javascript" src="/rsc/doublets/gui/js/webpage.js" />
+      <script type="text/javascript" src="../rsc/doublets/gui/js/webpage.js" />
       <div class="jp-layout-separator-horiz"/>
       <div id="header" class="jp-layout-maintitle jp-layout-border">
         <span>
@@ -31,12 +31,12 @@
       <p id="person_gnd">
         Anzahl der Personen ohne GND:
         <span type="person" class="numGND"></span>
-        <a class="gndLink" href="/servlets/solr/select?q=%2BobjectType:person+-id.gnd:*">(Personen ohne GND anzeigen...)</a>
+        <a class="gndLink" href="../servlets/solr/select?q=%2BobjectType:person+-id.gnd:*">(Personen ohne GND anzeigen...)</a>
       </p>
       <p id="jpinst_gnd">
         Anzahl Institutionen ohne GND:
         <span type="jpinst" class="numGND"></span>
-        <a class="gndLink" href="/servlets/solr/select?q=%2BobjectType:jpinst+-id.gnd:*">(Institutionen ohne GND anzeigen...)</a>
+        <a class="gndLink" href="../servlets/solr/select?q=%2BobjectType:jpinst+-id.gnd:*">(Institutionen ohne GND anzeigen...)</a>
       </p>
     </div>
   </section>

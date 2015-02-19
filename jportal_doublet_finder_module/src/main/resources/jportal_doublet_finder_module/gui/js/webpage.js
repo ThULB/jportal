@@ -6,7 +6,7 @@ $(document).ready(function() {
 			$("span.numDub").on("initGUIElem", function(){
 				var numDubDispl = $(this);
 				var type = numDubDispl.attr("type");
-				$.get("/servlets/solr/select?wt=json&q=%2BdoubletOf:* %2BobjectType:"+type,function(data){
+				$.get(jp.baseURL + "servlets/solr/select?wt=json&q=%2BdoubletOf:* %2BobjectType:"+type,function(data){
 					var numDoublets = data.response.numFound;
 					numDubDispl.text(numDoublets);
 					if(numDoublets == 0){
@@ -21,7 +21,7 @@ $(document).ready(function() {
 			$("span.numGND").on("initGUIElem", function(){
 				var numDubDispl = $(this);
 				var type = numDubDispl.attr("type");
-				$.get("/servlets/solr/select?wt=json&q=-id.gnd:* %2BobjectType:"+type,function(data){
+				$.get(jp.baseURL + "servlets/solr/select?wt=json&q=-id.gnd:* %2BobjectType:"+type,function(data){
 					var numDoublets = data.response.numFound;
 					numDubDispl.text(numDoublets);
 					if(numDoublets == 0){
@@ -39,18 +39,18 @@ $(document).ready(function() {
 			$("#delDubButton").on({
 				click : function(){
 					var button = $(this);
-					$.get('/servlets/MCRWebCLIServlet?request=getKnownCommands', function(data){
+					$.get(jp.baseURL + 'servlets/MCRWebCLIServlet?request=getKnownCommands', function(data){
 						button.trigger("removeDub");
 				    }).error(function(err){
 				        if(err.status == 403){
-				        	$(location).attr('href',"/servlets/MCRLoginServlet?action=login&url=%2Frsc%2Fdoublets");
+				        	$(location).attr('href', jp.baseURL + "servlets/MCRLoginServlet?action=login&url=%2Frsc%2Fdoublets");
 				        }
 				    });
 				},
 				
 				removeDub : function(){
 					$.each(["person", "jpinst"], function(index, type){
-						$.get('/servlets/MCRWebCLIServlet?run=jp clean up ' + type, function(data){
+						$.get(jp.baseURL + 'servlets/MCRWebCLIServlet?run=jp clean up ' + type, function(data){
 							if(!dubCheckGUI.data("statusTriggered")){
 								dubCheckGUI.trigger("status");
 								dubCheckGUI.data("statusTriggered", true);
@@ -76,7 +76,7 @@ $(document).ready(function() {
 			var processRunning = true;
 			$.ajax({ 
 		        type :  'GET',
-		        url: '/servlets/MCRWebCLIServlet?request=getStatus', 
+		        url: jp.baseURL + 'servlets/MCRWebCLIServlet?request=getStatus', 
 		        success: function(data){
 		            processRunning = data.running;
 		        }, 
