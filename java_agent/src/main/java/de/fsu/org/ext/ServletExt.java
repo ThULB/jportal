@@ -25,7 +25,7 @@ static final Logger LOGGER = Logger.getLogger(ServletExt.class);
             Path classPath = Paths.get(path);
 
             Path resourcePath = classPath.resolve(reqPath);
-            if (Files.exists(resourcePath)) {
+            if (Files.exists(resourcePath) && !Files.isDirectory(resourcePath)) {
                 LOGGER.info("Using resource: " + resourcePath.toString());
                 try {
                     Files.copy(resourcePath, resp.getOutputStream());
