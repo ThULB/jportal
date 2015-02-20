@@ -1831,6 +1831,9 @@
       <str name="XSL.subselect.type">person</str>
       <str name="sort">created desc</str>
     </lst>
+    <lst name="appends">
+      <str name="rows">6</str>
+    </lst>
     <lst name="invariants">
       <str name="q">{!q.op=AND}{!type=edismax v=$qry qf=$qf}</str>
       <str name="fq">{!type=edismax v=$XSL.subselect.type qf=objectType}</str>

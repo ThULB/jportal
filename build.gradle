@@ -1,9 +1,7 @@
 import java.io.File;
 import java.util.HashSet;
 
-//def mcrVersion = '2014.07-SNAPSHOT'
 def mcrVersion = '2015.01-SNAPSHOT'
-//def jettyVersion = "9.2.2.v20140723"
 def jettyVersion = "9.2.7.v20150116"
 def hibernateVersion = "4.3.4.Final"
 
@@ -15,12 +13,11 @@ def getDate() {
     return formattedDate
 }
 
-//project.ext.needMCR = true
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'eclipse'
+    apply plugin: 'maven-publish'
 
     eclipse {
         jdt {
@@ -30,14 +27,34 @@ subprojects {
         classpath { downloadSources=true }
     }
 
-    group = "fsu.thulb"
-    version = "2.0.18-SNAPSHOT"
+    def group = "fsu.thulb"
+    def version = "2.0.18-SNAPSHOT"
+    def releaseURL = "http://artifactory.mycore.de/mycore-releases"
+    def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
+    
     repositories {
         mavenLocal()
 
-        maven{ url "http://artifactory.mycore.de/mycore-releases" }
+        maven{ url releaseURL }
 
-        maven{ url "http://artifactory.mycore.de/mycore-snapshots" }
+        maven{ url snapshotsURL }
+    }
+    
+    configurations {
+        deployerJars
+    }
+    
+    dependencies {
+        deployerJars "org.apache.maven.wagon:wagon-http:2.8"
+    }
+    
+    uploadArchives {
+        repositories.mavenDeployer {
+            configuration = configurations.deployerJars
+            repository(url: "scp://repos.mycompany.com/releases") {
+                authentication(userName: "me", password: "myPassword")
+            }
+        }
     }
 
     def noMCRDep = [
@@ -46,6 +63,7 @@ subprojects {
     ]
 
     if (!(project.name in noMCRDep)) {
+        println "DEP: ${project.name}"
         dependencies{
             compile "org.mycore:mycore-base:$mcrVersion"
             compile "org.mycore:mycore-solr:$mcrVersion"
@@ -83,8 +101,9 @@ subprojects {
     def mcrModule = [
         "jportal_mcr_module",
         "jportal_derivate_browser",
-				"jportal_laws",
-				"jportal_doublet_finder_module"
+        "jportal_move_obj_module",
+		"jportal_laws",
+		"jportal_doublet_finder_module"
     ]
 
     if(project.name in mcrModule){
@@ -178,7 +197,8 @@ project(':jportal_webapp'){
         runtime 'com.mchange:c3p0:0.9.2.1'
         runtime project(':jportal_laws')
         runtime project(':jportal_derivate_browser')
-				runtime project(':jportal_doublet_finder_module')
+        runtime project(':jportal_doublet_finder_module')
+        runtime project(':jportal_move_obj_module')
         applet "org.mycore.fileupload:fileupload-applet:1.2-SNAPSHOT"
     }
 
