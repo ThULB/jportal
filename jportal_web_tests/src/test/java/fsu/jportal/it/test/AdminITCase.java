@@ -322,7 +322,8 @@ public class AdminITCase extends BaseIntegrationTest {
 		loadGroups = By.xpath("//div[@id='dijit__TreeNode_1']/div/span[@class='dijitTreeContent']/span[@class='dijitTreeLabel']");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadGroups));
 		assertThat(DRIVER.findElement(loadGroups).getText(), containsString("testGroup"));
-		DRIVER.findElement(By.xpath("//div[@id='dijit__TreeNode_1']/div/span[@class='dijitTreeContent']")).click();
+		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_1 > div > .dijitTreeContent")).click();
+		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_1 > div > .dijitTreeContent")).click();
 		DRIVER.findElement(By.id("dijit_form_Button_13")).click();
 	  DRIVER.findElement(By.id("dijit_form_Button_5")).click();
 	  Thread.sleep(500);

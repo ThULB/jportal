@@ -102,13 +102,13 @@ public abstract class TestUtils {
     }
     
     public static void deletObj(WebDriver driver, String toDelete) throws Exception {
-      TestUtils.home(driver);
       //find
-      goToObj(driver, toDelete);
-
-    	//click auf delete
+      if(!toDelete.equals("")) {
+      	TestUtils.home(driver);
+      	goToObj(driver, toDelete);
+      }
+      	
       clickCreatSelect(driver, "Dokument löschen");
-    	
     	WebDriverWait wait = new WebDriverWait(driver, 2);
 		  By deletOk = By.id("delete-dialog-submit");
 		  wait.until(ExpectedConditions.elementToBeClickable(deletOk));

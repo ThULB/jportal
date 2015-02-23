@@ -83,7 +83,12 @@ public class BaseITCase extends BaseIntegrationTest {
         }
         
         DRIVER.findElement(By.linkText("Schiller und die Räuber")).click();
-        TestUtils.deletObj(DRIVER, "Der Spiegel");
+        assertEquals("header does not match", "Schiller und die Räuber", DRIVER.findElement(By.id("jp-maintitle"))
+            .getText());
+        
+        DRIVER.findElement(By.linkText("Der Spiegel")).click();
+        TestUtils.deletObj(DRIVER, "");
+        TestUtils.home(DRIVER);
         TestUtils.logout(DRIVER);
     }
 
@@ -114,8 +119,9 @@ public class BaseITCase extends BaseIntegrationTest {
         assertEquals("header does not match", "Spiegel-Verlag", DRIVER.findElement(By.id("jp-maintitle"))
             .getText());
         
+        TestUtils.deletObj(DRIVER, "");
         TestUtils.deletObj(DRIVER, "Der Spiegel");
-        TestUtils.deletObj(DRIVER, "Spiegel-Verlag");
+        TestUtils.home(DRIVER);
         TestUtils.logout(DRIVER);
     }
     
@@ -151,4 +157,47 @@ public class BaseITCase extends BaseIntegrationTest {
 				TestUtils.home(DRIVER);
 				TestUtils.logout(DRIVER);
 		}
+	
+  @Test
+  public void doublet() throws Exception {
+      TestUtils.home(DRIVER);
+      TestUtils.login(DRIVER);
+      TestUtils.creatMinInst(DRIVER, "parentTestInst");
+      
+      String[] doubletID = DRIVER.getCurrentUrl().split("/");
+   
+      TestUtils.clickCreatSelect(DRIVER, "Neue Institution");
+
+      // create inst with doublet
+      DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/fullname")).sendKeys("testInst");
+      DRIVER.findElement(By.name("/mycoreobject/metadata/def.doubletOf/doubletOf")).sendKeys(doubletID[doubletID.length - 1]);
+
+      TestUtils.saveForm(DRIVER);
+
+      assertEquals("header does not match", "testInst", DRIVER.findElement(By.id("jp-maintitle")).getText());
+      
+      //go to doublet menu 
+      TestUtils.clickCreatSelect(DRIVER, "Dublettenfinder");
+      assertEquals("header does not match", "Dubletten-Check", DRIVER.findElement(By.cssSelector("#jportal_doublet_finder_module > div:nth-child(2) > span")).getText());
+      
+      //search the doublet
+      DRIVER.findElement(By.linkText("(Dubletten von Institutionen anzeigen...)")).click();
+      
+      assertEquals("text does not match", "testInst", DRIVER.findElement(By.linkText("testInst")).getText());
+
+      DRIVER.navigate().back();
+      
+      //del testInst
+      DRIVER.findElement(By.id("delDubButton")).click();
+
+      Thread.sleep(500);
+      assertEquals("didn't deleted", "0", DRIVER.findElement(By.xpath("//p[@id='jpinst_doublets']/span[@class='numDub']")).getText());
+
+      DRIVER.findElement(By.linkText("(Institutionen ohne GND anzeigen...)")).click();
+      DRIVER.findElement(By.linkText("parentTestInst")).click();
+      
+      TestUtils.deletObj(DRIVER, "");
+      TestUtils.home(DRIVER);
+      TestUtils.logout(DRIVER);
+  }
 }
