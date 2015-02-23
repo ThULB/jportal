@@ -2,6 +2,7 @@ package fsu.jportal.backend;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileVisitResult;
@@ -17,11 +18,16 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUsageException;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.urn.hibernate.MCRURN;
 
 import fsu.jportal.mets.MetsTools;
@@ -329,5 +335,22 @@ public class DerivateTools {
             return 0;
         }
         return 1; //OK
+    }
+    
+    public static String uploadFile(InputStream inputStream, long filesize, String documentID, String derivateID,
+            String filePath) throws Exception {
+        MCRSession session = MCRSessionMgr.getCurrentSession();
+        if (derivateID == null) {
+            String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
+            derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
+        }
+        MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
+        handler.startUpload(1);
+        session.commitTransaction();
+        handler.receiveFile(filePath, inputStream, filesize, null);
+        session.beginTransaction();
+        handler.finishUpload();
+        handler.unregister();
+        return derivateID;
     }
 }

@@ -64,13 +64,13 @@ import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
 @Path("derivatebrowser")
 public class DerivateBrowserResource {
     private MCRJSONManager gsonManager;
-    
+
     private static final String dateFormat = "dd.MM.yyyy HH:mm:ss";
 
     private static final DateFormat dateFormatter = new SimpleDateFormat(dateFormat);
-    
+
     private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
-    
+
     @Context
     HttpServletRequest request;
 
@@ -111,16 +111,17 @@ public class DerivateBrowserResource {
         }
         return Response.ok(json.toString()).build();
     }
-    
-     @GET
-     @Path("start")
-     @Produces(MediaType.TEXT_HTML)
-     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-     public Response start(@PathParam("derivID") String derivID) {
-         InputStream mainGui = getClass().getResourceAsStream("/META-INF/resources/modules/derivate-browser/gui/derivatebrowser.html");
-         return Response.ok(mainGui).build();
-     }
-     
+
+    @GET
+    @Path("start")
+    @Produces(MediaType.TEXT_HTML)
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    public Response start(@PathParam("derivID") String derivID) {
+        InputStream mainGui = getClass().getResourceAsStream(
+                "/META-INF/resources/modules/derivate-browser/gui/derivatebrowser.html");
+        return Response.ok(mainGui).build();
+    }
+
     @DELETE
     @Path("{derivID}{path:(/.*)*}")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
@@ -139,7 +140,7 @@ public class DerivateBrowserResource {
         }
         return Response.ok().build();
     }
-   
+
     @DELETE
     @Path("multiple")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -152,17 +153,18 @@ public class DerivateBrowserResource {
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonO = jsonArray.get(i).getAsJsonObject();
             int status;
-            status = DerivateTools.delete(MCRPath.getPath(jsonO.get("deriID").getAsString(),  jsonO.get("path").getAsString()));
+            status = DerivateTools.delete(MCRPath.getPath(jsonO.get("deriID").getAsString(), jsonO.get("path")
+                    .getAsString()));
             jsonO.addProperty("status", status);
         }
         return Response.ok(jsonObject.toString()).build();
     }
-    
+
     @POST
     @Path("{derivID}{path:(/.*)*}")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response createFolder(@PathParam("derivID") String derivID, @PathParam("path") String path) throws Exception {
-        if (!DerivateTools.mkdir(derivID + ":" + path)){
+        if (!DerivateTools.mkdir(derivID + ":" + path)) {
             return Response.status(Status.CONFLICT).build();
         }
         return Response.ok().build();
@@ -171,24 +173,24 @@ public class DerivateBrowserResource {
     @POST
     @Path("rename")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response rename(@QueryParam("file") String file, @QueryParam("name") String name, @QueryParam("mainFile") String start) {
-        try{
+    public Response rename(@QueryParam("file") String file, @QueryParam("name") String name,
+            @QueryParam("mainFile") String start) {
+        try {
             DerivateTools.rename(file, name);
-        }
-        catch (FileAlreadyExistsException e){
+        } catch (FileAlreadyExistsException e) {
             return Response.status(Status.CONFLICT).build();
         } catch (IOException e) {
             e.printStackTrace();
             return Response.serverError().build();
         }
-        if (Boolean.parseBoolean(start)){
+        if (Boolean.parseBoolean(start)) {
             String path = file.substring(0, file.lastIndexOf("/") + 1) + name;
             Derivate derivate = new Derivate(file.substring(0, file.lastIndexOf(":")));
             derivate.setMaindoc(path.substring(path.lastIndexOf(":") + 1));
         }
         return Response.ok().build();
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("moveDeriFiles")
@@ -200,11 +202,10 @@ public class DerivateBrowserResource {
         String moveTo = jsonObject.get("moveTo").getAsString();
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonFile = jsonArray.get(i).getAsJsonObject();
-            if (!jsonFile.get("file").getAsString().equals(moveTo)){
-                if(DerivateTools.mv(jsonFile.get("file").getAsString(), moveTo)){
+            if (!jsonFile.get("file").getAsString().equals(moveTo)) {
+                if (DerivateTools.mv(jsonFile.get("file").getAsString(), moveTo)) {
                     jsonFile.addProperty("status", "1");
-                }
-                else{
+                } else {
                     jsonFile.addProperty("status", "0");
                 }
             }
@@ -220,44 +221,43 @@ public class DerivateBrowserResource {
         derivate.setMaindoc(path);
         return Response.ok().build();
     }
-        
+
     @GET
     @Path("deriid/{derivID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDeriID(@PathParam("derivID") String derivID) throws IOException, JDOMException, SAXException {
-        MCRObjectID mcrid =MCRObjectID.getInstance(derivID);
+        MCRObjectID mcrid = MCRObjectID.getInstance(derivID);
         List<MCRObjectID> derivateIds = MCRMetadataManager.getDerivateIds(mcrid, 0, TimeUnit.MILLISECONDS);
         JsonArray jsonArray = new JsonArray();
-        for (MCRObjectID objid : derivateIds){
+        for (MCRObjectID objid : derivateIds) {
             JsonObject jsonObj = new JsonObject();
             jsonObj.addProperty("id", objid.toString());
             jsonArray.add(jsonObj);
         }
         return Response.ok(jsonArray.toString()).build();
     }
-    
+
     @GET
     @Path("folders/{derivID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFolders(@PathParam("derivID") String derivID) throws IOException, JDOMException, SAXException {
         Derivate derivate = new Derivate(derivID);
         MCRDirectory node = derivate.getRootDir();
-        
+
         JsonObject jsonObject = new JsonObject();
-        
+
         jsonObject.addProperty("name", node.getName());
         jsonObject.addProperty("absPath", node.getAbsolutePath());
         jsonObject.addProperty("isRoot", true);
-        if (node.getNumChildren(2, 2) > 0){
+        if (node.getNumChildren(2, 2) > 0) {
             jsonObject.addProperty("hasChildren", true);
             jsonObject.add("children", getFolderChildren(node.getChildren()));
-        }
-        else{
+        } else {
             jsonObject.addProperty("hasChildren", false);
         }
         return Response.ok(jsonObject.toString()).build();
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("exists")
@@ -278,8 +278,8 @@ public class DerivateBrowserResource {
         }
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonFile = jsonArray.get(i).getAsJsonObject();
-            if (fileTyps.contains(jsonFile.get("fileType").getAsString())){
-                if (node.hasChild(jsonFile.get("file").getAsString())){
+            if (fileTyps.contains(jsonFile.get("fileType").getAsString())) {
+                if (node.hasChild(jsonFile.get("file").getAsString())) {
                     MCRFilesystemNode child = node.getChild(jsonFile.get("file").getAsString());
                     JsonObject childJson = new JsonObject();
                     childJson.addProperty("name", child.getName());
@@ -288,56 +288,49 @@ public class DerivateBrowserResource {
                     childJson.addProperty("lastmodified", sdf.format(child.getLastModified().getTime()));
                     jsonFile.addProperty("exists", "1");
                     jsonFile.add("existingFile", childJson);
-                }
-                else{
+                } else {
                     jsonFile.addProperty("exists", "0");
                 }
-            }
-            else{
+            } else {
                 jsonFile.addProperty("exists", "2");
             }
         }
         return Response.ok(jsonObject.toString()).build();
     }
-    
+
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("upload")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response getUpload(@FormDataParam("file") InputStream inputStream, @FormDataParam("filename") String filename, @FormDataParam("size") long filesize, @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID, @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite){
-        if (overwrite){
-            if (DerivateTools.delete(MCRPath.getPath(documentID, path + "/" + filename)) != 1){
+    public Response getUpload(@FormDataParam("file") InputStream inputStream,
+            @FormDataParam("filename") String filename, @FormDataParam("size") long filesize,
+            @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID,
+            @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite) {
+        if (overwrite) {
+            if (DerivateTools.delete(MCRPath.getPath(documentID, path + "/" + filename)) != 1) {
                 return Response.serverError().build();
             }
         }
-        if (derivateID.equals("")){
+        if (derivateID.equals("")) {
             derivateID = null;
         }
-        MCRSession session = MCRSessionMgr.getCurrentSession();
-        if (derivateID == null){
-            String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
-            derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
-        }
-        MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
+        String filePath = path + "/" + filename;
+
         try {
-            handler.startUpload(1);
-            session.commitTransaction();
-            handler.receiveFile(path + "/" + filename, inputStream, filesize, null);
-            session.beginTransaction();
-            handler.finishUpload();
-            handler.unregister();
+            derivateID = DerivateTools.uploadFile(inputStream, filesize, documentID, derivateID, filePath);
         } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
             return Response.serverError().build();
         }
         return Response.ok(derivateID).build();
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("addURN")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response addURN(String data) throws Exception{
+    public Response addURN(String data) throws Exception {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
         JsonArray jsonArray = jsonObject.getAsJsonArray("files");
@@ -345,7 +338,7 @@ public class DerivateBrowserResource {
         Boolean all = jsonObject.get("completeDeri").getAsBoolean();
         MCRURNAdder urnAdder = new MCRURNAdder();
         if (all) {
-            if(urnAdder.addURNToDerivates(deriID)){
+            if (urnAdder.addURNToDerivates(deriID)) {
                 return Response.ok().build();
             }
             return Response.serverError().build();
@@ -353,16 +346,15 @@ public class DerivateBrowserResource {
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonO = jsonArray.get(i).getAsJsonObject();
             String path = jsonO.get("path").getAsString();
-            if(urnAdder.addURNToSingleFile(deriID, path)){
+            if (urnAdder.addURNToSingleFile(deriID, path)) {
                 jsonO.addProperty("URN", getURNforFile(deriID, path));
-            }
-            else{
+            } else {
                 jsonO.addProperty("URN", "");
             }
         }
         return Response.ok(jsonObject.toString()).build();
     }
-    
+
     @PUT
     @Path("moveDocs")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
@@ -375,15 +367,15 @@ public class DerivateBrowserResource {
             String newParentID = jsonObject.get("newParentId").getAsString();
             if (!objID.equals(newParentID)) {
                 try {
-                    if (objID.contains("derivate")){
+                    if (objID.contains("derivate")) {
                         MCRDerivateCommands.linkDerivateToObject(objID, newParentID);
-                    }
-                    else{
-                        MCRObjectCommands.replaceParent(objID, newParentID);                        
+                    } else {
+                        MCRObjectCommands.replaceParent(objID, newParentID);
                     }
                 } catch (MCRPersistenceException e) {
                     return Response.status(Status.UNAUTHORIZED).build();
-                } catch (Exception e) { e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                     e.printStackTrace();
                     return Response.serverError().build();
                 }
@@ -392,12 +384,12 @@ public class DerivateBrowserResource {
         }
         return Response.ok().build();
     }
-    
+
     @POST
     @Path("link")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response setLink(@QueryParam("docID") String docID, @QueryParam("imgPath") String imgPath) {
-        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null && !imgPath.equals("")){
+        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null && !imgPath.equals("")) {
             try {
                 DerivateLinkUtil.setLink(MCRJerseyUtil.getID(docID), imgPath);
             } catch (MCRActiveLinkException e) {
@@ -405,17 +397,16 @@ public class DerivateBrowserResource {
                 return Response.serverError().build();
             }
             return Response.ok().build();
-        }
-        else{
+        } else {
             return Response.serverError().build();
-        }        
+        }
     }
-    
+
     @DELETE
     @Path("link")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response removeLink(@QueryParam("docID") String docID, @QueryParam("imgPath") String imgPath) {
-        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null && !imgPath.equals("")){
+        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null && !imgPath.equals("")) {
             try {
                 DerivateLinkUtil.removeLink(MCRJerseyUtil.getID(docID), imgPath);
             } catch (MCRActiveLinkException e) {
@@ -423,25 +414,23 @@ public class DerivateBrowserResource {
                 return Response.serverError().build();
             }
             return Response.ok().build();
-        }
-        else{
+        } else {
             return Response.serverError().build();
-        }        
+        }
     }
-    
-    private JsonArray getFolderChildren(MCRFilesystemNode[] childs){
+
+    private JsonArray getFolderChildren(MCRFilesystemNode[] childs) {
         JsonArray jsonArray = new JsonArray();
-        for (MCRFilesystemNode child : childs){
+        for (MCRFilesystemNode child : childs) {
             if (child instanceof MCRDirectory) {
                 JsonObject jsonObj = new JsonObject();
                 jsonObj.addProperty("name", child.getName());
                 jsonObj.addProperty("absPath", child.getAbsolutePath());
                 jsonObj.addProperty("isRoot", false);
-                if (((MCRDirectory) child).getNumChildren(2, 1) > 0){
+                if (((MCRDirectory) child).getNumChildren(2, 1) > 0) {
                     jsonObj.addProperty("hasChildren", true);
                     jsonObj.add("children", getFolderChildren(((MCRDirectory) child).getChildren()));
-                }
-                else{
+                } else {
                     jsonObj.addProperty("hasChildren", false);
                 }
                 jsonArray.add(jsonObj);
@@ -449,7 +438,7 @@ public class DerivateBrowserResource {
         }
         return jsonArray;
     }
-    
+
     private String getURNforFile(String derivate, String path) {
         String fileName = path;
         String pathToFile = "/";
