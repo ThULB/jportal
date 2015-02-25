@@ -48,6 +48,10 @@ var DerivateBrowser = function () {
                 derivateBrowserLargeView.loadViewer();
             });
 
+            $("body").on("click", ".link-preview", function () {
+                derivateBrowserTools.goToPath($(this).data("path"));
+            });
+
             $("body").on("click", ".btn-remove-link", function () {
                 removeLink(derivateBrowserTools.getCurrentDocID(), $(this).closest(".link-preview").data("path"));
             });

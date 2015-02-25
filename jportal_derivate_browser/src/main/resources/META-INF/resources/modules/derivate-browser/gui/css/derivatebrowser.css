@@ -1005,6 +1005,7 @@ li.derivate-browser-breadcrumb-entry{
     text-align: center;
     position: relative;
     box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.1);
+    cursor: zoom-in;
 }
 
 .link-preview:hover {
@@ -1014,26 +1015,32 @@ li.derivate-browser-breadcrumb-entry{
 .link-preview:hover .link-info{
     opacity: 1;
 }
+
 .link-info{
     opacity: 0;
     /*cursor: pointer;*/
     position: absolute;
     top: 0;
     right: 0;
-    /*width: 100%;*/
+    width: 100%;
     background-color: rgba(77,77,77,0.8);
     padding-bottom: 5px;
-    padding-left: 5px;
  }
+
+.link-info > h6{
+    margin-right: 20px;
+    color: #FAFAFA;
+    margin-top: 3px;
+    margin-bottom: 0;
+    cursor: text;
+}
 
 .btn-remove-link{
     /*opacity: 0;*/
     cursor: pointer;
-    /*position: absolute;*/
+    position: absolute;
     right: 2px;
     top: 2px;
-    /*font-size: 18px;*/
-    float: right;
     color: #FAFAFA;
 }
 

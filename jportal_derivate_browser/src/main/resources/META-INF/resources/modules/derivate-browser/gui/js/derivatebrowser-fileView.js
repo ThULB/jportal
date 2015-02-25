@@ -209,8 +209,8 @@ var derivateBrowserFileView = (function () {
         if (links != undefined){
             $("#journal-info-linklist").html("");
             $.each(links, function(i, link) {
-                var img = $("<div class='link-preview'><img class='link-preview-img' src='http://localhost:8291/jportal/servlets/MCRTileCombineServlet/MIN/" + link + "?centerThumb=no'></div>");
-                $(img).append("<div class='link-info'><span class='btn-remove-link glyphicon glyphicon-remove'></span></div>");
+                var img = $("<div class='link-preview'><img class='link-preview-img' src='http://localhost:8291/jportal/servlets/MCRTileCombineServlet/MIN/" + link + "'></div>");
+                $(img).append("<div class='link-info'><h6 class='mightOverflow'>" + link + "</h6><span class='btn-remove-link glyphicon glyphicon-remove'></span></div>");
                 $(img).data("path", link);
                 $("#journal-info-linklist").append(img);
             });

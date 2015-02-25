@@ -161,8 +161,10 @@ var derivateBrowserLargeView = (function () {
     }
 
     function setCurrentFileTo(currentFile) {
-        $("#view-large-normal").attr( "src", currentFileList[currentFile].getMidPath());
-        $("#view-large-normal").data("id", currentFileList[currentFile].getID());
+        fileEntry =  currentFileList[currentFile];
+        $("#view-large-normal").attr( "src", fileEntry.getMidPath());
+        $("#view-large-normal").data("id", fileEntry.getID());
+        derivateBrowserTools.setFileName(fileEntry.name);
         currentFileList[currentFile].setStatusTo( $("#view-large-panel-collapse"));
         if (currentFile == 0){
             $("#view-large-left").addClass("hidden");

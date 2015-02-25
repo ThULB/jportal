@@ -104,6 +104,11 @@ var derivateBrowserTools = (function () {
         currentFile = filename;
 	}
 
+    function setFile(filename) {
+        currentFile = filename;
+        $.address.path("/" + currentDocID  + currentPath + "/" + currentFile);
+    }
+
     function showAlert(text, success) {
         $('#alert-area').removeClass("show-alert");
         $("#alert-area").removeClass("alert-success");
@@ -241,10 +246,19 @@ var derivateBrowserTools = (function () {
 		goTo: function(docID, path) {
 			goToDocument(docID, path);
 		},
+
+        goToPath: function(path) {
+            goToDocument(path.substring(0, path.indexOf("/")), path.substring(path.indexOf("/")));
+        },
 		
-		setIDs: function(docID, path) {
-			setDocIDs(docID, path);
+		setIDs: function(docID, path, filename) {
+            if (filename == undefined) filename = "";
+			setDocIDs(docID, path, filename);
 		},
+
+        setFileName: function(filename) {
+            setFile(filename);
+        },
 
         alert: function(text, success) {
             showAlert(text, success);
