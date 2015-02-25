@@ -151,6 +151,9 @@ var derivateBrowserNavigation = (function () {
         });
     }
 
+    /**
+     * @property hasChildren
+     */
     function drawDeriFolders(deriID, data, parent) {
     	if (parent == undefined){
     		parent = findDoc(deriID)

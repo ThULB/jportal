@@ -2,6 +2,7 @@ var derivateBrowserTools = (function () {
 	
 	var currentDocID = "",
 		currentPath = "",
+        currentFile = "",
         timeOutID = null,
         i18nKeys =[];
 
@@ -47,16 +48,27 @@ var derivateBrowserTools = (function () {
 			$("#derivat-panel").addClass("hidden");
 			$("#derivate-browser").addClass("hidden");
 			$("#journal-info").addClass("hidden");
+            if (!$("#file-view-large").hasClass("hidden")){
+                derivateBrowserLargeView.destroyLargeView();
+                $("#file-view").removeClass("hidden");
+            }
 		}
         if (docID != "" && docID != undefined) {
-            setDocIDs(docID, path);
+            var fileName = path.substr(path.lastIndexOf("/") + 1);
+            if(fileName.contains(".")){
+                path = path.substring(0, path.lastIndexOf("/"));
+            }
+            else{
+                fileName = "";
+            }
+            setDocIDs(docID, path, fileName);
             derivateBrowserNavigation.goToDocument(docID, path);
-            derivateBrowserFileView.showDerivateOrDoc(docID, path);
+            derivateBrowserFileView.showDerivateOrDoc(docID, path, fileName);
             disableButton();
-            $.address.path("/" + currentDocID  + currentPath + "/");
+            $.address.path("/" + currentDocID  + currentPath + "/" + currentFile);
         }
         else{
-            setDocIDs("", "");
+            setDocIDs("", "", "");
             $.address.path("");
         }
 	}
@@ -86,9 +98,10 @@ var derivateBrowserTools = (function () {
         }
     }
 	
-	function setDocIDs(docID, path) {
+	function setDocIDs(docID, path, filename) {
 		currentDocID = docID;
 		currentPath = path;
+        currentFile = filename;
 	}
 
     function showAlert(text, success) {
@@ -145,7 +158,67 @@ var derivateBrowserTools = (function () {
             return "";
         }
     }
-    
+
+    function toReadableSize(size, unit) {
+        var conSize = convertSize({number: size, unit: unit});
+        var unitString = "";
+        switch (conSize.unit){
+            case 0:
+                unitString = "bytes";
+                break;
+            case 1:
+                unitString = "kB";
+                break;
+            case 2:
+                unitString = "MB";
+                break;
+            case 3:
+                unitString = "GB";
+                break;
+            default:
+                unitString = "GB";
+                break;
+        }
+        return conSize.number + " " + unitString;
+    }
+
+    function convertSize(sizeAndUnit) {
+        if (sizeAndUnit.unit < 3){
+            if (sizeAndUnit.number > 1024){
+                var size2 = Math.round((sizeAndUnit.number / 1024) * 100)/ 100;
+                return convertSize({number: size2, unit: sizeAndUnit.unit + 1});
+            }
+        }
+        return {number: sizeAndUnit.number, unit: sizeAndUnit.unit};
+    }
+
+    function addPopover(elm, content) {
+        var timer;
+        $(elm).popover({
+            content: content,
+            html: true,
+            trigger: "manual"
+        }).on("mouseenter", function() {
+            var pop = this;
+            clearTimeout(timer);
+            $(".popover.in").parent().find(".popover-file").popover("hide");
+            timer = setTimeout(function() {
+                if ($(".popover:hover").length == 0) {
+                    $(pop).popover("show");
+                }
+            }, 400);
+        }).on("mouseleave", function() {
+            var pop = this;
+            setTimeout(function() {
+                if (!$(".popover:hover").length) {
+                    if (!$(':hover',this).length) {
+                        $(pop).popover('hide');
+                    }
+                }
+            }, 200);
+        });
+    }
+
     return {
         //public   
     	setImgPath: function(img, deriID, path) {
@@ -182,7 +255,15 @@ var derivateBrowserTools = (function () {
         },
 
         getI18n: function(args) {
-           return  getI18nKey.apply(this,arguments);
+           return getI18nKey.apply(this,arguments);
+        },
+
+        getReadableSize: function(size, unit) {
+            return toReadableSize(size, unit);
+        },
+
+        setupPopover: function(elm, content) {
+            addPopover(elm, content);
         }
     };
 })();

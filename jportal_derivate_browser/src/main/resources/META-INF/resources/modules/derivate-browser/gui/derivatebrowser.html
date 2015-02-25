@@ -38,8 +38,8 @@
 				</button>
 			</div>
 		</div>
-		<div id="file-view" ondragover="return false">
-			<div id="alert-area" class="alert alert-danger">...</div>
+        <div id="alert-area" class="alert alert-danger">...</div>
+        <div id="file-view" ondragover="return false">
 			<div id="files">
                 <div id="editor-loading"  class="hidden">
                     <div class="bounce1"></div>
@@ -61,25 +61,49 @@
 											<dt><text class="i18n" i18n="db.label.fileLastMod" i18n-def="zuletzt geändert"></text>:</dt>
 											<dd id="derivat-panel-last"></dd>
 										</dl>
-										<div id="derivat-panel-buttons">
-											<button id="btn-urnAll" type="button" class="btn btn-default browser-button">
-				 									<span class="glyphicon glyphicon glyphicon-tags button-glyphicon"></span>
-				 									<text class="i18n" i18n="db.label.assignUrn" i18n-def=" URN für Derivat vergeben"></text>
-											</button>
-                                            <button id="btn-viewer" type="button" class="btn btn-default browser-button">
-                                                <span class="glyphicon glyphicon-sound-stereo button-glyphicon"></span>
-                                                <text class="i18n" i18n="db.label.goToViewer" i18n-def="in Viewer ansehen"></text>
+                                        <div id="option-select-area">
+                                            <button id="btn-derivate-options" type="button" class="btn btn-default browser-button derivate-button">
+                                                <span class="glyphicon glyphicon glyphicon-cog button-glyphicon"></span>
+                                                <text class="i18n" i18n="db.label.derivateOptions" i18n-def="Optionen"></text>
                                             </button>
-                                            <button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button">
-                                                <span class="glyphicon glyphicon glyphicon-trash button-glyphicon"></span>
-                                                <text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>
-                                            </button>
-										</div>
+                                            <div id="derivat-panel-buttons" class="hidden">
+                                                <button id="btn-urnAll" type="button" class="btn btn-default browser-button derivate-button">
+                                                        <span class="glyphicon glyphicon glyphicon-tags button-glyphicon"></span>
+                                                        <text class="i18n" i18n="db.label.assignUrn" i18n-def="URN für Derivat vergeben"></text>
+                                                </button>
+                                                <button id="btn-viewer" type="button" class="btn btn-default browser-button derivate-button">
+                                                    <span class="glyphicon glyphicon-sound-stereo button-glyphicon"></span>
+                                                    <text class="i18n" i18n="db.label.goToViewer" i18n-def="in Viewer ansehen"></text>
+                                                </button>
+                                                <button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button derivate-button">
+                                                    <span class="glyphicon glyphicon glyphicon-trash button-glyphicon"></span>
+                                                    <text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>
+                                                </button>
+                                                <div id="download-select-area">
+                                                    <button id="btn-download" type="button" class="btn btn-default browser-button derivate-button">
+                                                        <span class="glyphicon glyphicon-arrow-down button-glyphicon"></span>
+                                                        <text class="i18n" i18n="db.label.download" i18n-def="Derivat herunterladen"></text>
+                                                    </button>
+                                                    <div id="download-new-select-area" class="hidden">
+                                                        <button id="btn-download-zip" class="btn btn-default browser-button download-button" type="button">
+                                                            <text class="i18n" i18n="db.label.download.zip" i18n-def="als Zip"></text>
+                                                        </button>
+                                                        <button id="btn-download-tar" class="btn btn-default browser-button download-button" type="button">
+                                                            <text class="i18n" i18n="db.label.download.tar" i18n-def="als Tar"></text>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <!--<button id="btn-download-tar" type="button" class="btn btn-default browser-button derivate-button">-->
+                                                    <!--<span class="glyphicon glyphicon-arrow-down button-glyphicon"></span>-->
+                                                    <!--<text class="i18n" i18n="db.label.downloadTar" i18n-def="Derivat als Tar herunterladen"></text>-->
+                                                <!--</button>-->
+                                            </div>
+                                        </div>
 									</div>
 									<div id="derivat-panel-startfile">
 										<label><text class="i18n" i18n="db.label.startFile" i18n-def="Startdatei"></text></label>
 										<figure>
-											<img class='img-placeholder img-placeholder-startfile'>
+											<img class='img-placeholder img-placeholder-startfile' src="">
 											<img id='panel-img' class="hidden" src=''>
 										    <div id="derivat-panel-startfile-overlay-div" class="hidden">
 										    	<div id="derivat-panel-startfile-overlay-label">
@@ -87,16 +111,19 @@
 												</div>
 										    </div>
 											<figcaption class="panel-img-cap">
-												<h5 id="derivat-panel-startfile-label"></h5>
+												<h5 id="derivat-panel-startfile-label" class="mightOverflow"></h5>
 											</figcaption>
 		        						</figure>
 									</div>
 								</div>
 							</div>
-							<div id="collapse-btn-div"><span id="collapse-btn" class="glyphicon glyphicon-chevron-up btn" data-toggle="collapse" data-target="#collapseOne"> </span></div>
+							<div class="collapse-btn-div"><span id="collapse-btn" class="glyphicon glyphicon-chevron-up btn" data-toggle="collapse" data-target="#collapseOne"> </span></div>
 						</div>
-						<ol  id="derivate-browser-breadcrumb" class="breadcrumb">
-						</ol>
+                        <div id="derivate-browser-breadcrumb-bar">
+                            <ol id="derivate-browser-breadcrumb" class="breadcrumb"></ol>
+                            <span id="btn-large-view" class="glyphicon glyphicon glyphicon-th-large breadcrumb-btn"></span>
+                            <span id="btn-list-view" class="glyphicon glyphicon glyphicon glyphicon-th-list breadcrumb-btn hidden"></span>
+                        </div>
 						<table id="browser-table-head" class="table table-hover table-condensed" cellspacing="0">
 							<thead>
 								<tr id="browser-table-head-tr">
@@ -161,6 +188,38 @@
 				</div>
 			</div>
 		</div>
+        <div id="file-view-large" class="hidden">
+            <span id="button-view-large-close" class="glyphicon glyphicon glyphicon-remove"></span>
+            <div id="view-large-main" class="noSelect">
+                <div id="view-large-left">
+                    <span class="glyphicon glyphicon glyphicon-menu-left"></span>
+                </div>
+                <div id="view-large-normal-wrapper">
+                    <!--<img id="view-large-normal" src="http://localhost:8291/jportal/servlets/MCRTileCombineServlet/MID/jportal_derivate_00000030/d2.jpg">-->
+                    <img id="view-large-normal" class="view-large-draggable" src="">
+                </div>
+                <div id="view-large-right">
+                    <span class="glyphicon glyphicon glyphicon-menu-right"></span>
+                </div>
+            </div>
+            <div id="view-large-bottom" class="noSelect">
+                <div id="view-large-slider-wrapper"></div>
+                <div id="view-large-slider">
+                    <div id="view-large-slider-left">
+                        <span class="glyphicon glyphicon-menu-left"></span>
+                    </div>
+                    <div id="view-large-slider-content"></div>
+                    <div id="view-large-slider-right">
+                        <span class="glyphicon glyphicon-menu-right"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" id="view-large-panel">
+                <div class="collapse-btn-div"><span id="view-large-panel-collapse-btn" class="glyphicon glyphicon-chevron-down btn"> </span></div>
+                <div id="view-large-panel-collapse" class="panel-collapse collapse in">
+                </div>
+            </div>
+        </div>
 		<div id="upload-status-bar" class="hidden">
 			<div id="upload-status-bar-header">
 				<span class="glyphicon glyphicon-cloud-upload"></span>
@@ -296,7 +355,7 @@
                 <div class="modal-body">
                     <div id="lightbox-new-derivate-main" class="dl-horizontal" ondragover="return false">
                         <p id="lightbox-new-derivate-hint" ondragover="return false">
-                            <text class="i18n" i18n="db.label.dragAndDropUpload" i18n-def="Drag and Drop zum hochladen" ondragover="return false"></text>
+                            <text class="i18n" i18n="db.label.dragAndDropUpload" i18n-def="Drag and Drop zum hochladen"></text>
                         </p>
                         <table>
                             <tbody id="lightbox-new-derivate-table" class="hidden">
@@ -327,7 +386,7 @@
 	
 	<script id="file-entry-template" type="text/mustache">
 		<tr class="browser-table-file browser-table-entry">
-			<td><span data-trigger="hover" data-title="{{name}}"
+			<td><span data-trigger="" data-title="{{name}}"
 				data-placement="right" data-toggle="popover" rel="popover"
 				class="glyphicon glyphicon-picture popover-file"></span></td>
 			<td>
@@ -423,6 +482,35 @@
 			</dl>
 		</div>
 	</script>
+
+    <script id="upload-large-view-status-template" type="text/mustache">
+		<div class="row">
+		    <div class="col-md-6">
+			    <h4>{{name}}</h4>
+			    <dl>
+				    <dt>Size</dt>
+				    <dd>{{size}}</dd>
+				    <dt>last modified</dt>
+				    <dd>{{lastModified}}</dd>
+				    <dt>URN</dt>
+                    {{#urn}}
+					    <dd>{{urn}}</dd>
+				    {{/urn}}
+				    {{^urn}}
+                        <dd>-</dd>
+				    {{/urn}}
+			    </dl>
+            </div>
+            <div class="col-md-6">
+                <h5><strong>Verlinkt mit:</strong></h5>
+			    <ul id="view-large-link-list">
+                    {{#linkedDocs}}
+			            <li><a data-id="{{id}}" class="mightOverflow" href="start#/{{id}}">{{name}}</a></li>
+                    {{/linkedDocs}}
+                </ul>
+            </div>
+		</div>
+	</script>
 	<script type="text/javascript">
 		var getUrl = window.location;
 		var jp = jp || {};
@@ -439,6 +527,8 @@
 	<script type="text/javascript" src="gui/js/derivatebrowser-navigation.js"></script>
 	<script type="text/javascript" src="gui/js/derivatebrowser-fileView.js"></script>
 	<script type="text/javascript" src="gui/js/derivatebrowser-tools.js"></script>
+    <script type="text/javascript" src="gui/js/derivatebrowser-largeView.js"></script>
+    <script type="text/javascript" src="gui/js/derivatebrowser-largeViewEntry.js"></script>
 <!--  	<script type="text/javascript" src="jp-subselect.js" ></script> -->
 </body>
 </html>

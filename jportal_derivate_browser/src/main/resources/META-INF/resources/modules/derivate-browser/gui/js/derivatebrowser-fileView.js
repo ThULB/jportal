@@ -10,7 +10,10 @@ var derivateBrowserFileView = (function () {
         $("#main").find("input[name='_xed_submit_cancel']").remove();
     });
 
-	function showDerivatOrFolder(deriID, data){
+    /**
+     * @property maindocName
+     */
+	function showDerivatOrFolder(deriID, data, filename){
 		$("#journal-info").addClass("hidden");
 		$(".btn-delete-all").addClass("faded");
 		$(".btn-move-all").addClass("faded");
@@ -22,6 +25,7 @@ var derivateBrowserFileView = (function () {
 			showPanel(data, false);
 		}
 		$("#browser-table-files").html("");
+        derivateBrowserLargeView.resetList();
 		$.each(data.children, function(i, file) {
 			file.deriID = deriID;
 			if (file.type == "file"){
@@ -33,16 +37,21 @@ var derivateBrowserFileView = (function () {
 		});
 		$("#derivate-browser").removeClass("hidden");
 		createBreadcrumb(deriID, data.absPath);
+        if (!$("#file-view-large").hasClass("hidden") || filename != ""){
+            $("#file-view").addClass("hidden");
+            derivateBrowserLargeView.loadViewer(deriID + data.absPath + filename);
+        }
 	}
 
 	function addFileToView(file , mainDoc) {
 		var fileEntryTemplate = $("#file-entry-template").html();
 		var fileEntryOutput = $(Mustache.render(fileEntryTemplate, file));
 		$(fileEntryOutput).find(".popover-file").data("lastMod", file.lastmodified);
-		$(fileEntryOutput).find(".popover-file").data("size", getReadableSize(file.size,0));
+		$(fileEntryOutput).find(".popover-file").data("size", derivateBrowserTools.getReadableSize(file.size,0));
 		$(fileEntryOutput).data("path", file.absPath);
 		$(fileEntryOutput).data("deriID", file.deriID);
 		$(fileEntryOutput).data("docID", file.deriID);
+        derivateBrowserLargeView.addFileToList(new LargeViewEntry(file.deriID, file.absPath, file.size, file.lastmodified, file.urn));
 		if ((mainDoc == file.absPath) || ("/" + mainDoc == file.absPath)){
 			$(fileEntryOutput).data("startfile", true);
 		}
@@ -62,14 +71,20 @@ var derivateBrowserFileView = (function () {
 			$(folderEntryOutput).find("input.input-new").data("temp", folder.temp);
 		}
 	}
-	
+
+    /**
+     * @property parentName
+     * @property parentSize
+     * @property parentLastMod
+     * @property hasURN
+     */
 	function showPanel(data, child) {
 		var deriName = "";
 		if (child){
 			var panelName = $("#derivat-panel-name");
 			if ($(panelName).html() != data.parentName){
 				$(panelName).html(data.parentName);
-				$("#derivat-panel-size").html(getReadableSize(data.parentSize, 0));
+				$("#derivat-panel-size").html(derivateBrowserTools.getReadableSize(data.parentSize, 0));
 				$("#derivat-panel-last").html(data.parentLastMod);
 				deriName = data.parentName;
 			}
@@ -79,7 +94,7 @@ var derivateBrowserFileView = (function () {
 		}
 		else{
 			$("#derivat-panel-name").html(data.name);
-			$("#derivat-panel-size").html(getReadableSize(data.size, 0));
+			$("#derivat-panel-size").html(derivateBrowserTools.getReadableSize(data.size, 0));
 			$("#derivat-panel-last").html(data.lastmodified);
 			deriName = data.name;
 		}
@@ -210,13 +225,13 @@ var derivateBrowserFileView = (function () {
     }
 
     //ajax Methods
-	function getDerivate(deriID, path){
+	function getDerivate(deriID, path, filename){
 		$.ajax({
 			url: "./" + deriID + path,
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
-					showDerivatOrFolder(deriID, data);
+					showDerivatOrFolder(deriID, data, filename);
 					},
 			error: function(error) {
                     console.log(error);
@@ -327,6 +342,10 @@ var derivateBrowserFileView = (function () {
 		});
 	}
 
+    /**
+     * @property numFound
+     * @property derivateLink
+     */
     function getDocLinks(docID) {
         var url = jp.baseURL + "servlets/solr/select?q=id%3A" + docID + "&start=0&rows=10&sort=maintitle+asc&wt=json&indent=true";
         $.getJSON(url, function(search) {
@@ -336,15 +355,35 @@ var derivateBrowserFileView = (function () {
         });
     }
 
+    function getViewer(docID, path) {
+        $("#browser-large-view").removeClass("hidden");
+        //$.ajax({
+        //    url: "//141.35.23.195:9201/classes/example/MyCoReViewerMinimal.html",
+        //    type: "GET",
+        //    statusCode: {
+        //        200: function(data) {
+        //            //console.log(data);
+        //            //$("#browser-large-view").append(data);
+        //        },
+        //        500: function() {
+        //            derivateBrowserTools.alert(derivateBrowserTools.getI18n(""), false);
+        //        },
+        //        401: function() {
+        //            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+        //        }
+        //    }
+        //});
+    }
+
     return {
         //public
         init: function() {
 
         },
 
-        showDerivateOrDoc: function(docID, path){
+        showDerivateOrDoc: function(docID, path, filename){
             if (docID.search("derivate") != -1){
-            	getDerivate(docID, path);
+            	getDerivate(docID, path, filename);
             }
             else{
             	showDoc(docID);
@@ -386,7 +425,7 @@ var derivateBrowserFileView = (function () {
 		},
 
 		editDoc: function() {
-			docID = derivateBrowserTools.getCurrentDocID();
+			var docID = derivateBrowserTools.getCurrentDocID();
 			getDocEditor(docID.substring(docID.indexOf("_") + 1, docID.lastIndexOf("_")), "update", derivateBrowserTools.getCurrentDocID());
 		},
 

@@ -1,3 +1,10 @@
+
+/**
+ * @property objectType
+ * @property maintitle
+ * @property childrenCount
+ * @property derivateOwner
+ */
 function TreeEntry(data, pa) {
 	this.docID = data.id;
 	this.type = data.objectType;

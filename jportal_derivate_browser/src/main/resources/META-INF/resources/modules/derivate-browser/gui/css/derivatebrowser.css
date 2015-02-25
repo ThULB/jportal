@@ -1,6 +1,7 @@
 html,body{
 	width: 100%;
 	height: 100%;
+    overflow: hidden;
 }
 @-webkit-keyframes bouncedelay {
     0%, 80%, 100% { -webkit-transform: scale(0.0) }
@@ -237,6 +238,7 @@ span.btn{
 	vertical-align: top;
 	max-width: 50%;
 	max-height: 200px;
+    cursor: zoom-in;
 }
 
 .img-placeholder-popover{
@@ -263,6 +265,7 @@ span.btn{
 
 .invisible{
 	opacity: 0;
+    cursor: auto;
 }
 
 .hidden{
@@ -306,10 +309,21 @@ span.btn{
 	height: 256px;
 }
 
+#btn-derivate-options{
+    margin-top: 10px;
+}
+
+#option-select-area{
+    position: relative;
+    width: 250px;
+}
+
 #derivat-panel-buttons{
-	position: absolute;
-	left: 15px;
-	bottom: 0;
+    padding: 8px;
+    margin-top: -5px;
+    background-color: #FAFAFA;
+    box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.2);
+    border-top: 1px solid #DDD;
 }
 
 .button-glyphicon{
@@ -323,7 +337,7 @@ span.btn{
 	height: 226px;
 }
 
-#collapse-btn-div{
+.collapse-btn-div{
 	text-align: center;
 }
 
@@ -362,7 +376,7 @@ span.btn{
 }
 
 #derivat-panel-startfile-label{
-	color: #FAFAFA
+	color: #FAFAFA;
 }
 
 #derivat-panel-startfile-overlay-div{
@@ -417,7 +431,7 @@ span.btn-folder{
 	height: 100%;
 }
 
-#derivate-browser-breadcrumb{
+#derivate-browser-breadcrumb-bar{
 	background-color: #fafafa;
 	border-bottom: 1px solid;
 	border-color: #DDD;
@@ -426,6 +440,15 @@ span.btn-folder{
 	padding: 15px;
 	box-shadow: 0 1px 5px 0 rgba(50, 50, 50, 0.1);
 	position: relative;
+}
+
+#derivate-browser-breadcrumb{
+    background-color: #fafafa;
+    margin-bottom: 0;
+    padding: 0;
+    position: relative;
+    list-style: none;
+    display: inline-block;
 }
 
 
@@ -542,8 +565,6 @@ li.derivate-browser-breadcrumb-entry{
 .noSelect{
 	-moz-user-select: 	-moz-none;
 	-moz-user-select:	none;
-	-o-user-select:	none;
-	-khtml-user-select:	none; 
 	-webkit-user-select:	none;
 	-ms-user-select:	none;
 	user-select:	none;
@@ -775,7 +796,7 @@ li.derivate-browser-breadcrumb-entry{
     border-color: #1565C0;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-primary:focus {
     color: #FFF;
     background-color: #1565C0;
     border-color: #1565C0;
@@ -787,7 +808,7 @@ li.derivate-browser-breadcrumb-entry{
     border-color: #ff9800;
 }
 
-.btn-warning:hover {
+.btn-warning:hover, .btn-warning:focus {
     color: #FFF;
     background-color: #ff9800;
     border-color: #ff9800;
@@ -799,7 +820,7 @@ li.derivate-browser-breadcrumb-entry{
     color: #FFF;
 }
 
-.btn-danger:hover {
+.btn-danger:hover, .btn-danger:focus {
     background-color: #f44336;
     border-color: #f44336;
     color: #FFF;
@@ -811,7 +832,7 @@ li.derivate-browser-breadcrumb-entry{
     border-color: #CCC;
 }
 
-.btn-default:hover {
+.btn-default:hover, .btn-default:focus {
     color: #333;
     background-color: #FFF;
     border-color: #CCC;
@@ -915,6 +936,8 @@ li.derivate-browser-breadcrumb-entry{
 
 #lightbox-new-derivate-main{
     min-height: 300px;
+    max-height: 500px;
+    overflow: auto;
     position: relative;
 }
 
@@ -1028,9 +1051,327 @@ li.derivate-browser-breadcrumb-entry{
     text-align: center;
 }
 
+.breadcrumb-btn{
+    float: right;
+    margin-top: 5px;
+    font-size: 18px;
+}
+
+.mightOverflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.derivate-button{
+    display: block;
+    margin-bottom: 5px;
+    width: 100%;
+    text-align: left;
+}
+
+#download-select-area{
+    position: relative;
+}
+
+#download-new-select-area{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    background: #FAFAFA;
+    top: 32px;
+    padding: 8px;
+    box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.2);
+    border-top: 1px solid #DDD;
+}
+
+.download-button{
+    width: 48%;
+}
+
+.btn:focus {
+    outline: 0;
+}
+
+/******************************************************
+* Large File
+******************************************************/
+#browser-large-view{
+    width: 100%;
+}
+
+#file-view-large{
+    background-color: #212124;
+    width: 75%;
+    height: 100%;
+    position: relative;
+    display: inline-block;
+}
+
+#view-large-main {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 187px);
+    transition: height 0.6s ease-out 0s;
+}
+
+#view-large-main.expended-view {
+    height: calc(100% - 68px);
+    transition: height 0.6s ease-in 0s;
+}
+
+#view-large-left{
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 50%;
+    cursor: pointer;
+    /*background-color: red;*/
+}
+
+#view-large-main .glyphicon-menu-left{
+    position: absolute;
+    left: 10px;
+    top: 45%;
+    color: #FAFAFA;
+    font-size: 32px;
+}
+
+#view-large-right{
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 50%;
+    cursor: pointer;
+    /*background-color: green;*/
+}
+
+#view-large-main .glyphicon-menu-right{
+    position: absolute;
+    right: 10px;
+    top: 45%;
+    color: #FAFAFA;
+    font-size: 32px;
+}
+
+#view-large-normal-wrapper{
+    /*position: absolute;*/
+    /*z-index: 10;*/
+    /*might not work with every browser*/
+    /*left: 50%;*/
+    /*top: 50%;*/
+    /*transform: translate(-50%,-50%);*/
+
+}
+#view-large-normal{
+    position: absolute;
+    max-height: 100%;
+    max-width: calc(100% - 100px);
+    /*margin: 20px 50px;*/
+    z-index: 10;
+    /*might not work with every browser*/
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    padding-top: 20px;
+    cursor: zoom-in;
+}
+
+#view-large-overlay{
+    z-index: 900;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+
+}
+
+#view-large-large{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 100;
+    cursor: zoom-out;
+}
+
+#view-large-bottom{
+    height: 45px;
+    width: 100%;
+    position: relative;
+}
+
+#view-large-slider{
+    position: absolute;
+    z-index: 50;
+    /*might not work with every browser*/
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%,0);
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/*#view-large-slider{*/
+    /*position: relative;*/
+    /*z-index: 50;*/
+    /*might not work with every browser*/
+    /*transform: translate(-50%,-0);*/
+/*}*/
+
+/*.view-large-thump{*/
+    /*max-width: 50px;*/
+    /*max-height: 50px;*/
+    /*margin-right: 10px;*/
+    /*display: inline-block;*/
+/*}*/
+
+.view-large-thump{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    display: inline-block;
+    background-position: 50% 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+    cursor: pointer;
+}
+
+.view-large-thump-empty{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+#view-large-slider:hover .view-large-thump{
+    width: 50px;
+    height: 50px;
+
+}
+
+#view-large-slider:hover .view-large-thump-empty {
+    width: 50px;
+    height: 50px;
+}
+
+.view-large-slider-current{
+    box-shadow: inset 0 0 0 1px #fff
+}
+
+#view-large-slider-content{
+    display: inline-block;
+}
+
+#view-large-slider-left{
+    color: #FAFAFA;
+    float: left;
+    margin-right: 10px;
+    height: 50px;
+    cursor: pointer;
+    display: none;
+    font-size: 16px;
+}
+
+#view-large-slider:hover #view-large-slider-left{
+    display: inline-block;
+}
+
+#view-large-slider-left > span{
+    top: 40%;
+}
+
+
+#view-large-slider-right{
+    color: #FAFAFA;
+    float: right;
+    height: 50px;
+    cursor: pointer;
+    display: none;
+    font-size: 16px;
+}
+#view-large-slider:hover #view-large-slider-right{
+    display: inline-block;
+}
+
+#view-large-slider-right > span{
+    top: 40%;
+}
+
+#view-large-slider-wrapper {
+    background: transparent;
+    /*background: linear-gradient(0deg, #212124 50px, rgba(33, 33, 36, 0) 85px);*/
+    width: 100%;
+    height: 75px;
+    top: -30px;
+    position: absolute;
+    z-index: 40;
+    /*display: none;*/
+}
+
+#file-view-large > #view-large-bottom > #view-large-slider-wrapper:hover {
+    /*display: none;*/
+    background: transparent;
+}
+
+#view-large-bottom:hover #view-large-slider-wrapper {
+    /*display: inline-block;*/
+    background-color: rgba(33, 33, 33, 0.3);
+    background: linear-gradient(0deg, #212124 50px, rgba(33, 33, 36, 0) 75px);
+}
+
+#button-view-large-close{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 24px;
+    color: #FAFAFA;
+    z-index: 50;
+    cursor: pointer;
+}
+
+#view-large-panel-collapse dd {
+    margin-left: 130px;
+}
+
+#view-large-panel-collapse dt{
+    float: left;
+    text-align: right;
+    width: 120px;
+}
+
+#view-large-panel-collapse h4{
+    padding-left: 20px;
+}
+
+#view-large-panel{
+    background-color: #fafafa;
+    border-radius: 0;
+    margin-bottom: 0;
+    box-shadow: 3px 3px 10px 0 rgba(50, 50, 50, 0.5);
+    position: relative;
+    z-index: 80;
+}
+
+#view-large-panel-collapse-btn{
+    padding-bottom: 0;
+}
+
+#view-large-link-list{
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 75px;
+}
+
 /******************************************************
 * Overwrite Bootstrap Stuff from jp-default
-*******************************************************/
+******************************************************/
 
 .pagination > .active:hover {
 	text-decoration: none;

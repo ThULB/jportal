@@ -3,7 +3,7 @@ function Upload(docID, deriID, path, file) {
 	this.deriID = deriID;
 	this.path = path;
 	this.name = file.name;
-	this.size = getReadableSize(file.size, 0);
+	this.size = derivateBrowserTools.getReadableSize(file.size, 0);
 	this.rawSize = file.size;
 	this.type = file.type;
 	this.lastmodified = file.lastModifiedDate.toLocaleDateString() + " " + file.lastModifiedDate.toLocaleTimeString();
@@ -11,6 +11,7 @@ function Upload(docID, deriID, path, file) {
 	this.exists = undefined;
 	this.img = undefined;
 	this.statusbar = undefined;
+    //noinspection JSUnusedGlobalSymbols
     this.inFolder = false;
 }
 
@@ -46,6 +47,7 @@ Upload.prototype.getCompletePath = function() {
 };
 
 Upload.prototype.isInFolder = function() {
+    //noinspection JSUnusedGlobalSymbols
     this.inFolder = true;
 };
 
@@ -77,7 +79,7 @@ Upload.prototype.askOverwrite = function(existingFile, deriID, path) {
 	var originalFileOutput = $(Mustache.render(uploadOverwriteTemplate, existingFile));
 	//var newFileOutput = $(Mustache.render(fileEntryTemplate, file));
 	derivateBrowserTools.setImgPath($(originalFileOutput).find(".overwrite-img"), deriID, path + "/" + existingFile.name);
-	$(originalFileOutput).find(".img-size").html(getReadableSize($(originalFileOutput).find(".img-size").html(),0));
+	$(originalFileOutput).find(".img-size").html(derivateBrowserTools.getReadableSize($(originalFileOutput).find(".img-size").html(),0));
 	$("#lightbox-upload-overwrite-original-file").html(originalFileOutput);
 	
 	var newFileOutput = $(Mustache.render(uploadOverwriteTemplate, this));
@@ -88,38 +90,38 @@ Upload.prototype.askOverwrite = function(existingFile, deriID, path) {
 };
 
 
-function getReadableSize(size, unit) {
-	var conSize = convertSize({number: size, unit: unit});
-	var unitString = "";
-	switch (conSize.unit){
-		case 0:
-			unitString = "bytes";
-			break;
-		case 1:
-			unitString = "kB";
-			break;
-		case 2:
-			unitString = "MB";
-			break;
-		case 3:
-			unitString = "GB";
-			break;
-		default:
-			unitString = "GB";
-			break;
-	}
-	return conSize.number + " " + unitString;
-}
-
-function convertSize(sizeAndUnit){
-	if (sizeAndUnit.unit < 3){
-		if (sizeAndUnit.number > 1024){
-			var size2 = Math.round((sizeAndUnit.number / 1024) * 100)/ 100;
-			return convertSize({number: size2, unit: sizeAndUnit.unit + 1});
-		}
-	}
-	return {number: sizeAndUnit.number, unit: sizeAndUnit.unit};
-}
+//function getReadableSize(size, unit) {
+//	var conSize = convertSize({number: size, unit: unit});
+//	var unitString = "";
+//	switch (conSize.unit){
+//		case 0:
+//			unitString = "bytes";
+//			break;
+//		case 1:
+//			unitString = "kB";
+//			break;
+//		case 2:
+//			unitString = "MB";
+//			break;
+//		case 3:
+//			unitString = "GB";
+//			break;
+//		default:
+//			unitString = "GB";
+//			break;
+//	}
+//	return conSize.number + " " + unitString;
+//}
+//
+//function convertSize(sizeAndUnit){
+//	if (sizeAndUnit.unit < 3){
+//		if (sizeAndUnit.number > 1024){
+//			var size2 = Math.round((sizeAndUnit.number / 1024) * 100)/ 100;
+//			return convertSize({number: size2, unit: sizeAndUnit.unit + 1});
+//		}
+//	}
+//	return {number: sizeAndUnit.number, unit: sizeAndUnit.unit};
+//}
 
 function readImg(file, display, upload) {
 	if (!upload.type.endsWith("pdf")){
