@@ -24,11 +24,13 @@ var DerivateBrowser = function () {
             $("body").on("click", "#btn-download-zip", function () {
                 window.location.href = jp.baseURL + "servlets/MCRZipServlet/" + derivateBrowserTools.getCurrentDocID();
                 $("#download-new-select-area").addClass("hidden");
+                $("#derivat-panel-buttons").addClass("hidden");
             });
 
             $("body").on("click", "#btn-download-tar", function () {
                 window.location.href = jp.baseURL + "servlets/MCRTarServlet/" + derivateBrowserTools.getCurrentDocID();
                 $("#download-new-select-area").addClass("hidden");
+                $("#derivat-panel-buttons").addClass("hidden");
             });
 
             $("body").on("click", "#btn-download", function () {
@@ -72,38 +74,50 @@ var DerivateBrowser = function () {
                 $("#lightbox-new-derivate-table").removeClass("hidden");
                 event.preventDefault();
                 event.stopPropagation();
-
-                var files = event.originalEvent.dataTransfer.items;
-                if (files != undefined) {
-                    for (var i = 0; i < files.length; ++i) {
-                        //noinspection JSUnresolvedFunction
-                        var entry = files[i].webkitGetAsEntry();
-                        getWebkitFiles(entry);
+                if (!$("#lightbox-new-derivate-main").hasClass("new-derivate-noDrop")){
+                    var files = event.originalEvent.dataTransfer.items;
+                    if (files != undefined) {
+                        for (var i = 0; i < files.length; ++i) {
+                            //noinspection JSUnresolvedFunction
+                            var entry = files[i].webkitGetAsEntry();
+                            getWebkitFiles(entry);
+                        }
                     }
-                }
-                else {
-                    files = event.originalEvent.dataTransfer.files;
-                    $.each(files, function (i, file) {
-                        addFileToUplodlist(file, "");
+                    else {
+                        files = event.originalEvent.dataTransfer.files;
+                        $.each(files, function (i, file) {
+                            addFileToUplodlist(file, "");
 
-                    });
+                        });
+                    }
                 }
             });
 
             $("body").on("click", "#lightbox-new-derivate-confirm", function () {
+                currentUploadCheck.deriID = "";
                 $.each(uploadList, function (index, upload) {
                     if (upload instanceof Upload) {
                         uploadFile(upload, "new");
                     }
                     return false;
                 });
+                $("#lightbox-new-derivate-confirm").addClass("hidden");
+                $(".lightbox-new-derivate-cancel").addClass("hidden");
+                $("#lightbox-new-derivate-message").removeClass("hidden");
+                $("#lightbox-new-derivate-main").addClass("new-derivate-noDrop");
             });
 
             $("body").on("click", ".lightbox-new-derivate-cancel", function () {
-                uploadList = {};
-                $("#lightbox-new-derivate-hint").removeClass("hidden");
-                $("#lightbox-new-derivate-table").addClass("hidden");
-                $("#lightbox-new-derivate-table").html("");
+                hideNewDerivateLightbox();
+            });
+
+            $("body").on("click", "#lightbox-new-derivate-done", function () {
+                var deriID = $(this).data("deriID");
+                if (deriID != "" && deriID != undefined) {
+                    derivateBrowserNavigation.addTempDoc(deriID, deriID, "derivate", $(this).data("docID"));
+                    derivateBrowserTools.goTo(deriID, "");
+                }
+                hideNewDerivateLightbox();
             });
 
             $("body").on("click", "#folder-list-new-choose", function () {
@@ -152,6 +166,7 @@ var DerivateBrowser = function () {
             });
 
             $("body").on("click", "#btn-deleteDeri", function () {
+                $("#derivat-panel-buttons").addClass("hidden");
                 showDeleteDocAlert("derivate");
             });
 
@@ -407,6 +422,7 @@ var DerivateBrowser = function () {
                     "files": []
                 };
                 addURN(json);
+                $("#derivat-panel-buttons").addClass("hidden");
             });
 
             $("body").on("drop", "#files", function (event) {
@@ -434,7 +450,7 @@ var DerivateBrowser = function () {
                             uploadList[upload.getID()] = upload;
                         }
                         else {
-                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype"), false);
+                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetypeFolder"), false);
                         }
                     });
                     existsCheck();
@@ -447,6 +463,7 @@ var DerivateBrowser = function () {
                 $("#upload-status-bar").animate({'height': '0px'}, 500, function () {
                     $("#upload-status-bar").addClass("hidden");
                     $("#upload-status-bar-table").html("");
+                    $("#upload-status-bar-header-error").addClass("hidden");
                 });
             });
 
@@ -1004,39 +1021,50 @@ var DerivateBrowser = function () {
                     if (upload.exists) {
                         derivateBrowserFileView.removeFileWithPath(upload.getCompletePath());
                     }
-                    derivateBrowserFileView.addFile(upload.getaddToBrowserJson());
+                    if (upload.type.endsWith("xml")){
+                        derivateBrowserFileView.addXML(upload.getaddToBrowserJson());
+                    }
+                    else{
+                        derivateBrowserFileView.addFile(upload.getaddToBrowserJson());
+                    }
                     uploadFilesAndAsk();
                 }
                 if (mode == "new") {
-                    upload.exists = true;
-                    var all = true;
-                    $.each(uploadList, function (index, nextUpload) {
-                        if (nextUpload instanceof Upload) {
-                            if (nextUpload.exists == false) {
-                                nextUpload.deriID = deriID;
-                                uploadFile(nextUpload, "new");
-                                all = false;
-                                return false;
-                            }
-                        }
-                    });
-                    if (all) {
-                        uploadList = {};
-                        $("#lightbox-new-derivate").modal("hide");
-                        $("#lightbox-new-derivate-hint").removeClass("hidden");
-                        $("#lightbox-new-derivate-table").addClass("hidden");
-                        $("#lightbox-new-derivate-table").html("");
-                        derivateBrowserNavigation.addTempDoc(deriID, deriID, "derivate", upload.docID);
-                        derivateBrowserTools.goTo(deriID, "");
-                    }
+                    currentUploadCheck.deriID = deriID;
+                    uploadNextFile(upload);
                 }
             },
             error: function (error) {
-                if (error.status == 401) {
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                if (error.status == 415) {
+                    console.log("Test");
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype"), false);
+                    $(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.alert.filetype"));
+                    $(upload.statusbar).addClass("alert-warning");
+                    if (mode == "new") {
+                        upload.exists = true;
+                        uploadNextFile(upload);
+                    }
+                    else{
+                        uploadFilesAndAsk();
+                    }
                 }
                 else {
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.upload.error"), false);
+                    if (error.status == 401) {
+                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                    }
+                    else {
+                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.upload.error"), false);
+                        $(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.label.upload.error"));
+                        $(upload.statusbar).addClass("alert-danger");
+                        $("#upload-status-bar-header-error").removeClass("hidden");
+                        if (mode == "new") {
+                            upload.exists = true;
+                            cancelUpload();
+                        }
+                        else{
+                            uploadFilesAndAsk();
+                        }
+                    }
                 }
             }
         });
@@ -1348,6 +1376,61 @@ var DerivateBrowser = function () {
                 }
             });
         }
+    }
+
+    function uploadNextFile(upload) {
+        upload.exists = true;
+        var all = true;
+        $.each(uploadList, function (index, nextUpload) {
+            if (nextUpload instanceof Upload) {
+                if (nextUpload.exists == false) {
+                    nextUpload.deriID = currentUploadCheck.deriID;
+                    uploadFile(nextUpload, "new");
+                    all = false;
+                    return false;
+                }
+            }
+        });
+        if (all) {
+            $("#lightbox-new-derivate-done").removeClass("hidden");
+            $("#lightbox-new-derivate-message").addClass("hidden");
+            $("#lightbox-new-derivate-done").data("deriID", currentUploadCheck.deriID);
+            $("#lightbox-new-derivate-done").data("docID", upload.docID);
+        }
+    }
+
+    function cancelUpload() {
+        var docID = "";
+        $.each(uploadList, function (index, nextUpload) {
+            docID = nextUpload.docID;
+            if (nextUpload instanceof Upload) {
+                if (nextUpload.exists == false) {
+                    $(nextUpload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.label.upload.canceled"));
+                }
+            }
+        });
+        $("#lightbox-new-derivate-error").removeClass("hidden");
+        $("#lightbox-new-derivate-done").removeClass("hidden");
+        $("#lightbox-new-derivate-message").addClass("hidden");
+        $("#lightbox-new-derivate-done").data("deriID", currentUploadCheck.deriID);
+        $("#lightbox-new-derivate-done").data("docID", docID);
+
+    }
+
+    function hideNewDerivateLightbox() {
+        uploadList = {};
+        currentUploadCheck = {};
+        $("#lightbox-new-derivate").modal("hide");
+        $("#lightbox-new-derivate-hint").removeClass("hidden");
+        $("#lightbox-new-derivate-table").addClass("hidden");
+        $("#lightbox-new-derivate-table").html("");
+        $("#lightbox-new-derivate-main").removeClass("new-derivate-noDrop");
+        $("#lightbox-new-derivate-confirm").removeClass("hidden");
+        $(".lightbox-new-derivate-cancel").removeClass("hidden");
+        $("#lightbox-new-derivate-done").addClass("hidden");
+        $("#lightbox-new-derivate-done").removeData();
+        $("#lightbox-new-derivate-error").addClass("hidden");
+        $("#lightbox-new-derivate-message").addClass("hidden");
     }
 };
 

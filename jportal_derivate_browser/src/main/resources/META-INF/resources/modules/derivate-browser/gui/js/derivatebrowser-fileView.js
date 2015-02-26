@@ -29,7 +29,12 @@ var derivateBrowserFileView = (function () {
 		$.each(data.children, function(i, file) {
 			file.deriID = deriID;
 			if (file.type == "file"){
-				addFileToView(file, data.maindocName);
+                if (file.contentType == "xml"){
+                    addXMLToView(file);
+                }
+                else{
+                    addFileToView(file, data.maindocName);
+                }
 			}
 			else{
 				addFolderToView(file, data.absPath);
@@ -37,7 +42,7 @@ var derivateBrowserFileView = (function () {
 		});
 		$("#derivate-browser").removeClass("hidden");
 		createBreadcrumb(deriID, data.absPath);
-        if (!$("#file-view-large").hasClass("hidden") || filename != ""){
+        if (($("#file-view-large").hasClass("hidden") && filename != "" && filename != undefined) || !$("#file-view-large").hasClass("hidden")){
             $("#file-view").addClass("hidden");
             derivateBrowserLargeView.loadViewer(deriID + data.absPath + filename);
         }
@@ -57,6 +62,15 @@ var derivateBrowserFileView = (function () {
 		}
 		$(fileEntryOutput).appendTo("#browser-table-files");
 	}
+
+    function addXMLToView(file) {
+        var xmlEntryTemplate = $("#xml-entry-template").html();
+        var xmlEntryOutput = $(Mustache.render(xmlEntryTemplate, file));
+        $(xmlEntryOutput).data("path", file.absPath);
+        $(xmlEntryOutput).data("deriID", file.deriID);
+        $(xmlEntryOutput).data("docID", file.deriID);
+        $(xmlEntryOutput).appendTo("#browser-table-files");
+    }
 
 	function addFolderToView(folder, path) {
 		var folderEntryTemplate = $("#folder-entry-template").html();
@@ -415,6 +429,10 @@ var derivateBrowserFileView = (function () {
 		addFile: function(json) {
 			addFileToView(json);
 		},
+
+        addXML: function(json) {
+            addXMLToView(json);
+        },
 
 		updateDoc: function(mode) {
 			updateDocument(mode);

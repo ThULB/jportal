@@ -224,6 +224,7 @@
 			<div id="upload-status-bar-header">
 				<span class="glyphicon glyphicon-cloud-upload"></span>
 				<div id="upload-status-bar-header-label">Upload...</div>
+                <div id="upload-status-bar-header-error" class="hidden alert-danger-text"><span class="glyphicon glyphicon-alert"></span><text class="i18n" i18n="db.alert.upload.error" i18n-def="Fehler beim Hochladen."></text></div>
 				<span class="glyphicon glyphicon-remove btn-close-usb btn"></span>
 				<span class="glyphicon glyphicon-minus btn-mini-usb btn"></span>
 			</div>
@@ -347,9 +348,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="btn-round">
-                        <button type="button" class="close lightbox-new-derivate-cancel" data-dismiss="modal" aria-hidden="true">x</button>
-                    </div>
+                    <button type="button" class="close lightbox-new-derivate-cancel" data-dismiss="modal" aria-hidden="true">x</button>
                     <h4 id="lightbox-new-derivate-label" class="modal-title"><text class="i18n" i18n="db.label.newDerivate" i18n-def="Derivat anlegen"></text></h4>
                 </div>
                 <div class="modal-body">
@@ -364,8 +363,16 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <div id="lightbox-new-derivate-error" class="hidden alert-danger-text">
+                        <span class="glyphicon glyphicon-alert"></span>
+                        <text class="i18n" i18n="db.alert.upload.errorMessage" i18n-def="Fehler beim Uploaden, Upload abgebrochen. Bereits hochgeladene Dateien bleiben bestehen."></text>
+                    </div>
+                    <div id="lightbox-new-derivate-message" class="hidden">
+                        <text class="i18n" i18n="db.alert.upload.message" i18n-def="Upload läuft... Bitte warten"></text>
+                    </div>
                     <button type="button" class="btn btn-default lightbox-new-derivate-cancel browser-button" data-dismiss="modal" aria-hidden="true"><text class="i18n" i18n="db.label.cancel" i18n-def="Abbrechen"></text></button>
                     <button type="button" id="lightbox-new-derivate-confirm" class="btn btn-primary browser-button"><text class="i18n" i18n="db.label.upload" i18n-def="Hochladen"></text></button>
+                    <button type="button" id="lightbox-new-derivate-done" class="btn btn-primary browser-button hidden"><text class="i18n" i18n="db.label.upload.done" i18n-def="Fertig"></text></button>
                 </div>
             </div>
         </div>
@@ -396,14 +403,36 @@
 					<span class="glyphicon glyphicon-trash btn-delete btn invisible"></span>
 				</div>
 			</td>
-			<td class="browser-table-file-name">{{name}}</td>
-			<td class="browser-table-file-urn">
+			<td class="browser-table-file-name mightOverflow">{{name}}</td>
+			<td class="browser-table-file-urn mightOverflow">
 				{{#urn}}
 					{{urn}}
 				{{/urn}}
 				{{^urn}}
 					<div class="no-urn">-</div>
 					<span class="glyphicon glyphicon-tag btn-new-urn btn invisible"></span>
+				{{/urn}}
+			</td>
+		</tr>
+	</script>
+
+    <script id="xml-entry-template" type="text/mustache">
+		<tr class="browser-table-xml browser-table-entry">
+			<td><span class="glyphicon glyphicon-file"></span></td>
+			<td>
+				<div class="btns">
+					<span class="glyphicon glyphicon-unchecked btn-check btn invisible"></span>
+					<span class="glyphicon glyphicon-edit btn-edit btn invisible"></span>
+					<span class="glyphicon glyphicon-trash btn-delete btn invisible"></span>
+				</div>
+			</td>
+			<td class="browser-table-file-name mightOverflow">{{name}}</td>
+			<td class="browser-table-file-urn mightOverflow">
+				{{#urn}}
+					{{urn}}
+				{{/urn}}
+				{{^urn}}
+
 				{{/urn}}
 			</td>
 		</tr>
@@ -420,12 +449,12 @@
 				</div>
 			</td>
 			{{#temp}}
-				<td class="browser-table-file-name"><input id="temp-folder-{{temp}}" class="input-new" type="text" value=""></td>
+				<td class="browser-table-file-name mightOverflow"><input id="temp-folder-{{temp}}" class="input-new" type="text" value=""></td>
 			{{/temp}}
 			{{^temp}}
-				<td class="browser-table-file-name">{{name}}</td>
+				<td class="browser-table-file-name mightOverflow">{{name}}</td>
 			{{/temp}}
-			<td class="browser-table-file-urn">
+			<td class="browser-table-file-urn mightOverflow">
 				{{#urn}}
 					{{urn}}
 				{{/urn}}
@@ -458,7 +487,7 @@
 	
 	<script id="upload-entry-template" type="text/mustache">
 		<tr class="upload-entry">
-			<td><img class='img-placeholder img-placeholder-upload' src=''><img class='upload-preview-image hidden'></img></td>
+			<td class="upload-preview-img-td"><img class='img-placeholder img-placeholder-upload' src=''><img class='upload-preview-image hidden'></img></td>
 			{{#inFolder}}
 			    <td class="upload-preview-name" title="{{name}}">{{path}}/{{name}}</td>
             {{/inFolder}}

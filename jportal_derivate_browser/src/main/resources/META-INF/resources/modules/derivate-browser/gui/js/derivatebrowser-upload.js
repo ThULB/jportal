@@ -32,6 +32,7 @@ Upload.prototype.getFormData = function() {
     data.append("size", this.rawSize);
     data.append("file", this.file);
 	data.append("overwrite", this.exists);
+    data.append("type", this.type);
     return data;
 };
 
@@ -125,7 +126,7 @@ Upload.prototype.askOverwrite = function(existingFile, deriID, path) {
 
 function readImg(file, display, upload) {
 	if (!upload.type.endsWith("pdf")){
-		if (file.size < 2097152){
+		if ((file.size < 2097152) || upload.type.endsWith("xml")){
 			if (upload.img != undefined){
 				display.attr("src", upload.img);
 				$(display).siblings(".img-placeholder").addClass("hidden");

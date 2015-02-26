@@ -172,6 +172,10 @@ ul{
 	cursor: default;
 }
 
+#browser-table{
+    table-layout: fixed;
+}
+
 #browser-table-wrapper{
 	height: calc(100% - 376px - 48px);
 	overflow: auto;
@@ -479,6 +483,7 @@ li.derivate-browser-breadcrumb-entry{
 #upload-status-bar-body{
 	overflow: auto;
 	height: calc(100% - 30px);
+    width: 100%;
 }
 
 #upload-status-bar-body > table{
@@ -503,6 +508,15 @@ li.derivate-browser-breadcrumb-entry{
 	padding-left: 5px;
 }
 
+#upload-status-bar-header-error{
+    display: inline-block;
+    margin-left: 50px;
+}
+
+#upload-status-bar-header-error > text{
+    padding-left: 5px;
+}
+
 .btn-close-usb{
 	color: #FFFFFF;
 	float: right;
@@ -511,6 +525,11 @@ li.derivate-browser-breadcrumb-entry{
 .btn-mini-usb{
 	color: #FFFFFF;
 	float: right;
+}
+
+.upload-preview-img-td{
+    width: 100px;
+    text-align: center;
 }
 
 .upload-preview-image{
@@ -543,7 +562,7 @@ li.derivate-browser-breadcrumb-entry{
 }
 
 .statusbar-progress{
-	width: 130px;
+	width: 100%;
     margin-bottom: 0;
     box-shadow: 0 2px 2px 0 rgba(50, 50, 50, 0.5);
     border-radius: 0;
@@ -777,6 +796,10 @@ li.derivate-browser-breadcrumb-entry{
     font-weight: bold;
 }
 
+.alert-danger-text {
+    color: #f44336;
+}
+
 .alert-success{
 	background-color: #4caf50;
 	border-color: #4caf50;
@@ -950,6 +973,12 @@ li.derivate-browser-breadcrumb-entry{
     position: absolute;
     top: 45%;
     width: 100%;
+}
+
+#lightbox-new-derivate-error{
+    float: left;
+    display: inline-block;
+    width: 310px;
 }
 
 #editor-loading {

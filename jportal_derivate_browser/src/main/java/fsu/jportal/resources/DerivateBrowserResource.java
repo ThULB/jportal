@@ -27,6 +27,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.jdom2.JDOMException;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPath;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
@@ -104,6 +112,15 @@ public class DerivateBrowserResource {
         String maindoc = derivate.getMaindoc();
         FileNodeWraper wrapper = new FileNodeWraper(node, maindoc);
         JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
+        MCRDerivate derObj = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivID));
+        Document xml = derObj.createXML();
+        XPathFactory xpF = XPathFactory.instance();
+        XPathExpression<Element> xpE = xpF.compile("mycorederivate/derivate",Filters.element());
+        Element derivateNode = (Element) xpE.evaluateFirst(xml);
+        Attribute displayAttr = derivateNode.getAttribute("display");
+        if (displayAttr != null){
+            json.addProperty("display", displayAttr.getValue());
+        }
         if (path != null && !"".equals(path.trim())) {
             json.addProperty("parentName", derivate.getRootDir().getName());
             json.addProperty("parentSize", derivate.getRootDir().getSize());
@@ -270,7 +287,7 @@ public class DerivateBrowserResource {
         String path = jsonObject.get("path").getAsString();
         Derivate derivate = new Derivate(deriID);
         MCRDirectory node;
-        List<String> fileTyps = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
+//        List<String> fileTyps = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
         if (path != null && !"".equals(path.trim())) {
             node = (MCRDirectory) derivate.getChildByPath(path);
         } else {
@@ -278,7 +295,7 @@ public class DerivateBrowserResource {
         }
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonFile = jsonArray.get(i).getAsJsonObject();
-            if (fileTyps.contains(jsonFile.get("fileType").getAsString())) {
+//            if (fileTyps.contains(jsonFile.get("fileType").getAsString())) {
                 if (node.hasChild(jsonFile.get("file").getAsString())) {
                     MCRFilesystemNode child = node.getChild(jsonFile.get("file").getAsString());
                     JsonObject childJson = new JsonObject();
@@ -291,9 +308,9 @@ public class DerivateBrowserResource {
                 } else {
                     jsonFile.addProperty("exists", "0");
                 }
-            } else {
-                jsonFile.addProperty("exists", "2");
-            }
+//            } else {
+//                jsonFile.addProperty("exists", "2");
+//            }
         }
         return Response.ok(jsonObject.toString()).build();
     }
@@ -305,25 +322,30 @@ public class DerivateBrowserResource {
     public Response getUpload(@FormDataParam("file") InputStream inputStream,
             @FormDataParam("filename") String filename, @FormDataParam("size") long filesize,
             @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID,
-            @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite) {
-        if (overwrite) {
-            if (DerivateTools.delete(MCRPath.getPath(documentID, path + "/" + filename)) != 1) {
+            @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite,
+            @FormDataParam("type") String type) {
+        List<String> fileTyps = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
+        if (fileTyps.contains(type)){
+            if (overwrite) {
+                if (DerivateTools.delete(MCRPath.getPath(documentID, path + "/" + filename)) != 1) {
+                    return Response.serverError().build();
+                }
+            }
+            if (derivateID.equals("")) {
+                derivateID = null;
+            }
+            String filePath = path + "/" + filename;
+            
+            try {
+                derivateID = DerivateTools.uploadFile(inputStream, filesize, documentID, derivateID, filePath);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
                 return Response.serverError().build();
             }
+            return Response.ok(derivateID).build();            
         }
-        if (derivateID.equals("")) {
-            derivateID = null;
-        }
-        String filePath = path + "/" + filename;
-
-        try {
-            derivateID = DerivateTools.uploadFile(inputStream, filesize, documentID, derivateID, filePath);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return Response.serverError().build();
-        }
-        return Response.ok(derivateID).build();
+        return Response.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
     }
 
     @POST
