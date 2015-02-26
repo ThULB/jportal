@@ -14,7 +14,8 @@ $(function () {
     $("#main").parent().on("click",".jp-personSelect-inst", function(event) {
 		event.preventDefault();
         type = "jpinst";
-    	setSubmit($(this));
+        $(this).addClass("personSelect-use");
+        setSubmit($(this));
 		getPersonSelect("","score+desc", 0, getModal);
 	});
 

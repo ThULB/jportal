@@ -271,25 +271,24 @@
 
 	<xsl:template match="jp:template[@type='subselect']" mode="subselect">
 		<div class="jp-personSelect-name">
-			<xed:bind xpath="{@xpath}">
-				<xed:output value="@xlink:title" />
-			</xed:bind>
-			<xed:bind xpath="{@xpath2}">
-				<xed:output value="@xlink:href" />
-			</xed:bind>
-	
-			<xed:if test="@xlink:title != ''">
-				<xed:output value="@xlink:title" />
-			</xed:if>
-			<xed:if test="@xlink:href != ''">
-				<label>
-					(
-					<xed:output value="@xlink:href" />
-					)
-				</label>
-			</xed:if>
+				<xed:if test="@xlink:title != ''">
+					<xed:bind xpath="{@xpath}">
+						<xed:output value="@xlink:title" />
+						<xed:output />
+					</xed:bind>
+				</xed:if>
+				<xed:if test="@xlink:href != ''">
+					<label>
+						(
+						<xed:bind xpath="{@xpath2}">
+							<xed:output value="@xlink:href" />
+							<xed:output />
+						</xed:bind>
+						)
+					</label>
+				</xed:if>
 		</div>
-
+			
 		<!-- 2 buttons for selection of person or institution _ subselect -->
 		<div class="form-group">
 			<button type="submit" xed:target="subselect"
