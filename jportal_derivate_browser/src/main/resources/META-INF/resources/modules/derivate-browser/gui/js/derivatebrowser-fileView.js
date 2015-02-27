@@ -41,9 +41,12 @@ var derivateBrowserFileView = (function () {
 			}
 		});
 		$("#derivate-browser").removeClass("hidden");
+        $("#browser-table-sort-click").find(".glyphicon").addClass("hidden");
+        //$("#browser-table-sort").stupidsort('asc');
 		createBreadcrumb(deriID, data.absPath);
         if (($("#file-view-large").hasClass("hidden") && filename != "" && filename != undefined) || !$("#file-view-large").hasClass("hidden")){
             $("#file-view").addClass("hidden");
+            if (data.absPath != "/") filename = "/" + filename;
             derivateBrowserLargeView.loadViewer(deriID + data.absPath + filename);
         }
 	}
@@ -367,26 +370,6 @@ var derivateBrowserFileView = (function () {
                 addLinksToView(search.response.docs[0].derivateLink);
             }
         });
-    }
-
-    function getViewer(docID, path) {
-        $("#browser-large-view").removeClass("hidden");
-        //$.ajax({
-        //    url: "//141.35.23.195:9201/classes/example/MyCoReViewerMinimal.html",
-        //    type: "GET",
-        //    statusCode: {
-        //        200: function(data) {
-        //            //console.log(data);
-        //            //$("#browser-large-view").append(data);
-        //        },
-        //        500: function() {
-        //            derivateBrowserTools.alert(derivateBrowserTools.getI18n(""), false);
-        //        },
-        //        401: function() {
-        //            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
-        //        }
-        //    }
-        //});
     }
 
     return {

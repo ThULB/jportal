@@ -18,14 +18,29 @@ LargeViewEntry.prototype.setStatusTo = function(node) {
 };
 
 LargeViewEntry.prototype.getLargePath = function() {
-    return jp.baseURL + "servlets/MCRTileCombineServlet/MAX/" + this.docID + this.path;
+    if (this.name.endsWith("pdf")){
+        return jp.baseURL + "img/pdfthumb/" + this.docID + this.path;
+    }
+    else{
+        return jp.baseURL + "servlets/MCRTileCombineServlet/MAX/" + this.docID + this.path;
+    }
 };
 
 LargeViewEntry.prototype.getMidPath = function() {
-    return jp.baseURL + "servlets/MCRTileCombineServlet/MID/" + this.docID + this.path;
+    if (this.name.endsWith("pdf")){
+        return jp.baseURL + "img/pdfthumb/" + this.docID + this.path;
+    }
+    else{
+        return jp.baseURL + "servlets/MCRTileCombineServlet/MID/" + this.docID + this.path;
+    }
 };
 LargeViewEntry.prototype.getThumpPath = function() {
-    return jp.baseURL + "servlets/MCRTileCombineServlet//" + this.docID + this.path;
+    if (this.name.endsWith("pdf")){
+        return jp.baseURL + "img/pdfthumb/" + this.docID + this.path;
+    }
+    else{
+        return jp.baseURL + "servlets/MCRTileCombineServlet//" + this.docID + this.path;
+    }
 };
 
 LargeViewEntry.prototype.getID = function() {

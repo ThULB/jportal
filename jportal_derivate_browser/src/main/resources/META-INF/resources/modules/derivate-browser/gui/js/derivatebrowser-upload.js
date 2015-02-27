@@ -16,7 +16,7 @@ function Upload(docID, deriID, path, file) {
 }
 
 Upload.prototype.getStatus = function() {
-	var template = $("#upload-entry-template").html();
+	var template = $("#upload-entry-template2").html();
 	var status = $(Mustache.render(template, this));
 	readImg(this.file, $(status).find("img.upload-preview-image"), this);
 	return status;
@@ -125,8 +125,11 @@ Upload.prototype.askOverwrite = function(existingFile, deriID, path) {
 //}
 
 function readImg(file, display, upload) {
+    var supportedImg = ["jpeg", "png", "tiff", "gif", "bmp"];
+    var type = upload.type.substr(upload.type.lastIndexOf("/")+1);
+    console.log(type);
 	if (!upload.type.endsWith("pdf")){
-		if ((file.size < 2097152) || upload.type.endsWith("xml")){
+		if ((file.size < 2097152) && supportedImg.indexOf(type) > -1){
 			if (upload.img != undefined){
 				display.attr("src", upload.img);
 				$(display).siblings(".img-placeholder").addClass("hidden");

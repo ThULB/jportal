@@ -1,6 +1,7 @@
 var derivateBrowserLargeView = (function () {
 
     var currentFileList = [],
+        fullFileList = [],
         currentFileIndex = 0,
         currentSliderIndex = 0,
         oldPosX = 0,
@@ -50,7 +51,7 @@ var derivateBrowserLargeView = (function () {
         }
     });
 
-    $("#file-view-large").on("click", "#view-large-normal", function (evt) {
+    $("#file-view-large").on("click", ".view-large-resizeable", function (evt) {
         oldPosX = evt.pageX;
         oldPosY = evt.pageY;
         $("body").append('<div id="view-large-overlay"><img id="view-large-large" src="' + currentFileList[currentFileIndex].getLargePath() + '"></div>');
@@ -61,7 +62,6 @@ var derivateBrowserLargeView = (function () {
     });
 
     $("body").on("mousemove","#view-large-overlay", function (evt) {
-        var x = ($("#view-large-large")  + evt.pageX);
         $("#view-large-large").offset({
             top: $("#view-large-large").offset().top + (oldPosY - evt.pageY),
             left: $("#view-large-large").offset().left + (oldPosX - evt.pageX)
@@ -71,9 +71,10 @@ var derivateBrowserLargeView = (function () {
     });
 
     $("body").on("click", "#button-view-large-close", function () {
-        resetLargeView();
+        hideLargeView();
         $("#file-view").removeClass("hidden");
-        derivateBrowserTools.goTo(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
+        derivateBrowserTools.setFileName("");
+        //derivateBrowserTools.goTo(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
     });
 
     //private Methods
@@ -164,6 +165,13 @@ var derivateBrowserLargeView = (function () {
         fileEntry =  currentFileList[currentFile];
         $("#view-large-normal").attr( "src", fileEntry.getMidPath());
         $("#view-large-normal").data("id", fileEntry.getID());
+        if (!fileEntry.name.endsWith("pdf")){
+            $("#view-large-normal").addClass("view-large-resizeable");
+        }
+        else{
+            $("#view-large-normal").removeClass("view-large-resizeable");
+        }
+        $("#view-large-normal").data("id", fileEntry.getID());
         derivateBrowserTools.setFileName(fileEntry.name);
         currentFileList[currentFile].setStatusTo( $("#view-large-panel-collapse"));
         if (currentFile == 0){
@@ -184,6 +192,11 @@ var derivateBrowserLargeView = (function () {
 
     function resetLargeView() {
         currentFileList = [];
+        fullFileList = [];
+        hideLargeView();
+    }
+
+    function hideLargeView() {
         currentFileIndex = 0;
         currentSliderIndex = 0;
         $("#view-large-slider-content").html("");
@@ -192,13 +205,27 @@ var derivateBrowserLargeView = (function () {
         $("#file-view-large").addClass("hidden");
     }
 
-    //ajax Methods
-    function getDocPerID(docID, callback) {
-        var url = jp.baseURL + "servlets/solr/select?q=id%3A" + docID + "&start=0&rows=10&sort=maintitle+asc&wt=json&indent=true";
-        $.getJSON(url, function(search) {
-            callback(search.response);
+    function sortCurrentList(dir){
+        currentFileList.sort(function(a, b) {
+            var sort = 0;
+            if (a.name.toLowerCase() < b.name.toLowerCase()) sort = -1;
+            if (a.name.toLowerCase() > b.name.toLowerCase()) sort = 1;
+            if (dir == "DESC") sort = sort * -1;
+            return sort;
         });
+        if (fullFileList != []){
+            fullFileList.sort(function(a, b) {
+                var sort = 0;
+                if (a.name.toLowerCase() < b.name.toLowerCase()) sort = -1;
+                if (a.name.toLowerCase() > b.name.toLowerCase()) sort = 1;
+                if (dir == "DESC") sort = sort * -1;
+                return sort;
+            });
+        }
     }
+
+    //ajax Methods
+
 
     return {
         //public
@@ -216,8 +243,29 @@ var derivateBrowserLargeView = (function () {
 
         resetList: function() {
             currentFileList = [];
+            fullFileList = [];
             currentFileIndex = 0;
             currentSliderIndex = 0;
+        },
+
+        sortList: function(dir) {
+            sortCurrentList(dir);
+        },
+
+        filterList: function() {
+            fullFileList = currentFileList.slice();
+            currentFileList = [];
+        },
+
+        addFileToFilteredList: function(fileEntry) {
+            currentFileList.push(fullFileList[fullFileList.map(function(x) {return x.getID();}).indexOf(fileEntry)]);
+        },
+
+        resetFilteredList: function() {
+            if (fullFileList.length > 0){
+                currentFileList = fullFileList.slice();
+                fullFileList = [];
+            }
         }
     };
 })();

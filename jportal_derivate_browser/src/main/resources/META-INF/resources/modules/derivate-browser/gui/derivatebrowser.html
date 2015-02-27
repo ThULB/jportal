@@ -121,15 +121,23 @@
 						</div>
                         <div id="derivate-browser-breadcrumb-bar">
                             <ol id="derivate-browser-breadcrumb" class="breadcrumb"></ol>
-                            <span id="btn-large-view" class="glyphicon glyphicon glyphicon-th-large breadcrumb-btn"></span>
-                            <span id="btn-list-view" class="glyphicon glyphicon glyphicon glyphicon-th-list breadcrumb-btn hidden"></span>
+                            <span id="btn-large-view" class="glyphicon glyphicon-th-large breadcrumb-btn"></span>
+                            <div id="btn-filter-table-input" class="hidden">
+                                <input class="form-control input-sm" type="text" placeholder="Filtern...">
+                                <span id="btn-filter-table-input-remove" class="glyphicon glyphicon-remove btn hidden"></span>
+                            </div>
+                            <span id="btn-filter-table" class="glyphicon glyphicon-search breadcrumb-btn"></span>
                         </div>
 						<table id="browser-table-head" class="table table-hover table-condensed" cellspacing="0">
 							<thead>
 								<tr id="browser-table-head-tr">
 									<th></th>
 									<th></th>
-									<th><text class="i18n" i18n="db.label.fileName" i18n-def="Dateiname"></text></th>
+									<th id="browser-table-sort-click">
+                                        <text class="i18n" i18n="db.label.fileName" i18n-def="Dateiname"></text>
+                                        <span class="glyphicon glyphicon glyphicon-chevron-up hidden"></span>
+                                        <span class="glyphicon glyphicon glyphicon-chevron-down hidden"></span>
+                                    </th>
 									<th><text class="i18n" i18n="db.label.fileUrn" i18n-def="URN"></text></th>
 								</tr>
 							</thead>
@@ -137,6 +145,14 @@
 					</div>
 					<div id="browser-table-wrapper">
 						<table id="browser-table" class="table table-hover table-condensed" cellspacing="0">
+                            <thead class="hidden">
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th id="browser-table-sort" data-sort="string"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
 							<tbody id="browser-table-files">	
 							</tbody>
 						</table>
@@ -224,7 +240,8 @@
 			<div id="upload-status-bar-header">
 				<span class="glyphicon glyphicon-cloud-upload"></span>
 				<div id="upload-status-bar-header-label">Upload...</div>
-                <div id="upload-status-bar-header-error" class="hidden alert-danger-text"><span class="glyphicon glyphicon-alert"></span><text class="i18n" i18n="db.alert.upload.error" i18n-def="Fehler beim Hochladen."></text></div>
+                <div id="upload-status-bar-header-type" class="hidden alert-warning-text upload-status-bar-header-info"><span class="glyphicon glyphicon-alert"></span><text class="i18n" i18n="db.alert.filetype" i18n-def="Dateityp wird nicht unterstützt."></text></div>
+                <div id="upload-status-bar-header-error" class="hidden alert-danger-text upload-status-bar-header-info"><span class="glyphicon glyphicon-alert"></span><text class="i18n" i18n="db.alert.upload.error" i18n-def="Fehler beim Hochladen."></text></div>
 				<span class="glyphicon glyphicon-remove btn-close-usb btn"></span>
 				<span class="glyphicon glyphicon-minus btn-mini-usb btn"></span>
 			</div>
@@ -498,6 +515,22 @@
 			<td class="upload-preview-status"><div class='statusbar-progress progress'><div class='statusbar-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></td>
 		</tr>
 	</script>
+
+    <script id="upload-entry-template2" type="text/mustache">
+		<div class="upload-entry2">
+			<div><img class='img-placeholder img-placeholder-upload' src=''><img class='upload-preview-image hidden'></img></div>
+			<span class="upload-success glyphicon glyphicon-ok-sign alert-success-text upload-icon hidden"></span>
+            <span class="upload-type glyphicon glyphicon-info-sign alert-warning-text upload-icon hidden"></span>
+            <span class="upload-error glyphicon glyphicon-remove-sign alert-danger-text upload-icon hidden"></span>
+            {{#inFolder}}
+			    <div class="upload-preview-name mightOverflow" title="{{name}}">{{path}}/{{name}}</div>
+            {{/inFolder}}
+            {{^inFolder}}
+                <div class="upload-preview-name mightOverflow" title="{{name}}">{{name}}</div>
+            {{/inFolder}}
+			<div class="upload-preview-status"><div class='statusbar-progress progress'><div class='statusbar-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></div>
+		</div>
+	</script>
 	
 	<script id="upload-overwrite-template" type="text/mustache">
 		<div>
@@ -515,7 +548,7 @@
     <script id="upload-large-view-status-template" type="text/mustache">
 		<div class="row">
 		    <div class="col-md-6">
-			    <h4>{{name}}</h4>
+			    <h4 class="mightOverflow">{{name}}</h4>
 			    <dl>
 				    <dt>Size</dt>
 				    <dd>{{size}}</dd>
@@ -558,6 +591,7 @@
 	<script type="text/javascript" src="gui/js/derivatebrowser-tools.js"></script>
     <script type="text/javascript" src="gui/js/derivatebrowser-largeView.js"></script>
     <script type="text/javascript" src="gui/js/derivatebrowser-largeViewEntry.js"></script>
+    <script type="text/javascript" src="gui/js/stupidtable.js"></script>
 <!--  	<script type="text/javascript" src="jp-subselect.js" ></script> -->
 </body>
 </html>
