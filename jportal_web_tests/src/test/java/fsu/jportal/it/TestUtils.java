@@ -10,7 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public abstract class TestUtils {
-
+		public static String ERROR_MESSAGE = "";
+		
     public static void home(WebDriver driver) {
         driver.get(BaseIntegrationTest.getHomeAddress());
         assertEquals("invald index page - title does not match", "journals@UrMEL - JPortal", driver.getTitle());
@@ -104,7 +105,7 @@ public abstract class TestUtils {
     public static void deletObj(WebDriver driver, String toDelete) throws Exception {
       //find
       if(!toDelete.equals("")) {
-      	TestUtils.home(driver);
+      	home(driver);
       	goToObj(driver, toDelete);
       }
       	
@@ -131,4 +132,17 @@ public abstract class TestUtils {
     	driver.findElement(waitForSearch).click();
     }
 
+    public static void throwError() throws Exception {
+    	if(!ERROR_MESSAGE.equals("")){
+    		String tmp = ERROR_MESSAGE;
+    		ERROR_MESSAGE = "";
+    		throw new Exception(tmp);
+    	}
+    }
+
+    public static void finishThis(WebDriver driver) throws Exception {
+      home(driver);
+      logout(driver);
+      throwError();
+    }
 }
