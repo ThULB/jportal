@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.HashSet;
 
-def mcrVersion = '2015.01-SNAPSHOT'
+def mcrVersion = '2015.03-SNAPSHOT'
 def jettyVersion = "9.2.7.v20150116"
 def hibernateVersion = "4.3.4.Final"
 
@@ -13,7 +13,7 @@ def getDate() {
     return formattedDate
 }
 
-subprojects {
+allprojects{
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'eclipse'
@@ -31,7 +31,7 @@ subprojects {
     def version = "2.0.18-SNAPSHOT"
     def releaseURL = "http://artifactory.mycore.de/mycore-releases"
     def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
-    
+
     repositories {
         mavenLocal()
 
@@ -39,15 +39,11 @@ subprojects {
 
         maven{ url snapshotsURL }
     }
-    
-    configurations {
-        deployerJars
-    }
-    
-    dependencies {
-        deployerJars "org.apache.maven.wagon:wagon-http:2.8"
-    }
-    
+
+    configurations { deployerJars }
+
+    dependencies { deployerJars "org.apache.maven.wagon:wagon-http:2.8" }
+
     uploadArchives {
         repositories.mavenDeployer {
             configuration = configurations.deployerJars
@@ -57,34 +53,42 @@ subprojects {
         }
     }
 
+    dependencies{ testCompile 'junit:junit:4.+' }
+}
+
+def mcrComplDep = [
+    "org.mycore:mycore-base:$mcrVersion",
+    "org.mycore:mycore-solr:$mcrVersion",
+    "org.mycore:mycore-mets:$mcrVersion",
+    "org.mycore:mycore-iview2:$mcrVersion",
+    "org.mycore:mycore-user2:$mcrVersion",
+    "org.mycore:mycore-classeditor:$mcrVersion",
+    "org.mycore:mycore-mets:$mcrVersion",
+    "org.mycore:mycore-oai:$mcrVersion",
+    'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT',
+    'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT',
+    'org.mycore.mets:mets-model:0.6-SNAPSHOT',
+    'org.mycore.mets:mets-validator:1.1-SNAPSHOT',
+    'javax.servlet:javax.servlet-api:3.1.0',
+    'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
+]
+
+
+
+subprojects {
+
     def noMCRDep = [
         "jportal_jetty_tools",
+        "jportal_web_tests",
         "java_agent"
     ]
 
     if (!(project.name in noMCRDep)) {
-        println "DEP: ${project.name}"
         dependencies{
-            compile "org.mycore:mycore-base:$mcrVersion"
-            compile "org.mycore:mycore-solr:$mcrVersion"
-            compile "org.mycore:mycore-mets:$mcrVersion"
-            compile "org.mycore:mycore-iview2:$mcrVersion"
-            compile "org.mycore:mycore-user2:$mcrVersion"
-            compile "org.mycore:mycore-classeditor:$mcrVersion"
-            compile "org.mycore:mycore-mets:$mcrVersion"
-            compile "org.mycore:mycore-oai:$mcrVersion"
-						compile "org.mycore:mycore-session-listing:$mcrVersion"
-            //        compile "org.mycore:mycore-handle:$mcrVersion"
-            compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
-            compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
-            compile 'org.mycore.mets:mets-model:0.6-SNAPSHOT'
-            compile 'org.mycore.mets:mets-validator:1.1-SNAPSHOT'
-            compile 'javax.servlet:javax.servlet-api:3.1.0'
-            compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
-            testCompile group: 'junit', name: 'junit', version: '4.+'
+            mcrComplDep.each{dep -> compile dep }
         }
     }
-		
+
     def noJPModuleDep = [
         "jportal-commons",
         "jportal_ext_web_lib",
@@ -92,7 +96,7 @@ subprojects {
         "jportal_emb_hsql",
         "jportal_jetty_tools",
         "java_agent",
-				"jportal_web_tests"
+        "jportal_web_tests"
     ]
 
     if(project.name != 'jportal_mcr_module' && !(project.name in noJPModuleDep)){
@@ -103,8 +107,8 @@ subprojects {
         "jportal_mcr_module",
         "jportal_derivate_browser",
         "jportal_move_obj_module",
-				"jportal_laws",
-				"jportal_doublet_finder_module"
+        "jportal_laws",
+        "jportal_doublet_finder_module"
     ]
 
     if(project.name in mcrModule){
@@ -178,6 +182,18 @@ project(':jportal_mcr_module'){
     }
 }
 
+//project(':jportal_web_tests'){
+//    dependencies{
+//        testCompile 'org.seleniumhq.selenium:selenium-java:2.44.0'
+//    }
+//
+//    test {
+//        beforeTest{
+//
+//        }
+//    }
+//}
+
 project(':jportal_webapp'){
     apply plugin: 'war'
 
@@ -204,11 +220,9 @@ project(':jportal_webapp'){
     }
 
     task runJetty(type: JavaExec) {
-				description = "run the jetty"
+        description = "run the jetty"
         dependencies {
-            jetty("org.eclipse.jetty:jetty-runner:$jettyVersion"){
-                exclude group: 'org.ow2.asm'
-            }
+            jetty("org.eclipse.jetty:jetty-runner:$jettyVersion"){ exclude group: 'org.ow2.asm' }
             jetty project(':jportal_jetty_tools')
             jetty project(':java_agent')
             solr "org.mycore.solr:solr:4.7.2@war"
@@ -216,7 +230,7 @@ project(':jportal_webapp'){
 
         def solrWarFilePath
         configurations.solr.each { File file -> solrWarFilePath = file.absolutePath }
-        
+
         def agentOp
         for(path in resourcePaths){
             if(agentOp == null){
@@ -225,12 +239,12 @@ project(':jportal_webapp'){
                 agentOp = agentOp + "," + path
             }
         }
-        
+
         main = "org.eclipse.jetty.runner.Runner"
         systemProperties.put("MCR.AppName","jportal")
         jvmArgs '-Xdebug'
         jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-        jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath+"=$agentOp"
+        //        jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath+"=$agentOp"
         jvmArgs '-XX:MaxPermSize=128m'
         args '--config', 'jetty/jetty-config.xml'
         args '--path', '/solr', solrWarFilePath
@@ -251,7 +265,7 @@ project(':jportal_jetty_tools'){
     configurations {  solr }
 
     dependencies{
-//                    compile "org.mycore:mycore-base:$mcrVersion"
+        //                    compile "org.mycore:mycore-base:$mcrVersion"
         compile 'org.hsqldb:hsqldb:2.3.2'
         compile 'javax.servlet:javax.servlet-api:3.0.1'
         compile 'log4j:log4j:1.2.17'
@@ -293,8 +307,11 @@ project(':jportal_jetty_tools'){
     }
 }
 
-configurations.all { resolutionStrategy.cacheDynamicVersionsFor 0, 'minutes' }
-
-task wrapper(type: Wrapper){
-    gradleVersion = '2.2.1'
+configurations.all {
+    resolutionStrategy{
+        cacheDynamicVersionsFor 0, 'seconds'
+        cacheChangingModulesFor 0, 'seconds'
+    }
 }
+
+task wrapper(type: Wrapper){ gradleVersion = '2.2.1' }

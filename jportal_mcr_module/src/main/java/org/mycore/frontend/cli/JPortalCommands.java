@@ -4,7 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -96,5 +101,37 @@ public class JPortalCommands {
     @MCRCommand(help = "Create directories in derivate: mkir derivID:/path/to/newDir", syntax = "mkdir {0}")
     public static void mkdir(String newDir) {
         DerivateTools.mkdir(newDir);
+    }
+    
+    @MCRCommand(help = "Add derivate to object: addDerivate objID /path/to/file(s)", syntax = "addDerivate {0} {1}")
+    public static void addDerivate(String objID, String pathStr){
+        if(MCRMetadataManager.exists(MCRObjectID.getInstance(objID))){
+            Path path = Paths.get(pathStr);
+            if(Files.exists(path)){
+                if(Files.isDirectory(path)){
+                    //loop
+                    try {
+                        Iterator<Path> childrenIter = Files.newDirectoryStream(path).iterator();
+                        String derivateID = null;
+                        while (childrenIter.hasNext()) {
+                            Path childPath = (Path) childrenIter.next();
+                            if(Files.isDirectory(childPath)){
+                                
+                            }else{
+                                InputStream inputStream = Files.newInputStream(childPath);
+                                long filesize = Files.size(childPath);
+                                derivateID = DerivateTools.uploadFile(inputStream, filesize, objID, derivateID, pathStr);
+                            }
+                        }
+                        
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }else{
+                    //load file
+                }
+            }
+        }
     }
 }

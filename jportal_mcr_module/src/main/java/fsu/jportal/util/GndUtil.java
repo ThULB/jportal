@@ -4,7 +4,7 @@ import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -18,7 +18,7 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.solr.MCRSolrServerFactory;
+import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.sru.SRUConnector;
 import org.mycore.sru.SRUConnectorFactory;
 
@@ -41,11 +41,11 @@ public class GndUtil {
      * @throws SolrServerException if a solr error occur
      */
     public static SolrDocument getMCRObject(String gndId) throws SolrServerException {
-        SolrServer solrServer = MCRSolrServerFactory.getSolrServer();
+        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         ModifiableSolrParams p = new ModifiableSolrParams();
         p.set("q", "id.gnd:" + gndId);
         p.set("rows", 1);
-        QueryResponse query = solrServer.query(p);
+        QueryResponse query = solrClient.query(p);
         SolrDocumentList results = query.getResults();
         if (results.isEmpty()) {
             return null;

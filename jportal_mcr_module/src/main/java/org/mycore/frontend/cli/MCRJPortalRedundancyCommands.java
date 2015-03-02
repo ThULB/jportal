@@ -27,7 +27,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-import org.mycore.solr.MCRSolrServerFactory;
+import org.mycore.solr.MCRSolrClientFactory;
 
 import fsu.jportal.backend.MetaDataTools;
 
@@ -68,7 +68,7 @@ public class MCRJPortalRedundancyCommands{
     public static SolrDocumentList getDoubletObjsOfType(String type) {
         try {
             SolrQuery q = new SolrQuery("+doubletOf:* +objectType:"+type);
-            SolrDocumentList solrResultList = MCRSolrServerFactory.getSolrServer().query(q).getResults();
+            SolrDocumentList solrResultList = MCRSolrClientFactory.getSolrClient().query(q).getResults();
             return solrResultList;
         } catch (SolrServerException e) {
             // TODO Auto-generated catch block

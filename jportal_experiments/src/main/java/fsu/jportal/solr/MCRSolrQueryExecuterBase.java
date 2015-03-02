@@ -1,9 +1,9 @@
 package fsu.jportal.solr;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.params.SolrParams;
-import org.mycore.solr.MCRSolrServerFactory;
+import org.mycore.solr.MCRSolrClientFactory;
 
 public abstract class MCRSolrQueryExecuterBase {
 
@@ -33,8 +33,8 @@ public abstract class MCRSolrQueryExecuterBase {
         return start;
     }
 
-    public SolrServer getServer() {
-        return MCRSolrServerFactory.getSolrServer();
+    public SolrClient getClient() {
+        return MCRSolrClientFactory.getSolrClient();
     }
 
     public SolrParams getParams(int start) {

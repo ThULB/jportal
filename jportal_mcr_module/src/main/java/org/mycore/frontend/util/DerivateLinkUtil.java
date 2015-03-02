@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -23,7 +23,7 @@ import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.solr.MCRSolrServerFactory;
+import org.mycore.solr.MCRSolrClientFactory;
 
 public abstract class DerivateLinkUtil {
 
@@ -133,7 +133,7 @@ public abstract class DerivateLinkUtil {
      * @throws SolrServerException
      */
     public static void deleteDerivateLinks(MCRDerivate der) throws SolrServerException {
-        SolrServer solrServer = MCRSolrServerFactory.getSolrServer();
+        SolrClient solrServer = MCRSolrClientFactory.getSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();
         MCRObjectID derivateId = der.getId();
         params.add("q", "derivateLink:" + derivateId + "*");

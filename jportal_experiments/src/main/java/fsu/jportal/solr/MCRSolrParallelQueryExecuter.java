@@ -37,7 +37,7 @@ public class MCRSolrParallelQueryExecuter extends MCRSolrQueryExecuterBase {
 
         @Override
         public QueryResponse call() throws Exception {
-            QueryResponse response = getServer().query(getParams(start));
+            QueryResponse response = getClient().query(getParams(start));
             action.execute(response);
             return response;
         }

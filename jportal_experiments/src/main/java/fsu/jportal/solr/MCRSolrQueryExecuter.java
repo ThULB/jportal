@@ -1,6 +1,6 @@
 package fsu.jportal.solr;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
@@ -11,7 +11,7 @@ public class MCRSolrQueryExecuter extends MCRSolrQueryExecuterBase {
     }
 
     public void execute() throws SolrServerException {
-        SolrServer solrServer = getServer();
+        SolrClient solrServer = getClient();
         boolean execute = true;
         long numFound = Long.MAX_VALUE;
         int position = start;

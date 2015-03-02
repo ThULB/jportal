@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrDocument;
 import org.mycore.common.MCRPersistenceException;
@@ -142,8 +143,8 @@ public class JPArticle implements JPComponent, Cloneable {
      * @throws SolrServerException
      */
     public void addHeading(String heading) throws SolrServerException {
-        HttpSolrServer server = MCRSolrClassificationUtil.getCore().getServer();
-        SolrDocument doc = MCRSolrSearchUtils.first(server, "+classification:jportal_class_rubric_llz +label.de:\""
+        HttpSolrClient client = MCRSolrClassificationUtil.getCore().getClient();
+        SolrDocument doc = MCRSolrSearchUtils.first(client, "+classification:jportal_class_rubric_llz +label.de:\""
             + heading + "\"");
         MCRCategoryID categId;
         String classId = "jportal_class_rubric_llz";

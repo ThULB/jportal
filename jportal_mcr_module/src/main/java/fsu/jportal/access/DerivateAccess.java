@@ -6,7 +6,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.datamodel.common.MCRISO8601Date;
-import org.mycore.solr.MCRSolrServerFactory;
+import org.mycore.solr.MCRSolrClientFactory;
 
 import fsu.jportal.pref.JournalConfig;
 
@@ -30,7 +30,7 @@ public class DerivateAccess {
                 String sorlQuery = "+journalID:" + id +" +objectType:jparticle +published_sort:[" + year + "-"+month+"-01T00:00:00.000Z TO "+year+"-"+month+"-31T23:59:59.999Z]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
                 solrParams.set("q", sorlQuery).set("rows", 1);
-                QueryResponse response = MCRSolrServerFactory.getSolrServer().query(solrParams);
+                QueryResponse response = MCRSolrClientFactory.getSolrClient().query(solrParams);
                 
                 if(!response.getResults().isEmpty()){
                     return true;
