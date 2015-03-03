@@ -15,10 +15,9 @@
       <artifactId>junit</artifactId>
     </dependency>
     <dependency>
-  <groupId>com.sun.jersey</groupId>
-  <artifactId>jersey-core</artifactId>
-  <version>1.17</version>
-</dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <finalName>jportal_jquery_cnd</finalName>

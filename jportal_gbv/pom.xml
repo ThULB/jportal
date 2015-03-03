@@ -143,8 +143,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-core</artifactId>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -175,10 +179,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-    <groupId>org.mycore.mets</groupId>
-    <artifactId>mets-validator</artifactId>
-    <version>1.1-SNAPSHOT</version>
-    <scope>provided</scope>
-  </dependency>
+      <groupId>org.mycore.mets</groupId>
+      <artifactId>mets-validator</artifactId>
+      <version>1.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 </project>
