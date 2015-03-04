@@ -71,6 +71,7 @@ def mcrComplDep = [
     "org.mycore:mycore-mets:$mcrVersion",
     "org.mycore:mycore-oai:$mcrVersion",
     "org.mycore:mycore-session-listing:$mcrVersion",
+		"org.mycore:mycore-swf:$mcrVersion",
     'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT',
     'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT',
     'org.mycore.mets:mets-model:0.6-SNAPSHOT',
