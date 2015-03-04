@@ -152,6 +152,7 @@ var derivateBrowserFileView = (function () {
 	function showDoc(docID) {
 		if (!docID.contains("derivate")){
             $("#journal-info-text").html("");
+            $("#journal-info-text").removeClass("journal-info-text-large");
 			$("#derivate-browser").addClass("hidden");
 			$("#derivat-panel").addClass("hidden");
 			$("#browser-table-files").html("");
@@ -206,10 +207,12 @@ var derivateBrowserFileView = (function () {
         $("#journal-info-button-whileEdit").removeClass("hidden");
         $("#journal-info-button-notEdit").addClass("hidden");
         $("#editor-loading").addClass("hidden");
+        $("#journal-info-linklist").addClass("hidden");
 		if ($("#journal-info").hasClass("hidden")){
 			$("#journal-info").removeClass("hidden");
 			$("#derivate-browser").addClass("hidden");
 		}
+        $("#journal-info-text").addClass("journal-info-text-large");
         $("#journal-info").addClass("loaded");
         $("#journal-info-text").html(html);
 	}
@@ -231,7 +234,12 @@ var derivateBrowserFileView = (function () {
                 $(img).data("path", link);
                 $("#journal-info-linklist").append(img);
             });
-            $("#journal-info-linklist").removeClass("invisible");
+            $("#journal-info-linklist").removeClass("hidden");
+            $("#journal-info-text").removeClass("journal-info-text-large");
+        }
+        else{
+            $("#journal-info-linklist").addClass("hidden");
+            $("#journal-info-text").addClass("journal-info-text-large");
         }
     }
 
@@ -441,7 +449,8 @@ var derivateBrowserFileView = (function () {
         removeLink: function(path) {
             removeLinkFromView(path);
             if ($("#journal-info-linklist").children().length == 0){
-                $("#journal-info-linklist").addClass("invisible");
+                $("#journal-info-linklist").addClass("hidden");
+                $("#journal-info-text").addClass("journal-info-text-large");
             }
         }
     };

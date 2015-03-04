@@ -171,8 +171,8 @@
 					</div>
 				</div>
 				<div id="journal-info" class="hidden">					
-					<div id="journal-info-text"></div>
-                    <div id="journal-info-linklist" class="invisible"></div>
+					<div id="journal-info-text" class="journal-info-text-large"></div>
+                    <div id="journal-info-linklist" class="hidden"></div>
 					<div id="journal-browser-footer">
 						<div id="journal-browser-bottom-btns" class="bottom-btns">
 							<div id="journal-info-button-notEdit">
@@ -211,7 +211,6 @@
                     <span class="glyphicon glyphicon glyphicon-menu-left"></span>
                 </div>
                 <div id="view-large-normal-wrapper">
-                    <!--<img id="view-large-normal" src="http://localhost:8291/jportal/servlets/MCRTileCombineServlet/MID/jportal_derivate_00000030/d2.jpg">-->
                     <img id="view-large-normal" class="view-large-draggable" src="">
                 </div>
                 <div id="view-large-right">
@@ -548,7 +547,7 @@
     <script id="upload-large-view-status-template" type="text/mustache">
 		<div class="row">
 		    <div class="col-md-6">
-			    <h4 class="mightOverflow">{{name}}</h4>
+                <h4 class="mightOverflow">{{name}}</h4>
 			    <dl>
 				    <dt>Size</dt>
 				    <dd>{{size}}</dd>

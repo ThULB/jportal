@@ -955,7 +955,10 @@ li.derivate-browser-breadcrumb-entry{
 	height: calc(100% - 151px);
 	overflow: auto;
 	padding: 20px;
+}
 
+#journal-info > .journal-info-text-large{
+    height: calc(100% - 50px);
 }
 
 #journal-info-text .panel{
@@ -1321,11 +1324,9 @@ li.derivate-browser-breadcrumb-entry{
 
 #view-large-large{
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
     z-index: 100;
     cursor: zoom-out;
+    padding: 100px;
 }
 
 #view-large-bottom{

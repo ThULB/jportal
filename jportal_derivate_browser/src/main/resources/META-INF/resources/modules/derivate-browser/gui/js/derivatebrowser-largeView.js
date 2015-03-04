@@ -3,9 +3,7 @@ var derivateBrowserLargeView = (function () {
     var currentFileList = [],
         fullFileList = [],
         currentFileIndex = 0,
-        currentSliderIndex = 0,
-        oldPosX = 0,
-        oldPosY= 0;
+        currentSliderIndex = 0;
 
     //binds
     $("#file-view-large").on("click", "#view-large-link-list a", function (event) {
@@ -52,9 +50,7 @@ var derivateBrowserLargeView = (function () {
     });
 
     $("#file-view-large").on("click", ".view-large-resizeable", function (evt) {
-        oldPosX = evt.pageX;
-        oldPosY = evt.pageY;
-        $("body").append('<div id="view-large-overlay"><img id="view-large-large" src="' + currentFileList[currentFileIndex].getLargePath() + '"></div>');
+        enlargeorHideImage(evt.pageX, evt.pageY);
     });
 
     $("body").on("click", "#view-large-overlay", function () {
@@ -62,12 +58,7 @@ var derivateBrowserLargeView = (function () {
     });
 
     $("body").on("mousemove","#view-large-overlay", function (evt) {
-        $("#view-large-large").offset({
-            top: $("#view-large-large").offset().top + (oldPosY - evt.pageY),
-            left: $("#view-large-large").offset().left + (oldPosX - evt.pageX)
-        }, 1);
-        oldPosX = evt.pageX;
-        oldPosY = evt.pageY;
+        setLargePosition(evt.pageX, evt.pageY);
     });
 
     $("body").on("click", "#button-view-large-close", function () {
@@ -75,6 +66,22 @@ var derivateBrowserLargeView = (function () {
         $("#file-view").removeClass("hidden");
         derivateBrowserTools.setFileName("");
         //derivateBrowserTools.goTo(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
+    });
+
+    $("body").on("keydown", function (key) {
+        if (!$("#file-view-large").hasClass("hidden")) {
+            if (key.which == 37) {  // <-
+                setPrevFile();
+            }
+
+            if (key.which == 39) {  // ->
+                setNextFile();
+            }
+
+            if (key.which == 32) {  // LEER
+                enlargeorHideImage($(window).width() / 2, $(window).height() / 2);
+            }
+        }
     });
 
     //private Methods
@@ -222,6 +229,33 @@ var derivateBrowserLargeView = (function () {
                 return sort;
             });
         }
+    }
+
+    function enlargeorHideImage(x, y) {
+        if ($("#view-large-overlay").length > 0){
+            $("#view-large-overlay").remove();
+        }
+        else{
+            var img = $('<div id="view-large-overlay"><img id="view-large-large" src="' + currentFileList[currentFileIndex].getLargePath() + '"></div>');
+            $("body").append(img);
+            setLargePosition(x, y);
+        }
+    }
+
+    function setLargePosition(x, y) {
+        var top = -($(window).height() / 2) + ($("#view-large-large").height() / 2);
+        var left = -($(window).width() / 2) + ($("#view-large-large").width() / 2);
+
+        if ($("#view-large-large").height() > $(window).height()){
+            top = (y  * ($("#view-large-large").outerHeight() / $(window).height())) - (y);
+        }
+        if ($("#view-large-large").width() > $(window).width()){
+            left = (x  * ($("#view-large-large").outerWidth() / $(window).width())) - (x);
+        }
+        $("#view-large-large").animate({
+            top: -top,
+            left: -left
+        });
     }
 
     //ajax Methods
