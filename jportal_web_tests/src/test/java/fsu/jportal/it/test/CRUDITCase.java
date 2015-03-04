@@ -27,47 +27,11 @@ public class CRUDITCase extends BaseIntegrationTest {
 	      DRIVER.findElement(adminButton).click();
         
         DRIVER.findElement(By.name("Neue Person")).click();
-        assertEquals("language not changed - content does not match", "Neue Person anlegen", DRIVER
-            .findElement(By.id("xeditor-title")).getText());
+        By waitForLoad = By.id("xeditor-title");
+        wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+        assertEquals("content does not match", "Neue Person anlegen", DRIVER.findElement(waitForLoad).getText());
         
-        // fill form
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/lastName")).sendKeys("Goethe");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/firstName")).sendKeys("Johann Wolfgang");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/nameAffix")).sendKeys("von");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/lastName")).sendKeys("Goethe");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/firstName")).sendKeys("Johann Wolfgang");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/collocation")).sendKeys("Goethe_test");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/nameAffix")).sendKeys("von");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative[2]/name")).sendKeys("Goethe_test");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative[2]/collocation")).sendKeys("Goethe_test");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative[2]/nameAffix")).sendKeys("Goethe_test");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.peerage/peerage")).sendKeys("test");
-        WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/def.gender/gender/@categid"));
-        select.findElement(By.xpath("option[@value='male']")).click();
-        select = DRIVER.findElement(By.name("/mycoreobject/metadata/def.contact/contact/@type"));
-        select.findElement(By.xpath("option[@value='email']")).click();
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.contact/contact")).sendKeys("test");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.role/role")).sendKeys("Publizist, Politiker, Jurist usw.");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.placeOfActivity/placeOfActivity")).sendKeys("test");
-//        DRIVER.findElement(By.name("/mycoreobject/metadata/def.dateOfBirth/dateOfBirth")).sendKeys("1749-08-28");
-        DRIVER.findElement(By.xpath("//div[@id='dateOfBirthCon']/input[@placeholder='Jahr']")).sendKeys("1749");
-        DRIVER.findElement(By.xpath("//div[@id='dateOfBirthCon']/input[@placeholder='Monat']")).sendKeys("08");
-        DRIVER.findElement(By.xpath("//div[@id='dateOfBirthCon']/input[@placeholder='Tag']")).sendKeys("28");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.placeOfBirth/placeOfBirth")).sendKeys("Frankurt am Main");
-//        DRIVER.findElement(By.name("/mycoreobject/metadata/def.dateOfDeath/dateOfDeath")).sendKeys("1832-03-22");
-        DRIVER.findElement(By.xpath("//div[@id='dateOfDeathCon']/input[@placeholder='Jahr']")).sendKeys("1832");
-        DRIVER.findElement(By.xpath("//div[@id='dateOfDeathCon']/input[@placeholder='Monat']")).sendKeys("03");
-        DRIVER.findElement(By.xpath("//div[@id='dateOfDeathCon']/input[@placeholder='Tag']")).sendKeys("22");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.placeOfDeath/placeOfDeath")).sendKeys("Weimar");
-        select = DRIVER.findElement(By.name("/mycoreobject/metadata/def.note/note/@type"));
-        select.findElement(By.xpath("option[@value='visible']")).click();
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.note/note")).sendKeys("test");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.link/link/@xlink:href")).sendKeys("test.test");
-        select = DRIVER.findElement(By.name("/mycoreobject/metadata/def.identifier/identifier/@type"));
-        select.findElement(By.xpath("option[@value='gnd']")).click();
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.identifier/identifier")).sendKeys("test");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/def.doubletOf/doubletOf")).sendKeys("test");
-        TestUtils.saveForm(DRIVER);
+        createPersonSet();
         
         try {
 	        // test page
@@ -82,6 +46,47 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.finishThis(DRIVER);
     }
 
+		private void createPersonSet() {
+			// fill form
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/lastName")).sendKeys("Goethe");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/firstName")).sendKeys("Johann Wolfgang");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/nameAffix")).sendKeys("von");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/lastName")).sendKeys("Goethe");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/firstName")).sendKeys("Johann Wolfgang");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/collocation")).sendKeys("Goethe_test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/nameAffix")).sendKeys("von");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative[2]/name")).sendKeys("Goethe_test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative[2]/collocation")).sendKeys("Goethe_test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative[2]/nameAffix")).sendKeys("Goethe_test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.peerage/peerage")).sendKeys("test");
+			WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/def.gender/gender/@categid"));
+			select.findElement(By.xpath("option[@value='male']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/def.contact/contact/@type"));
+			select.findElement(By.xpath("option[@value='email']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.contact/contact")).sendKeys("test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.role/role")).sendKeys("Publizist, Politiker, Jurist usw.");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.placeOfActivity/placeOfActivity")).sendKeys("test");
+//        DRIVER.findElement(By.name("/mycoreobject/metadata/def.dateOfBirth/dateOfBirth")).sendKeys("1749-08-28");
+			DRIVER.findElement(By.xpath("//div[@id='dateOfBirthCon']/input[@placeholder='Jahr']")).sendKeys("1749");
+			DRIVER.findElement(By.xpath("//div[@id='dateOfBirthCon']/input[@placeholder='Monat']")).sendKeys("08");
+			DRIVER.findElement(By.xpath("//div[@id='dateOfBirthCon']/input[@placeholder='Tag']")).sendKeys("28");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.placeOfBirth/placeOfBirth")).sendKeys("Frankurt am Main");
+//        DRIVER.findElement(By.name("/mycoreobject/metadata/def.dateOfDeath/dateOfDeath")).sendKeys("1832-03-22");
+			DRIVER.findElement(By.xpath("//div[@id='dateOfDeathCon']/input[@placeholder='Jahr']")).sendKeys("1832");
+			DRIVER.findElement(By.xpath("//div[@id='dateOfDeathCon']/input[@placeholder='Monat']")).sendKeys("03");
+			DRIVER.findElement(By.xpath("//div[@id='dateOfDeathCon']/input[@placeholder='Tag']")).sendKeys("22");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.placeOfDeath/placeOfDeath")).sendKeys("Weimar");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/def.note/note/@type"));
+			select.findElement(By.xpath("option[@value='visible']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.note/note")).sendKeys("test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.link/link/@xlink:href")).sendKeys("test.test");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/def.identifier/identifier/@type"));
+			select.findElement(By.xpath("option[@value='gnd']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.identifier/identifier")).sendKeys("test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.doubletOf/doubletOf")).sendKeys("test");
+			TestUtils.saveForm(DRIVER);
+		}
+
     @Test
     public void createInstitution() throws Exception {
         TestUtils.home(DRIVER);
@@ -94,21 +99,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         assertEquals("language not changed - content does not match", "Neue Institution anlegen", DRIVER
             .findElement(By.id("xeditor-title")).getText());
 
-        // fill form
-        DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/fullname")).sendKeys(
-            "Thüringer Universitäts- und Landesbibliothek Jena");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/nickname")).sendKeys("ThULB");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/country")).sendKeys("Deutschland");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/zipcode")).sendKeys("07743");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/city")).sendKeys("Jena");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/street")).sendKeys("Bibliotheksplatz");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/number")).sendKeys("2");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/urls/url/@xlink:title")).sendKeys("ThULB");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/urls/url/@xlink:href")).sendKeys(
-            "http://www.thulb.uni-jena.de");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/emails/email")).sendKeys("testEmail@test.de");
-        DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note")).sendKeys("Bibliothek");
-        TestUtils.saveForm(DRIVER);
+        createInstSet();
 
         try {
 	        // test page
@@ -124,6 +115,24 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.finishThis(DRIVER);
     }
 
+		private void createInstSet() {
+			// fill form
+			DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/fullname")).sendKeys(
+			    "Thüringer Universitäts- und Landesbibliothek Jena");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/nickname")).sendKeys("ThULB");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/country")).sendKeys("Deutschland");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/zipcode")).sendKeys("07743");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/city")).sendKeys("Jena");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/street")).sendKeys("Bibliotheksplatz");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/number")).sendKeys("2");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/urls/url/@xlink:title")).sendKeys("ThULB");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/urls/url/@xlink:href")).sendKeys(
+			    "http://www.thulb.uni-jena.de");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/emails/email")).sendKeys("testEmail@test.de");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note")).sendKeys("Bibliothek");
+			TestUtils.saveForm(DRIVER);
+		}
+
     @Test
     public void createJournal() throws Exception {
         TestUtils.home(DRIVER);
@@ -131,55 +140,20 @@ public class CRUDITCase extends BaseIntegrationTest {
 	  		TestUtils.createMinPerson(DRIVER, "testPerson");
 
 	  		try{
+	  			TestUtils.home(DRIVER);
 	        // create journal
-	        By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
-	        wait.until(ExpectedConditions.elementToBeClickable(adminButton));
-	        DRIVER.findElement(adminButton).click();
-	        
-	        DRIVER.findElement(By.name("Neue Zeitschrift")).click();
-	        assertEquals("language not changed - content does not match", "Neue Zeitschrift anlegen", DRIVER
-	            .findElement(By.id("xeditor-title")).getText());
+	        TestUtils.clickCreatSelect(DRIVER, "Neue Zeitschrift");
+	        assertEquals("content does not match", "Neue Zeitschrift anlegen", DRIVER.findElement(By.id("xeditor-title")).getText());
 	
-	        // bibl. beschreibung
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("Die Horen");
-	        // main publisher
-	        WebElement participantSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/participants/participant/@type"));
-	        participantSelect.findElement(By.xpath("option[@value='mainPublisher']")).click();
-	        
-	        DRIVER.findElement(By.xpath("//button[@class='btn btn-default jp-personSelect-person']")).click();
-	        
-	        By subselect = By.xpath("//div[@id='resultList']/div/div/div/a");
-	        wait.until(ExpectedConditions.elementToBeClickable(subselect));
-	        DRIVER.findElement(subselect).click();
-	        
-	        DRIVER.findElement(By.id("personSelect-send")).click();
-	        // from
-	        WebElement fromSelect = DRIVER.findElement(By.id("dateSelect"));
-	        fromSelect.findElement(By.xpath("option[@value='published_from']")).click();
-	        DRIVER.findElement(By.xpath("//div[@id='fromDateContainer']/input[@placeholder='Jahr']")).sendKeys("1795");
-	        // until
-	        fromSelect.findElement(By.xpath("//div[@id='untilDateContainer']/input[@placeholder='Jahr']")).sendKeys("1797");
-	        // language
-	        WebElement langSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/languages/language/@categid"));
-	        langSelect.findElement(By.xpath("option[@value='de']")).click();
-	        // journal type
-	        WebElement journalTypeSelect = DRIVER.findElement(By
-	            .name("/mycoreobject/metadata/contentClassis1/contentClassi1/@categid"));
-	        journalTypeSelect.findElement(By.xpath("option[@value='historical']")).click();
-	        // template
-	        WebElement templateSelect = DRIVER.findElement(By
-	            .name("/mycoreobject/metadata/hidden_templates/hidden_template"));
-	        templateSelect.findElement(By.xpath("option[@value='template_DynamicLayoutTemplates']")).click();
-	
-	        TestUtils.saveForm(DRIVER);
+	        creatJournalSet();
 	        // Tests
-	        assertEquals("header does not match", "Die Horen", DRIVER.findElement(By.id("jp-maintitle")).getText());
+	        assertEquals("header does not match", "testJournal", DRIVER.findElement(By.id("jp-maintitle")).getText());
 	  		} catch (Exception e) {
 	  			TestUtils.ERROR_MESSAGE = e.getMessage();
 	  		}
 
 	  		try {
-        	TestUtils.deletObj(DRIVER, "Die Horen");
+        	TestUtils.deletObj(DRIVER, "testJournal");
         } catch (Exception e) {
         	TestUtils.ERROR_MESSAGE += e.getMessage();
         }
@@ -191,6 +165,41 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.finishThis(DRIVER);
     }
 
+		private void creatJournalSet() {
+			// bibl. beschreibung
+			DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("testJournal");
+			// main publisher
+			WebElement participantSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/participants/participant/@type"));
+			participantSelect.findElement(By.xpath("option[@value='mainPublisher']")).click();
+			
+			DRIVER.findElement(By.xpath("//button[@class='btn btn-default jp-personSelect-person']")).click();
+			
+			By subselect = By.xpath("//div[@id='resultList']/div/div/div/a");
+			wait.until(ExpectedConditions.elementToBeClickable(subselect));
+			DRIVER.findElement(subselect).click();
+			
+			DRIVER.findElement(By.id("personSelect-send")).click();
+			// from
+			WebElement fromSelect = DRIVER.findElement(By.id("dateSelect"));
+			fromSelect.findElement(By.xpath("option[@value='published_from']")).click();
+			DRIVER.findElement(By.xpath("//div[@id='fromDateContainer']/input[@placeholder='Jahr']")).sendKeys("1795");
+			// until
+			fromSelect.findElement(By.xpath("//div[@id='untilDateContainer']/input[@placeholder='Jahr']")).sendKeys("1797");
+			// language
+			WebElement langSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/languages/language/@categid"));
+			langSelect.findElement(By.xpath("option[@value='de']")).click();
+			// journal type
+			WebElement journalTypeSelect = DRIVER.findElement(By
+			    .name("/mycoreobject/metadata/contentClassis1/contentClassi1/@categid"));
+			journalTypeSelect.findElement(By.xpath("option[@value='historical']")).click();
+			// template
+			WebElement templateSelect = DRIVER.findElement(By
+			    .name("/mycoreobject/metadata/hidden_templates/hidden_template"));
+			templateSelect.findElement(By.xpath("option[@value='template_DynamicLayoutTemplates']")).click();
+
+			TestUtils.saveForm(DRIVER);
+		}
+
     @Test
     public void createVolume() throws Exception {
         TestUtils.home(DRIVER);
@@ -200,32 +209,9 @@ public class CRUDITCase extends BaseIntegrationTest {
         try {
         	TestUtils.clickCreatSelect(DRIVER, "Neuer Band");
 	        //try to create full volume
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("Zweite Ausgabe");
-	        WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle/@type"));
-	        select.findElement(By.xpath("option[@value='title_beside']")).click();
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle")).sendKeys("test_volumen");
-	        DRIVER.findElement(By.xpath("//div[@id='dateContainer']/input[@placeholder='Jahr']")).sendKeys("1947");
-	        select = DRIVER.findElement(By.name("/mycoreobject/metadata/traditions/tradition/@type"));
-	        select.findElement(By.xpath("option[@value='otherLocation']")).click();
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/traditions/tradition")).sendKeys("jena");
-	        select = DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi/@type"));
-	        select.findElement(By.xpath("option[@value='misc']")).click();
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi")).sendKeys("test");
-	        select = DRIVER.findElement(By.name("/mycoreobject/metadata/collationNotes/collationNote/@type"));
-	        select.findElement(By.xpath("option[@value='siteDetails']")).click();
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/collationNotes/collationNote")).sendKeys("123");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/abstracts/abstract")).sendKeys("this_is_a_test");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note")).sendKeys("this_is_a_test");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/people/person")).sendKeys("test_person");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/publicationNotes/publicationNote")).sendKeys("test");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/footNotes/footNote")).sendKeys("test");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/bibEvidences/bibEvidence")).sendKeys("test");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/indexFields/indexField")).sendKeys("test");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_positions/hidden_position")).sendKeys("test");
-	        TestUtils.saveForm(DRIVER);
+	        createVolumeSet();
 	        // Tests
-	        assertEquals("header does not match", "Zweite Ausgabe", DRIVER.findElement(By.id("jp-maintitle"))
-	        		.getText());
+	        assertEquals("header does not match", "testVolume", DRIVER.findElement(By.id("jp-maintitle")).getText());
         } catch (Exception e) {
         	TestUtils.ERROR_MESSAGE = e.getMessage();
         }
@@ -233,6 +219,32 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.deletObj(DRIVER, "testJournal");
         TestUtils.finishThis(DRIVER);
     }
+
+		private void createVolumeSet() {
+			DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("testVolume");
+			WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle/@type"));
+			select.findElement(By.xpath("option[@value='title_beside']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle")).sendKeys("testVolume");
+			DRIVER.findElement(By.xpath("//div[@id='dateContainer']/input[@placeholder='Jahr']")).sendKeys("2015");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/traditions/tradition/@type"));
+			select.findElement(By.xpath("option[@value='otherLocation']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/traditions/tradition")).sendKeys("testVolume");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi/@type"));
+			select.findElement(By.xpath("option[@value='misc']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi")).sendKeys("testVolume");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/collationNotes/collationNote/@type"));
+			select.findElement(By.xpath("option[@value='siteDetails']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/collationNotes/collationNote")).sendKeys("123");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/abstracts/abstract")).sendKeys("testVolume");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note")).sendKeys("testVolume");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/people/person")).sendKeys("testPerson");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/publicationNotes/publicationNote")).sendKeys("testVolume");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/footNotes/footNote")).sendKeys("testVolume");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/bibEvidences/bibEvidence")).sendKeys("testVolume");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/indexFields/indexField")).sendKeys("testVolume");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_positions/hidden_position")).sendKeys("testVolume");
+			TestUtils.saveForm(DRIVER);
+		}
 
     @Test
     public void createArticle() throws Exception {
@@ -243,24 +255,9 @@ public class CRUDITCase extends BaseIntegrationTest {
         try {
 	        TestUtils.clickCreatSelect(DRIVER, "Neuer Artikel");
 	        // bibl. Beschreibung
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("Heim ins Frankreich");
-	        WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle/@type"));
-	        select.findElement(By.xpath("option[@value='title_beside']")).click();
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle")).sendKeys("test_article");
-	        DRIVER.findElement(By.xpath("//div[@id='dateContainer']/input[@placeholder='Jahr']")).sendKeys("1947");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/refs/ref")).sendKeys("test");
-	        select = DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi/@type"));
-	        select.findElement(By.xpath("option[@value='misc']")).click();
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi")).sendKeys("test");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/sizes/size")).sendKeys("1");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/keywords/keyword")).sendKeys("test");
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/abstracts/abstract")).sendKeys("test");
-	        select = DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note/@type"));
-	        select.findElement(By.xpath("option[@value='internalNote']")).click();
-	        DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note")).sendKeys("test");
-	        TestUtils.saveForm(DRIVER);
+	        createArticleSet();
 	        // Tests
-	        assertEquals("header does not match", "Heim ins Frankreich", DRIVER.findElement(By.id("jp-maintitle"))
+	        assertEquals("header does not match", "testArticle", DRIVER.findElement(By.id("jp-maintitle"))
 	        		.getText());
         } catch (Exception e) {
         	TestUtils.ERROR_MESSAGE = e.getMessage();
@@ -269,6 +266,25 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.deletObj(DRIVER, "testJournal");
         TestUtils.finishThis(DRIVER);
     }
+
+		private void createArticleSet() {
+			DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("testArticle");
+			WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle/@type"));
+			select.findElement(By.xpath("option[@value='title_beside']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle")).sendKeys("testArticle");
+			DRIVER.findElement(By.xpath("//div[@id='dateContainer']/input[@placeholder='Jahr']")).sendKeys("2015");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/refs/ref")).sendKeys("test");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi/@type"));
+			select.findElement(By.xpath("option[@value='misc']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi")).sendKeys("test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/sizes/size")).sendKeys("1");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/keywords/keyword")).sendKeys("test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/abstracts/abstract")).sendKeys("test");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note/@type"));
+			select.findElement(By.xpath("option[@value='internalNote']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note")).sendKeys("test");
+			TestUtils.saveForm(DRIVER);
+		}
 
     @Test
     public void delete() throws Exception {
@@ -406,4 +422,104 @@ public class CRUDITCase extends BaseIntegrationTest {
 		  TestUtils.deletObj(DRIVER, "testJournalWithChild");
 		  TestUtils.finishThis(DRIVER);
 		}
+    
+    //edit journal, volumen, article
+    @Test
+    public void editJournal() throws Exception {
+		  TestUtils.home(DRIVER);
+		  TestUtils.login(DRIVER);
+    	TestUtils.createMinPerson(DRIVER, "testPerson");
+		  TestUtils.creatMinJournal(DRIVER, "testJournalOriginal");
+		  TestUtils.creatMinVolume(DRIVER, "testVolumeOriginal");
+		  TestUtils.creatMinArticle(DRIVER, "testArticleOriginal");
+		  
+		  try {
+		  	//****************** edit Article *********************************
+		  	assertEquals("text does not match", "testArticleOriginal", DRIVER.findElement(By.id("jp-maintitle")).getText());
+		  	TestUtils.clickCreatSelect(DRIVER, "Dokument bearbeiten");
+        DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).clear();
+        createArticleSet();
+        assertEquals("text does not match", "testArticle", DRIVER.findElement(By.id("jp-maintitle")).getText());
+        //*****************************************************************
+		  } catch (Exception e) {
+		  	TestUtils.ERROR_MESSAGE = "Edit Article failed! \n" + e.getMessage();
+		  }
+        
+      try {
+        //****************** edit Volumen *********************************
+      	DRIVER.findElement(By.linkText("testVolumeOriginal")).click();
+      	assertEquals("text does not match", "testVolumeOriginal", DRIVER.findElement(By.id("jp-maintitle")).getText());
+      	TestUtils.clickCreatSelect(DRIVER, "Dokument bearbeiten");
+      	DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).clear();
+      	createVolumeSet();
+        assertEquals("text does not match", "testVolume", DRIVER.findElement(By.id("jp-maintitle")).getText());
+        //*****************************************************************
+      } catch (Exception e) {
+      	TestUtils.ERROR_MESSAGE += "Edit Volumen failed! \n" + e.getMessage();
+      }
+      
+      try {
+      	//****************** edit Journal *********************************
+      	DRIVER.findElement(By.linkText("testJournalOriginal")).click();
+      	assertEquals("text does not match", "testJournalOriginal", DRIVER.findElement(By.id("jp-maintitle")).getText());
+      	TestUtils.clickCreatSelect(DRIVER, "Dokument bearbeiten");
+      	DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).clear();
+      	creatJournalSet();
+      	assertEquals("text does not match", "testJournal", DRIVER.findElement(By.id("jp-maintitle")).getText());
+        //*****************************************************************
+      } catch (Exception e) {
+      	TestUtils.ERROR_MESSAGE += "Edit Journal failed! \n" + e.getMessage();
+      	TestUtils.deletObj(DRIVER, "testJournalOriginal");
+      }
+		  
+		  TestUtils.deletObj(DRIVER, "testJournal");
+    	TestUtils.deletObj(DRIVER, "testPerson");
+		  TestUtils.finishThis(DRIVER);
+		}
+    
+    //edit person
+    @Test
+    public void editPerson() throws Exception{
+		  TestUtils.home(DRIVER);
+		  TestUtils.login(DRIVER);
+		  TestUtils.createMinPerson(DRIVER, "testPerson");
+		  
+		  try {
+		  	assertEquals("text does not match", "testPerson", DRIVER.findElement(By.id("jp-maintitle")).getText());
+				TestUtils.clickCreatSelect(DRIVER, "Dokument bearbeiten");
+		  	DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/lastName")).clear();
+		  	createPersonSet();
+		  	assertEquals("header does not match", "Goethe, Johann Wolfgang von",
+            DRIVER.findElement(By.id("jp-maintitle")).getText());
+		  } catch (Exception e) {
+		  	TestUtils.ERROR_MESSAGE = e.getMessage();
+//		  	TestUtils.deletObj(DRIVER, "testPerson");
+		  }
+		  
+		  TestUtils.deletObj(DRIVER, "");
+		  TestUtils.finishThis(DRIVER);
+    }
+    
+    //edit inst
+    @Test
+    public void editInst() throws Exception {
+		  TestUtils.home(DRIVER);
+		  TestUtils.login(DRIVER);
+		  TestUtils.creatMinInst(DRIVER, "testInst");
+		  
+		  try {
+		  	assertEquals("header does not match", "testInst", DRIVER.findElement(By.id("jp-maintitle")).getText());
+		  	TestUtils.clickCreatSelect(DRIVER, "Dokument bearbeiten");
+		  	DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/fullname")).clear();
+		  	createInstSet();
+        assertEquals("header does not match", "Thüringer Universitäts- und Landesbibliothek Jena",
+            DRIVER.findElement(By.id("jp-maintitle")).getText());
+		  } catch (Exception e) {
+		  	TestUtils.ERROR_MESSAGE = e.getMessage();
+		  	TestUtils.deletObj(DRIVER, "testInst");
+		  }
+		  
+		  TestUtils.deletObj(DRIVER, "");
+		  TestUtils.finishThis(DRIVER);
+    }
 }

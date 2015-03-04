@@ -4,6 +4,7 @@ package fsu.jportal.it.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.Alert;
@@ -196,9 +197,10 @@ public class AdminITCase extends BaseIntegrationTest {
 		if(DRIVER.findElements(testIsOpen).size() > 0) {
 			DRIVER.findElement(testIsOpen).click();
 		}
-		loadClassEdt = By.cssSelector(".dijitTreeNodeContainer > div:first-child > div > .dijitTreeContent");
+		loadClassEdt = By.cssSelector(".dijitTreeNodeContainer > div:first-child > div");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadClassEdt));
 	  DRIVER.findElement(loadClassEdt).click();
+	  Thread.sleep(1000);
 	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
 	  DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testClassification");
 	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_4")).getText());
@@ -234,7 +236,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		By loadClassEdt = By.cssSelector(".dijitTreeNodeContainer > div:last-child > div > .dijitTreeContent > .dijitTreeLabel");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadClassEdt));
 		assertThat(DRIVER.findElement(loadClassEdt).getText(), containsString("testClassification"));
-		DRIVER.findElement(By.cssSelector(".dijitTreeNodeContainer > div:last-child > div > .dijitTreeContent")).click();
+		DRIVER.findElement(By.cssSelector(".dijitTreeNodeContainer > div:last-child > div")).click();
 		DRIVER.findElement(By.id("dijit_form_Button_13")).click();
 		
 	  DRIVER.findElement(By.id("dijit_form_Button_5")).click();
@@ -340,27 +342,28 @@ public class AdminITCase extends BaseIntegrationTest {
 	  DRIVER.findElement(loadGroups).click();
 
 		DRIVER.findElement(By.id("dijit_form_Button_12")).click();
-		DRIVER.findElement(By.xpath("//div[@id='dijit__TreeNode_0']/div/span[1]")).click();
-		DRIVER.findElement(By.xpath("//div[@id='dijit__TreeNode_0']/div/span[1]")).click();
+		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_0 > div > span:last-child")).click();
+		By testIsOpen = By.cssSelector("#dijit__TreeNode_0 > div > .dijitTreeExpandoClosed");
+		if(DRIVER.findElements(testIsOpen).size() > 0) {
+			DRIVER.findElement(testIsOpen).click();
+		}
 		
-		loadGroups = By.cssSelector("#dijit__TreeNode_2 > div > span:last-child");
+		loadGroups = By.cssSelector("#dijit__TreeNode_2 > div");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadGroups));
 	  DRIVER.findElement(loadGroups).click();
-		
+	  Thread.sleep(500);
 	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
 	  DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testGroup");
 	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_4")).getText());
 	  DRIVER.findElement(By.id("dijit_form_TextBox_4")).sendKeys("testGroup");
 	  DRIVER.findElement(By.id("dijit_form_ValidationTextBox_2")).clear();
 	  DRIVER.findElement(By.id("dijit_form_ValidationTextBox_2")).sendKeys("testGroup");
-
 	  //save and accept alert dialog
 	  DRIVER.findElement(By.id("dijit_form_Button_5")).click();
 	  Thread.sleep(500);
 	  Alert myAlert = DRIVER.switchTo().alert();
 		assertEquals("save failed", "Speichern erfolgreich", myAlert.getText());
 		myAlert.accept();
-
 		DRIVER.navigate().refresh();
 		
 		try {
@@ -379,12 +382,14 @@ public class AdminITCase extends BaseIntegrationTest {
 	}
 	
 	public void deleteGroupTry() throws InterruptedException {
-		By loadGroups = By.xpath("//div[@id='dijit__TreeNode_1']/div/span[@class='dijitTreeContent']/span[@class='dijitTreeLabel']");
+		By loadGroups = By.cssSelector("#dijit__TreeNode_1 > div > span:last-child > .dijitTreeLabel");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadGroups));
 		assertThat(DRIVER.findElement(loadGroups).getText(), containsString("testGroup"));
 		Thread.sleep(100);
-		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_1 > div > .dijitTreeContent")).click();
+		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_1 > div")).click();
+		Thread.sleep(100);
 		DRIVER.findElement(By.id("dijit_form_Button_13")).click();
+		Thread.sleep(100);
 	  DRIVER.findElement(By.id("dijit_form_Button_5")).click();
 	  Thread.sleep(500);
 	  Alert myAlert = DRIVER.switchTo().alert();
@@ -429,5 +434,84 @@ public class AdminITCase extends BaseIntegrationTest {
 	  		.findElement(By.cssSelector("#jp-layout-globalmessage-editor > div:last-child")).getText());
 	  
 	  TestUtils.finishThis(DRIVER);
+	}
+	
+	@Test
+	public void activSessions() throws Exception {
+		TestUtils.home(DRIVER);
+		TestUtils.login(DRIVER);
+		DRIVER.findElement(By.linkText("Admin")).click();
+		DRIVER.findElement(By.linkText("Aktive Sitzungen")).click();
+	  assertEquals("title does not match", "Liste aktiver Sitzungen - JPortal", DRIVER.getTitle());
+	  assertEquals("Superuser", DRIVER.findElement(By.cssSelector(".sessionTableLtR > tbody > tr:last-child > td > b")).getText());
+		TestUtils.finishThis(DRIVER);
+	}
+	
+	@Test 
+	public void webCLI() throws Exception {
+		String originalWin = DRIVER.getWindowHandle();
+
+		TestUtils.home(DRIVER);
+		TestUtils.login(DRIVER);
+		
+		DRIVER.findElement(By.linkText("Admin")).click();
+		DRIVER.findElement(By.xpath("//input[@value='Start']")).click();
+
+	  for(String winHandle : DRIVER.getWindowHandles()){
+	  	DRIVER.switchTo().window(winHandle);
+	  }
+	  Thread.sleep(600);
+	  
+	  By loadWait = By.id("dijit_form_DropDownButton_0");
+	  wait.until(ExpectedConditions.elementToBeClickable(loadWait));
+	  assertTrue("Command Dropdown should be present", DRIVER.findElement(loadWait).isDisplayed());
+	  assertTrue("Clear Logs button should be present", DRIVER.findElement(By.id("toolbar.clear")).isDisplayed());
+	  assertTrue("Stop Refresh button should be present", DRIVER.findElement(By.id("dijit_form_Button_3")).isDisplayed());
+	  assertTrue("Refresh Commands should be present", DRIVER.findElement(By.id("toolbar.refreshCmds")).isDisplayed());
+	  assertTrue("Settings should be present", DRIVER.findElement(By.id("dijit_form_Button_0")).isDisplayed());
+	  assertTrue("Execute be present", DRIVER.findElement(By.id("command.execute")).isDisplayed());
+	  assertTrue("Logs should be present", DRIVER.findElement(By.id("mainTabContainer_tablist_logs")).isDisplayed());
+	  assertTrue("Command Queue should be present", DRIVER.findElement(By.id("mainTabContainer_tablist_commandQueue")).isDisplayed());
+
+	  DRIVER.findElement(By.id("command")).sendKeys("list all users");
+	  DRIVER.findElement(By.id("command.execute_label")).click();
+	  
+	  loadWait = By.xpath("//div[@id='logs']/pre");
+	  wait.until(ExpectedConditions.elementToBeClickable(loadWait));
+	  assertThat(DRIVER.findElement(loadWait).getText(), containsString("Syntax matched (executed): list all users"));
+	  
+	  DRIVER.findElement(By.id("toolbar.clear")).click();
+	  
+	  assertEquals("" , DRIVER.findElement(By.xpath("//div[@id='logs']/pre")).getText());
+
+	  assertEquals("Stop Refresh" , DRIVER.findElement(By.id("dijit_form_Button_3_label")).getText());
+	  DRIVER.findElement(By.id("dijit_form_Button_3")).click();
+	  loadWait = By.id("dijit_form_Button_2_label");
+	  wait.until(ExpectedConditions.elementToBeClickable(loadWait));
+	  assertEquals("Refresh" , DRIVER.findElement(loadWait).getText());
+	  DRIVER.findElement(By.id("dijit_form_Button_2")).click();
+	  
+	  DRIVER.findElement(By.id("dijit_form_Button_0")).click();
+	  loadWait = By.xpath("//label[@for='logRefreshSetting']");
+	  wait.until(ExpectedConditions.elementToBeClickable(loadWait));
+	  assertEquals("Log refresh rate:" , DRIVER.findElement(loadWait).getText());
+	  assertEquals("Command queue refresh rate:" , DRIVER.findElement(By.xpath("//label[@for='queueRefreshSetting']")).getText());
+	  assertEquals("Log History Size:" , DRIVER.findElement(By.xpath("//label[@for='logHistorySize']")).getText());
+	  assertEquals("AutoScroll Logs:" , DRIVER.findElement(By.xpath("//label[@for='cb']")).getText());
+	  
+	  assertTrue("Log refresh rate should be present", DRIVER.findElement(By.id("logRefreshSetting")).isDisplayed());
+	  assertTrue("Command queue refresh rate should be present", DRIVER.findElement(By.id("queueRefreshSetting")).isDisplayed());
+	  assertTrue("Log History Size should be present", DRIVER.findElement(By.id("logHistorySize")).isDisplayed());
+	  assertTrue("AutoScroll Logs should be present", DRIVER.findElement(By.id("cb")).isDisplayed());
+	  
+	  DRIVER.findElement(By.id("dijit_form_Button_1")).click();
+	  
+	  //Close the new window, if that window no more required
+	  DRIVER.close();
+
+		//Switch back to original browser (first window)
+		DRIVER.switchTo().window(originalWin);
+
+		TestUtils.finishThis(DRIVER);
 	}
 }

@@ -3,6 +3,7 @@ package fsu.jportal.it.test;
 //import junit.framework.TestCase;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -63,6 +64,7 @@ public class BaseITCase extends BaseIntegrationTest {
         } catch (Exception e){
         	TestUtils.ERROR_MESSAGE = e.getMessage();
         }
+        
         TestUtils.deletObj(DRIVER, "Der Spiegel");
         TestUtils.finishThis(DRIVER);
     }
@@ -96,8 +98,9 @@ public class BaseITCase extends BaseIntegrationTest {
     		} catch (Exception e){
         	TestUtils.ERROR_MESSAGE = e.getMessage();
         }
-        TestUtils.deletObj(DRIVER, "Der Spiegel");
-        TestUtils.finishThis(DRIVER);
+    		
+    		TestUtils.deletObj(DRIVER, "Der Spiegel");
+    		TestUtils.finishThis(DRIVER);
     }
 
     @Test
@@ -130,8 +133,10 @@ public class BaseITCase extends BaseIntegrationTest {
     		} catch (Exception e){
         	TestUtils.ERROR_MESSAGE = e.getMessage();
         }
+        try {
+        	TestUtils.deletObj(DRIVER, "Spiegel-Verlag");
+        } catch(Exception e) {}
         
-        TestUtils.deletObj(DRIVER, "Spiegel-Verlag");
         TestUtils.deletObj(DRIVER, "Der Spiegel");
         TestUtils.finishThis(DRIVER);
     }
@@ -213,12 +218,32 @@ public class BaseITCase extends BaseIntegrationTest {
 	      DRIVER.findElement(By.linkText("parentTestInst")).click();
       } catch (Exception e){
       	TestUtils.ERROR_MESSAGE = e.getMessage();
-      	try {
-      		TestUtils.deletObj(DRIVER, "testInst");
-      	} catch (Exception e2) {}
+      	TestUtils.deletObj(DRIVER, "testInst");
       }
       
       TestUtils.deletObj(DRIVER, "parentTestInst");
+      TestUtils.finishThis(DRIVER);
+  }
+  
+  @Test
+  public void versionsInfo() throws Exception {
+      TestUtils.home(DRIVER);
+      TestUtils.login(DRIVER);
+      TestUtils.createMinPerson(DRIVER, "testPerson");
+   
+      try{
+      	TestUtils.clickCreatSelect(DRIVER, "Versionsgeschichte");
+      	
+      	assertEquals("Versionsgeschichte - JPortal", DRIVER.getTitle());
+      	assertTrue("versionsinfo table should be displayed", DRIVER.findElement(By.xpath("//table[@class='table versioninfo']")).isDisplayed());
+      	
+      	DRIVER.findElement(By.linkText("Zurück...")).click();
+      } catch (Exception e) {
+      	TestUtils.ERROR_MESSAGE = e.getMessage();
+      	TestUtils.deletObj(DRIVER, "testPerson");
+      }
+      
+      TestUtils.deletObj(DRIVER, "");
       TestUtils.finishThis(DRIVER);
   }
 }

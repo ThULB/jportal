@@ -108,28 +108,34 @@ public abstract class TestUtils {
       	home(driver);
       	goToObj(driver, toDelete);
       }
-      	
-      clickCreatSelect(driver, "Dokument löschen");
-    	WebDriverWait wait = new WebDriverWait(driver, 2);
-		  By deletOk = By.id("delete-dialog-submit");
-		  wait.until(ExpectedConditions.elementToBeClickable(deletOk));
-		  driver.findElement(deletOk).click();
-		  
-		  //wait until its deleted
-		  Thread.sleep(600);
-		  //check if ok
-	    assertEquals("testObj didn't deleted successfully", "Löschen erfolgreich!", driver.findElement(By.id("delete-dialog-info")).getText());
-		  
-    	driver.findElement(By.id("delete-dialog-close")).click();
+      
+      try {
+	      clickCreatSelect(driver, "Dokument löschen");
+	    	WebDriverWait wait = new WebDriverWait(driver, 2);
+			  By deleteOk = By.id("delete-dialog-submit");
+			  wait.until(ExpectedConditions.elementToBeClickable(deleteOk));
+			  driver.findElement(deleteOk).click();
+			  
+			  //wait until its deleted
+			  deleteOk = By.xpath("//div[@id='delete-dialog-info'][text()='Löschen erfolgreich!']");
+			  wait.until(ExpectedConditions.elementToBeClickable(deleteOk));
+	//		  Thread.sleep(600);
+			  //check if ok
+		    assertEquals("testObj didn't deleted successfully", "Löschen erfolgreich!", driver.findElement(By.id("delete-dialog-info")).getText());
+			  
+	    	driver.findElement(By.id("delete-dialog-close")).click();
+      } catch (Exception e) { ERROR_MESSAGE += "Failed to delete! " + e.getMessage(); }
     }
     
     public static void goToObj(WebDriver driver, String where) {
-    	driver.findElement(By.id("inputField")).sendKeys(where);
-    	driver.findElement(By.xpath("//span[@class='glyphicon glyphicon-search glyphSearchBar']")).submit();
-    	WebDriverWait wait = new WebDriverWait(driver, 2);
-    	By waitForSearch = By.linkText(where);
-    	wait.until(ExpectedConditions.elementToBeClickable(waitForSearch));
-    	driver.findElement(waitForSearch).click();
+    	try {
+	    	driver.findElement(By.id("inputField")).sendKeys(where);
+	    	driver.findElement(By.xpath("//span[@class='glyphicon glyphicon-search glyphSearchBar']")).submit();
+	    	WebDriverWait wait = new WebDriverWait(driver, 2);
+	    	By waitForSearch = By.linkText(where);
+	    	wait.until(ExpectedConditions.elementToBeClickable(waitForSearch));
+	    	driver.findElement(waitForSearch).click();
+    	} catch (Exception e) { ERROR_MESSAGE += "Failed to Find! " + e.getMessage(); }
     }
 
     public static void throwError() throws Exception {
