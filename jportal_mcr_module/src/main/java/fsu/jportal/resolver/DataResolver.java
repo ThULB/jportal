@@ -7,11 +7,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
+import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.resources.GlobalMessageFile;
 
 /**
  * get the file from .mycore/jportal/data/config/jp-globalmessage.xml
  */
+@URIResolverSchema(schema = "getData")
 public class DataResolver implements URIResolver {
 
     @Override

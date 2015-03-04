@@ -7,13 +7,14 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.common.xml.MCRJPortalURIGetJournalID;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
 
 public class MCRJPortalLayoutTemplateDetector {
 

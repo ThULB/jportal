@@ -1,4 +1,4 @@
-package org.mycore.common.xml;
+package fsu.jportal.common.xml;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;

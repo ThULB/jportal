@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +41,7 @@ import org.mycore.user2.MCRUserCommands;
 import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXParseException;
 
+import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.nio.JarResource;
 
 public class InitHandler implements AutoExecutable{

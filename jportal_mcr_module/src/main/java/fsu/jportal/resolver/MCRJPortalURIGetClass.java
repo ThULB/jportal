@@ -1,4 +1,4 @@
-package org.mycore.common.xml;
+package fsu.jportal.resolver;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -10,7 +10,12 @@ import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.xml.MCRURIResolver;
 
+import fsu.jportal.annotation.URIResolverSchema;
+import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
+
+@URIResolverSchema(schema = "jportal_getClass")
 public class MCRJPortalURIGetClass implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetClass.class);

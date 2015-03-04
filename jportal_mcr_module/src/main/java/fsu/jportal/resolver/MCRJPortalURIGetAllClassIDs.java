@@ -1,4 +1,4 @@
-package org.mycore.common.xml;
+package fsu.jportal.resolver;
 
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +16,9 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 
+import fsu.jportal.annotation.URIResolverSchema;
+
+@URIResolverSchema(schema = "jportal_getALLClassIDs")
 public class MCRJPortalURIGetAllClassIDs implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetAllClassIDs.class);

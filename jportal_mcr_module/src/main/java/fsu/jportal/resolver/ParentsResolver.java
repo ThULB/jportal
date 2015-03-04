@@ -9,9 +9,11 @@ import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
 
+import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.util.ContentTools;
 import fsu.jportal.xml.ParentsListXML;
 
+@URIResolverSchema(schema = "parents")
 public class ParentsResolver implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(ParentsResolver.class);

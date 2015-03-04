@@ -1,4 +1,4 @@
-package fsu.jportal.resolver.xeditor;
+package fsu.jportal.resolver;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -12,6 +12,9 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import fsu.jportal.annotation.URIResolverSchema;
+
+@URIResolverSchema(schema = "xClassification")
 public class ClassificationResolver implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(ClassificationResolver.class);

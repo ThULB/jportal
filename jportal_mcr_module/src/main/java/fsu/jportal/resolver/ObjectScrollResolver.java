@@ -35,6 +35,8 @@ import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrURL;
 
+import fsu.jportal.annotation.URIResolverSchema;
+
 /**
  * Resolves the previous and the next object.
  * 
@@ -43,6 +45,7 @@ import org.mycore.solr.search.MCRSolrURL;
  * 
  * @author Matthias Eichner
  */
+@URIResolverSchema(schema = "objectScroll")
 public class ObjectScrollResolver implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(ObjectScrollResolver.class);

@@ -1,4 +1,4 @@
-package fsu.jportal.resolver.xeditor;
+package fsu.jportal.resolver;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -11,6 +11,9 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 
+import fsu.jportal.annotation.URIResolverSchema;
+
+@URIResolverSchema(schema = "xClassificationLabel")
 public class ClassificationLabelResolver implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(ClassificationLabelResolver.class);

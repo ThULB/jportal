@@ -1,4 +1,4 @@
-package org.mycore.common.xml;
+package fsu.jportal.resolver;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -12,6 +12,10 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.services.i18n.MCRTranslation;
 
+import fsu.jportal.annotation.URIResolverSchema;
+import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
+
+@URIResolverSchema(schema = "jportal_getClassLabel")
 public class MCRJPortalURIGetClassLabel implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetClassLabel.class);

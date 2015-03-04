@@ -1,4 +1,4 @@
-package org.mycore.common.xml;
+package fsu.jportal.resolver;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -21,7 +21,12 @@ import org.jdom2.transform.JDOMSource;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.xml.MCRURIResolver;
 
+import fsu.jportal.annotation.URIResolverSchema;
+import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
+
+@URIResolverSchema(schema = "jportal_includeEditorCode")
 public class MCRJPortalURIIncludeEditorCode implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIIncludeEditorCode.class);

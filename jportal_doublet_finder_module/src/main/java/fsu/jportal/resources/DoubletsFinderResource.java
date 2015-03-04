@@ -18,9 +18,11 @@ import org.jdom2.input.SAXBuilder;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.frontend.cli.MCRCommandManager;
+import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 import org.xml.sax.SAXException;
 
 @Path("doublets")
+@MCRRestrictedAccess(ResourceAccess.class)
 public class DoubletsFinderResource {
 
     @Context

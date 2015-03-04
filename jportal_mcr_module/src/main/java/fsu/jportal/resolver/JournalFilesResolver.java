@@ -3,7 +3,6 @@ package fsu.jportal.resolver;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -12,6 +11,9 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.mycore.common.config.MCRConfiguration;
 
+import fsu.jportal.annotation.URIResolverSchema;
+
+@URIResolverSchema(schema = "journalFile")
 public class JournalFilesResolver implements URIResolver {
 
     @Override

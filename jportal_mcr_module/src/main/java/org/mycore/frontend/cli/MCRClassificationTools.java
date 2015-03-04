@@ -8,7 +8,8 @@ import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
-import org.mycore.datamodel.classifications2.impl.MCRClassificationHelper;
+
+import fsu.jportal.backend.MCRClassificationHelper;
 
 public class MCRClassificationTools extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRClassificationTools.class.getName());

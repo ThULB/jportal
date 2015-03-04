@@ -1,4 +1,4 @@
-package fsu.jportal.resolver.xeditor;
+package fsu.jportal.resolver;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +15,8 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 
+import fsu.jportal.annotation.URIResolverSchema;
+
 /**
  * <p><blockquote><pre>
  * &lt;dummyRoot> 
@@ -24,6 +26,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
  * &lt;/dummyRoot>
  * </pre></blockquote></p>
  */
+@URIResolverSchema(schema = "xClassifications")
 public class ClassificationsResolver implements URIResolver {
 
     private Element returnXML = null;

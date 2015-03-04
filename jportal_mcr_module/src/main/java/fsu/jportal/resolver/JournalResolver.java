@@ -1,4 +1,4 @@
-package fsu.jportal.resolver.xeditor;
+package fsu.jportal.resolver;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -10,6 +10,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import fsu.jportal.annotation.URIResolverSchema;
+
 /**
  * Gets the journal by any children id. For creating new objects the 'parent'
  * part id is used, for editing objects the 'id' part is used as a reference object. 
@@ -18,6 +20,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * <b>getJournal:{id}:{parent}</b>
  * </p>
  */
+@URIResolverSchema(schema = "xJournal")
 public class JournalResolver implements URIResolver {
 
     @Override

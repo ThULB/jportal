@@ -16,8 +16,10 @@ import org.jdom2.JDOMException;
 import org.jdom2.output.DOMOutputter;
 import org.jdom2.transform.JDOMSource;
 
+import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.xml.XMLTools;
 
+@URIResolverSchema(schema = "editorPreProc")
 public class EditorPreProc implements URIResolver {
 
     @Override

@@ -1,4 +1,4 @@
-package org.mycore.datamodel.classifications2.impl;
+package fsu.jportal.backend;
 
 import java.util.List;
 
@@ -10,6 +10,8 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRCategoryLink;
+import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
+import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
 public class MCRClassificationHelper {
     private static Logger LOGGER = Logger.getLogger(MCRClassificationHelper.class.getName());

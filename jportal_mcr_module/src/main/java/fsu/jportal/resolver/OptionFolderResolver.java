@@ -15,8 +15,10 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
 
+import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.nio.JarResource;
 
+@URIResolverSchema(schema = "templatesOption")
 public class OptionFolderResolver implements URIResolver {
 
     @Override
