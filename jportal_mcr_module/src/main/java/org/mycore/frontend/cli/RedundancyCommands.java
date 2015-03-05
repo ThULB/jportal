@@ -32,9 +32,9 @@ import org.mycore.solr.MCRSolrClientFactory;
 import fsu.jportal.backend.MetaDataTools;
 
 @MCRCommandGroup(name = "JP doubletOf Commands")
-public class MCRJPortalRedundancyCommands{
+public class RedundancyCommands{
 
-    private static final Logger LOGGER = Logger.getLogger(MCRJPortalRedundancyCommands.class);
+    private static final Logger LOGGER = Logger.getLogger(RedundancyCommands.class);
 
     @MCRCommand(helpKey = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "fix title of {0} for link {1}")
     public static void removeDoublets(String objId, String linkID){

@@ -13,8 +13,8 @@ import org.mycore.datamodel.classifications2.MCRCategoryLink;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
-public class MCRClassificationHelper {
-    private static Logger LOGGER = Logger.getLogger(MCRClassificationHelper.class.getName());
+public class ClassificationHelper {
+    private static Logger LOGGER = Logger.getLogger(ClassificationHelper.class.getName());
 
     public static void repairLeftRightValue(String classID) {
         final Session session = MCRHIBConnection.instance().getSession();
@@ -23,7 +23,8 @@ public class MCRClassificationHelper {
         classification.calculateLeftRightAndLevel(0, 0);
     }
 
-    public static void importExportClassification(String id, int boolValue) {
+    // Reimport classification with retaining links
+    public static void importExportClassification(String id, int keepLinks) {
         // retrieve the root category
         MCRCategoryDAO categoryDAO = MCRCategoryDAOFactory.getInstance();
         MCRCategory categ = categoryDAO.getCategory(MCRCategoryID.rootID(id), -1);
@@ -32,7 +33,7 @@ public class MCRClassificationHelper {
         // saving existing Link
         Session session = MCRHIBConnection.instance().getSession();
         
-        if (boolValue == 1) {
+        if (keepLinks == 1) {
 
             String sqlSaveQuery = "from MCRCategoryLink where category in (select internalID from MCRCategoryImpl where rootID='" + id
                     + "' and not(categID=''))";
@@ -44,7 +45,7 @@ public class MCRClassificationHelper {
 
         categoryDAO.replaceCategory(categ);
 
-        if (boolValue == 1 && linkList != null) {
+        if (keepLinks == 1 && linkList != null) {
             for (MCRCategoryLink categLink : linkList) {
                 session.save(categLink);
             }

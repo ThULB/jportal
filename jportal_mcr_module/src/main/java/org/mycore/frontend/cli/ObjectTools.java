@@ -53,8 +53,8 @@ import fsu.thulb.jp.searchpojo.ContentEntry;
 import fsu.thulb.jp.searchpojo.StorageContentList;
 
 @MCRCommandGroup(name = "JP Object Commands")
-public class MCRObjectTools {
-    private static Logger LOGGER = Logger.getLogger(MCRObjectTools.class.getName());
+public class ObjectTools {
+    private static Logger LOGGER = Logger.getLogger(ObjectTools.class.getName());
 
     @MCRCommand(help = "vd17Import url", syntax = "vd17Import {0}")
     public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException,

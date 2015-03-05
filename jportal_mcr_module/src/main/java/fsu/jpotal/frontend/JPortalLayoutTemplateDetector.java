@@ -1,4 +1,4 @@
-package org.mycore.frontend;
+package fsu.jpotal.frontend;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -16,9 +16,9 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
 
-public class MCRJPortalLayoutTemplateDetector {
+public class JPortalLayoutTemplateDetector {
 
-    private final static Logger LOGGER = Logger.getLogger(MCRJPortalLayoutTemplateDetector.class);
+    private final static Logger LOGGER = Logger.getLogger(JPortalLayoutTemplateDetector.class);
 
     private final static String KEY_PREFIX = "MCR.Module-JPortal.DynamicLayoutTemplates.";
 

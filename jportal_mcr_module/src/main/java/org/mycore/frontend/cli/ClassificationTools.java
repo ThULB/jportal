@@ -8,27 +8,24 @@ import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.frontend.cli.annotation.MCRCommand;
+import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
-import fsu.jportal.backend.MCRClassificationHelper;
+import fsu.jportal.backend.ClassificationHelper;
 
-public class MCRClassificationTools extends MCRAbstractCommands {
-    private static Logger LOGGER = Logger.getLogger(MCRClassificationTools.class.getName());
+@MCRCommandGroup(name = "Classification Tools")
+public class ClassificationTools{
+    private static Logger LOGGER = Logger.getLogger(ClassificationTools.class.getName());
 
-    public MCRClassificationTools() {
+    public ClassificationTools() {
         super();
 
-        addCommand(new MCRCommand("repair category with empty labels", "org.mycore.frontend.cli.MCRClassificationTools.repairEmptyLabels", ""));
 
-        addCommand(new MCRCommand("repair position in parent", "org.mycore.frontend.cli.MCRClassificationTools.repairPositionInParent", ""));
-
-        addCommand(new MCRCommand("import export classification {0} {1}", "org.mycore.frontend.cli.MCRClassificationTools.importExportClassification String int", ""));
-
-        addCommand(new MCRCommand("repair left right values for classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.repairLeftRightValue String",
-                "fixes all left and right values in the given classification"));
     }
 
     // - get category without labels via SQL-query
     // - set category ID as category label
+    @MCRCommand(help = "Repair category with empty labels.", syntax = "repair category with empty labels")
     public static void repairEmptyLabels() {
         Session session = MCRHIBConnection.instance().getSession();
         String sqlQuery = "select cat.classid,cat.categid from mcrcategory cat left outer join mcrcategorylabels label on cat.internalid = label.category where label.text is null";
@@ -47,6 +44,7 @@ public class MCRClassificationTools extends MCRAbstractCommands {
         LOGGER.info("Fixing category labels completed!");
     }
 
+    @MCRCommand(help = "Repair position in parent.", syntax = "repair position in parent")
     public static void repairPositionInParent() {
         Session session = MCRHIBConnection.instance().getSession();
         // this SQL-query find missing numbers in positioninparent
@@ -110,13 +108,15 @@ public class MCRClassificationTools extends MCRAbstractCommands {
 
         session.createSQLQuery(sqlQuery).executeUpdate();
     }
-
-    public static void importExportClassification(String id, int boolValue) {
-        MCRClassificationHelper.importExportClassification(id, boolValue);
+    
+    @MCRCommand(syntax = "import export classification {0} {1}", help = "Reimport classification {id} and {keeplinks = 1}")
+    public static void importExportClassification(String id, int keepLinks) {
+        ClassificationHelper.importExportClassification(id, keepLinks);
     }
     
+    @MCRCommand(syntax = "repair left right values for classification {0}", help = "fixes all left and right values in the given classification")
     public static void repairLeftRightValue(String classID) {
-        MCRClassificationHelper.repairLeftRightValue(classID);
+        ClassificationHelper.repairLeftRightValue(classID);
     }
 
 }

@@ -3,17 +3,13 @@ package org.mycore.frontend.cli;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.mycore.frontend.cli.annotation.MCRCommand;
+import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
-public class MCRUsersGroupsTools extends MCRAbstractCommands {
-    private static Logger LOGGER = Logger.getLogger(MCRUsersGroupsTools.class.getName());
+@MCRCommandGroup(name = "User Group Tools")
+public class UsersGroupsTools {
 
-    public MCRUsersGroupsTools() {
-        super();
-        addCommand(new MCRCommand("add {0} to {1}", "org.mycore.frontend.cli.MCRUsersGroupsTools.addUsers String String",
-                "add [userIDs] to [groupIDs]\n usersIDs: user1,user2,...\n groupIDs: group1, group2,..."));
-    }
-
+    @MCRCommand(syntax = "add {0} to {1}", help = "add [userIDs] to [groupIDs]\n usersIDs: user1,user2,...\n groupIDs: group1, group2,...")
     public static List<String> addUsers(String userIDs, String groupIDS) {
         String[] userList = userIDs.split(",");
         String[] groupList = groupIDS.split(",");
