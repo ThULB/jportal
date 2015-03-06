@@ -36,7 +36,7 @@ public class RedundancyCommands{
 
     private static final Logger LOGGER = Logger.getLogger(RedundancyCommands.class);
 
-    @MCRCommand(helpKey = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "fix title of {0} for link {1}")
+    @MCRCommand(help = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "fix title of {0} for link {1}")
     public static void removeDoublets(String objId, String linkID){
         MCRParameterCollector parameter = new MCRParameterCollector();
         parameter.setParameter("linkId", linkID);
@@ -46,7 +46,7 @@ public class RedundancyCommands{
 
     
     
-    @MCRCommand(helpKey = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "jp clean up {0}")
+    @MCRCommand(help = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "jp clean up {0}")
     public static List<String> cleanUp(String type) {
         // get all objects of specific type where doubletOf is not empty
         SolrDocumentList results = getDoubletObjsOfType(type);
@@ -78,7 +78,7 @@ public class RedundancyCommands{
         return null;
     }
 
-    @MCRCommand(helpKey = "internal command for replacing links and removing the doublet", syntax = "internal replace links and remove {0} {1}")
+    @MCRCommand(help = "internal command for replacing links and removing the doublet", syntax = "internal replace links and remove {0} {1}")
     public static List<String> replaceAndRemove(String doublet, String doubletOf) throws Exception {
         ArrayList<String> commandList = new ArrayList<String>();
         if (!MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf))) {
@@ -114,7 +114,7 @@ public class RedundancyCommands{
      * @param oldLink The link which to replaced.
      * @param newLink The new link.
      */
-    @MCRCommand(helpKey = "internal command for replacing links and removing the doublet", syntax = "internal replace links {0} {1} {2}")
+    @MCRCommand(help = "internal command for replacing links and removing the doublet", syntax = "internal replace links {0} {1} {2}")
     public static void replaceLinks(String sourceId, String oldLink, String newLink) throws Exception {
         if (!MCRAccessManager.checkPermission(sourceId, PERMISSION_WRITE)) {
             LOGGER.error("The current user has not the permission to modify " + sourceId);
