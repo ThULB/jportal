@@ -1,0 +1,53 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+dependencies{
+	testCompile 'junit:junit:4.+'
+	testCompile "log4j:log4j:1.2.17"
+	testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
+	testCompile "org.mycore:mycore-viewer:0.4-SNAPSHOT:tests"
+}
+
+
+def temporaryDir = '/home/miller/.m2/repository/org/mycore/mycore-viewer/0.4-SNAPSHOT'
+
+task unzip(type: Copy )  {
+	from zipTree(file("$temporaryDir/mycore-viewer-0.4-SNAPSHOT-tests.jar"))
+	into file("$temporaryDir/myTests")
+}
+
+task testFromJar(type: Test , dependsOn: unzip) {
+	doFirst {
+		ant.propertyfile(file: "$temporaryDir/myTests/test.properties") {
+			entry( key: "test.viewer.applicationController", value: "fsu.jportal.it.test.JPortalApplicationController")
+		}
+		testClassesDir=file("$temporaryDir/myTests")
+		sourceSets.test.compileClasspath.each { def file ->
+			println "test path: " + file
+		}
+		
+		sourceSets.main.compileClasspath.each { def file ->
+			println "test path: " + file
+		}
+		
+		dependencies {
+			
+			classpath=files(testClassesDir)//+sourceSets.main.compileClasspath+sourceSets.test.compileClasspath
+		}
+	}
+	
+	exclude '**/*PDF*'
+
+	//it would be good if we could at doLast delete the myTest dir
+	//			doLast {
+	////				delete ("$temporaryDir/myTests")
+	//				ant.delete(dir: "$temporaryDir/myTests")
+	//			}
+}
+
+task deleteTestDir(type: Delete) { delete "$temporaryDir/myTests" }
+
+//	task testViewer(type: Test, dependsOn: ['testFromJar', 'deleteTestDir'])

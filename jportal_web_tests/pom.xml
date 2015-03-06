@@ -12,7 +12,7 @@
   <properties>
     <MCR.AppName>jportal</MCR.AppName>
     <MCR.Home.Integration>${project.build.directory}/mycore-home</MCR.Home.Integration>
-    <selenium.version>2.39.0</selenium.version>
+    <selenium.version>2.45.0</selenium.version>
     <solr.version>4.6.1-SNAPSHOT</solr.version>
     <solr.home>${MCR.Home.Integration}/solr-home</solr.home>
     <cargo.jvmargs>
@@ -576,9 +576,15 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+<!--     <dependency> -->
+<!--       <groupId>log4j</groupId> -->
+<!--       <artifactId>log4j</artifactId> -->
+<!--     </dependency> -->
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
@@ -589,6 +595,12 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-viewer</artifactId>
+      <version>0.3</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
