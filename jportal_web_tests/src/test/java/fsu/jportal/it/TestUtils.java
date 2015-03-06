@@ -62,11 +62,11 @@ public abstract class TestUtils {
     }
     
     public static void createMinPerson(WebDriver driver, String lastName) {
-//        login(driver);
-//        home(driver);
-//        driver.findElement(By.name("Neue Person")).click();
     	clickCreatSelect(driver, "Neue Person");
-    	driver.findElement(By.name("/mycoreobject/metadata/def.heading/heading/lastName")).sendKeys(lastName);
+    	WebDriverWait wait = new WebDriverWait(driver, 2);
+    	By waitForLoad = By.name("/mycoreobject/metadata/def.heading/heading/lastName");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+    	driver.findElement(waitForLoad).sendKeys(lastName);
     	WebElement genderSelect = driver.findElement(By.name("/mycoreobject/metadata/def.gender/gender/@categid"));
       genderSelect.findElement(By.xpath("option[@value='male']")).click();
     	saveForm(driver);
@@ -74,14 +74,20 @@ public abstract class TestUtils {
     
     public static void creatMinInst(WebDriver driver, String fullName) {
     	clickCreatSelect(driver, "Neue Institution");
-    	driver.findElement(By.name("/mycoreobject/metadata/names/name/fullname")).sendKeys(fullName);
+    	WebDriverWait wait = new WebDriverWait(driver, 2);
+    	By waitForLoad = By.name("/mycoreobject/metadata/names/name/fullname");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+    	driver.findElement(waitForLoad).sendKeys(fullName);
     	saveForm(driver);
     }
     
     public static void creatMinJournal(WebDriver driver, String name) {
       home(driver);
       clickCreatSelect(driver, "Neue Zeitschrift");
-      driver.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys(name);
+      WebDriverWait wait = new WebDriverWait(driver, 2);
+      By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+      driver.findElement(waitForLoad).sendKeys(name);
       WebElement langSelect = driver.findElement(By.name("/mycoreobject/metadata/languages/language/@categid"));
       langSelect.findElement(By.xpath("option[@value='de']")).click();
       WebElement templateSelect = driver.findElement(By
@@ -92,13 +98,19 @@ public abstract class TestUtils {
     
     public static void creatMinVolume(WebDriver driver, String name) {
     	clickCreatSelect(driver, "Neuer Band");
-    	driver.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys(name);
+    	WebDriverWait wait = new WebDriverWait(driver, 2);
+    	By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+    	driver.findElement(waitForLoad).sendKeys(name);
     	saveForm(driver);
     }
     
     public static void creatMinArticle(WebDriver driver, String name) {
     	clickCreatSelect(driver, "Neuer Artikel");
-    	driver.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys(name);
+    	WebDriverWait wait = new WebDriverWait(driver, 2);
+    	By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+    	driver.findElement(waitForLoad).sendKeys(name);
     	saveForm(driver);
     }
     
@@ -124,7 +136,7 @@ public abstract class TestUtils {
 		    assertEquals("testObj didn't deleted successfully", "Löschen erfolgreich!", driver.findElement(By.id("delete-dialog-info")).getText());
 			  
 	    	driver.findElement(By.id("delete-dialog-close")).click();
-      } catch (Exception e) { ERROR_MESSAGE += "Failed to delete! " + e.getMessage(); }
+      } catch (Exception e) { ERROR_MESSAGE += "Failed to delete! \n" + e.getMessage(); }
     }
     
     public static void goToObj(WebDriver driver, String where) {
@@ -135,7 +147,7 @@ public abstract class TestUtils {
 	    	By waitForSearch = By.linkText(where);
 	    	wait.until(ExpectedConditions.elementToBeClickable(waitForSearch));
 	    	driver.findElement(waitForSearch).click();
-    	} catch (Exception e) { ERROR_MESSAGE += "Failed to Find! " + e.getMessage(); }
+    	} catch (Exception e) { ERROR_MESSAGE += "Failed to Find! \n" + e.getMessage(); }
     }
 
     public static void throwError() throws Exception {

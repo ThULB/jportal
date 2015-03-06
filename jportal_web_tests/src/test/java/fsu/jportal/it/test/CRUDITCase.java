@@ -48,7 +48,9 @@ public class CRUDITCase extends BaseIntegrationTest {
 
 		private void createPersonSet() {
 			// fill form
-			DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/lastName")).sendKeys("Goethe");
+			By waitForLoad = By.name("/mycoreobject/metadata/def.heading/heading/lastName");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+			DRIVER.findElement(waitForLoad).sendKeys("Goethe");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/firstName")).sendKeys("Johann Wolfgang");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/nameAffix")).sendKeys("von");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/def.alternative/alternative/lastName")).sendKeys("Goethe");
@@ -117,8 +119,9 @@ public class CRUDITCase extends BaseIntegrationTest {
 
 		private void createInstSet() {
 			// fill form
-			DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/fullname")).sendKeys(
-			    "Thüringer Universitäts- und Landesbibliothek Jena");
+			By waitForLoad = By.name("/mycoreobject/metadata/names/name/fullname");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+			DRIVER.findElement(waitForLoad).sendKeys("Thüringer Universitäts- und Landesbibliothek Jena");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/nickname")).sendKeys("ThULB");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/country")).sendKeys("Deutschland");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/zipcode")).sendKeys("07743");
@@ -167,7 +170,9 @@ public class CRUDITCase extends BaseIntegrationTest {
 
 		private void creatJournalSet() {
 			// bibl. beschreibung
-			DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("testJournal");
+			By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+			DRIVER.findElement(waitForLoad).sendKeys("testJournal");
 			// main publisher
 			WebElement participantSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/participants/participant/@type"));
 			participantSelect.findElement(By.xpath("option[@value='mainPublisher']")).click();
@@ -221,7 +226,9 @@ public class CRUDITCase extends BaseIntegrationTest {
     }
 
 		private void createVolumeSet() {
-			DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("testVolume");
+			By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+			DRIVER.findElement(waitForLoad).sendKeys("testVolume");
 			WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle/@type"));
 			select.findElement(By.xpath("option[@value='title_beside']")).click();
 			DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle")).sendKeys("testVolume");
@@ -268,7 +275,9 @@ public class CRUDITCase extends BaseIntegrationTest {
     }
 
 		private void createArticleSet() {
-			DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("testArticle");
+			By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+			DRIVER.findElement(waitForLoad).sendKeys("testArticle");
 			WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle/@type"));
 			select.findElement(By.xpath("option[@value='title_beside']")).click();
 			DRIVER.findElement(By.name("/mycoreobject/metadata/subtitles/subtitle")).sendKeys("testArticle");
@@ -487,13 +496,15 @@ public class CRUDITCase extends BaseIntegrationTest {
 		  try {
 		  	assertEquals("text does not match", "testPerson", DRIVER.findElement(By.id("jp-maintitle")).getText());
 				TestUtils.clickCreatSelect(DRIVER, "Dokument bearbeiten");
-		  	DRIVER.findElement(By.name("/mycoreobject/metadata/def.heading/heading/lastName")).clear();
+				By waitForLoad = By.name("/mycoreobject/metadata/def.heading/heading/lastName");
+				wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+		  	DRIVER.findElement(waitForLoad).clear();
 		  	createPersonSet();
 		  	assertEquals("header does not match", "Goethe, Johann Wolfgang von",
             DRIVER.findElement(By.id("jp-maintitle")).getText());
 		  } catch (Exception e) {
 		  	TestUtils.ERROR_MESSAGE = e.getMessage();
-//		  	TestUtils.deletObj(DRIVER, "testPerson");
+		  	TestUtils.deletObj(DRIVER, "testPerson");
 		  }
 		  
 		  TestUtils.deletObj(DRIVER, "");
