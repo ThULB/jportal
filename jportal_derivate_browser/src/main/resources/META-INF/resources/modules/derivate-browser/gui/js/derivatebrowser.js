@@ -1,8 +1,5 @@
 var DerivateBrowser = function () {
     var qpara = [], hash;
-    var uploadList = {};
-    var currentUploadCheck = {};
-    var dragcounter = 0;
     var mouseDown = false;
     var dragElm = null;
     var dragObj = null;
@@ -113,60 +110,6 @@ var DerivateBrowser = function () {
                 window.location.href = jp.baseURL + "rsc/viewer/" + derivateBrowserTools.getCurrentDocID() + $("#derivat-panel-startfile").data("startfile");
             });
 
-            /**
-             * @namespace event.originalEvent.dataTransfer
-             * */
-            $("body").on("drop", "#lightbox-new-derivate-main", function (event) {
-                $("#lightbox-new-derivate-hint").addClass("hidden");
-                $("#lightbox-new-derivate-table").removeClass("hidden");
-                event.preventDefault();
-                event.stopPropagation();
-                if (!$("#lightbox-new-derivate-main").hasClass("new-derivate-noDrop")){
-                    var files = event.originalEvent.dataTransfer.items;
-                    if (files != undefined) {
-                        for (var i = 0; i < files.length; ++i) {
-                            //noinspection JSUnresolvedFunction
-                            var entry = files[i].webkitGetAsEntry();
-                            getWebkitFiles(entry);
-                        }
-                    }
-                    else {
-                        files = event.originalEvent.dataTransfer.files;
-                        $.each(files, function (i, file) {
-                            addFileToUplodlist(file, "");
-
-                        });
-                    }
-                }
-            });
-
-            $("body").on("click", "#lightbox-new-derivate-confirm", function () {
-                currentUploadCheck.deriID = "";
-                $.each(uploadList, function (index, upload) {
-                    if (upload instanceof Upload) {
-                        uploadFile(upload, "new");
-                    }
-                    return false;
-                });
-                $("#lightbox-new-derivate-confirm").addClass("hidden");
-                $(".lightbox-new-derivate-cancel").addClass("hidden");
-                $("#lightbox-new-derivate-message").removeClass("hidden");
-                $("#lightbox-new-derivate-main").addClass("new-derivate-noDrop");
-            });
-
-            $("body").on("click", ".lightbox-new-derivate-cancel", function () {
-                hideNewDerivateLightbox();
-            });
-
-            $("body").on("click", "#lightbox-new-derivate-done", function () {
-                var deriID = $(this).data("deriID");
-                if (deriID != "" && deriID != undefined) {
-                    derivateBrowserNavigation.addTempDoc(deriID, deriID, "derivate", $(this).data("docID"));
-                    derivateBrowserTools.goTo(deriID, "");
-                }
-                hideNewDerivateLightbox();
-            });
-
             $("body").on("click", "#folder-list-new-choose", function () {
                 $("#folder-list-new-select-area").toggleClass("hidden");
             });
@@ -184,15 +127,6 @@ var DerivateBrowser = function () {
             $("body").on("click", "#folder-list-new-button-article", function () {
                 derivateBrowserFileView.newDoc("jparticle");
                 $("#folder-list-new-select-area").addClass("hidden");
-            });
-
-            $("body").on("click", "#folder-list-new-button-derivate", function () {
-                uploadList = {};
-                $("#lightbox-new-derivate-table").html("");
-                $("#lightbox-new-derivate-hint").removeClass("hidden");
-                $("#lightbox-new-derivate-table").addClass("hidden");
-                $("#folder-list-new-select-area").addClass("hidden");
-                $("#lightbox-new-derivate").modal("show");
             });
 
             $("body").on("click", "#lightbox-alert-deleteDoc-confirm", function () {
@@ -232,58 +166,6 @@ var DerivateBrowser = function () {
                 if (paths[0] != undefined) {
                     derivateBrowserTools.goTo(paths[0], path);
                 }
-            });
-
-            $("body").on("click", "#btn-upload-cancel", function () {
-                $('#lightbox-upload-overwrite').modal('hide');
-                uploadList = {};
-            });
-
-            $("body").on("click", "#btn-upload-skip", function () {
-                $('#lightbox-upload-overwrite').modal('hide');
-                currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
-                if ($(".btn-upload-all").data("check") == true) {
-                    currentUploadCheck.skipAll = true;
-                }
-                uploadFilesAndAsk();
-            });
-
-            $("body").on("click", ".btn-upload-all", function () {
-                if ($(this).data("check") == true) {
-                    $(this).removeData("check");
-                    $(this).addClass("glyphicon-unchecked");
-                    $(this).removeClass("glyphicon-check");
-                }
-                else {
-                    $(this).data("check", true);
-                    $(this).removeClass("glyphicon-unchecked");
-                    $(this).addClass("glyphicon-check");
-                }
-            });
-
-            $("body").on("click", "#btn-upload-overwrite", function () {
-                var upload = uploadList[currentUploadCheck.data.files[currentUploadCheck.currentPos].id];
-                upload.statusbar = upload.getStatus();
-                $("#upload-status-bar-table").append(upload.statusbar);
-                showUploadBar();
-                $('#lightbox-upload-overwrite').modal('hide');
-                currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
-                if ($(".btn-upload-all").data("check") == true) {
-                    currentUploadCheck.overwriteAll = true;
-                }
-                uploadFile(upload);
-            });
-
-            $('#lightbox-upload-overwrite').on('hidden.bs.modal', function () {
-                $(this).data("open", false);
-                if ($(this).data("openagain") != undefined) {
-                    $(this).removeData("openagain");
-                    $('#lightbox-upload-overwrite').modal("show");
-                }
-            });
-
-            $('#lightbox-upload-overwrite').on('shown.bs.modal', function () {
-                $(this).data("open", true);
             });
 
             $("body").on("mouseenter", ".popover-file", function () {
@@ -469,77 +351,6 @@ var DerivateBrowser = function () {
                 };
                 addURN(json);
                 $("#derivat-panel-buttons").addClass("hidden");
-            });
-
-            $("body").on("drop", "#files", function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                if (!$("#upload-overlay").hasClass("hidden")) {
-                    var files = event.originalEvent.dataTransfer.files;
-                    var deriID;
-                    if ($(".aktiv").hasClass("derivat-folder")) {
-                        deriID = $(".aktiv").data("deriID");
-                    }
-                    else {
-                        deriID = $(".aktiv").data("id");
-                    }
-                    var path;
-                    if ($(".aktiv").data("path") == undefined) {
-                        path = "";
-                    }
-                    else {
-                        path = $(".aktiv").data("path");
-                    }
-                    $.each(files, function (i, file) {
-                        if (file.type != "") {
-                            var upload = new Upload(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath(), file);
-                            uploadList[upload.getID()] = upload;
-                        }
-                        else {
-                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetypeFolder"), false);
-                        }
-                    });
-                    existsCheck();
-                }
-                dragcounter = 0;
-                $("#upload-overlay").addClass("hidden");
-            });
-
-            $("body").on("click", ".btn-close-usb", function () {
-                $("#upload-status-bar").animate({'height': '0px'}, 500, function () {
-                    $("#upload-status-bar").addClass("hidden");
-                    $("#upload-status-bar-table").html("");
-                    $("#upload-status-bar-header-error").addClass("hidden");
-                    $("#upload-status-bar-header-type").addClass("hidden");
-                });
-            });
-
-            $("body").on("click", ".btn-mini-usb", function () {
-                if ($(this).data("status") == "maxi") {
-                    $(this).data("status", "mini");
-                    $("#upload-status-bar").animate({'height': '32px'}, 500, function () {
-                        $("#upload-status-bar-table").addClass("hidden");
-                    });
-                }
-                else {
-                    $(this).data("status", "maxi");
-                    $("#upload-status-bar-table").removeClass("hidden");
-                    $("#upload-status-bar").animate({'height': '300px'}, 500);
-                }
-            });
-
-            $("body").on("dragenter", "#files", function () {
-                if (dragcounter == 0 && !$("#derivate-browser").hasClass("hidden")) {
-                    $("#upload-overlay").removeClass("hidden");
-                }
-                dragcounter++;
-            });
-
-            $("body").on("dragleave", "#files", function () {
-                dragcounter--;
-                if (dragcounter == 0) {
-                    $("#upload-overlay").addClass("hidden");
-                }
             });
 
             $("body").on("click", "#journal-info-button-edit", function () {
@@ -1052,98 +863,6 @@ var DerivateBrowser = function () {
     }
 
     /**
-     * @property lengthComputable
-     * @property loaded
-     * @property total
-     */
-    function uploadFile(upload, mode) {
-        $.ajax({
-            url: "upload",
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: upload.getFormData(),
-            xhr: function () {
-                $(upload.statusbar).find("div.statusbar-progress").removeClass("invisible");
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function (evt) {
-                    if (evt.lengthComputable) {
-                        var percentComplete = Math.floor((evt.loaded / evt.total) * 100);
-                        $(upload.statusbar).find(".statusbar-progress-status").attr("arial-now", percentComplete);
-                        $(upload.statusbar).find(".statusbar-progress-status").css("width", percentComplete + "%");
-                        //$(upload.statusbar).find(".statusbar-progress-status").html(percentComplete + '%');
-                    }
-                }, false);
-                return xhr;
-            },
-            success: function (deriID) {
-                $(upload.statusbar).find(".upload-success").removeClass("hidden");
-                $(upload.statusbar).find(".upload-success").attr("title", derivateBrowserTools.getI18n("db.alert.upload.success"));
-                //$(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.alert.upload.success"));
-                if (mode != "new") {
-                    if (upload.exists) {
-                        derivateBrowserFileView.removeFileWithPath(upload.getCompletePath());
-                    }
-                    if (upload.type.endsWith("xml")){
-                        derivateBrowserFileView.addXML(upload.getaddToBrowserJson());
-                    }
-                    else{
-                        derivateBrowserFileView.addFile(upload.getaddToBrowserJson());
-                    }
-                    uploadFilesAndAsk();
-                }
-                if (mode == "new") {
-                    currentUploadCheck.deriID = deriID;
-                    uploadNextFile(upload);
-                }
-            },
-            error: function (error) {
-                if (error.status == 415) {
-                    console.log("Test");
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype"), false);
-                    $(upload.statusbar).find(".upload-type").removeClass("hidden");
-                    $(upload.statusbar).find(".upload-type").attr("title", derivateBrowserTools.getI18n("db.alert.filetype"));
-                    //$(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.alert.filetype"));
-                    //$(upload.statusbar).addClass("alert-warning");
-                    $(upload.statusbar).find(".statusbar-progress-status").addClass("alert-warning");
-                    if ($("#upload-status-bar-header-error").hasClass("hidden")){
-                        $("#upload-status-bar-header-type").removeClass("hidden");
-                    }
-                    if (mode == "new") {
-                        upload.exists = true;
-                        uploadNextFile(upload);
-                    }
-                    else{
-                        uploadFilesAndAsk();
-                    }
-                }
-                else {
-                    if (error.status == 401) {
-                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
-                    }
-                    else {
-                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.upload.error"), false);
-                        $(upload.statusbar).find(".upload-error").removeClass("hidden");
-                        $(upload.statusbar).find(".upload-error").attr("title", derivateBrowserTools.getI18n("db.label.upload.error"));
-                        //$(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.label.upload.error"));
-                        //$(upload.statusbar).addClass("alert-danger");
-                        $(upload.statusbar).find(".statusbar-progress-status").addClass("alert-danger");
-                        $("#upload-status-bar-header-type").addClass("hidden");
-                        $("#upload-status-bar-header-error").removeClass("hidden");
-                        if (mode == "new") {
-                            upload.exists = true;
-                            cancelUpload();
-                        }
-                        else{
-                            uploadFilesAndAsk();
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    /**
      * @property URN
      */
     function addURN(json) {
@@ -1175,34 +894,6 @@ var DerivateBrowser = function () {
                 },
                 500: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.error"), false);
-                },
-                401: function () {
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
-                }
-            }
-        });
-    }
-
-    function doExistsCheck(json) {
-        $.ajax({
-            url: "exists",
-            type: "POST",
-            contentType: 'application/json',
-            dataType: "json",
-            data: JSON.stringify(json),
-            statusCode: {
-                200: function (data) {
-                    currentUploadCheck.data = data;
-                    currentUploadCheck.currentPos = 0;
-                    currentUploadCheck.overwriteAll = false;
-                    currentUploadCheck.skipAll = false;
-                    $(".btn-upload-all").removeData("check");
-                    $(".btn-upload-all").addClass("glyphicon-unchecked");
-                    $(".btn-upload-all").removeClass("glyphicon-check");
-                    uploadFilesAndAsk();
-                },
-                500: function () {
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.upload.error"), false);
                 },
                 401: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
@@ -1283,64 +974,6 @@ var DerivateBrowser = function () {
         $("#derivat-panel-startfile-label").html($(entry).data("path"));
     }
 
-    function existsCheck() {
-        var json = {
-            "deriID": derivateBrowserTools.getCurrentDocID(),
-            "path": derivateBrowserTools.getCurrentPath(),
-            "files": []
-        };
-        $.each(uploadList, function (index, value) {
-            if (value instanceof Upload) {
-                if (value.exists == undefined) {
-                    json.files.push(value.getCheckJson());
-                }
-            }
-        });
-        doExistsCheck(json)
-    }
-
-    /**
-     * @property existingFile
-     */
-    function uploadFilesAndAsk() {
-        var data = currentUploadCheck.data;
-        if (currentUploadCheck.currentPos < Object.keys(data.files).length) {
-            var file = data.files[currentUploadCheck.currentPos];
-            var upload = uploadList[file.id];
-            //TODO fix abfrage
-            if (file.exists == "1" && currentUploadCheck.skipAll) {
-                currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
-                uploadFilesAndAsk();
-                return false;
-            }
-            if (file.exists == "2") {
-                currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
-                uploadFilesAndAsk();
-                //TODO show Alert Filetype not supported
-                return false;
-            }
-            if (file.exists == "1" && !currentUploadCheck.overwriteAll) {
-                upload.exists = true;
-                upload.askOverwrite(file.existingFile, data.deriID, data.path);
-            }
-            if (file.exists == "1" && currentUploadCheck.overwriteAll) {
-                upload.exists = true;
-            }
-            if (file.exists == "0") {
-                upload.exists = false;
-            }
-            if (file.exists == "0" || currentUploadCheck.overwriteAll) {
-                upload.statusbar = upload.getStatus();
-                $("#upload-status-bar-table").append(upload.statusbar);
-                showUploadBar();
-                uploadFile(upload);
-                currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
-            }
-        }
-        else {
-            currentUploadCheck = {};
-        }
-    }
 
     function searchJournals(query) {
         $("#folder-list-ul").html("");
@@ -1348,13 +981,6 @@ var DerivateBrowser = function () {
         $("#derivat-panel").addClass("hidden");
         if (query == "") query = "*";
         derivateBrowserNavigation.searchJournals(query);
-    }
-
-    function showUploadBar() {
-        $("#upload-status-bar-table").removeClass("hidden");
-        $("#upload-status-bar").removeClass("hidden");
-        $("#upload-status-bar").animate({'height': '300px'}, 500);
-        $(".btn-mini-usb").data("status", "maxi");
     }
 
     function checkIfNothingSelected() {
@@ -1405,105 +1031,6 @@ var DerivateBrowser = function () {
         else {
             showDeleteDocAlert("journal");
         }
-    }
-
-    function addFileToUplodlist(file, path) {
-        if (file.type != "") {
-            var upload = new Upload(derivateBrowserTools.getCurrentDocID(), "", derivateBrowserTools.getCurrentPath() + path, file);
-            if (path != "") upload.isInFolder();
-            if (uploadList[upload.getID()] == undefined) {
-                upload.exists = false;
-                upload.statusbar = upload.getStatus();
-                $("#lightbox-new-derivate-table").append(upload.statusbar);
-                $("#lightbox-new-derivate-table .statusbar-progress").addClass("invisible");
-                uploadList[upload.getID()] = upload;
-            }
-            else {
-                console.log("already in there");
-            }
-        }
-        else {
-            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype"), false);
-        }
-    }
-
-    /**
-     * @property isFile
-     * @property isDirectory
-     */
-    function getWebkitFiles(item, path) {
-        path = path || "";
-        if (item.isFile) {
-            // Get file
-            item.file(function (file) {
-                addFileToUplodlist(file, path);
-            });
-        } else if (item.isDirectory) {
-            // Get folder contents
-            //noinspection JSUnresolvedFunction
-            var dirReader = item.createReader();
-            //noinspection JSUnresolvedFunction
-            dirReader.readEntries(function (entries) {
-                for (var i = 0; i < entries.length; i++) {
-                    getWebkitFiles(entries[i], path + "/" + item.name);
-                }
-            });
-        }
-    }
-
-    function uploadNextFile(upload) {
-        upload.exists = true;
-        var all = true;
-        $.each(uploadList, function (index, nextUpload) {
-            if (nextUpload instanceof Upload) {
-                if (nextUpload.exists == false) {
-                    nextUpload.deriID = currentUploadCheck.deriID;
-                    uploadFile(nextUpload, "new");
-                    all = false;
-                    return false;
-                }
-            }
-        });
-        if (all) {
-            $("#lightbox-new-derivate-done").removeClass("hidden");
-            $("#lightbox-new-derivate-message").addClass("hidden");
-            $("#lightbox-new-derivate-done").data("deriID", currentUploadCheck.deriID);
-            $("#lightbox-new-derivate-done").data("docID", upload.docID);
-        }
-    }
-
-    function cancelUpload() {
-        var docID = "";
-        $.each(uploadList, function (index, nextUpload) {
-            docID = nextUpload.docID;
-            if (nextUpload instanceof Upload) {
-                if (nextUpload.exists == false) {
-                    $(nextUpload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.label.upload.canceled"));
-                }
-            }
-        });
-        $("#lightbox-new-derivate-error").removeClass("hidden");
-        $("#lightbox-new-derivate-done").removeClass("hidden");
-        $("#lightbox-new-derivate-message").addClass("hidden");
-        $("#lightbox-new-derivate-done").data("deriID", currentUploadCheck.deriID);
-        $("#lightbox-new-derivate-done").data("docID", docID);
-
-    }
-
-    function hideNewDerivateLightbox() {
-        uploadList = {};
-        currentUploadCheck = {};
-        $("#lightbox-new-derivate").modal("hide");
-        $("#lightbox-new-derivate-hint").removeClass("hidden");
-        $("#lightbox-new-derivate-table").addClass("hidden");
-        $("#lightbox-new-derivate-table").html("");
-        $("#lightbox-new-derivate-main").removeClass("new-derivate-noDrop");
-        $("#lightbox-new-derivate-confirm").removeClass("hidden");
-        $(".lightbox-new-derivate-cancel").removeClass("hidden");
-        $("#lightbox-new-derivate-done").addClass("hidden");
-        $("#lightbox-new-derivate-done").removeData();
-        $("#lightbox-new-derivate-error").addClass("hidden");
-        $("#lightbox-new-derivate-message").addClass("hidden");
     }
 
     function filterTable(filterID) {

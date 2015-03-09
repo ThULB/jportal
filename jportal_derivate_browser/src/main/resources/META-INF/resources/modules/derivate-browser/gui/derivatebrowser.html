@@ -41,12 +41,19 @@
         <div id="alert-area" class="alert alert-danger">...</div>
         <div id="file-view" ondragover="return false">
 			<div id="files">
-                <div id="editor-loading"  class="hidden">
+                <div id="editor-loading"  class="derivate-browser-loading hidden">
                     <div class="bounce1"></div>
                     <div class="bounce2"></div>
                     <div class="bounce3"></div>
                 </div>
-				<div id="upload-overlay" class="hidden"></div>
+				<div id="upload-overlay" class="hidden">
+                    <div id="upload-overlay-circle"></div>
+                    <!--<span class="glyphicon glyphicon-cloud-upload upload-icon"></span>-->
+                    <!--<span class="glyphicon glyphicon-picture"></span>-->
+                    <!--<i class="fa fa-cloud-upload fa-6"></i>-->
+                    <div id="upload-overlay-text-add" class="upload-overlay-text"><text class="i18n" i18n="db.label.uploadOverlay" i18n-def="Dateien fallen lassen zum sofortigen Upload."></text></div>
+                    <div id="upload-overlay-text-new" class="upload-overlay-text hidden"><text class="i18n" i18n="db.label.uploadOverlay.new" i18n-def="Dateien fallen lassen um Derivat zu erstellen."></text></div>
+                </div>
 				<div id="derivate-browser" class="hidden">
 					<div id="derivate-browser-header">
 						<div class="panel panel-default hidden" id="derivat-panel">
@@ -63,12 +70,12 @@
 										</dl>
                                         <div id="option-select-area">
                                             <button id="btn-derivate-options" type="button" class="btn btn-default browser-button derivate-button">
-                                                <span class="glyphicon glyphicon glyphicon-cog button-glyphicon"></span>
+                                                <span class="glyphicon glyphicon-cog button-glyphicon"></span>
                                                 <text class="i18n" i18n="db.label.derivateOptions" i18n-def="Optionen"></text>
                                             </button>
                                             <div id="derivat-panel-buttons" class="hidden">
                                                 <button id="btn-urnAll" type="button" class="btn btn-default browser-button derivate-button">
-                                                        <span class="glyphicon glyphicon glyphicon-tags button-glyphicon"></span>
+                                                        <span class=" glyphicon glyphicon-tags button-glyphicon"></span>
                                                         <text class="i18n" i18n="db.label.assignUrn" i18n-def="URN für Derivat vergeben"></text>
                                                 </button>
                                                 <button id="btn-viewer" type="button" class="btn btn-default browser-button derivate-button">
@@ -76,7 +83,7 @@
                                                     <text class="i18n" i18n="db.label.goToViewer" i18n-def="in Viewer ansehen"></text>
                                                 </button>
                                                 <button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button derivate-button">
-                                                    <span class="glyphicon glyphicon glyphicon-trash button-glyphicon"></span>
+                                                    <span class=" glyphicon glyphicon-trash button-glyphicon"></span>
                                                     <text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>
                                                 </button>
                                                 <div id="download-select-area">
@@ -93,10 +100,6 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <!--<button id="btn-download-tar" type="button" class="btn btn-default browser-button derivate-button">-->
-                                                    <!--<span class="glyphicon glyphicon-arrow-down button-glyphicon"></span>-->
-                                                    <!--<text class="i18n" i18n="db.label.downloadTar" i18n-def="Derivat als Tar herunterladen"></text>-->
-                                                <!--</button>-->
                                             </div>
                                         </div>
 									</div>
@@ -244,6 +247,21 @@
 				<span class="glyphicon glyphicon-remove btn-close-usb btn"></span>
 				<span class="glyphicon glyphicon-minus btn-mini-usb btn"></span>
 			</div>
+            <div id="upload-complete-status-wrapper">
+                <div id="upload-complete-status-done" class="upload-statusbar-text hidden"><text class="i18n" i18n="db.label.upload.status.done" i18n-def="Upload abgeschlossen"></text></div>
+                <div id="upload-complete-status-canceled" class="upload-statusbar-text hidden"><text class="i18n" i18n="db.label.upload.status.canceled" i18n-def="Upload abgebrochen"></text></div>
+                <div id="upload-complete-status-text" class="upload-statusbar-text">
+                    <div id="upload-complete-status-current-number"></div>
+                    <div><text class="i18n" i18n="db.label.upload.of" i18n-def="von"></text></div>
+                    <div id="upload-complete-status-file-count"></div>
+                </div>
+                <div id="upload-status-bar-cancel" class="hidden">Upload abbrechen</div>
+                <td class="upload-complete-status">
+                    <div class='statusbar-complete-progress progress'>
+                        <div class='statusbar-complete-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div>
+                    </div>
+                </td>
+            </div>
 			<div id="upload-status-bar-body">
 				<table>
 					<tbody id="upload-status-bar-table">
@@ -372,10 +390,13 @@
                         <p id="lightbox-new-derivate-hint" ondragover="return false">
                             <text class="i18n" i18n="db.label.dragAndDropUpload" i18n-def="Drag and Drop zum hochladen"></text>
                         </p>
-                        <table>
-                            <tbody id="lightbox-new-derivate-table" class="hidden">
-                            </tbody>
-                        </table>
+                        <div id="lightbox-new-derivate-loading"  class="derivate-browser-loading hidden">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                        <div id="lightbox-new-derivate-status" class="hidden">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -503,7 +524,9 @@
 	
 	<script id="upload-entry-template" type="text/mustache">
 		<tr class="upload-entry">
-			<td class="upload-preview-img-td"><img class='img-placeholder img-placeholder-upload' src=''><img class='upload-preview-image hidden'></img></td>
+			<td class="upload-preview-img-td">
+			    <span class="glyphicon glyphicon-picture upload-preview-image"></span>
+			</td>
 			{{#inFolder}}
 			    <td class="upload-preview-name" title="{{name}}">{{path}}/{{name}}</td>
             {{/inFolder}}
@@ -511,7 +534,7 @@
                 <td class="upload-preview-name" title="{{name}}">{{name}}</td>
             {{/inFolder}}
 			<td class="upload-preview-size" title="{{size}}">{{size}}</td>
-			<td class="upload-preview-status"><div class='statusbar-progress progress'><div class='statusbar-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></td>
+			<td class="upload-preview-status"><p class="upload-preview-status-text">Warten</p><div class='statusbar-progress progress hidden'><div class='statusbar-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></td>
 		</tr>
 	</script>
 
@@ -547,7 +570,7 @@
     <script id="upload-large-view-status-template" type="text/mustache">
 		<div class="row">
 		    <div class="col-md-6">
-                <h4 class="mightOverflow">{{name}}</h4>
+				<h4 class="mightOverflow">{{name}}</h4>
 			    <dl>
 				    <dt>Size</dt>
 				    <dd>{{size}}</dd>
@@ -572,6 +595,33 @@
             </div>
 		</div>
 	</script>
+
+    <script id="upload-entry-template3" type="text/mustache">
+        <div class="row">
+            <p class="col-md-4"><strong><text class="i18n" i18n="db.label.upload.of" i18n-def="Gesamt Fortschritt:"></text></strong></p>
+            <div class="col-md-1"><text class="i18n" i18n="db.label.upload.file" i18n-def="Datei "></text></div>
+            <div id="lightbox-new-derivate-current-number" class="col-md-1"></div>
+            <div class="col-md-1"><text class="i18n" i18n="db.label.upload.of" i18n-def="von"></text></div>
+            <div id="lightbox-new-derivate-file-count" class="col-md-1"></div>
+        </div>
+        <div class="row">
+            <div id="lightbox-new-derivate-current-size" class="col-md-2"></div>
+            <div class="col-md-1"><text class="i18n" i18n="db.label.upload.of" i18n-def="von"></text></div>
+            <div id="lightbox-new-derivate-complete-size" class="col-md-2"></div>
+            <div class="upload-preview-status-complete col-md-7"><div class='statusbar-progress-complete progress'><div class='statusbar-progress-complete-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></div>
+        </div>
+        <div class="row">
+            <p class="col-md-3"><strong><text class="i18n" i18n="db.label.upload.of" i18n-def="Aktuelle Datei:"></text></strong></p>
+            <div id="lightbox-new-derivate-current-name" class="col-md-5"></div>
+        </div>
+        <div class="row">
+            <div id="lightbox-new-derivate-current-single-size" class="col-md-2"></div>
+            <div class="col-md-1"><text class="i18n" i18n="db.label.upload.of" i18n-def="von"></text></div>
+            <div id="lightbox-new-derivate-complete-single-size" class="col-md-2"></div>
+            <div class="upload-preview-status-single col-md-7"><div class='statusbar-progress-single progress'><div class='statusbar-progress-single-status progress-bar noAnimation' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></div>
+        </div>
+	</script>
+
 	<script type="text/javascript">
 		var getUrl = window.location;
 		var jp = jp || {};
@@ -583,7 +633,8 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
  	<script type="text/javascript" src="gui/js/derivatebrowser.js"></script>
- 	<script type="text/javascript" src="gui/js/derivatebrowser-upload.js"></script>
+ 	<script type="text/javascript" src="gui/js/derivatebrowser-uploadEntry.js"></script>
+    <script type="text/javascript" src="gui/js/derivatebrowser-upload.js"></script>
  	<script type="text/javascript" src="gui/js/derivatebrowser-treeEntry.js"></script>
 	<script type="text/javascript" src="gui/js/derivatebrowser-navigation.js"></script>
 	<script type="text/javascript" src="gui/js/derivatebrowser-fileView.js"></script>

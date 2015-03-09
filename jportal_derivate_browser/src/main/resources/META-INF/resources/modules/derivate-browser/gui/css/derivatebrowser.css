@@ -18,6 +18,21 @@ html,body{
       }
 }
 
+@-webkit-keyframes bouncedelayUpload {
+    0% { -webkit-transform: scale(1.0) }
+    50% { -webkit-transform: scale(1.05) }
+}
+
+@keyframes bouncedelayUpload {
+    0% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    } 50% {
+          transform: scale(1.1);
+          -webkit-transform: scale(1.05);
+      }
+}
+
 #filebrowser{
 	width: 100%;
 	height: 100%;
@@ -475,6 +490,31 @@ li.derivate-browser-breadcrumb-entry{
 	background-color: rgba(77, 77, 77, 0.5);
 }
 
+#upload-overlay-circle {
+    width: 330px;
+    height: 330px;
+    background-color: #1565C0;
+    border-radius: 165px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -165px;
+    margin-top: -165px;
+    animation: bouncedelayUpload 2.0s infinite ease-in-out;
+    -webkit-animation: bouncedelayUpload 2.0s infinite ease-in-out;
+    box-shadow: 0 2px 2px 0 rgba(50, 50, 50, 0.2);
+}
+
+.upload-overlay-text{
+    top: 50%;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    color: #FAFAFA;
+    margin-top: -8px;
+    font-weight: bold;
+}
+
 #upload-status-bar{
 	z-index: 999;
 	border: 1px solid #E3E3E3;
@@ -487,10 +527,53 @@ li.derivate-browser-breadcrumb-entry{
 	background-color: #FFFFFF;	
 }
 
+#upload-complete-status-wrapper{
+    width: 100%;
+    height: 25px;
+    position: absolute;
+}
+
+.upload-statusbar-text{
+    position: absolute;
+    color: #fafafa;
+    text-align: center;
+    width: 100%;
+}
+
+#upload-complete-status-text > div{
+    display: inline-block;
+}
+
+#upload-status-bar-cancel {
+    position: absolute;
+    right: 5px;
+    color: #fafafa;
+    cursor: pointer;
+}
+
+.statusbar-complete-progress{
+    width: 100%;
+    background-color: rgba(77, 77, 77, 0.8);
+    border-radius: 0;
+}
+
+div.statusbar-progress-single-status.noAnimation {
+    -webkit-transition: none;
+    -moz-transition: none;
+    /*-ms-transition: none;*/
+    -o-transition: none;
+    transition: none;
+}
+
+#lightbox-new-derivate-status {
+    overflow: hidden;
+}
+
 #upload-status-bar-body{
 	overflow: auto;
-	height: calc(100% - 30px);
+	height: calc(100% - 50px);
     width: 100%;
+    margin-top: 20px;
 }
 
 #upload-status-bar-body > table{
@@ -535,86 +618,95 @@ li.derivate-browser-breadcrumb-entry{
 }
 
 .upload-preview-img-td{
-    width: 100px;
+    width: 30px;
     text-align: center;
 }
 
+.upload-preview-image{
+	font-size: 20px;
+}
+
 /*.upload-preview-image{*/
+    /*max-height: 150px;*/
+    /*max-width: 230px;*/
+/*}*/
+
+
+/*.img-placeholder-upload{*/
 	/*max-height: 50px;*/
 	/*max-width: 100px;*/
 /*}*/
 
-.upload-preview-image{
-    max-height: 150px;
-    max-width: 230px;
-}
-
-
-.img-placeholder-upload{
-	max-height: 50px;
-	max-width: 100px;
+.upload-preview-name{
+	padding-left: 5px;
+	width: 230px;
+	max-width: 160px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 /*.upload-preview-name{*/
-	/*padding-left: 5px;*/
-	/*width: 150px;*/
-	/*max-width: 150px;*/
-	/*overflow: hidden;*/
-	/*white-space: nowrap;*/
-	/*text-overflow: ellipsis;*/
-/*}*/
-
-.upload-preview-name{
-    padding-left: 5px;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
+    /*padding-left: 5px;*/
+    /*width: 100%;*/
+    /*position: absolute;*/
+    /*bottom: 0;*/
     /*background-color: rgba(77,77,77,0.8);*/
-    color: #FAFAFA;
-    z-index: 5;
-}
+    /*color: #FAFAFA;*/
+    /*z-index: 5;*/
+/*}*/
 
 .upload-preview-size{
 	padding-left: 5px;
-	width: 100px;
-	max-width: 100px;
+	width: 90px;
+	max-width: 90px;
 	text-align: right;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
 
-/*.statusbar-progress{*/
+.statusbar-progress{
 	/*width: 100%;*/
-    /*margin-bottom: 0;*/
+    /*width: 130px;*/
+    margin-bottom: 0;
     /*box-shadow: 0 2px 2px 0 rgba(50, 50, 50, 0.5);*/
+    border-radius: 0;
+    /*float: left;*/
+    /*margin-left: 10px;*/
+}
+
+/*.statusbar-progress{*/
+    /*width: 100%;*/
+    /*margin-bottom: 0;*/
     /*border-radius: 0;*/
+    /*position: absolute;*/
+    /*bottom: 0;*/
+    /*background-color: rgba(77, 77, 77, 0.8);*/
     /*float: right;*/
 /*}*/
-
-.statusbar-progress{
-    width: 100%;
-    margin-bottom: 0;
-    border-radius: 0;
-    position: absolute;
-    bottom: 0;
-    background-color: rgba(77, 77, 77, 0.8);
-    /*float: right;*/
-}
 
 
 .statusbar-progress-status{
     background-color: #1565C0;
 }
 
-/*.upload-preview-status{*/
-	/*padding: 0 8px;*/
-/*}*/
-
 .upload-preview-status{
-    padding: 0;
-    width: 100%;
+	width: 130px;
+    max-width: 130px;
+    margin-left: 10px;
+    margin-top: 15px;
+    float: left;
 }
+
+.upload-entry.alert-warning > .upload-preview-status {
+    margin-top: 6px;
+}
+
+/*.upload-preview-status{*/
+    /*padding: 0;*/
+    /*width: 100%;*/
+/*}*/
 
 .no-urn{
 	display: inline-block;
@@ -697,7 +789,7 @@ li.derivate-browser-breadcrumb-entry{
 }
 
 .upload-entry {
-    height: 40px;
+    height: 50px;
     width: 100%;
 }
 
@@ -940,6 +1032,8 @@ li.derivate-browser-breadcrumb-entry{
 
 #lightbox-alert-delete-list{
 	margin-top: 10px;
+    height: 250px;
+    overflow: auto;
 }
 
 .lightbox-warning{
@@ -1022,7 +1116,7 @@ li.derivate-browser-breadcrumb-entry{
 }
 
 #lightbox-new-derivate-main{
-    min-height: 300px;
+    min-height: 150px;
     max-height: 500px;
     overflow: auto;
     position: relative;
@@ -1045,14 +1139,14 @@ li.derivate-browser-breadcrumb-entry{
     width: 310px;
 }
 
-#editor-loading {
+.derivate-browser-loading {
     top: 40%;
     position:  absolute;
     width: 100%;
     text-align: center;
 }
 
-#editor-loading > div {
+.derivate-browser-loading > div {
     width: 18px;
     height: 18px;
     background-color: #333;
@@ -1066,12 +1160,12 @@ li.derivate-browser-breadcrumb-entry{
     animation-fill-mode: both;
 }
 
-#editor-loading .bounce1 {
+.derivate-browser-loading .bounce1 {
     -webkit-animation-delay: -0.32s;
     animation-delay: -0.32s;
 }
 
-#editor-loading .bounce2 {
+.derivate-browser-loading .bounce2 {
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
 }

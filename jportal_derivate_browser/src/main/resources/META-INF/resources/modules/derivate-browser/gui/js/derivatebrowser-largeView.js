@@ -252,7 +252,7 @@ var derivateBrowserLargeView = (function () {
         if ($("#view-large-large").width() > $(window).width()){
             left = (x  * ($("#view-large-large").outerWidth() / $(window).width())) - (x);
         }
-        $("#view-large-large").animate({
+        $("#view-large-large").offset({
             top: -top,
             left: -left
         });

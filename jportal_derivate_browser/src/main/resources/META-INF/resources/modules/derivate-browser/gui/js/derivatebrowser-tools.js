@@ -152,6 +152,18 @@ var derivateBrowserTools = (function () {
         });
     }
 
+    function updateI18n(elm) {
+        $(elm).find(".i18n").each(function(i, elm) {
+            var i18nKey = i18nKeys[$(elm).attr("i18n")];
+            if (i18nKey != undefined){
+                $(elm).html(i18nKey);
+            }
+            else{
+                $(elm).html($(elm).attr("i18n-def"));
+            }
+        });
+    }
+
     function getI18nKey(key) {
         var string = i18nKeys[key];
         if (string != undefined){
@@ -267,6 +279,10 @@ var derivateBrowserTools = (function () {
 
         loadI18n: function(lang) {
             loadI18nKeys(lang)
+        },
+
+        updateI18nForElm: function(elm) {
+            updateI18n(elm);
         },
 
         getI18n: function(args) {
