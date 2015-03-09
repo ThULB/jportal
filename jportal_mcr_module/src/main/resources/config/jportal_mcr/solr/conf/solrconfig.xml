@@ -1851,7 +1851,7 @@
     </lst>
     <lst name="appends">
       <str name="fq">+contentClassi2:Gesetzesblaetter</str>
-      <str name="fq">+objectType:jpvolume</str>
+      <str name="fq">+objectType:(jpvolume OR jparticle)</str>
     </lst>
     <lst name="invariants">
       <str name="q">({!join from=returnId to=id}{!type=edismax v=$qry qf=$qf}) OR {!type=edismax v=$qry qf=$qf}</str>
