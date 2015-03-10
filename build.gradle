@@ -231,6 +231,19 @@ project(':jportal_webapp'){
             into 'applet'
             rename 'fileupload-applet(.*).jar', 'upload.jar'
         }
+//        from {
+//            configurations.executableWarDeps.collect {
+//                it.isDirectory() ? it : project.zipTree(it)
+//            }
+//        }
+//
+//        from("$buildDir/classes/main"){ include "**/JettyRun.class" }
+
+        manifest {
+            attributes("Webapp": "$project.name")
+            attributes("version": "$project.version")
+//            attributes("Main-Class": "fsu.thulb.jetty.JettyRun")
+        }
     }
 }
 
@@ -282,21 +295,36 @@ task stopJetty(type: Exec){
     def jettyStart
     configurations.jettystartJar.each { File file -> if(file.absolutePath.contains("jetty-start")) jettyStart = file.absolutePath }
 
-    println "Jar: " + jettyStart
     executable "java"
     args '-jar', jettyStart//, '--stop-port 8181', '--stop-key stop', '--stop'
-//    args '--stop-port', '8181'
-//    args '--stop-key', 'stop'
+    args '-DSTOP.PORT=8181'
+    args '-DSTOP.KEY=stop'
+    //    args '--stop-port', '8181'
+    //    args '--stop-key', 'stop'
     args '--stop'
-//    args '--help'
+    //    args '--help'
+}
+
+task hello(type: Exec){
+    executable "java"
+    args '-jar', project(':jportal_jetty_tools').tasks.getByPath(':jportal_jetty_tools:jar').archivePath
 }
 
 project(':jportal_jetty_tools'){
     //    project.ext.needMCR = false
-    configurations {  solr }
+    configurations {
+        solr
+        executableWarDeps{ extendsFrom compile }
+    }
 
     dependencies{
         //                    compile "org.mycore:mycore-base:$mcrVersion"
+        compile "org.eclipse.jetty:jetty-server:$jettyVersion"
+        executableWarDeps "org.eclipse.jetty:jetty-server:$jettyVersion"
+        compile "org.eclipse.jetty:jetty-security:$jettyVersion"
+        executableWarDeps "org.eclipse.jetty:jetty-security:$jettyVersion"
+        compile "org.eclipse.jetty:jetty-plus:$jettyVersion"
+        executableWarDeps "org.eclipse.jetty:jetty-plus:$jettyVersion"
         compile 'org.hsqldb:hsqldb:2.3.2'
         compile 'javax.servlet:javax.servlet-api:3.0.1'
         compile 'log4j:log4j:1.2.17'
@@ -334,6 +362,22 @@ project(':jportal_jetty_tools'){
         from("$solrBuildDir") {
             include 'solr.xml'
             into 'config/jportal_jetty_tools/solr/solr-home'
+        }
+    }
+    
+    jar {
+        from {
+            configurations.executableWarDeps.collect {
+                it.isDirectory() ? it : project.zipTree(it)
+            }
+        }
+
+//        from("$buildDir/classes/main"){ include "**/JettyRun.class" }
+
+        manifest {
+//            attributes("Webapp": "$project.name")
+//            attributes("version": "$project.version")
+            attributes("Main-Class": "fsu.thulb.jetty.JettyRun")
         }
     }
 }
