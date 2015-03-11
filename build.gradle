@@ -306,8 +306,34 @@ task stopJetty(type: Exec){
 }
 
 task hello(type: Exec){
+    configurations {
+        jetty_
+        solr_
+    }
+    
+    description = "Hello Jetty"
+    
+    dependencies {
+        jetty_ project(':java_agent')
+        solr_ "org.mycore.solr:solr:4.7.2@war"
+    }
+
+    def solrWarFilePath
+    configurations.solr_.each { File file -> solrWarFilePath = file.absolutePath }
+
+    def agentOp
+    for(path in resourcePaths){
+        if(agentOp == null){
+            agentOp = path.toString()
+        }else {
+            agentOp = agentOp + "," + path
+        }
+    }
+    
     executable "java"
     args '-jar', project(':jportal_jetty_tools').tasks.getByPath(':jportal_jetty_tools:jar').archivePath
+    args "--path /solr " + solrWarFilePath
+    args "--path /jportal " + project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath
 }
 
 project(':jportal_jetty_tools'){
