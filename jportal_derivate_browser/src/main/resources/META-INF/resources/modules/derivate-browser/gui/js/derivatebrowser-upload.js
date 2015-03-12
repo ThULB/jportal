@@ -25,7 +25,6 @@ var derivateBrowserUpload = (function () {
 
     $("body").on("drop", "#files", function (event) {
         event.preventDefault();
-        event.stopPropagation();
         if (!$("#upload-overlay").hasClass("hidden")) {
             if (!$("#derivate-browser").hasClass("hidden")){
                 addToDerivate(event);
@@ -343,6 +342,7 @@ var derivateBrowserUpload = (function () {
             }
         }
         else {
+            scrollToElement($(".upload-entry").last());
             $(".upload-statusbar-text").addClass("hidden");
             $("#upload-complete-status-done").removeClass("hidden");
             uploadRunning = false;
@@ -401,10 +401,15 @@ var derivateBrowserUpload = (function () {
         $("#upload-complete-status-text").removeClass("hidden");
     }
 
-    function scrollToElement(elm) {
+    function scrollToElement(elm, end) {
+        var animationTime = 100;
+        if ($("#upload-status-bar-body").queue( "fx").length > 1) {
+            $("#upload-status-bar-body").stop(true);
+            animationTime = 1;
+        }
         $("#upload-status-bar-body").animate({
             scrollTop: $(elm).index() * $(elm).outerHeight()
-        }, 100);
+        }, animationTime);
     }
 
     /**
@@ -425,6 +430,9 @@ var derivateBrowserUpload = (function () {
                 }
             }
             else {
+                $("#upload-status-bar-header-type").removeClass("hidden");
+                $("#upload-status-bar-header-type-file").addClass("hidden");
+                $("#upload-status-bar-header-type-folder").removeClass("hidden");
                 derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetypeFolder"), false);
             }
         });
@@ -572,6 +580,8 @@ var derivateBrowserUpload = (function () {
                         if (mode != "new") {
                             if ($("#upload-status-bar-header-error").hasClass("hidden")) {
                                 $("#upload-status-bar-header-type").removeClass("hidden");
+                                $("#upload-status-bar-header-type-file").removeClass("hidden");
+                                $("#upload-status-bar-header-type-folder").addClass("hidden");
                             }
                             cancelUpload(currentUploadID + 1);
                         }

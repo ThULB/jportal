@@ -68,6 +68,76 @@ var derivateBrowserLargeView = (function () {
         //derivateBrowserTools.goTo(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
     });
 
+    $("#file-view-large").on("click", ".btn-check-large", function () {
+        var file = currentFileList[currentFileIndex];
+        var parent = derivateBrowserFileView.getFile(file.path);
+        if (!file.selected) {
+            $(parent).addClass("checked");
+            $(parent).data("checked", true);
+            $(parent).find(".btn-check").removeClass("glyphicon-unchecked");
+            $(parent).find(".btn-check").removeClass("invisible");
+            $(parent).find(".btn-check").addClass("glyphicon-check");
+            file.selected = true;
+            updatePanelData(currentFileList[currentFileIndex]);
+        }
+        else {
+            $(parent).removeClass("checked");
+            $(parent).removeData("checked");
+            $(parent).find(".btn-check").addClass("glyphicon-unchecked");
+            $(parent).find(".btn-check").addClass("invisible");
+            $(parent).find(".btn-check").removeClass("glyphicon-check");
+            file.selected = false;
+            updatePanelData(currentFileList[currentFileIndex]);
+        }
+        if ($(".browser-table-entry .glyphicon-check").length == 0) {
+            $(".btn-delete-all").addClass("faded");
+            $(".btn-move-all").addClass("faded");
+        }
+        else {
+            $(".btn-delete-all").removeClass("faded");
+            $(".btn-move-all").removeClass("faded");
+        }
+    });
+
+    $("#file-view-large").on("click", ".btn-edit-large", function () {
+        if ($("#view-large-panel-input").hasClass("hidden")) {
+            $("#view-large-panel-input").val($("#view-large-panel-title").html());
+            $("#view-large-panel-title").addClass("hidden");
+            $("#view-large-panel-input").removeClass("hidden");
+        }
+        else {
+            hidePanelInput();
+        }
+    });
+
+    $("#file-view-large").on("click", ".btn-delete-large", function () {
+        var entry = derivateBrowserFileView.getFile(currentFileList[currentFileIndex].path);
+        var startfile = $("#derivat-panel-startfile").data("startfile");
+        if ($(entry).data("startfile") != true && startfile.indexOf($(entry).data("path")) != 0) {
+            entry.addClass("delete");
+            derivateBrowserTools.showDeleteAlert();
+        }
+        else {
+            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.startfile"), false);
+        }
+    });
+
+    $("#file-view-large").on("keydown", "#view-large-panel-input", function (key) {
+        if (key.which == 13) {
+            var newName = $("#view-large-panel-input").val();
+            var file = currentFileList[currentFileIndex];
+            if (newName != file.name){
+                derivateBrowserFileView.renameFile(file.path,derivateBrowserTools.getCurrentDocID(), newName, file.start, changeName);
+            }
+            else {
+                hidePanelInput();
+            }
+        }
+        if (key.which == 27) {
+            hidePanelInput();
+        }
+    });
+
     $("body").on("keydown", function (key) {
         if (!$("#file-view-large").hasClass("hidden")) {
             if (key.which == 37) {  // <-
@@ -91,8 +161,7 @@ var derivateBrowserLargeView = (function () {
             setCurrentFileTo(0);
         }
         else{
-            var index = currentFileList.map(function(x) {return x.getID();}).indexOf(id);
-            if (index == -1) index = 0;
+            var index = getIndexFromID(id);
             currentFileIndex = index;
             setCurrentFileTo(index);
         }
@@ -169,32 +238,64 @@ var derivateBrowserLargeView = (function () {
     }
 
     function setCurrentFileTo(currentFile) {
-        fileEntry =  currentFileList[currentFile];
-        $("#view-large-normal").attr( "src", fileEntry.getMidPath());
-        $("#view-large-normal").data("id", fileEntry.getID());
-        if (!fileEntry.name.endsWith("pdf")){
-            $("#view-large-normal").addClass("view-large-resizeable");
-        }
-        else{
-            $("#view-large-normal").removeClass("view-large-resizeable");
-        }
-        $("#view-large-normal").data("id", fileEntry.getID());
-        derivateBrowserTools.setFileName(fileEntry.name);
-        currentFileList[currentFile].setStatusTo( $("#view-large-panel-collapse"));
-        if (currentFile == 0){
-            $("#view-large-left").addClass("hidden");
-        }
-        else{
-            $("#view-large-left").removeClass("hidden");
-        }
+        if (currentFileList.length > 0) {
+            showAlert(false);
+            var fileEntry =  currentFileList[currentFile];
+            $("#view-large-normal").attr( "src", fileEntry.getMidPath());
+            $("#view-large-normal").data("id", fileEntry.getID());
+            if (!fileEntry.name.endsWith("pdf")){
+                $("#view-large-normal").addClass("view-large-resizeable");
+            }
+            else{
+                $("#view-large-normal").removeClass("view-large-resizeable");
+            }
+            $("#view-large-normal").data("id", fileEntry.getID());
+            derivateBrowserTools.setFileName(fileEntry.name);
+            updatePanelData(fileEntry);
+            if (currentFile == 0){
+                $("#view-large-left").addClass("hidden");
+            }
+            else{
+                $("#view-large-left").removeClass("hidden");
+            }
 
-        if (currentFile == currentFileList.length - 1 ) {
-            $("#view-large-right").addClass("hidden");
+            if (currentFile == currentFileList.length - 1 ) {
+                $("#view-large-right").addClass("hidden");
+            }
+            else{
+                $("#view-large-right").removeClass("hidden");
+            }
+            setThumbFileTo(currentFile);
         }
         else{
-            $("#view-large-right").removeClass("hidden");
+            showAlert(true);
         }
-        setThumbFileTo(currentFile);
+    }
+
+    function updatePanelData(fileEntry) {
+        fileEntry.setStatusTo( $("#view-large-panel-collapse"));
+        if (fileEntry.selected) {
+            $("#view-large-panel").children().addClass("checked");
+            $("#view-large-panel").find(".btn-check-large").removeClass("glyphicon-unchecked");
+            $("#view-large-panel").find(".btn-check-large").addClass("glyphicon-check");
+        }
+        else {
+            $("#view-large-panel").children().removeClass("checked");
+            $("#view-large-panel").find(".btn-check-large").addClass("glyphicon-unchecked");
+            $("#view-large-panel").find(".btn-check-large").removeClass("glyphicon-check");
+        }
+    }
+
+    function changeName(success, deriID, oldname, newName) {
+        if (success) {
+            var path = oldname.substr(0, oldname.lastIndexOf("/") + 1) + newName;
+            setCurrentFileTo(getIndexFromID(deriID + path));
+        }
+        else{
+            if (!$("#view-large-panel-input").hasClass("hidden")) {
+                $("#view-large-panel-input").parent().addClass("has-error");
+            }
+        }
     }
 
     function resetLargeView() {
@@ -236,15 +337,17 @@ var derivateBrowserLargeView = (function () {
             $("#view-large-overlay").remove();
         }
         else{
-            var img = $('<div id="view-large-overlay"><img id="view-large-large" src="' + currentFileList[currentFileIndex].getLargePath() + '"></div>');
+            var img = $('<div id="view-large-overlay"><img id="view-large-large" src=""></div>');
             $("body").append(img);
-            setLargePosition(x, y);
+            $(img).find("#view-large-large").attr( "src", currentFileList[currentFileIndex].getLargePath()).on("load", function() {
+                setLargePosition(x, y);
+            });
         }
     }
 
     function setLargePosition(x, y) {
-        var top = -($(window).height() / 2) + ($("#view-large-large").height() / 2);
-        var left = -($(window).width() / 2) + ($("#view-large-large").width() / 2);
+        var top = - ($(window).height() / 2) + ($("#view-large-large").outerHeight() / 2);
+        var left = - ($(window).width() / 2) + ($("#view-large-large").outerWidth() / 2);
 
         if ($("#view-large-large").height() > $(window).height()){
             top = (y  * ($("#view-large-large").outerHeight() / $(window).height())) - (y);
@@ -256,6 +359,45 @@ var derivateBrowserLargeView = (function () {
             top: -top,
             left: -left
         });
+    }
+
+    function getIndexFromID(id) {
+        var index = currentFileList.map(function(x) {return x.getID();}).indexOf(id);
+        if (index == -1) index = 0;
+        return index;
+    }
+
+    function hidePanelInput() {
+        $("#view-large-panel-input").val("");
+        $("#view-large-panel-title").removeClass("hidden");
+        $("#view-large-panel-input").addClass("hidden");
+        $("#view-large-panel-input").parent().removeClass("has-error");
+    }
+
+    function removeFromList(id) {
+        currentFileList.splice(getIndexFromID(id), 1);
+        setCurrentFileTo(0);
+    }
+
+    function showAlert(show) {
+        if (show){
+            $("#view-large-main").addClass("expended-view");
+            $("#view-large-bottom").addClass("hidden");
+            $("#view-large-normal-wrapper").addClass("hidden");
+            $("#view-large-left").addClass("hidden");
+            $("#view-large-right").addClass("hidden");
+            $("#view-large-panel").addClass("hidden");
+            $("#view-large-alert").removeClass("hidden");
+        }
+        else {
+            $("#view-large-main").removeClass("expended-view");
+            $("#view-large-bottom").removeClass("hidden");
+            $("#view-large-normal-wrapper").removeClass("hidden");
+            $("#view-large-left").removeClass("hidden");
+            $("#view-large-right").removeClass("hidden");
+            $("#view-large-panel").removeClass("hidden");
+            $("#view-large-alert").addClass("hidden");
+        }
     }
 
     //ajax Methods
@@ -300,6 +442,23 @@ var derivateBrowserLargeView = (function () {
                 currentFileList = fullFileList.slice();
                 fullFileList = [];
             }
+        },
+
+        getFile: function(id) {
+            return currentFileList[getIndexFromID(id)];
+        },
+
+        updateLinks: function(docID) {
+            currentFileList[currentFileIndex].linkedDocs.push({"id": docID, "name": docID });
+            updatePanelData(currentFileList[currentFileIndex]);
+        },
+
+        updateName: function(id, newName) {
+            currentFileList[getIndexFromID(id)].changeName(newName);
+        },
+
+        removeFile: function(id) {
+            removeFromList(id)
         }
     };
 })();

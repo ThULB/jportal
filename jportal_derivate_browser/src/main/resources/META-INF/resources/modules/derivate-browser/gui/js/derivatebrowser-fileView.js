@@ -26,6 +26,12 @@ var derivateBrowserFileView = (function () {
 		}
 		$("#browser-table-files").html("");
         derivateBrowserLargeView.resetList();
+        if (data.children.length < 1) {
+            $("#browser-table-wrapper").addClass("browser-table-empty");
+        }
+        else {
+            $("#browser-table-wrapper").removeClass("browser-table-empty");
+        }
 		$.each(data.children, function(i, file) {
 			file.deriID = deriID;
 			if (file.type == "file"){
@@ -59,11 +65,15 @@ var derivateBrowserFileView = (function () {
 		$(fileEntryOutput).data("path", file.absPath);
 		$(fileEntryOutput).data("deriID", file.deriID);
 		$(fileEntryOutput).data("docID", file.deriID);
-        derivateBrowserLargeView.addFileToList(new LargeViewEntry(file.deriID, file.absPath, file.size, file.lastmodified, file.urn));
 		if ((mainDoc == file.absPath) || ("/" + mainDoc == file.absPath)){
-			$(fileEntryOutput).data("startfile", true);
+            derivateBrowserLargeView.addFileToList(new LargeViewEntry(file.deriID, file.absPath, file.size, file.lastmodified, file.urn, true));
+            $(fileEntryOutput).data("startfile", true);
 		}
+        else {
+            derivateBrowserLargeView.addFileToList(new LargeViewEntry(file.deriID, file.absPath, file.size, file.lastmodified, file.urn, false));
+        }
 		$(fileEntryOutput).appendTo("#browser-table-files");
+        $("#browser-table-wrapper").removeClass("browser-table-empty");
 	}
 
     function addXMLToView(file) {
@@ -73,6 +83,7 @@ var derivateBrowserFileView = (function () {
         $(xmlEntryOutput).data("deriID", file.deriID);
         $(xmlEntryOutput).data("docID", file.deriID);
         $(xmlEntryOutput).appendTo("#browser-table-files");
+        $("#browser-table-wrapper").removeClass("browser-table-empty");
     }
 
 	function addFolderToView(folder, path) {
@@ -87,6 +98,7 @@ var derivateBrowserFileView = (function () {
 		else{
 			$(folderEntryOutput).find("input.input-new").data("temp", folder.temp);
 		}
+        $("#browser-table-wrapper").removeClass("browser-table-empty");
 	}
 
     /**
@@ -115,6 +127,14 @@ var derivateBrowserFileView = (function () {
 			$("#derivat-panel-last").html(data.lastmodified);
 			deriName = data.name;
 		}
+        if (!data.display) {
+            $("#derivate-hidden").removeClass("hidden");
+            $("#btn-hide").addClass("derivate-ishidden");
+        }
+        else {
+            $("#derivate-hidden").addClass("hidden");
+            $("#btn-hide").removeClass("derivate-ishidden");
+        }
 		$("#derivat-panel-startfile-label").html(data.maindocName);
 		if (data.hasURN){
 			$("#btn-urnAll").addClass("hidden");
@@ -249,6 +269,18 @@ var derivateBrowserFileView = (function () {
         }).remove();
     }
 
+    function setStartFile(entry, loadImg) {
+        $(".startfile").removeClass("startfile");
+        $(".browser-table-file").filter(function () {
+            return $(this).data("startfile") == true;
+        }).removeData("startfile");
+        $(entry).data("startfile", true);
+        if (loadImg) {
+            derivateBrowserTools.setImgPath($("#panel-img"), $(entry).data("deriID"), $(entry).data("path"));
+        }
+        $("#derivat-panel-startfile-label").html($(entry).data("path"));
+    }
+
     //ajax Methods
 	function getDerivate(deriID, path, filename){
 		$.ajax({
@@ -380,6 +412,47 @@ var derivateBrowserFileView = (function () {
         });
     }
 
+    function renameF(oldName, deriID, newName, start, callback) {
+        $.ajax({
+            url: "rename?file=" + deriID + ":" + oldName + "&name=" + newName + "&mainFile=" + start,
+            type: "POST",
+            dataType: "json",
+            statusCode: {
+                200: function () {
+                    var entry = findFile(oldName);
+                    $(entry).data("path", oldName.substring(0, oldName.lastIndexOf("/") + 1) + newName);
+                    $(entry).find(".browser-table-file-name").html(newName);
+                    $(entry).find(".browser-table-file-name").removeData("oldName");
+                    derivateBrowserNavigation.renameDoc(derivateBrowserTools.getCurrentDocID(), oldName, newName);
+                    derivateBrowserLargeView.updateName(deriID + oldName, newName);
+                    if (start == "true") {
+                        $("#derivat-panel-startfile").data("startfile", $(entry).data("path"));
+                        setStartFile(entry, false);
+                    }
+                    $(entry).find(".btn-edit").removeData("edit");
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.rename.success", oldName.substr(oldName.lastIndexOf("/") + 1), newName), true);
+                    if (callback != undefined) {
+                        callback(true, deriID, oldName, newName);
+                    }
+                },
+                409: function () {
+                    var entry = findFile(oldName);
+                    $(entry).find(".browser-table-file-name").addClass("has-error");
+                    if (callback != undefined) {
+                        callback(false);
+                    }
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.rename.already", newName), false);
+                },
+                500: function () {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.rename.error", oldName), false);
+                },
+                401: function () {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
+            }
+        });
+    }
+
     return {
         //public
         init: function() {
@@ -415,7 +488,14 @@ var derivateBrowserFileView = (function () {
 
 		removeFile: function(node) {
 			node.remove();
+            if ($("#browser-table-files").html() == "") {
+                $("#browser-table-wrapper").addClass("browser-table-empty");
+            }
 		},
+
+        getFile: function (path) {
+            return findFile(path);
+        },
 
 		addFile: function(json) {
 			addFileToView(json);
@@ -452,6 +532,14 @@ var derivateBrowserFileView = (function () {
                 $("#journal-info-linklist").addClass("hidden");
                 $("#journal-info-text").addClass("journal-info-text-large");
             }
+        },
+
+        renameFile: function(oldName, deriID, newName, start, callback) {
+            renameF(oldName, deriID, newName, start, callback);
+        },
+
+        changeStartFile: function(entry, loadImg) {
+            setStartFile(entry, loadImg)
         }
     };
 })();

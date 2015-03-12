@@ -67,29 +67,36 @@
 											<dd id="derivat-panel-size"></dd>
 											<dt><text class="i18n" i18n="db.label.fileLastMod" i18n-def="zuletzt geändert"></text>:</dt>
 											<dd id="derivat-panel-last"></dd>
+                                            <dt></dt>
+                                            <dd id="derivate-hidden" class="alert-warning-text hidden"><text class="i18n" i18n="db.label.hidden" i18n-def="Versteckt"></text></dd>
 										</dl>
-                                        <div id="option-select-area">
-                                            <button id="btn-derivate-options" type="button" class="btn btn-default browser-button derivate-button">
-                                                <span class="glyphicon glyphicon-cog button-glyphicon"></span>
-                                                <text class="i18n" i18n="db.label.derivateOptions" i18n-def="Optionen"></text>
-                                            </button>
-                                            <div id="derivat-panel-buttons" class="hidden">
-                                                <button id="btn-urnAll" type="button" class="btn btn-default browser-button derivate-button">
+                                        <!--<div id="derivate-hidden" class="alert-warning-text"><text class="i18n" i18n="db.label.hidden" i18n-def="Versteckt"></text></div>-->
+                                        <!--<div id="option-select-area">-->
+                                            <!--<button id="btn-derivate-options" type="button" class="btn btn-default browser-button derivate-button">-->
+                                                <!--<span class="glyphicon glyphicon-cog button-glyphicon"></span>-->
+                                                <!--<text class="i18n" i18n="db.label.derivateOptions" i18n-def="Optionen"></text>-->
+                                            <!--</button>-->
+                                            <div id="derivat-panel-buttons" class="">
+                                                <button id="btn-urnAll" type="button" class="btn btn-default browser-button derivate-button" title="URN für Derivat vergeben">
                                                         <span class=" glyphicon glyphicon-tags button-glyphicon"></span>
-                                                        <text class="i18n" i18n="db.label.assignUrn" i18n-def="URN für Derivat vergeben"></text>
+                                                        <!--<text class="i18n" i18n="db.label.assignUrn" i18n-def="URN für Derivat vergeben"></text>-->
                                                 </button>
-                                                <button id="btn-viewer" type="button" class="btn btn-default browser-button derivate-button">
+                                                <button id="btn-hide" type="button" class="btn btn-default browser-button derivate-button">
+                                                    <span class="glyphicon glyphicon-eye-open button-glyphicon" title="anzeigen"></span>
+                                                    <span class="glyphicon glyphicon-eye-close button-glyphicon" title="verstecken"></span>
+                                                </button>
+                                                <button id="btn-viewer" type="button" class="btn btn-default browser-button derivate-button" title="in Viewer ansehen">
                                                     <span class="glyphicon glyphicon-sound-stereo button-glyphicon"></span>
-                                                    <text class="i18n" i18n="db.label.goToViewer" i18n-def="in Viewer ansehen"></text>
+                                                    <!--<text class="i18n" i18n="db.label.goToViewer" i18n-def="in Viewer ansehen"></text>-->
                                                 </button>
-                                                <button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button derivate-button">
+                                                <button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button derivate-button" title="Derivat löschen">
                                                     <span class=" glyphicon glyphicon-trash button-glyphicon"></span>
-                                                    <text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>
+                                                    <!--<text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>-->
                                                 </button>
                                                 <div id="download-select-area">
-                                                    <button id="btn-download" type="button" class="btn btn-default browser-button derivate-button">
+                                                    <button id="btn-download" type="button" class="btn btn-default browser-button derivate-button" title="Derivat herunterladen">
                                                         <span class="glyphicon glyphicon-arrow-down button-glyphicon"></span>
-                                                        <text class="i18n" i18n="db.label.download" i18n-def="Derivat herunterladen"></text>
+                                                        <!--<text class="i18n" i18n="db.label.download" i18n-def="Derivat herunterladen"></text>-->
                                                     </button>
                                                     <div id="download-new-select-area" class="hidden">
                                                         <button id="btn-download-zip" class="btn btn-default browser-button download-button" type="button">
@@ -102,7 +109,7 @@
                                                 </div>
                                             </div>
                                         </div>
-									</div>
+									<!--</div>-->
 									<div id="derivat-panel-startfile">
 										<label><text class="i18n" i18n="db.label.startFile" i18n-def="Startdatei"></text></label>
 										<figure>
@@ -147,7 +154,7 @@
 						</table>
 					</div>
 					<div id="browser-table-wrapper">
-						<table id="browser-table" class="table table-hover table-condensed" cellspacing="0">
+                        <table id="browser-table" class="table table-hover table-condensed" cellspacing="0">
                             <thead class="hidden">
                                 <tr>
                                     <th></th>
@@ -156,10 +163,11 @@
                                     <th></th>
                                 </tr>
                             </thead>
-							<tbody id="browser-table-files">	
+							<tbody id="browser-table-files">
 							</tbody>
 						</table>
-					</div>
+                        <div id="browser-table-alert"><text class="i18n" i18n="db.alert.noFiles" i18n-def="Keine Dateien gefunden, bitte laden Sie welche hoch."></text></div>
+                    </div>
 					<div id="derivate-browser-footer">
 						<div id="bottom-btns" class="bottom-btns">
 							<div class="btn-add btn">
@@ -219,6 +227,7 @@
                 <div id="view-large-right">
                     <span class="glyphicon glyphicon glyphicon-menu-right"></span>
                 </div>
+                <div id="view-large-alert" class="hidden"><text class="i18n" i18n="db.alert.noImage" i18n-def="Keine Bilder gefunden, bitte laden Sie welche hoch."></text></div>
             </div>
             <div id="view-large-bottom" class="noSelect">
                 <div id="view-large-slider-wrapper"></div>
@@ -242,8 +251,15 @@
 			<div id="upload-status-bar-header">
 				<span class="glyphicon glyphicon-cloud-upload"></span>
 				<div id="upload-status-bar-header-label">Upload...</div>
-                <div id="upload-status-bar-header-type" class="hidden alert-warning-text upload-status-bar-header-info"><span class="glyphicon glyphicon-alert"></span><text class="i18n" i18n="db.alert.filetype" i18n-def="Dateityp wird nicht unterstützt."></text></div>
-                <div id="upload-status-bar-header-error" class="hidden alert-danger-text upload-status-bar-header-info"><span class="glyphicon glyphicon-alert"></span><text class="i18n" i18n="db.alert.upload.error" i18n-def="Fehler beim Hochladen."></text></div>
+                <div id="upload-status-bar-header-type" class="hidden alert-warning-text upload-status-bar-header-info">
+                    <span class="glyphicon glyphicon-alert"></span>
+                    <text id="upload-status-bar-header-type-file" class="i18n" i18n="db.alert.filetype.file" i18n-def="Dateityp wird nicht unterstützt."></text>
+                    <text id="upload-status-bar-header-type-folder" class="i18n hidden" i18n="db.alert.filetype.folder" i18n-def="Ordner werden nicht unterstützt."></text>
+                </div>
+                <div id="upload-status-bar-header-error" class="hidden alert-danger-text upload-status-bar-header-info">
+                    <span class="glyphicon glyphicon-alert"></span>
+                    <text class="i18n" i18n="db.alert.upload.error" i18n-def="Fehler beim Hochladen."></text>
+                </div>
 				<span class="glyphicon glyphicon-remove btn-close-usb btn"></span>
 				<span class="glyphicon glyphicon-minus btn-mini-usb btn"></span>
 			</div>
@@ -256,11 +272,11 @@
                     <div id="upload-complete-status-file-count"></div>
                 </div>
                 <div id="upload-status-bar-cancel" class="hidden">Upload abbrechen</div>
-                <td class="upload-complete-status">
+                <div class="upload-complete-status">
                     <div class='statusbar-complete-progress progress'>
                         <div class='statusbar-complete-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div>
                     </div>
-                </td>
+                </div>
             </div>
 			<div id="upload-status-bar-body">
 				<table>
@@ -567,10 +583,13 @@
 		</div>
 	</script>
 
-    <script id="upload-large-view-status-template" type="text/mustache">
+    <script id="large-view-status-template" type="text/mustache">
 		<div class="row">
 		    <div class="col-md-6">
-				<h4 class="mightOverflow">{{name}}</h4>
+		        <div>
+                    <h4 id="view-large-panel-title" class="mightOverflow">{{name}}</h4>
+                    <input id="view-large-panel-input" type="text" class="hidden form-control input-sm">
+				</div>
 			    <dl>
 				    <dt>Size</dt>
 				    <dd>{{size}}</dd>
@@ -586,6 +605,11 @@
 			    </dl>
             </div>
             <div class="col-md-6">
+                <div>
+                    <span class="glyphicon glyphicon-unchecked btn-check-large btn"></span>
+                    <span class="glyphicon glyphicon-edit btn-edit-large btn"></span>
+                    <span class="glyphicon glyphicon-trash btn-delete-large btn"></span>
+                </div>
                 <h5><strong>Verlinkt mit:</strong></h5>
 			    <ul id="view-large-link-list">
                     {{#linkedDocs}}

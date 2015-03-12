@@ -237,6 +237,14 @@ var derivateBrowserTools = (function () {
         });
     }
 
+    function showDelAlert() {
+        $("#lightbox-alert-delete-list").html("");
+        $(".delete").each(function () {
+            $("#lightbox-alert-delete-list").append("<p>" + $(this).data("path") + "</p>")
+        });
+        $("#lightbox-alert-delete").modal('show');
+    }
+
     return {
         //public   
     	setImgPath: function(img, deriID, path) {
@@ -295,6 +303,10 @@ var derivateBrowserTools = (function () {
 
         setupPopover: function(elm, content) {
             addPopover(elm, content);
+        },
+
+        showDeleteAlert: function() {
+            showDelAlert();
         }
     };
 })();

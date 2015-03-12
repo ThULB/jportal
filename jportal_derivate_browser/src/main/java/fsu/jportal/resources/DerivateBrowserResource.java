@@ -119,7 +119,7 @@ public class DerivateBrowserResource {
         Element derivateNode = (Element) xpE.evaluateFirst(xml);
         Attribute displayAttr = derivateNode.getAttribute("display");
         if (displayAttr != null){
-            json.addProperty("display", displayAttr.getValue());
+            json.addProperty("display", Boolean.parseBoolean(displayAttr.getValue()));
         }
         if (path != null && !"".equals(path.trim())) {
             json.addProperty("parentName", derivate.getRootDir().getName());

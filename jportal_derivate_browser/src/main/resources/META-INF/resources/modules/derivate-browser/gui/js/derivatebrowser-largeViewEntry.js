@@ -1,4 +1,4 @@
-function LargeViewEntry(docID, path, size, lastModified, urn) {
+function LargeViewEntry(docID, path, size, lastModified, urn, start) {
     this.docID = docID;
     this.path = path;
     this.name = path.substr(path.lastIndexOf("/") + 1);
@@ -6,6 +6,8 @@ function LargeViewEntry(docID, path, size, lastModified, urn) {
     this.lastModified = lastModified;
     this.urn = urn;
     this.linkedDocs = undefined;
+    this.selected = false;
+    this.start = start;
 }
 
 LargeViewEntry.prototype.setStatusTo = function(node) {
@@ -47,8 +49,13 @@ LargeViewEntry.prototype.getID = function() {
     return buildID(this);
 };
 
+LargeViewEntry.prototype.changeName = function(newName) {
+    this.name = newName;
+    this.path = this.path.substr(0, this.path.lastIndexOf("/") + 1) + newName;
+};
+
 function getTemplate(entry, node) {
-    var template = $("#upload-large-view-status-template").html();
+    var template = $("#large-view-status-template").html();
     $(node).html(Mustache.render(template, entry));
 }
 

@@ -337,11 +337,13 @@ var derivateBrowserNavigation = (function () {
 
         renameDoc: function(docID, path, name) {
             var doc = findDoc(docID, path);
-            doc.children("div.folder-name").html(name);
-            if (doc.data("path") != undefined){
-                var oldPath = doc.data("path");
-                doc.data("path", oldPath.substring(0, oldPath.lastIndexOf("/") + 1) + name);
-                doc.data("id", doc.data("derID") + doc.data("path"));
+            if (doc.length > 0) {
+                doc.children("div.folder-name").html(name);
+                if (doc.data("path") != undefined){
+                    var oldPath = doc.data("path");
+                    doc.data("path", oldPath.substring(0, oldPath.lastIndexOf("/") + 1) + name);
+                    doc.data("id", doc.data("derID") + doc.data("path"));
+                }
             }
         },
 
