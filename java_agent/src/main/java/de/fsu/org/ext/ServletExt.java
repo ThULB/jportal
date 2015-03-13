@@ -28,6 +28,7 @@ static final Logger LOGGER = Logger.getLogger(ServletExt.class);
             if (Files.exists(resourcePath) && !Files.isDirectory(resourcePath)) {
                 LOGGER.info("Using resource: " + resourcePath.toString());
                 try {
+                    resp.setContentType(Files.probeContentType(resourcePath));
                     Files.copy(resourcePath, resp.getOutputStream());
                     return true;
                 } catch (MalformedURLException e) {
