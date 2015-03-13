@@ -43,6 +43,7 @@ var derivateBrowserTools = (function () {
 	}
 	
 	function goToDocument(docID, path) {
+        $("#filebrowser-loading").addClass("hidden");
         $("#journal-info-linklist").addClass("hidden");
         $("#journal-info-text").addClass("journal-info-text-large");
 		if (docID == "" || docID == undefined || (currentDocID.contains("derivate") && !docID.contains("derivate")) || (!currentDocID.contains("derivate") && docID.contains("derivate"))){

@@ -2,6 +2,7 @@ var DerivateBrowser = function () {
     var qpara = [], hash;
     var mouseDown = false;
     var mouseDownTimer = undefined;
+    var loadingTimer = undefined;
     var dragElm = null;
     var dragObj = null;
 
@@ -527,6 +528,9 @@ var DerivateBrowser = function () {
             });
 
             $("body").on("click", "#lightbox-alert-delete-confirm", function () {
+                loadingTimer = setTimeout(function() {
+                    $("#filebrowser-loading").removeClass("hidden");
+                }, 1000);
                 var json = {
                     "files": []
                 };
@@ -718,13 +722,19 @@ var DerivateBrowser = function () {
 
                     }
                     $(".delete").removeClass("delete");
+                    clearTimeout(loadingTimer);
+                    $("#filebrowser-loading").addClass("hidden");
                 },
                 500: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.errorMulti"), false);
                     $(".delete").removeClass("delete");
+                    clearTimeout(loadingTimer);
+                    $("#filebrowser-loading").addClass("hidden");
                 },
                 401: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                    clearTimeout(loadingTimer);
+                    $("#filebrowser-loading").addClass("hidden");
                 }
             }
         });
