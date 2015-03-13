@@ -8,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.Namespace;
-import org.jdom2.Text;
+import org.jdom2.*;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
@@ -34,14 +30,14 @@ import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
 
 /**
  * LLZ METS importer class.
- * 
+ *
  * @author Matthias Eichner
  */
 public class LLZMetsImporter {
 
     private static Logger LOGGER = Logger.getLogger(LLZMetsImporter.class);
 
-    private static final List<Namespace> NS_LIST;
+    private static final ArrayList<org.jdom2.Namespace> NS_LIST;
 
     private static final XPathExpression<Element> LOGICAL_STRUCTMAP_EXPRESSION;
 
@@ -56,25 +52,25 @@ public class LLZMetsImporter {
     private static final XPathExpression<Attribute> FILE_EXPRESSION;
 
     static {
-        NS_LIST = new ArrayList<>();
+        NS_LIST = new ArrayList<Namespace>();
         NS_LIST.add(MCRConstants.METS_NAMESPACE);
         NS_LIST.add(MCRConstants.MODS_NAMESPACE);
         NS_LIST.add(MCRConstants.XLINK_NAMESPACE);
         Map<String, Object> vars = new HashMap<String, Object>();
         vars.put("id", null);
         LOGICAL_STRUCTMAP_EXPRESSION = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null, NS_LIST);
+                "mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null, NS_LIST);
         MODS_EXPRESSION = XPathFactory.instance().compile("mets:dmdSec[@ID=$id]/mets:mdWrap/mets:xmlData/mods:mods",
-            Filters.element(), vars, NS_LIST);
+                Filters.element(), vars, NS_LIST);
         TITLE_EXPRESSION = XPathFactory.instance().compile("mods:recordInfo/mods:recordOrigin/text()", Filters.text(),
-            null, NS_LIST);
+                null, NS_LIST);
         HEADING_EXPRESSION = XPathFactory.instance().compile("/add/doc/field[@name='heading_base']/text()",
-            Filters.text());
+                Filters.text());
         FILEID_EXPRESSION = XPathFactory.instance().compile(
-            "mets:div/mets:fptr/mets:area/@FILEID", Filters.attribute(), null, NS_LIST);
+                "mets:div/mets:fptr/mets:area/@FILEID", Filters.attribute(), null, NS_LIST);
         FILE_EXPRESSION = XPathFactory.instance().compile(
-            "mets:fileSec/mets:fileGrp/mets:fileGrp[@ID='OCRMasterFiles']/mets:file[@ID=$id]/mets:FLocat/@xlink:href",
-            Filters.attribute(), vars, NS_LIST);
+                "mets:fileSec/mets:fileGrp/mets:fileGrp[@ID='OCRMasterFiles']/mets:file[@ID=$id]/mets:FLocat/@xlink:href",
+                Filters.attribute(), vars, NS_LIST);
     }
 
     private Document mets;
@@ -93,9 +89,9 @@ public class LLZMetsImporter {
 
     /**
      * Imports the dmd section of the given mets document.
-     * 
-     * @param metsDocument
-     * @param derivateId
+     *
+     * @param metsDocument METS xml document
+     * @param derivateId MCR derivate ID
      * @throws ConvertException something went so wrong that the import process has to be stopped
      */
     public void importMets(Document metsDocument, MCRObjectID derivateId) throws ConvertException {
@@ -143,7 +139,7 @@ public class LLZMetsImporter {
                     }
                 } else {
                     throw new ConvertException("Cannot create article cause of missing DMDID. ID="
-                        + div.getAttributeValue("ID"));
+                            + div.getAttributeValue("ID"));
                 }
                 volume.addChild(article);
             } else if (type.equals("tp") || type.equals("preface") || type.equals("toc")) {
@@ -170,7 +166,7 @@ public class LLZMetsImporter {
             volume.setHiddenPosition(Integer.valueOf(order));
         } else {
             String msg = volumeId + ": ORDER attribute of logical div " + logicalDiv.getAttributeValue("ID")
-                + " is not set!";
+                    + " is not set!";
             LOGGER.warn(msg);
             getErrorList().add(msg);
         }
@@ -189,17 +185,17 @@ public class LLZMetsImporter {
         if (mods == null) {
             throw new ConvertException("Could not find referenced dmd entry " + dmdId + " in dmd section.");
         }
-        JPArticle article = buildArticle(mods, logicalDiv, dmdId);
-        return article;
+
+        return buildArticle(mods, logicalDiv, dmdId);
     }
 
     /**
-     * Creates a new jparticle based on the given mods element. 
-     * 
-     * @param mods the mods element containing the article
+     * Creates a new jparticle based on the given mods element.
+     *
+     * @param mods       the mods element containing the article
      * @param logicalDiv the referenced logical div (mets:structMap[@TYPE='logical']/mets:div)
-     * @param dmdId the dmdId
-     * @return
+     * @param dmdId      the dmdId
+     * @return JPArticle object
      * @throws ConvertException
      */
     protected JPArticle buildArticle(Element mods, Element logicalDiv, String dmdId) throws ConvertException {
@@ -253,12 +249,15 @@ public class LLZMetsImporter {
         // id's
         List<Element> identifiers = mods.getChildren("identifier", MCRConstants.MODS_NAMESPACE);
         for (Element identifier : identifiers) {
-            String type = identifier.getAttributeValue("type").toLowerCase();
-            type = type.equals("gbv") ? "ppn" : type;
-            String id = identifier.getTextNormalize();
-            if(id.startsWith("(")) {
-                // don't store the queries
-                article.setIdenti(type, id.substring(6));
+            String attr = identifier.getAttributeValue("type");
+            if (attr != null) {
+                String type = attr.toLowerCase();
+                type = type.equals("gbv") ? "ppn" : type;
+                String id = identifier.getTextNormalize();
+                if (id.startsWith("(")) {
+                    // don't store the queries
+                    article.setIdenti(type, id.substring(6));
+                }
             }
         }
         // derivate link
@@ -272,7 +271,7 @@ public class LLZMetsImporter {
             article.setSize(Integer.valueOf(order));
         } else {
             String msg = article.getObject().getId() + ": ORDER attribute of logical div "
-                + logicalDiv.getAttributeValue("ID") + " is not set!";
+                    + logicalDiv.getAttributeValue("ID") + " is not set!";
             LOGGER.warn(msg);
             getErrorList().add(msg);
         }
