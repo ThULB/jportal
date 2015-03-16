@@ -25,7 +25,6 @@ var derivateBrowserLargeView = (function () {
     });
 
     $("#file-view-large").on("click", ".view-large-thump", function () {
-        currentFileIndex = $(this).data("id");
         setCurrentFileTo($(this).data("id"));
     });
 
@@ -139,7 +138,7 @@ var derivateBrowserLargeView = (function () {
     });
 
     $("body").on("keydown", function (key) {
-        if (!$("#file-view-large").hasClass("hidden")) {
+        if (!$("#file-view-large").hasClass("hidden") && $("#view-large-panel-input").hasClass("hidden")) {
             if (key.which == 37) {  // <-
                 setPrevFile();
             }
@@ -162,7 +161,6 @@ var derivateBrowserLargeView = (function () {
         }
         else{
             var index = getIndexFromID(id);
-            currentFileIndex = index;
             setCurrentFileTo(index);
         }
         $("#file-view-large").removeClass("hidden");
@@ -240,7 +238,8 @@ var derivateBrowserLargeView = (function () {
     function setCurrentFileTo(currentFile) {
         if (currentFileList.length > 0) {
             showAlert(false);
-            var fileEntry =  currentFileList[currentFile];
+            currentFileIndex = currentFile;
+            var fileEntry =  currentFileList[currentFileIndex];
             $("#view-large-normal").attr( "src", fileEntry.getMidPath());
             $("#view-large-normal").data("id", fileEntry.getID());
             if (!fileEntry.name.endsWith("pdf")){
@@ -376,7 +375,9 @@ var derivateBrowserLargeView = (function () {
 
     function removeFromList(id) {
         currentFileList.splice(getIndexFromID(id), 1);
-        setCurrentFileTo(0);
+        if (!$("#file-view-large").hasClass("hidden")) {
+            setCurrentFileTo(0);
+        }
     }
 
     function showAlert(show) {

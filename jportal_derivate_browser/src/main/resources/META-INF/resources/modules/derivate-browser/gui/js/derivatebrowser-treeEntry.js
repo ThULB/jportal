@@ -49,11 +49,11 @@ TreeEntry.prototype.getChilds = function(start, callback) {
 		if(search.response.numFound > 0){
 			var results = search.response.docs;
 			$.each(results, function(i, result){
-				var bla = new TreeEntry(result, "");
-				entry.childs.push(bla);
+				var newEntry = new TreeEntry(result, "");
+				entry.childs.push(newEntry);
 			});
 			if(search.response.numFound > 100 && search.response.start < search.response.numFound){
-				entry.getChilds(start + 100);
+				entry.getChilds(start + 100, callback);
 			}
 			else{
 				entry.getChildsAndDeris(callback);
@@ -68,11 +68,11 @@ TreeEntry.prototype.getDeris = function(start, callback) {
 		if(search.response.numFound > 0){
 			var results = search.response.docs;
 			$.each(results, function(i, result){
-				var bla = new TreeEntry(result, "");
-				entry.deris.push(bla);
+				var newEntry = new TreeEntry(result, "");
+				entry.deris.push(newEntry);
 			});
 			if(search.response.numFound > 100 && search.response.start < search.response.numFound){
-				entry.getChilds(start + 100);
+				entry.getChilds(start + 100, callback);
 			}
 			else{
 				entry.getChildsAndDeris(callback);

@@ -518,12 +518,12 @@ var DerivateBrowser = function () {
 
                         }
                     });
-                }
-                if (canDelete) {
-                    derivateBrowserTools.showDeleteAlert();
-                }
-                else {
-                    $(".delete").removeClass("delete");
+                    if (canDelete) {
+                        derivateBrowserTools.showDeleteAlert();
+                    }
+                    else {
+                        $(".delete").removeClass("delete");
+                    }
                 }
             });
 

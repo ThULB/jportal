@@ -38,6 +38,17 @@ html,body{
 	height: 100%;
 }
 
+#filebrowser-loading {
+    background-color: rgba(77,77,77,0.8);
+    z-index: 11;
+    height: 100%;
+    top: 0;
+}
+
+#filebrowser-loading > div {
+    margin-top: 25%;
+}
+
 .hide-folder {
     display: none;
 }
@@ -277,6 +288,10 @@ span.btn{
 	padding-right: 3px;
 	cursor: pointer;
 	display: inline;	
+}
+
+span.btn.faded{
+    cursor: default;
 }
 
 .popover-img{
@@ -761,7 +776,7 @@ div.statusbar-progress-single-status.noAnimation {
     left: 7px;
     position: absolute;
     top: -8px;
-    z-index: 10;
+    z-index: 9;
 }
 
 .btn-add2{
@@ -769,7 +784,7 @@ div.statusbar-progress-single-status.noAnimation {
     left: 8px;
     position: absolute;
     top: -8px;
-    z-index: 20;
+    z-index: 10;
 }
 
 .bottom-btns{
