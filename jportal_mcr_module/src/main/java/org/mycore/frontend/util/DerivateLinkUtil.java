@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -23,6 +25,8 @@ import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.solr.MCRSolrClientFactory;
 
 public abstract class DerivateLinkUtil {
@@ -61,6 +65,20 @@ public abstract class DerivateLinkUtil {
         if (file == null || derivateId == null)
             return null;
         return new StringBuffer(derivateId).append(file.startsWith("/") ? "" : "/").append(file).toString();
+    }
+    
+    public static void setLinks(List<MCRObjectID> idList, MCRPath pathOfImage) {
+        setLinks(idList, pathOfImage.getOwner() + pathOfImage.getOwnerRelativePath());
+    }
+    
+    public static void setLinks(List<MCRObjectID> idList, String pathOfImage) {
+        for (MCRObjectID id : idList) {
+            try {
+                setLink(id, pathOfImage);
+            } catch (MCRActiveLinkException exc) {
+                LOGGER.error("unable to set derivate link of object " + id + " and file " + pathOfImage, exc);
+            }
+        }
     }
 
     public static void setLink(MCRObjectID mcrObjId, String pathOfImage) throws MCRActiveLinkException {
@@ -133,10 +151,53 @@ public abstract class DerivateLinkUtil {
      * @throws SolrServerException
      */
     public static void deleteDerivateLinks(MCRDerivate der) throws SolrServerException {
+        MCRObjectID derivateId = der.getId();
+        List<MCRObjectID> idList = getLinks(derivateId + "*");
+        for (MCRObjectID id : idList) {
+            try {
+                DerivateLinkUtil.removeLinks(id, derivateId);
+              } catch (MCRException | MCRActiveLinkException exc) {
+              LOGGER.error("unable to delete derivate link of object " + id + " and derivate " + derivateId,
+                  exc);
+          }
+        }
+    }
+    
+    public static void deleteFileLinks(List<MCRObjectID> idList, MCRPath pathOfImg) {
+        for (MCRObjectID id : idList) {
+            try {
+                removeLink(id, pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
+            } catch (MCRActiveLinkException exc) {
+                LOGGER.error("unable to delete derivate link of object " + id + " and file " + pathOfImg, exc);
+            }
+        }
+    }
+    
+    public static void deleteFileLink(MCRPath pathOfImg) throws SolrServerException {
+        deleteFileLink(pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
+    }
+    
+    public static void deleteFileLink(String pathOfImg) throws SolrServerException {
+        List<MCRObjectID> idList = getLinks(pathOfImg);
+        for (MCRObjectID id : idList) {
+            try {
+                DerivateLinkUtil.removeLink(id, pathOfImg);
+              } catch (MCRException | MCRActiveLinkException exc) {
+              LOGGER.error("unable to delete derivate link of object " + id + " and file " + pathOfImg,
+                  exc);
+          }
+        }
+    }
+    
+    public static List<MCRObjectID> getLinks(MCRPath pathOfImg) throws SolrServerException {
+        return getLinks(pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
+    }
+        
+    public static List<MCRObjectID> getLinks(String pathOfImg) throws SolrServerException {
         SolrClient solrServer = MCRSolrClientFactory.getSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();
-        MCRObjectID derivateId = der.getId();
-        params.add("q", "derivateLink:" + derivateId + "*");
+        List<MCRObjectID> idList = new ArrayList<MCRObjectID>();
+        params.add("q", "derivateLink:" + pathOfImg);
         params.set("rows", 100);
         params.set("fl", "id");
         int numFound = Integer.MAX_VALUE, start = 0;
@@ -149,13 +210,14 @@ public abstract class DerivateLinkUtil {
             for (SolrDocument doc : results) {
                 String docId = (String) doc.getFieldValue("id");
                 try {
-                    DerivateLinkUtil.removeLinks(MCRObjectID.getInstance(docId), derivateId);
-                } catch (MCRException | MCRActiveLinkException exc) {
-                    LOGGER.error("unable to delete derivate link of object " + docId + " and derivate " + derivateId,
-                        exc);
+                    idList.add(MCRJerseyUtil.getID(docId));                    
+                }
+                catch (WebApplicationException e) {
+                    e.printStackTrace();
                 }
             }
         }
+        return idList;
     }
 
     private static MCRMetaDerivateLink getLink(MCRMetaElement derLinks, String pathOfImage) {
