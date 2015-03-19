@@ -225,6 +225,7 @@ project(':jportal_webapp'){
         runtime project(':jportal_move_obj_module')
         applet "org.mycore.fileupload:fileupload-applet:1.2-SNAPSHOT"
     }
+    //foo
 
     war {
         from(configurations.applet){
@@ -329,11 +330,16 @@ task hello(type: Exec){
             agentOp = agentOp + "," + path
         }
     }
-    
+
     executable "java"
     args '-jar', project(':jportal_jetty_tools').tasks.getByPath(':jportal_jetty_tools:jar').archivePath
     args "--path /solr " + solrWarFilePath
     args "--path /jportal " + project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath
+}
+
+task daemon(type: Exec){
+    executable "java"
+    args '-jar', project(':jportal_jetty_tools').tasks.getByPath(':jportal_jetty_tools:jar').archivePath
 }
 
 project(':jportal_jetty_tools'){
