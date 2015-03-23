@@ -57,6 +57,10 @@ LargeViewEntry.prototype.changeName = function(newName) {
 function getTemplate(entry, node) {
     var template = $("#large-view-status-template").html();
     $(node).html(Mustache.render(template, entry));
+    if (entry.selected) {
+        $(node).find(".btn-check-large").removeClass("glyphicon-unchecked");
+        $(node).find(".btn-check-large").addClass("glyphicon-check");
+    }
 }
 
 function buildID(entry) {

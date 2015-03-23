@@ -172,7 +172,6 @@ var derivateBrowserFileView = (function () {
 	function showDoc(docID) {
 		if (!docID.contains("derivate")){
             $("#journal-info-text").html("");
-            $("#journal-info-text").removeClass("journal-info-text-large");
 			$("#derivate-browser").addClass("hidden");
 			$("#derivat-panel").addClass("hidden");
 			$("#browser-table-files").html("");
@@ -205,9 +204,16 @@ var derivateBrowserFileView = (function () {
 				});
 	}
 
-	function removeFromView(){
-		var parentID = derivateBrowserNavigation.getParentDocID(derivateBrowserTools.getCurrentDocID());
-		derivateBrowserNavigation.removeDocPerID(derivateBrowserTools.getCurrentDocID(), "");
+	function removeFromView(json){
+        var parentID = derivateBrowserNavigation.getParentDocID(derivateBrowserTools.getCurrentDocID());
+        $.each(json, function (i, elm) {
+            if (elm.status == "1") {
+                derivateBrowserNavigation.removeDocPerID(elm.objId, "");
+            }
+            else {
+                derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.notAllDocs"), false);
+            }
+        });
 		derivateBrowserTools.goTo(parentID, "");
 	}
 
@@ -249,7 +255,7 @@ var derivateBrowserFileView = (function () {
         if (links != undefined){
             $("#journal-info-linklist").html("");
             $.each(links, function(i, link) {
-                var img = $("<div class='link-preview'><img class='link-preview-img' src='http://localhost:8291/jportal/servlets/MCRTileCombineServlet/MIN/" + link + "'></div>");
+                var img = $("<div class='link-preview'><img class='link-preview-img' src='" + jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + link + "'></div>");
                 $(img).append("<div class='link-info'><h6 class='mightOverflow'>" + link + "</h6><span class='btn-remove-link glyphicon glyphicon-remove'></span></div>");
                 $(img).data("path", link);
                 $("#journal-info-linklist").append(img);
@@ -279,6 +285,30 @@ var derivateBrowserFileView = (function () {
             derivateBrowserTools.setImgPath($("#panel-img"), $(entry).data("deriID"), $(entry).data("path"));
         }
         $("#derivat-panel-startfile-label").html($(entry).data("path"));
+    }
+
+    function showDocs() {
+        if ($(".aktiv").length > 1) {
+            $("#journal-info-button-delete-labelAll").removeClass("hidden");
+            $("#journal-info-button-delete-label").addClass("hidden");
+            $("#journal-info-text").html("");
+            $("#journal-info-text").addClass("journal-info-text-large");
+            $("#journal-info-button-goToPage").addClass("hidden");
+            $("#journal-info-button-edit").addClass("hidden");
+            $("#journal-info-linklist").addClass("hidden");
+            $("#journal-info-text").append("<strong>" + derivateBrowserTools.getI18n("db.label.selected.label") + "</strong>");
+            var ul = $("<ul></ul>");
+            $(".aktiv").each(function (i, elm) {
+                var newElm = $(elm).clone();
+                $(newElm).children().first().remove();
+                ul.append("<li>" + $(newElm).html() + "</li>");
+            });
+            $("#journal-info-text").append(ul);
+
+        }
+        else {
+            derivateBrowserTools.goTo(derivateBrowserTools.getCurrentDocID(), "");
+        }
     }
 
     //ajax Methods
@@ -378,13 +408,14 @@ var derivateBrowserFileView = (function () {
 		});
 	}
 
-	function deleteDocument(docID, callback) {
+	function deleteDocument(json, callback) {
 		$.ajax({
-			url: "./" + docID,
+			url: "docs",
 			type: "DELETE",
-
-			success: function() {
-					callback();
+            data: JSON.stringify(json),
+            dataType: "json",
+			success: function(data) {
+					callback(data);
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.deleted"), true);
 				},
 			error: function(error) {
@@ -518,8 +549,8 @@ var derivateBrowserFileView = (function () {
 			getDocEditor(docID.substring(docID.indexOf("_") + 1, docID.lastIndexOf("_")), "update", derivateBrowserTools.getCurrentDocID());
 		},
 
-		deleteDoc: function() {
-			deleteDocument(derivateBrowserTools.getCurrentDocID(), removeFromView);
+		deleteDocs: function(json) {
+			deleteDocument(json, removeFromView);
 		},
 
 		newDoc: function(type) {
@@ -540,6 +571,10 @@ var derivateBrowserFileView = (function () {
 
         changeStartFile: function(entry, loadImg) {
             setStartFile(entry, loadImg)
+        },
+
+        showSelectedDocs: function() {
+            showDocs();
         }
     };
 })();

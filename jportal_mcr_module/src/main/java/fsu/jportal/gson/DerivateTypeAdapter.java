@@ -1,6 +1,8 @@
 package fsu.jportal.gson;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
@@ -14,7 +16,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 
 public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWraper> {
-
+    private static final String dateFormat = "dd.MM.yyyy HH:mm:ss";
+    private static final DateFormat dateFormatter = new SimpleDateFormat(dateFormat);
+    
     @Override
     public JsonElement serialize(FileNodeWraper deriv, Type typeOfSrc, JsonSerializationContext context) {
         String maindoc = deriv.getMaindoc();
@@ -22,7 +26,6 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWraper> {
         if (!deriv.isDir()) {
             return nodeJSON;
         }
-        
         nodeJSON.addProperty("maindocName", maindoc);
 
         MCRFilesystemNode[] children = deriv.getChildren();
@@ -40,8 +43,14 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWraper> {
         else{
             nodeJSON.addProperty("hasURN", false);
         }
+        if (!deriv.getNode().getAbsolutePath().equals("/")) {
+            nodeJSON.addProperty("parentName", deriv.getNode().getRootDirectory().getName());
+            nodeJSON.addProperty("parentSize", deriv.getNode().getRootDirectory().getSize());
+            nodeJSON.addProperty("parentLastMod",
+                dateFormatter.format(deriv.getNode().getRootDirectory().getLastModified().getTime()));
+        }
         nodeJSON.add("children", childrenJSON);
-
+        
         return nodeJSON;
     }
 

@@ -4,7 +4,10 @@ var derivateBrowserTools = (function () {
 		currentPath = "",
         currentFile = "",
         timeOutID = null,
-        i18nKeys =[];
+        i18nKeys = [],
+        loadingTimer = 0,
+        asyncCount = 0,
+        asyncCallback = undefined;
 
 
     //private Methods   
@@ -43,7 +46,7 @@ var derivateBrowserTools = (function () {
 	}
 	
 	function goToDocument(docID, path) {
-        $("#filebrowser-loading").addClass("hidden");
+        hideLoadScreen();
         $("#journal-info-linklist").addClass("hidden");
         $("#journal-info-text").addClass("journal-info-text-large");
 		if (docID == "" || docID == undefined || (currentDocID.contains("derivate") && !docID.contains("derivate")) || (!currentDocID.contains("derivate") && docID.contains("derivate"))){
@@ -73,6 +76,10 @@ var derivateBrowserTools = (function () {
             setDocIDs("", "", "");
             $.address.path("");
         }
+        $("#journal-info-button-delete-labelAll").addClass("hidden");
+        $("#journal-info-button-delete-label").removeClass("hidden");
+        $("#journal-info-button-goToPage").removeClass("hidden");
+        $("#journal-info-button-edit").removeClass("hidden");
 	}
 
     function disableButton() {
@@ -238,12 +245,33 @@ var derivateBrowserTools = (function () {
         });
     }
 
-    function showDelAlert() {
+    function showDelAlert(fileList) {
         $("#lightbox-alert-delete-list").html("");
-        $(".delete").each(function () {
-            $("#lightbox-alert-delete-list").append("<p>" + $(this).data("path") + "</p>")
+        $.each(fileList, function (i, elm) {
+            $("#lightbox-alert-delete-list").append("<p>" + elm + "</p>")
         });
         $("#lightbox-alert-delete").modal('show');
+    }
+    function showDelAlertDocs(fileList) {
+        $("#lightbox-alert-delete-docs-list").html("");
+        $.each(fileList, function (i, elm) {
+            var name = derivateBrowserNavigation.getDocName(elm);
+            if (name == undefined) name = elm;
+            $("#lightbox-alert-delete-docs-list").append("<p>" + name + "</p>")
+        });
+        $("#lightbox-alert-delete-docs").modal('show');
+    }
+
+    function showLoadScreen() {
+        clearTimeout(loadingTimer);
+        loadingTimer = setTimeout(function() {
+            $("#filebrowser-loading").removeClass("hidden");
+        }, 1000);
+    }
+
+    function hideLoadScreen() {
+        clearTimeout(loadingTimer);
+        $("#filebrowser-loading").addClass("hidden");
     }
 
     return {
@@ -306,8 +334,31 @@ var derivateBrowserTools = (function () {
             addPopover(elm, content);
         },
 
-        showDeleteAlert: function() {
-            showDelAlert();
+        showDeleteAlert: function(fileList) {
+            showDelAlert(fileList);
+        },
+
+        showDeleteAlertDocs: function(fileList) {
+            showDelAlertDocs(fileList);
+        },
+
+        showLoadingScreen: function() {
+            showLoadScreen();
+        },
+
+        hideLoadingScreen: function () {
+            hideLoadScreen();
+        },
+
+        newAsyncMonitor: function (count, callback) {
+            asyncCount = count;
+            asyncCallback = callback;
+        },
+
+        doneAsync: function (para) {
+            if (--asyncCount < 1){
+                asyncCallback(para, "");
+            }
         }
     };
 })();

@@ -10,7 +10,23 @@ var derivateBrowserNavigation = (function () {
         $(".aktiv").removeClass("aktiv");
         $(node).addClass("aktiv");
     }
-    
+
+    function highlightRange (startNode, endNode) {
+        var parent = $(startNode).parent()[0];
+        var inZone = false;
+        $(".aktiv").removeClass("aktiv");
+        if (parent == $(endNode).parent()[0]) {
+            $(parent).children().each(function(i, elm) {
+                if (elm == startNode[0]) inZone = true;
+                if (inZone) {
+                    $(elm).addClass("aktiv");
+                }
+                if (elm == endNode[0]) inZone = false;
+            });
+        }
+
+    }
+
     function highlightCurrent () {
     	highlight(findDoc(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath()));
     }
@@ -201,8 +217,18 @@ var derivateBrowserNavigation = (function () {
 	}
 
 	function addDocToParent(response) {
-		if (response.numFound > 0){
-           drawDoc(new TreeEntry(response.docs[0], ""));
+        derivateBrowserTools.doneAsync(response.docs[0].parent);
+        if (response.numFound > 0){
+            var parent = findDoc(response.docs[0].parent);
+            if ($(parent).find("ul.children").children().length > 0) {
+                drawDoc(new TreeEntry(response.docs[0], ""));
+            }
+            else {
+                if ($(parent).find(".no-button").length > 0){
+                    $(parent).find(".no-button").remove();
+                    $(parent).prepend("<span class='glyphicon glyphicon-plus button button-expand'></span>");
+                }
+            }
 		}
 	}
 	
@@ -230,10 +256,10 @@ var derivateBrowserNavigation = (function () {
 	}
 
     //ajax Methods
-    function getDocPerID(docID, callback) {
+    function getDocPerID(docID, callback, docs) {
         var url = jp.baseURL + "servlets/solr/select?q=id%3A" + docID + "&start=0&rows=10&sort=maintitle+asc&wt=json&indent=true";
         $.getJSON(url, function(search) {
-            callback(search.response);
+            callback(search.response, docs, docID);
         });
     }
 
@@ -327,8 +353,8 @@ var derivateBrowserNavigation = (function () {
 			return $(node).parent().closest('li.folder').data("docID");
 		},
 
-		gotDerivateChilds: function(docID, callback){
-			return getDocPerID(docID, callback);
+		gotDerivateChilds: function(docID, callback, docs){
+			return getDocPerID(docID, callback, docs);
 		},
 
         addTempDoc: function(docID, name, type, parentID){
@@ -355,6 +381,23 @@ var derivateBrowserNavigation = (function () {
         unFadeEntry: function(node) {
             $(node).children().not(".children").removeClass("faded");
             $(node).removeData("faded");
+        },
+
+        getCurrentNode: function () {
+            return findDoc(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
+        },
+
+        selectRange: function(startNode, endNode) {
+            if ($(startNode).index() < $(endNode).index()) {
+                highlightRange(startNode, endNode);
+            }
+            else {
+                highlightRange(endNode, startNode);
+            }
+        },
+
+        getDocName: function(docID) {
+            return findDoc(docID, "").find(".folder-name").html();
         }
     };
 })();

@@ -2,9 +2,9 @@ var DerivateBrowser = function () {
     var qpara = [], hash;
     var mouseDown = false;
     var mouseDownTimer = undefined;
-    var loadingTimer = undefined;
     var dragElm = null;
     var dragObj = null;
+    var docDeleteList = [];
 
     return {
         init: function () {
@@ -148,12 +148,24 @@ var DerivateBrowser = function () {
             });
 
             $("body").on("click", "#lightbox-alert-deleteDoc-confirm", function () {
-                derivateBrowserFileView.deleteDoc();
+                var json = [];
+                json.push({"objId": derivateBrowserTools.getCurrentDocID()});
+                derivateBrowserFileView.deleteDocs(json);
                 $("#lightbox-alert-deleteDoc").modal('hide');
             });
 
             $("body").on("click", "#journal-info-button-delete", function () {
-                derivateBrowserNavigation.gotDerivateChilds(derivateBrowserTools.getCurrentDocID(), checkForChilds);
+                if ($(".aktiv").length == 1) {
+                    derivateBrowserNavigation.gotDerivateChilds(derivateBrowserTools.getCurrentDocID(), checkForChilds);
+                }
+                if ($(".aktiv").length > 1) {
+                    docDeleteList = [];
+                    var selectedDocs =[];
+                    $(".aktiv").each(function (i, elm) {
+                        selectedDocs.push($(elm).data("docID"));
+                    });
+                    deleteMultipleDocs(selectedDocs);
+                }
             });
 
             $("body").on("click", "#journal-info-button-cancel", function () {
@@ -267,6 +279,11 @@ var DerivateBrowser = function () {
                             $(elm).width($(dragElm).width());
 //			        		var elm = dragElm.find("span.icon").clone();
                             $("body").append(elm);
+                            if ($(".aktiv").length > 1) {
+                                $(elm).append("<div id='drag-doc-count'>" + $(".aktiv").length + "</div>");
+                                $(elm).css("padding-right", $("#drag-doc-count").outerWidth() + "px");
+                                $(".aktiv").addClass("faded");
+                            }
                             $(dragElm).addClass("faded");
                             $(elm).offset($(dragElm).offset());
                             $(elm).animate({
@@ -328,9 +345,11 @@ var DerivateBrowser = function () {
                                 if (!($(moveTo).hasClass("journal") && $(dragElm).hasClass("article"))) {
                                     dragObj.remove();
                                     var json = [];
-                                    json.push({
-                                        "objId": $(dragElm).data("docID"),
-                                        "newParentId": $(moveTo).data("docID")
+                                    $(".aktiv").each(function () {
+                                        json.push({
+                                            "objId": $(this).data("docID"),
+                                            "newParentId": $(moveTo).data("docID")
+                                        });
                                     });
                                     moveDocTo(json);
                                 }
@@ -343,6 +362,7 @@ var DerivateBrowser = function () {
                         left: $(dragElm).offset().left + 20
                     }, 400, function () {
                         $(dragElm).removeClass("faded");
+                        $(".aktiv").removeClass("faded");
                         $("li.derivat").removeClass("faded");
                         derivateBrowserNavigation.unFadeEntry($(".aktiv").closest(".folder:not('.derivat')"));
                         dragObj.remove();
@@ -394,8 +414,26 @@ var DerivateBrowser = function () {
                 searchJournals($("#folder-list-search-input").val());
             });
 
-            $("body").on("click", ".folder:not(.derivat) > .folder-name, .folder:not(.derivat) > span.icon", function () {
-                derivateBrowserTools.goTo($(this).parent().data("docID"), "");
+            $("body").on("click", ".folder:not(.derivat) > .folder-name, .folder:not(.derivat) > span.icon", function (event) {
+                if (event.shiftKey || event.ctrlKey) {
+                    window.getSelection().removeAllRanges();
+                    var current = derivateBrowserNavigation.getCurrentNode();
+                    var endNode = $(this).parent(".folder");
+                    if (current.parent()[0] == endNode.parent()[0]) {
+                        if (event.ctrlKey) {
+                            if ($(".aktiv").length > 1){
+                                $(this).parent(".folder").toggleClass("aktiv");
+                            }
+                        }
+                        else {
+                            derivateBrowserNavigation.selectRange(derivateBrowserNavigation.getCurrentNode(), $(this).parent(".folder"));
+                        }
+                        derivateBrowserFileView.showSelectedDocs();
+                    }
+                }
+                else {
+                    derivateBrowserTools.goTo($(this).parent().data("docID"), "");
+                }
             });
 
             $("body").on("click", ".button-expand", function () {
@@ -409,12 +447,16 @@ var DerivateBrowser = function () {
                 $(this).addClass("button-expand glyphicon-plus");
             });
 
-            $("body").on("click", ".derivat > .folder-name, .derivat > span.icon", function () {
-                derivateBrowserTools.goTo($(this).parent().data("docID"), "");
+            $("body").on("click", ".derivat > .folder-name, .derivat > span.icon", function (event) {
+                if (!event.shiftKey) {
+                    derivateBrowserTools.goTo($(this).parent().data("docID"), "");
+                }
             });
 
-            $("body").on("click", ".derivat-folder > .folder-name, .derivat-folder > span.icon", function () {
-                derivateBrowserTools.goTo($(this).parent().data("deriID"), $(this).parent().data("path"));
+            $("body").on("click", ".derivat-folder > .folder-name, .derivat-folder > span.icon", function (event) {
+                if (!event.shiftKey) {
+                    derivateBrowserTools.goTo($(this).parent().data("deriID"), $(this).parent().data("path"));
+                }
             });
 
             $("body").on("click", ".derivate-browser-breadcrumb-entry", function () {
@@ -469,13 +511,35 @@ var DerivateBrowser = function () {
                 }
             });
 
-            $("body").on("click", ".btn-check", function () {
-                var parent = $(this).parents(".browser-table-entry");
-                if ($(parent).data("checked") != true) {
-                    checkEntry(true, parent);
+            $("body").on("click", ".btn-check", function (event) {
+                var parent = $(this).parents(".browser-table-entry")[0];
+                var last = $(".last-selected")[0];
+                if (event.shiftKey && last != undefined) {
+                    var inZone = false;
+                    $("#browser-table-files").children().each(function(i, elm) {
+                        if (elm == last || elm == parent){
+                            if (inZone) {
+                                inZone = false;
+                                checkEntry(true, elm);
+                            }
+                            else {
+                                inZone = true;
+                            }
+                        }
+                        if (inZone) {
+                            checkEntry(true, elm);
+                        }
+                    });
                 }
                 else {
-                    checkEntry(false, parent);
+                    if ($(parent).data("checked") != true) {
+                        checkEntry(true, parent);
+                        $(".last-selected").removeClass("last-selected");
+                        $(parent).addClass("last-selected");
+                    }
+                    else {
+                        checkEntry(false, parent);
+                    }
                 }
                 checkIfNothingSelected();
             });
@@ -504,6 +568,7 @@ var DerivateBrowser = function () {
             $("body").on("click", ".btn-delete-all", function () {
                 var canDelete = true;
                 var startfile = $("#derivat-panel-startfile").data("startfile");
+                var fileList = [];
                 if ($(".glyphicon-check").length > 0) {
                     var entrys = $(".browser-table-entry").filter(function () {
                         return $(this).data("checked") == true;
@@ -511,6 +576,7 @@ var DerivateBrowser = function () {
                     entrys.each(function (i, node) {
                         if ($(this).data("startfile") != true && startfile.indexOf($(this).data("path")) != 0) {
                             $(node).addClass("delete");
+                            fileList.push($(node).data("path"));
                         }
                         else {
                             derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.startfile"), false);
@@ -519,7 +585,7 @@ var DerivateBrowser = function () {
                         }
                     });
                     if (canDelete) {
-                        derivateBrowserTools.showDeleteAlert();
+                        derivateBrowserTools.showDeleteAlert(fileList);
                     }
                     else {
                         $(".delete").removeClass("delete");
@@ -528,27 +594,40 @@ var DerivateBrowser = function () {
             });
 
             $("body").on("click", "#lightbox-alert-delete-confirm", function () {
-                loadingTimer = setTimeout(function() {
-                    $("#filebrowser-loading").removeClass("hidden");
-                }, 1000);
                 var json = {
-                    "files": []
+                        files: []
                 };
+                derivateBrowserTools.showLoadingScreen();
                 $(".delete").each(function () {
                     var json2 = {
                         "deriID": $(this).data("deriID"),
                         "path": $(this).data("path")
                     };
-                    json.files.push(json2);
+                    json.push(json2);
                 });
                 deleteMultipleFiles(json);
                 $("#lightbox-alert-delete").modal('hide');
+            });
+
+            $("body").on("click", "#lightbox-alert-delete-docs-confirm", function () {
+                var json = [];
+                $.each(docDeleteList, function (i, elm) {
+                    json.push({"objId": elm});
+                });
+                derivateBrowserFileView.deleteDocs(json);
+                $("#lightbox-alert-delete-docs").modal('hide');
             });
 
             $("body").on("click", ".lightbox-alert-delete-cancel", function () {
                 $("#lightbox-alert-delete-list").html("");
                 $(".delete").removeClass("delete");
                 $("#lightbox-alert-delete").modal('hide');
+            });
+
+            $("body").on("click", ".lightbox-alert-delete-docs-cancel", function () {
+                $("#lightbox-alert-delete-docs-list").html("");
+                $("#lightbox-alert-delete-docs").modal('hide');
+                docDeleteList = [];
             });
 
             $("body").on("click", ".btn-add", function () {
@@ -722,19 +801,16 @@ var DerivateBrowser = function () {
 
                     }
                     $(".delete").removeClass("delete");
-                    clearTimeout(loadingTimer);
-                    $("#filebrowser-loading").addClass("hidden");
+                    derivateBrowserTools.hideLoadingScreen();
                 },
                 500: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.errorMulti"), false);
                     $(".delete").removeClass("delete");
-                    clearTimeout(loadingTimer);
-                    $("#filebrowser-loading").addClass("hidden");
+                    derivateBrowserTools.hideLoadingScreen();
                 },
                 401: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
-                    clearTimeout(loadingTimer);
-                    $("#filebrowser-loading").addClass("hidden");
+                    derivateBrowserTools.hideLoadingScreen();
                 }
             }
         });
@@ -895,20 +971,33 @@ var DerivateBrowser = function () {
     }
 
     function moveDocTo(json) {
+        derivateBrowserTools.showLoadingScreen();
         $.ajax({
             url: "moveDocs",
             type: "PUT",
             contentType: 'application/json',
+            dataType: "json",
             data: JSON.stringify(json),
             statusCode: {
-                200: function () {
-                    derivateBrowserNavigation.removeDocPerID(json[0].objId);
-                    derivateBrowserNavigation.addDoc(json[0].objId);
+                200: function (data) {
+                    derivateBrowserTools.newAsyncMonitor(data.length, derivateBrowserTools.goTo);
+                    $.each(data, function (i , elm) {
+                        if (elm.success) {
+                            derivateBrowserNavigation.removeDocPerID(elm.objId);
+                            derivateBrowserNavigation.addDoc(elm.objId);
+                        }
+                        else {
+                            derivateBrowserTools.doneAsync(elm.newParentId);
+                            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.move.notAllDocs"), false);
+                        }
+                    });
                 },
                 500: function () {
+                    derivateBrowserTools.hideLoadingScreen();
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.move.error"), false);
                 },
                 401: function () {
+                    derivateBrowserTools.hideLoadingScreen();
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
                 }
             }
@@ -1004,12 +1093,26 @@ var DerivateBrowser = function () {
      * @property docs
      * @property derivateCount
      */
-    function checkForChilds(data) {
+    function checkForChilds(data, docs, docID) {
         if (data.docs[0].derivateCount > 0) {
-            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.delete.digi"), false);
+            var name = derivateBrowserNavigation.getDocName(docID);
+            if (name == undefined) name = docID;
+            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.delete.digi", name), false);
+            docDeleteList = [];
         }
         else {
-            showDeleteDocAlert("journal");
+            if (docs != undefined){
+                docDeleteList.push(docID);
+                if (docs.length > 0) {
+                    deleteMultipleDocs(docs);
+                }
+                else {
+                    derivateBrowserTools.showDeleteAlertDocs(docDeleteList)
+                }
+            }
+            else {
+                showDeleteDocAlert("journal");
+            }
         }
     }
 
@@ -1055,6 +1158,10 @@ var DerivateBrowser = function () {
             $(node).find(".btn-check").removeClass("glyphicon-check");
             derivateBrowserLargeView.getFile($(node).data("docID") + $(node).data("path")).selected = false;
         }
+    }
+
+    function deleteMultipleDocs(docs) {
+        derivateBrowserNavigation.gotDerivateChilds(docs.pop(), checkForChilds, docs);
     }
 };
 

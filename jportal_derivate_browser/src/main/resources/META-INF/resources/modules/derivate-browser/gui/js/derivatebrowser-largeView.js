@@ -71,6 +71,8 @@ var derivateBrowserLargeView = (function () {
         var file = currentFileList[currentFileIndex];
         var parent = derivateBrowserFileView.getFile(file.path);
         if (!file.selected) {
+            $(".last-selected").removeClass("last-selected");
+            $(parent).addClass("last-selected");
             $(parent).addClass("checked");
             $(parent).data("checked", true);
             $(parent).find(".btn-check").removeClass("glyphicon-unchecked");

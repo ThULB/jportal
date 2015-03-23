@@ -18,7 +18,14 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
@@ -27,6 +34,8 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
@@ -40,6 +49,9 @@ import org.xml.sax.SAXException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import fsu.jportal.gson.DerivateTypeAdapter;
+import fsu.jportal.gson.FileNodeWraper;
+import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
 import fsu.jportal.mets.MetsTools;
 import fsu.jportal.urn.URNTools;
 import fsu.jportal.util.DerivatePath;
@@ -358,5 +370,150 @@ public class DerivateTools {
         handler.finishUpload();
         handler.unregister();
         return derivateID;
+    }
+    
+    public static void setAsMain(String derivateID, String path) {
+        Derivate derivate = new Derivate(derivateID);
+        derivate.setMaindoc(path);
+    }
+    
+    public static JsonObject getChildAsJson(String derivateID, String path, String file){
+        Derivate derivate = new Derivate(derivateID);
+        MCRDirectory node;
+        if (path != null && !"".equals(path.trim())) {
+            node = (MCRDirectory) derivate.getChildByPath(path);
+        } else {
+            node = derivate.getRootDir();
+        }
+        MCRFilesystemNode child = node.getChild(file);
+        if (child != null) {
+            JsonObject childJson = new JsonObject();
+            childJson.addProperty("name", child.getName());
+            childJson.addProperty("size", child.getSize());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            childJson.addProperty("lastmodified", sdf.format(child.getLastModified().getTime()));
+            return childJson;
+        }
+        else {
+            return null;
+        }
+    }
+    
+    public static JsonObject getDerivateFolderAsJson(String derivateID) {
+        Derivate derivate = new Derivate(derivateID);
+        MCRDirectory node = derivate.getRootDir();
+
+        JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty("name", node.getName());
+        jsonObject.addProperty("absPath", node.getAbsolutePath());
+        jsonObject.addProperty("isRoot", true);
+        if (node.getNumChildren(2, 2) > 0) {
+            jsonObject.addProperty("hasChildren", true);
+            jsonObject.add("children", getFolderChildren(node.getChildren()));
+        } else {
+            jsonObject.addProperty("hasChildren", false);
+        }
+        return jsonObject;
+    }
+    
+    private static JsonArray getFolderChildren(MCRFilesystemNode[] childs) {
+        JsonArray jsonArray = new JsonArray();
+        for (MCRFilesystemNode child : childs) {
+            if (child instanceof MCRDirectory) {
+                JsonObject jsonObj = new JsonObject();
+                jsonObj.addProperty("name", child.getName());
+                jsonObj.addProperty("absPath", child.getAbsolutePath());
+                jsonObj.addProperty("isRoot", false);
+                if (((MCRDirectory) child).getNumChildren(2, 1) > 0) {
+                    jsonObj.addProperty("hasChildren", true);
+                    jsonObj.add("children", getFolderChildren(((MCRDirectory) child).getChildren()));
+                } else {
+                    jsonObj.addProperty("hasChildren", false);
+                }
+                jsonArray.add(jsonObj);
+            }
+        }
+        return jsonArray;
+    }
+    
+    public static boolean addURNToDerivate(String derivateID) {
+        MCRURNAdder urnAdder = new MCRURNAdder();
+        try {
+            return urnAdder.addURNToDerivates(derivateID);
+        } catch (IOException | JDOMException | SAXException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public static String addURNToFile(String derivatID, String path) {
+        MCRURNAdder urnAdder = new MCRURNAdder();
+        try {
+            if (urnAdder.addURNToSingleFile(derivatID, path)) {
+                return getURNforFile(derivatID, path);
+            }
+            else {
+                return "";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    
+    private static String getURNforFile(String derivate, String path) {
+        String fileName = path;
+        String pathToFile = "/";
+        if (path.contains("/")) {
+            pathToFile = path.substring(0, path.lastIndexOf("/") + 1);
+            fileName = path.substring(path.lastIndexOf("/") + 1);
+        }
+        return MCRURNManager.getURNForFile(derivate, pathToFile, fileName);
+    }
+    
+    public static void setLink(String documentID, String path) throws MCRActiveLinkException {
+        DerivateLinkUtil.setLink(MCRJerseyUtil.getID(documentID), path);
+    }
+    
+    public static void removeLink(String documentID, String path) throws MCRActiveLinkException {
+        DerivateLinkUtil.removeLink(MCRJerseyUtil.getID(documentID), path);
+    }
+    
+    public static JsonObject getDerivateAsJson(String derivateID, String path) {
+        MCRJSONManager gsonManager = MCRJSONManager.instance();
+        gsonManager.registerAdapter(new DerivateTypeAdapter());
+        gsonManager.registerAdapter(new MCRFilesystemNodeTypeAdapter());
+        Derivate derivate = new Derivate(derivateID);
+        MCRFilesystemNode node;
+        MCRPath mcrPath = MCRPath.getPath(derivateID, path);
+        if (path != null && !"".equals(path.trim())) {
+            node = derivate.getChildByPath(path);
+        } else {
+            node = derivate.getRootDir();
+        }
+        if (!Files.exists(mcrPath)) {
+            return null;
+        }
+        String maindoc = derivate.getMaindoc();
+        FileNodeWraper wrapper = new FileNodeWraper(node, maindoc);
+        JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
+
+        json.addProperty("display", isHidden(derivateID));
+
+        return json;
+    }
+    
+    private static boolean isHidden(String derivateID) {
+        MCRDerivate derObj = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateID));
+        Document xml = derObj.createXML();
+        XPathFactory xpF = XPathFactory.instance();
+        XPathExpression<Element> xpE = xpF.compile("mycorederivate/derivate",Filters.element());
+        Element derivateNode = (Element) xpE.evaluateFirst(xml);
+        Attribute displayAttr = derivateNode.getAttribute("display");
+        if (displayAttr != null){
+            return Boolean.parseBoolean(displayAttr.getValue());
+        }
+        return false;
     }
 }

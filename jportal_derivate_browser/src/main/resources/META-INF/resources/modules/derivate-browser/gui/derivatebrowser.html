@@ -198,7 +198,8 @@
                                 </button>
 								<button id="journal-info-button-delete" type="button" class="btn btn-danger browser-button">
                                     <span class="glyphicon glyphicon glyphicon-trash button-glyphicon"></span>
-                                    <text class="i18n" i18n="db.alert.delete.label" i18n-def="Löschen"></text>
+                                    <text id="journal-info-button-delete-labelAll" class="i18n hidden" i18n="db.label.deleteAll" i18n-def="Alle makierten Löschen"></text>
+                                    <text id="journal-info-button-delete-label" class="i18n" i18n="db.label.delete" i18n-def="Löschen"></text>
                                 </button>
 								<button id="journal-info-button-edit" type="button" class="btn btn-primary browser-button">
                                     <span class="glyphicon glyphicon-edit button-glyphicon"></span>
@@ -333,11 +334,41 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default lightbox-alert-delete-cancel browser-button" data-dismiss="modal" aria-hidden="true"><text class="i18n" i18n="db.label.cancel" i18n-def="Abbrechen"></text></button>
-					<button type="button" id="lightbox-alert-delete-confirm" class="btn btn-danger browser-button" ><text class="i18n" i18n="db.alert.delete.label" i18n-def="Löschen"></text></button>
+					<button type="button" id="lightbox-alert-delete-confirm" class="btn btn-danger browser-button" ><text class="i18n" i18n="db.label.delete" i18n-def="Löschen"></text></button>
 				</div>
 			</div>
 		</div>
 	</div>
+
+    <div class="modal fade" id="lightbox-alert-delete-docs" tabindex="-1" role="dialog" aria-labelledby="lightbox-alert-delete-docs-label" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="btn-round">
+                        <button type="button" class="close lightbox-alert-delete-docs-cancel" data-dismiss="modal" aria-hidden="true">x</button>
+                    </div>
+                    <h4 id="lightbox-alert-delete-docs-label" class="modal-title"><text class="i18n" i18n="db.alert.delete.titleDocs" i18n-def="Dokumente löschen?"></text></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="lightbox-alert-delete-docs-main" class="dl-horizontal">
+                        <div class="alert alert-danger lightbox-danger">
+                            <h4><label><text class="i18n" i18n="db.alert.delete.warning" i18n-def="Achtung!"></text></label></h4>
+                            <label><text class="i18n" i18n="db.alert.delete.confirmDigi" i18n-def="Bitte stellen Sie sicher das sich keine Digitalisate in den zu löschenden Dokumenten befinden. Das System kann Digitalisate nicht auf allen Ebenen finden."></text></label>
+                        </div>
+                        <div class="alert alert-warning lightbox-warning">
+                            <h4><label><text class="i18n" i18n="db.alert.delete.warning" i18n-def="Achtung!"></text></label></h4>
+                            <label><text class="i18n" i18n="db.alert.delete.confirmDocs" i18n-def="Wollen Sie wirklich die folgenden Dokumente löschen?"></text></label>
+                            <div id="lightbox-alert-delete-docs-list"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default lightbox-alert-delete-docs-cancel browser-button" data-dismiss="modal" aria-hidden="true"><text class="i18n" i18n="db.label.cancel" i18n-def="Abbrechen"></text></button>
+                    <button type="button" id="lightbox-alert-delete-docs-confirm" class="btn btn-danger browser-button" ><text class="i18n" i18n="db.label.delete" i18n-def="Löschen"></text></button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 	<div class="modal fade" id="lightbox-alert-deleteDoc" tabindex="-1" role="dialog" aria-labelledby="lightbox-alert-deleteDoc-label" aria-hidden="true" data-backdrop="static">
 		<div class="modal-dialog">
@@ -358,7 +389,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default lightbox-alert-deleteDoc-cancel browser-button" data-dismiss="modal" aria-hidden="true"><text class="i18n" i18n="db.label.cancel" i18n-def="Abbrechen"></text></button>
-					<button type="button" id="lightbox-alert-deleteDoc-confirm" class="btn btn-danger browser-button" ><text class="i18n" i18n="db.alert.delete.label" i18n-def="Löschen"></text></button>
+					<button type="button" id="lightbox-alert-deleteDoc-confirm" class="btn btn-danger browser-button" ><text class="i18n" i18n="db.label.delete" i18n-def="Löschen"></text></button>
 				</div>
 			</div>
 		</div>

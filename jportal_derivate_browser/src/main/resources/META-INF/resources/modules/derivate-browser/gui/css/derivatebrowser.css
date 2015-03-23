@@ -1077,6 +1077,12 @@ div.statusbar-progress-single-status.noAnimation {
     overflow: auto;
 }
 
+#lightbox-alert-delete-docs-list{
+    margin-top: 10px;
+    max-height: 200px;
+    overflow: auto;
+}
+
 .lightbox-warning{
 	margin-bottom: 0;
 }
@@ -1372,6 +1378,15 @@ div.statusbar-progress-single-status.noAnimation {
     display: inline-block;
 }
 
+#drag-doc-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    height: 100%;
+    padding: 0 3px;
+    text-align: center;
+}
 
 /******************************************************
 * Large File
@@ -1649,7 +1664,7 @@ div.statusbar-progress-single-status.noAnimation {
 #view-large-link-list{
     overflow-x: hidden;
     overflow-y: auto;
-    height: 75px;
+    height: 65px;
 }
 
 #view-large-panel-input{
