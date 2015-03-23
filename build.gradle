@@ -203,6 +203,7 @@ project(':jportal_mcr_module'){
 
 project(':jportal_webapp'){
     apply plugin: 'war'
+    apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 
     configurations {
         jetty
@@ -225,7 +226,6 @@ project(':jportal_webapp'){
         runtime project(':jportal_move_obj_module')
         applet "org.mycore.fileupload:fileupload-applet:1.2-SNAPSHOT"
     }
-    //foo
 
     war {
         from(configurations.applet){
@@ -245,6 +245,14 @@ project(':jportal_webapp'){
             attributes("version": "$project.version")
 //            attributes("Main-Class": "fsu.thulb.jetty.JettyRun")
         }
+    }
+
+    gretty {
+        dependencies{
+            gretty project(':jportal_jetty_tools')
+        }
+        port = 8291
+        serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
     }
 }
 
@@ -331,10 +339,24 @@ task hello(type: Exec){
         }
     }
 
-    executable "java"
-    args '-jar', project(':jportal_jetty_tools').tasks.getByPath(':jportal_jetty_tools:jar').archivePath
-    args "--path /solr " + solrWarFilePath
-    args "--path /jportal " + project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath
+//    executable "java"
+//    args '-jar', project(':jportal_jetty_tools').tasks.getByPath(':jportal_jetty_tools:jar').archivePath
+//    args "--path /solr " + solrWarFilePath
+//    args "--path /jportal " + project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath
+
+    executable "/Users/chi/Development/tools/jetty/jetty-distribution-9.2.7.v20150116/bin/jetty.sh"
+    args 'start'
+}
+
+task good(){
+
+
+//    configurations.dist.each { File file -> println "DIST: " + file.absolutePath }
+    def start = "/Users/chi/Development/tools/jetty/jetty-distribution-9.2.7.v20150116/bin/jetty.sh start"
+    def proc1 = start.execute()
+    println "Hoho"
+    def stop = "/Users/chi/Development/tools/jetty/jetty-distribution-9.2.7.v20150116/bin/jetty.sh stop"
+    def proc2 = stop.execute()
 }
 
 task daemon(type: Exec){
