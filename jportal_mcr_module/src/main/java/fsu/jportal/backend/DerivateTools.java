@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -25,6 +26,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
@@ -41,6 +43,8 @@ import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.frontend.util.DerivateLinkUtil;
+import org.mycore.iview2.frontend.MCRIView2Commands;
+import org.mycore.iview2.services.MCRIView2Tools;
 import org.mycore.urn.hibernate.MCRURN;
 import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
@@ -515,5 +519,38 @@ public class DerivateTools {
             return Boolean.parseBoolean(displayAttr.getValue());
         }
         return false;
+    }
+    
+    public static boolean tileDerivate(String derivateID) {
+        if (!MCRIView2Tools.isDerivateSupported(derivateID)) {
+            LOGGER.info("Skipping tiling of derivate " + derivateID + " as it's main file is not supported by IView2.");
+            return false;
+        }
+        MCRPath derivateRoot = MCRPath.getPath(derivateID, "/");
+
+        if (!Files.exists(derivateRoot)) {
+            LOGGER.info("Derivate " + derivateID + " does not exist or is not a directory!");
+            return false;
+        }
+        
+        try {
+            Files.walkFileTree(derivateRoot, new SimpleFileVisitor<java.nio.file.Path>(){
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Objects.requireNonNull(file);
+                    Objects.requireNonNull(attrs);
+                    if (MCRIView2Tools.isFileSupported(file)) {
+                        MCRIView2Commands.tileImage(MCRPath.toMCRPath(file));
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+                
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+       return true;
     }
 }

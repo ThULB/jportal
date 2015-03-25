@@ -298,4 +298,14 @@ public class DerivateBrowserResource {
             return Response.serverError().build();
         }
     }
+    
+    @POST
+    @Path("tileDerivate")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    public Response tileDerivate(@QueryParam("deriID") String deriID) {
+        if (DerivateTools.tileDerivate(deriID)) {
+            return Response.ok().build();
+        }
+        return Response.serverError().build();
+    }
 }

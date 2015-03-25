@@ -9,6 +9,10 @@ var DerivateBrowser = function () {
     return {
         init: function () {
 
+            $("body").on("click", "#btn-tileDeri", function () {
+                tileDerivate(derivateBrowserTools.getCurrentDocID())
+            });
+
             $("body").on("click", "#btn-hide", function () {
                 var entry = $(this);
                 $.get(jp.baseURL + "servlets/MCRDisplayHideDerivateServlet?derivate=" + derivateBrowserTools.getCurrentDocID())
@@ -1036,6 +1040,24 @@ var DerivateBrowser = function () {
                 },
                 500: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.link.remove.error"), false);
+                },
+                401: function () {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
+            }
+        });
+    }
+
+    function tileDerivate(deriID) {
+        $.ajax({
+            url: "tileDerivate?deriID=" + deriID,
+            type: "POST",
+            statusCode: {
+                200: function () {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.tile.success"), true);
+                },
+                500: function () {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.tile.success"), false);
                 },
                 401: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
