@@ -84,16 +84,20 @@ public class BaseIntegrationTest {
 
     @BeforeClass
     public static void setupClass() {
-        String buildDirectory = System.getProperty("project.build.directory");
-        LOGGER.info("########## build Dir: " + buildDirectory);
-        if (buildDirectory == null) {
-            LOGGER.warn("Did not get System property 'project.build.directory'");
-            File targetDirectory = new File("target");
-            MAVEN_OUTPUT_DIRECTORY = targetDirectory.isDirectory() ? targetDirectory : alternateDirectory.getRoot();
-        } else {
-            MAVEN_OUTPUT_DIRECTORY = new File(buildDirectory);
+//        String buildDirectory = System.getProperty("project.build.directory");
+//        LOGGER.info("########## build Dir: " + buildDirectory);
+//        if (buildDirectory == null) {
+//            LOGGER.warn("Did not get System property 'project.build.directory'");
+//            File targetDirectory = new File("target");
+//            MAVEN_OUTPUT_DIRECTORY = targetDirectory.isDirectory() ? targetDirectory : alternateDirectory.getRoot();
+//        } else {
+//            MAVEN_OUTPUT_DIRECTORY = new File(buildDirectory);
+//        }
+//        MAVEN_OUTPUT_DIRECTORY = new File(MAVEN_OUTPUT_DIRECTORY, "failed-it");
+        MAVEN_OUTPUT_DIRECTORY = new File("/Users/chi/Development/projects/jportal/jportal_web_tests/build/reports/tests/failed-it");
+        if(!MAVEN_OUTPUT_DIRECTORY.exists()){
+            MAVEN_OUTPUT_DIRECTORY.mkdirs();
         }
-        MAVEN_OUTPUT_DIRECTORY = new File(MAVEN_OUTPUT_DIRECTORY, "failed-it");
         LOGGER.info("Using " + MAVEN_OUTPUT_DIRECTORY.getAbsolutePath() + " as replacement.");
 //        String port = System.getProperty("it.port", "8080");
         String port = System.getProperty("it.port", "8291");

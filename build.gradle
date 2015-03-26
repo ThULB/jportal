@@ -284,10 +284,10 @@ project(':jportal_webapp'){
 //        serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
 //    }
 
-    farm {
+    farms{
+    farm 'App', {
         webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
         webapp ":jportal_webapp", contextPath: "/jportal-gretty"
-        integrationTestTask = ":jportal_web_tests:webTests"
 
         dependencies{
             gretty project(':jportal_jetty_tools')
@@ -306,6 +306,25 @@ project(':jportal_webapp'){
         jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath+"=$agentOp"
         port = 8291
         serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
+    }
+
+    farm 'webTests', {
+        def pathName = 'jportal-webTests'
+        webapp project(':jportal_web_tests')
+        webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
+        webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
+        integrationTestTask = "webTests"
+
+        dependencies{
+            gretty project(':jportal_jetty_tools')
+            gretty project(':java_agent')
+        }
+
+        systemProperty "MCR.AppName",pathName
+        systemProperty "project.build.directory",testResultsDir
+        port = 8291
+        serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
+    }
     }
 
 }
@@ -360,32 +379,7 @@ project(':jportal_web_tests'){
         //testCompile "org.mycore:mycore-viewer:0.4-SNAPSHOT:test"
     }
 
-    def pathName = 'jportal-webTests'
-    farm {
-        webapp project
-        webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
-        webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
-        integrationTestTask = "webTests"
 
-        dependencies{
-            gretty project(':jportal_jetty_tools')
-            gretty project(':java_agent')
-        }
-//        def agentOp
-//        for(path in resourcePaths){
-//            if(agentOp == null){
-//                agentOp = path.toString()
-//            }else {
-//                agentOp = agentOp + "," + path
-//            }
-//        }
-
-        systemProperty "MCR.AppName",pathName
-        systemProperty "project.build.directory",testResultsDir
-        //jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath+"=$agentOp"
-        port = 8291
-        serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
-    }
 
     test {
         exclude '**/test'
