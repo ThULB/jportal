@@ -321,7 +321,9 @@ project(':jportal_webapp'){
         }
 
         systemProperty "MCR.AppName",pathName
-        systemProperty "project.build.directory",testResultsDir
+        systemProperty "MCR.Home","$project.buildDir/mcrHome"
+//        systemProperty "IT.reports",project.reportsDir
+
         port = 8291
         serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
     }
@@ -388,6 +390,7 @@ project(':jportal_web_tests'){
     task webTests(type: Test, dependsOn: 'test') {
         outputs.upToDateWhen { false }
         include '**/test/*'
+        systemProperty "project.build.directory",project.reportsDir
     }
 
     task runWebTests(dependsOn: ':jportal_webapp:farmIntegrationTest'){
