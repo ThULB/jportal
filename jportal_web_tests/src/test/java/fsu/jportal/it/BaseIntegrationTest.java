@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.System;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -84,6 +85,7 @@ public class BaseIntegrationTest {
     @BeforeClass
     public static void setupClass() {
         String buildDirectory = System.getProperty("project.build.directory");
+        LOGGER.info("########## build Dir: " + buildDirectory);
         if (buildDirectory == null) {
             LOGGER.warn("Did not get System property 'project.build.directory'");
             File targetDirectory = new File("target");
@@ -98,7 +100,7 @@ public class BaseIntegrationTest {
         LOCAL_PORT = Integer.parseInt(port);
         TEST_APP = System.getProperty("it.context", "");
 //        START_URL = "http://localhost:" + LOCAL_PORT + "/" + TEST_APP;
-        START_URL = "http://localhost:" + LOCAL_PORT + "/jportal" + TEST_APP;
+        START_URL = "http://localhost:" + LOCAL_PORT + "/jportal-webTests" + TEST_APP;
         LOGGER.info("Server running on '" + START_URL + "'");
         DRIVER = new FirefoxDriver();
     }
