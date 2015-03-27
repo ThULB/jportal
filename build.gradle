@@ -15,7 +15,7 @@ def getDate() {
     return formattedDate
 }
 
-allprojects{
+allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'eclipse'
@@ -26,7 +26,7 @@ allprojects{
             sourceCompatibility = 1.7
             targetCompatibility = 1.7
         }
-        classpath { downloadSources=true }
+        classpath { downloadSources = true }
     }
 
     def group = "fsu.thulb"
@@ -37,9 +37,9 @@ allprojects{
     repositories {
         mavenLocal()
 
-        maven{ url releaseURL }
+        maven { url releaseURL }
 
-        maven{ url snapshotsURL }
+        maven { url snapshotsURL }
     }
 
     configurations { deployerJars }
@@ -57,7 +57,7 @@ allprojects{
         }
     }
 
-    dependencies{
+    dependencies {
         testCompile 'junit:junit:4.+'
         testCompile "log4j:log4j:1.2.17"
         testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.+'
@@ -65,22 +65,22 @@ allprojects{
 }
 
 def mcrComplDep = [
-    "org.mycore:mycore-base:$mcrVersion",
-    "org.mycore:mycore-solr:$mcrVersion",
-    "org.mycore:mycore-mets:$mcrVersion",
-    "org.mycore:mycore-iview2:$mcrVersion",
-    "org.mycore:mycore-user2:$mcrVersion",
-    "org.mycore:mycore-classeditor:$mcrVersion",
-    "org.mycore:mycore-mets:$mcrVersion",
-    "org.mycore:mycore-oai:$mcrVersion",
-    "org.mycore:mycore-session-listing:$mcrVersion",
-    "org.mycore:mycore-swf:$mcrVersion",
-    'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT',
-    'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT',
-    'org.mycore.mets:mets-model:0.6-SNAPSHOT',
-    'org.mycore.mets:mets-validator:1.1-SNAPSHOT',
-    'javax.servlet:javax.servlet-api:3.1.0',
-    'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
+        "org.mycore:mycore-base:$mcrVersion",
+        "org.mycore:mycore-solr:$mcrVersion",
+        "org.mycore:mycore-mets:$mcrVersion",
+        "org.mycore:mycore-iview2:$mcrVersion",
+        "org.mycore:mycore-user2:$mcrVersion",
+        "org.mycore:mycore-classeditor:$mcrVersion",
+        "org.mycore:mycore-mets:$mcrVersion",
+        "org.mycore:mycore-oai:$mcrVersion",
+        "org.mycore:mycore-session-listing:$mcrVersion",
+        "org.mycore:mycore-swf:$mcrVersion",
+        'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT',
+        'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT',
+        'org.mycore.mets:mets-model:0.6-SNAPSHOT',
+        'org.mycore.mets:mets-validator:1.1-SNAPSHOT',
+        'javax.servlet:javax.servlet-api:3.1.0',
+        'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
 ]
 
 
@@ -88,40 +88,40 @@ def mcrComplDep = [
 subprojects {
 
     def noMCRDep = [
-        "jportal_jetty_tools",
-        "jportal_web_tests",
-        "java_agent"
+            "jportal_jetty_tools",
+            "jportal_web_tests",
+            "java_agent"
     ]
 
     if (!(project.name in noMCRDep)) {
-        dependencies{
-            mcrComplDep.each{dep -> compile dep }
+        dependencies {
+            mcrComplDep.each { dep -> compile dep }
         }
     }
 
     def noJPModuleDep = [
-        "jportal-commons",
-        "jportal_ext_web_lib",
-        "jportal_iview2_plugin",
-        "jportal_emb_hsql",
-        "jportal_jetty_tools",
-        "java_agent",
-        "jportal_web_tests"
+            "jportal-commons",
+            "jportal_ext_web_lib",
+            "jportal_iview2_plugin",
+            "jportal_emb_hsql",
+            "jportal_jetty_tools",
+            "java_agent",
+            "jportal_web_tests"
     ]
 
-    if(project.name != 'jportal_mcr_module' && !(project.name in noJPModuleDep)){
-        dependencies{ compile project(':jportal_mcr_module') }
+    if (project.name != 'jportal_mcr_module' && !(project.name in noJPModuleDep)) {
+        dependencies { compile project(':jportal_mcr_module') }
     }
 
     def mcrModule = [
-        "jportal_mcr_module",
-        "jportal_derivate_browser",
-        "jportal_move_obj_module",
-        "jportal_laws",
-        "jportal_doublet_finder_module"
+            "jportal_mcr_module",
+            "jportal_derivate_browser",
+            "jportal_move_obj_module",
+            "jportal_laws",
+            "jportal_doublet_finder_module"
     ]
 
-    if(project.name in mcrModule){
+    if (project.name in mcrModule) {
         println "MCRModule $project.name"
         jar {
             manifest {
@@ -135,10 +135,10 @@ subprojects {
     resourcePaths.addAll(sourceSets.main.resources.srcDirs);
 }
 
-project(':jportal_mcr_module'){
-    configurations{ iview }
+project(':jportal_mcr_module') {
+    configurations { iview }
 
-    dependencies{
+    dependencies {
         compile project(':jportal-commons')
         compile project(':jportal_ext_web_lib')
         compile project(':jportal_iview2_plugin')
@@ -157,7 +157,7 @@ project(':jportal_mcr_module'){
     }
 
     def gruntBuildDir = "$project.buildDir/grunt"
-    processResources.doFirst{
+    processResources.doFirst {
         copy {
             from 'grunt'
             include '**/*'
@@ -165,7 +165,7 @@ project(':jportal_mcr_module'){
         }
 
         def iviewJar
-        configurations.iview.each{ file ->
+        configurations.iview.each { file ->
             iviewJar = file.absolutePath
         }
         copy {
@@ -192,34 +192,9 @@ project(':jportal_mcr_module'){
     }
 }
 
-//project(':jportal_web_tests'){
-//    dependencies{
-//        testCompile 'org.seleniumhq.selenium:selenium-java:2.44.0'
-//    }
-//
-//    test {
-//        beforeTest{
-//
-//        }
-//    }
-//}
-//buildscript {
-//    repositories {
-//        jcenter()
-//        // enable this to use snapshot versions of Gretty:
-//        // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
-//    }
-//
-//    dependencies {
-//        classpath 'org.akhikhl.gretty:gretty:+'
-//    }
-//}
-
-project(':jportal_webapp'){
+project(':jportal_webapp') {
     apply plugin: 'war'
     apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
-    //apply plugin: 'org.akhikhl.gretty'
-    //apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 
     configurations {
         jetty
@@ -229,6 +204,9 @@ project(':jportal_webapp'){
     }
 
     dependencies {
+        testCompile 'junit:junit:4.+'
+        testCompile "log4j:log4j:1.2.17"
+        testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
         runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.mycore:mycore-acl-editor2:$mcrVersion"
@@ -244,144 +222,16 @@ project(':jportal_webapp'){
     }
 
     war {
-        from(configurations.applet){
+        from(configurations.applet) {
             into 'applet'
             rename 'fileupload-applet(.*).jar', 'upload.jar'
         }
-//        from {
-//            configurations.executableWarDeps.collect {
-//                it.isDirectory() ? it : project.zipTree(it)
-//            }
-//        }
-//
-//        from("$buildDir/classes/main"){ include "**/JettyRun.class" }
 
         manifest {
             attributes("Webapp": "$project.name")
             attributes("version": "$project.version")
-//            attributes("Main-Class": "fsu.thulb.jetty.JettyRun")
         }
     }
-
-//    gretty {
-//        dependencies{
-//            gretty project(':jportal_jetty_tools')
-//            gretty project(':java_agent')
-//        }
-//        def agentOp
-//        for(path in resourcePaths){
-//            if(agentOp == null){
-//                agentOp = path.toString()
-//            }else {
-//                agentOp = agentOp + "," + path
-//            }
-//        }
-//
-//        systemProperty "MCR.AppName","jportal-gretty"
-//        //jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath+"=$agentOp"
-//        port = 8291
-//        contextPath = "jportal-gretty"
-//        serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
-//    }
-
-    farms{
-    farm 'App', {
-        webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
-        webapp ":jportal_webapp", contextPath: "/jportal-gretty"
-
-        dependencies{
-            gretty project(':jportal_jetty_tools')
-            gretty project(':java_agent')
-        }
-        def agentOp
-        for(path in resourcePaths){
-            if(agentOp == null){
-                agentOp = path.toString()
-            }else {
-                agentOp = agentOp + "," + path
-            }
-        }
-
-        systemProperty "MCR.AppName","jportal-gretty"
-        jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath+"=$agentOp"
-        port = 8291
-        serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
-    }
-
-    farm 'webTests', {
-        def pathName = 'jportal-webTests'
-        webapp project(':jportal_web_tests')
-        webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
-        webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
-        integrationTestTask = "webTests"
-
-        dependencies{
-            gretty project(':jportal_jetty_tools')
-            gretty project(':java_agent')
-        }
-
-        systemProperty "MCR.AppName",pathName
-        systemProperty "MCR.Home","$project.buildDir/mcrHome"
-//        systemProperty "IT.reports",project.reportsDir
-
-        port = 8291
-        serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
-    }
-    }
-
-}
-
-
-
-task runJetty(type: JavaExec){
-    configurations {
-        jetty
-        solr
-    }
-    description = "run the jetty"
-    dependencies {
-        jetty("org.eclipse.jetty:jetty-runner:$jettyVersion"){ exclude group: 'org.ow2.asm' }
-        jetty project(':jportal_jetty_tools')
-        jetty project(':java_agent')
-        solr "org.mycore.solr:solr:4.7.2@war"
-    }
-
-    def solrWarFilePath
-    configurations.solr.each { File file -> solrWarFilePath = file.absolutePath }
-
-    def agentOp
-    for(path in resourcePaths){
-        if(agentOp == null){
-            agentOp = path.toString()
-        }else {
-            agentOp = agentOp + "," + path
-        }
-    }
-
-    main = "org.eclipse.jetty.runner.Runner"
-    systemProperties.put("MCR.AppName","jportal")
-    jvmArgs '-Xdebug'
-    jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-    //jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath+"=$agentOp"
-    jvmArgs '-XX:MaxPermSize=128m'
-    args '--config', 'jetty/jetty-config.xml'
-    args '--stop-port', '8181'
-    args '--stop-key', 'stop'
-    args '--path', '/solr', solrWarFilePath
-    args '--path', '/jportal', project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath
-    classpath configurations.jetty
-}
-
-project(':jportal_web_tests'){
-    apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
-    dependencies {
-        testCompile 'junit:junit:4.+'
-        testCompile "log4j:log4j:1.2.17"
-        testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
-        //testCompile "org.mycore:mycore-viewer:0.4-SNAPSHOT:test"
-    }
-
-
 
     test {
         exclude '**/test'
@@ -390,22 +240,63 @@ project(':jportal_web_tests'){
     task webTests(type: Test, dependsOn: 'test') {
         outputs.upToDateWhen { false }
         include '**/test/*'
-        systemProperty "project.build.directory",project.reportsDir
+        systemProperty "project.build.directory", project.reportsDir
     }
 
-    task runWebTests(dependsOn: ':jportal_webapp:farmIntegrationTest'){
+    farms {
+        farm 'App', {
+            webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
+            webapp ":jportal_webapp", contextPath: "/jportal-gretty"
 
+            dependencies {
+                gretty project(':jportal_jetty_tools')
+                gretty project(':java_agent')
+            }
+            def agentOp
+            for (path in resourcePaths) {
+                if (agentOp == null) {
+                    agentOp = path.toString()
+                } else {
+                    agentOp = agentOp + "," + path
+                }
+            }
+
+            systemProperty "MCR.AppName", "jportal-gretty"
+            jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
+            port = 8291
+            serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
+        }
+
+        farm 'webTests', {
+            def pathName = 'jportal-webTests'
+            webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
+            webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
+            webapp project
+            integrationTestTask = "webTests"
+
+            dependencies {
+                gretty project(':jportal_jetty_tools')
+                gretty project(':java_agent')
+            }
+
+            systemProperty "MCR.AppName", pathName
+            systemProperty "MCR.Home", "$project.buildDir/mcrHome"
+
+            port = 8291
+            serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
+        }
     }
+
 }
 
-project(':jportal_jetty_tools'){
+project(':jportal_jetty_tools') {
     //    project.ext.needMCR = false
     configurations {
         solr
-        executableWarDeps{ extendsFrom compile }
+        executableWarDeps { extendsFrom compile }
     }
 
-    dependencies{
+    dependencies {
         //                    compile "org.mycore:mycore-base:$mcrVersion"
         compile "org.eclipse.jetty:jetty-server:$jettyVersion"
         executableWarDeps "org.eclipse.jetty:jetty-server:$jettyVersion"
@@ -421,9 +312,9 @@ project(':jportal_jetty_tools'){
     }
 
     def solrBuildDir = "$project.buildDir/solr"
-    processResources.doFirst{
+    processResources.doFirst {
         def solrJar
-        configurations.solr.each{ file ->
+        configurations.solr.each { file ->
             solrJar = file.absolutePath
             println "Solr Jar $solrJar";
         }
@@ -452,7 +343,7 @@ project(':jportal_jetty_tools'){
             into 'config/jportal_jetty_tools/solr/solr-home'
         }
     }
-    
+
     jar {
         from {
             configurations.executableWarDeps.collect {
@@ -471,10 +362,10 @@ project(':jportal_jetty_tools'){
 }
 
 configurations.all {
-    resolutionStrategy{
+    resolutionStrategy {
         cacheDynamicVersionsFor 0, 'seconds'
         cacheChangingModulesFor 0, 'seconds'
     }
 }
 
-task wrapper(type: Wrapper){ gradleVersion = '2.2.1' }
+task wrapper(type: Wrapper) { gradleVersion = '2.2.1' }
