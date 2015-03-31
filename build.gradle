@@ -270,7 +270,7 @@ project(':jportal_webapp') {
             }
 
             systemProperty "MCR.AppName", "jportal-gretty"
-            //jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
+            jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
             port = 8291
             serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
         }
