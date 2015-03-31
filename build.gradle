@@ -19,6 +19,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'eclipse'
+    apply plugin: 'idea'
     apply plugin: 'maven-publish'
 
     eclipse {
@@ -27,6 +28,13 @@ allprojects {
             targetCompatibility = 1.7
         }
         classpath { downloadSources = true }
+    }
+
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
     }
 
     def group = "fsu.thulb"
@@ -262,7 +270,7 @@ project(':jportal_webapp') {
             }
 
             systemProperty "MCR.AppName", "jportal-gretty"
-            jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
+            //jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
             port = 8291
             serverConfigFile = "$project.projectDir/../jetty/jetty-config.xml"
         }
