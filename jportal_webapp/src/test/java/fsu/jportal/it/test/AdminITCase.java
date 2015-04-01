@@ -50,7 +50,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		  wait.until(ExpectedConditions.elementToBeClickable(rule));
 		  DRIVER.findElement(rule).sendKeys("testAllwaysFalse");
 		  
-		  DRIVER.findElement(By.cssSelector(".acle2-new-rule-text")).sendKeys("false");
+		  DRIVER.findElement(By.className("acle2-new-rule-text")).sendKeys("false");
 		  DRIVER.findElement(By.id("acle2-new-rule-add")).click();
 	
 		  assertThat(DRIVER.findElement(By.id("acle2-alert-area")).getText(), both(containsString("testAllwaysFalse")).and(containsString("erfolgreich hinzugefügt")));
@@ -210,7 +210,7 @@ public class AdminITCase extends BaseIntegrationTest {
 	
 	  //save and accept alert dialog
 	  DRIVER.findElement(By.id("dijit_form_Button_5")).click();
-	  Thread.sleep(500);
+	  Thread.sleep(600);
 		try {
 		  Alert myAlert = DRIVER.switchTo().alert();
 			assertEquals("save failed", "Speichern erfolgreich", myAlert.getText());
@@ -253,7 +253,7 @@ public class AdminITCase extends BaseIntegrationTest {
 	  assertEquals("content does not match", "Neuen Nutzer anlegen", DRIVER
 	  		.findElement(By.xpath("//h3[@class='panel-title']")).getText());
 		
-	  DRIVER.findElement(By.id("userName")).sendKeys("testUser");
+	  DRIVER.findElement(By.id("userName")).sendKeys("testuser");
 	  DRIVER.findElement(By.id("password")).sendKeys("test");
 	  DRIVER.findElement(By.id("password2")).sendKeys("test");
 	  DRIVER.findElement(By.id("hint")).sendKeys("test");
@@ -273,16 +273,16 @@ public class AdminITCase extends BaseIntegrationTest {
 	  DRIVER.findElement(By.name("_xed_submit_servlet:MCRUserServlet")).click();
 	  
 	  try {
-		  assertEquals("didn't save - content does not match", "Nutzerdaten anzeigen:testUser", DRIVER
+		  assertEquals("didn't save - content does not match", "Nutzerdaten anzeigen:testuser", DRIVER
 			.findElement(By.xpath("//div[@class='user-details']/h2")).getText());
 		  
 		  //search user
 		  TestUtils.home(DRIVER);
 			DRIVER.findElement(By.linkText("Admin")).click();
 			DRIVER.findElement(By.linkText("Suchen und verwalten")).click();
-			DRIVER.findElement(By.xpath("//input[@name='search']")).sendKeys("testUser");
+			DRIVER.findElement(By.xpath("//input[@name='search']")).sendKeys("testuser");
 			DRIVER.findElement(By.xpath("//input[@name='search']")).sendKeys(Keys.ENTER);
-			DRIVER.findElement(By.linkText("testUser")).click();
+			DRIVER.findElement(By.linkText("testuser")).click();
 		  
 		  //change data
 			DRIVER.findElement(By.linkText("Daten ändern")).click();
@@ -309,9 +309,9 @@ public class AdminITCase extends BaseIntegrationTest {
 	  	TestUtils.ERROR_MESSAGE = e.getMessage();
 	  	DRIVER.findElement(By.linkText("Admin")).click();
 			DRIVER.findElement(By.linkText("Suchen und verwalten")).click();
-			DRIVER.findElement(By.xpath("//input[@name='search']")).sendKeys("testUser");
+			DRIVER.findElement(By.xpath("//input[@name='search']")).sendKeys("testuser");
 			DRIVER.findElement(By.xpath("//input[@name='search']")).sendKeys(Keys.ENTER);
-			DRIVER.findElement(By.linkText("testUser")).click();
+			DRIVER.findElement(By.linkText("testuser")).click();
 	  }
 	  
 	  //delete user

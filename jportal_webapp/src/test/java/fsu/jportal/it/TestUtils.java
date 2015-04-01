@@ -30,7 +30,6 @@ public abstract class TestUtils {
 
     public static void logout(WebDriver driver) {
         driver.findElement(By.xpath("//div[@id='navbar-collapse-globalHeader']/ul/li[5]/a")).click();
-//        assertEquals("logout failed", 2, driver.findElements(By.xpath("//div[@id='globalMenu']/ul/li")).size());
     }
 
     public static void saveForm(WebDriver driver) {
@@ -131,7 +130,6 @@ public abstract class TestUtils {
 			  //wait until its deleted
 			  deleteOk = By.xpath("//div[@id='delete-dialog-info'][text()='Löschen erfolgreich!']");
 			  wait.until(ExpectedConditions.elementToBeClickable(deleteOk));
-	//		  Thread.sleep(600);
 			  //check if ok
 		    assertEquals("testObj didn't deleted successfully", "Löschen erfolgreich!", driver.findElement(By.id("delete-dialog-info")).getText());
 			  
@@ -141,13 +139,17 @@ public abstract class TestUtils {
     
     public static void goToObj(WebDriver driver, String where) {
     	try {
+    		Thread.sleep(600);
 	    	driver.findElement(By.id("inputField")).sendKeys(where);
 	    	driver.findElement(By.xpath("//span[@class='glyphicon glyphicon-search glyphSearchBar']")).submit();
 	    	WebDriverWait wait = new WebDriverWait(driver, 2);
 	    	By waitForSearch = By.linkText(where);
 	    	wait.until(ExpectedConditions.elementToBeClickable(waitForSearch));
 	    	driver.findElement(waitForSearch).click();
-    	} catch (Exception e) { ERROR_MESSAGE += "Failed to Find! \n" + e.getMessage(); }
+    	} catch (Exception e) { ERROR_MESSAGE += "Failed to Find! \n" + e.getMessage(); 
+    		try {
+    		} catch (Exception ex) {}
+    	}
     }
 
     public static void throwError() throws Exception {
