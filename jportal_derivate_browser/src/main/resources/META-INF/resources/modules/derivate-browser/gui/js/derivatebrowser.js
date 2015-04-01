@@ -1149,8 +1149,8 @@ var DerivateBrowser = function () {
         if(filterID != ""){
             $("#btn-filter-table-input-remove").removeClass("hidden");
             derivateBrowserLargeView.filterList();
-            $(".browser-table-file").addClass("hidden");
-            var entrys = $(".browser-table-file")
+            $(".browser-table-entry").addClass("hidden");
+            var entrys = $(".browser-table-entry")
                 .filter(function() {
                     return $(this).find(".browser-table-file-name").html().match(new RegExp("^" + filterID, "i"));
                 });
@@ -1160,7 +1160,7 @@ var DerivateBrowser = function () {
             });
         }
         else{
-            $(".browser-table-file").removeClass("hidden");
+            $(".browser-table-entry").removeClass("hidden");
             derivateBrowserLargeView.resetFilteredList();
         }
     }
