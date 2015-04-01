@@ -256,10 +256,30 @@ var derivateBrowserNavigation = (function () {
 	}
 
     //ajax Methods
-    function getDocPerID(docID, callback, docs) {
+    function getDocPerID(docID, callback, docs, count) {
         var url = jp.baseURL + "servlets/solr/select?q=id%3A" + docID + "&start=0&rows=10&sort=maintitle+asc&wt=json&indent=true";
         $.getJSON(url, function(search) {
-            callback(search.response, docs, docID);
+            //console.log(search.response.numFound);
+            if (search.response.numFound > 0) {
+                callback(search.response, docs, docID);
+                derivateBrowserTools.hideLoadingScreen();
+            }
+            else {
+                if (count == undefined){
+                    console.log("BLA2");
+                    count = 1;
+                    derivateBrowserTools.showLoadingScreen();
+                }
+                console.log(count);
+                if (count < 4) {
+                    setTimeout(function () {
+                        getDocPerID(docID, callback, docs, count+1);
+                    }, 1000);
+                }
+                else {
+                    derivateBrowserTools.hideLoadingScreen();
+                }
+            }
         });
     }
 

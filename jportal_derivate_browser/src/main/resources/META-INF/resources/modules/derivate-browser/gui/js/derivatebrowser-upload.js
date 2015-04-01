@@ -176,6 +176,7 @@ var derivateBrowserUpload = (function () {
 
     $("body").on("click", "#folder-list-new-button-derivate", function () {
         $("#lightbox-new-derivate").modal("show");
+        $("#folder-list-new-select-area").addClass("hidden");
     });
 
     $(window).on('beforeunload', function(){
@@ -401,7 +402,7 @@ var derivateBrowserUpload = (function () {
         $("#upload-complete-status-text").removeClass("hidden");
     }
 
-    function scrollToElement(elm, end) {
+    function scrollToElement(elm) {
         var animationTime = 100;
         if ($("#upload-status-bar-body").queue( "fx").length > 1) {
             $("#upload-status-bar-body").stop(true);

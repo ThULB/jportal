@@ -183,7 +183,7 @@ public class DerivateBrowserResource {
         String path = jsonObject.get("path").getAsString();
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonFile = jsonArray.get(i).getAsJsonObject();
-            JsonObject childJson = DerivateTools.getChildAsJson(deriID, path, jsonFile.get("file").getAsString());;
+            JsonObject childJson = DerivateTools.getChildAsJson(deriID, path, jsonFile.get("file").getAsString());
             if (childJson != null) {
                 jsonFile.addProperty("exists", "1");
                 jsonFile.add("existingFile", childJson);

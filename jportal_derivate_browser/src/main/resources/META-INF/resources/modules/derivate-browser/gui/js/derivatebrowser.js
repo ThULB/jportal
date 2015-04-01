@@ -506,9 +506,11 @@ var DerivateBrowser = function () {
             $("body").on("click", ".btn-delete", function () {
                 var entry = $(this).parents(".browser-table-entry");
                 var startfile = $("#derivat-panel-startfile").data("startfile");
-                if ($(entry).data("startfile") != true && startfile.indexOf($(entry).data("path")) != 0) {
+                if ($(entry).data("startfile") != true && startfile != $(entry).data("path")) {
                     entry.addClass("delete");
-                    derivateBrowserTools.showDeleteAlert();
+                    var fileList = [];
+                    fileList.push($(entry).data("path"));
+                    derivateBrowserTools.showDeleteAlert(fileList);
                 }
                 else {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.startfile"), false);
@@ -607,7 +609,7 @@ var DerivateBrowser = function () {
                         "deriID": $(this).data("deriID"),
                         "path": $(this).data("path")
                     };
-                    json.push(json2);
+                    json.files.push(json2);
                 });
                 deleteMultipleFiles(json);
                 $("#lightbox-alert-delete").modal('hide');

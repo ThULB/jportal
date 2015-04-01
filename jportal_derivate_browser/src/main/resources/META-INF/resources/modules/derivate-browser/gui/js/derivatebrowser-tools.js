@@ -263,10 +263,12 @@ var derivateBrowserTools = (function () {
     }
 
     function showLoadScreen() {
-        clearTimeout(loadingTimer);
-        loadingTimer = setTimeout(function() {
-            $("#filebrowser-loading").removeClass("hidden");
-        }, 1000);
+        if ($("#filebrowser-loading").hasClass("hidden")) {
+            clearTimeout(loadingTimer);
+            loadingTimer = setTimeout(function() {
+                $("#filebrowser-loading").removeClass("hidden");
+            }, 1000);
+        }
     }
 
     function hideLoadScreen() {
