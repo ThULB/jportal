@@ -787,6 +787,7 @@ var DerivateBrowser = function () {
                         if (file.status == 1) {
                             derivateBrowserFileView.removeFileWithPath(file.path);
                             derivateBrowserNavigation.removeDocPerID(file.deriID, file.path);
+                            derivateBrowserLargeView.removeFile(file.deriID + file.path);
                             checkIfNothingSelected();
                         }
                         else {
@@ -799,7 +800,6 @@ var DerivateBrowser = function () {
                     else {
                         if (data.files.length == 1) {
                             derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.success", data.files[0].path.substr(data.files[0].path.lastIndexOf("/") + 1)), true);
-                            derivateBrowserLargeView.removeFile(data.files[0].deriID + data.files[0].path);
                         }
                         else {
                             derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.successAll"), true);

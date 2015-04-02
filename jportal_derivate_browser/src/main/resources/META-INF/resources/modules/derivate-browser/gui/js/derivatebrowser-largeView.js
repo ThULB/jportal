@@ -116,7 +116,9 @@ var derivateBrowserLargeView = (function () {
         var startfile = $("#derivat-panel-startfile").data("startfile");
         if ($(entry).data("startfile") != true && startfile.indexOf($(entry).data("path")) != 0) {
             entry.addClass("delete");
-            derivateBrowserTools.showDeleteAlert();
+            var fileList = [];
+            fileList.push($(entry).data("path"));
+            derivateBrowserTools.showDeleteAlert(fileList);
         }
         else {
             derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.startfile"), false);
@@ -163,7 +165,12 @@ var derivateBrowserLargeView = (function () {
         }
         else{
             var index = getIndexFromID(id);
-            setCurrentFileTo(index);
+            if (index != -1) {
+                setCurrentFileTo(index);
+            }
+            else {
+                setCurrentFileTo(0);
+            }
         }
         $("#file-view-large").removeClass("hidden");
     }
@@ -290,7 +297,13 @@ var derivateBrowserLargeView = (function () {
     function changeName(success, deriID, oldname, newName) {
         if (success) {
             var path = oldname.substr(0, oldname.lastIndexOf("/") + 1) + newName;
-            setCurrentFileTo(getIndexFromID(deriID + path));
+            var index = getIndexFromID(deriID + path);
+            if (index != -1) {
+                setCurrentFileTo(index);
+            }
+            else {
+                setCurrentFileTo(0);
+            }
         }
         else{
             if (!$("#view-large-panel-input").hasClass("hidden")) {
@@ -363,9 +376,9 @@ var derivateBrowserLargeView = (function () {
     }
 
     function getIndexFromID(id) {
-        var index = currentFileList.map(function(x) {return x.getID();}).indexOf(id);
-        if (index == -1) index = 0;
-        return index;
+        //var index = currentFileList.map(function(x) {return x.getID();}).indexOf(id);
+        //if (index == -1) index = 0;
+        return currentFileList.map(function(x) {return x.getID();}).indexOf(id);
     }
 
     function hidePanelInput() {
@@ -376,9 +389,12 @@ var derivateBrowserLargeView = (function () {
     }
 
     function removeFromList(id) {
-        currentFileList.splice(getIndexFromID(id), 1);
-        if (!$("#file-view-large").hasClass("hidden")) {
-            setCurrentFileTo(0);
+        var index = getIndexFromID(id);
+        if (index != -1){
+            currentFileList.splice(index, 1);
+            if (!$("#file-view-large").hasClass("hidden")) {
+                setCurrentFileTo(0);
+            }
         }
     }
 
@@ -448,7 +464,10 @@ var derivateBrowserLargeView = (function () {
         },
 
         getFile: function(id) {
-            return currentFileList[getIndexFromID(id)];
+            var index = getIndexFromID(id);
+            if (index != -1) {
+                return currentFileList[index];
+            }
         },
 
         updateLinks: function(docID) {
@@ -457,7 +476,10 @@ var derivateBrowserLargeView = (function () {
         },
 
         updateName: function(id, newName) {
-            currentFileList[getIndexFromID(id)].changeName(newName);
+            var index = getIndexFromID(id);
+            if (index != -1) {
+                currentFileList[index].changeName(newName);
+            }
         },
 
         removeFile: function(id) {
