@@ -29,8 +29,8 @@ public class AdminITCase extends BaseIntegrationTest {
 		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.linkText("ACL-Editor")).click();
-		
-	  assertEquals("content does not match", "Editor für Zugriffsrechte", DRIVER
+
+		assertEquals("content does not match", "Editor für Zugriffsrechte", DRIVER
 	  		.findElement(By.xpath("//div[@id='acle2-header']/span/label")).getText());
 		
 		//create new object
@@ -43,16 +43,18 @@ public class AdminITCase extends BaseIntegrationTest {
 		By newRule = By.cssSelector(".select2-results > li:last-child");
 	  wait.until(ExpectedConditions.elementToBeClickable(newRule));
 	  DRIVER.findElement(newRule).click();
-		
+	  
 		try {
 		  //create new rule from object menu
 		  By rule = By.id("acle2-new-rule-desc");
 		  wait.until(ExpectedConditions.elementToBeClickable(rule));
 		  DRIVER.findElement(rule).sendKeys("testAllwaysFalse");
-		  
+		  if(DRIVER.findElement(rule).getAttribute("value").equals("")) {
+		  	DRIVER.findElement(rule).sendKeys("testAllwaysFalse");
+		  }
 		  DRIVER.findElement(By.className("acle2-new-rule-text")).sendKeys("false");
 		  DRIVER.findElement(By.id("acle2-new-rule-add")).click();
-	
+		  
 		  assertThat(DRIVER.findElement(By.id("acle2-alert-area")).getText(), both(containsString("testAllwaysFalse")).and(containsString("erfolgreich hinzugefügt")));
 		  Thread.sleep(500);
 		  DRIVER.findElement(By.id("acle2-button-new-access")).click();
@@ -192,6 +194,7 @@ public class AdminITCase extends BaseIntegrationTest {
 	  DRIVER.findElement(loadClassEdt).click();
 	  
 		DRIVER.findElement(By.id("dijit_form_Button_12")).click();
+		Thread.sleep(600);
 		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_0 > div > span:last-child")).click();
 		By testIsOpen = By.cssSelector("#dijit__TreeNode_0 > div > .dijitTreeExpandoClosed");
 		if(DRIVER.findElements(testIsOpen).size() > 0) {
@@ -200,7 +203,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		loadClassEdt = By.cssSelector(".dijitTreeNodeContainer > div:first-child > div");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadClassEdt));
 	  DRIVER.findElement(loadClassEdt).click();
-	  Thread.sleep(1000);
+	  Thread.sleep(600);
 	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
 	  DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testClassification");
 	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_4")).getText());
@@ -226,6 +229,8 @@ public class AdminITCase extends BaseIntegrationTest {
 				classificationDeleteTry();
 			} catch (Exception e2) {TestUtils.ERROR_MESSAGE += "Second try to delete failed! \n" + e.getMessage();}
 		}
+		
+		dojoMenuMiniTest();
 		
 		TestUtils.finishThis(DRIVER);
 	}
@@ -337,24 +342,27 @@ public class AdminITCase extends BaseIntegrationTest {
 		DRIVER.findElement(By.linkText("Gruppen verwalten")).click();
 		
 		//create group test
-		By loadGroups = By.xpath("//div[@id='dijit__TreeNode_0']/div/span[1]");
+//		By loadGroups = By.xpath("//div[@id='dijit__TreeNode_0']/div/span[1]");
+		By loadGroups = By.cssSelector("#dijit__TreeNode_0 > div:first-child > span:last-child");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadGroups));
 	  DRIVER.findElement(loadGroups).click();
 
-		DRIVER.findElement(By.id("dijit_form_Button_12")).click();
-		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_0 > div > span:last-child")).click();
-		By testIsOpen = By.cssSelector("#dijit__TreeNode_0 > div > .dijitTreeExpandoClosed");
+	  By loadButton = By.id("dijit_form_Button_12");
+//		DRIVER.findElement(By.id("dijit_form_Button_12")).click();
+	  wait.until(ExpectedConditions.elementToBeClickable(loadButton));
+	  DRIVER.findElement(loadButton).click();
+		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_0 > div:first-child > span:last-child")).click();
+		By testIsOpen = By.cssSelector("#dijit__TreeNode_0 > div:first-child > .dijitTreeExpandoClosed");
 		if(DRIVER.findElements(testIsOpen).size() > 0) {
 			DRIVER.findElement(testIsOpen).click();
 		}
 		
-		loadGroups = By.cssSelector("#dijit__TreeNode_2 > div");
+		loadGroups = By.cssSelector("#dijit__TreeNode_2 > div > span:last-child");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadGroups));
 	  DRIVER.findElement(loadGroups).click();
-	  Thread.sleep(500);
-	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
+	  assertEquals("content not empty", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
 	  DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testGroup");
-	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_4")).getText());
+	  assertEquals("content not empty", "", DRIVER.findElement(By.id("dijit_form_TextBox_4")).getText());
 	  DRIVER.findElement(By.id("dijit_form_TextBox_4")).sendKeys("testGroup");
 	  DRIVER.findElement(By.id("dijit_form_ValidationTextBox_2")).clear();
 	  DRIVER.findElement(By.id("dijit_form_ValidationTextBox_2")).sendKeys("testGroup");
@@ -377,21 +385,36 @@ public class AdminITCase extends BaseIntegrationTest {
 				TestUtils.ERROR_MESSAGE += "Second try to delet it failed too! \n" + e2.getMessage();
 			}
 		}
-	  
+		
+		dojoMenuMiniTest();
+		
 		TestUtils.finishThis(DRIVER);
+	}
+	
+	public void dojoMenuMiniTest() {
+		//check the menu of userGroup and Klassification
+		DRIVER.findElement(By.id("dijit_form_Button_7")).click();
+		By openMenu = By.id("mycore_classification_SettingsDialog_0_title");
+		wait.until(ExpectedConditions.elementToBeClickable(openMenu));
+		assertEquals("Import und Einstellungen", DRIVER.findElement(openMenu).getText());
+		
+		assertEquals("Klassifikation importieren", DRIVER.findElement(By.xpath("//h1[@i18n='component.classeditor.settings.import']")).getText());
+		assertTrue("Import Button should be present.", DRIVER.findElement(By.xpath("//form[@id='classImportForm']/span[2]")).isDisplayed());
+		assertEquals("Sprachauswahl", DRIVER.findElement(By.xpath("//h1[@i18n='component.classeditor.settings.language']")).getText());
+		assertEquals("Weitere Einstellungen", DRIVER.findElement(By.xpath("//h1[@i18n='component.classeditor.settings.additionalSettings']")).getText());
+//		DRIVER.findElement(By.cssSelector(".dijitDialogTitleBar > span:last-child")).click();
 	}
 	
 	public void deleteGroupTry() throws InterruptedException {
 		By loadGroups = By.cssSelector("#dijit__TreeNode_1 > div > span:last-child > .dijitTreeLabel");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadGroups));
 		assertThat(DRIVER.findElement(loadGroups).getText(), containsString("testGroup"));
-		Thread.sleep(100);
 		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_1 > div")).click();
-		Thread.sleep(100);
+		Thread.sleep(600);
 		DRIVER.findElement(By.id("dijit_form_Button_13")).click();
-		Thread.sleep(100);
+		Thread.sleep(600);
 	  DRIVER.findElement(By.id("dijit_form_Button_5")).click();
-	  Thread.sleep(500);
+	  Thread.sleep(600);
 	  Alert myAlert = DRIVER.switchTo().alert();
 		assertEquals("save failed", "Speichern erfolgreich", myAlert.getText());
 		myAlert.accept();
