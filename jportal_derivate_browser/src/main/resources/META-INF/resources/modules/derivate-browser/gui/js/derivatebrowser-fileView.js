@@ -214,6 +214,7 @@ var derivateBrowserFileView = (function () {
                 derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.notAllDocs"), false);
             }
         });
+        derivateBrowserTools.hideLoadingScreen();
 		derivateBrowserTools.goTo(parentID, "");
 	}
 
@@ -550,6 +551,7 @@ var derivateBrowserFileView = (function () {
 		},
 
 		deleteDocs: function(json) {
+            derivateBrowserTools.showLoadingScreen();
 			deleteDocument(json, removeFromView);
 		},
 

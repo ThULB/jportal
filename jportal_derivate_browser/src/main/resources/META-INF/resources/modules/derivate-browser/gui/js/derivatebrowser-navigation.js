@@ -217,9 +217,11 @@ var derivateBrowserNavigation = (function () {
 	}
 
 	function addDocToParent(response) {
-        derivateBrowserTools.doneAsync(response.docs[0].parent);
+        var parentID = response.docs[0].parent;
+        if (parentID == undefined) parentID = response.docs[0].derivateOwner;
+        derivateBrowserTools.doneAsync(parentID);
         if (response.numFound > 0){
-            var parent = findDoc(response.docs[0].parent);
+            var parent = findDoc(parentID);
             if ($(parent).find("ul.children").children().length > 0) {
                 drawDoc(new TreeEntry(response.docs[0], ""));
             }

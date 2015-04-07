@@ -86,7 +86,7 @@ var derivateBrowserTools = (function () {
         var type = currentDocID.match("_(.*?)_")[1];
         switch (type) {
             case "jparticle":
-                $("#folder-list-new-button-article").removeAttr("disabled");
+                $("#folder-list-new-button-article").attr("disabled", "");
                 $("#folder-list-new-button-derivate").removeAttr("disabled");
                 $("#folder-list-new-button-volume").attr("disabled", "");
                 break;
