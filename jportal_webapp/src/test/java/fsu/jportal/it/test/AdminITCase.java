@@ -188,24 +188,17 @@ public class AdminITCase extends BaseIntegrationTest {
 		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.linkText("Klassifikations Editor")).click();
-		
-		By loadClassEdt = By.cssSelector("#dijit__TreeNode_0 > div > span:last-child");
-	  wait.until(ExpectedConditions.elementToBeClickable(loadClassEdt));
-	  DRIVER.findElement(loadClassEdt).click();
-	  
-		DRIVER.findElement(By.id("dijit_form_Button_12")).click();
-		Thread.sleep(600);
-		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_0 > div > span:last-child")).click();
-		By testIsOpen = By.cssSelector("#dijit__TreeNode_0 > div > .dijitTreeExpandoClosed");
-		if(DRIVER.findElements(testIsOpen).size() > 0) {
-			DRIVER.findElement(testIsOpen).click();
-		}
-		loadClassEdt = By.cssSelector(".dijitTreeNodeContainer > div:first-child > div");
-	  wait.until(ExpectedConditions.elementToBeClickable(loadClassEdt));
-	  DRIVER.findElement(loadClassEdt).click();
-	  Thread.sleep(600);
-	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
-	  DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testClassification");
+
+		creatNewClassificationTry();
+		try {
+		  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
+		  DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testClassification");
+	  } catch (Exception e) {
+	  	creatNewClassificationTry();
+	  	assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
+	  	DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testClassification");
+		  Thread.sleep(600);
+	  }
 	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_4")).getText());
 	  DRIVER.findElement(By.id("dijit_form_TextBox_4")).sendKeys("testClassification");
 	  DRIVER.findElement(By.id("dijit_form_ValidationTextBox_1")).clear();
@@ -230,9 +223,22 @@ public class AdminITCase extends BaseIntegrationTest {
 			} catch (Exception e2) {TestUtils.ERROR_MESSAGE += "Second try to delete failed! \n" + e.getMessage();}
 		}
 		
-		dojoMenuMiniTest();
+		dojoImportAndSettings();
 		
 		TestUtils.finishThis(DRIVER);
+	}
+	
+	public void creatNewClassificationTry() throws Exception {
+		Thread.sleep(1000);
+  	DRIVER.findElement(By.cssSelector("#dijit__TreeNode_0 > div > span:last-child")).click();
+	  Thread.sleep(600);
+	  DRIVER.findElement(By.id("dijit_form_Button_12")).click();
+	  Thread.sleep(600);
+	  DRIVER.findElement(By.cssSelector(".dijitTreeNodeContainer > div:first-child > div")).click();
+	  Thread.sleep(600);
+//	  assertEquals("content does not match", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
+//  	DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testClassification");
+//	  Thread.sleep(600);
 	}
 	
 	public void classificationDeleteTry() {
@@ -342,13 +348,12 @@ public class AdminITCase extends BaseIntegrationTest {
 		DRIVER.findElement(By.linkText("Gruppen verwalten")).click();
 		
 		//create group test
-//		By loadGroups = By.xpath("//div[@id='dijit__TreeNode_0']/div/span[1]");
 		By loadGroups = By.cssSelector("#dijit__TreeNode_0 > div:first-child > span:last-child");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadGroups));
 	  DRIVER.findElement(loadGroups).click();
+	  Thread.sleep(600);
 
 	  By loadButton = By.id("dijit_form_Button_12");
-//		DRIVER.findElement(By.id("dijit_form_Button_12")).click();
 	  wait.until(ExpectedConditions.elementToBeClickable(loadButton));
 	  DRIVER.findElement(loadButton).click();
 		DRIVER.findElement(By.cssSelector("#dijit__TreeNode_0 > div:first-child > span:last-child")).click();
@@ -357,9 +362,11 @@ public class AdminITCase extends BaseIntegrationTest {
 			DRIVER.findElement(testIsOpen).click();
 		}
 		
+		Thread.sleep(600);
 		loadGroups = By.cssSelector("#dijit__TreeNode_2 > div > span:last-child");
 	  wait.until(ExpectedConditions.elementToBeClickable(loadGroups));
 	  DRIVER.findElement(loadGroups).click();
+	  Thread.sleep(600);
 	  assertEquals("content not empty", "", DRIVER.findElement(By.id("dijit_form_TextBox_3")).getText());
 	  DRIVER.findElement(By.id("dijit_form_TextBox_3")).sendKeys("testGroup");
 	  assertEquals("content not empty", "", DRIVER.findElement(By.id("dijit_form_TextBox_4")).getText());
@@ -386,12 +393,12 @@ public class AdminITCase extends BaseIntegrationTest {
 			}
 		}
 		
-		dojoMenuMiniTest();
+		dojoImportAndSettings();
 		
 		TestUtils.finishThis(DRIVER);
 	}
 	
-	public void dojoMenuMiniTest() {
+	public void dojoImportAndSettings() {
 		//check the menu of userGroup and Klassification
 		DRIVER.findElement(By.id("dijit_form_Button_7")).click();
 		By openMenu = By.id("mycore_classification_SettingsDialog_0_title");
