@@ -118,7 +118,7 @@ public class DerivateBrowserResource {
     @Path("rename")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response rename(@QueryParam("file") String file, @QueryParam("name") String name,
-            @QueryParam("mainFile") String start) {
+            @QueryParam("mainFile") Boolean start) {
         try {
             DerivateTools.rename(file, name);
         } catch (FileAlreadyExistsException e) {
@@ -127,7 +127,7 @@ public class DerivateBrowserResource {
             e.printStackTrace();
             return Response.serverError().build();
         }
-        if (Boolean.parseBoolean(start)) {
+        if (start) {
             String path = file.substring(0, file.lastIndexOf("/") + 1) + name;
             DerivateTools.setAsMain(file.substring(0, file.lastIndexOf(":")), path.substring(path.lastIndexOf(":") + 1));
         }

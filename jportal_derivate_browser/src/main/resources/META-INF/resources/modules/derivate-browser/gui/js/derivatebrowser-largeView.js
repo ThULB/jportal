@@ -298,11 +298,9 @@ var derivateBrowserLargeView = (function () {
         if (success) {
             var path = oldname.substr(0, oldname.lastIndexOf("/") + 1) + newName;
             var index = getIndexFromID(deriID + path);
-            if (index != -1) {
-                setCurrentFileTo(index);
-            }
-            else {
-                setCurrentFileTo(0);
+            if (currentFileIndex == index) {
+                hidePanelInput();
+                $("#view-large-panel-title").html(newName);
             }
         }
         else{

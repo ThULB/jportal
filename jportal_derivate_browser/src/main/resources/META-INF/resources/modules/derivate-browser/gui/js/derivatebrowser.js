@@ -349,7 +349,7 @@ var DerivateBrowser = function () {
                                 if (!($(moveTo).hasClass("journal") && $(dragElm).hasClass("article"))) {
                                     dragObj.remove();
                                     var json = [];
-                                    if ($(dragElm).hasClass(".aktiv")) {
+                                    if ($(dragElm).hasClass("aktiv")) {
                                         $(".aktiv").each(function () {
                                             json.push({
                                                 "objId": $(this).data("docID"),
@@ -497,8 +497,10 @@ var DerivateBrowser = function () {
                 if (!$(this).hasClass("input-new")) {
                     if (event.which == 13) {
                         if ($(this).val() != $(this).parent().data("oldName")) {
-                            var main = ($(this).parents(".browser-table-entry").data("startfile") == true ? "true" : "false");
-                            derivateBrowserFileView.renameFile($(this).parents(".browser-table-entry").data("path"), $(this).parents(".browser-table-entry").data("deriID"), $(this).val(), main);
+                            derivateBrowserFileView.renameFile($(this).parents(".browser-table-entry").data("path"),
+                                $(this).parents(".browser-table-entry").data("deriID"),
+                                $(this).val(),
+                                $(this).parents(".browser-table-entry").data("startfile"));
                         }
                         else {
                             $(this).parent().html($(this).parent().data("oldName"));
@@ -778,14 +780,6 @@ var DerivateBrowser = function () {
             var lang = qpara["lang"];
             if (lang == undefined) lang = "de";
             derivateBrowserTools.loadI18n(lang);
-        },
-
-        setMouseDown: function(bool) {
-            return mouseDown = bool;
-        },
-
-        setDragElm: function(elm) {
-            return dragElm = elm;
         }
     };
 

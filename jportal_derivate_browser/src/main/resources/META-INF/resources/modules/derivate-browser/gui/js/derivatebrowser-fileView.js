@@ -457,7 +457,7 @@ var derivateBrowserFileView = (function () {
                     $(entry).find(".browser-table-file-name").removeData("oldName");
                     derivateBrowserNavigation.renameDoc(derivateBrowserTools.getCurrentDocID(), oldName, newName);
                     derivateBrowserLargeView.updateName(deriID + oldName, newName);
-                    if (start == "true") {
+                    if (start) {
                         $("#derivat-panel-startfile").data("startfile", $(entry).data("path"));
                         setStartFile(entry, false);
                     }
