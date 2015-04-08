@@ -51,6 +51,8 @@ public class LLZMetsImporter {
 
     private static final XPathExpression<Attribute> FILE_EXPRESSION;
 
+    private static final XPathExpression<Attribute> OCR_EXPRESSION;
+
     static {
         NS_LIST = new ArrayList<Namespace>();
         NS_LIST.add(MCRConstants.METS_NAMESPACE);
@@ -71,6 +73,9 @@ public class LLZMetsImporter {
         FILE_EXPRESSION = XPathFactory.instance().compile(
                 "mets:fileSec/mets:fileGrp/mets:fileGrp[@ID='OCRMasterFiles']/mets:file[@ID=$id]/mets:FLocat/@xlink:href",
                 Filters.attribute(), vars, NS_LIST);
+        OCR_EXPRESSION  = XPathFactory.instance().compile(
+                "mets:structMap[@TYPE='PHYSICAL']/mets:div[@TYPE='physSequence']/mets:div[mets:fptr/@FILEID=$id]/mets:fptr[contains(@FILEID,'-OCRMASTER')]/@FILEID", Filters.attribute(), vars, NS_LIST);
+
     }
 
     private Document mets;
@@ -277,30 +282,35 @@ public class LLZMetsImporter {
         }
     }
 
-    private void handleDerivateLink(Element logicalDiv, JPArticle article) {
+    public void handleDerivateLink(Element logicalDiv, JPArticle article) {
         String logicalId = logicalDiv.getAttributeValue("ID");
         MCRObjectID articleId = article.getObject().getId();
         Attribute fileIdAttr = FILEID_EXPRESSION.evaluateFirst(logicalDiv);
         if (fileIdAttr != null) {
-            String fileId = fileIdAttr.getValue().replaceAll("-INDEXALTO", "-OCRMASTER");
-            FILE_EXPRESSION.setVariable("id", fileId);
-            Attribute hrefAttr = FILE_EXPRESSION.evaluateFirst(mets.getRootElement());
-            if (hrefAttr != null) {
-                String href = hrefAttr.getValue();
-                try {
-                    String newHref = new TiffHrefStrategy().get(href);
-                    MCRPath path = MCRPath.getPath(derivate.getId().toString(), newHref);
-                    if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
-                        article.setDerivateLink(derivate, newHref);
-                    } else {
-                        String msg = articleId + ": There is no image " + newHref + " in this derivate.";
+            Element rootElement = mets.getRootElement();
+            OCR_EXPRESSION.setVariable("id",fileIdAttr);
+            Attribute ocrIdAttr = OCR_EXPRESSION.evaluateFirst(rootElement);
+            if (ocrIdAttr != null) {
+                String ocrId = ocrIdAttr.getValue();
+                FILE_EXPRESSION.setVariable("id", ocrId);
+                Attribute hrefAttr = FILE_EXPRESSION.evaluateFirst(rootElement);
+                if (hrefAttr != null) {
+                    String href = hrefAttr.getValue();
+                    try {
+                        String newHref = new TiffHrefStrategy().get(href);
+                        MCRPath path = MCRPath.getPath(derivate.getId().toString(), newHref);
+                        if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
+                            article.setDerivateLink(derivate, newHref);
+                        } else {
+                            String msg = articleId + ": There is no image " + newHref + " in this derivate.";
+                            getErrorList().add(msg);
+                            LOGGER.warn(msg);
+                        }
+                    } catch (Exception exc) {
+                        String msg = articleId + ": Unable to add derivate link " + href + " of logical div " + logicalId;
                         getErrorList().add(msg);
-                        LOGGER.warn(msg);
+                        LOGGER.error(msg, exc);
                     }
-                } catch (Exception exc) {
-                    String msg = articleId + ": Unable to add derivate link " + href + " of logical div " + logicalId;
-                    getErrorList().add(msg);
-                    LOGGER.error(msg, exc);
                 }
             }
         }
