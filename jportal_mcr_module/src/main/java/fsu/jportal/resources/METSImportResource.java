@@ -101,13 +101,14 @@ public class METSImportResource {
         METSValidator validator = new METSValidator(in);
         List<ValidationException> exceptionList = validator.validate();
         if (!exceptionList.isEmpty()) {
-            String dataDir = MCRConfiguration.instance().getString("MCR.dataDir");
+            String dataDir = MCRConfiguration.instance().getString("MCR.datadir");
             java.nio.file.Path errorDir = Paths.get(dataDir).resolve("error");
             if(!Files.exists(errorDir)){
                 Files.createDirectories(errorDir);
             }
             java.nio.file.Path errorMets = errorDir.resolve("mets.xml");
             Files.write(errorMets, bytes);
+            LOGGER.info("Writing error mets file to " + errorDir);
             throw exceptionList.get(0);
         }
         // replace with new mets.xml
