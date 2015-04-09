@@ -58,7 +58,7 @@ public class LLZMetsConverter {
         FileGrp masterGroup = handleFileGroup(uibk, "MASTER",
             "mets:fileSec//mets:fileGrp[@ID='OCRMasterFiles']/mets:file", "image/tiff", new TiffHrefStrategy());
         FileGrp altoGroup = handleFileGroup(uibk, "ALTO",
-            "mets:fileSec//mets:fileGrp[@ID='Index_ALTO_Files']/mets:file", "text/xml", new AltoHrefStrategy());
+                "mets:fileSec//mets:fileGrp[@ID='Index_ALTO_Files']/mets:file", "text/xml", new AltoHrefStrategy());
         mcr.getFileSec().addFileGrp(masterGroup);
         mcr.getFileSec().addFileGrp(altoGroup);
     }
@@ -114,6 +114,11 @@ public class LLZMetsConverter {
         Element volumeDiv = xpathExp.evaluateFirst(llzElement);
         LogicalDiv volume = new LogicalDiv(volumeDiv.getAttributeValue("ID"), "volume",
             volumeDiv.getAttributeValue("LABEL"));
+        String order = volumeDiv.getAttributeValue("ORDER");
+        if(order != null){
+            volume.setOrder(Integer.valueOf(order));
+        }
+
         structMap.setDivContainer(volume);
         handleLogicalDivs(volumeDiv, volume);
     }
