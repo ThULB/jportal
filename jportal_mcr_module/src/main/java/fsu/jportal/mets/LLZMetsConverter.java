@@ -112,12 +112,10 @@ public class LLZMetsConverter {
         XPathExpression<Element> xpathExp = XPathFactory.instance().compile(
             "mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null, IMetsElement.METS);
         Element volumeDiv = xpathExp.evaluateFirst(llzElement);
-        LogicalDiv volume = new LogicalDiv(volumeDiv.getAttributeValue("ID"), "volume",
-            volumeDiv.getAttributeValue("LABEL"));
-        String order = volumeDiv.getAttributeValue("ORDER");
-        if(order != null){
-            volume.setOrder(Integer.valueOf(order));
-        }
+        LogicalDiv volume = new LogicalDiv(volumeDiv.getAttributeValue("ID"),
+                volumeDiv.getAttributeValue("TYPE"), volumeDiv.getAttributeValue("LABEL"),
+                Integer.valueOf(volumeDiv.getAttributeValue("ORDER")),
+                volumeDiv.getAttributeValue("ADMID"), volumeDiv.getAttributeValue("DMDID"));
 
         structMap.setDivContainer(volume);
         handleLogicalDivs(volumeDiv, volume);
