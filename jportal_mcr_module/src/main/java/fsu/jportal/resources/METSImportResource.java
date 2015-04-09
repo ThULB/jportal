@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -23,6 +24,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRUtils;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -99,6 +101,13 @@ public class METSImportResource {
         METSValidator validator = new METSValidator(in);
         List<ValidationException> exceptionList = validator.validate();
         if (!exceptionList.isEmpty()) {
+            String dataDir = MCRConfiguration.instance().getString("MCR.dataDir");
+            java.nio.file.Path errorDir = Paths.get(dataDir).resolve("error");
+            if(!Files.exists(errorDir)){
+                Files.createDirectories(errorDir);
+            }
+            java.nio.file.Path errorMets = errorDir.resolve("mets.xml");
+            Files.write(errorMets, bytes);
             throw exceptionList.get(0);
         }
         // replace with new mets.xml
