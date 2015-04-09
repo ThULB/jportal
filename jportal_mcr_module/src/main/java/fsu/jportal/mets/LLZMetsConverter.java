@@ -86,7 +86,7 @@ public class LLZMetsConverter {
         structMap.setDivContainer(physicalDiv);
 
         XPathExpression<Element> xpathExp = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='physical_structmap']//mets:div[mets:fptr]", Filters.element(), null,
+            "mets:structMap[@TYPE='PHYSICAL']//mets:div[mets:fptr]", Filters.element(), null,
             IMetsElement.METS);
         List<Element> divs = new ArrayList<Element>(xpathExp.evaluate(llzElement));
         Collections.sort(divs, new Comparator<Element>() {
