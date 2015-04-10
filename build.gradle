@@ -141,6 +141,10 @@ subprojects {
         }
     }
     resourcePaths.addAll(sourceSets.main.resources.srcDirs);
+
+    test{
+        systemProperty "project.buildDir", project.buildDir.absolutePath
+    }
 }
 
 project(':jportal_mcr_module') {
