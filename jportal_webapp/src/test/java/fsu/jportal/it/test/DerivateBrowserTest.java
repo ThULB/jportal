@@ -2,7 +2,10 @@ package fsu.jportal.it.test;
 
 import static org.junit.Assert.*;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import com.google.common.base.Function;
 import org.junit.Test;
@@ -13,6 +16,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fsu.jportal.it.BaseIntegrationTest;
 import fsu.jportal.it.TestUtils;
+
+import javax.imageio.ImageIO;
 
 public class DerivateBrowserTest extends BaseIntegrationTest {
     WebDriverWait wait = new WebDriverWait(DRIVER, 10);
@@ -36,7 +41,7 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         WebElement testArticle = createArticle(testVolume, "TestArtikel");
 
         //upload derivate
-        String testImgName = "test.tif";
+        String testImgName = "test.png";
         WebElement testDerivate = createDerivate(testArticle, testImgName);
         String derivateID = getDocName(testDerivate);
 
@@ -59,7 +64,7 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("alert-area"), "Derivat wird gekachelt."));
         
         //upload second image
-        String testImgSecName = "test2.tif";
+        String testImgSecName = "test2.png";
         uploadImagesToDerivate(getDocFromName(derivateID), new String[]{testImgSecName});
 
         //filter table
@@ -78,8 +83,8 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         DRIVER.findElement(By.className("btn-new-urn")).click();
 
         //rename
-        renameDerivateFile("test3.tif");
-        assertTrue("invald startfile name after change name", DRIVER.findElement(By.id("derivat-panel-startfile-label")).getText().endsWith("test3.tif"));
+        renameDerivateFile("test3.png");
+        assertTrue("invald startfile name after change name", DRIVER.findElement(By.id("derivat-panel-startfile-label")).getText().endsWith("test3.png"));
 
         //select all
         DRIVER.findElement(By.className("btn-check-all")).click();
@@ -108,10 +113,10 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         assertTrue("new folder is not empty", !DRIVER.findElements(By.id("browser-table-alert")).isEmpty());
 
         //upload 2 more images
-        uploadImagesToDerivate(getDocFromName(folderName), new String[]{"test.tif", "test2.tif"});
+        uploadImagesToDerivate(getDocFromName(folderName), new String[]{"test.png", "test2.png"});
 
         //rename file
-        renameDerivateFile("test4.tif");
+        renameDerivateFile("test4.png");
         deleteDerivateFile(1);
 
         //move file
@@ -149,7 +154,7 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         assertTrue("file in large view selected",!DRIVER.findElement(By.id("view-large-panel-collapse")).getAttribute("class").contains("checked"));
 
         //rename in large view
-        String newName = "test5.tif";
+        String newName = "test5.png";
         DRIVER.findElement(By.className("btn-edit-large")).click();
         DRIVER.findElement(By.id("view-large-panel-input")).clear();
         DRIVER.findElement(By.id("view-large-panel-input")).sendKeys(newName);
@@ -297,7 +302,14 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
     }
 
     private void uploadImage (String dropZone, String img) {
-        File testImg = new File(img);
+        File testImg = null;
+        try {
+            testImg = createImage(img);
+        } catch (IOException e) {
+            assertTrue("could not load or create Image " + img, false);
+            e.printStackTrace();
+        }
+        assertTrue("could not load or create Image " + img, testImg != null);
         String inputId = "FileUploadTest";
         js.executeScript("$('<input/>').attr({id: '" + inputId + "', type:'file'}).css({position: 'absolute', top: 0}).appendTo('body');");
         DRIVER.findElement(By.id(inputId)).sendKeys(testImg.getAbsolutePath());
@@ -380,7 +392,7 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         parent.findElement(By.className("folder-name")).click();
         DRIVER.findElement(By.id("folder-list-new-choose")).click();
         DRIVER.findElement(By.id("folder-list-new-button-derivate")).click();
-        uploadImage("lightbox-new-derivate-main", "src/test/resources/img/" + fileName);
+        uploadImage("lightbox-new-derivate-main", fileName);
         DRIVER.findElement(By.id("lightbox-new-derivate-confirm")).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("lightbox-new-derivate-done")));
         DRIVER.findElement(By.id("lightbox-new-derivate-done")).click();
@@ -393,7 +405,7 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         js.executeScript("$('#upload-overlay').removeClass('hidden')");
         for (String imgName : imgNames) {
             js.executeScript("$('#upload-overlay').removeClass('hidden')");
-            uploadImage("upload-overlay", "src/test/resources/img/" + imgName);
+            uploadImage("upload-overlay", imgName);
         }
         wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("upload-preview-status"), "Hochgeladen"));
         assertTrue("can not find UploadBar", !DRIVER.findElements(By.id("upload-status-bar-body")).isEmpty());
@@ -447,5 +459,21 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
                 return driver.findElement(By.cssSelector("div.link-info > h6"));
             }
         });
+    }
+
+    private File createImage (String imgName) throws IOException {
+        File outputPath = new File(MAVEN_OUTPUT_DIRECTORY, this.getClass().getName() + "/tmp/imgs");
+        if (!outputPath.exists()) {
+            outputPath.mkdirs();
+        }
+        File outputFile = new File(outputPath, "/" + imgName);
+        if (!outputFile.exists()) {
+            BufferedImage newBufferedImage = new BufferedImage(200, 500, BufferedImage.TYPE_INT_RGB);
+            Graphics2D newGraphic = newBufferedImage.createGraphics();
+            newGraphic.setPaint(Color.red);
+            newGraphic.fillRect(0, 0, newBufferedImage.getWidth(), newBufferedImage.getHeight());
+            ImageIO.write(newBufferedImage, "png", outputFile);
+        }
+        return outputFile;
     }
 }
