@@ -128,4 +128,8 @@ public class BaseIntegrationTest {
     public static String getHomeAddress() {
         return START_URL + "/content/below/index.xml";
     }
+
+    public static String getStartUrl() {
+        return START_URL;
+    }
 }
