@@ -32,7 +32,7 @@ public class WebappConf {
         initConfDir();
         checkConf(Paths.get("mycore.properties"));
         checkConf(Paths.get("hibernate/hibernate.cfg.xml"));
-        startHsqlDB();
+//        startHsqlDB();
         checkSolrHome();
     }
 
