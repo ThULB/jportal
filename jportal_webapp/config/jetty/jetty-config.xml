@@ -25,15 +25,15 @@
     </Array>
   </Set>
 
-  <Call class="fsu.jportal.startup.WebappConf" name="instance">
-    <Call id="solrHome" name="getSolrHome" />
-  </Call>
-  
-  <New id="solr" class="org.eclipse.jetty.plus.jndi.EnvEntry">
-    <Arg>/solr/home</Arg>
-    <Arg>
-      <Ref refid="solrHome"/>
-    </Arg>
-  </New>
+  <!--<Call class="fsu.jportal.startup.WebappConf" name="instance">-->
+    <!--<Call id="solrHome" name="getSolrHome" />-->
+  <!--</Call>-->
+  <!-- -->
+  <!--<New id="solr" class="org.eclipse.jetty.plus.jndi.EnvEntry">-->
+    <!--<Arg>/solr/home</Arg>-->
+    <!--<Arg>-->
+      <!--<Ref refid="solrHome"/>-->
+    <!--</Arg>-->
+  <!--</New>-->
 </Configure>
 

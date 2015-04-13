@@ -143,7 +143,7 @@ subprojects {
     }
     resourcePaths.addAll(sourceSets.main.resources.srcDirs);
 
-    test{
+    test {
         systemProperty "project.buildDir", project.buildDir.absolutePath
     }
 }
@@ -308,21 +308,59 @@ project(':jportal_webapp') {
             webapp project
             integrationTestTask = "webTests"
 
+            configurations {
+                solr
+            }
+
             dependencies {
-                gretty project(':jportal_jetty_tools')
+//                gretty project(':jportal_jetty_tools')
+                solr "org.mycore:mycore-solr:$mcrVersion@jar"
                 gretty project(':java_agent')
             }
 
+            def solrJar
+            configurations.solr.each { file ->
+                solrJar = file.absolutePath
+                println "Solr Jar $solrJar";
+            }
+
             def mcrHome = "$project.buildDir/mcrHome"
+            def appPath = "$mcrHome/$pathName"
+            def solrHome = "$appPath/solr-home"
+
             systemProperty "MCR.AppName", pathName
             systemProperty "MCR.Home", mcrHome
+            systemProperty "solr.solr.home", solrHome
 
             port = 8291
             serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
 
+            task appconfig(type: Sync) {
+                from("config") {
+                    include "**"
+                    exclude "jetty/**"
+                }
+                into appPath
+
+
+                def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+                into("solr-home") {
+                    from moduleFiles
+                    include '**/solr.xml'
+                }
+
+                into("solr-home/conf") {
+                    from moduleFiles
+                    include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                    from zipTree(solrJar).files
+                    include 'classificationSchema.xml'
+                }
+            }
+
             onStart {
-                def hsqlDBPath = Paths.get(mcrHome,pathName,"hsqldb-data","database")
-                String[] args = ["-database",hsqlDBPath.toString(),"-port", "8298"]
+                tasks.appconfig.execute()
+                def hsqlDBPath = Paths.get(mcrHome, pathName, "hsqldb-data", "database")
+                String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
 
                 org.hsqldb.Server.main(args)
             }
@@ -353,38 +391,38 @@ project(':jportal_jetty_tools') {
         solr "org.mycore:mycore-solr:$mcrVersion@jar"
     }
 
-    def solrBuildDir = "$project.buildDir/solr"
-    processResources.doFirst {
-        def solrJar
-        configurations.solr.each { file ->
-            solrJar = file.absolutePath
-            println "Solr Jar $solrJar";
-        }
-        copy {
-            from zipTree(solrJar).files
-            include 'classificationSchema.xml'
-            into solrBuildDir
-            includeEmptyDirs = false
-        }
-
-        copy {
-            from project(':jportal_mcr_module').fileTree("src/main/resources").files
-            include '**/solr.xml', '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-            into solrBuildDir
-            includeEmptyDirs = false
-        }
-    }
-    processResources {
-        from("$solrBuildDir") {
-            include 'classificationSchema.xml', 'schema.xml', 'solrconfig.xml', 'stopwords.txt'
-            into 'config/jportal_jetty_tools/solr/solr-home/conf'
-        }
-
-        from("$solrBuildDir") {
-            include 'solr.xml'
-            into 'config/jportal_jetty_tools/solr/solr-home'
-        }
-    }
+//    def solrBuildDir = "$project.buildDir/solr"
+//    processResources.doFirst {
+//        def solrJar
+//        configurations.solr.each { file ->
+//            solrJar = file.absolutePath
+//            println "Solr Jar $solrJar";
+//        }
+//        copy {
+//            from zipTree(solrJar).files
+//            include 'classificationSchema.xml'
+//            into solrBuildDir
+//            includeEmptyDirs = false
+//        }
+//
+//        copy {
+//            from project(':jportal_mcr_module').fileTree("src/main/resources").files
+//            include '**/solr.xml', '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+//            into solrBuildDir
+//            includeEmptyDirs = false
+//        }
+//    }
+//    processResources {
+//        from("$solrBuildDir") {
+//            include 'classificationSchema.xml', 'schema.xml', 'solrconfig.xml', 'stopwords.txt'
+//            into 'config/jportal_jetty_tools/solr/solr-home/conf'
+//        }
+//
+//        from("$solrBuildDir") {
+//            include 'solr.xml'
+//            into 'config/jportal_jetty_tools/solr/solr-home'
+//        }
+//    }
 
     jar {
         from {
