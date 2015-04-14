@@ -240,6 +240,7 @@ project(':jportal_webapp') {
         testCompile 'junit:junit:4.+'
         testCompile "log4j:log4j:1.2.17"
         testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
+				testCompile "org.mycore:mycore-viewer:0.4-SNAPSHOT:tests"
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
         runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.mycore:mycore-acl-editor2:$mcrVersion"

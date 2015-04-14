@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+	<mets:dmdSec ID="dmd_ArchNachl_derivate_00000008" />
+	<mets:amdSec ID="amd_ArchNachl_derivate_00000008" />
+	<mets:fileSec>
+		<mets:fileGrp USE="MASTER">
+			<mets:file ID="master_c93f42ad-cc79-4c23-a28a-7e01166f2b22"
+				MIMETYPE="image/png">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
+					LOCTYPE="URL" xlink:href="r.png" />
+			</mets:file>
+			<mets:file ID="master_7f64192f-3102-48a0-928c-d389902ab697"
+				MIMETYPE="image/png">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
+					LOCTYPE="URL" xlink:href="g.png" />
+			</mets:file>
+			<mets:file ID="master_69267d60-a3bd-4be4-80ae-b91469d75980"
+				MIMETYPE="image/png">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
+					LOCTYPE="URL" xlink:href="b.png" />
+			</mets:file>
+			<mets:file ID="master_64a22c65-5a1a-494a-8013-2fe9d0491597"
+				MIMETYPE="image/tiff">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
+					LOCTYPE="URL" xlink:href="rgb.tiff" />
+			</mets:file>
+		</mets:fileGrp>
+	</mets:fileSec>
+	<mets:structMap TYPE="LOGICAL">
+		<mets:div ADMID="amd_ArchNachl_derivate_00000008" DMDID="dmd_ArchNachl_derivate_00000008"
+			ID="log_ArchNachl_derivate_00000008" LABEL="ArchNachl_derivate_00000008"
+			ORDER="1" TYPE="monograph">
+			<mets:div ID="log000001" LABEL="TestFiles" ORDER="1" TYPE="chapter">
+				<mets:div ID="log000002" LABEL="rot" ORDER="1" TYPE="chapter" />
+				<mets:div ID="log000003" LABEL="gruen" ORDER="2" TYPE="chapter" />
+				<mets:div ID="log000004" LABEL="blau" ORDER="3" TYPE="chapter" />
+				<mets:div ID="log000005" LABEL="rgb" ORDER="4" TYPE="chapter" />
+			</mets:div>
+			<mets:div ID="log000006" LABEL="Buch" ORDER="2" TYPE="volume">
+				<mets:div ID="log000007" LABEL="Einband" ORDER="1" TYPE="binding">
+					<mets:div ID="log000008" LABEL="Deckel" ORDER="1" TYPE="cover">
+						<mets:div ID="log000009" LABEL="DeckelVorn" ORDER="2"
+							TYPE="- cover_front" />
+						<mets:div ID="log000010" LABEL="DeckelHinten" ORDER="3"
+							TYPE="- cover_back" />
+					</mets:div>
+				</mets:div>
+				<mets:div ID="log000011" LABEL="Kapitel1" ORDER="2" TYPE="chapter" />
+				<mets:div ID="log000012" LABEL="Kapitel2" ORDER="3" TYPE="chapter" />
+				<mets:div ID="log000013" LABEL="Kapitel3" ORDER="4" TYPE="chapter" />
+			</mets:div>
+		</mets:div>
+	</mets:structMap>
+	<mets:structMap TYPE="PHYSICAL">
+		<mets:div ID="phys_dmd_ArchNachl_derivate_00000008" TYPE="physSequence">
+			<mets:div ID="phys_master_c93f42ad-cc79-4c23-a28a-7e01166f2b22"
+				ORDER="1" ORDERLABEL="r.png" TYPE="page">
+				<mets:fptr FILEID="master_c93f42ad-cc79-4c23-a28a-7e01166f2b22" />
+			</mets:div>
+			<mets:div ID="phys_master_7f64192f-3102-48a0-928c-d389902ab697"
+				ORDER="2" ORDERLABEL="g.png" TYPE="page">
+				<mets:fptr FILEID="master_7f64192f-3102-48a0-928c-d389902ab697" />
+			</mets:div>
+			<mets:div ID="phys_master_69267d60-a3bd-4be4-80ae-b91469d75980"
+				ORDER="3" ORDERLABEL="b.png" TYPE="page">
+				<mets:fptr FILEID="master_69267d60-a3bd-4be4-80ae-b91469d75980" />
+			</mets:div>
+			<mets:div ID="phys_master_64a22c65-5a1a-494a-8013-2fe9d0491597"
+				ORDER="4" ORDERLABEL="rgb.tiff" TYPE="page">
+				<mets:fptr FILEID="master_64a22c65-5a1a-494a-8013-2fe9d0491597" />
+			</mets:div>
+		</mets:div>
+	</mets:structMap>
+	<mets:structLink>
+		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
+			xlink:from="log000002" xlink:to="phys_master_c93f42ad-cc79-4c23-a28a-7e01166f2b22" />
+		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
+			xlink:from="log000003" xlink:to="phys_master_7f64192f-3102-48a0-928c-d389902ab697" />
+		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
+			xlink:from="log000004" xlink:to="phys_master_69267d60-a3bd-4be4-80ae-b91469d75980" />
+		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
+			xlink:from="log000005" xlink:to="phys_master_64a22c65-5a1a-494a-8013-2fe9d0491597" />
+	</mets:structLink>
+</mets:mets>
