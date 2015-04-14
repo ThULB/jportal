@@ -35,7 +35,7 @@
             <a href="{$WebApplicationBaseURL}jp-classeditor.xml">Klassifikations Editor</a>
           </li>
           <li>
-            <a href="{$WebApplicationBaseURL}src/derivatebrowser/start">Objekt Browser</a>
+            <a href="{$WebApplicationBaseURL}rsc/derivatebrowser/start">Objekt Browser</a>
           </li>
         </ul>
       </div>
