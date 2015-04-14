@@ -309,21 +309,12 @@ project(':jportal_webapp') {
             webapp project
             integrationTestTask = "webTests"
 
-            configurations {
-                solr
-            }
+
 
             dependencies {
-//                gretty project(':jportal_jetty_tools')
-                solr "org.mycore:mycore-solr:$mcrVersion@jar"
                 gretty project(':java_agent')
             }
 
-            def solrJar
-            configurations.solr.each { file ->
-                solrJar = file.absolutePath
-                println "Solr Jar $solrJar";
-            }
 
             def mcrHome = "$project.buildDir/mcrHome"
             def appPath = "$mcrHome/$pathName"
@@ -336,30 +327,42 @@ project(':jportal_webapp') {
             port = 8291
             serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
 
-            task appconfig(type: Sync) {
-                from("config") {
-                    include "**"
-                    exclude "jetty/**"
-                }
-                into appPath
-
-
-                def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
-                into("solr-home") {
-                    from moduleFiles
-                    include '**/solr.xml'
-                }
-
-                into("solr-home/conf") {
-                    from moduleFiles
-                    include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-                    from zipTree(solrJar).files
-                    include 'classificationSchema.xml'
-                }
-            }
-
             onStart {
-                tasks.appconfig.execute()
+                sync {
+                    from("config") {
+                        include "**"
+                        exclude "jetty/**"
+                    }
+                    into appPath
+
+                    def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+
+                    configurations {
+                        solr
+                    }
+                    dependencies {
+                        solr "org.mycore:mycore-solr:$mcrVersion@jar"
+                    }
+                    def solrJar
+                    configurations.solr.each { file ->
+                        solrJar = file.absolutePath
+                        println "Solr Jar $solrJar";
+                    }
+
+                    into("solr-home") {
+                        from moduleFiles
+                        include '**/solr.xml'
+                    }
+
+                    into("solr-home/conf") {
+                        from moduleFiles
+                        include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                        from zipTree(solrJar).files
+                        include 'classificationSchema.xml'
+                    }
+
+                }
+
                 def hsqlDBPath = Paths.get(mcrHome, pathName, "hsqldb-data", "database")
                 String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
 
