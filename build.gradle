@@ -324,7 +324,7 @@ project(':jportal_webapp') {
 
                 onStart {
                     copy {
-                        from("config") {
+                        from("$project.projectDir/config") {
                             include "**"
                             exclude "jetty/**"
                         }
