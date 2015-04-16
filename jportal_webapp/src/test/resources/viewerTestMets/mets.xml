@@ -26,50 +26,93 @@
 				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
 					LOCTYPE="URL" xlink:href="rgb.tiff" />
 			</mets:file>
+			<mets:file ID="master_37f1a441-1a73-4076-886f-ca2209998749"
+				MIMETYPE="image/tiff">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
+					LOCTYPE="URL" xlink:href="RN_0004_0000_00.tif" />
+			</mets:file>
+			<mets:file ID="master_78b62a80-3b0f-4708-ae10-04cf6c43099d"
+				MIMETYPE="image/tiff">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
+					LOCTYPE="URL" xlink:href="RN_0004_0000_01.tif" />
+			</mets:file>
+			<mets:file ID="master_bd833a03-4f8e-44f6-b9bd-bfe2dca9ccbf"
+				MIMETYPE="image/tiff">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
+					LOCTYPE="URL" xlink:href="RN_0004_0000_02.tif" />
+			</mets:file>
+			<mets:file ID="master_8f7543f3-167f-4f3f-9475-271aa6a0a556"
+				MIMETYPE="image/tiff">
+				<mets:FLocat xmlns:xlink="http://www.w3.org/1999/xlink"
+					LOCTYPE="URL" xlink:href="RN_0004_0000_03.tif" />
+			</mets:file>
 		</mets:fileGrp>
 	</mets:fileSec>
 	<mets:structMap TYPE="LOGICAL">
-		<mets:div ADMID="amd_ArchNachl_derivate_00000008" DMDID="dmd_ArchNachl_derivate_00000008"
-			ID="log_ArchNachl_derivate_00000008" LABEL="ArchNachl_derivate_00000008"
-			ORDER="1" TYPE="monograph">
-			<mets:div ID="log000001" LABEL="TestFiles" ORDER="1" TYPE="chapter">
-				<mets:div ID="log000002" LABEL="rot" ORDER="1" TYPE="chapter" />
-				<mets:div ID="log000003" LABEL="gruen" ORDER="2" TYPE="chapter" />
-				<mets:div ID="log000004" LABEL="blau" ORDER="3" TYPE="chapter" />
-				<mets:div ID="log000005" LABEL="rgb" ORDER="4" TYPE="chapter" />
+		<mets:div ID="log_ArchNachl_derivate_00000008" TYPE="monograph"
+			LABEL="ArchNachl_derivate_00000008" ORDER="1"
+			ADMID="amd_ArchNachl_derivate_00000008" DMDID="dmd_ArchNachl_derivate_00000008">
+			<mets:div ID="log000001" TYPE="chapter" LABEL="TestFiles"
+				ORDER="1">
+				<mets:div ID="log000002" TYPE="chapter" LABEL="rot" ORDER="1" />
+				<mets:div ID="log000003" TYPE="chapter" LABEL="gruen"
+					ORDER="2" />
+				<mets:div ID="log000004" TYPE="chapter" LABEL="blau" ORDER="3" />
+				<mets:div ID="log000005" TYPE="chapter" LABEL="rgb" ORDER="4" />
 			</mets:div>
-			<mets:div ID="log000006" LABEL="Buch" ORDER="2" TYPE="volume">
-				<mets:div ID="log000007" LABEL="Einband" ORDER="1" TYPE="binding">
-					<mets:div ID="log000008" LABEL="Deckel" ORDER="1" TYPE="cover">
-						<mets:div ID="log000009" LABEL="DeckelVorn" ORDER="2"
-							TYPE="- cover_front" />
-						<mets:div ID="log000010" LABEL="DeckelHinten" ORDER="3"
-							TYPE="- cover_back" />
+			<mets:div ID="log000006" TYPE="volume" LABEL="Buch" ORDER="2">
+				<mets:div ID="log000007" TYPE="binding" LABEL="Einband"
+					ORDER="1">
+					<mets:div ID="log000008" TYPE="cover" LABEL="Deckel"
+						ORDER="1">
+						<mets:div ID="log000009" TYPE="- cover_front" LABEL="DeckelVorn"
+							ORDER="2" />
+						<mets:div ID="log000010" TYPE="- cover_back" LABEL="DeckelHinten"
+							ORDER="3" />
 					</mets:div>
 				</mets:div>
-				<mets:div ID="log000011" LABEL="Kapitel1" ORDER="2" TYPE="chapter" />
-				<mets:div ID="log000012" LABEL="Kapitel2" ORDER="3" TYPE="chapter" />
-				<mets:div ID="log000013" LABEL="Kapitel3" ORDER="4" TYPE="chapter" />
+				<mets:div ID="log000011" TYPE="chapter" LABEL="Kapitel1"
+					ORDER="2" />
+				<mets:div ID="log000012" TYPE="chapter" LABEL="Kapitel2"
+					ORDER="3" />
+				<mets:div ID="log000013" TYPE="chapter" LABEL="Kapitel3"
+					ORDER="4" />
 			</mets:div>
 		</mets:div>
 	</mets:structMap>
 	<mets:structMap TYPE="PHYSICAL">
 		<mets:div ID="phys_dmd_ArchNachl_derivate_00000008" TYPE="physSequence">
 			<mets:div ID="phys_master_c93f42ad-cc79-4c23-a28a-7e01166f2b22"
-				ORDER="1" ORDERLABEL="r.png" TYPE="page">
+				TYPE="page" ORDER="1" ORDERLABEL="r.png">
 				<mets:fptr FILEID="master_c93f42ad-cc79-4c23-a28a-7e01166f2b22" />
 			</mets:div>
 			<mets:div ID="phys_master_7f64192f-3102-48a0-928c-d389902ab697"
-				ORDER="2" ORDERLABEL="g.png" TYPE="page">
+				TYPE="page" ORDER="2" ORDERLABEL="g.png">
 				<mets:fptr FILEID="master_7f64192f-3102-48a0-928c-d389902ab697" />
 			</mets:div>
 			<mets:div ID="phys_master_69267d60-a3bd-4be4-80ae-b91469d75980"
-				ORDER="3" ORDERLABEL="b.png" TYPE="page">
+				TYPE="page" ORDER="3" ORDERLABEL="b.png">
 				<mets:fptr FILEID="master_69267d60-a3bd-4be4-80ae-b91469d75980" />
 			</mets:div>
 			<mets:div ID="phys_master_64a22c65-5a1a-494a-8013-2fe9d0491597"
-				ORDER="4" ORDERLABEL="rgb.tiff" TYPE="page">
+				TYPE="page" ORDER="4" ORDERLABEL="rgb.tiff">
 				<mets:fptr FILEID="master_64a22c65-5a1a-494a-8013-2fe9d0491597" />
+			</mets:div>
+			<mets:div ID="phys_master_37f1a441-1a73-4076-886f-ca2209998749"
+				TYPE="page" ORDER="5">
+				<mets:fptr FILEID="master_37f1a441-1a73-4076-886f-ca2209998749" />
+			</mets:div>
+			<mets:div ID="phys_master_78b62a80-3b0f-4708-ae10-04cf6c43099d"
+				TYPE="page" ORDER="6">
+				<mets:fptr FILEID="master_78b62a80-3b0f-4708-ae10-04cf6c43099d" />
+			</mets:div>
+			<mets:div ID="phys_master_bd833a03-4f8e-44f6-b9bd-bfe2dca9ccbf"
+				TYPE="page" ORDER="7">
+				<mets:fptr FILEID="master_bd833a03-4f8e-44f6-b9bd-bfe2dca9ccbf" />
+			</mets:div>
+			<mets:div ID="phys_master_8f7543f3-167f-4f3f-9475-271aa6a0a556"
+				TYPE="page" ORDER="8">
+				<mets:fptr FILEID="master_8f7543f3-167f-4f3f-9475-271aa6a0a556" />
 			</mets:div>
 		</mets:div>
 	</mets:structMap>
@@ -82,5 +125,13 @@
 			xlink:from="log000004" xlink:to="phys_master_69267d60-a3bd-4be4-80ae-b91469d75980" />
 		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
 			xlink:from="log000005" xlink:to="phys_master_64a22c65-5a1a-494a-8013-2fe9d0491597" />
+		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
+			xlink:from="log000008" xlink:to="phys_master_37f1a441-1a73-4076-886f-ca2209998749" />
+		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
+			xlink:from="log000009" xlink:to="phys_master_78b62a80-3b0f-4708-ae10-04cf6c43099d" />
+		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
+			xlink:from="log000010" xlink:to="phys_master_bd833a03-4f8e-44f6-b9bd-bfe2dca9ccbf" />
+		<mets:smLink xmlns:xlink="http://www.w3.org/1999/xlink"
+			xlink:from="log000007" xlink:to="phys_master_8f7543f3-167f-4f3f-9475-271aa6a0a556" />
 	</mets:structLink>
 </mets:mets>

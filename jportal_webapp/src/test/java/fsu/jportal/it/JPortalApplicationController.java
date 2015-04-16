@@ -12,11 +12,11 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
+import org.mycore.iview.tests.DriverFactory;
 import org.mycore.iview.tests.controller.ApplicationController;
 import org.mycore.iview.tests.model.TestDerivate;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import fsu.jportal.it.TestUtils;
 import fsu.jportal.it.PaintTestPics;
@@ -25,80 +25,74 @@ public class JPortalApplicationController extends ApplicationController {
 
 	@Override
 	public void init() {
+		createDerivateFiles();
+  	WebDriver initDriver = DriverFactory.getFactory().getDriver();
+		
+  	TestUtils.home(initDriver);
+  	TestUtils.login(initDriver);
+  	TestUtils.creatMinJournal(initDriver, "testJournal");
+		
+		journalURl = initDriver.getCurrentUrl();
+		uploadFiles(initDriver);
+		deleteFiles();
+		
+  	initDriver.quit();
 	}
 
 	static final Logger LOGGER = Logger.getLogger(JPortalApplicationController.class);
 
 	private static final String FILE_LOCATION = "testImages";
 
-	private boolean firstRun = true;
-	private String derivateUrl = null;
+	private String journalURl = null;
 	private List <File> files = new ArrayList<File>();
+	Path tempDirectory = null; 
+	private int testNumber = 5;
 
 	@Override
 	public void setUpDerivate(WebDriver webdriver, TestDerivate testDerivate) {
-		if (firstRun) {
-			creteDerivateFiles();
-
-			TestUtils.home(webdriver);
-			TestUtils.login(webdriver);
-			TestUtils.creatMinJournal(webdriver, "testJournal");
-			
-			derivateUrl = webdriver.getCurrentUrl();
-			uploadFiles(webdriver);
-			firstRun = false;
-		} else {
-			webdriver.get(derivateUrl);
-		}
+			webdriver.get(journalURl);
 	}
 
 	private void uploadFiles(WebDriver webdriver) {
-		for (int i = 0; i < files.size(); i++) {
-			boolean isFirstFile = i % 3 == 0;
-			boolean isLastFile = i % 3 == 2;
-
-			if (isFirstFile) {
-				if (i == 0) {
-					TestUtils.clickCreatSelect(webdriver, "Datei hochladen");
-				} else {
-					webdriver.findElement(By.linkText("Dateien hinzufügen")).click();
-				}
-			}
-
-			int slot = (i % 3) + 1;
-			setFileInput(webdriver, files.get(i), slot);
-
-			if (isLastFile || i == files.size() - 1) {
+		TestUtils.clickCreatSelect(webdriver, "Datei hochladen");
+		
+		for(int i = 0, j = 1; i < files.size(); i++, j ++) {
+			webdriver.findElement(By.xpath("//table[@class='editorRepeater']/tbody/tr[" + j + "]/td/input[@class='editorFile']")).sendKeys(files.get(i).getAbsolutePath());
+			if(j == 3 && i < files.size()) {
 				webdriver.findElement(By.xpath("//input[@value='Speichern']")).click();
+				webdriver.findElement(By.linkText("Dateien hinzufügen")).click();
+				j = 0;
 			}
 		}
+		webdriver.findElement(By.xpath("//input[@value='Speichern']")).click();
 	}
-
-	private void setFileInput(WebDriver webdriver, File file, int slot) {
-		WebElement fileInput;
-		if (slot == 1) {
-			fileInput = webdriver.findElement(By.name("/upload/path"));
-		} else {
-			fileInput = webdriver.findElement(By.name("/upload/path[" + slot + "]"));
+	
+	private void deleteFiles() {
+		for (int i = 0; i < files.size(); i++) {
+			if(!files.get(i).getName().equals("mets.xml")){
+				files.get(i).delete();
+			}
 		}
-		fileInput.sendKeys(file.getAbsolutePath());
+		tempDirectory.toFile().delete();
 	}
 
 	@Override
 	public void shutDownDerivate(WebDriver webdriver, TestDerivate testDerivate) {
-//		try {
-//			webdriver.findElement(By.xpath("//button[@data-id='CloseViewerButton']")).click();
-//			for (int i = 0; i < files.size(); i++) {
-//				files.get(i).delete();
-//			}
-//		
-//			webdriver.findElement(By.linkText("Derivat löschen"));
-//			webdriver.findElement(By.cssSelector(".bootstrap-dialog-footer-buttons > button:last-child"));
-//			Thread.sleep(1000);
-//			TestUtils.deletObj(webdriver, "");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		if(--testNumber == 0) {
+			try {
+				TestUtils.home(webdriver);
+				TestUtils.login(webdriver);
+				TestUtils.goToObj(webdriver, "testJournal");
+				Thread.sleep(600);
+				webdriver.findElement(By.linkText("Derivat löschen")).click();
+				Thread.sleep(600);
+				webdriver.findElement(By.cssSelector(".bootstrap-dialog-footer-buttons > button:last-child")).click();
+				webdriver.navigate().refresh();
+				TestUtils.deletObj(webdriver, "");
+			} catch (Exception e) {
+				LOGGER.error("shutDownDerivate error: " + e.toString());
+			}
+		}
 	}
 
 	@Override
@@ -106,9 +100,9 @@ public class JPortalApplicationController extends ApplicationController {
 		webdriver.findElement(By.className("thumbnail")).click();
 	}
 	
-	private void creteDerivateFiles() {
+	private void createDerivateFiles() {
 		try {
-			Path tempDirectory = Files.createTempDirectory(FILE_LOCATION);
+			tempDirectory = Files.createTempDirectory(FILE_LOCATION);
 			PaintTestPics pics = new PaintTestPics();
 			
 			int width = 1000;
