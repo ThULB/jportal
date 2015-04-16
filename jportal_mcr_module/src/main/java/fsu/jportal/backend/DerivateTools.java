@@ -33,8 +33,10 @@ import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUsageException;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.ifs.MCRDirectory;
+import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -250,7 +252,7 @@ public class DerivateTools {
                     Files.delete(dir);
                     return super.postVisitDirectory(dir, exc);
                 }
-                
+
             });
         }
     }
@@ -504,6 +506,7 @@ public class DerivateTools {
         JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
 
         json.addProperty("display", isHidden(derivateID));
+        json.addProperty("urnEnabled", urnEnabled());
 
         return json;
     }
@@ -552,5 +555,28 @@ public class DerivateTools {
             return false;
         }
        return true;
+    }
+
+    public static String getMD5forFile(String derivateID, String path) {
+        Derivate derivate = new Derivate(derivateID);
+        MCRFile mcrFile = (MCRFile) derivate.getChildByPath(path);
+        if (mcrFile != null ){
+            return mcrFile.getMD5();
+        }
+        return "";
+    }
+
+    private static boolean urnEnabled() {
+        String urnObjects = "";
+        try {
+            urnObjects = MCRConfiguration.instance().getString("MCR.URN.Enabled.Objects");
+        }
+        catch (MCRConfigurationException e) {
+            LOGGER.info("Property MCR.URN.Enabled.Object not set, URN allocation not possible.");
+        }
+        if (urnObjects.contains("derivate")) {
+            return true;
+        }
+        return false;
     }
 }
