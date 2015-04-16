@@ -14,6 +14,7 @@ function UploadEntry(docID, deriID, path, file) {
     //noinspection JSUnusedGlobalSymbols
     this.inFolder = false;
     this.checkedFile = undefined;
+	this.md5 = "";
 }
 
 UploadEntry.prototype.getStatus = function() {
@@ -45,7 +46,7 @@ UploadEntry.prototype.getID = function() {
 };
 
 UploadEntry.prototype.getCompletePath = function() {
-    return this.path + "/" + this.name;
+    return this.path.trim() + "/" + this.name;
 };
 
 UploadEntry.prototype.isInFolder = function() {
@@ -68,7 +69,9 @@ UploadEntry.prototype.getaddToBrowserJson = function() {
 			size: this.rawSize,
 			lastmodified: currentDate.toLocaleDateString() + " " + currentDate.toLocaleTimeString(),
 			absPath: this.getCompletePath(),
-			deriID: this.docID
+			deriID: this.docID,
+			md5: this.md5,
+			urnEnabled: $("#btn-urnAll").data("urnEnabled")
 	};
 };
 
@@ -91,7 +94,6 @@ UploadEntry.prototype.askOverwrite = function(existingFile, deriID, path) {
 function readImg(file, display, upload) {
     var supportedImg = ["jpeg", "png", "tiff", "gif", "bmp"];
     var type = upload.type.substr(upload.type.lastIndexOf("/")+1);
-    console.log(type);
 	if (!upload.type.endsWith("pdf")){
 		if ((file.size < 2097152) && supportedImg.indexOf(type) > -1){
 			if (upload.img != undefined){

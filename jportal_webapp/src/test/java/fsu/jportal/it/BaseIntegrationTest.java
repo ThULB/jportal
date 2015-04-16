@@ -1,10 +1,7 @@
 package fsu.jportal.it;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.lang.System;
 
 import org.apache.log4j.Logger;
@@ -21,6 +18,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import javax.imageio.ImageIO;
 
 public class BaseIntegrationTest {
 
@@ -131,5 +130,14 @@ public class BaseIntegrationTest {
 
     public static String getStartUrl() {
         return START_URL;
+    }
+
+    public static BufferedImage takeScreenshot() throws IOException {
+        if (DRIVER instanceof TakesScreenshot) {
+            ByteArrayInputStream inputStream;
+            inputStream =  new ByteArrayInputStream(((TakesScreenshot) DRIVER).getScreenshotAs(OutputType.BYTES));
+            return ImageIO.read(inputStream);
+        }
+        return null;
     }
 }

@@ -502,8 +502,13 @@
 					{{urn}}
 				{{/urn}}
 				{{^urn}}
-					<div class="no-urn">-</div>
-					<span class="glyphicon glyphicon-tag btn-new-urn btn invisible"></span>
+					{{#urnEnabled}}
+                        <div class="no-urn">-</div>
+					    <span class="glyphicon glyphicon-tag btn-new-urn btn invisible"></span>
+					{{/urnEnabled}}
+					{{^urnEnabled}}
+					    <div>-</div>
+					{{/urnEnabled}}
 				{{/urn}}
 			</td>
 		</tr>
@@ -592,22 +597,6 @@
 			<td class="upload-preview-size" title="{{size}}">{{size}}</td>
 			<td class="upload-preview-status"><p class="upload-preview-status-text">Warten</p><div class='statusbar-progress progress hidden'><div class='statusbar-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></td>
 		</tr>
-	</script>
-
-    <script id="upload-entry-template2" type="text/mustache">
-		<div class="upload-entry2">
-			<div><img class='img-placeholder img-placeholder-upload' src=''><img class='upload-preview-image hidden'></img></div>
-			<span class="upload-success glyphicon glyphicon-ok-sign alert-success-text upload-icon hidden"></span>
-            <span class="upload-type glyphicon glyphicon-info-sign alert-warning-text upload-icon hidden"></span>
-            <span class="upload-error glyphicon glyphicon-remove-sign alert-danger-text upload-icon hidden"></span>
-            {{#inFolder}}
-			    <div class="upload-preview-name mightOverflow" title="{{name}}">{{path}}/{{name}}</div>
-            {{/inFolder}}
-            {{^inFolder}}
-                <div class="upload-preview-name mightOverflow" title="{{name}}">{{name}}</div>
-            {{/inFolder}}
-			<div class="upload-preview-status"><div class='statusbar-progress progress'><div class='statusbar-progress-status progress-bar' role='progressbar' arial-value-min='0' arial-value-max='100'></div></div></div>
-		</div>
 	</script>
 	
 	<script id="upload-overwrite-template" type="text/mustache">
@@ -706,6 +695,5 @@
     <script type="text/javascript" src="gui/js/derivatebrowser-largeView.js"></script>
     <script type="text/javascript" src="gui/js/derivatebrowser-largeViewEntry.js"></script>
     <script type="text/javascript" src="gui/js/stupidtable.js"></script>
-<!--  	<script type="text/javascript" src="jp-subselect.js" ></script> -->
 </body>
 </html>

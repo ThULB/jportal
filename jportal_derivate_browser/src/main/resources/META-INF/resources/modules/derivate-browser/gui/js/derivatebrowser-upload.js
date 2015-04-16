@@ -511,7 +511,7 @@ var derivateBrowserUpload = (function () {
 
                         $(upload.statusbar).find(".statusbar-progress-status").attr("arial-now", percentSingle);
                         $(upload.statusbar).find(".statusbar-progress-status").css("width", percentSingle + "%");
-                        $(upload.statusbar).find(".statusbar-progress-status").html(percentComplete + '%');
+                        $(upload.statusbar).find(".statusbar-progress-status").html(percentSingle + '%');
 
                         $(".statusbar-complete-progress-status").attr("arial-now", percentComplete);
                         $(".statusbar-complete-progress-status").css("width", percentComplete + "%");
@@ -524,7 +524,8 @@ var derivateBrowserUpload = (function () {
                 }, false);
                 return xhr;
             },
-            success: function (deriID) {
+            success: function (data) {
+                upload.md5 = data.md5;
                 $(upload.statusbar).find(".upload-success").removeClass("hidden");
                 $(upload.statusbar).find(".upload-success").attr("title", derivateBrowserTools.getI18n("db.alert.upload.success"));
                 $(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.alert.upload.success"));
@@ -542,16 +543,16 @@ var derivateBrowserUpload = (function () {
                     uploadFilesAndAsk();
                 }
                 if (mode == "new") {
-                    currentDeriID = deriID;
+                    currentDeriID = data.derivateID;
                     if (currentUploadID < currentUploadList.length){
                         var nextUpload = currentUploadList[currentUploadID];
-                        nextUpload.deriID = deriID;
+                        nextUpload.deriID = currentDeriID;
                         uploadFile(nextUpload, "new");
                     }
                     else{
                         $("#lightbox-new-derivate-done").removeClass("hidden");
                         $("#lightbox-new-derivate-message").addClass("hidden");
-                        $("#lightbox-new-derivate-done").data("deriID", deriID);
+                        $("#lightbox-new-derivate-done").data("deriID", currentDeriID);
                         $("#lightbox-new-derivate-done").data("docID", upload.docID);
                     }
                 }

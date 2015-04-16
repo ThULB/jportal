@@ -196,6 +196,7 @@ public class DerivateBrowserResource {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("upload")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response getUpload(@FormDataParam("file") InputStream inputStream,
@@ -221,7 +222,11 @@ public class DerivateBrowserResource {
                 e.printStackTrace();
                 return Response.serverError().build();
             }
-            return Response.ok(derivateID).build();            
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("derivateID", derivateID);
+            jsonObject.addProperty("md5", DerivateTools.getMD5forFile(derivateID, filePath));
+
+            return Response.ok(jsonObject.toString()).build();
         }
         return Response.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
     }

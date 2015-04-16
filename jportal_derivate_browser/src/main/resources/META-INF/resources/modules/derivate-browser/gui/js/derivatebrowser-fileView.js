@@ -34,6 +34,7 @@ var derivateBrowserFileView = (function () {
         }
 		$.each(data.children, function(i, file) {
 			file.deriID = deriID;
+            file.urnEnabled = data.urnEnabled;
 			if (file.type == "file"){
                 if (file.contentType == "xml"){
                     addXMLToView(file);
@@ -65,6 +66,7 @@ var derivateBrowserFileView = (function () {
 		$(fileEntryOutput).data("path", file.absPath);
 		$(fileEntryOutput).data("deriID", file.deriID);
 		$(fileEntryOutput).data("docID", file.deriID);
+        $(fileEntryOutput).data("md5", file.md5);
 		if ((mainDoc == file.absPath) || ("/" + mainDoc == file.absPath)){
             derivateBrowserLargeView.addFileToList(new LargeViewEntry(file.deriID, file.absPath, file.size, file.lastmodified, file.urn, true));
             $(fileEntryOutput).data("startfile", true);
@@ -136,12 +138,13 @@ var derivateBrowserFileView = (function () {
             $("#btn-hide").removeClass("derivate-ishidden");
         }
 		$("#derivat-panel-startfile-label").html(data.maindocName);
-		if (data.hasURN){
+		if (data.hasURN || !data.urnEnabled){
 			$("#btn-urnAll").addClass("hidden");
 		}
 		else{
 			$("#btn-urnAll").removeClass("hidden");
 		}
+        $("#btn-urnAll").data("urnEnabled", data.urnEnabled);
 		var path = data.maindocName;
 		if (path.indexOf("/") != 0) path = "/" + path;
 		derivateBrowserTools.setImgPath($("#panel-img"), deriName, path);
