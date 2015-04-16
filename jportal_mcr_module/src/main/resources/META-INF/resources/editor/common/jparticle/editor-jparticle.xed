@@ -49,8 +49,8 @@
         <jp:template name="textArea" xpath="." i18n="editormask.labels.abstract" buttons="true" />
       </xed:repeat>
 
-      <xed:repeat xpath="notes[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain'][@type='annotation']" min="0" max="10">
-        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.note" buttons="true" classification="jportal_class_00000060" noPleaseSelect="true" />
+      <xed:repeat xpath="notes[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain']" min="0" max="10">
+        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.note" buttons="true" classification="jportal_class_00000060" noPleaseSelect="true" bottom="littleSpace"/>
         <jp:template name="textArea" xpath="." selectXpath="@type" />
       </xed:repeat>
 
