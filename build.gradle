@@ -226,12 +226,9 @@ repositories {
 
 project(':jportal_webapp') {
     apply plugin: 'war'
-//    apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
     apply plugin: 'org.akhikhl.gretty'
 
     configurations {
-        jetty
-        solr
         applet
         agent
     }
@@ -240,7 +237,7 @@ project(':jportal_webapp') {
         testCompile 'junit:junit:4.+'
         testCompile "log4j:log4j:1.2.17"
         testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
-				testCompile "org.mycore:mycore-viewer:0.4-SNAPSHOT:tests"
+        testCompile "org.mycore:mycore-viewer:0.4-SNAPSHOT:tests"
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
         runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.mycore:mycore-acl-editor2:$mcrVersion"
@@ -267,6 +264,7 @@ project(':jportal_webapp') {
         }
     }
 
+    // don't run webtests at compile time
     test {
         exclude '**/test'
     }
@@ -278,171 +276,99 @@ project(':jportal_webapp') {
     }
 
     farms {
-        farm 'App', {
-            webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
-            webapp ":jportal_webapp", contextPath: "/jportal-gretty"
-
-            dependencies {
-                gretty project(':jportal_jetty_tools')
-                gretty project(':java_agent')
-            }
-            def agentOp
-            for (path in resourcePaths) {
-                if (agentOp == null) {
-                    agentOp = path.toString()
-                } else {
-                    agentOp = agentOp + "," + path
-                }
-            }
-
-            systemProperty "MCR.AppName", "jportal-gretty"
-            jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-            jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
-            port = 8291
-            serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
+        dependencies {
+            gretty 'org.hsqldb:hsqldb:2.3.2'
         }
 
-        farm 'webTests', {
-            def pathName = 'jportal-webTests'
-            webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
-            webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
-            webapp project
-            integrationTestTask = "webTests"
+        ['App', 'WebTests'].each { farmName ->
+            farm farmName, {
+                def pathName = farmName.equals('App') ? "jportal" : "jportal-webTests"
+                def mcrHome = System.getProperty("user.home") + "/.mycore"
 
+                webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
+                webapp project, contextPath: "/$pathName"
 
+                integrationTestTask = "webTests"
 
-            dependencies {
-                gretty project(':java_agent')
-            }
-
-
-            def mcrHome = "$project.buildDir/mcrHome"
-            def appPath = "$mcrHome/$pathName"
-            def solrHome = "$appPath/solr-home"
-
-            systemProperty "MCR.AppName", pathName
-            systemProperty "MCR.Home", mcrHome
-            systemProperty "solr.solr.home", solrHome
-
-            port = 8291
-            serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
-
-            onStart {
-                sync {
-                    from("config") {
-                        include "**"
-                        exclude "jetty/**"
-                    }
-                    into appPath
-
-                    def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
-
-                    configurations {
-                        solr
-                    }
+                if (farmName.equals('App')) {
                     dependencies {
-                        solr "org.mycore:mycore-solr:$mcrVersion@jar"
+                        gretty project(':java_agent')
                     }
-                    def solrJar
-                    configurations.solr.each { file ->
-                        solrJar = file.absolutePath
-                        println "Solr Jar $solrJar";
+                    def agentOp
+                    for (path in resourcePaths) {
+                        if (agentOp == null) {
+                            agentOp = path.toString()
+                        } else {
+                            agentOp = agentOp + "," + path
+                        }
                     }
-
-                    into("solr-home") {
-                        from moduleFiles
-                        include '**/solr.xml'
-                    }
-
-                    into("solr-home/conf") {
-                        from moduleFiles
-                        include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-                        from zipTree(solrJar).files
-                        include 'classificationSchema.xml'
-                    }
-
+                    jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
+                } else {
+                    // Gretty don't load static files from META-INF in jar files, so this is a workaround
+                    webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
+                    // Gretty need the webapp project to run the webtests, this is due to the workaround above
+                    webapp project
+                    mcrHome = "$project.buildDir/mcrHome"
                 }
 
-                def hsqlDBPath = Paths.get(mcrHome, pathName, "hsqldb-data", "database")
-                String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
+                def appPath = "$mcrHome/$pathName"
+                def solrHome = "$appPath/solr-home"
 
-                org.hsqldb.Server.main(args)
+                systemProperty "MCR.AppName", pathName
+                systemProperty "MCR.Home", mcrHome
+                systemProperty "solr.solr.home", solrHome
+
+                jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+                port = 8291
+                serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
+
+                onStart {
+                    copy {
+                        from("config") {
+                            include "**"
+                            exclude "jetty/**"
+                        }
+                        into appPath
+
+                        def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+
+                        configurations {
+                            solr
+                        }
+                        dependencies {
+                            solr "org.mycore:mycore-solr:$mcrVersion@jar"
+                        }
+                        def solrJar
+                        configurations.solr.each { file ->
+                            solrJar = file.absolutePath
+                            println "Solr Jar $solrJar";
+                        }
+
+                        into("solr-home") {
+                            from moduleFiles
+                            include '**/solr.xml'
+                        }
+
+                        into("solr-home/conf") {
+                            from moduleFiles
+                            include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                            from zipTree(solrJar).files
+                            include 'classificationSchema.xml'
+                        }
+
+                    }
+
+
+                    def hsqlDBPath = Paths.get(mcrHome, pathName, "hsqldb-data", "database")
+                    String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
+
+                    org.hsqldb.Server.main(args)
+                }
             }
+
         }
     }
 
-}
-
-project(':jportal_jetty_tools') {
-    //    project.ext.needMCR = false
-    configurations {
-        solr
-        executableWarDeps { extendsFrom compile }
-    }
-
-    dependencies {
-        //                    compile "org.mycore:mycore-base:$mcrVersion"
-        compile "org.eclipse.jetty:jetty-server:$jettyVersion"
-        executableWarDeps "org.eclipse.jetty:jetty-server:$jettyVersion"
-        compile "org.eclipse.jetty:jetty-security:$jettyVersion"
-        executableWarDeps "org.eclipse.jetty:jetty-security:$jettyVersion"
-        compile "org.eclipse.jetty:jetty-plus:$jettyVersion"
-        executableWarDeps "org.eclipse.jetty:jetty-plus:$jettyVersion"
-        compile 'org.hsqldb:hsqldb:2.3.2'
-        compile 'javax.servlet:javax.servlet-api:3.0.1'
-        compile 'log4j:log4j:1.2.17'
-        compile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
-        solr "org.mycore:mycore-solr:$mcrVersion@jar"
-    }
-
-//    def solrBuildDir = "$project.buildDir/solr"
-//    processResources.doFirst {
-//        def solrJar
-//        configurations.solr.each { file ->
-//            solrJar = file.absolutePath
-//            println "Solr Jar $solrJar";
-//        }
-//        copy {
-//            from zipTree(solrJar).files
-//            include 'classificationSchema.xml'
-//            into solrBuildDir
-//            includeEmptyDirs = false
-//        }
-//
-//        copy {
-//            from project(':jportal_mcr_module').fileTree("src/main/resources").files
-//            include '**/solr.xml', '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-//            into solrBuildDir
-//            includeEmptyDirs = false
-//        }
-//    }
-//    processResources {
-//        from("$solrBuildDir") {
-//            include 'classificationSchema.xml', 'schema.xml', 'solrconfig.xml', 'stopwords.txt'
-//            into 'config/jportal_jetty_tools/solr/solr-home/conf'
-//        }
-//
-//        from("$solrBuildDir") {
-//            include 'solr.xml'
-//            into 'config/jportal_jetty_tools/solr/solr-home'
-//        }
-//    }
-
-    jar {
-        from {
-            configurations.executableWarDeps.collect {
-                it.isDirectory() ? it : project.zipTree(it)
-            }
-        }
-
-//        from("$buildDir/classes/main"){ include "**/JettyRun.class" }
-
-        manifest {
-//            attributes("Webapp": "$project.name")
-//            attributes("version": "$project.version")
-            attributes("Main-Class": "fsu.thulb.jetty.JettyRun")
-        }
-    }
 }
 
 configurations.all {
