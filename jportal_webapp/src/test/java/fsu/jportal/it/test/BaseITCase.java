@@ -51,13 +51,11 @@ public class BaseITCase extends BaseIntegrationTest {
         DRIVER.get(START_URL + "/content/main/journalList.xml");
         
         try {
-	        // click d
 	        By d = By.xpath("//ul[@id='tabNav']/li[text()='D']");
 	        wait.until(ExpectedConditions.elementToBeClickable(d));
 	        DRIVER.findElement(d).click();
 	        // test if spiegel occur
 	        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Der Spiegel")));
-	        // click
 	        DRIVER.findElement(By.linkText("Der Spiegel")).click();
 	        assertEquals("header does not match", "Der Spiegel", DRIVER.findElement(By.id("jp-maintitle"))
 	            .getText());
@@ -76,7 +74,6 @@ public class BaseITCase extends BaseIntegrationTest {
     		TestUtils.creatMinJournal(DRIVER, "Der Spiegel");
     		TestUtils.creatMinVolume(DRIVER, "Erste Ausgabe (1947)");
     		TestUtils.creatMinArticle(DRIVER, "Schiller und die Räuber");
-//        DRIVER.get(START_URL + "/receive/jportal_jpjournal_00000001");
     		try {
 	    		TestUtils.goToObj(DRIVER, "Der Spiegel");
 	        
@@ -107,7 +104,6 @@ public class BaseITCase extends BaseIntegrationTest {
     public void search() throws Exception {
     		TestUtils.home(DRIVER);
     		TestUtils.login(DRIVER);
-    		//create article and inst
     		TestUtils.creatMinJournal(DRIVER, "Der Spiegel");
     		TestUtils.creatMinVolume(DRIVER, "Erste Ausgabe (1947)");
     		TestUtils.creatMinArticle(DRIVER, "Schiller und die Räuber");
@@ -145,7 +141,6 @@ public class BaseITCase extends BaseIntegrationTest {
     public void advancedSearch() throws Exception {
 				TestUtils.home(DRIVER);
 				TestUtils.login(DRIVER);
-				//create person
 				TestUtils.createMinPerson(DRIVER, "Schiller");
 				TestUtils.home(DRIVER);
 				

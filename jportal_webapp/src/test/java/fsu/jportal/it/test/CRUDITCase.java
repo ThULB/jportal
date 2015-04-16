@@ -34,7 +34,6 @@ public class CRUDITCase extends BaseIntegrationTest {
         createPersonSet();
         
         try {
-	        // test page
 	        assertEquals("title does not match", "Goethe, Johann Wolfgang - JPortal", DRIVER.getTitle());
 	        assertEquals("header does not match", "Goethe, Johann Wolfgang von",
 	            DRIVER.findElement(By.id("jp-maintitle")).getText());
@@ -104,7 +103,6 @@ public class CRUDITCase extends BaseIntegrationTest {
         createInstSet();
 
         try {
-	        // test page
 	        assertEquals("title does not match", "Thüringer Universitäts- und Landesbibliothek Jena - JPortal",
 	            DRIVER.getTitle());
 	        assertEquals("header does not match", "Thüringer Universitäts- und Landesbibliothek Jena", DRIVER
@@ -123,16 +121,25 @@ public class CRUDITCase extends BaseIntegrationTest {
 			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
 			DRIVER.findElement(waitForLoad).sendKeys("Thüringer Universitäts- und Landesbibliothek Jena");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/nickname")).sendKeys("ThULB");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/property")).sendKeys("test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/alternatives/alternative/name")).sendKeys("ThULB");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/country")).sendKeys("Deutschland");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/zipcode")).sendKeys("07743");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/city")).sendKeys("Jena");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/street")).sendKeys("Bibliotheksplatz");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/addresses/address/number")).sendKeys("2");
+			WebElement instSelectElement = DRIVER.findElement(By.name("/mycoreobject/metadata/phones/phone/@type"));
+			instSelectElement.findElement(By.xpath("option[@value='Telefon']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/phones/phone")).sendKeys("+49 3641 9-40100");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/urls/url/@xlink:title")).sendKeys("ThULB");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/urls/url/@xlink:href")).sendKeys(
 			    "http://www.thulb.uni-jena.de");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/emails/email")).sendKeys("testEmail@test.de");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note")).sendKeys("Bibliothek");
+			instSelectElement = DRIVER.findElement(By.name("/mycoreobject/metadata/identifiers/identifier/@type"));
+			instSelectElement.findElement(By.xpath("option[@value='gnd']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/identifiers/identifier")).sendKeys("test");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/def.doubletOf/doubletOf")).sendKeys("test");
 			TestUtils.saveForm(DRIVER);
 		}
 
@@ -144,12 +151,10 @@ public class CRUDITCase extends BaseIntegrationTest {
 
 	  		try{
 	  			TestUtils.home(DRIVER);
-	        // create journal
 	        TestUtils.clickCreatSelect(DRIVER, "Neue Zeitschrift");
 	        assertEquals("content does not match", "Neue Zeitschrift anlegen", DRIVER.findElement(By.id("xeditor-title")).getText());
 	
 	        creatJournalSet();
-	        // Tests
 	        assertEquals("header does not match", "testJournal", DRIVER.findElement(By.id("jp-maintitle")).getText());
 	  		} catch (Exception e) {
 	  			TestUtils.ERROR_MESSAGE = e.getMessage();
@@ -213,9 +218,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 
         try {
         	TestUtils.clickCreatSelect(DRIVER, "Neuer Band");
-	        //try to create full volume
 	        createVolumeSet();
-	        // Tests
 	        assertEquals("header does not match", "testVolume", DRIVER.findElement(By.id("jp-maintitle")).getText());
         } catch (Exception e) {
         	TestUtils.ERROR_MESSAGE = e.getMessage();
@@ -261,9 +264,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.creatMinVolume(DRIVER, "testBand");
         try {
 	        TestUtils.clickCreatSelect(DRIVER, "Neuer Artikel");
-	        // bibl. Beschreibung
 	        createArticleSet();
-	        // Tests
 	        assertEquals("header does not match", "testArticle", DRIVER.findElement(By.id("jp-maintitle"))
 	        		.getText());
         } catch (Exception e) {
@@ -394,7 +395,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 		  TestUtils.home(DRIVER);
 		  TestUtils.login(DRIVER);
 		  
-		  //creat test obj
 		  TestUtils.creatMinJournal(DRIVER, "testJournalNoChild");
 		  String[] noChildJournal = DRIVER.getCurrentUrl().split("/");
 		  
@@ -486,7 +486,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 		  TestUtils.finishThis(DRIVER);
 		}
     
-    //edit person
     @Test
     public void editPerson() throws Exception{
 		  TestUtils.home(DRIVER);
@@ -511,7 +510,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 		  TestUtils.finishThis(DRIVER);
     }
     
-    //edit inst
     @Test
     public void editInst() throws Exception {
 		  TestUtils.home(DRIVER);
