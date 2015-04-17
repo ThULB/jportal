@@ -33,6 +33,8 @@
     <xsl:if test="contains($objectID, '_jpvolume_') or contains($objectID, '_jparticle_')">
       <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
       <xsl:apply-templates select="$journal/metadata/*" mode="jportal.journal" />
+			<!-- participants should only be from the object -->
+      <xsl:apply-templates select="$objectID/metadata/participants/participant" mode="jportal.participant" />
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields1" mode="jportal.hiddenGenFields" />
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields2" mode="jportal.hiddenGenFields" />
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields3" mode="jportal.hiddenGenFields" />
@@ -130,7 +132,7 @@
     <xsl:call-template name="jp.index.participants" />
   </xsl:template>
 
-  <xsl:template match="participants/participant" mode="jportal.journal">
+  <xsl:template match="participants/participant" mode="jportal.participant">
     <xsl:call-template name="jp.index.participants" />
   </xsl:template>
 
