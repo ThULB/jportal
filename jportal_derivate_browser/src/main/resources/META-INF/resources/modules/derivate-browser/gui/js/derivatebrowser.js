@@ -19,10 +19,12 @@ var DerivateBrowser = function () {
                     .done(function() {
                         if (entry.hasClass("derivate-ishidden")) {
                             entry.removeClass("derivate-ishidden");
+                            entry.attr("title", "Derivate verstecken");
                             $("#derivate-hidden").addClass("hidden");
                         }
                         else {
                             entry.addClass("derivate-ishidden");
+                            entry.attr("title", "Derivate anzeigen");
                             $("#derivate-hidden").removeClass("hidden");
                         }
                     });
@@ -1189,7 +1191,9 @@ var DerivateBrowser = function () {
             $(node).removeClass("checked");
             $(node).removeData("checked");
             $(node).find(".btn-check").addClass("glyphicon-unchecked");
-            $(node).find(".btn-check").addClass("invisible");
+            if ($(node).find(".invisible").length > 0) {
+                $(node).find(".btn-check").addClass("invisible");
+            }
             $(node).find(".btn-check").removeClass("glyphicon-check");
             derivateBrowserLargeView.getFile($(node).data("docID") + $(node).data("path")).selected = false;
         }

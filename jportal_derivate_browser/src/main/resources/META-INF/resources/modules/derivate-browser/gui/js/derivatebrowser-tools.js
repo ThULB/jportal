@@ -9,6 +9,11 @@ var derivateBrowserTools = (function () {
         asyncCount = 0,
         asyncCallback = undefined;
 
+    //binds
+    $("body").on("click", "#alert-area-close", function () {
+        window.clearTimeout(timeOutID);
+        $('#alert-area').removeClass("show-alert");
+    });
 
     //private Methods   
 	function getPDFImg(img, deriID, path){
@@ -126,7 +131,7 @@ var derivateBrowserTools = (function () {
             window.clearTimeout(timeOutID);
         }
 
-        $("#alert-area").html(text);
+        $("#alert-area-text").html(text);
         if (success){
             $("#alert-area").addClass("alert-success");
             $("#alert-area").addClass("show-alert");

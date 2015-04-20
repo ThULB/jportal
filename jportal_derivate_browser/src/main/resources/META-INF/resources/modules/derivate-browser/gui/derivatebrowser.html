@@ -43,7 +43,12 @@
 				</button>
 			</div>
 		</div>
-        <div id="alert-area" class="alert alert-danger">...</div>
+        <div id="alert-area" class="alert alert-danger">
+            <div id="alert-area-text">...</div>
+            <div id="alert-area-close" class="btn">
+                <span  class="glyphicon glyphicon-remove"></span>
+            </div>
+        </div>
         <div id="file-view" ondragover="return false">
 			<div id="files">
                 <div id="editor-loading"  class="derivate-browser-loading hidden">
@@ -86,9 +91,9 @@
                                                         <span class=" glyphicon glyphicon-tags button-glyphicon"></span>
                                                         <!--<text class="i18n" i18n="db.label.assignUrn" i18n-def="URN für Derivat vergeben"></text>-->
                                                 </button>
-                                                <button id="btn-hide" type="button" class="btn btn-default browser-button derivate-button">
-                                                    <span class="glyphicon glyphicon-eye-open button-glyphicon" title="anzeigen"></span>
-                                                    <span class="glyphicon glyphicon-eye-close button-glyphicon" title="verstecken"></span>
+                                                <button id="btn-hide" type="button" class="btn btn-default browser-button derivate-button" title="Derivate verstecken">
+                                                    <span class="glyphicon glyphicon-eye-open button-glyphicon"></span>
+                                                    <span class="glyphicon glyphicon-eye-close button-glyphicon"></span>
                                                 </button>
                                                 <button id="btn-viewer" type="button" class="btn btn-default browser-button derivate-button" title="in Viewer ansehen">
                                                     <span class="glyphicon glyphicon-sound-stereo button-glyphicon"></span>

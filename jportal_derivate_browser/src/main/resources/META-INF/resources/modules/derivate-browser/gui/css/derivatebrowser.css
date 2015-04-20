@@ -974,6 +974,15 @@ div.statusbar-progress-single-status.noAnimation {
 	transition: transform 1s ease-out 0s;
 }
 
+#alert-area-text {
+	margin-right: 10px;
+}
+
+#alert-area-close {
+	position: absolute;
+	right: 4px;
+	top: 8px;
+}
 
 .alert-danger {
     background-color: #f44336;
@@ -1108,8 +1117,14 @@ div.statusbar-progress-single-status.noAnimation {
 }
 
 #journal-info-text input, #journal-info-text select, #journal-info-text button, #journal-info-text textarea{
-	box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.2);
-	border: 0;
+	box-shadow: 0 1px 3px 0 rgba(150, 150, 150, 0.2);
+	border: 1px solid rgba(240,240,240, 0.5);
+	border-radius: 0;
+}
+
+#journal-info-text input:focus, #journal-info-text textarea:focus{
+	box-shadow: 0 3px 6px 0 rgba(50, 50, 50, 0.2);
+	border: 1px solid #66afe9;
 	border-radius: 0;
 }
 
@@ -1386,6 +1401,10 @@ div.statusbar-progress-single-status.noAnimation {
     height: 100%;
     padding: 0 3px;
     text-align: center;
+}
+
+textarea {
+	resize: none;
 }
 
 /******************************************************
