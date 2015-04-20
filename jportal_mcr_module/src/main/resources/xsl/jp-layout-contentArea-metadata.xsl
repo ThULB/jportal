@@ -141,17 +141,22 @@
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLangText']">
     <xsl:if test="@inherited='0'">
       <p class="jp-layout-metadata-list">
-        <xsl:value-of select="text()" />
-      </p>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLangText' and @type = 'doi']">
-    <xsl:if test="@inherited='0'">
-      <p class="jp-layout-metadata-list">
-        <a href="{text()}">
-          <xsl:value-of select="text()" />
-        </a>
+			  <xsl:variable name="externUrl">
+	  			<xsl:choose>
+	  				<xsl:when test="@type = 'ppn'">http://gso.gbv.de/DB=2.1/PPNSET?PPN=</xsl:when>
+	  				<xsl:when test="@type = 'bvb'">http://gateway-bayern.de/</xsl:when>
+	  			</xsl:choose>
+	  		</xsl:variable>
+	  		<xsl:choose>
+	  			<xsl:when test="$externUrl != '' or @type = 'doi'">
+	  				<a href="{$externUrl}{text()}">
+          		<xsl:value-of select="text()" />
+        		</a>
+	  			</xsl:when>
+	  			<xsl:otherwise>
+		        <xsl:value-of select="text()" />
+	  			</xsl:otherwise>
+	  		</xsl:choose>
       </p>
     </xsl:if>
   </xsl:template>
