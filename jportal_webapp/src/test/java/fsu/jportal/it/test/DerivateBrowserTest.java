@@ -348,7 +348,7 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
             e.printStackTrace();
         }
         assertTrue("could not load or create Image " + img, testImgFile != null);
-        assertTrue("could not get MD5 from Image " + img, testImgMD5.equals(""));
+        assertTrue("could not get MD5 from Image " + img, !testImgMD5.equals(""));
         String inputId = "FileUploadTest";
         JS.executeScript("$('<input/>').attr({id: '" + inputId + "', type:'file'}).css({position: 'absolute', top: 0}).appendTo('body');");
         DRIVER.findElement(By.id(inputId)).sendKeys(testImgFile.getAbsolutePath());
