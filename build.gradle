@@ -24,6 +24,8 @@ allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
 
     eclipse {
         jdt {
@@ -284,7 +286,6 @@ project(':jportal_webapp') {
             farm farmName, {
                 def pathName = farmName.equals('App') ? "jportal" : "jportal-webTests"
                 def mcrHome = System.getProperty("user.home") + "/.mycore"
-
                 webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
                 webapp project, contextPath: "/$pathName"
 
@@ -303,7 +304,7 @@ project(':jportal_webapp') {
                         }
                     }
                     jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
-                } else {
+                } else if(farmName.equals('WebTests')) {
                     // Gretty don't load static files from META-INF in jar files, so this is a workaround
                     webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
                     // Gretty need the webapp project to run the webtests, this is due to the workaround above
