@@ -70,11 +70,16 @@ var derivateBrowserUpload = (function () {
     });
 
     $("#lightbox-new-derivate").on("click", "#lightbox-new-derivate-confirm", function () {
-        uploadFile(currentUploadList[0], "new");
-        $("#lightbox-new-derivate-confirm").addClass("hidden");
-        $(".lightbox-new-derivate-cancel").addClass("hidden");
-        $("#lightbox-new-derivate-message").removeClass("hidden");
-        $("#lightbox-new-derivate-main").addClass("new-derivate-noDrop");
+        if (currentUploadList.length > 0) {
+            uploadFile(currentUploadList[0], "new");
+            $("#lightbox-new-derivate-confirm").addClass("hidden");
+            $(".lightbox-new-derivate-cancel").addClass("hidden");
+            $("#lightbox-new-derivate-message").removeClass("hidden");
+            $("#lightbox-new-derivate-main").addClass("new-derivate-noDrop");
+        }
+        else {
+            $("#lightbox-new-derivate-hint").addClass("alert-danger-text");
+        }
     });
 
     $("body").on("click", "#lightbox-new-derivate-done", function () {
@@ -292,6 +297,7 @@ var derivateBrowserUpload = (function () {
     function hideNewDeri() {
         $("#lightbox-new-derivate").modal("hide");
         $("#lightbox-new-derivate-hint").removeClass("hidden");
+        $("#lightbox-new-derivate-hint").removeClass("alert-danger-text");
         $("#lightbox-new-derivate-status").html("");
         $("#lightbox-new-derivate-status").addClass("hidden");
         $("#lightbox-new-derivate-main").removeClass("new-derivate-noDrop");

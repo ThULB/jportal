@@ -926,6 +926,9 @@ var DerivateBrowser = function () {
                             if (oneFile.type == "folder") {
                                 derivateBrowserNavigation.addChildToDerivat(name, path, deriID, data.moveTo.substr(oneFile.file.indexOf(":") + 1));
                             }
+                            else {
+                                derivateBrowserLargeView.removeFile(deriID + path);
+                            }
                         }
                         else {
                             notMoved++;
@@ -1185,7 +1188,9 @@ var DerivateBrowser = function () {
             $(node).find(".btn-check").removeClass("glyphicon-unchecked");
             $(node).find(".btn-check").removeClass("invisible");
             $(node).find(".btn-check").addClass("glyphicon-check");
-            derivateBrowserLargeView.getFile($(node).data("docID") + $(node).data("path")).selected = true;
+            if ($(node).hasClass("browser-table-file")) {
+                derivateBrowserLargeView.getFile($(node).data("docID") + $(node).data("path")).selected = true;
+            }
         }
         else {
             $(node).removeClass("checked");
@@ -1195,7 +1200,9 @@ var DerivateBrowser = function () {
                 $(node).find(".btn-check").addClass("invisible");
             }
             $(node).find(".btn-check").removeClass("glyphicon-check");
-            derivateBrowserLargeView.getFile($(node).data("docID") + $(node).data("path")).selected = false;
+            if ($(node).hasClass("browser-table-file")) {
+                derivateBrowserLargeView.getFile($(node).data("docID") + $(node).data("path")).selected = false;
+            }
         }
     }
 
