@@ -1,4 +1,4 @@
-package fsu.urmel.urn;
+package fsu.jportal.urn;
 
 import java.util.UUID;
 

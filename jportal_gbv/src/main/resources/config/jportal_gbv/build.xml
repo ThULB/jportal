@@ -27,7 +27,7 @@
 
 	<target name="config">
 		<echo>JPortal: config</echo>
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Annotated" value="org.mycore.frontend.cli.MigratingCMDs" />
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Annotated" value="MigratingCMDs" />
 		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="fsu.jportal.resources" />
 	</target>
 

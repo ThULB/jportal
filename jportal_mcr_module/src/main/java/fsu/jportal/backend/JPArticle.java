@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrDocument;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -25,7 +24,7 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.util.DerivateLinkUtil;
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 

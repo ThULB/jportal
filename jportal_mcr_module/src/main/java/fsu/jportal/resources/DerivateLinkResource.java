@@ -10,12 +10,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.xml.crypto.URIDereferencer;
 
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
-import org.mycore.frontend.util.DerivateLinkUtil;
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 
 @Path("derivate/link")
 public class DerivateLinkResource {

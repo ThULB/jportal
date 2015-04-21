@@ -5,7 +5,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.frontend.util.DerivateLinkUtil;
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 
 /**
  * This event handler tries to delete all corresponding derivate links
