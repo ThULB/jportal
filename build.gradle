@@ -251,7 +251,7 @@ project(':jportal_webapp') {
         runtime project(':jportal_derivate_browser')
         runtime project(':jportal_doublet_finder_module')
         runtime project(':jportal_move_obj_module')
-        applet "org.mycore.fileupload:fileupload-applet:1.2-SNAPSHOT"
+        applet "org.mycore.fileupload:fileupload-applet:1.+"
     }
 
     war {
