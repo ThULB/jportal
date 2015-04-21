@@ -213,7 +213,7 @@
     <div class="dfg-viewer">
       <xsl:variable name="encodedURL">
         <xsl:variable name="url">
-          <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRMETSServlet/', $derivID)" />
+          <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRMETSServlet/', $derivID, '/')" />
           <xsl:if test="$file != ''">
             <xsl:value-of select="$file" />
           </xsl:if>
