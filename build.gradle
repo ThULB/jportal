@@ -157,7 +157,6 @@ project(':jportal_mcr_module') {
         compile project(':jportal-commons')
         compile project(':jportal_ext_web_lib')
         compile project(':jportal_iview2_plugin')
-        compile 'de.uni-jena.thulb:JPJaxbPojos:0.0.1-SNAPSHOT'
         compile 'de.uni-jena.thulb.oai:archive-oai-resources:0.0.1-SNAPSHOT'
         compile 'log4j:log4j:1.2.17'
         compile "com.sun.jersey.jersey-test-framework:jersey-test-framework-grizzly:$jerseyVersion"

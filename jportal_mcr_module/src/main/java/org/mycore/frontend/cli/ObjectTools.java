@@ -1,25 +1,5 @@
 package org.mycore.frontend.cli;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.bind.JAXBException;
-
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -27,53 +7,25 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.*;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.frontend.util.DerivateLinkUtil;
 import org.mycore.iview2.frontend.MCRIView2Commands;
-import org.xml.sax.SAXParseException;
 
-import fsu.thulb.jaxb.JaxbTools;
-import fsu.thulb.jp.searchpojo.AtomLink;
-import fsu.thulb.jp.searchpojo.ContentEntry;
-import fsu.thulb.jp.searchpojo.StorageContentList;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.*;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {
     private static Logger LOGGER = Logger.getLogger(ObjectTools.class.getName());
-
-    @MCRCommand(help = "vd17Import url", syntax = "vd17Import {0}")
-    public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException,
-        MCRActiveLinkException, MCRException, SAXParseException {
-        StorageContentList storageContentList = JaxbTools.unmarschall(new URL(url), StorageContentList.class);
-
-        ContentEntry participantEntries = storageContentList.getContentFor("participant");
-        importObjects(participantEntries);
-        ContentEntry jpVolumeEntries = storageContentList.getContentFor("jpvolume");
-        importObjects(jpVolumeEntries);
-    }
-
-    private static void importObjects(ContentEntry contentEntries) throws URISyntaxException, MCRActiveLinkException,
-        MCRException, SAXParseException, IOException {
-        for (AtomLink participantLink : contentEntries.getLink()) {
-            MCRObject mcrObject = new MCRObject(new URI(participantLink.getHref()));
-            MCRMetadataManager.update(mcrObject);
-        }
-    }
 
     @MCRCommand(help = "export import [objectID].", syntax = "export import object {0}")
     public static void exportImport(String objectID) throws MCRPersistenceException, MCRActiveLinkException {
