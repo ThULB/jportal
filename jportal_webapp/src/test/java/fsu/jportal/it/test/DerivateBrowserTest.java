@@ -378,11 +378,7 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
     private void dragAndDrop(WebElement elementToDrop, WebElement dropZone) {
         BUILDER.moveToElement(elementToDrop).perform();
         BUILDER.clickAndHold(elementToDrop).perform();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        sleep(500);
         BUILDER.moveToElement(dropZone).perform();
         BUILDER.release().perform();
     }
@@ -593,19 +589,20 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
 
     private void checkUploadedImage(WebElement popover) {
         DRIVER.findElement(By.id("collapse-btn")).click();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.interrupted();
-        }
+        sleep(500);
         BUILDER.moveToElement(popover).perform();
         WAIT.until(ExpectedConditions.visibilityOfElementLocated(By.className("popover-img")));
+        sleep(500);
         assertTrue("displayed image differs from uploaded image", displayedImageCorrect(POPOVERPIXELCOUNT, IMAGECOLOR));
         DRIVER.findElement(By.id("collapse-btn")).click();
+        sleep(500);
+    }
+
+    private void sleep(int time) {
         try {
-            Thread.sleep(500);
+            Thread.sleep(time);
         } catch (InterruptedException e) {
-            Thread.interrupted();
+            Thread.currentThread().interrupted();
         }
     }
 }
