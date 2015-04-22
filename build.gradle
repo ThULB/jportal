@@ -201,6 +201,7 @@ project(':jportal_mcr_module') {
     }
 
     processResources {
+        //copy iview link js into META-INF
         from("$gruntBuildDir/classes/META-INF") { into 'META-INF' }
         from("$project.buildDir/templateName.xml") { into 'META-INF/resources/templates' }
     }

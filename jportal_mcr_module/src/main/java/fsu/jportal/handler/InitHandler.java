@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Enumeration;
+import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 
@@ -44,36 +45,69 @@ import org.xml.sax.SAXParseException;
 import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.nio.JarResource;
 
-public class InitHandler implements AutoExecutable{
+public class InitHandler implements AutoExecutable {
 
     private Session session;
+
     private Transaction transaction;
 
-    @Override
-    public String getName() {
+    @Override public String getName() {
         return "Init JPortal";
     }
 
-    @Override
-    public int getPriority() {
+    @Override public int getPriority() {
         return 0;
     }
 
-    @Override
-    public void startUp(ServletContext servletContext) {
+    @Override public void startUp(ServletContext servletContext) {
         startSession();
-        
-        if(isTableEmpty(MCRACCESSRULE.class)){
+
+        if (isTableEmpty(MCRACCESSRULE.class)) {
             createDefaultRules();
         }
-        
-        if(isTableEmpty(MCRCategoryImpl.class)){
+
+        if (isTableEmpty(MCRCategoryImpl.class)) {
             createClass();
         }
-        
+
         initSuperUser();
-        
+
         closeSession();
+
+        initCLI();
+    }
+
+    private void initCLI() {
+        info("init CLI....");
+        StringBuffer cliClassName = new StringBuffer();
+        try {
+            String packageName = "fsu.jportal.frontend.cli";
+            Enumeration<URL> resources = getClass().getClassLoader().getResources(packageName.replace('.', '/'));
+            while (resources.hasMoreElements()) {
+                URL url = resources.nextElement();
+                JarResource jarResource = new JarResource(url);
+                DirectoryStream<Path> paths = jarResource.listFiles();
+                for (Path path : paths) {
+                    String className = path.getFileName().toString();
+                    if (!className.contains("$")) {
+                        info("found CLI: " + className);
+                        cliClassName.append("," + packageName + "." + className.replace(".class", ""));
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (cliClassName.length() > 0) {
+            cliClassName.insert(0, "%MCR.CLI.Classes.External%");
+            HashMap<String, String> props = new HashMap<>();
+            props.put("MCR.CLI.Classes.External", cliClassName.toString());
+            MCRConfiguration.instance().initialize(props, false);
+//            info("found CLI classes " + cliClassName);
+        }
+
     }
 
     public boolean isTableEmpty(Class clazz) {
@@ -92,7 +126,7 @@ public class InitHandler implements AutoExecutable{
 
     private void createClass() {
         info("creating default classifications ...");
-        
+
         try {
             Enumeration<URL> resources = getClass().getClassLoader().getResources("classifications");
             MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
@@ -100,16 +134,16 @@ public class InitHandler implements AutoExecutable{
                 URL url = (URL) resources.nextElement();
                 info("Classi location: " + url.toString());
                 JarResource resource = new JarResource(url);
-                
+
                 for (Path child : resource.listFiles()) {
                     info("Found classi: " + child.toString());
                     InputStream classiXMLIS = Files.newInputStream(child);
-                    
+
                     Document xml = MCRXMLParserFactory.getParser().parseXML(new MCRStreamContent(classiXMLIS));
                     MCRCategory category = MCRXMLTransformer.getCategory(xml);
                     DAO.addCategory(null, category);
                 }
-                
+
                 resource.close();
             }
         } catch (IOException e) {
@@ -125,11 +159,11 @@ public class InitHandler implements AutoExecutable{
             e.printStackTrace();
         }
     }
-    
+
     private void initSuperUser() {
         info("superuser ...");
         String superuser = MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName", "administrator");
-        if(!MCRUserManager.exists(superuser)){
+        if (!MCRUserManager.exists(superuser)) {
             MCRUserCommands.initSuperuser();
         }
         info("superuser initialized");
@@ -143,10 +177,10 @@ public class InitHandler implements AutoExecutable{
         info("creating default ACL rules ...");
         InputStream cmdFileIS = getClass().getResourceAsStream("/config/jportal_mcr/acl/defaultrules-commands");
         BufferedReader cmdFileReader = new BufferedReader(new InputStreamReader(cmdFileIS));
-        
+
         try {
-            for(String cmdLine; (cmdLine = cmdFileReader.readLine()) != null; ) {
-                if(cmdLine != null && !cmdLine.trim().equals("")) {
+            for (String cmdLine; (cmdLine = cmdFileReader.readLine()) != null; ) {
+                if (cmdLine != null && !cmdLine.trim().equals("")) {
                     info(cmdLine);
                     createRule(cmdLine);
                 }
@@ -156,16 +190,16 @@ public class InitHandler implements AutoExecutable{
             e.printStackTrace();
         }
     }
-    
-    private void createRule(String cmdLine){
+
+    private void createRule(String cmdLine) {
         try {
             Object[] params = parseParams(cmdLine);
-            
+
             String permission = (String) params[0];
             String id = (String) params[1];
             Element rule = getRuleXML((String) params[2]);
             String description = (String) params[3];
-            
+
             addRule(id, permission, rule, description);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -173,9 +207,9 @@ public class InitHandler implements AutoExecutable{
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
-        } 
+        }
     }
-    
+
     private Element getRuleXML(String source) {
         Path path = Paths.get("/config/jportal_mcr/acl", source);
         String ruleXML = path.toString();
@@ -187,21 +221,22 @@ public class InitHandler implements AutoExecutable{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
         return null;
     }
 
     private Object[] parseParams(String cmdLine) throws NoSuchMethodException, ParseException {
-        Method method = MCRAccessCommands.class.getMethod("permissionUpdateForID", String.class, String.class, String.class, String.class);
+        Method method = MCRAccessCommands.class
+                .getMethod("permissionUpdateForID", String.class, String.class, String.class, String.class);
         String pattern = method.getAnnotation(MCRCommand.class).syntax();
         MessageFormat mf = new MessageFormat(pattern);
         Object[] params = mf.parse(cmdLine);
         return params;
     }
-    
-    private void addRule(String id, String permission, Element rule, String description){
+
+    private void addRule(String id, String permission, Element rule, String description) {
         MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
-        
+
         AI.addRule(id, permission, rule, description);
     }
 
