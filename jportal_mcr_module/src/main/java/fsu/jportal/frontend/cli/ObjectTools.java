@@ -1,5 +1,20 @@
 package fsu.jportal.frontend.cli;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -13,16 +28,20 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-import fsu.jportal.frontend.util.DerivateLinkUtil;
 import org.mycore.iview2.frontend.MCRIView2Commands;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.*;
+import fsu.jportal.frontend.RecursiveObjectExporter;
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {
@@ -33,6 +52,12 @@ public class ObjectTools {
         MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
         MCRMetadataManager.update(mcrObject);
     }
+
+	  @MCRCommand(help = "export object and children and their derivate from [objectID] to [destination].", syntax = "export object recursiv from {0} to {1}")
+	  public static void exportObject(String objectID, String dest) {
+	    RecursiveObjectExporter exportIt = new RecursiveObjectExporter();
+	    exportIt.start(objectID, dest);
+	  }
 
     // dataModelCoverage: browse, fully
     @MCRCommand(help = "cp [source ID] [n times] [layoutTemplate] [dataModelCoverage]", syntax = "cp {0} {1} {2} {3}")
