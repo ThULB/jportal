@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+
+#logo .logoTitle {
+    height: 72px;
+    padding-left: 30px;
+    padding-top: 5px;
+    width: 800px;
+    font-size: 2.2em;
+}
+
+@media (max-width: 767px) {
+	#logo .logoTitle {
+    	font-size: 1.3em;
+    	word-break: break-all;
+	}
+}
+
+#searchBar {
+    background-color: #464646;
+}
+
+#searchBar .input-group-addon {
+    background-color: #464646;
+    color: #FFF;
+}

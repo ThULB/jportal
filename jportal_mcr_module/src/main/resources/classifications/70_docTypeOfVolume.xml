@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000070">
+    <label xml:lang="en" text="Type of volume" />
+    <label xml:lang="de" text="Bandtyp" />
+    <categories>
+        <category ID="monograph">
+            <label xml:lang="de" text="Monographie" />
+            <label xml:lang="en" text="monograph" />
+        </category>
+        <category ID="volume">
+            <label xml:lang="en" text="volume" />
+            <label xml:lang="de" text="Jahrgang" />
+        </category>
+    </categories>
+</mycoreclass>

@@ -4,6 +4,10 @@
     <label xml:lang="en" text="Rubric" description="Rubric" />
     <label xml:lang="pl" text="Rubryka" description="Rubryka" />
     <categories>
+        <category ID="recension">
+            <label xml:lang="en" text="recension" />
+            <label xml:lang="de" text="Rezensionen" />
+        </category>
         <category ID="meditation">
             <label xml:lang="de" text="Andachten" />
             <label xml:lang="en" text="devotions" />
