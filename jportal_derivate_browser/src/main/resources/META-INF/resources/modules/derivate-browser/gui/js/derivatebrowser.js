@@ -1115,6 +1115,7 @@ var DerivateBrowser = function () {
     function readQueryParameter() {
         var q = document.URL.split(/\?(.+)?/)[1];
         if (q != undefined) {
+            q = q.split('#')[0];
             q = q.split('&');
             for (var i = 0; i < q.length; i++) {
                 hash = q[i].split(/=(.+)?/);
