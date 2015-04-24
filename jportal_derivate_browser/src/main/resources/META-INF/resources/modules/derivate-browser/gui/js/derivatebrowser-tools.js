@@ -154,25 +154,23 @@ var derivateBrowserTools = (function () {
 
     function changeAllI18n() {
         $("#folder-list-search-input").attr("placeholder", i18nKeys["db.label.search"]);
-        $(".i18n").each(function(i, elm) {
-            var i18nKey = i18nKeys[$(elm).attr("i18n")];
-            if (i18nKey != undefined){
-                $(elm).html(i18nKey);
-            }
-            else{
-                $(elm).html($(elm).attr("i18n-def"));
-            }
-        });
+        updateI18n($("body"));
     }
 
     function updateI18n(elm) {
-        $(elm).find(".i18n").each(function(i, elm) {
-            var i18nKey = i18nKeys[$(elm).attr("i18n")];
+        $(elm).find(".i18n").each(function(i, node) {
+            var i18nKey = i18nKeys[$(node).attr("i18n")];
             if (i18nKey != undefined){
-                $(elm).html(i18nKey);
+                $(node).html(i18nKey);
             }
             else{
-                $(elm).html($(elm).attr("i18n-def"));
+                $(node).html($(node).attr("i18n-def"));
+            }
+        });
+        $(elm).find(".i18n-title").each(function(i, node) {
+            var i18nKey = i18nKeys[$(node).attr("i18n")];
+            if (i18nKey != undefined){
+                $(node).attr("title", i18nKey);
             }
         });
     }

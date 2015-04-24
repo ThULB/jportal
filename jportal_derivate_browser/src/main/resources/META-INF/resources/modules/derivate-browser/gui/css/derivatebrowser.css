@@ -779,6 +779,10 @@ div.statusbar-progress-single-status.noAnimation {
     z-index: 9;
 }
 
+.btn-add1:hover{
+	color: #FFFFFF;
+}
+
 .btn-add2{
     font-size: 14px;
     left: 8px;

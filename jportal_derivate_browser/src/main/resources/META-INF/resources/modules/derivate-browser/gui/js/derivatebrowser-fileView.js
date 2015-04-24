@@ -61,6 +61,7 @@ var derivateBrowserFileView = (function () {
 	function addFileToView(file , mainDoc) {
 		var fileEntryTemplate = $("#file-entry-template").html();
 		var fileEntryOutput = $(Mustache.render(fileEntryTemplate, file));
+        derivateBrowserTools.updateI18nForElm(fileEntryOutput);
 		$(fileEntryOutput).find(".popover-file").data("lastMod", file.lastmodified);
 		$(fileEntryOutput).find(".popover-file").data("size", derivateBrowserTools.getReadableSize(file.size,0));
 		$(fileEntryOutput).data("path", file.absPath);
@@ -81,6 +82,7 @@ var derivateBrowserFileView = (function () {
     function addXMLToView(file) {
         var xmlEntryTemplate = $("#xml-entry-template").html();
         var xmlEntryOutput = $(Mustache.render(xmlEntryTemplate, file));
+        derivateBrowserTools.updateI18nForElm(xmlEntryOutput);
         $(xmlEntryOutput).data("path", file.absPath);
         $(xmlEntryOutput).data("deriID", file.deriID);
         $(xmlEntryOutput).data("docID", file.deriID);
@@ -91,6 +93,7 @@ var derivateBrowserFileView = (function () {
 	function addFolderToView(folder, path) {
 		var folderEntryTemplate = $("#folder-entry-template").html();
 		var folderEntryOutput = $(Mustache.render(folderEntryTemplate, folder));
+        derivateBrowserTools.updateI18nForElm(folderEntryOutput);
 		$(folderEntryOutput).data("path", folder.absPath);
 		$(folderEntryOutput).data("deriID", folder.deriID);
 		$(folderEntryOutput).appendTo("#browser-table-files");

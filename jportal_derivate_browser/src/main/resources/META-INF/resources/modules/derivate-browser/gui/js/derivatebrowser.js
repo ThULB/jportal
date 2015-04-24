@@ -212,6 +212,7 @@ var DerivateBrowser = function () {
                     file.size = $(this).data("size");
                     var popoverTemplate = $("#popover-template").html();
                     var popOverOutput = $(Mustache.render(popoverTemplate, file));
+                    derivateBrowserTools.updateI18nForElm($(popOverOutput));
                     //$(this).popover({content: popOverOutput, html: true});
                     derivateBrowserTools.setImgPath($(popOverOutput).find(".popover-img"), $(parent).data("deriID"), $(parent).data("path"));
                     derivateBrowserTools.setupPopover($(this), popOverOutput);

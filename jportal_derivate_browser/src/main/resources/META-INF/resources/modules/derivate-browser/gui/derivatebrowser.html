@@ -80,33 +80,25 @@
                                             <dt></dt>
                                             <dd id="derivate-hidden" class="alert-warning-text hidden"><text class="i18n" i18n="db.label.hidden" i18n-def="Versteckt"></text></dd>
 										</dl>
-                                        <!--<div id="derivate-hidden" class="alert-warning-text"><text class="i18n" i18n="db.label.hidden" i18n-def="Versteckt"></text></div>-->
-                                        <!--<div id="option-select-area">-->
-                                            <!--<button id="btn-derivate-options" type="button" class="btn btn-default browser-button derivate-button">-->
-                                                <!--<span class="glyphicon glyphicon-cog button-glyphicon"></span>-->
-                                                <!--<text class="i18n" i18n="db.label.derivateOptions" i18n-def="Optionen"></text>-->
-                                            <!--</button>-->
                                             <div id="derivat-panel-buttons" class="">
-                                                <button id="btn-urnAll" type="button" class="btn btn-default browser-button derivate-button" title="URN für Derivat vergeben">
+                                                <button id="btn-urnAll" type="button" class="btn btn-default browser-button derivate-button i18n-title" i18n="db.title.newURNAll" title="URN für Derivat vergeben">
                                                         <span class=" glyphicon glyphicon-tags button-glyphicon"></span>
-                                                        <!--<text class="i18n" i18n="db.label.assignUrn" i18n-def="URN für Derivat vergeben"></text>-->
                                                 </button>
-                                                <button id="btn-hide" type="button" class="btn btn-default browser-button derivate-button" title="Derivate verstecken">
+                                                <button id="btn-hide" type="button" class="btn btn-default browser-button derivate-button i18n-title" i18n="db.title.hideDerivate" title="Derivate verstecken">
                                                     <span class="glyphicon glyphicon-eye-open button-glyphicon"></span>
                                                     <span class="glyphicon glyphicon-eye-close button-glyphicon"></span>
                                                 </button>
-                                                <button id="btn-viewer" type="button" class="btn btn-default browser-button derivate-button" title="in Viewer ansehen">
+                                                <button id="btn-viewer" type="button" class="btn btn-default browser-button derivate-button i18n-title" i18n="db.title.goToViewer" title="in Viewer ansehen">
                                                     <span class="glyphicon glyphicon-sound-stereo button-glyphicon"></span>
-                                                    <!--<text class="i18n" i18n="db.label.goToViewer" i18n-def="in Viewer ansehen"></text>-->
+
                                                 </button>
-                                                <button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button derivate-button" title="Derivat löschen">
+                                                <button id="btn-deleteDeri" type="button" class="btn btn-danger browser-button derivate-button i18n-title" i18n="db.title.deleteDerivate" title="Derivat löschen">
                                                     <span class=" glyphicon glyphicon-trash button-glyphicon"></span>
-                                                    <!--<text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>-->
+
                                                 </button>
                                                 <div id="download-select-area">
-                                                    <button id="btn-download" type="button" class="btn btn-default browser-button derivate-button" title="Derivat herunterladen">
+                                                    <button id="btn-download" type="button" class="btn btn-default browser-button derivate-button i18n-title" i18n="db.title.downloadDerivate" title="Derivat herunterladen">
                                                         <span class="glyphicon glyphicon-arrow-down button-glyphicon"></span>
-                                                        <!--<text class="i18n" i18n="db.label.download" i18n-def="Derivat herunterladen"></text>-->
                                                     </button>
                                                     <div id="download-new-select-area" class="hidden">
                                                         <button id="btn-download-zip" class="btn btn-default browser-button download-button" type="button">
@@ -117,13 +109,11 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <button id="btn-tileDeri" type="button" class="btn btn-default browser-button derivate-button" title="Derivat kacheln">
+                                                <button id="btn-tileDeri" type="button" class="btn btn-default browser-button derivate-button i18n-title" i18n="db.title.tileDerivate" title="Derivat kacheln">
                                                     <span class=" glyphicon glyphicon glyphicon-th button-glyphicon"></span>
-                                                    <!--<text class="i18n" i18n="db.label.deleteDerivate" i18n-def="Derivat löschen"></text>-->
                                                 </button>
                                             </div>
                                         </div>
-									<!--</div>-->
 									<div id="derivat-panel-startfile">
 										<label><text class="i18n" i18n="db.label.startFile" i18n-def="Startdatei"></text></label>
 										<figure>
@@ -145,12 +135,12 @@
 						</div>
                         <div id="derivate-browser-breadcrumb-bar">
                             <ol id="derivate-browser-breadcrumb" class="breadcrumb"></ol>
-                            <span id="btn-large-view" class="glyphicon glyphicon-th-large breadcrumb-btn"></span>
+                            <span id="btn-large-view" class="glyphicon glyphicon-th-large breadcrumb-btn i18n-title" i18n="db.title.goToLargeView" title="in vergrößerter Ansicht"></span>
                             <div id="btn-filter-table-input" class="hidden">
                                 <input class="form-control input-sm" type="text" placeholder="Filtern...">
                                 <span id="btn-filter-table-input-remove" class="glyphicon glyphicon-remove btn hidden"></span>
                             </div>
-                            <span id="btn-filter-table" class="glyphicon glyphicon-search breadcrumb-btn"></span>
+                            <span id="btn-filter-table" class="glyphicon glyphicon-search breadcrumb-btn i18n-title" i18n="db.title.filter" title="Liste filtern"></span>
                         </div>
 						<table id="browser-table-head" class="table table-hover table-condensed" cellspacing="0">
 							<thead>
@@ -184,14 +174,14 @@
                     </div>
 					<div id="derivate-browser-footer">
 						<div id="bottom-btns" class="bottom-btns">
-							<div class="btn-add btn">
+							<div class="btn-add btn i18n-title" i18n="db.title.addFolder" title="Ordner anlegen">
 								<span class="glyphicon glyphicon-folder-close btn-add btn"></span>
 								<span class="glyphicon glyphicon-plus btn-add1 btn"></span>
 								<span class="glyphicon glyphicon-plus btn-add2 btn"></span>
 							</div>
-								<span class='glyphicon glyphicon-unchecked btn-check-all btn'></span>
-								<span class='glyphicon glyphicon-trash btn-delete-all btn faded'></span>
-								<span class='glyphicon glyphicon-share-alt btn-move-all btn faded'></span>
+								<span class='glyphicon glyphicon-unchecked btn-check-all btn i18n-title' i18n="db.title.selectAll" title="Alle makieren"></span>
+								<span class='glyphicon glyphicon-trash btn-delete-all btn faded i18n-title' i18n="db.title.deleteAll" title="Alle makierte löschen"></span>
+								<span class='glyphicon glyphicon-share-alt btn-move-all btn faded i18n-title' i18n="db.title.move" title="Alle makierte verschieben"></span>
 						</div>
 					</div>
 				</div>
@@ -481,9 +471,9 @@
 			<img class='popover-img hidden' src=''>
 			<img class='img-placeholder img-placeholder-popover' src=''>
 			<dl>
-				<dt>Size</dt>
+				<dt><text class="i18n" i18n="db.label.fileSize" i18n-def="Größe"></text></dt>
 				<dd class="img-size">{{size}}</dd>
-				<dt>last modified</dt>
+				<dt><text class="i18n" i18n="db.label.fileLastMod" i18n-def="zuletzt geändert"></text></dt>
 				<dd>{{lastmodified}}</dd>
 			</dl>
 		</div>
@@ -496,9 +486,9 @@
 				class="glyphicon glyphicon-picture popover-file"></span></td>
 			<td>
 				<div class="btns">
-					<span class="glyphicon glyphicon-unchecked btn-check btn invisible"></span>
-					<span class="glyphicon glyphicon-edit btn-edit btn invisible"></span>
-					<span class="glyphicon glyphicon-trash btn-delete btn invisible"></span>
+					<span class="glyphicon glyphicon-unchecked btn-check btn invisible i18n-title" i18n="db.title.select" title="Makieren"></span>
+					<span class="glyphicon glyphicon-edit btn-edit btn invisible i18n-title" i18n="db.title.edit" title="Umbenennen"></span>
+					<span class="glyphicon glyphicon-trash btn-delete btn invisible i18n-title" i18n="db.title.delete" title="Löschen"></span>
 				</div>
 			</td>
 			<td class="browser-table-file-name mightOverflow">{{name}}</td>
@@ -524,9 +514,9 @@
 			<td><span class="glyphicon glyphicon-file"></span></td>
 			<td>
 				<div class="btns">
-					<span class="glyphicon glyphicon-unchecked btn-check btn invisible"></span>
-					<span class="glyphicon glyphicon-edit btn-edit btn invisible"></span>
-					<span class="glyphicon glyphicon-trash btn-delete btn invisible"></span>
+					<span class="glyphicon glyphicon-unchecked btn-check btn invisible i18n-title" i18n="db.title.select" title="Makieren"></span>
+					<span class="glyphicon glyphicon-edit btn-edit btn invisible i18n-title" i18n="db.title.edit" title="Umbenennen"></span>
+					<span class="glyphicon glyphicon-trash btn-delete btn invisible i18n-title" i18n="db.title.delete" title="Löschen"></span>
 				</div>
 			</td>
 			<td class="browser-table-file-name mightOverflow">{{name}}</td>
@@ -546,9 +536,9 @@
 			<td><span class="glyphicon glyphicon-folder-close btn-folder"></span></td>
 			<td>
 				<div class="btns">
-					<span class="glyphicon glyphicon-unchecked btn-check btn invisible"></span>
-					<span class="glyphicon glyphicon-edit btn-edit btn invisible"></span>
-					<span class="glyphicon glyphicon-trash btn-delete btn invisible"></span>
+					<span class="glyphicon glyphicon-unchecked btn-check btn invisible i18n-title" i18n="db.title.select" title="Makieren"></span>
+					<span class="glyphicon glyphicon-edit btn-edit btn invisible i18n-title" i18n="db.title.edit" title="Umbenennen"></span>
+					<span class="glyphicon glyphicon-trash btn-delete btn invisible i18n-title" i18n="db.title.delete" title="Löschen"></span>
 				</div>
 			</td>
 			{{#temp}}
@@ -625,9 +615,9 @@
                     <input id="view-large-panel-input" type="text" class="hidden form-control input-sm">
 				</div>
 			    <dl>
-				    <dt>Size</dt>
+				    <dt><text class="i18n" i18n="db.label.fileSize" i18n-def="Größe"></text>:</dt>
 				    <dd>{{size}}</dd>
-				    <dt>last modified</dt>
+				    <dt><text class="i18n" i18n="db.label.fileLastMod" i18n-def="zuletzt geändert"></text>:</dt>
 				    <dd>{{lastModified}}</dd>
 				    <dt>URN</dt>
                     {{#urn}}
@@ -640,11 +630,11 @@
             </div>
             <div class="col-md-6">
                 <div>
-                    <span class="glyphicon glyphicon-unchecked btn-check-large btn"></span>
-                    <span class="glyphicon glyphicon-edit btn-edit-large btn"></span>
-                    <span class="glyphicon glyphicon-trash btn-delete-large btn"></span>
+                    <span class="glyphicon glyphicon-unchecked btn-check-large btn i18n-title" i18n="db.title.select" title="Makieren"></span>
+                    <span class="glyphicon glyphicon-edit btn-edit-large btn i18n-title" i18n="db.title.edit" title="Umbenennen"></span>
+                    <span class="glyphicon glyphicon-trash btn-delete-large btn i18n-title" i18n="db.title.delete" title="Löschen"></span>
                 </div>
-                <h5><strong>Verlinkt mit:</strong></h5>
+                <h5><strong><text class="i18n" i18n="db.label.linkedWith" i18n-def="Verlinkt mit"></text>:</strong></h5>
 			    <ul id="view-large-link-list">
                     {{#linkedDocs}}
 			            <li><a data-id="{{id}}" class="mightOverflow" href="start#/{{id}}">{{name}}</a></li>
