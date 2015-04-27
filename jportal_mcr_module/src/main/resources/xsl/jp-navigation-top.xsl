@@ -50,7 +50,7 @@
           <a>
             <xsl:attribute name="href">
             <xsl:if test="$isGuest">
-              <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRLoginServlet?url=', $RequestURL)" />
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRLoginServlet?action=login')" />
             </xsl:if>
             <xsl:if test="not($isGuest)">
               <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/logout')" />
