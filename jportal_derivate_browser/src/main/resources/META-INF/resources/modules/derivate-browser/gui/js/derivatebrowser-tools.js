@@ -238,6 +238,7 @@ var derivateBrowserTools = (function () {
             }, 400);
         }).on("mouseleave", function() {
             var pop = this;
+            clearTimeout(timer);
             setTimeout(function() {
                 if (!$(".popover:hover").length) {
                     if (!$(':hover',this).length) {

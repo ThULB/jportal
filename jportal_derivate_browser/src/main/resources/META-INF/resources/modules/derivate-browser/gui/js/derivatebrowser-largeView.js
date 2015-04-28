@@ -217,7 +217,7 @@ var derivateBrowserLargeView = (function () {
     }
 
     function addThumbFile(id, append, currentFile){
-        var img = $('<a class="view-large-thump" style="background-image: url(' + currentFileList[id].getThumpPath() + ');"></a>');
+        var img = $('<a class="view-large-thump" style="background-image: url(\'' + currentFileList[id].getThumpPath() + '\');"></a>');
         img.data("id", id);
         if (id == currentFile){
             img.addClass("view-large-slider-current");
