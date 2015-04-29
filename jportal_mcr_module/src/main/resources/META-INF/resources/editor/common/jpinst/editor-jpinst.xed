@@ -73,7 +73,16 @@
         </jp:template>
         <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
       </xed:repeat>
-
+    
+    	<xed:repeat xpath="logo[@class='MCRMetaLangText']/url[@inherited='0'][@form='plain']" min="0" max="10">
+        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.LLogos" buttons="true"
+           option="true" validate="interdependentSelect">
+          <option i18n="jp.editor.inst.sLogo" value="logoPlain" />
+          <option i18n="jp.editor.inst.logoWText" value="logoPlusText" />
+        </jp:template>
+        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
+      </xed:repeat>
+    
       <jp:template name="textInput"
         xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']"
         i18n="editormask.labels.LdoubletOf" maxlength="128" />
