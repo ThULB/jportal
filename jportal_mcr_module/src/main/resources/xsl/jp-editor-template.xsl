@@ -113,7 +113,7 @@
 
 	<xsl:template match="jp:template" mode="title">
 		<xsl:choose>
-			<xsl:when test="@validate = 'required'">
+			<xsl:when test="@validate = 'required' or @validate = 'requiredPersonName'">
 				<label>
 					<xed:output i18n="{@i18n}" />
 				</label>
@@ -158,11 +158,18 @@
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="jp:template[@validate='required']"
-		mode="required">
+	<xsl:template match="jp:template[@validate='required']" mode="required">
 		<xed:validate display="here" required="true">
 			<div class="alert alert-danger" role="alert">
 				<xed:output i18n="jp.editor.requiredInput" />
+			</div>
+		</xed:validate>
+	</xsl:template>
+	
+	<xsl:template match="jp:template[@validate='requiredPersonName']" mode="required">
+		<xed:validate display="here" test="(string-length(../lastName) &gt; 0) or (string-length(../firstName) &gt; 0) or (string-length(../name) &gt; 0)">
+			<div class="alert alert-danger" role="alert">
+				<xed:output i18n="jp.editor.requiredPersonName" />
 			</div>
 		</xed:validate>
 	</xsl:template>
@@ -175,8 +182,7 @@
       </xed:validate>
     </xsl:template>
 
-	<xsl:template match="jp:template[@validate='interdependentInput']"
-		mode="required">
+	<xsl:template match="jp:template[@validate='interdependentInput']" mode="required">
 		<xed:validate display="here"
 			test="not(string-length({@selectXpath}) = 0 and string-length(text()) != 0)">
 			<div class="alert alert-danger" role="alert">
@@ -185,10 +191,9 @@
 		</xed:validate>
 	</xsl:template>
 
-	<xsl:template match="jp:template[@validate='subselect']"
-		mode="required">
+	<xsl:template match="jp:template[@validate='subselect']" mode="required">
 		<xed:validate display="here"
-			test="((string-length(.) = 0) and (string-length(../@xlink:href) = 0)) or ((string-length(.) > 0) and (string-length(../@xlink:href) > 0))">
+			test="((string-length(.) = 0) and (string-length(../@xlink:href) = 0)) or ((string-length(.) &gt; 0) and (string-length(../@xlink:href) &gt; 0))">
 			<div class="alert alert-danger" role="alert">
 				<xed:output i18n="jp.editor.select_help" />
 			</div>

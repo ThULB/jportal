@@ -6,10 +6,10 @@
 
       <xed:bind xpath="def.heading[@class='MCRMetaXML']/heading[@inherited='0']">
         <jp:template name="textInputSm" xpath="lastName" i18n="editormask.person.Lheading" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" maxlength="128" validate="required" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" maxlength="128" validate="requiredPersonName" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="firstName" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.firstName" maxlength="128" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.firstName" maxlength="128" validate="requiredPersonName" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="collocation" >
           <jp:template name="textInput" xpath="." i18n="jp.editor.person.collocation" maxlength="128" small="true" />
@@ -18,7 +18,7 @@
           <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" maxlength="128" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="name" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.single" maxlength="128" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.single" maxlength="128" validate="requiredPersonName" small="true" />
         </jp:template>
       </xed:bind>
     </jp:section>
