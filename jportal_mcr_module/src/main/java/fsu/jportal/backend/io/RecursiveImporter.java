@@ -90,6 +90,10 @@ public class RecursiveImporter {
     }
 
     public HashSet<String> getIdsOfImportedObjs() {
+        if(idsOfImportedObjs == null){
+            setIdsOfImportedObjs(new HashSet<String>());
+        }
+
         return idsOfImportedObjs;
     }
 
@@ -99,7 +103,7 @@ public class RecursiveImporter {
                 .compile("participants/participant/@xlink:href", Filters.attribute(), null, xlink);
         for (Attribute objIDAttr : participantsXpath.evaluate(metaDataXML)) {
             String objID = objIDAttr.getValue();
-            setIdsOfImportedObjs(new HashSet<String>());
+
             if (!getIdsOfImportedObjs().contains(objID)) {
                 getIdsOfImportedObjs().add(objID);
                 importObj(getSrc().getObj(objID));

@@ -27,9 +27,9 @@ public class Importer {
 
     private static String host;
 
-    @MCRCommand(syntax = "importObj {0}", help = "importObj urlStr")
-    public static void importObj(String urlStr) {
-        HttpImportSource httpImportSource = new HttpImportSource(urlStr);
+    @MCRCommand(syntax = "importObj {0} {1}", help = "importObj webappURL id")
+    public static void importObj(String urlStr, String id) {
+        HttpImportSource httpImportSource = new HttpImportSource(urlStr, id);
         ImportSink localSystem = new LocalSystemSink();
         new RecursiveImporter(httpImportSource, localSystem).start();
     }

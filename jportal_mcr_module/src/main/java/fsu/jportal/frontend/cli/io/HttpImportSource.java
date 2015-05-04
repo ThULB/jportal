@@ -22,18 +22,12 @@ public class HttpImportSource implements ImportSource {
     private List<Document> objs;
 
     private URL url;
+    private String baseURL;
 
-    public HttpImportSource(String objURL) {
-        url = null;
-        try {
-            System.out.println("Get Obj: " + objURL);
-            url = new URL(objURL);
-            InputStream in = url.openStream();
-            Document objXML = buildXML(in);
-            getObjs().add(objXML);
-        } catch (java.io.IOException | JDOMException e) {
-            e.printStackTrace();
-        }
+    public HttpImportSource(String baseURL, String id) {
+        this.baseURL = baseURL;
+        Document objXML = getObj(id);
+        getObjs().add(objXML);
     }
 
     private Document buildXML(InputStream in) throws JDOMException, IOException {
@@ -48,17 +42,17 @@ public class HttpImportSource implements ImportSource {
         return objs;
     }
 
-    public URL getUrl() {
-        return url;
+    public URL getUrl(String url) throws MalformedURLException {
+        return new URL(baseURL + url);
     }
 
     public Document getObj(String objID) {
         try {
-            URL url = getUrl().toURI().resolve("/receive/" + objID + "?XSL.Style=xml").toURL();
+            URL url = getUrl("/receive/" + objID + "?XSL.Style=xml");
             System.out.println("Get Obj: " + url);
             InputStream inputStream = url.openStream();
             return buildXML(inputStream);
-        } catch (IOException | JDOMException | URISyntaxException e) {
+        } catch (IOException | JDOMException e) {
             e.printStackTrace();
         }
 
@@ -67,12 +61,12 @@ public class HttpImportSource implements ImportSource {
 
     public Document getClassification(String classID) {
         try {
-            URL url = getUrl().toURI().resolve("/rsc/classifications/export/" + classID).toURL();
+            URL url = getUrl("/rsc/classifications/export/" + classID);
             System.out.println("Get Classi: " + url);
 
             InputStream inputStream = url.openStream();
             return buildXML(inputStream);
-        } catch (IOException | JDOMException | URISyntaxException e) {
+        } catch (IOException | JDOMException e) {
             e.printStackTrace();
         }
 

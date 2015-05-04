@@ -63,8 +63,8 @@ public class RecursiveImporterTest {
 
     @Test
     public void testGetParticipants() throws Exception {
-        HttpImportSource httpImportSource = new HttpImportSource(
-                "http://zs.thulb.uni-jena.de/receive/jportal_jpjournal_00001219?XSL.Style=xml");
+        HttpImportSource httpImportSource = new HttpImportSource("http://zs.thulb.uni-jena.de",
+                "jportal_jpjournal_00001219");
         MockImportSink mockImportSink = new MockImportSink();
         RecursiveImporter importer = new RecursiveImporter(httpImportSource, mockImportSink);
         List<Document> objs = httpImportSource.getObjs();
