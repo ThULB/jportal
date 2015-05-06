@@ -241,3 +241,82 @@ label.editorText {
 #personSelect-select .popover-content{
 	height: 310px;
 }
+
+/*logoSelect*/
+#personSelect-modal .modal-footer{
+	clear: both;
+}
+
+.editor-logoSelect-container {
+	height: 500px;
+	overflow: auto;
+}
+
+.editor-logoSelect-container > a {
+	border-radius: 18px;
+	margin: 12px !important;
+	width: 45%;
+	display: inline-block;
+	height: 125px;
+}
+
+.editor-logoSelect-container > a > svg{
+	height: 80%;
+}
+
+.editor-logoSelect-container > a:first-child {
+	border-top-left-radius: 18px;
+	border-top-right-radius: 18px;
+}
+
+.editor-logoSelect-container > a:last-child {
+	border-bottom-left-radius: 18px;
+	border-bottom-right-radius: 18px;
+}
+
+#thumbLogoPlain, #thumbLogoText {
+	border-radius: 18px;
+	height: 150px;
+	margin-bottom: 15px;
+}
+
+#delLogoPlain, #delLogoText {
+	cursor: pointer;
+	position: absolute; 
+	right: 1.5em; 
+	top: 0.5em;
+	color: #428BCA;
+}
+
+#delLogoPlain:hover, #delLogoText:hover {
+	color: #D9534F;
+}
+
+#thumbLogoPlain, #thumbLogoText {
+	display: flex;
+	align-items: center;
+}
+
+#thumbLogoPlain > p, #thumbLogoText > p, .editor-logoSelect-container > a > svg {
+	width: 100%;
+}
+
+.editor-logo-active, .editor-logo-active:hover {
+	background-color: #5ec5ed !important;
+}
+
+#thumbLogoPlain > h5, #thumbLogoText > h5, .editor-logoSelect-container > a > h5 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top: 0.5px solid #ddd;
+  width: 100%;
+  color: #333;
+  margin-bottom: 5px;
+  padding-top: 5px;
+}
+
+#thumbLogoPlain > svg, #thumbLogoText > svg, .editor-logoSelect-container > svg {
+	margin: 0 auto 2.1em;
+}
+

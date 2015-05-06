@@ -25,6 +25,9 @@
               <xed:output value="$CurrentLang" />
             </span>
           </xed:if>
+          <xed:if test="$type = 'jpinst'">
+          	<script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-logoSelect.js" class="jp-db-load"></script>
+          </xed:if>
           <span id="currentType" style="display:none">
               <xed:output value="$type" />
           </span>

@@ -56,7 +56,7 @@
 		select) and 3. buttons -->
 	<!-- Form: titel | input | buttons -->
 	<xsl:template
-		match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select', @name)]">
+		match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|logoThumbnail', @name)]">
 		<div class="row">
 			<xsl:if test="@small">
 				<xsl:attribute name="class"></xsl:attribute>
@@ -131,7 +131,7 @@
 
 	<xsl:template match="jp:template[@name='textInput']" mode="input">
 		<input type="text" class="form-control" maxlength="{@maxlength}"
-			tabindex="1">
+			tabindex="1" >
 			<xsl:if test="@placeholder">
 				<xsl:attribute name="placeholder">
           <xsl:value-of select="concat('{i18n:', @placeholder, '}')" />
@@ -140,6 +140,11 @@
 			<xsl:if test="@inputClass">
 				<xsl:attribute name="class">
           <xsl:value-of select="@inputClass" />
+        </xsl:attribute>
+			</xsl:if>
+			<xsl:if test="@generateID">
+				<xsl:attribute name="id">
+          <xsl:value-of select="@generateID" />
         </xsl:attribute>
 			</xsl:if>
 			<xsl:if test="contains(@inputClass, 'date-field')">
@@ -203,6 +208,30 @@
 	<xsl:template match="jp:template[@name='textArea']" mode="input">
 		<textarea class="form-control" wrap="" rows="3" cols="48"
 			tabindex="1" />
+	</xsl:template>
+	
+	<xsl:template match="jp:template[@name='logoThumbnail']" mode="input">
+		<xed:bind xpath="{@xpathInput1}">
+			<div class="col-md-6 text-center">
+				<a id="thumbLogoPlain" class="thumbnail" >
+					<p>Click hier um Logo auszuwählen.</p>
+					<h5><xsl:value-of select="i18n:translate('jp.editor.inst.sLogo')"></xsl:value-of></h5>
+				</a>
+				<span id="delLogoPlain" class="glyphicon glyphicon-remove" style="display:none"></span>
+				<input type="text" style="display:none"></input>
+			</div>
+		</xed:bind>
+		<xed:bind xpath="{@xpathInput2}">
+			<div class="col-md-6 text-center">
+				<a id="thumbLogoText" class="thumbnail">
+					<p>Click hier um Logo auszuwählen.</p>
+					<h5><xsl:value-of select="i18n:translate('jp.editor.inst.logoWText')"></xsl:value-of></h5>
+				</a>
+				<span id="delLogoText" class="glyphicon glyphicon-remove" style="display:none"></span>
+				<input type="text" style="display:none"></input>
+			</div>
+		</xed:bind>
+		<xsl:apply-templates select="." mode="modal"/>
 	</xsl:template>
 
 	<xsl:template match="jp:template[@name='selectInput']"
@@ -308,7 +337,10 @@
 			</button>
 		</div>
 		
-		<!-- Modal -->
+		<xsl:apply-templates select="." mode="modal"/>
+	</xsl:template>
+	
+	<xsl:template match="jp:template" mode="modal">
 		<div class="modal fade" id="personSelect-modal" tabindex="-1" role="dialog" aria-labelledby="personSelect-modal-title" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
