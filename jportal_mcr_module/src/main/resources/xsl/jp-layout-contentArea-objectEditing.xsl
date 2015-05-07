@@ -169,6 +169,9 @@
 
   <xsl:template name="initImprint">
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-imprint.js" />
+    <script type="text/javascript" >
+      currentLang = '<xsl:value-of select="i18n:getCurrentLocale()" />'
+    </script>
   </xsl:template>
 
   <xsl:template name="jp.object.editing.items">

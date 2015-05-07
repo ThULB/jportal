@@ -1,70 +1,104 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Imprint GUI</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Imprint GUI</title>
 </head>
 <body style="background-color: white">
-	<div id="GUI">
-		<div id="imprintGUIMain">
-			<div class="modal fade in" style="display: block;">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 id="imprintTitle" class="modal-title">Impressum
-								bearbeiten</h4>
+<div id="GUI">
+	<div id="imprintGUIMain">
+		<link href="../css/jp-imprint.css" rel="stylesheet" type="text/css">
+		<div class="modal fade" id="imprint-modal" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true"
+			 data-keyboard="false">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 id="imprint-preview-title" class="modal-title i18n"
+							i18n="jp.imprintEditor.fsType.preview.title" i18n-def="Impressum auswählen"></h4>
+						<h4 id="imprint-editor-title" class="modal-title hidden i18n"
+							i18n="jp.imprintEditor.fsType.editor.title" i18n-def="Impressum	bearbeiten"></h4>
+						<h4 id="imprint-new-title" class="modal-title hidden i18n"
+							i18n="jp.imprintEditor.fsType.new.title" i18n-def="Impressum anlegen"></h4>
+
+						<div id="imprint-editor-error" class="hidden alert-danger-text">
+							<span class="fa fa-exclamation-triangle"></span>
+							<text class="i18n" i18n="jp.imprintEditor.alert.text"
+								  i18n-def="Bitte füllen Sie alle Felder aus und verwenden Sie keine breits verwendeten Namen.">
+							</text>
 						</div>
-						<div class="modal-body">
+					</div>
+					<div class="modal-body">
+						<div id="imprint-preview-panel">
 							<div class="row">
-								<div class="col-md-4 editBox">
-									<div id="imprintSelBox" class="list-group"
-										style="height: 571px; width: 280px; overflow: auto" />
-									<div class="btn-group" role="group" aria-label="Edit Buttons">
-										<button id="addImprintButton" type="button"
-											class="btn btn-default">
+								<div class="col-md-4 editBox" >
+									<div id="imprintSelBox" class="list-group">
+									</div>
+									<div class="btn-group">
+										<button id="imprint-new-btn" type="button" class="btn btn-default">
 											<i class="fa fa-plus"></i>
+										</button>
+										<button id="imprint-delete-btn" type="button" class="btn btn-default">
+											<i class="fa fa-minus"></i>
 										</button>
 									</div>
 								</div>
 								<div class="col-md-8">
-
-									<div class='ckeditor' id="ckEditorContainer"></div>
+									<div id="imprint-no-imprint" class=" hidden i18n" i18n="jp.imprintEditor.fsType.noImprint"
+										 i18n-def="Keine Impressum gefunden, bitte legen Sie eins an."></div>
+									<div id="imprint-no-link" class=" hidden i18n" i18n="jp.imprintEditor.partner.noLink"
+										 i18n-def="Dieses Dokument besitzt noch kein Impressum, wählen Sie bitte eins aus."></div>
+									<div id="imprint-preview"></div>
+									<i id="imprint-preview-edit" class="fa fa-pencil-square-o fa-2x"></i>
 								</div>
 							</div>
 						</div>
-						<div class="modal-footer">
-							<button id="imprintCancelButton" class="btn btn-default"
-								type="button">Abbrechen</button>
-							<button id="imprintSaveButton" class="btn btn-primary"
-								type="button">Speichern</button>
+						<div id="imprint-editor-panel" class="hidden">
+							<input id="imprint-editor-input" type="text" class="form-control input-sm" value="">
+							<div id="imprint-editor-wrapper">
+								<textarea name="imprint-editor" rows="0" cols="0" class="form-control"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div id="imprint-preview-button">
+							<button id="imprint-preview-cancel" class="btn btn-default i18n"
+									i18n="jp.imprintEditor.button.cancel" i18n-def="Abbrechen" type="button"></button>
+							<button id="imprint-preview-save" class="btn btn-primary i18n"
+									i18n="jp.imprintEditor.button.choose" i18n-def="Auswählen" type="button"></button>
+						</div>
+						<div id="imprint-editor-button" class="hidden">
+							<button id="imprint-editor-cancel" class="btn btn-default i18n"
+									i18n="jp.imprintEditor.button.cancel" i18n-def="Abbrechen" type="button"></button>
+							<button id="imprint-editor-save" class="btn btn-primary i18n"
+									i18n="jp.imprintEditor.button.save" i18n-def="Speichern" type="button"></button>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="modal-backdrop fade in"></div>
 		</div>
-
-
-		<div id="warnEmptyName" aria-hidden="false"
-			aria-labelledby="mySmallModalLabel" role="dialog"
-			class="modal fade in" style="display: block; padding-right: 15px;">
-			<div class="modal-dialog modal-sm">
+		<div class="modal fade" id="imprint-alert-delete" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true"
+			 data-keyboard="false">
+			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h2 id="mySmallModalLabel" class="modal-title">
-							<i class="fa fa-exclamation-triangle"></i> Kein Titel
-						</h2>
+						<h4 id="imprint-alert-delete-title" class="modal-title"></h4>
 					</div>
-					<div class="modal-body">...</div>
+					<div class="modal-body">
+						<div class="alert alert-warning lightbox-warning">
+							<h4><label class="i18n" i18n="jp.imprintEditor.alert.warning" i18n-def="Achtung!"></label></h4>
+							<p id="imprint-alert-delete-text"></p>
+						</div>
+					</div>
 					<div class="modal-footer">
-						<button id="warnEmptyNameOKButton" class="btn btn-primary"
-							type="button">OK</button>
+						<button type="button" class="btn btn-default i18n" data-dismiss="modal"
+								i18n="jp.imprintEditor.button.cancel" i18n-def="Abbrechen"></button>
+						<button type="button" id="imprint-alert-delete-btn" class="btn btn-danger i18n"
+								i18n="jp.imprintEditor.button.delete" i18n-def="Löschen"></button>
 					</div>
 				</div>
-				<!-- /.modal-content -->
 			</div>
-			<!-- /.modal-dialog -->
 		</div>
 	</div>
+</div>
 </body>
 </html>

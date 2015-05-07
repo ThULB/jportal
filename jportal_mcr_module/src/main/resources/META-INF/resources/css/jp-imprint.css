@@ -1,0 +1,99 @@
+#imprint-preview{
+    max-height: 480px;
+    overflow: auto;
+}
+
+#imprint-preview-edit{
+    position: absolute;
+    right: 5px;
+    top: 0;
+    cursor: pointer;
+    color: rgba(51,51,51,.2);
+}
+
+#imprint-preview-edit:hover{
+    color: rgba(51,51,51,1);
+}
+
+.imprint-list-link{
+    cursor: pointer;
+    padding: 10px 15px;
+}
+
+.list-group-item{
+    padding: 0;
+}
+
+.imprint-list-input{
+    width: calc(100% - 30px);
+    margin: 4px 15px;
+}
+
+
+#imprintSelBox{
+    overflow: auto;
+    height: 310px;
+}
+
+.current-imprint {
+    position: absolute;
+    top: 6px;
+    right: 5px;
+}
+
+.active {
+    z-index: 2;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+#imprint-no-imprint {
+    text-align: center;
+    font-weight: bold;
+    color: #9E9E9E;
+}
+
+#imprint-no-link {
+    text-align: center;
+    font-weight: bold;
+    color: #9E9E9E;
+}
+
+#imprint-modal .modal-content {
+    height: 550px;
+}
+
+#imprint-modal .modal-body {
+    height: 405px;
+}
+
+#imprint-editor-error {
+    float: right;
+    display: inline-block;
+    width: 500px;
+    text-align: right;
+    padding-top: 7px;
+}
+
+.alert-danger-text {
+    color: #a94442;
+}
+
+.modal-header {
+    display: inline-block;
+    width: 100%;
+}
+
+.modal-title {
+    display: inline;
+}
+
+#imprint-editor-wrapper.imprint-alert > div {
+    border-color: #a94442;
+}
+
+#imprint-alert-delete {
+    z-index: 1070;
+}
+
