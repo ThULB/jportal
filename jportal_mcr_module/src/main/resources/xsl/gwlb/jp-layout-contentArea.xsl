@@ -123,9 +123,11 @@
         </xsl:if>
 
         <!--Print Article-->
-        <xsl:call-template name="jp.toc.printArticles">
-          <xsl:with-param name="parentID" select="./@ID" />
-        </xsl:call-template>
+        <xsl:if test="($currentType = 'jpvolume') and not($rubric = '')">
+          <xsl:call-template name="jp.toc.printArticles">
+            <xsl:with-param name="parentID" select="./@ID" />
+          </xsl:call-template>
+        </xsl:if>
       </div>
     </div>
   </xsl:template>

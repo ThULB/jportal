@@ -341,6 +341,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	float: left;
 	list-style: none outside none;
 	overflow: hidden;
+	padding-left: 0;
 }
 
 .jp-layout-metadataList li span {
@@ -516,7 +517,7 @@ p.jp-layout-metadata-list {
 
 #globalHeader a {
 	/*font-weight: bold;*/
-	font-size: 10px;
+	font-size: 12px;
 }
 
 #logo {
