@@ -51,8 +51,7 @@
             <label xml:lang="en" text="Signature" />
         </category>
         <category ID="ppn">
-            <label xml:lang="de" text="Gemeinsamer Bibliotheksverbund – PPN" />
-            <label xml:lang="en" text="Common Library Network – PPN" />
+            <label xml:lang="de" text="Gemeinsamer Bibliotheksverbund PPN" />
         </category>
         <category ID="bvb">
             <label xml:lang="de" text="Bibliotheksverbund Bayern" />
