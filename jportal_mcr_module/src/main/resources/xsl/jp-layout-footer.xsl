@@ -54,22 +54,16 @@
 
   <xsl:template match="participant" mode="footer">
     <xsl:variable name="participant" select="document(concat('mcrobject:', @xlink:href))/mycoreobject" />
-    <xsl:variable name="derivateID" select="$participant/structure/derobjects/derobject/@xlink:href" />
-    <xsl:variable name="role" select="$participant/structure/derobjects/derobject/@xlink:role" />
-
-    <xsl:if test="$role = 'http://mycore.de/urmel/derivate/context/partner'">
-      <xsl:variable name="derivate" select="document(concat('mcrobject:', $derivateID))/mycorederivate" />
-      <xsl:variable name="file" select="$derivate/derivate/internals/internal/@maindoc" />
-      <xsl:variable name="src" select="concat($WebApplicationBaseURL, 'servlets/MCRFileNodeServlet/', $derivateID, '/', mcrxml:encodeURIPath($file))" />
+    <xsl:if test="$participant/metadata/logo/url[@type='logoPlain']">
       <li>
         <xsl:choose>
           <xsl:when test="$participant/metadata/urls/url">
             <a href="{$participant/metadata/urls/url/@xlink:href}">
-              <img src="{$src}" alt="{@xlink:title}" class="logo" />
+              <img src="{$participant/metadata/logo/url[@type='logoPlain']}" alt="{@xlink:title}" class="logo" />
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <img src="{$src}" alt="{@xlink:title}" class="logo" />
+            <img src="{$participant/metadata/logo/url[@type='logoPlain']}" alt="{@xlink:title}" class="logo" />
           </xsl:otherwise>
         </xsl:choose>
       </li>
