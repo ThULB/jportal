@@ -69,9 +69,11 @@ allprojects {
     }
 
     dependencies {
+        testCompile 'org.jmockit:jmockit:1.+'
+        testCompile 'com.github.tomakehurst:wiremock:1.+'
         testCompile 'junit:junit:4.+'
-        testCompile "log4j:log4j:1.2.17"
-        testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.+'
+        testCompile 'log4j:log4j:1.2.17'
+        testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
     }
 }
 
@@ -304,7 +306,7 @@ project(':jportal_webapp') {
                             agentOp = agentOp + "," + path
                         }
                     }
-                    jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
+//                    jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
                 } else if(farmName.equals('WebTests')) {
                     // Gretty don't load static files from META-INF in jar files, so this is a workaround
                     webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
