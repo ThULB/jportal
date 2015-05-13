@@ -1,61 +1,140 @@
 package fsu.jportal.mets.test;
 
-import org.jdom2.*;
-import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import java.io.IOException;
+import fsu.jportal.mets.LLZMetsImporter;
+import mockit.*;
+import mockit.integration.junit4.JMockit;
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mycore.common.MCRSystemUserInformation;
+import org.mycore.datamodel.metadata.*;
+
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.jar.Attributes;
 
 /**
  * Created by chi on 02.04.15.
  */
+@RunWith(JMockit.class)
 public class LLZMetsImporterTest {
+    @Mocked MCRSystemUserInformation sysInfo;
+
+    @Injectable MCRObjectID derivID;
+
+    @Injectable MCRObjectID objID;
+
+    @Injectable MCRObjectID ownerID;
+
     @Test
-    public void handleDerivateLink() {
-//        LLZMetsImporter metsImporter = new LLZMetsImporter();
-        InputStream metsIS = getClass().getResourceAsStream("/mets/mets.xml");
-        ArrayList<Namespace> NS_LIST = new ArrayList<>();
+    @Ignore
+    public void testLLZImport() throws Exception {
+        new Expectations() {{
+            sysInfo.getUserID();
+            result = "root";
+            objID.getTypeId();
+            result = "jpvolume";
+        }};
 
-        NS_LIST.add(Namespace.getNamespace("mets", "http://www.loc.gov/METS/"));
-        NS_LIST.add(Namespace.getNamespace("mods", "http://www.loc.gov/mods/v3"));
-        NS_LIST.add(Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink"));
+        new Expectations() {
+            MCRObjectID nextID;
 
-//        mets:fptr FILEID="FID-THULB_129846422_1801_1802_LLZ_001_18010701_001-INDEXALTO"
-        XPathExpression<Attribute> expression  = XPathFactory.instance().compile(
-                "mets:structMap[@TYPE='PHYSICAL']/mets:div[@TYPE='physSequence']/mets:div[mets:fptr/@FILEID='FID-THULB_129846422_1801_1802_LLZ_001_18010701_001-INDEXALTO']/mets:fptr[contains(@FILEID,'-OCRMASTER')]/@FILEID", Filters.attribute(), null, NS_LIST);
-        Map<String, Object> vars = new HashMap<String, Object>();
-        vars.put("id", null);
-        XPathExpression<Attribute> FILE_EXPRESSION = XPathFactory.instance().compile(
-                "mets:fileSec/mets:fileGrp/mets:fileGrp[@ID='OCRMasterFiles']/mets:file[@ID=$id]/mets:FLocat/@xlink:href",
-                Filters.attribute(), vars, NS_LIST);
+            {
+                MCRObjectID.getNextFreeId("jportal_jpvolume");
+                result = nextID;
+            }
+        };
 
-        SAXBuilder saxBuilder = new SAXBuilder();
-        try {
-            Document metsDoc = saxBuilder.build(metsIS);
-            Element rootElement = metsDoc.getRootElement();
-            Attribute element = expression.evaluateFirst(rootElement);
-            String ocrId = element.getValue();
-            System.out.println("Elem: " + ocrId);
-            FILE_EXPRESSION.setVariable("id", ocrId);
-            Attribute hrefAttr = FILE_EXPRESSION.evaluateFirst(rootElement);
-            System.out.println("File: " + hrefAttr.getValue());
-//            for (Element child : metsDoc.getRootElement().getChildren()) {
-//                System.out.println("Elem: " + child.getName());
+        new MockUp<MCRMetaDefault>() {
+            @Mock
+            void $clinit() {
+            }
+        };
+
+        new MockUp<MCRBase>() {
+            @Mock
+            void $clinit() {
+            }
+        };
+
+//        new MockUp<MCRObjectID>() {
+//            MCRObjectID objID;
+//
+//            @Mock
+//            void $clinit() {
 //            }
-            ;
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//
+//            @Mock
+//            void $init(final Invocation inv) {
+//
+//            }
+//
+//            @Mock
+//            public MCRObjectID getInstance(Invocation invocation, String id) {
+//                System.out.println("get ID: " + id);
+//                return invocation.getInvokedInstance();
+//            }
+//
+//            @Mock
+//            public String getTypeId() {
+//                System.out.println("getTypeID");
+//                return "foo";
+//            }
+//
+//            @Mock
+//            public synchronized MCRObjectID getNextFreeId(String base_id) {
+//                return nextID;
+//            }
+//        };
+
+        new MockUp<MCRDerivate>() {
+            @Mock
+            MCRObjectID getOwnerID() {
+                return ownerID;
+            }
+        };
+
+        new MockUp<MCRObject>() {
+            @Mock
+            void $init() {
+            }
+
+            @Mock
+            public MCRObjectID getId() {
+                System.out.println("getID");
+                return objID;
+            }
+        };
+
+        new MockUp<MCRMetadataManager>() {
+            @Mock
+            void $clinit() {
+
+            }
+
+            @Mock
+            public MCRDerivate retrieveMCRDerivate(MCRObjectID id) {
+                System.out.println("retrieveMCRDerivate");
+                return new MCRDerivate();
+            }
+
+            @Mock
+            public MCRObject retrieveMCRObject(MCRObjectID id) {
+                return new MCRObject();
+            }
+
+            @Mock
+            public void update(final MCRObject mcrObject) {
+
+            }
+        };
+
+        LLZMetsImporter metsImporter = new LLZMetsImporter();
+        InputStream xmlStream = getClass().getResourceAsStream("/mets/mets.xml");
+        Document metsXML = new SAXBuilder().build(xmlStream);
+        metsImporter.importMets(metsXML, derivID);
     }
 }
 
