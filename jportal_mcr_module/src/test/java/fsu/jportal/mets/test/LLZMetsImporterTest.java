@@ -11,39 +11,32 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mycore.common.MCRSystemUserInformation;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.*;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by chi on 02.04.15.
  */
 @RunWith(JMockit.class)
 public class LLZMetsImporterTest {
-    @Mocked MCRSystemUserInformation sysInfo;
-
-    @Injectable MCRObjectID derivID;
-
-    @Injectable MCRObjectID objID;
-
-    @Injectable MCRObjectID ownerID;
 
     @Test
     @Ignore
-    public void testLLZImport() throws Exception {
+    public void testLLZImport(@Mocked final MCRObjectID derivID, @Mocked final MCRObjectID ownerID,
+        @Mocked final MCRObjectID objID, @Mocked final MCRSystemUserInformation sysInfo) throws Exception {
+
         new Expectations() {{
             sysInfo.getUserID();
             result = "root";
-            objID.getTypeId();
-            result = "jpvolume";
+            objID.getTypeId(); result ="jpvolume";
         }};
 
-        new Expectations() {
-            MCRObjectID nextID;
-
-            {
-                MCRObjectID.getNextFreeId("jportal_jpvolume");
-                result = nextID;
+        new MockUp<MCRMetaElement>() {
+            @Mock
+            void $clinit() {
             }
         };
 
@@ -59,52 +52,27 @@ public class LLZMetsImporterTest {
             }
         };
 
-//        new MockUp<MCRObjectID>() {
-//            MCRObjectID objID;
-//
-//            @Mock
-//            void $clinit() {
-//            }
-//
-//            @Mock
-//            void $init(final Invocation inv) {
-//
-//            }
-//
-//            @Mock
-//            public MCRObjectID getInstance(Invocation invocation, String id) {
-//                System.out.println("get ID: " + id);
-//                return invocation.getInvokedInstance();
-//            }
-//
-//            @Mock
-//            public String getTypeId() {
-//                System.out.println("getTypeID");
-//                return "foo";
-//            }
-//
-//            @Mock
-//            public synchronized MCRObjectID getNextFreeId(String base_id) {
-//                return nextID;
-//            }
-//        };
-
-        new MockUp<MCRDerivate>() {
+        new MockUp<MCRObject>() {
             @Mock
-            MCRObjectID getOwnerID() {
-                return ownerID;
+            void $init(Invocation inv) {
+            }
+
+            @Mock
+            public MCRObjectID getId(Invocation inv) {
+                System.out.println("obj getID");
+                return objID;
             }
         };
 
-        new MockUp<MCRObject>() {
+        new MockUp<MCRDerivate>() {
             @Mock
             void $init() {
+
             }
 
             @Mock
-            public MCRObjectID getId() {
-                System.out.println("getID");
-                return objID;
+            public MCRObjectID getOwnerID() {
+                return ownerID;
             }
         };
 
@@ -122,6 +90,7 @@ public class LLZMetsImporterTest {
 
             @Mock
             public MCRObject retrieveMCRObject(MCRObjectID id) {
+                System.out.println("retrieveMCRObject");
                 return new MCRObject();
             }
 
@@ -134,7 +103,26 @@ public class LLZMetsImporterTest {
         LLZMetsImporter metsImporter = new LLZMetsImporter();
         InputStream xmlStream = getClass().getResourceAsStream("/mets/mets.xml");
         Document metsXML = new SAXBuilder().build(xmlStream);
-        metsImporter.importMets(metsXML, derivID);
+        metsImporter.importMets(metsXML, MCRObjectID.getInstance("derivID"));
+    }
+
+    @Test
+    public void testMCRObjID(@Mocked final MCRObjectID ownerID, @Mocked final MCRObjectID objID) throws Exception {
+        new Expectations() {{
+            MCRObjectID.getInstance("ownerID");
+            result = ownerID;
+            MCRObjectID.getInstance("objID");
+            result = objID;
+            objID.getTypeId();
+            result = "obj";
+        }};
+
+        MCRObjectID foo = MCRObjectID.getInstance("ownerID");
+        MCRObjectID obj = MCRObjectID.getInstance("objID");
+        assertNotNull(obj);
+        String objType = obj.getTypeId();
+        assertEquals("obj", objType);
+        assertFalse("obj".equals(foo.getTypeId()));
     }
 }
 
