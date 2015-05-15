@@ -92,6 +92,8 @@ public class LLZMetsImporter {
      */
     private List<String> errorList;
 
+    private String lastDmdID;
+
     /**
      * Imports the dmd section of the given mets document.
      *
@@ -133,20 +135,7 @@ public class LLZMetsImporter {
             } else if (type.equals("volumeparts")) {
                 volume.addChild(buildVolume(div, "Volume Parts"));
             } else if (type.equals("rezension")) {
-                JPArticle article = buildArticle(div);
-                if (article != null) {
-                    lastArticle = article;
-                } else if (lastArticle != null) {
-                    try {
-                        article = lastArticle.clone();
-                    } catch (Exception exc) {
-                        throw new ConvertException("Unable to clone last article", exc);
-                    }
-                } else {
-                    throw new ConvertException("Cannot create article cause of missing DMDID. ID="
-                            + div.getAttributeValue("ID"));
-                }
-                volume.addChild(article);
+                volume.addChild(buildArticle(div));
             } else if (type.equals("tp") || type.equals("preface") || type.equals("toc")) {
                 JPArticle article = new JPArticle();
                 String title = type.equals("tp") ? "Titelblatt" : type.equals("preface") ? "Vorwort" : "Register";
@@ -182,9 +171,16 @@ public class LLZMetsImporter {
 
     private JPArticle buildArticle(Element logicalDiv) throws ConvertException {
         String dmdId = LLZMetsUtils.getDmDId(logicalDiv);
-        if (dmdId == null) {
-            return null;
+
+        if (dmdId != null) {
+            lastDmdID = dmdId;
+        } else if(lastDmdID != null){
+            dmdId = lastDmdID;
+        } else {
+            throw new ConvertException("Cannot create article cause of missing DMDID. ID="
+                    + logicalDiv.getAttributeValue("ID"));
         }
+
         MODS_EXPRESSION.setVariable("id", dmdId);
         Element mods = MODS_EXPRESSION.evaluateFirst(mets.getRootElement());
         if (mods == null) {
