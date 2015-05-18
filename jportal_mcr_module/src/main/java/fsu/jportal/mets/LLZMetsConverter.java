@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
@@ -35,10 +36,12 @@ import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
 
 /**
  * Converts the llz output format from uibk to the mycore mets format.
- * 
+ *
  * @author Matthias Eichner
  */
 public class LLZMetsConverter {
+
+    private String lastBibLabel;
 
     public Mets convert(Document llzDocument) throws ConvertException {
         try {
@@ -56,7 +59,7 @@ public class LLZMetsConverter {
 
     private void handleFileSection(Element uibk, Mets mcr) throws URISyntaxException {
         FileGrp masterGroup = handleFileGroup(uibk, "MASTER",
-            "mets:fileSec//mets:fileGrp[@ID='OCRMasterFiles']/mets:file", "image/tiff", new TiffHrefStrategy());
+                "mets:fileSec//mets:fileGrp[@ID='OCRMasterFiles']/mets:file", "image/tiff", new TiffHrefStrategy());
         FileGrp altoGroup = handleFileGroup(uibk, "ALTO",
                 "mets:fileSec//mets:fileGrp[@ID='Index_ALTO_Files']/mets:file", "text/xml", new AltoHrefStrategy());
         mcr.getFileSec().addFileGrp(masterGroup);
@@ -64,10 +67,10 @@ public class LLZMetsConverter {
     }
 
     private FileGrp handleFileGroup(Element llzElement, String fileGroup, String xpath, String mimeType,
-        FileHrefStrategy hrefStrategy) throws URISyntaxException {
+            FileHrefStrategy hrefStrategy) throws URISyntaxException {
         FileGrp group = new FileGrp(fileGroup);
-        XPathExpression<Element> xpathExp = XPathFactory.instance().compile(xpath, Filters.element(), null,
-            IMetsElement.METS);
+        XPathExpression<Element> xpathExp = XPathFactory.instance()
+                .compile(xpath, Filters.element(), null, IMetsElement.METS);
         List<Element> files = xpathExp.evaluate(llzElement);
         for (Element fileElement : files) {
             String id = fileElement.getAttributeValue("ID");
@@ -85,9 +88,11 @@ public class LLZMetsConverter {
         PhysicalDiv physicalDiv = new PhysicalDiv();
         structMap.setDivContainer(physicalDiv);
 
-        XPathExpression<Element> xpathExp = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='PHYSICAL']//mets:div[mets:fptr]", Filters.element(), null,
-            IMetsElement.METS);
+        setID(physicalDiv, llzElement);
+
+        XPathExpression<Element> xpathExp = XPathFactory.instance()
+                .compile("mets:structMap[@TYPE='PHYSICAL']//mets:div[mets:fptr]", Filters.element(), null,
+                        IMetsElement.METS);
         List<Element> divs = new ArrayList<Element>(xpathExp.evaluate(llzElement));
         Collections.sort(divs, new Comparator<Element>() {
             @Override
@@ -107,21 +112,41 @@ public class LLZMetsConverter {
         }
     }
 
+    private void setID(PhysicalDiv physicalDiv, Element llzElement) {
+        XPathExpression<Attribute> physMapExp = XPathFactory.instance()
+                .compile("mets:structMap[@TYPE='PHYSICAL']/mets:div[@TYPE='physSequence']/@id", Filters.attribute(),
+                        null, IMetsElement.METS);
+
+        Attribute idAttr = physMapExp.evaluateFirst(llzElement);
+        String id = null;
+        if (idAttr != null) {
+            id = idAttr.getValue();
+        }
+
+        if (id == null || id.equals("")) {
+            id = "physSequence_1";
+
+        }
+
+        physicalDiv.setId(id);
+    }
+
     private void handleLogicalStructure(Element llzElement, Mets mets) {
         LogicalStructMap structMap = (LogicalStructMap) mets.getStructMap(LogicalStructMap.TYPE);
-        XPathExpression<Element> xpathExp = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null, IMetsElement.METS);
+        XPathExpression<Element> xpathExp = XPathFactory.instance()
+                .compile("mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null,
+                        IMetsElement.METS);
         Element volumeDiv = xpathExp.evaluateFirst(llzElement);
 
-//        LogicalDiv logDivContainer = new LogicalDiv(logDivContainerElem.getAttributeValue("ID"),
-//                logDivContainerElem.getAttributeValue("TYPE"), logDivContainerElem.getAttributeValue("LABEL"),
-//                Integer.valueOf(logDivContainerElem.getAttributeValue("ORDER")),
-//                logDivContainerElem.getAttributeValue("ADMID"), logDivContainerElem.getAttributeValue("DMDID"));
+        //        LogicalDiv logDivContainer = new LogicalDiv(logDivContainerElem.getAttributeValue("ID"),
+        //                logDivContainerElem.getAttributeValue("TYPE"), logDivContainerElem.getAttributeValue("LABEL"),
+        //                Integer.valueOf(logDivContainerElem.getAttributeValue("ORDER")),
+        //                logDivContainerElem.getAttributeValue("ADMID"), logDivContainerElem.getAttributeValue("DMDID"));
 
         LogicalDiv volume = new LogicalDiv(volumeDiv.getAttributeValue("ID"), "volume",
-            volumeDiv.getAttributeValue("LABEL"));
+                volumeDiv.getAttributeValue("LABEL"));
         String order = volumeDiv.getAttributeValue("ORDER");
-        if(order != null){
+        if (order != null) {
             volume.setOrder(Integer.valueOf(order));
         }
 
@@ -165,15 +190,21 @@ public class LLZMetsConverter {
         String bibLabel = LLZMetsUtils.getBibLabel(recensionDiv);
         if (bibLabel != null) {
             recension.setLabel(bibLabel);
+            this.lastBibLabel = bibLabel;
         }
         if (recension.getLabel() == null) {
-            recension.setLabel("unknown " + recension.getType());
+            if (lastBibLabel == null) {
+                recension.setLabel("unknown " + recension.getType());
+            } else {
+                recension.setLabel(lastBibLabel);
+            }
         }
     }
 
     private void handleLogicalFilePointer(Element divElement, AbstractLogicalDiv div) {
-        XPathExpression<Element> areaExp = XPathFactory.instance().compile(
-            "mets:div/mets:fptr/mets:area[contains(@FILEID, 'INDEXALTO')]", Filters.element(), null, IMetsElement.METS);
+        XPathExpression<Element> areaExp = XPathFactory.instance()
+                .compile("mets:div/mets:fptr/mets:area[contains(@FILEID, 'INDEXALTO')]", Filters.element(), null,
+                        IMetsElement.METS);
         List<Element> areas = areaExp.evaluate(divElement);
         String lastFileID = null, lastContentID = null;
         Fptr fptr = new Fptr();
