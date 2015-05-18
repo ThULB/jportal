@@ -7,6 +7,8 @@ import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import fsu.jportal.frontend.util.DerivateLinkUtil;
 
+import java.io.IOException;
+
 /**
  * This event handler tries to delete all corresponding derivate links
  * when a derivate is deleted. It is assumed that solr could deliver
@@ -24,6 +26,8 @@ public class DeleteDerivateHandler extends MCREventHandlerBase {
             DerivateLinkUtil.deleteDerivateLinks(der);
         } catch (SolrServerException sse) {
             LOGGER.error("unable to delete all derivate links");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

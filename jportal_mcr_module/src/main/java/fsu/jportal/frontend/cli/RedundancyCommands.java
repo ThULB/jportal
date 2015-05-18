@@ -4,6 +4,7 @@ import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -73,8 +74,10 @@ public class RedundancyCommands{
         } catch (SolrServerException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        
+
         return null;
     }
 
@@ -110,7 +113,7 @@ public class RedundancyCommands{
     
     /**
      * Replaces all links which are found in the source mcrobject xml-tree.
-     * @param source The source Id as String.
+     * @param sourceId The source Id as String.
      * @param oldLink The link which to replaced.
      * @param newLink The new link.
      */

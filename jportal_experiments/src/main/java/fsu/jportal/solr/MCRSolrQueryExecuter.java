@@ -4,13 +4,15 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import java.io.IOException;
+
 public class MCRSolrQueryExecuter extends MCRSolrQueryExecuterBase {
 
     public MCRSolrQueryExecuter(MCRSolrQueryAction action) {
         super(action);
     }
 
-    public void execute() throws SolrServerException {
+    public void execute() throws SolrServerException, IOException {
         SolrClient solrServer = getClient();
         boolean execute = true;
         long numFound = Long.MAX_VALUE;

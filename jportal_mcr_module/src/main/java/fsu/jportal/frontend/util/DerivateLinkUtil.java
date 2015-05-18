@@ -1,5 +1,6 @@
 package fsu.jportal.frontend.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -150,7 +151,7 @@ public abstract class DerivateLinkUtil {
      * @param der 
      * @throws SolrServerException
      */
-    public static void deleteDerivateLinks(MCRDerivate der) throws SolrServerException {
+    public static void deleteDerivateLinks(MCRDerivate der) throws SolrServerException, IOException {
         MCRObjectID derivateId = der.getId();
         List<MCRObjectID> idList = getLinks(derivateId + "*");
         for (MCRObjectID id : idList) {
@@ -173,11 +174,11 @@ public abstract class DerivateLinkUtil {
         }
     }
     
-    public static void deleteFileLink(MCRPath pathOfImg) throws SolrServerException {
+    public static void deleteFileLink(MCRPath pathOfImg) throws SolrServerException, IOException {
         deleteFileLink(pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
     }
     
-    public static void deleteFileLink(String pathOfImg) throws SolrServerException {
+    public static void deleteFileLink(String pathOfImg) throws SolrServerException, IOException {
         List<MCRObjectID> idList = getLinks(pathOfImg);
         for (MCRObjectID id : idList) {
             try {
@@ -189,11 +190,11 @@ public abstract class DerivateLinkUtil {
         }
     }
     
-    public static List<MCRObjectID> getLinks(MCRPath pathOfImg) throws SolrServerException {
+    public static List<MCRObjectID> getLinks(MCRPath pathOfImg) throws SolrServerException, IOException {
         return getLinks(pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
     }
         
-    public static List<MCRObjectID> getLinks(String pathOfImg) throws SolrServerException {
+    public static List<MCRObjectID> getLinks(String pathOfImg) throws SolrServerException, IOException {
         SolrClient solrServer = MCRSolrClientFactory.getSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();
         List<MCRObjectID> idList = new ArrayList<MCRObjectID>();

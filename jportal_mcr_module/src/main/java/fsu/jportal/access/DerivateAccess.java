@@ -1,5 +1,6 @@
 package fsu.jportal.access;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import org.apache.solr.client.solrj.SolrServerException;
@@ -38,6 +39,8 @@ public class DerivateAccess {
                 
             } catch (SolrServerException e) {
                 // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

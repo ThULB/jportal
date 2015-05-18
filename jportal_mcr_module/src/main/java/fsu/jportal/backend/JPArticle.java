@@ -1,5 +1,6 @@
 package fsu.jportal.backend;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -141,7 +142,7 @@ public class JPArticle implements JPComponent, Cloneable {
      * @param heading
      * @throws SolrServerException
      */
-    public void addHeading(String heading) throws SolrServerException {
+    public void addHeading(String heading) throws SolrServerException, IOException {
         HttpSolrClient client = MCRSolrClassificationUtil.getCore().getClient();
         SolrDocument doc = MCRSolrSearchUtils.first(client, "+classification:jportal_class_rubric_llz +label.de:\""
             + heading + "\"");

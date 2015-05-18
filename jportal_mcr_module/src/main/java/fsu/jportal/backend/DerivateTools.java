@@ -175,6 +175,8 @@ public class DerivateTools {
                 DerivateLinkUtil.deleteFileLinks(idList, sourceNode);
             } catch (SolrServerException e) {
                 LOGGER.error("unable to get or set all file links");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             if(sourcePath.equals(maindoc)){
                 Derivate targetDerivate = new Derivate(target.getOwner());

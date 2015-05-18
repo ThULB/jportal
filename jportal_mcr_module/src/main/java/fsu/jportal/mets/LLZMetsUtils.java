@@ -171,7 +171,7 @@ public abstract class LLZMetsUtils {
      * @throws ConnectException when no connection to the sru interface could be established (in this case you
      * can assume that the person does not exist in the system)
      */
-    public static MCRObjectID getOrCreatePerson(Element name) throws SolrServerException, ConnectException {
+    public static MCRObjectID getOrCreatePerson(Element name) throws SolrServerException, IOException {
         String authorityURI = name.getAttributeValue("authorityURI");
         if (!"http://d-nb.info/gnd/".equals(authorityURI)) {
             return null;

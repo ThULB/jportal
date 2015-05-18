@@ -1,5 +1,6 @@
 package fsu.jportal.util;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,7 +41,7 @@ public class GndUtil {
      * @return mycore object with the given id
      * @throws SolrServerException if a solr error occur
      */
-    public static SolrDocument getMCRObject(String gndId) throws SolrServerException {
+    public static SolrDocument getMCRObject(String gndId) throws SolrServerException, IOException {
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         ModifiableSolrParams p = new ModifiableSolrParams();
         p.set("q", "id.gnd:" + gndId);
@@ -61,7 +62,7 @@ public class GndUtil {
      * @return mcr id or null
      * @throws SolrServerException if a solr error occur
      */
-    public static String getMCRId(String gndId) throws SolrServerException {
+    public static String getMCRId(String gndId) throws SolrServerException, IOException {
         SolrDocument doc = getMCRObject(gndId);
         return doc == null ? null : (String) doc.getFieldValue("id");
     }
@@ -73,15 +74,15 @@ public class GndUtil {
      * @return true if an mycore object exists, otherwise false
      * @throws SolrServerException if a solr error occur
      */
-    public static boolean exists(String gndId) throws SolrServerException {
+    public static boolean exists(String gndId) throws SolrServerException, IOException {
         return getMCRId(gndId) != null;
     }
 
     /**
      * Opens a url connection to the gbv sru interface and tries to get the pica record
      * with the given gnd id. You can convert this pica record to a mycore object with
-     * {@link GndUtil#convertPicaRecord}.
-     * 
+     * {@link GndUtil#toMCRObjectDocument(PicaRecord)}.
+     *
      * @param gndId gnd identifier
      * @return a <code>PicaRecord</code> instance or null when there is no such record
      * @throws ConnectException is thrown when cannot connect to gbv sru interface
