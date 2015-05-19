@@ -103,7 +103,7 @@ public class GndUtil {
      * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      * @return new mycore object
      */
-    public static MCRObject toMCRObject(PicaRecord picaRecord) {
+    public static MCRObject toMCRObject(PicaRecord picaRecord) throws IOException {
         return new MCRObject(toMCRObjectDocument(picaRecord));
     }
 
@@ -114,7 +114,7 @@ public class GndUtil {
      * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      * @return jdom2 document
      */
-    public static Document toMCRObjectDocument(PicaRecord picaRecord) {
+    public static Document toMCRObjectDocument(PicaRecord picaRecord) throws IOException {
         String objectType = picaRecord.getValue("002@", "0");
         if (isPerson(objectType)) {
             return new JPPersonProducer().procudeRawMCRObject(picaRecord);
