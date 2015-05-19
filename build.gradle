@@ -69,9 +69,9 @@ allprojects {
     }
 
     dependencies {
+        testCompile 'junit:junit:4.+'
         testCompile 'org.jmockit:jmockit:1.+'
         testCompile 'com.github.tomakehurst:wiremock:1.+'
-        testCompile 'junit:junit:4.+'
         testCompile 'log4j:log4j:1.2.17'
         testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
     }
