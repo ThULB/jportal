@@ -1,14 +1,7 @@
 package fsu.jportal.mets.test;
 
-import static org.junit.Assert.*;
-
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPVolume;
 import fsu.jportal.mets.ConvertException;
-import fsu.jportal.mets.LLZMetsImporter;
 import fsu.jportal.mets.LLZMetsUtils;
-//import mockit.*;
-//import mockit.integration.junit4.JMockit;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jdom2.*;
@@ -16,15 +9,7 @@ import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
-import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRSystemUserInformation;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.*;
 import org.mycore.mets.model.IMetsElement;
 
 import java.io.InputStream;
@@ -32,6 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+//import mockit.*;
+//import mockit.integration.junit4.JMockit;
 
 /**
  * Created by chi on 02.04.15.
@@ -155,8 +143,6 @@ public class LLZMetsImporterTest {
     @Test
 //    @Ignore
     public void testLLZImport() throws Exception {
-
-        MCRObjectID foo = MCRObjectID.getInstance("foo");
 
         BasicConfigurator.configure();
 
