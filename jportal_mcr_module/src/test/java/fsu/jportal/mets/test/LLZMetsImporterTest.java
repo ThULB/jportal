@@ -7,8 +7,8 @@ import fsu.jportal.backend.JPVolume;
 import fsu.jportal.mets.ConvertException;
 import fsu.jportal.mets.LLZMetsImporter;
 import fsu.jportal.mets.LLZMetsUtils;
-import mockit.*;
-import mockit.integration.junit4.JMockit;
+//import mockit.*;
+//import mockit.integration.junit4.JMockit;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jdom2.*;
@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * Created by chi on 02.04.15.
  */
-@RunWith(JMockit.class)
+//@RunWith(JMockit.class)
 public class LLZMetsImporterTest {
 
     public static class LLZMetsParser{
@@ -155,6 +155,9 @@ public class LLZMetsImporterTest {
     @Test
 //    @Ignore
     public void testLLZImport() throws Exception {
+
+        MCRObjectID foo = MCRObjectID.getInstance("foo");
+
         BasicConfigurator.configure();
 
         InputStream xmlStream = getClass().getResourceAsStream("/mets/mets.xml");
