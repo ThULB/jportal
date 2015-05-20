@@ -116,7 +116,7 @@ public class MoveObjResource {
             parentTypeJson.add(new JsonPrimitive(parentType));
         }
         
-        String baseURL = MCRServlet.getBaseURL();
+        String baseURL = MCRFrontendUtil.getBaseURL();
         confObj.addProperty("sort", sort);
         confObj.addProperty("parentField", parentField);
         confObj.add("parentTypes", parentTypeJson);
