@@ -1,8 +1,9 @@
 var plainLogoIn = "input[name='/mycoreobject/metadata/logo/url']";
 var logoPlusText = "input[name='/mycoreobject/metadata/logo/url[2]']";
-var logoAdressStart = "http://wrackdm17.thulb.uni-jena.de/logos/";
+var logoURLBase = "";
 
 $(function() {
+	loadLogoBaseURL();
 	checkIfEdit();
 	
 	var thumbnailId = null;
@@ -10,13 +11,27 @@ $(function() {
 	$("#thumbLogoPlain").click(function() {
 		thumbnailId = "thumbLogoPlain";
 		showLogos();
-//		select("a[value='" + $(plainLogoIn).val() + "']");
+		setTimeout(function() {
+			select("a[value='" + $(plainLogoIn).val() + "']");
+		}, 100);
+		
+		setTimeout(function() {
+			var position = $("a[value='" + $(plainLogoIn).val() + "']").position().top;
+			$(".editor-logoSelect-container").scrollTop($(".editor-logoSelect-container").scrollTop() + position - 10);
+		}, 500);
 	});
 	
 	$("#thumbLogoText").click(function() {
 		thumbnailId = "thumbLogoText";
 		showLogos();
-//		select("a[value='" + $(logoPlusText).val() + "']");
+		setTimeout(function() {
+			select("a[value='" + $(logoPlusText).val() + "']");
+		}, 100);
+		
+		setTimeout(function() {
+			var position = $("a[value='" + $(logoPlusText).val() + "']").position().top;
+			$(".editor-logoSelect-container").scrollTop($(".editor-logoSelect-container").scrollTop() + position - 10);
+		}, 500);
 	});
   
   $("#personSelect-send").click(function() {
@@ -95,7 +110,6 @@ function checkIfEdit() {
 };
 
 function loadList(list){
-//	alert(list);
 	$.ajax({
 		url: jp.baseURL + "rsc/logoImporter/getList/" + list,
 		type: "GET",
@@ -115,7 +129,7 @@ function buildList(data, subfolder) {
 	$(list).each(function() {
 		var href = $(this).attr("href");
 		if(href.contains(".svg")) {
-			var logoAdress = logoAdressStart + subfolder + href;
+			var logoAdress = logoURLBase + subfolder + href;
 			var inputBase = '<a class="list-group-item thumbnail text-center" onclick="select(this)" value="' + logoAdress + '" ><h5>' + href + '</h5></a>';
 			$("#personSelect-modal-body > .editor-logoSelect-container").append(inputBase);
 			loadPic("a[value='" + logoAdress + "']", logoAdress);
@@ -148,4 +162,17 @@ function loadPic(element, targeturl) {
 
 function loadHelper(element) {
 	loadList($(element).attr("value"));
+};
+
+function loadLogoBaseURL() {
+	$.ajax({
+		url: jp.baseURL + "rsc/logoImporter/getLogoURLBase",
+		type: "GET",
+		success: function(data) {
+					logoURLBase = data + "/";
+				},
+		error: function(error) {
+					alert(error);
+				}
+	});
 };

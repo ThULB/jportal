@@ -40,34 +40,10 @@ public class GetLogos {
 		}
 		return Response.serverError().build();
 	}
-
-	private String getLogoURL() {
+	
+	@GET
+	@Path("getLogoURLBase")
+	public String getLogoURL() {
 		return MCRConfiguration.instance().getString("JP.Site.Logo.url", null);
 	}
-	
-	/*
-	 * TODO: return url 
-	 * 
-	 */
-//	@GET
-//  @Path("getLogoURL")
-//	public String getLogo(@QueryParam("url") String site) {
-//		URL url = null;
-//		String line = "";
-//		String logo = "";
-//		try {
-//			url = new URL(site);
-//			URLConnection connection = url.openConnection();
-//			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-//			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//			
-//			while ((line = in.readLine()) != null){
-//				logo += line;
-//			}
-//			logo = logo.substring(logo.indexOf("<svg"), logo.indexOf("</svg>")) + "</svg>";
-//		} catch (IOException e) {
-//			LOGGER.error("Could not load the URL: " + site + " ---> error: " + e.getMessage());
-//		}
-//		return logo;
-//	}
 }
