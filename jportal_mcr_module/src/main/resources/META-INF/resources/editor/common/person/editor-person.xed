@@ -98,7 +98,7 @@
 
       <xed:bind
         xpath="def.note[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain']">
-        <jp:template name="selectInput" xpath="@type" i18n="metaData.person.note"  option="true" validate="interdependentSelect">
+        <jp:template name="selectInput" xpath="@type" i18n="metaData.person.note"  option="true" noPleaseSelect="true" bottom='littleSpace'>
           <option i18n="jp.editor.person.visible" value="visible" />
           <option i18n="jp.editor.person.hidden" value="hidden" />
         </jp:template>
