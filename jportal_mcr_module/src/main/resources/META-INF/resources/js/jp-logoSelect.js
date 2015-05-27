@@ -1,10 +1,9 @@
 var plainLogoIn = "input[name='/mycoreobject/metadata/logo/url']";
 var logoPlusText = "input[name='/mycoreobject/metadata/logo/url[2]']";
 var logoURLBase = "";
-
 $(function() {
-	loadLogoBaseURL();
 	checkIfEdit();
+	getBaseURL();
 	
 	var thumbnailId = null;
 	
@@ -16,9 +15,10 @@ $(function() {
 		}, 100);
 		
 		setTimeout(function() {
-			var position = $("a[value='" + $(plainLogoIn).val() + "']").position().top;
-			$(".editor-logoSelect-container").scrollTop($(".editor-logoSelect-container").scrollTop() + position - 10);
-		}, 500);
+			var logo = $("a[value='" + $(plainLogoIn).val() + "']");
+			var container = $(".editor-logoSelect-container");
+			$(".editor-logoSelect-container").scrollTop($(container).scrollTop() + $(logo).position().top - $(container).height() / 2 + $(logo).height() / 2);
+		}, 600);
 	});
 	
 	$("#thumbLogoText").click(function() {
@@ -29,9 +29,10 @@ $(function() {
 		}, 100);
 		
 		setTimeout(function() {
-			var position = $("a[value='" + $(logoPlusText).val() + "']").position().top;
-			$(".editor-logoSelect-container").scrollTop($(".editor-logoSelect-container").scrollTop() + position - 10);
-		}, 500);
+			var logo = $("a[value='" + $(logoPlusText).val() + "']");
+			var container = $(".editor-logoSelect-container");
+			$(".editor-logoSelect-container").scrollTop($(container).scrollTop() + $(logo).position().top - $(container).height() / 2 + $(logo).height() / 2);
+		}, 600);
 	});
   
   $("#personSelect-send").click(function() {
@@ -129,7 +130,7 @@ function buildList(data, subfolder) {
 	$(list).each(function() {
 		var href = $(this).attr("href");
 		if(href.contains(".svg")) {
-			var logoAdress = logoURLBase + subfolder + href;
+			var logoAdress = logoURLBase + "/" + subfolder + href;
 			var inputBase = '<a class="list-group-item thumbnail text-center" onclick="select(this)" value="' + logoAdress + '" ><h5>' + href + '</h5></a>';
 			$("#personSelect-modal-body > .editor-logoSelect-container").append(inputBase);
 			loadPic("a[value='" + logoAdress + "']", logoAdress);
@@ -164,12 +165,12 @@ function loadHelper(element) {
 	loadList($(element).attr("value"));
 };
 
-function loadLogoBaseURL() {
+function getBaseURL() {
 	$.ajax({
 		url: jp.baseURL + "rsc/logoImporter/getLogoURLBase",
 		type: "GET",
 		success: function(data) {
-					logoURLBase = data + "/";
+					logoURLBase = data;
 				},
 		error: function(error) {
 					alert(error);

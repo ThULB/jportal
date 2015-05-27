@@ -31,10 +31,10 @@ public class GetLogos {
 			URL url = new URL(urlString);
 			URLConnection connection = url.openConnection();
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-			InputStreamReader in2 = new InputStreamReader(connection.getInputStream());
+			InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 			String contentType = connection.getContentType();
 			
-			return Response.ok(in2, contentType).build();
+			return Response.ok(reader, contentType).build();
 		} catch (IOException e) {
 			LOGGER.error("Could not load the URL: " + urlString + " ---> error: " + e.getMessage());
 		}

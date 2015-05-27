@@ -318,5 +318,5 @@ label.editorText {
 
 #thumbLogoPlain > svg, #thumbLogoText > svg, .editor-logoSelect-container > svg {
 	margin: 0 auto 2.1em;
+	height: 80%;
 }
-
