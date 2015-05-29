@@ -83,7 +83,6 @@ function showLogos() {
 function initBody() {
 	var rawDiv = "<div class='raw editor-logoSelect-container'></div>";
 	$("#personSelect-modal-body").append(rawDiv);
-	$("#personSelect-modal-title").text("Logo Auswahl");
 	$("#personSelect-cancel-button").text("Abbrechen");
 	$("#personSelect-send").text("Auswählen");
 };
@@ -124,6 +123,7 @@ function loadList(list){
 };
 
 function buildList(data, subfolder) {
+	$("#personSelect-modal-title").text("Logo Auswahl aus Ordner: /logos/" + subfolder);
 	$("#personSelect-modal-body > .editor-logoSelect-container").empty();
 	$(".modal-header > a").remove();
 	var list = $(data).find("a");
