@@ -82,5 +82,6 @@
         xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']"
         i18n="editormask.labels.LdoubletOf" maxlength="128" />
     </jp:section>
+    <jp:template name="modal"/>
   </xed:template>
 </xed:template>

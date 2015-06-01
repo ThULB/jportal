@@ -77,6 +77,11 @@
 					<xsl:attribute name="class">col-md-9</xsl:attribute>
 					<xsl:attribute name="style">padding: 0px</xsl:attribute>
 				</xsl:if>
+				<xsl:if test="@myClass">
+					<xsl:attribute name="class">
+						<xsl:value-of select="@myClass" />
+					</xsl:attribute>
+				</xsl:if>
 				<xed:bind xpath="{@xpath}">
 					<xsl:apply-templates select="jp:template[@name='textInput']" />
 					<xsl:if test="@name!='textInputSm' and @name!='date_select'">
@@ -325,22 +330,17 @@
 			
 		<!-- 2 buttons for selection of person or institution _ subselect -->
 		<div class="form-group">
-			<button type="submit" xed:target="subselect"
-				xed:href="{concat('solr/subselect?XSL.subselect.type=person&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=', @value)}"
-				class="btn btn-default jp-personSelect-person" tabindex="1">
+			<button type="button" class="btn btn-default jp-personSelect-person" tabindex="1">
 				<xed:output i18n="jp.editor.person.select" />
 			</button>
-			<button type="submit" xed:target="subselect"
-				xed:href="{concat('solr/subselect?XSL.subselect.type=jpinst&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=', @value)}"
-				class="btn btn-default jp-personSelect-inst" tabindex="1">
+			<button type="button" class="btn btn-default jp-personSelect-inst" tabindex="1">
 				<xed:output i18n="jp.editor.inst.select" />
 			</button>
 		</div>
 		
-		<xsl:apply-templates select="." mode="modal"/>
 	</xsl:template>
 	
-	<xsl:template match="jp:template" mode="modal">
+	<xsl:template match="jp:template[@name='modal']">
 		<div class="modal fade" id="personSelect-modal" tabindex="-1" role="dialog" aria-labelledby="personSelect-modal-title" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">

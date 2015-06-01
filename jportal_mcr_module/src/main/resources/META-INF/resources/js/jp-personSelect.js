@@ -1,118 +1,126 @@
-$(function () {
-	var personSelectSessionID = "";
-	var submit = "";
-    var type = "";
-    
-    $("#main").parent().on("click",".jp-personSelect-person", function(event) {
-		event.preventDefault();
-        type = "person";
-        $(this).addClass("personSelect-use");
-        setSubmit($(this));
-		getPersonSelect("","score+desc", 0, getModal);
-	});
+$(document).ready(function () {
+	$(".participant_subselect").each(function(){
+		var labelName = $(this).find(".jp-personSelect-name");
+		$(this).find(".jp-personSelect-person, .jp-personSelect-inst").each(function(){
+			var that = $(this);
+			that.click(function(){
+				var type = that.attr("class").indexOf("-inst") != -1 ? "jpinst" : "person";
+				var namebase = that.parent().prev().prev(".form-group").find(".form-control").attr("name");
+				namebase = namebase.substr(0, namebase.length - 6);
+				
+				var conn = connector(type, namebase);
+				initModal(conn, labelName);
+			})
+		})
+	})
 	
-    $("#main").parent().on("click",".jp-personSelect-inst", function(event) {
-		event.preventDefault();
-        type = "jpinst";
-        $(this).addClass("personSelect-use");
-        setSubmit($(this));
-		getPersonSelect("","score+desc", 0, getModal);
-	});
+	function connector(type, namebase){
+		var conn = {};
 
-    $("#main").parent().on("click", "#submitButton", function(event) {
-		event.preventDefault();
-		getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
-	});
+		conn.getPersonSelect = function(qry, sort, start, callback){
+  		$.ajax({
+  			url: jp.baseURL + "servlets/solr/subselect?qry=" + qry + "&sort=" + sort + "&XSL.subselect.type=" + type + "&start=" + start,
+  			type: "GET",
+  			dataType: "html",
+  			success: function(data) {
+  				callback(data);
+  			},
+  			error: function(error) {
+  				alert(error);
+  			}
+  		});
+  	}
+  	conn.sendPerson = function(href, title, callback){
+  		var submit = "_xed_submit_ajaxSubselect:" + namebase + ":";
+  		var session = $("input[name='_xed_session']").val();
+  		$.ajax({
+  			url: jp.baseURL + "servlets/XEditor?_xed_session=" + session + "&@xlink:href=" + href + "&@xlink:title=" + title + "&" + submit,
+  			type: "POST",
+  			dataType: "text",
+  			success: function(data) {
+  				callback(data);
+  			},
+  			error: function(error) {
+  				alert(error);
+  			}
+  		});
+  	}
+  	
+  	return conn;
+	}
 	
-    $("#main").parent().on("click", "#personSelect-send", function() {
-		var entry = $("#personSelect-select .list-group-item.active");
-		var title = $(entry).attr("data-submit-url").split("@xlink:title=")[1];
-		sendPerson(entry.attr("data-jp-mcrid"), title, personSelectSessionID);
-	});
-
-    $("#main").parent().on("change", "#personSelect-searchBar select", function() {
-		getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
-	});
-	
-    $("#main").parent().on("click", "#personSelect-select ul.pagination > li:not(.active)", function(event) {
-		event.preventDefault();
-		var link = $(this).find("a").attr("href").split("start=");
-		if (link.length == 2){
-			getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), link[1], changeModal);
+	function initModal(conn, labelName){
+		conn.getPersonSelect("","score+desc", 0, getModal);
+		
+		function getModal(bodyContent) {
+			var processedContent = preProcess(bodyContent);
+			$("#personSelect-modal-body").append(processedContent);
+	    $("#personSelect-cancel-button").html($("#personSelect-select > div > a#selectButton").next().html());
+			$("#personSelect-send").html($("#personSelect-select > div > a#selectButton").html());
+			$("#personSelect-modal-title").html($("#personSelect-select > div > h2").html());
+			
+			$("#personSelect-modal").on('hidden.bs.modal', function() {
+				$("#personSelect-send").attr("disabled", "");
+				$("#personSelect-modal-body").children().remove();
+			});
+			
+	    $("#personSelect-modal").modal("show");
 		}
-		else{
-			getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
+		
+		function changeModal(bodyContent) {
+			var processedContent = preProcess(bodyContent);
+			$("#personSelect-modal-body").html(processedContent);
 		}
-	});
-	
-    $("#main").parent().on("click", "#personSelect-select .list-group-item ", function() {
-		$("#personSelect-send").removeAttr("disabled");
-	});
-	
-    $("#main").parent().on("click", ".personSelect-cancel", function() {
-        $("#personSelect-modal").modal("hide");
-	});
+		
+		function preProcess(data) {
+			var html =  $("<div></div>");
+			html.append($("<div></div>").append(data).find("#searchBar").attr("id", "personSelect-searchBar"));
+			html.append($("<div></div>").append(data).find("#main").attr("id", "personSelect-select"));
+			$(html).find("#selectButton").parent().hide();
+			$(html).find("hr").remove();
+			$(html).find("select[name='sort']").attr("onChange", "");
+			return html;
+		}
 
-	function getPersonSelect(qry, sort, start, callback){
-		$.ajax({
-			url: jp.baseURL + "servlets/solr/subselect?qry=" + qry + "&sort=" + sort + "&XSL.subselect.type=" + type + "&start=" + start,
-			type: "GET",
-			dataType: "html",
-			success: function(data) {
-						callback(preProcess(data));
-					},
-			error: function(error) {
-						alert(error);
-					}
+		var parent = $("#personSelect-modal");
+		
+		parent.parent().on("click", "#submitButton", function(event) {
+  		event.preventDefault();
+  		conn.getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
+  	});
+  	
+		parent.unbind().on("click", "#personSelect-send", function() {
+  		var entry = $("#personSelect-select .list-group-item.active");
+  		var title = $(entry).attr("data-submit-url").split("@xlink:title=")[1];
+  		var href = entry.attr("data-jp-mcrid");
+  		labelName.html(title + " " + "<label>( " + href + " )</label>");
+  		$("#personSelect-modal").modal("hide");
+  		conn.sendPerson(href, title, function(data){
+				$("input[name='_xed_session']").val(data);
+  		});
+  	});
+  	
+		parent.on("change", "#personSelect-searchBar select", function() {
+			conn.getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
 		});
+  	
+		parent.on("click", "#personSelect-select ul.pagination > li:not(.active)", function(event) {
+			event.preventDefault();
+  		var link = $(this).find("a").attr("href").split("start=");
+  		if (link.length == 2){
+  			conn.getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), link[1], changeModal);
+  		}
+  		else{
+  			conn.getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
+  		}
+  	});
+  	
+		parent.on("click", "#personSelect-select .list-group-item ", function() {
+  		$("#personSelect-send").removeAttr("disabled");
+  	});
+  	
+		parent.on("click", ".personSelect-cancel", function() {
+  		$("#personSelect-modal").modal("hide");
+  	});
 	}
-	
-	function sendPerson(href, title, session){
-		$.ajax({
-			url: jp.baseURL + "servlets/XEditor?_xed_session=" + session + "&@xlink:href=" + href + "&@xlink:title=" + title + "&" + submit,
-			type: "POST",
-			dataType: "text",
-			success: function(data) {
-						$("input[name='_xed_session']").val(data);
-						$(".personSelect-use").parent().prev(".jp-personSelect-name").html(title + " " + "<label>( " + href + " )</label>");
-						$(this).removeClass("personSelect-use");
-						$("#personSelect-modal").modal("hide");
-					},
-			error: function(error) {
-						alert(error);
-					}
-		});
-	}
-
-	function getModal(bodyContent) {
-		$("#personSelect-modal-body").append(bodyContent);
-        $("#personSelect-cancel-button").html($("#personSelect-select > div > a#selectButton").next().html());
-		$("#personSelect-send").html($("#personSelect-select > div > a#selectButton").html());
-		$("#personSelect-modal-title").html($("#personSelect-select > div > h2").html());
-		$("#personSelect-modal").on('hidden.bs.modal', function() {
-			$("#personSelect-modal-body").html("");
-			$("#personSelect-send").attr("disabled", "");
-		});
-        $("#personSelect-modal").modal("show");
-	}
-	
-	function changeModal(bodyContent) {
-		$("#personSelect-modal-body").html(bodyContent);
-	}
-	
-	function preProcess(data) {
-		var html =  $("<div></div>");
-		html.append($("<div></div>").append(data).find("#searchBar").attr("id", "personSelect-searchBar"));
-		html.append($("<div></div>").append(data).find("#main").attr("id", "personSelect-select"));
-		$(html).find("#selectButton").parent().hide();
-		$(html).find("hr").remove();
-		$(html).find("select[name='sort']").attr("onChange", "");
-		return html;
-	}
-
-    function setSubmit(elm) {
-        var pos = $(elm).attr("name").indexOf(":");
-        submit = "_xed_submit_ajaxSubselect" + $(elm).attr("name").substring(pos);
-        personSelectSessionID = $("input[name='_xed_session']").val();
-    }
-  });
+});
