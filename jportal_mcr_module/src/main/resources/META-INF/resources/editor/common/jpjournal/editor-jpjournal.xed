@@ -119,6 +119,6 @@
 
       <jp:template name="selectInput" xpath="hidden_rubricsID[@class='MCRMetaLangText']/hidden_rubricID[@inherited='0'][@form='plain']" i18n="editormask.labels.rubricID" list="xClassifications:" />
     </jp:section>
-    
+    <jp:template name="modal"/>
   </xed:template>
 </xed:template>

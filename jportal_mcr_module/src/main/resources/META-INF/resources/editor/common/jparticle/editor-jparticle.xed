@@ -108,6 +108,7 @@
           </xed:bind>
         </xed:repeat>
       </xed:if>
+      <jp:template name="modal"/>
     </jp:section>
   </xed:template>
 </xed:template>

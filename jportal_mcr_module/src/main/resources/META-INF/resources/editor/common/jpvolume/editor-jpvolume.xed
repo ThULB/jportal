@@ -122,5 +122,6 @@
       <jp:template name="textInput" xpath="hidden_positions[@class='MCRMetaLangText']/hidden_position[@inherited='0'][@form='plain']"
         i18n="editormask.labels.volume.position" maxlength="10" />
     </jp:section>
+    <jp:template name="modal"/>
   </xed:template>
 </xed:template>
