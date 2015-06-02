@@ -178,7 +178,6 @@ public class AdminITCase extends BaseIntegrationTest {
 			TestUtils.ERROR_MESSAGE += e.getMessage();
 		}
 	  
-	  //acl test finished
 	  TestUtils.finishThis(DRIVER);
 	}
 	
@@ -228,9 +227,9 @@ public class AdminITCase extends BaseIntegrationTest {
 	}
 	
 	public void creatNewClassificationTry() throws Exception {
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 	  DRIVER.findElement(By.cssSelector("#dijit__TreeNode_0 > div:first-child > span:last-child")).click();
-	  Thread.sleep(600);
+	  Thread.sleep(1000);
 	  DRIVER.findElement(By.id("dijit_form_Button_12")).click();
 	  Thread.sleep(600);
 	  DRIVER.findElement(By.cssSelector(".dijitTreeNodeContainer > div:first-child > div")).click();
@@ -272,11 +271,11 @@ public class AdminITCase extends BaseIntegrationTest {
 	  DRIVER.findElement(By.id("validUntil")).sendKeys("2020-10-10");
 	  
 	  //owner select
-	  DRIVER.findElement(By.cssSelector(".panel-body > div:nth-last-child(2) .btn-primary")).click();
+	  DRIVER.findElement(By.id("ownerSelect")).click();
 	  DRIVER.findElement(By.linkText("administrator")).click();
 	  
-	  //role selectcd
-	  DRIVER.findElement(By.cssSelector(".panel-body > div:last-child .btn-primary")).click();
+	  //role select
+	  DRIVER.findElement(By.id("roleSelect")).click();
 	  DRIVER.findElement(By.linkText("The superuser role")).click();
 	  
 	  //save
@@ -335,7 +334,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	  assertEquals("didn't delete - content does not match", "Die Nutzerkennung wurde mitsamt allen Rollenzugehörigkeiten gelöscht.", DRIVER
 		.findElement(By.cssSelector(".user-details > .alert > p > strong")).getText());
 	  
-	  //user test finished
 	  TestUtils.finishThis(DRIVER);
 	}
 	
@@ -428,7 +426,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	
 	@Test
 	public void globalMsg() throws Exception {
-		//test global msg editor
 		TestUtils.home(DRIVER);
 		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
@@ -535,7 +532,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	  
 	  DRIVER.findElement(By.id("dijit_form_Button_1")).click();
 	  
-	  //Close the new window, if that window no more required
 	  DRIVER.close();
 
 		//Switch back to original browser (first window)
