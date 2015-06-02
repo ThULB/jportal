@@ -1,10 +1,9 @@
 package fsu.jportal.it.test;
 
 //import junit.framework.TestCase;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -140,6 +139,24 @@ public class CRUDITCase extends BaseIntegrationTest {
 			instSelectElement.findElement(By.xpath("option[@value='gnd']")).click();
 			DRIVER.findElement(By.name("/mycoreobject/metadata/identifiers/identifier")).sendKeys("test");
 			DRIVER.findElement(By.name("/mycoreobject/metadata/def.doubletOf/doubletOf")).sendKeys("test");
+			
+			DRIVER.findElement(By.id("thumbLogoPlain")).click();
+	    wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#personSelect-modal-body > div > a")));
+	    assertNotNull(DRIVER.findElement(By.cssSelector("#personSelect-modal-body > .editor-logoSelect-container")));
+	    assertNotNull(DRIVER.findElement(By.cssSelector("#personSelect-modal-body > div > a:first-child > svg")));
+	    assertNotNull(DRIVER.findElement(By.cssSelector("#personSelect-modal-body > div > a:first-child > h5")).getText());
+	    assertEquals("Logo Auswahl aus Ordner: /logos/", DRIVER.findElement(By.id("personSelect-modal-title")).getText());
+	    
+	    DRIVER.findElement(By.className("glyphicon-folder-open")).click();
+	    waitForLoad = By.xpath("//div[@id='personSelect-modal-body']/div/a[1]");
+	    wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+	    DRIVER.findElement(waitForLoad).click();
+	    DRIVER.findElement(By.id("personSelect-send")).click();
+	    
+	    By logoPic = By.cssSelector("#thumbLogoPlain > svg");
+	    wait.until(ExpectedConditions.presenceOfElementLocated(logoPic));
+	    assertNotNull(DRIVER.findElement(logoPic));
+	    
 			TestUtils.saveForm(DRIVER);
 		}
 
