@@ -1,179 +1,171 @@
-var plainLogoIn = "input[name='/mycoreobject/metadata/logo/url']";
-var logoPlusText = "input[name='/mycoreobject/metadata/logo/url[2]']";
-var logoURLBase = "";
 $(function() {
+	var logoURLBase = "";
 	checkIfEdit();
-	getBaseURL();
+	getBaseURL(function(url){
+		logoURLBase = url;
+	});
 	
-	var thumbnailId = null;
+	$("#thumbLogoPlain, #thumbLogoText").click(function() {
+		var thumbnailId = $(this).attr("id");
+		var logoIn = $(this).next().next("input");
+		initModal(logoIn, thumbnailId)
+	});
 	
-	$("#thumbLogoPlain").click(function() {
-		thumbnailId = "thumbLogoPlain";
+	function initModal(logoIn, thumbnailId) {
 		showLogos();
-		setTimeout(function() {
-			select("a[value='" + $(plainLogoIn).val() + "']");
-		}, 100);
+		selectLogo();
 		
-		setTimeout(function() {
-			var logo = $("a[value='" + $(plainLogoIn).val() + "']");
-			var container = $(".editor-logoSelect-container");
-			$(".editor-logoSelect-container").scrollTop($(container).scrollTop() + $(logo).position().top - $(container).height() / 2 + $(logo).height() / 2);
-		}, 600);
-	});
-	
-	$("#thumbLogoText").click(function() {
-		thumbnailId = "thumbLogoText";
-		showLogos();
-		setTimeout(function() {
-			select("a[value='" + $(logoPlusText).val() + "']");
-		}, 100);
+		function showLogos() {
+			initBody();
+			
+			var jumpTo = "";
+			
+			if($(logoIn).val() != ""){
+				jumpTo = $(logoIn).val().substring(41);
+				var pieces = jumpTo.split("/");
+				jumpTo = jumpTo.replace(pieces[pieces.length-1], "");
+			}
+			
+			loadElement(jumpTo, buildList);
+			$("#personSelect-modal").modal("show");
+		};
 		
-		setTimeout(function() {
-			var logo = $("a[value='" + $(logoPlusText).val() + "']");
-			var container = $(".editor-logoSelect-container");
-			$(".editor-logoSelect-container").scrollTop($(container).scrollTop() + $(logo).position().top - $(container).height() / 2 + $(logo).height() / 2);
-		}, 600);
-	});
-  
-  $("#personSelect-send").click(function() {
-  	$("#" + thumbnailId + " > svg").remove();
-  	var picAdress = $(".list-group-item.editor-logo-active").attr("value");
-  	if(thumbnailId == 'thumbLogoPlain') {
-  		$(plainLogoIn).val(picAdress);
-  		$("#delLogoPlain").show();
-  	} else {
-  		$(logoPlusText).val(picAdress);
-  		$("#delLogoText").show();
-  	}
-  	loadPic("#" + thumbnailId, picAdress);
-  	$("#" + thumbnailId + " > p").hide();
-  	$("#personSelect-modal").modal("hide");
-  });
-  
-  $(".personSelect-cancel").click(function() {
-  	$("#personSelect-modal").modal("hide");
-  });
-  
-	$("#personSelect-modal").on('hidden.bs.modal', function() {
-		$("#personSelect-send").attr("disabled", "");
-		$("#personSelect-modal-body > .editor-logoSelect-container").remove();
-	});
-	
-	$("#delLogoPlain").click(function() {
-		$("#thumbLogoPlain > svg").remove();
-		$(plainLogoIn).val("");
-		$("#thumbLogoPlain > p").show();
-		$("#delLogoPlain").hide();
-	});
-	
-	$("#delLogoText").click(function() {
-		$("#thumbLogoText > svg").remove();
-		$(logoPlusText).val("");
-		$("#thumbLogoText > p").show();
-		$("#delLogoText").hide();
-	});
-});
-
-function showLogos() {
-	initBody();
-	loadList("");
-  $("#personSelect-modal").modal("show");
-};
-
-function initBody() {
-	var rawDiv = "<div class='raw editor-logoSelect-container'></div>";
-	$("#personSelect-modal-body").append(rawDiv);
-	$("#personSelect-cancel-button").text("Abbrechen");
-	$("#personSelect-send").text("Auswählen");
-};
-
-function select(item) {
-	$(".list-group-item").removeClass("editor-logo-active");
-	$(item).addClass('editor-logo-active');
-	$("#personSelect-send").removeAttr("disabled");
-};
-
-function checkIfEdit() {
-	if($("input[name='/mycoreobject/metadata/logo/url']").val() != ""){
-		var picAdress = $(plainLogoIn).val();
-		loadPic("#thumbLogoPlain", picAdress);
-  	$("#thumbLogoPlain > p").hide();
-  	$("#delLogoPlain").show();
-	}
-	
-	if($("input[name='/mycoreobject/metadata/logo/url[2]']").val() != ""){
-		var picAdress = $(logoPlusText).val();
-		loadPic("#thumbLogoText", picAdress);
-  	$("#thumbLogoText > p").hide();
-  	$("#delLogoText").show();
-	}
-};
-
-function loadList(list){
-	$.ajax({
-		url: jp.baseURL + "rsc/logoImporter/getList/" + list,
-		type: "GET",
-		success: function(data) {
-					buildList(data, list);
-				},
-		error: function(error) {
-					alert(error);
-				}
-	});
-};
-
-function buildList(data, subfolder) {
-	$("#personSelect-modal-title").text("Logo Auswahl aus Ordner: /logos/" + subfolder);
-	$("#personSelect-modal-body > .editor-logoSelect-container").empty();
-	$(".modal-header > a").remove();
-	var list = $(data).find("a");
-	$(list).each(function() {
-		var href = $(this).attr("href");
-		if(href.contains(".svg")) {
-			var logoAdress = logoURLBase + "/" + subfolder + href;
-			var inputBase = '<a class="list-group-item thumbnail text-center" onclick="select(this)" value="' + logoAdress + '" ><h5>' + href + '</h5></a>';
-			$("#personSelect-modal-body > .editor-logoSelect-container").append(inputBase);
-			loadPic("a[value='" + logoAdress + "']", logoAdress);
-		} else {
-			if(href.charAt(href.length - 1) == "/" && href != "/") {
-				if(href == "/logos/") {
-					var inputBase = '<a class="list-group-item thumbnail glyphicon glyphicon-folder-open text-center" onclick="loadHelper(this)" value="" ><p>zurück</p></a>';
-					$(".modal-header").append(inputBase);
-				} else {
-					var inputBase = '<a class="list-group-item thumbnail glyphicon glyphicon-folder-open text-center" onclick="loadHelper(this)" value="' + href + '" ><p>' + href + '</p></a>';
-					$(".modal-header").append(inputBase);
-				}
+		function selectLogo() {
+			if($(logoIn).val() != ""){
+				setTimeout(function() {
+					select("a[value='" + $(logoIn).val() + "']");
+				}, 100);
+				
+				setTimeout(function() {
+					var logo = $("a[value='" + $(logoIn).val() + "']");
+					var container = $("div.editor-logoSelect-container");
+					$(".editor-logoSelect-container").scrollTop($(container).scrollTop() + $(logo).position().top - $(container).height() / 2 + $(logo).height() / 2);
+				}, 200);
 			}
 		}
+		
+		$("#personSelect-send").unbind().click(function() {
+			$("#" + thumbnailId + " > svg").remove();
+			var picAdress = $(".list-group-item.editor-logo-active").attr("value");
+			$(logoIn).val(picAdress);
+			$("#" + thumbnailId).next("span").show();
+			loadElement(encodeURIComponent(picAdress.substring(41)), function(data){
+				$("#" + thumbnailId).prepend($(data).find("svg"));
+  		});
+			$("#" + thumbnailId + " > p").hide();
+			$("#personSelect-modal").modal("hide");
+		});
+		
+		$(".personSelect-cancel").click(function() {
+			$("#personSelect-modal").modal("hide");
+		});
+		
+		$("#personSelect-modal").on('hidden.bs.modal', function() {
+			$("#personSelect-send").attr("disabled", "");
+			$("#personSelect-modal").unbind();
+			$("#personSelect-modal-body > .editor-logoSelect-container").remove();
+		});
+		
+		$("#personSelect-modal").on("click", ".modal-header > a.glyphicon-folder-open", function() {
+			$("#personSelect-send").attr("disabled", "");
+			loadElement($(this).attr("value"), buildList);
+		});
+		
+		$("#personSelect-modal").on("click", ".editor-logoSelect-container > a.list-group-item", function() {
+			select(this);
+		});
+		
+		function initBody() {
+			var rawDiv = "<div class='raw editor-logoSelect-container'></div>";
+			$("#personSelect-modal-body").append(rawDiv);
+			$("#personSelect-cancel-button").text("Abbrechen");
+			$("#personSelect-send").text("Auswählen");
+		};
+	}
+	
+	$("#delLogoPlain, #delLogoText").click(function() {
+		$(this).prev(".thumbnail").children().filter("svg").remove();
+		$(this).prev(".thumbnail").children().filter("p").show();
+		$(this).next("input").val("");
+		$(this).hide();
 	});
-};
+	
+	function checkIfEdit() {
+		var name = "input[name='/mycoreobject/metadata/logo/url']";
+		loadPic(name);
+		
+		name = "input[name='/mycoreobject/metadata/logo/url[2]']";
+		loadPic(name);
+	};
+	
+	function loadPic(input) {
+		if($(input).val() != ""){
+			picAdress = $(input).val();
+			loadElement(encodeURIComponent(picAdress.substring(41)), function(data){
+				$(input).prev().prev(".thumbnail").prepend($(data).find("svg"));
+			});
+			$(input).prev().prev(".thumbnail").children().filter("p").hide();
+			$(input).prev("span").show();
+		}
+	}
+	
+	function select(item) {
+		$(".list-group-item").removeClass("editor-logo-active");
+		$(item).addClass('editor-logo-active');
+		$("#personSelect-send").removeAttr("disabled");
+	};
 
-function loadPic(element, targeturl) {
-	$.ajax({
-		url: jp.baseURL + "rsc/logoImporter/getList/" + encodeURIComponent(targeturl.substring(41)),
-		type: "GET",
-		success: function(data) {
-					$(element).prepend($(data).find("svg"));
-				},
-		error: function(error) {
-					alert(error);
+	function buildList(data, subfolder) {
+		$("#personSelect-modal-title").text("Logo Auswahl aus Ordner: /logos/" + subfolder);
+		$("#personSelect-modal-body > .editor-logoSelect-container").empty();
+		$(".modal-header > a").remove();
+		var list = $(data).find("a");
+		$(list).each(function() {
+			var href = $(this).attr("href");
+			var logoAdress = logoURLBase + "/" + subfolder + href;
+			if(href.contains(".svg")) {
+				var inputBase = '<a class="list-group-item thumbnail text-center" value="' + logoAdress + '" ><h5>' + decodeURIComponent(href) + '</h5></a>';
+				$("#personSelect-modal-body > .editor-logoSelect-container").append(inputBase);
+				loadElement(encodeURIComponent(logoAdress.substring(41)), function(data){
+					$("a[value='" + logoAdress + "']").prepend($(data).find("svg"));
+	  		});
+			} else {
+				if(href.charAt(href.length - 1) == "/" && href != "/") {
+					if(href == "/logos/") {
+						var inputBase = '<a class="list-group-item thumbnail glyphicon glyphicon-folder-open text-center" value="" ><p>zurück</p></a>';
+						$(".modal-header").append(inputBase);
+					} else {
+						var inputBase = '<a class="list-group-item thumbnail glyphicon glyphicon-folder-open text-center" value="' + href + '" ><p>' + href + '</p></a>';
+						$(".modal-header").append(inputBase);
+					}
 				}
-	});
-};
+			}
+		});
+	};
+	
+	function loadElement(path, callback){
+		$.ajax({
+			url: jp.baseURL + "rsc/logoImporter/getList/" + path,
+			type: "GET",
+			success: function(data) {
+				callback(data, path);
+			},
+			error: function(error) {
+				alert(error);
+			}
+		});
+	};
 
-function loadHelper(element) {
-	loadList($(element).attr("value"));
-};
-
-function getBaseURL() {
-	$.ajax({
-		url: jp.baseURL + "rsc/logoImporter/getLogoURLBase",
-		type: "GET",
-		success: function(data) {
-					logoURLBase = data;
-				},
-		error: function(error) {
-					alert(error);
-				}
-	});
-};
+	function getBaseURL(callback) {
+		$.ajax({
+			url: jp.baseURL + "rsc/logoImporter/getLogoURLBase",
+			type: "GET",
+			success: function(data) {
+				callback(data);
+			},
+			error: function(error) {
+				alert(error);
+			}
+		});
+	};
+});
