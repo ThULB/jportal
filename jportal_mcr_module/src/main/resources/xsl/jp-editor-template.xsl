@@ -223,7 +223,7 @@
 					<h5><xsl:value-of select="i18n:translate('jp.editor.inst.sLogo')"></xsl:value-of></h5>
 				</a>
 				<span id="delLogoPlain" class="glyphicon glyphicon-remove" style="display:none"></span>
-				<input type="text" style="display:none"></input>
+				<input type="text" style="display:none" />
 			</div>
 		</xed:bind>
 		<xed:bind xpath="{@xpathInput2}">
@@ -233,7 +233,7 @@
 					<h5><xsl:value-of select="i18n:translate('jp.editor.inst.logoWText')"></xsl:value-of></h5>
 				</a>
 				<span id="delLogoText" class="glyphicon glyphicon-remove" style="display:none"></span>
-				<input type="text" style="display:none"></input>
+				<input type="text" style="display:none" />
 			</div>
 		</xed:bind>
 		<xsl:apply-templates select="." mode="modal"/>
@@ -310,22 +310,13 @@
 
 	<xsl:template match="jp:template[@type='subselect']" mode="subselect">
 		<div class="jp-personSelect-name">
-				<xed:if test="@xlink:title != ''">
-					<xed:bind xpath="{@xpath}">
-						<xed:output value="@xlink:title" />
-						<xed:output />
-					</xed:bind>
-				</xed:if>
-				<xed:if test="@xlink:href != ''">
-					<label>
-						(
-						<xed:bind xpath="{@xpath2}">
-							<xed:output value="@xlink:href" />
-							<xed:output />
-						</xed:bind>
-						)
-					</label>
-				</xed:if>
+			<div class="jp-name-display"></div>
+			<xed:bind xpath="{@xpath}">
+				<input type="text" style="display:none" />
+			</xed:bind>
+			<xed:bind xpath="{@xpath2}">
+				<input type="text" style="display:none" />
+			</xed:bind>
 		</div>
 			
 		<!-- 2 buttons for selection of person or institution _ subselect -->

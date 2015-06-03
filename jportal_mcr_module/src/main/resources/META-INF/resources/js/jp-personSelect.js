@@ -1,6 +1,13 @@
 $(document).ready(function () {
 	$(".participant_subselect").each(function(){
 		var labelName = $(this).find(".jp-personSelect-name");
+		
+		if(labelName.find("input").filter(":first").val() != "") {
+			var title = labelName.find("input").filter(":first").val();
+			var href = labelName.find("input").filter(":last").val();
+			labelName.find(".jp-name-display").html(title + " " + "<label>( " + href + " )</label>");
+		}
+		
 		$(this).find(".jp-personSelect-person, .jp-personSelect-inst").each(function(){
 			var that = $(this);
 			that.click(function(){
@@ -93,7 +100,9 @@ $(document).ready(function () {
   		var entry = $("#personSelect-select .list-group-item.active");
   		var title = $(entry).attr("data-submit-url").split("@xlink:title=")[1];
   		var href = entry.attr("data-jp-mcrid");
-  		labelName.html(title + " " + "<label>( " + href + " )</label>");
+  		labelName.find(".jp-name-display").html(title + " " + "<label>( " + href + " )</label>");
+  		labelName.find("input").filter(":first").val(title);
+  		labelName.find("input").filter(":last").val(href);
   		$("#personSelect-modal").modal("hide");
   		conn.sendPerson(href, title, function(data){
 				$("input[name='_xed_session']").val(data);
