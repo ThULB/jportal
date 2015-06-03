@@ -26,7 +26,7 @@ $(document).ready(function () {
 
 		conn.getPersonSelect = function(qry, sort, start, callback){
   		$.ajax({
-  			url: jp.baseURL + "servlets/solr/subselect?qry=" + qry + "&sort=" + sort + "&XSL.subselect.type=" + type + "&start=" + start,
+  			url: jp.baseURL + "servlets/solr/subselect?qry=" + qry + "&sort=" + sort + "&XSL.subselect.type=" + type + "&rows=6" + "&start=" + start,
   			type: "GET",
   			dataType: "html",
   			success: function(data) {
