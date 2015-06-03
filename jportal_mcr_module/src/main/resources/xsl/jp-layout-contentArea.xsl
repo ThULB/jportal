@@ -78,8 +78,30 @@
                   <xsl:attribute name="class">col-sm-8 col-sm-offset-2 jp-layout-metadataList</xsl:attribute>
                 </xsl:if>
                 <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
-                <xsl:apply-templates mode="metadataDisplay"
-                  select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" />
+
+								<xsl:variable name="elements">
+	                <xsl:choose>
+	                	<xsl:when test="$currentType = 'jpinst'">
+	                		names|alternatives|addresses|phones|urls|emails|notes|identifiers|logo|def.doubletOf
+	                	</xsl:when>
+	                	<xsl:when test="$currentType = 'person'">
+	                		def.heading|def.alternative|def.peerage|def.gender|def.contact|def.role|def.placeOfActivity|def.dateOfBirth|def.placeOfBirth|def.dateOfDeath|def.placeOfDeath|def.note|def.link|def.identifier|def.doubletOf
+	                	</xsl:when>
+	                	<xsl:when test="$currentType = 'jpjournal'">
+	                		maintitles|subtitles|participants|dates|traditions|identis|languages|rights|predeces|successors|ddcs|abstracts|notes|contentClassis1|contentClassis2|contentClassis3|contentClassis4|contentClassis5|contentClassis6|contentClassis7|maintitlesForSorting
+	                	</xsl:when>
+	                	<xsl:when test="$currentType = 'jpvolume'">
+	                		maintitles|subtitles|participants|dates|traditions|identis|collationNotes|volContentClassis1|volContentClassis2|volContentClassis3|volContentClassis4|volContentClassis5|volContentClassis6|abstracts|notes|people|publicationNotes|normedPubLocations|footNotes|bibEvidences|indexFields
+	                	</xsl:when>
+	                	<xsl:when test="$currentType = 'jparticle'">
+	                		maintitles|subtitles|participants|dates|refs|identis|sizes|keywords|abstracts|notes|types|rubrics|classispub|classispub2|classispub3|classispub4
+	                	</xsl:when>
+	                </xsl:choose>
+                </xsl:variable>
+														
+                <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" >
+                  <xsl:sort order="ascending" select="string-length(substring-before($elements, name()))" data-type="number" />
+                </xsl:apply-templates>
                 <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
                   <xsl:apply-templates mode="linkedArticles" select="." />
                   <xsl:apply-templates mode="linkedCalendar" select="." />
