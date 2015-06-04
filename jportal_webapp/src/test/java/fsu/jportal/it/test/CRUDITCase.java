@@ -1,9 +1,7 @@
 package fsu.jportal.it.test;
 
-//import junit.framework.TestCase;
 import static org.junit.Assert.*;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -191,38 +189,64 @@ public class CRUDITCase extends BaseIntegrationTest {
     }
 
 		private void creatJournalSet() {
-			// bibl. beschreibung
 			By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
 			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
 			DRIVER.findElement(waitForLoad).sendKeys("testJournal");
-			// main publisher
 			WebElement participantSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/participants/participant/@type"));
 			participantSelect.findElement(By.xpath("option[@value='mainPublisher']")).click();
 			
 			DRIVER.findElement(By.xpath("//button[@class='btn btn-default jp-personSelect-person']")).click();
-			
 			By subselect = By.xpath("//div[@id='resultList']/div/div/div/a");
 			wait.until(ExpectedConditions.elementToBeClickable(subselect));
 			DRIVER.findElement(subselect).click();
-			
 			DRIVER.findElement(By.id("personSelect-send")).click();
-			// from
+			
 			WebElement fromSelect = DRIVER.findElement(By.id("dateSelect"));
 			fromSelect.findElement(By.xpath("option[@value='published_from']")).click();
 			DRIVER.findElement(By.xpath("//div[@id='fromDateContainer']/input[@placeholder='Jahr']")).sendKeys("1795");
-			// until
 			fromSelect.findElement(By.xpath("//div[@id='untilDateContainer']/input[@placeholder='Jahr']")).sendKeys("1797");
-			// language
+			WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/traditions/tradition/@type"));
+			select.findElement(By.xpath("option[@value='otherLocation']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/traditions/tradition")).sendKeys("testJournal");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi/@type"));
+			select.findElement(By.xpath("option[@value='bvb']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/identis/identi")).sendKeys("testJournal");
 			WebElement langSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/languages/language/@categid"));
 			langSelect.findElement(By.xpath("option[@value='de']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/rights/right")).sendKeys("testJournal");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/predeces/predece/@xlink:title")).sendKeys("testJournal");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/predeces/predece/@xlink:href")).sendKeys("testJournal");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/successors/successor/@xlink:title")).sendKeys("testJournal");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/successors/successor/@xlink:href")).sendKeys("testJournal");
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/ddcs/ddc/@categid"));
+			select.findElement(By.xpath("option[@value='001']")).click();
+			DRIVER.findElement(By.name("/mycoreobject/metadata/abstracts/abstract")).sendKeys("testJournal");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/notes/note")).sendKeys("testJournal");
 			// journal type
-			WebElement journalTypeSelect = DRIVER.findElement(By
-			    .name("/mycoreobject/metadata/contentClassis1/contentClassi1/@categid"));
-			journalTypeSelect.findElement(By.xpath("option[@value='historical']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/contentClassis1/contentClassi1/@categid"));
+			select.findElement(By.xpath("option[@value='historical']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/contentClassis2/contentClassi2/@categid"));
+			select.findElement(By.xpath("option[@value='eventWeimarJena']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/contentClassis3/contentClassi3/@categid"));
+			select.findElement(By.xpath("option[@value='countryArchiveRudolstadt']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/contentClassis4/contentClassi4/@categid"));
+			select.findElement(By.xpath("option[@value='AVSL']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/contentClassis5/contentClassi5/@categid"));
+			select.findElement(By.xpath("option[@value='100-199']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/contentClassis6/contentClassi6/@categid"));
+			select.findElement(By.xpath("option[@value='a1']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/contentClassis7/contentClassi7/@categid"));
+			select.findElement(By.xpath("option[@value='empty']")).click();
+			
+			DRIVER.findElement(By.name("/mycoreobject/metadata/maintitlesForSorting/maintitleForSorting")).sendKeys("testJournal");
 			// template
-			WebElement templateSelect = DRIVER.findElement(By
-			    .name("/mycoreobject/metadata/hidden_templates/hidden_template"));
-			templateSelect.findElement(By.xpath("option[@value='template_DynamicLayoutTemplates']")).click();
+			select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_templates/hidden_template"));
+			select.findElement(By.xpath("option[@value='template_DynamicLayoutTemplates']")).click();
+			
+			DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_genhiddenfields1/hidden_genhiddenfield1")).sendKeys("testJournal");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_genhiddenfields2/hidden_genhiddenfield2")).sendKeys("testJournal");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_genhiddenfields3/hidden_genhiddenfield3")).sendKeys("testJournal");
+			DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext")).sendKeys("testJournal");
 
 			TestUtils.saveForm(DRIVER);
 		}
@@ -313,6 +337,112 @@ public class CRUDITCase extends BaseIntegrationTest {
 			TestUtils.saveForm(DRIVER);
 		}
 
+	@Test
+	public void articleVolumeSetting() throws Exception {
+		TestUtils.home(DRIVER);
+		TestUtils.login(DRIVER);
+		
+		TestUtils.clickCreatSelect(DRIVER, "Neue Zeitschrift");
+		journalSettings();
+		TestUtils.saveForm(DRIVER);
+		
+		try {
+			TestUtils.clickCreatSelect(DRIVER, "Neuer Band");
+			volumeSettings();
+			TestUtils.saveForm(DRIVER);
+		} catch (Exception e) {
+			TestUtils.ERROR_MESSAGE = e.getMessage();
+		}
+		
+		try {
+			TestUtils.clickCreatSelect(DRIVER, "Neuer Artikel");
+			articleSettings();
+			TestUtils.saveForm(DRIVER);
+		} catch (Exception e) {
+			TestUtils.ERROR_MESSAGE += e.getMessage();
+		}
+		
+		TestUtils.deletObj(DRIVER, "testJournal");
+		TestUtils.finishThis(DRIVER);
+	}
+
+	private void articleSettings() {
+		By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+		wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+		DRIVER.findElement(waitForLoad).sendKeys("testArticle");
+		
+		WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/types/type/@categid"));
+		select.findElement(By.xpath("option[@value='00002000']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/rubrics/rubric/@categid"));
+		select.findElement(By.xpath("option[@value='00003000']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/classispub/classipub/@categid"));
+		select.findElement(By.xpath("option[@value='author']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/classispub2/classipub2/@categid"));
+		select.findElement(By.xpath("option[@value='calender']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/classispub3/classipub3/@categid"));
+		select.findElement(By.xpath("option[@value='published']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/classispub4/classipub4/@categid"));
+		select.findElement(By.xpath("option[@value='siteDetails']")).click();
+	}
+
+	private void volumeSettings() {
+		By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+		wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+		DRIVER.findElement(waitForLoad).sendKeys("testVolume");
+		
+		WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/volContentClassis1/volContentClassi1/@categid"));
+		select.findElement(By.xpath("option[@value='land-thueringen']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/volContentClassis2/volContentClassi2/@categid"));
+		select.findElement(By.xpath("option[@value='00002000']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/volContentClassis3/volContentClassi3/@categid"));
+		select.findElement(By.xpath("option[@value='report']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/volContentClassis4/volContentClassi4/@categid"));
+		select.findElement(By.xpath("option[@value='article']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/volContentClassis5/volContentClassi5/@categid"));
+		select.findElement(By.xpath("option[@value='otherLocation']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/volContentClassis6/volContentClassi6/@categid"));
+		select.findElement(By.xpath("option[@value='internalNote']")).click();
+	}
+
+	private void journalSettings() {
+		By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+		wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+		DRIVER.findElement(waitForLoad).sendKeys("testJournal");
+		
+		WebElement select = DRIVER.findElement(By.name("/mycoreobject/metadata/languages/language/@categid"));
+		select.findElement(By.xpath("option[@value='de']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_templates/hidden_template"));
+		select.findElement(By.xpath("option[@value='template_DynamicLayoutTemplates']")).click();
+		
+		//volume settings
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classiVol1/hidden_classiVol1"));
+		select.findElement(By.xpath("option[@value='jportal_laws_territory']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classiVol2/hidden_classiVol2"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000048']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classiVol3/hidden_classiVol3"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000065']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classiVol4/hidden_classiVol4"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000052']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classiVol5/hidden_classiVol5"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000080']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classiVol6/hidden_classiVol6"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000060']")).click();
+		
+		//article settings
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_pubTypesID/hidden_pubTypeID"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000048']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classispub/hidden_classipub"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000007']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classispub2/hidden_classipub2"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000090']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classispub3/hidden_classipub3"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000009']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_classispub4/hidden_classipub4"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000082']")).click();
+		select = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_rubricsID/hidden_rubricID"));
+		select.findElement(By.xpath("option[@value='jportal_class_00000044']")).click();
+	}
+	
     @Test
     public void delete() throws Exception {
         // create
@@ -548,4 +678,74 @@ public class CRUDITCase extends BaseIntegrationTest {
 		  TestUtils.deletObj(DRIVER, "");
 		  TestUtils.finishThis(DRIVER);
     }
+    
+	@Test
+	public void multipleParticipants() throws Exception {
+	  TestUtils.home(DRIVER);
+	  TestUtils.login(DRIVER);
+	  TestUtils.createMinPerson(DRIVER, "FirstPerson");
+	  TestUtils.createMinPerson(DRIVER, "SecondPerson");
+	  TestUtils.creatMinInst(DRIVER, "FirstInst");
+	  
+	  try {
+	  	TestUtils.clickCreatSelect(DRIVER, "Neue Zeitschrift");
+	  	
+			By waitForLoad = By.name("/mycoreobject/metadata/maintitles/maintitle");
+			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
+			DRIVER.findElement(waitForLoad).sendKeys("testJournal");
+			WebElement langSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/languages/language/@categid"));
+			langSelect.findElement(By.xpath("option[@value='de']")).click();
+			WebElement templateSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/hidden_templates/hidden_template"));
+			templateSelect.findElement(By.xpath("option[@value='template_DynamicLayoutTemplates']")).click();
+			
+			DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[5]/div[3]/button[1]")).click();
+
+      By testButton = By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[3]/button[1]");
+      wait.until(ExpectedConditions.presenceOfElementLocated(testButton));
+      
+			//ersten und zweiten select auf Herausgeber
+			WebElement participantSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/participants/participant/@type"));
+			participantSelect.findElement(By.xpath("option[@value='mainPublisher']")).click();
+			
+			participantSelect = DRIVER.findElement(By.name("/mycoreobject/metadata/participants/participant[2]/@type"));
+			participantSelect.findElement(By.xpath("option[@value='mainPublisher']")).click();
+			
+			DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[3]/button[1]")).click();
+			By subselect = By.xpath("//div[@id='resultList']/div/div/div/a[2]");
+			wait.until(ExpectedConditions.elementToBeClickable(subselect));
+			DRIVER.findElement(subselect).click();
+			DRIVER.findElement(By.id("personSelect-send")).click();
+			
+			assertEquals("", DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[5]/div[2]/div[@class='jp-personSelect-name']/div")).getText());
+			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[2]/div")).getText().contains("SecondPerson"));
+			
+			DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[5]/div[2]/div[3]/button[1]")).click();
+			subselect = By.xpath("//div[@id='resultList']/div/div/div/a[1]");
+			wait.until(ExpectedConditions.elementToBeClickable(subselect));
+			DRIVER.findElement(subselect).click();
+			DRIVER.findElement(By.id("personSelect-send")).click();
+			
+			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[5]/div[2]/div[2]/div")).getText().contains("FirstPerson"));
+			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[2]/div")).getText().contains("SecondPerson"));
+			
+			DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[3]/button[2]")).click();
+			subselect = By.xpath("//div[@id='resultList']/div/div/div/a[1]");
+			wait.until(ExpectedConditions.elementToBeClickable(subselect));
+			DRIVER.findElement(subselect).click();
+			DRIVER.findElement(By.id("personSelect-send")).click();
+			
+			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[5]/div[2]/div[2]/div")).getText().contains("FirstPerson"));
+			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[2]/div")).getText().contains("FirstInst"));
+			
+			TestUtils.saveForm(DRIVER);
+	  } catch (Exception e) {
+	  	TestUtils.ERROR_MESSAGE = e.getMessage();
+	  }
+	  
+	  TestUtils.deletObj(DRIVER, "");
+  	TestUtils.deletObj(DRIVER, "FirstPerson");
+  	TestUtils.deletObj(DRIVER, "SecondPerson");
+  	TestUtils.deletObj(DRIVER, "FirstInst");
+	  TestUtils.finishThis(DRIVER);
+	}
 }
