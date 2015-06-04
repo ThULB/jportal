@@ -498,9 +498,8 @@ public class CRUDITCase extends BaseIntegrationTest {
 	    
 	    DRIVER.findElement(By.linkText("Datensatz importieren")).click();
 	    
-	    //wait for it to be loaded
 	    Thread.sleep(600);
-	    //check if ok
+	    
 	    assertThat(DRIVER.findElement(By.xpath("//div[@class='result']/p")).getText(), containsString("Datensatz erfolgreich importiert."));
 	    
 	    DRIVER.findElement(By.linkText("Link zum Objekt")).click();
@@ -748,4 +747,84 @@ public class CRUDITCase extends BaseIntegrationTest {
   	TestUtils.deletObj(DRIVER, "FirstInst");
 	  TestUtils.finishThis(DRIVER);
 	}
+	
+	@Test
+	public void impressumTest() throws Exception {
+	  TestUtils.home(DRIVER);
+	  TestUtils.login(DRIVER);
+	  TestUtils.creatMinJournal(DRIVER, "testJournal");
+		
+		partnerImpressum("Impressum");
+		
+		TestUtils.deletObj(DRIVER, "testJournal");
+		TestUtils.finishThis(DRIVER);
+	}
+	
+	@Test
+	public void partnerTest() throws Exception {
+	  TestUtils.home(DRIVER);
+	  TestUtils.login(DRIVER);
+	  TestUtils.creatMinJournal(DRIVER, "testJournal");
+		
+		partnerImpressum("Partner");
+		
+		TestUtils.deletObj(DRIVER, "testJournal");
+		TestUtils.finishThis(DRIVER);
+	}
+
+	private void partnerImpressum(String name) {
+		try {
+			TestUtils.clickCreatSelect(DRIVER, name + " auswählen");
+			
+			By waitForLoad = By.id("imprint-preview-title");
+			wait.until(ExpectedConditions.presenceOfElementLocated(waitForLoad));
+			assertEquals(name + " auswählen", DRIVER.findElement(waitForLoad).getText());
+			createEntry("test"+name, "teste"+name+"Text", name);
+			createEntry("testDelete", "testeDeleteText", name);
+			
+			DRIVER.findElement(By.id("imprint-delete-btn")).click();
+			
+			waitForLoad = By.id("imprint-alert-delete-btn");
+			wait.until(ExpectedConditions.presenceOfElementLocated(waitForLoad));
+			assertEquals("testDelete löschen?", DRIVER.findElement(By.id("imprint-alert-delete-title")).getText());
+			DRIVER.findElement(waitForLoad).click();
+			
+			assertTrue(DRIVER.findElements(By.xpath("//div[contains(text(), 'testDelete')]")).size() == 0);
+			
+			DRIVER.findElement(By.id("imprint-preview-save")).click();
+			
+			DRIVER.navigate().refresh();
+			
+			waitForLoad = By.linkText(name);
+			wait.until(ExpectedConditions.presenceOfElementLocated(waitForLoad));
+			DRIVER.findElement(waitForLoad).click();
+			assertEquals("teste"+name+"Text", DRIVER.findElement(By.xpath("//div[@id='main']/span/div")).getText());
+			
+		} catch (Exception e) {
+			TestUtils.ERROR_MESSAGE = e.getMessage();
+		}
+	}
+
+	private void createEntry(String name, String text, String containerName) {
+		By waitForLoad;
+		DRIVER.findElement(By.id("imprint-new-btn")).click();
+		
+		waitForLoad = By.id("imprint-editor-input");
+		wait.until(ExpectedConditions.presenceOfElementLocated(waitForLoad));
+		
+		assertEquals(containerName + " anlegen", DRIVER.findElement(By.id("imprint-new-title")).getText());
+		
+		DRIVER.findElement(waitForLoad).sendKeys(name);
+
+    DRIVER.switchTo().frame(DRIVER.findElement(By.className("cke_wysiwyg_frame")));
+    DRIVER.findElement(By.className("cke_editable")).sendKeys(text);
+    
+    DRIVER.switchTo().defaultContent();
+
+    DRIVER.findElement(By.id("imprint-editor-save")).click();
+    
+    assertEquals(name, DRIVER.findElement(By.cssSelector(".list-group-item.active")).getText());
+    assertEquals(text, DRIVER.findElement(By.id("imprint-preview")).getText());
+	}
+	
 }
