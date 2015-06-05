@@ -27,6 +27,7 @@ var ImprintEditor = function (objID, type) {
 			});
 
 			$("#imprintGUIMain").on("click", ".imprint-list-link", function () {
+				$("#imprint-preview-edit").removeClass("hidden");
 				selectImprint($(this).html());
 			});
 
@@ -254,8 +255,14 @@ var ImprintEditor = function (objID, type) {
 		$("#imprint-editor-title").addClass("hidden");
 		$("#imprint-editor-panel").addClass("hidden");
 		$("#imprint-editor-button").addClass("hidden");
+		$("#imprint-no-imprint").addClass("hidden");
+		$("#imprint-no-link").addClass("hidden");
 		if ($("#imprint-preview").html() == "<div />" || $("#imprint-preview").html() == "") {
-			$("#imprint-no-imprint").removeClass("hidden");
+			if($("#imprintSelBox").is(":empty")){
+				$("#imprint-no-imprint").removeClass("hidden");
+			} else {
+				$("#imprint-no-link").removeClass("hidden");
+			}
 		}
 	}
 
@@ -292,6 +299,9 @@ var ImprintEditor = function (objID, type) {
 		$("#imprintSelBox").html("");
 		$("#imprint-preview").html("");
 		$("#imprintGUIMain > .modal").modal("hide");
+		$("#imprint-preview-edit").addClass("hidden");
+		$("#imprint-no-link").addClass("hidden");
+		$("#imprint-no-imprint").addClass("hidden");
 	}
 
 	function saveEditor() {
@@ -346,6 +356,7 @@ var ImprintEditor = function (objID, type) {
 			$("#imprintSelBox").animate({
 				scrollTop: $('#imprintSelBox > .active').index() * $('#imprintSelBox > .active').outerHeight()
 			}, 1);
+			$("#imprint-preview-edit").removeClass("hidden");
 		}
 	}
 
