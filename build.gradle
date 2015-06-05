@@ -217,7 +217,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.akhikhl.gretty:gretty:+'
+        classpath 'org.akhikhl.gretty:gretty:1.2.3'
         classpath "org.hsqldb:hsqldb:2.3.2"
     }
 }
