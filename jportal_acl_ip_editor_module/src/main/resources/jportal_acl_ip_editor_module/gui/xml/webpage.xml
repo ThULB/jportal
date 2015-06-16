@@ -7,16 +7,16 @@
   </titleFromJournalID>
   <head>
     <top>
-      <link href="/rsc/ipAcl/gui/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+      <link href="../gui/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
     </top>
     <bottom>
-      <link href="/rsc/ipAcl/gui/css/webpage.css" rel="stylesheet" media="screen" />
-      <link href="/rsc/ipAcl/gui/css/print.css" rel="stylesheet" media="print" />
+      <link href="../gui/css/webpage.css" rel="stylesheet" media="screen" />
+      <link href="../gui/css/print.css" rel="stylesheet" media="print" />
     </bottom>
   </head>
   <body>
-    <script src="/rsc/ipAcl/gui/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/rsc/ipAcl/gui/js/webpage.js"></script>
+    <script src="../gui/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../gui/js/webpage.js"></script>
   </body>
   <section xml:lang="all" title="IP Editor">
     <noEditor>

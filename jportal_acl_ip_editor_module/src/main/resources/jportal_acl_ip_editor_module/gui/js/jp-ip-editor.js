@@ -189,7 +189,7 @@ var IPRuleEditor = function(objid){
 	//ajax list
 	function getIPs(){
 		$.ajax({
-			url: "/rsc/IPRule/"+objid,
+			url: jp.baseURL + "rsc/IPRule/"+objid,
 			type: "GET",
 			dataType: "text",
 //			data: {ruleId: ruleId},
@@ -205,7 +205,7 @@ var IPRuleEditor = function(objid){
 	//ajax add
 	function sendIP(ip){
 		$.ajax({
-			url: "/rsc/IPRule/"+objid,
+			url: jp.baseURL + "rsc/IPRule/"+objid,
 			type: "POST",
 			dataType: "text",
 			data: ip,
@@ -226,7 +226,7 @@ var IPRuleEditor = function(objid){
 	//ajax remove
 	function removeIP(ip, element){
 		$.ajax({
-			url: "/rsc/IPRule/" + objid,
+			url: jp.baseURL + "rsc/IPRule/" + objid,
 			type: "DELETE",
 			dataType: "text",
 			data: ip,
@@ -250,7 +250,7 @@ var IPRuleEditor = function(objid){
 	//ajax removeList
 	function removeIPList(ips){
 		$.ajax({
-			url: "/rsc/IPRule/"+objid,
+			url: jp.baseURL + "rsc/IPRule/"+objid,
 			type: "DELETE",
 			contentType: 'application/json',
 			dataType: "json",
@@ -271,7 +271,7 @@ var IPRuleEditor = function(objid){
 	//ajax edit
 	function editIP(newIp, oldIp){
 		$.ajax({
-			url: "/rsc/IPRule/"+objid,
+			url: jp.baseURL + "rsc/IPRule/"+objid,
 			type: "PUT",
 			contentType: 'application/json',
 			dataType: "json",

@@ -20,6 +20,7 @@ import org.jdom2.transform.JDOMResult;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
 import org.xml.sax.SAXException;
+import org.mycore.frontend.MCRFrontendUtil;
 
 import fsu.jportal.xml.XMLTools;
 
@@ -40,13 +41,14 @@ public class IPRuleGUIResource {
     @GET
     @Path("editor/{objID}")
     public Response start(@PathParam("objID") String objID) {
+    	  String baseURL = MCRFrontendUtil.getBaseURL();
         InputStream guiXML = getClass().getResourceAsStream("/jportal_acl_ip_editor_module/gui/xml/webpage.xml");
         InputStream guiXSL = getClass().getResourceAsStream("/jportal_acl_ip_editor_module/gui/xsl/webpage.xsl");
         
         JDOMResult result = new JDOMResult();
         Map<String, Object> params = new HashMap<>();
         params.put("journalID", objID);
-        params.put("url", "/rsc/IPRule/" + objID);
+        params.put("url", baseURL + "rsc/IPRule/" + objID);
         
         try {
             new XMLTools().transform(new StreamSource(guiXML), new StreamSource(guiXSL), params, result);
