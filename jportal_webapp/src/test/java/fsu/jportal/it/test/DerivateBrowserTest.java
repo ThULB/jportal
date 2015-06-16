@@ -98,6 +98,11 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
                 JS.executeScript("return ($('tr.browser-table-file > td.browser-table-file-name:contains(" + testImgSecName + "):visible').length == 0)"));
         assertTrue(testImgName + " filtered", (boolean)
                 JS.executeScript("return ($('tr.browser-table-file > td.browser-table-file-name:contains(" + testImgName + "):visible').length != 0)"));
+        try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
         DRIVER.findElement(By.id("btn-filter-table-input-remove")).click();
 
         //get URN
@@ -149,6 +154,11 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         //move file
         String moveName =  DRIVER.findElement(By.className("browser-table-file-name")).getText();
         BUILDER.moveToElement(DRIVER.findElement(By.className("btns"))).perform();
+        try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
         DRIVER.findElement(By.className("btn-check")).click();
         DRIVER.findElement(By.className("btn-move-all")).click();
         WAIT.until(ExpectedConditions.visibilityOfElementLocated(By.id("lightbox-multi-move-confirm")));
@@ -159,6 +169,11 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         DRIVER.findElement(By.className("derivate-browser-breadcrumb-entry")).click();
         assertTrue("moved file not found", (boolean) JS.executeScript("return ($('td.browser-table-file-name:contains(" + moveName + ")').length > 0)"));
 
+        try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
         //delete folder
         BUILDER.moveToElement(DRIVER.findElement(By.cssSelector("tr.browser-table-folder div.btns"))).build().perform();
         DRIVER.findElement(By.cssSelector("tr.browser-table-folder div.btns > span.btn-delete")).click();
@@ -203,6 +218,11 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
         WAIT.until(ExpectedConditions.textToBePresentInElementLocated(By.id("alert-area"), "Startdatei erfolgreich geändert."));
         assertEquals("wrong starfilename", "/" + newStartFileName, DRIVER.findElement(By.id("derivat-panel-startfile-label")).getText());
 
+        try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
         //go to large view over popover
         BUILDER.moveToElement(DRIVER.findElements(By.className("popover-file")).get(1)).perform();
         WAIT.until(ExpectedConditions.elementToBeClickable(By.className("popover-img")));

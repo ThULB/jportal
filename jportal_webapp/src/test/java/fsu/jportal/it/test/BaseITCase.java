@@ -1,7 +1,5 @@
 package fsu.jportal.it.test;
 
-//import junit.framework.TestCase;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -145,6 +143,7 @@ public class BaseITCase extends BaseIntegrationTest {
 				TestUtils.home(DRIVER);
 				
 				try {
+					Thread.sleep(500);
 					DRIVER.findElement(By.id("searchDropDownButton")).click();
 					DRIVER.findElement(By.linkText("Erweiterte Suche")).click();
 					
@@ -230,7 +229,7 @@ public class BaseITCase extends BaseIntegrationTest {
       	TestUtils.clickCreatSelect(DRIVER, "Versionsgeschichte");
       	
       	assertEquals("Versionsgeschichte - JPortal", DRIVER.getTitle());
-      	assertTrue("versionsinfo table should be displayed", DRIVER.findElement(By.xpath("//table[@class='table versioninfo']")).isDisplayed());
+      	assertTrue("versionsinfo table should be displayed", DRIVER.findElement(By.xpath("//table[@class='table table-hover table-condensed versioninfo']")).isDisplayed());
       	
       	DRIVER.findElement(By.linkText("Zurück...")).click();
       } catch (Exception e) {

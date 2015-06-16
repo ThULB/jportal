@@ -112,7 +112,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         TestUtils.finishThis(DRIVER);
     }
 
-		private void createInstSet() {
+		private void createInstSet() throws InterruptedException {
 			// fill form
 			By waitForLoad = By.name("/mycoreobject/metadata/names/name/fullname");
 			wait.until(ExpectedConditions.elementToBeClickable(waitForLoad));
@@ -139,7 +139,8 @@ public class CRUDITCase extends BaseIntegrationTest {
 			DRIVER.findElement(By.name("/mycoreobject/metadata/def.doubletOf/doubletOf")).sendKeys("test");
 			
 			DRIVER.findElement(By.id("thumbLogoPlain")).click();
-	    wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#personSelect-modal-body > div > a")));
+			Thread.sleep(500);
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#personSelect-modal-body > div > a")));
 	    assertNotNull(DRIVER.findElement(By.cssSelector("#personSelect-modal-body > .editor-logoSelect-container")));
 	    assertNotNull(DRIVER.findElement(By.cssSelector("#personSelect-modal-body > div > a:first-child > svg")));
 	    assertNotNull(DRIVER.findElement(By.cssSelector("#personSelect-modal-body > div > a:first-child > h5")).getText());
@@ -715,6 +716,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			DRIVER.findElement(subselect).click();
 			DRIVER.findElement(By.id("personSelect-send")).click();
 			
+			Thread.sleep(500);
 			assertEquals("", DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[5]/div[2]/div[@class='jp-personSelect-name']/div")).getText());
 			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[2]/div")).getText().contains("SecondPerson"));
 			
@@ -724,6 +726,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			DRIVER.findElement(subselect).click();
 			DRIVER.findElement(By.id("personSelect-send")).click();
 			
+			Thread.sleep(500);
 			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[5]/div[2]/div[2]/div")).getText().contains("FirstPerson"));
 			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[2]/div")).getText().contains("SecondPerson"));
 			
@@ -733,6 +736,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			DRIVER.findElement(subselect).click();
 			DRIVER.findElement(By.id("personSelect-send")).click();
 			
+			Thread.sleep(500);
 			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[5]/div[2]/div[2]/div")).getText().contains("FirstPerson"));
 			assertTrue(DRIVER.findElement(By.xpath("//div[@title='Formale Beschreibung']/div[6]/div[2]/div[2]/div")).getText().contains("FirstInst"));
 			
@@ -749,23 +753,13 @@ public class CRUDITCase extends BaseIntegrationTest {
 	}
 	
 	@Test
-	public void impressumTest() throws Exception {
+	public void impressum_partner_test() throws Exception {
 	  TestUtils.home(DRIVER);
 	  TestUtils.login(DRIVER);
 	  TestUtils.creatMinJournal(DRIVER, "testJournal");
 		
 		partnerImpressum("Impressum");
-		
-		TestUtils.deletObj(DRIVER, "testJournal");
-		TestUtils.finishThis(DRIVER);
-	}
-	
-	@Test
-	public void partnerTest() throws Exception {
-	  TestUtils.home(DRIVER);
-	  TestUtils.login(DRIVER);
-	  TestUtils.creatMinJournal(DRIVER, "testJournal");
-		
+		TestUtils.goToObj(DRIVER, "testJournal");
 		partnerImpressum("Partner");
 		
 		TestUtils.deletObj(DRIVER, "testJournal");
@@ -776,6 +770,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 		try {
 			TestUtils.clickCreatSelect(DRIVER, name + " auswählen");
 			
+			Thread.sleep(500);
 			By waitForLoad = By.id("imprint-preview-title");
 			wait.until(ExpectedConditions.presenceOfElementLocated(waitForLoad));
 			assertEquals(name + " auswählen", DRIVER.findElement(waitForLoad).getText());
@@ -784,6 +779,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			
 			DRIVER.findElement(By.id("imprint-delete-btn")).click();
 			
+			Thread.sleep(500);
 			waitForLoad = By.id("imprint-alert-delete-btn");
 			wait.until(ExpectedConditions.presenceOfElementLocated(waitForLoad));
 			assertEquals("testDelete löschen?", DRIVER.findElement(By.id("imprint-alert-delete-title")).getText());
@@ -805,11 +801,12 @@ public class CRUDITCase extends BaseIntegrationTest {
 		}
 	}
 
-	private void createEntry(String name, String text, String containerName) {
-		By waitForLoad;
+	private void createEntry(String name, String text, String containerName) throws InterruptedException {
 		DRIVER.findElement(By.id("imprint-new-btn")).click();
 		
-		waitForLoad = By.id("imprint-editor-input");
+		Thread.sleep(600);
+		
+		By waitForLoad = By.id("imprint-editor-input");
 		wait.until(ExpectedConditions.presenceOfElementLocated(waitForLoad));
 		
 		assertEquals(containerName + " anlegen", DRIVER.findElement(By.id("imprint-new-title")).getText());
@@ -826,5 +823,4 @@ public class CRUDITCase extends BaseIntegrationTest {
     assertEquals(name, DRIVER.findElement(By.cssSelector(".list-group-item.active")).getText());
     assertEquals(text, DRIVER.findElement(By.id("imprint-preview")).getText());
 	}
-	
 }
