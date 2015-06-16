@@ -4,18 +4,18 @@ module mycore.viewer.components {
     export interface DerivateLinkComponentSettings extends MyCoReViewerSettings {
     }
 
-    export class DerivateLinkComponent extends IviewComponent {
+    export class DerivateLinkComponent extends ViewerComponent {
 
         public _toolbarModel: model.MyCoReBasicToolbarModel;
         public _derivateLinkControllGroup;
         public _derivateLinkButton: widgets.toolbar.ToolbarButton;
         public _currentImage: string;
 
-        constructor(private _settings: DerivateLinkComponentSettings) {
+        constructor(private _settings: MyCoReViewerSettings) {
             super();
         }
 
-        public handle(e: mycore.viewer.widgets.events.IviewEvent): void {
+        public handle(e: mycore.viewer.widgets.events.ViewerEvent): void {
             // add to toolbar
             if (e.type == events.ProvideToolbarModelEvent.TYPE) {
                 this._toolbarModel = (<events.ProvideToolbarModelEvent>e).model;
