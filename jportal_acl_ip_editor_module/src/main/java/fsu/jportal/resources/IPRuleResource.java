@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
 
 import org.apache.log4j.Logger;
-import org.mycore.access.mcrimpl.MCRAccessControlSystem;
+//import org.mycore.access.mcrimpl.MCRAccessControlSystem;
 import org.mycore.access.mcrimpl.MCRAccessRule;
 import org.mycore.access.mcrimpl.MCRRuleStore;
 import org.mycore.common.MCRCache;
@@ -47,12 +47,12 @@ import fsu.jportal.pref.JournalConfig;
 public class IPRuleResource {
     static Logger LOGGER = Logger.getLogger(IPRuleResource.class);
     
-    static MCRCache<String, MCRAccessRule> accessCache;
-
-    static {
-        MCRAccessControlSystem.instance();
-        accessCache = MCRAccessControlSystem.getCache();
-    }
+//    static MCRCache<String, MCRAccessRule> accessCache;
+//
+//    static {
+//        MCRAccessControlSystem.instance();
+//        accessCache = MCRAccessControlSystem.getCache();
+//    }
 
     @PathParam("objID")
     String objID;
@@ -173,7 +173,7 @@ public class IPRuleResource {
 
             rule.setRule(buildRule(ipRules.values(), defRule));
             ruleStore.updateRule(rule);
-            updateRuleCache(ruleid, rule);
+//            updateRuleCache(ruleid, rule);
             
             return Status.CREATED;
         } catch (IPFormatException e) {
@@ -184,11 +184,11 @@ public class IPRuleResource {
         }
     }
 
-    private void updateRuleCache(String ruleid, MCRAccessRule rule) {
-        MCRCache<String, MCRAccessRule> cache = MCRAccessControlSystem.getCache();
+//    private void updateRuleCache(String ruleid, MCRAccessRule rule) {
+//        MCRCache<String, MCRAccessRule> cache = MCRAccessControlSystem.getCache();
 //        cache.put(ruleid, rule);
-        cache.remove(ruleid);
-    }
+//        cache.remove(ruleid);
+//    }
 
     private String buildRule(Collection<IPAddress> values, String defRule) {
         StringBuffer newRuleStr = new StringBuffer();
@@ -225,7 +225,7 @@ public class IPRuleResource {
                 
                 rule.setRule(buildRule(ipRules.values(), defRule));
                 ruleStore.updateRule(rule);
-                updateRuleCache(ruleid, rule);
+//                updateRuleCache(ruleid, rule);
                 
                 return Status.OK;
             } catch (IPRuleParseException e) {
@@ -269,7 +269,7 @@ public class IPRuleResource {
         }
     }
 
-    protected static MCRCache<String, MCRAccessRule> getAccessCache() {
-        return accessCache;
-    }
+//    protected static MCRCache<String, MCRAccessRule> getAccessCache() {
+//        return accessCache;
+//    }
 }
