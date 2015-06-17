@@ -17,8 +17,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 
 		@Test
     public void createPerson() throws Exception {
-        TestUtils.home(DRIVER);
-        TestUtils.login(DRIVER);
 	      By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
 	      wait.until(ExpectedConditions.elementToBeClickable(adminButton));
 	      DRIVER.findElement(adminButton).click();
@@ -35,7 +33,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 	        assertEquals("header does not match", "Goethe, Johann Wolfgang von",
 	            DRIVER.findElement(By.id("jp-maintitle")).getText());
         } catch (Exception e) {
-        	TestUtils.ERROR_MESSAGE = e.getMessage();
+        	TestUtils.setErrorMessage(e.getMessage());
         }
         
         TestUtils.deletObj(DRIVER, "");
@@ -87,8 +85,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 
     @Test
     public void createInstitution() throws Exception {
-        TestUtils.home(DRIVER);
-        TestUtils.login(DRIVER);
         By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
         wait.until(ExpectedConditions.elementToBeClickable(adminButton));
         DRIVER.findElement(adminButton).click();
@@ -105,7 +101,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 	        assertEquals("header does not match", "Thüringer Universitäts- und Landesbibliothek Jena", DRIVER
 	            .findElement(By.id("jp-maintitle")).getText());
         } catch (Exception e) {
-        	TestUtils.ERROR_MESSAGE = e.getMessage();
+        	TestUtils.setErrorMessage(e.getMessage());
         }
         
         TestUtils.deletObj(DRIVER, "");
@@ -161,8 +157,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 
     @Test
     public void createJournal() throws Exception {
-        TestUtils.home(DRIVER);
-        TestUtils.login(DRIVER);
 	  		TestUtils.createMinPerson(DRIVER, "testPerson");
 
 	  		try{
@@ -173,18 +167,18 @@ public class CRUDITCase extends BaseIntegrationTest {
 	        creatJournalSet();
 	        assertEquals("header does not match", "testJournal", DRIVER.findElement(By.id("jp-maintitle")).getText());
 	  		} catch (Exception e) {
-	  			TestUtils.ERROR_MESSAGE = e.getMessage();
+	  			TestUtils.setErrorMessage(e.getMessage());
 	  		}
 
 	  		try {
         	TestUtils.deletObj(DRIVER, "testJournal");
         } catch (Exception e) {
-        	TestUtils.ERROR_MESSAGE += e.getMessage();
+        	TestUtils.setErrorMessage(e.getMessage());
         }
         try {
         	TestUtils.deletObj(DRIVER, "testPerson");
         } catch (Exception e) {
-        	TestUtils.ERROR_MESSAGE += e.getMessage();
+        	TestUtils.setErrorMessage(e.getMessage());
         }
         TestUtils.finishThis(DRIVER);
     }
@@ -254,8 +248,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 
     @Test
     public void createVolume() throws Exception {
-        TestUtils.home(DRIVER);
-        TestUtils.login(DRIVER);
         TestUtils.creatMinJournal(DRIVER, "testJournal");
 
         try {
@@ -263,7 +255,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 	        createVolumeSet();
 	        assertEquals("header does not match", "testVolume", DRIVER.findElement(By.id("jp-maintitle")).getText());
         } catch (Exception e) {
-        	TestUtils.ERROR_MESSAGE = e.getMessage();
+        	TestUtils.setErrorMessage(e.getMessage());
         }
 
         TestUtils.deletObj(DRIVER, "testJournal");
@@ -300,8 +292,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 
     @Test
     public void createArticle() throws Exception {
-        TestUtils.home(DRIVER);
-        TestUtils.login(DRIVER);
         TestUtils.creatMinJournal(DRIVER, "testJournal");
         TestUtils.creatMinVolume(DRIVER, "testBand");
         try {
@@ -310,7 +300,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 	        assertEquals("header does not match", "testArticle", DRIVER.findElement(By.id("jp-maintitle"))
 	        		.getText());
         } catch (Exception e) {
-        	TestUtils.ERROR_MESSAGE = e.getMessage();
+        	TestUtils.setErrorMessage(e.getMessage());
         }
 
         TestUtils.deletObj(DRIVER, "testJournal");
@@ -340,9 +330,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 
 	@Test
 	public void articleVolumeSetting() throws Exception {
-		TestUtils.home(DRIVER);
-		TestUtils.login(DRIVER);
-		
 		TestUtils.clickCreatSelect(DRIVER, "Neue Zeitschrift");
 		journalSettings();
 		TestUtils.saveForm(DRIVER);
@@ -352,7 +339,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			volumeSettings();
 			TestUtils.saveForm(DRIVER);
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE = e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 		}
 		
 		try {
@@ -360,7 +347,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			articleSettings();
 			TestUtils.saveForm(DRIVER);
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE += e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 		}
 		
 		TestUtils.deletObj(DRIVER, "testJournal");
@@ -447,8 +434,6 @@ public class CRUDITCase extends BaseIntegrationTest {
     @Test
     public void delete() throws Exception {
         // create
-        TestUtils.home(DRIVER);
-        TestUtils.login(DRIVER);
         By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
         wait.until(ExpectedConditions.elementToBeClickable(adminButton));
         DRIVER.findElement(adminButton).click();
@@ -480,8 +465,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 
     @Test
     public void importObj() throws Exception {
-		  TestUtils.home(DRIVER);
-		  TestUtils.login(DRIVER);
 		  TestUtils.clickCreatSelect(DRIVER, "Person/Institution importieren");
 
 		  //gnd for Bach, Wilhelm Friedemann
@@ -511,8 +494,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 	
 		@Test
 		public void writeComments() throws Exception {
-		  TestUtils.home(DRIVER);
-		  TestUtils.login(DRIVER);
 		  TestUtils.creatMinJournal(DRIVER, "TestJournal");
 		  
 		  try {
@@ -531,7 +512,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			  
 			  assertEquals("text does not match", "Dies soll ein Test sein!", DRIVER.findElement(By.id("intro")).getText());
 		  } catch (Exception e) {
-		  	TestUtils.ERROR_MESSAGE = e.getMessage();
+		  	TestUtils.setErrorMessage(e.getMessage());
 		  }
 		  TestUtils.deletObj(DRIVER, "");
 		  TestUtils.finishThis(DRIVER);
@@ -539,9 +520,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 		
     @Test
     public void moveObjChild() throws Exception {
-		  TestUtils.home(DRIVER);
-		  TestUtils.login(DRIVER);
-		  
 		  TestUtils.creatMinJournal(DRIVER, "testJournalNoChild");
 		  String[] noChildJournal = DRIVER.getCurrentUrl().split("/");
 		  
@@ -571,7 +549,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			  	fail("Element still exist in the first parent journal.");
 			  }
 		  } catch (Exception e) {
-		  	TestUtils.ERROR_MESSAGE = e.getMessage();
+		  	TestUtils.setErrorMessage(e.getMessage());
 		  	TestUtils.deletObj(DRIVER, "testJournalNoChild");
 		  }
 		  
@@ -582,8 +560,6 @@ public class CRUDITCase extends BaseIntegrationTest {
     //edit journal, volumen, article
     @Test
     public void editJournal() throws Exception {
-		  TestUtils.home(DRIVER);
-		  TestUtils.login(DRIVER);
     	TestUtils.createMinPerson(DRIVER, "testPerson");
 		  TestUtils.creatMinJournal(DRIVER, "testJournalOriginal");
 		  TestUtils.creatMinVolume(DRIVER, "testVolumeOriginal");
@@ -598,7 +574,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         assertEquals("text does not match", "testArticle", DRIVER.findElement(By.id("jp-maintitle")).getText());
         //*****************************************************************
 		  } catch (Exception e) {
-		  	TestUtils.ERROR_MESSAGE = "Edit Article failed! \n" + e.getMessage();
+		  	TestUtils.setErrorMessage("Edit Article failed! \n" + e.getMessage());
 		  }
         
       try {
@@ -611,7 +587,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         assertEquals("text does not match", "testVolume", DRIVER.findElement(By.id("jp-maintitle")).getText());
         //*****************************************************************
       } catch (Exception e) {
-      	TestUtils.ERROR_MESSAGE += "Edit Volumen failed! \n" + e.getMessage();
+      	TestUtils.setErrorMessage("Edit Volumen failed! \n" + e.getMessage());
       }
       
       try {
@@ -624,7 +600,7 @@ public class CRUDITCase extends BaseIntegrationTest {
       	assertEquals("text does not match", "testJournal", DRIVER.findElement(By.id("jp-maintitle")).getText());
         //*****************************************************************
       } catch (Exception e) {
-      	TestUtils.ERROR_MESSAGE += "Edit Journal failed! \n" + e.getMessage();
+      	TestUtils.setErrorMessage("Edit Journal failed! \n" + e.getMessage());
       	TestUtils.deletObj(DRIVER, "testJournalOriginal");
       }
 		  
@@ -635,8 +611,6 @@ public class CRUDITCase extends BaseIntegrationTest {
     
     @Test
     public void editPerson() throws Exception{
-		  TestUtils.home(DRIVER);
-		  TestUtils.login(DRIVER);
 		  TestUtils.createMinPerson(DRIVER, "testPerson");
 		  
 		  try {
@@ -649,7 +623,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 		  	assertEquals("header does not match", "Goethe, Johann Wolfgang von",
             DRIVER.findElement(By.id("jp-maintitle")).getText());
 		  } catch (Exception e) {
-		  	TestUtils.ERROR_MESSAGE = e.getMessage();
+		  	TestUtils.setErrorMessage(e.getMessage());
 		  	TestUtils.deletObj(DRIVER, "testPerson");
 		  }
 		  
@@ -659,8 +633,6 @@ public class CRUDITCase extends BaseIntegrationTest {
     
     @Test
     public void editInst() throws Exception {
-		  TestUtils.home(DRIVER);
-		  TestUtils.login(DRIVER);
 		  TestUtils.creatMinInst(DRIVER, "testInst");
 		  
 		  try {
@@ -671,7 +643,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         assertEquals("header does not match", "Thüringer Universitäts- und Landesbibliothek Jena",
             DRIVER.findElement(By.id("jp-maintitle")).getText());
 		  } catch (Exception e) {
-		  	TestUtils.ERROR_MESSAGE = e.getMessage();
+		  	TestUtils.setErrorMessage(e.getMessage());
 		  	TestUtils.deletObj(DRIVER, "testInst");
 		  }
 		  
@@ -681,8 +653,6 @@ public class CRUDITCase extends BaseIntegrationTest {
     
 	@Test
 	public void multipleParticipants() throws Exception {
-	  TestUtils.home(DRIVER);
-	  TestUtils.login(DRIVER);
 	  TestUtils.createMinPerson(DRIVER, "FirstPerson");
 	  TestUtils.createMinPerson(DRIVER, "SecondPerson");
 	  TestUtils.creatMinInst(DRIVER, "FirstInst");
@@ -742,7 +712,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			
 			TestUtils.saveForm(DRIVER);
 	  } catch (Exception e) {
-	  	TestUtils.ERROR_MESSAGE = e.getMessage();
+	  	TestUtils.setErrorMessage(e.getMessage());
 	  }
 	  
 	  TestUtils.deletObj(DRIVER, "");
@@ -754,8 +724,6 @@ public class CRUDITCase extends BaseIntegrationTest {
 	
 	@Test
 	public void impressum_partner_test() throws Exception {
-	  TestUtils.home(DRIVER);
-	  TestUtils.login(DRIVER);
 	  TestUtils.creatMinJournal(DRIVER, "testJournal");
 		
 		partnerImpressum("Impressum");
@@ -797,7 +765,7 @@ public class CRUDITCase extends BaseIntegrationTest {
 			assertEquals("teste"+name+"Text", DRIVER.findElement(By.xpath("//div[@id='main']/span/div")).getText());
 			
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE = e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 		}
 	}
 

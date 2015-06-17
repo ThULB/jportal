@@ -25,8 +25,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	@Test
 	public void aclEditor() throws Exception {
 //		test ACL-Editor 
-		TestUtils.home(DRIVER);
-		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.linkText("ACL-Editor")).click();
 
@@ -130,7 +128,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		  assertEquals("didn't save - content does not match", "Makierte Regelzuweisungen erfolgreich gelöscht.", DRIVER
 		  		.findElement(By.id("acle2-alert-area")).getText());
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE = e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 			try {
 				DRIVER.findElement(By.id("acle2-access-filter-input-id")).sendKeys("testObject");
 				DRIVER.findElement(By.id("acle2-button-select-multi-access")).click();
@@ -142,7 +140,7 @@ public class AdminITCase extends BaseIntegrationTest {
 			  DRIVER.findElement(deletButton).click();
 				
 			} catch (Exception e2) {
-				TestUtils.ERROR_MESSAGE += "Failed to delete Test objects! \n" + e.getMessage();
+				TestUtils.setErrorMessage("Failed to delete Test objects! \n" + e2.getMessage());
 			}
 		}
 	  
@@ -156,7 +154,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		  
 		  assertThat(DRIVER.findElement(By.id("acle2-alert-area")).getText(), both(containsString("testRule")).and(containsString("erfolgreich hinzugefügt")));
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE += e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 		}
 		
 		try {
@@ -166,7 +164,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		  
 		  assertThat(DRIVER.findElement(By.id("acle2-alert-area")).getText(), containsString("erfolgreich gelöscht"));
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE += e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 		} 
 
 		try {
@@ -175,7 +173,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		  
 		  assertThat(DRIVER.findElement(By.id("acle2-alert-area")).getText(), containsString("erfolgreich gelöscht"));
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE += e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 		}
 	  
 	  TestUtils.finishThis(DRIVER);
@@ -183,8 +181,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	
 	@Test
 	public void classificationEditor() throws Exception {
-		TestUtils.home(DRIVER);
-		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.linkText("Klassifikations Editor")).click();
 
@@ -215,10 +211,12 @@ public class AdminITCase extends BaseIntegrationTest {
 			assertEquals("save failed", "Speichern erfolgreich", myAlert.getText());
 			myAlert.accept();
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE = e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 			try {
 				classificationDeleteTry();
-			} catch (Exception e2) {TestUtils.ERROR_MESSAGE += "Second try to delete failed! \n" + e.getMessage();}
+			} catch (Exception e2) {
+				TestUtils.setErrorMessage("Second try to delete failed! \n" + e2.getMessage());
+			};
 		}
 		
 		dojoImportAndSettings();
@@ -254,8 +252,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	@Test
 	public void user() throws Exception {
 		//test user 
-		TestUtils.home(DRIVER);
-		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.linkText("Nutzer anlegen")).click();
 		
@@ -315,7 +311,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		  assertEquals("didn't save - content does not match", "Das Passwort dieser Nutzerkennung wurde erfolgreich geändert.", DRIVER
 			.findElement(By.cssSelector(".user-details > .alert > p > strong")).getText());
 	  } catch (Exception e) {
-	  	TestUtils.ERROR_MESSAGE = e.getMessage();
+	  	TestUtils.setErrorMessage(e.getMessage());
 	  	DRIVER.findElement(By.linkText("Admin")).click();
 			DRIVER.findElement(By.linkText("Suchen und verwalten")).click();
 			DRIVER.findElement(By.xpath("//input[@name='search']")).sendKeys("testuser");
@@ -339,8 +335,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	
 	@Test
 	public void userGroups() throws Exception {
-		TestUtils.home(DRIVER);
-		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.linkText("Gruppen verwalten")).click();
 		
@@ -369,11 +363,11 @@ public class AdminITCase extends BaseIntegrationTest {
 			//delete group
 			deleteGroupTry();
 		} catch (Exception e) {
-			TestUtils.ERROR_MESSAGE = e.getMessage();
+			TestUtils.setErrorMessage(e.getMessage());
 			try {
 				deleteGroupTry();
 			} catch (Exception e2) {
-				TestUtils.ERROR_MESSAGE += "Second try to delet it failed too! \n" + e2.getMessage();
+				TestUtils.setErrorMessage("Second try to delet it failed too! \n" + e2.getMessage());
 			}
 		}
 		
@@ -426,8 +420,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	
 	@Test
 	public void globalMsg() throws Exception {
-		TestUtils.home(DRIVER);
-		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.linkText("Globale Nachricht Bearbeiten")).click();
 		
@@ -443,7 +435,7 @@ public class AdminITCase extends BaseIntegrationTest {
 		  assertEquals("save failed", "Speichern erfolgreich", DRIVER
 		  		.findElement(By.cssSelector("#jp-layout-globalmessage-editor > div:last-child")).getText());
 	  } catch (Exception e) {
-	  	TestUtils.ERROR_MESSAGE = e.getMessage();
+	  	TestUtils.setErrorMessage(e.getMessage());
 	  }
 	  
 	  DRIVER.navigate().refresh();
@@ -464,8 +456,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	
 	@Test
 	public void activSessions() throws Exception {
-		TestUtils.home(DRIVER);
-		TestUtils.login(DRIVER);
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.linkText("Aktive Sitzungen")).click();
 	  assertEquals("title does not match", "Liste aktiver Sitzungen - JPortal", DRIVER.getTitle());
@@ -477,9 +467,6 @@ public class AdminITCase extends BaseIntegrationTest {
 	public void webCLI() throws Exception {
 		String originalWin = DRIVER.getWindowHandle();
 
-		TestUtils.home(DRIVER);
-		TestUtils.login(DRIVER);
-		
 		DRIVER.findElement(By.linkText("Admin")).click();
 		DRIVER.findElement(By.xpath("//input[@value='Start']")).click();
 

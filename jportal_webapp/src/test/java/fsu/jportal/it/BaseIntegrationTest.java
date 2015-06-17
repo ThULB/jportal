@@ -79,7 +79,7 @@ public class BaseIntegrationTest {
 
     public static WebDriver DRIVER;
 
-    public byte[] screenShot;
+    public static byte[] screenShot;
 
     @BeforeClass
     public static void setupClass() {
@@ -104,6 +104,9 @@ public class BaseIntegrationTest {
         START_URL = "http://localhost:" + LOCAL_PORT + "/jportal-webTests" + TEST_APP;
         LOGGER.info("Server running on '" + START_URL + "'");
         DRIVER = new FirefoxDriver();
+        
+				TestUtils.home(DRIVER);
+    		TestUtils.login(DRIVER);
     }
 
     @AfterClass
@@ -113,16 +116,24 @@ public class BaseIntegrationTest {
 
     @Before
     public void setup() {
+    	screenShot = null;
+    	TestUtils.home(DRIVER);
     }
 
     @After
     public void tearDown() {
-        SOURCE_HTML = DRIVER.getPageSource();
-        if (DRIVER instanceof TakesScreenshot) {
-            screenShot = ((TakesScreenshot) DRIVER).getScreenshotAs(OutputType.BYTES);
-        }
-        TEST_URL = DRIVER.getCurrentUrl();
+        screenshot();
     }
+
+		public static void screenshot() {
+			if(screenShot == null){
+				SOURCE_HTML = DRIVER.getPageSource();
+				if (DRIVER instanceof TakesScreenshot) {
+				    screenShot = ((TakesScreenshot) DRIVER).getScreenshotAs(OutputType.BYTES);
+				}
+				TEST_URL = DRIVER.getCurrentUrl();
+			}
+		}
 
     public static String getHomeAddress() {
         return START_URL + "/content/below/index.xml";

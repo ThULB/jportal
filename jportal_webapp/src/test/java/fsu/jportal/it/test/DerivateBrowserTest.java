@@ -42,8 +42,6 @@ public class DerivateBrowserTest extends BaseIntegrationTest {
     @Test
     public void testCreateJournal(){
         DRIVER.manage().window().setSize(new Dimension(1440, 872));
-        TestUtils.home(DRIVER);
-        TestUtils.login(DRIVER);
         DRIVER.get(BaseIntegrationTest.getStartUrl() + "/rsc/derivatebrowser/start");
         assertEquals("invald index page - title does not match", "Jportal Derivate Browser", DRIVER.getTitle());
 

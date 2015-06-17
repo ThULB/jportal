@@ -17,17 +17,16 @@ public class BaseITCase extends BaseIntegrationTest {
 	
     @Test
     public void loginAndLogout() throws Exception {
-        TestUtils.home(DRIVER);
         if (TestUtils.isLoggedIn(DRIVER)) {
             TestUtils.logout(DRIVER);
         }
         TestUtils.login(DRIVER);
         TestUtils.logout(DRIVER);
+        TestUtils.login(DRIVER);
     }
 
     @Test
     public void language() throws Exception {
-        TestUtils.home(DRIVER);
         DRIVER.findElement(By.xpath("//li[@id='languageMenu']/a")).click();
         DRIVER.findElement(By.xpath("//ul[@id='languageList']/li[1]/a")).click();
         assertEquals("language not changed - content does not match", "Welcome to journals@UrMEL!", DRIVER
@@ -42,8 +41,6 @@ public class BaseITCase extends BaseIntegrationTest {
 
     @Test
     public void aToZ() throws Exception {
-				TestUtils.home(DRIVER);
-    		TestUtils.login(DRIVER);
     		TestUtils.creatMinJournal(DRIVER, "Der Spiegel");
     		Thread.sleep(500);
         DRIVER.get(START_URL + "/content/main/journalList.xml");
@@ -58,7 +55,7 @@ public class BaseITCase extends BaseIntegrationTest {
 	        assertEquals("header does not match", "Der Spiegel", DRIVER.findElement(By.id("jp-maintitle"))
 	            .getText());
         } catch (Exception e){
-        	TestUtils.ERROR_MESSAGE = e.getMessage();
+        	TestUtils.setErrorMessage(e.getMessage());
         }
         
         TestUtils.deletObj(DRIVER, "Der Spiegel");
@@ -67,8 +64,6 @@ public class BaseITCase extends BaseIntegrationTest {
 
     @Test
     public void navigate() throws Exception {
-				TestUtils.home(DRIVER);
-    		TestUtils.login(DRIVER);
     		TestUtils.creatMinJournal(DRIVER, "Der Spiegel");
     		TestUtils.creatMinVolume(DRIVER, "Erste Ausgabe (1947)");
     		TestUtils.creatMinArticle(DRIVER, "Schiller und die Räuber");
@@ -91,7 +86,7 @@ public class BaseITCase extends BaseIntegrationTest {
 	        
 	        DRIVER.findElement(By.linkText("Der Spiegel")).click();
     		} catch (Exception e){
-        	TestUtils.ERROR_MESSAGE = e.getMessage();
+        	TestUtils.setErrorMessage(e.getMessage());
         }
     		
     		TestUtils.deletObj(DRIVER, "Der Spiegel");
@@ -100,8 +95,6 @@ public class BaseITCase extends BaseIntegrationTest {
 
     @Test
     public void search() throws Exception {
-    		TestUtils.home(DRIVER);
-    		TestUtils.login(DRIVER);
     		TestUtils.creatMinJournal(DRIVER, "Der Spiegel");
     		TestUtils.creatMinVolume(DRIVER, "Erste Ausgabe (1947)");
     		TestUtils.creatMinArticle(DRIVER, "Schiller und die Räuber");
@@ -125,7 +118,7 @@ public class BaseITCase extends BaseIntegrationTest {
 	        assertEquals("header does not match", "Spiegel-Verlag", DRIVER.findElement(By.id("jp-maintitle"))
 	            .getText());
     		} catch (Exception e){
-        	TestUtils.ERROR_MESSAGE = e.getMessage();
+    			TestUtils.setErrorMessage(e.getMessage());
         }
         try {
         	TestUtils.deletObj(DRIVER, "Spiegel-Verlag");
@@ -137,8 +130,6 @@ public class BaseITCase extends BaseIntegrationTest {
     
 		@Test
     public void advancedSearch() throws Exception {
-				TestUtils.home(DRIVER);
-				TestUtils.login(DRIVER);
 				TestUtils.createMinPerson(DRIVER, "Schiller");
 				TestUtils.home(DRIVER);
 				
@@ -164,7 +155,7 @@ public class BaseITCase extends BaseIntegrationTest {
 					assertEquals("text does not match", "Person/Institution", searchField.findElement(By.xpath("option[@value='names_de']")).getText());
 					assertEquals("text does not match", "Schiller", DRIVER.findElement(By.name("XSL.value1")).getAttribute("value"));
 				} catch (Exception e){
-        	TestUtils.ERROR_MESSAGE = e.getMessage();
+					TestUtils.setErrorMessage(e.getMessage());
         }
 				
 				TestUtils.deletObj(DRIVER, "Schiller");
@@ -173,8 +164,6 @@ public class BaseITCase extends BaseIntegrationTest {
 	
   @Test
   public void doublet() throws Exception {
-      TestUtils.home(DRIVER);
-      TestUtils.login(DRIVER);
       TestUtils.creatMinInst(DRIVER, "parentTestInst");
       
       String[] doubletID = DRIVER.getCurrentUrl().split("/");
@@ -211,7 +200,7 @@ public class BaseITCase extends BaseIntegrationTest {
 	      DRIVER.findElement(By.linkText("(Institutionen ohne GND anzeigen...)")).click();
 	      DRIVER.findElement(By.linkText("parentTestInst")).click();
       } catch (Exception e){
-      	TestUtils.ERROR_MESSAGE = e.getMessage();
+      	TestUtils.setErrorMessage(e.getMessage());
       	TestUtils.deletObj(DRIVER, "testInst");
       }
       
@@ -221,8 +210,6 @@ public class BaseITCase extends BaseIntegrationTest {
   
   @Test
   public void versionsInfo() throws Exception {
-      TestUtils.home(DRIVER);
-      TestUtils.login(DRIVER);
       TestUtils.createMinPerson(DRIVER, "testPerson");
    
       try{
@@ -233,7 +220,7 @@ public class BaseITCase extends BaseIntegrationTest {
       	
       	DRIVER.findElement(By.linkText("Zurück...")).click();
       } catch (Exception e) {
-      	TestUtils.ERROR_MESSAGE = e.getMessage();
+      	TestUtils.setErrorMessage(e.getMessage());
       	TestUtils.deletObj(DRIVER, "testPerson");
       }
       

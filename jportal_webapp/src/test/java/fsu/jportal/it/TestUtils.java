@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public abstract class TestUtils {
-		public static String ERROR_MESSAGE = "";
+		private static String ERROR_MESSAGE = "";
 		
     public static void home(WebDriver driver) {
         driver.get(BaseIntegrationTest.getHomeAddress());
@@ -33,7 +33,6 @@ public abstract class TestUtils {
     }
 
     public static void saveForm(WebDriver driver) {
-        // TODO: don't use german 'Speichern'
         driver.findElement(By.xpath("//input[@type='submit' and @value='Speichern']")).click();
     }
 
@@ -134,7 +133,7 @@ public abstract class TestUtils {
 		    assertEquals("testObj didn't deleted successfully", "Löschen erfolgreich!", driver.findElement(By.id("delete-dialog-info")).getText());
 			  
 	    	driver.findElement(By.id("delete-dialog-close")).click();
-      } catch (Exception e) { ERROR_MESSAGE += "Failed to delete! \n" + e.getMessage(); }
+      } catch (Exception e) { setErrorMessage("Failed to delete! \n" + e.getMessage()); }
     }
     
     public static void goToObj(WebDriver driver, String where) {
@@ -146,7 +145,7 @@ public abstract class TestUtils {
 	    	By waitForSearch = By.linkText(where);
 	    	wait.until(ExpectedConditions.elementToBeClickable(waitForSearch));
 	    	driver.findElement(waitForSearch).click();
-    	} catch (Exception e) { ERROR_MESSAGE += "Failed to Find! \n" + e.getMessage(); 
+    	} catch (Exception e) { setErrorMessage("Failed to Find! \n" + e.getMessage()); 
     		try {
     		} catch (Exception ex) {}
     	}
@@ -161,8 +160,13 @@ public abstract class TestUtils {
     }
 
     public static void finishThis(WebDriver driver) throws Exception {
-      home(driver);
-      logout(driver);
+//      home(driver);
+//      logout(driver);
       throwError();
+    }
+    
+    public static void setErrorMessage(String text) {
+    	BaseIntegrationTest.screenshot();
+			ERROR_MESSAGE += text;
     }
 }
