@@ -230,8 +230,16 @@ label.editorText {
 }
 
 /*personSelect*/
-#personSelect-modal > .modal-dialog{
-	width: 930px;
+@media(min-width: 930px){
+	#personSelect-modal > .modal-dialog{
+		width: 930px;
+	}
+}
+
+@media(max-width: 929px){
+	#personSelect-modal > .modal-dialog{
+		width: 95%;
+	}
 }
 
 #personSelect-modal-body{
@@ -250,6 +258,12 @@ label.editorText {
 .editor-logoSelect-container {
 	height: 500px;
 	overflow: auto;
+}
+
+@media(max-width: 768px){
+	.editor-logoSelect-container > a {
+		width: 90% !important;	
+	}
 }
 
 .editor-logoSelect-container > a {
