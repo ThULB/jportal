@@ -8,7 +8,6 @@ var DerivateBrowser = function () {
 
     return {
         init: function () {
-
             $("body").on("click", "#btn-tileDeri", function () {
                 tileDerivate(derivateBrowserTools.getCurrentDocID())
             });
@@ -44,10 +43,8 @@ var DerivateBrowser = function () {
 
             });
 
-            $("body").on("keydown", "#btn-filter-table-input > input", function (key) {
-                if (key.which == 13) {
-                    filterTable($(this).val());
-                }
+            $("body").on("input", "#btn-filter-table-input > input", function (key) {
+                filterTable($(this).val());
             });
 
             $("body").on("click", "#btn-filter-table", function () {
@@ -1167,14 +1164,21 @@ var DerivateBrowser = function () {
         if(filterID != ""){
             $("#btn-filter-table-input-remove").removeClass("hidden");
             derivateBrowserLargeView.filterList();
-            $(".browser-table-entry").addClass("hidden");
+            //$(".browser-table-entry").addClass("hidden");
             var entrys = $(".browser-table-entry")
                 .filter(function() {
                     return $(this).find(".browser-table-file-name").html().match(new RegExp("^" + filterID, "i"));
-                });
-            $(entrys).each(function(index, entry) {
-                $(entry).removeClass("hidden");
-                derivateBrowserLargeView.addFileToFilteredList(($(entry).data("deriID") + $(entry).data("path")));
+                }).toArray();
+            $(".browser-table-entry").each(function(index, entry) {
+                if (entrys.indexOf(entry) == -1) {
+                    $(entry).addClass("hidden");
+                }
+                else {
+                    $(entry).removeClass("hidden");
+                    if (!$(entry).hasClass("browser-table-xml") && !$(entry).hasClass("browser-table-folder")) {
+                        derivateBrowserLargeView.addFileToFilteredList(($(entry).data("deriID") + $(entry).data("path")));
+                    }
+                }
             });
         }
         else{

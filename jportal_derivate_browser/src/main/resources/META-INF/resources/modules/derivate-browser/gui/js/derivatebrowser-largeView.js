@@ -446,7 +446,9 @@ var derivateBrowserLargeView = (function () {
         },
 
         filterList: function() {
-            fullFileList = currentFileList.slice();
+            if (currentFileList.length > fullFileList.length) {
+                fullFileList = currentFileList.slice();
+            }
             currentFileList = [];
         },
 
