@@ -410,7 +410,6 @@ var derivateBrowserLargeView = (function () {
 
     function showAlert(show) {
         if (show){
-            $("#view-large-main").addClass("expended-view");
             $("#view-large-bottom").addClass("hidden");
             $("#view-large-normal-wrapper").addClass("hidden");
             $("#view-large-left").addClass("hidden");
@@ -419,7 +418,6 @@ var derivateBrowserLargeView = (function () {
             $("#view-large-alert").removeClass("hidden");
         }
         else {
-            $("#view-large-main").removeClass("expended-view");
             $("#view-large-bottom").removeClass("hidden");
             $("#view-large-normal-wrapper").removeClass("hidden");
             $("#view-large-left").removeClass("hidden");
