@@ -5,6 +5,7 @@ var derivateBrowserTools = (function () {
         currentFile = "",
         timeOutID = null,
         i18nKeys = [],
+        imgLoadingTimer = 0,
         loadingTimer = 0,
         asyncCount = 0,
         asyncCallback = undefined;
@@ -17,19 +18,40 @@ var derivateBrowserTools = (function () {
 
     //private Methods   
 	function getPDFImg(img, deriID, path){
-		$(img).siblings(".img-placeholder").attr( "src", jp.baseURL + "images/adobe-logo.svg");
+        clearTimeout(imgLoadingTimer);
+        imgLoadingTimer = setTimeout(function() {
+            $(img).siblings(".img-placeholder").attr( "src", jp.baseURL + "images/adobe-logo.svg");
+            $(img).siblings(".img-placeholder").removeClass("hidden");
+            $(img).addClass("hidden");
+        }, 500);
 		$(img).attr( "src", jp.baseURL + "img/pdfthumb/" + deriID + path).on("load", function() {
+            clearTimeout(imgLoadingTimer);
 			$(img).siblings(".img-placeholder").addClass("hidden");
 			$(img).removeClass("hidden");
 		});
 	}
+
+    function getImgWithPath(img, path) {
+        clearTimeout(imgLoadingTimer);
+        imgLoadingTimer = setTimeout(function() {
+            $(img).siblings(".img-placeholder").attr("src", jp.baseURL + "images/file-logo.svg");
+            $(img).siblings(".img-placeholder").removeClass("hidden");
+            $(img).addClass("hidden");
+        }, 500);
+        $(img).attr("src", path).on("load", function () {
+            clearTimeout(imgLoadingTimer);
+            $(img).siblings(".img-placeholder").addClass("hidden");
+            $(img).removeClass("hidden");
+        });
+    }
 	
 	function getImg(img, deriID, path){
-        $(img).siblings(".img-placeholder").attr( "src", jp.baseURL + "images/file-logo.svg");
-		$(img).attr( "src", jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + deriID + path).on("load", function() {
-			$(img).siblings(".img-placeholder").addClass("hidden");
-			$(img).removeClass("hidden");
-		});
+        getImgWithPath(img, jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + deriID + path);
+        //$(img).siblings(".img-placeholder").attr( "src", jp.baseURL + "images/file-logo.svg");
+		//$(img).attr( "src", jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + deriID + path).on("load", function() {
+		//	$(img).siblings(".img-placeholder").addClass("hidden");
+		//	$(img).removeClass("hidden");
+		//});
 //		if (count < 6){
 //			$.ajax({
 //				url: "/servlets/MCRTileCombineServlet/MIN/" + deriID + path,
@@ -290,6 +312,10 @@ var derivateBrowserTools = (function () {
 				getImg(img, deriID, path, 0);
 			}
 		},
+
+        setImgPathWithPath: function(img, path) {
+            getImgWithPath(img, path);
+        },
 		
 		getCurrentDocID: function() {
 			return currentDocID;

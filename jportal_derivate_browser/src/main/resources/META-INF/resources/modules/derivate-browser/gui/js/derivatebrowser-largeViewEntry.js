@@ -19,6 +19,10 @@ LargeViewEntry.prototype.setStatusTo = function(node) {
     }
 };
 
+LargeViewEntry.prototype.getPath = function() {
+    return this.docID + this.path;
+};
+
 LargeViewEntry.prototype.getLargePath = function() {
     if (this.name.endsWith("pdf")){
         return jp.baseURL + "img/pdfthumb/" + this.docID + this.path;

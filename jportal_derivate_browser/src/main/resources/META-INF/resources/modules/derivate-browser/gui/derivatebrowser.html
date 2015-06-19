@@ -227,7 +227,8 @@
                     <span class="glyphicon glyphicon glyphicon-menu-left"></span>
                 </div>
                 <div id="view-large-normal-wrapper">
-                    <img id="view-large-normal" class="view-large-draggable" src="">
+                    <img id="view-large-normal" class="view-large-normal-img view-large-draggable view-large-resizeable" src="">
+                    <img id="view-large-normal-placeholder" class="view-large-normal-img img-placeholder hidden" src="">
                 </div>
                 <div id="view-large-right">
                     <span class="glyphicon glyphicon glyphicon-menu-right"></span>
@@ -468,8 +469,8 @@
 	
 	<script id="popover-template" type="text/mustache">
 		<div class="popover-template">
-			<img class='popover-img hidden' src=''>
-			<img class='img-placeholder img-placeholder-popover' src=''>
+			<img class='popover-img' src=''>
+			<img class='img-placeholder img-placeholder-popover hidden' src=''>
 			<dl>
 				<dt><text class="i18n" i18n="db.label.fileSize" i18n-def="Größe"></text></dt>
 				<dd class="img-size">{{size}}</dd>
@@ -596,8 +597,8 @@
 	
 	<script id="upload-overwrite-template" type="text/mustache">
 		<div>
-			<img class='overwrite-img hidden' src=''>
-			<img class='img-placeholder img-placeholder-overwrite' src=''>
+			<img class='overwrite-img' src=''>
+			<img class='img-placeholder img-placeholder-overwrite hidden' src=''>
 			<dl>
 				<dt>Size</dt>
 				<dd class="img-size">{{size}}</dd>

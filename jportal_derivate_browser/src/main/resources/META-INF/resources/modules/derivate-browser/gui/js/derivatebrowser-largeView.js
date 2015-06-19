@@ -49,7 +49,13 @@ var derivateBrowserLargeView = (function () {
     });
 
     $("#file-view-large").on("click", ".view-large-resizeable", function (evt) {
-        enlargeorHideImage(evt.pageX, evt.pageY);
+        var currentFile = currentFileList[currentFileIndex];
+        if (currentFile.name.endsWith("pdf")) {
+            window.location.href = jp.baseURL + "rsc/viewer/" + currentFile.getPath();
+        }
+        else {
+            enlargeorHideImage(currentFile, evt.pageX, evt.pageY);
+        }
     });
 
     $("body").on("click", "#view-large-overlay", function () {
@@ -152,7 +158,13 @@ var derivateBrowserLargeView = (function () {
             }
 
             if (key.which == 32) {  // LEER
-                enlargeorHideImage($(window).width() / 2, $(window).height() / 2);
+                var currentFile = currentFileList[currentFileIndex];
+                if (currentFile.name.endsWith("pdf")) {
+                    window.location.href = jp.baseURL + "rsc/viewer/" + currentFile.getPath();
+                }
+                else {
+                    enlargeorHideImage(currentFile, $(window).width() / 2, $(window).height() / 2);
+                }
             }
         }
     });
@@ -252,10 +264,10 @@ var derivateBrowserLargeView = (function () {
             $("#view-large-normal").attr( "src", fileEntry.getMidPath());
             $("#view-large-normal").data("id", fileEntry.getID());
             if (!fileEntry.name.endsWith("pdf")){
-                $("#view-large-normal").addClass("view-large-resizeable");
+                derivateBrowserTools.setImgPathWithPath($("#view-large-normal"), fileEntry.getMidPath())
             }
             else{
-                $("#view-large-normal").removeClass("view-large-resizeable");
+                derivateBrowserTools.setImgPath($("#view-large-normal"), fileEntry.docID, fileEntry.path);
             }
             $("#view-large-normal").data("id", fileEntry.getID());
             derivateBrowserTools.setFileName(fileEntry.name);
@@ -344,14 +356,14 @@ var derivateBrowserLargeView = (function () {
         }
     }
 
-    function enlargeorHideImage(x, y) {
+    function enlargeorHideImage(currentFile, x, y) {
         if ($("#view-large-overlay").length > 0){
             $("#view-large-overlay").remove();
         }
         else{
             var img = $('<div id="view-large-overlay"><img id="view-large-large" src=""></div>');
             $("body").append(img);
-            $(img).find("#view-large-large").attr( "src", currentFileList[currentFileIndex].getLargePath()).on("load", function() {
+            $(img).find("#view-large-large").attr( "src", currentFile.getLargePath()).on("load", function() {
                 setLargePosition(x, y);
             });
         }

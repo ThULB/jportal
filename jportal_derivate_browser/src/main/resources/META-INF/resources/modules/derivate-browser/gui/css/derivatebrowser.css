@@ -1481,7 +1481,7 @@ textarea {
     /*transform: translate(-50%,-50%);*/
 
 }
-#view-large-normal{
+.view-large-normal-img{
     position: absolute;
     max-height: 100%;
     max-width: calc(100% - 100px);
