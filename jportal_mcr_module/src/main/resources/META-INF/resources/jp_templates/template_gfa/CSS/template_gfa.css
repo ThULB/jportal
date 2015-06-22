@@ -8,6 +8,10 @@
     font-size: 2.2em;
 }
 
+#logo {
+    background-color: #FFF;
+}
+
 @media (max-width: 767px) {
 	#logo .logoTitle {
     	font-size: 1.3em;
@@ -19,7 +23,7 @@
     background-color: #464646;
 }
 
-#searchBar .input-group-addon {
+#searchBar .input-group-addon > span {
     background-color: #464646;
     color: #FFF;
 }

@@ -199,10 +199,19 @@
 
 		<li>
 			<span>
-				<xsl:call-template name="shortenString">
-					<xsl:with-param name="string" select="$rubric" />
-					<xsl:with-param name="length" select="20" />
-				</xsl:call-template>
+				<xsl:if test="$rubric = 'essays'">
+					<xsl:call-template name="shortenString">
+						<xsl:with-param name="string" select="'Aufsätze'" />
+						<xsl:with-param name="length" select="20" />
+					</xsl:call-template>
+				</xsl:if>
+
+				<xsl:if test="$rubric = 'recension'">
+					<xsl:call-template name="shortenString">
+						<xsl:with-param name="string" select="'Rezensionen'" />
+						<xsl:with-param name="length" select="20" />
+					</xsl:call-template>
+				</xsl:if>
 			</span>
 		</li>
 	</xsl:template>

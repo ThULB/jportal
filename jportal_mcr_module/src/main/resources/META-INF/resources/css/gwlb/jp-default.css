@@ -60,7 +60,7 @@ html a {
 	text-decoration: none;
 }
 html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-layout-intro a {
-	/*color: #2A89C1;*/
+	color: #3685D4;
 }
 
 .hidden {
@@ -189,7 +189,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	overflow: hidden; 
 }
 .jp-layout-index-gwlb-button{
-	background-color: #285690;
+	background-color: #3685D4;
 	border-color: #426B9E;
 }
 .jp-layout-footer {
@@ -224,7 +224,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 #jp-breadcrumb-container li, #jp-breadcrumb-container a{
-	color: #27568F;
+	color: #3685D4;
 }
 
 #jp-breadcrumb-container .jp-layout-scroller {
@@ -280,7 +280,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 #jp-journal-content {
-	border-left: 1px #F0F0F0;
+	border-left: 1px solid #F0F0F0;
 	margin-left: -1px;
 }
 
@@ -368,7 +368,7 @@ p.jp-layout-metadata-list {
 }
 
 .jp-layout-hidden-Button {
-	background: url("../images/enlargeButton_small.png") no-repeat scroll 0 0
+	background: url("../../images/enlargeButton_small.png") no-repeat scroll 0 0
 		transparent;
 	color: white;
 	display: none;
@@ -396,7 +396,7 @@ p.jp-layout-metadata-list {
 }
 
 .jp-layout-clickLabel a {
-	color: #27568F;
+	color: #3685D4;
 	/*color: #4B4E49;*/
 	/*font-weight: bold;*/
 }
@@ -419,8 +419,13 @@ p.jp-layout-metadata-list {
 #resultPaginator input.form-control {
 	width: 60px;
 }
-.pagination-jumper {
-	padding-left: 5px;
+
+#resultPaginator .pagination {
+	margin-bottom: 0;
+}
+
+#resultPaginator .pagination-jumper {
+	margin-top: 10px;
 }
 
 .jp-metadata dt {
@@ -525,9 +530,9 @@ p.jp-layout-metadata-list {
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
-	height: 158px;
-	background-color: #27568F;
-	background-position: bottom; 
+	height: 157px;
+	background-color: #3685D4;
+	background-size: contain;
 }
 
 #logo .logoTitle {
@@ -539,7 +544,7 @@ p.jp-layout-metadata-list {
 }
 
 #searchBar {
-	background-color: #27568F;
+	background-color: #3685D4;
 	padding: 5px 29px 5px;
 	min-height: 3.3em;
 	position: relative;
@@ -557,8 +562,18 @@ p.jp-layout-metadata-list {
 }
 
 #searchBar .input-group-addon {
-	background-color: #285690;
+	background-color: #ffffff;
 	color: #ffffff;
+	padding: 0;
+}
+
+#searchBar .input-group-addon > span {
+	padding: 7px 7px;
+	background-color: #3685D4;
+	border-radius: 4px;
+	top: 0;
+	right: 1px;
+	border-color: #fff;
 }
 
 #searchBar #inputField {
@@ -920,7 +935,7 @@ ul.ckeditorButtons li:last-child {
 }
 
 .jp-layout-mainHeader-UlLeft a{
-	color: #27568F;
+	color: #3685D4;
 }
 
 .jp-layout-mainHeader-LiPaPushleft{
@@ -934,7 +949,7 @@ ul.ckeditorButtons li:last-child {
 
 .jp-layout-mainHeader-SeperatorRight:after{
 	content: '\2022';
-	color: #27568F;
+	color: #3685D4;
 }
 
 .jp-navigation-topHeader-UlRightWraper > .jp-layout-mainHeader-SeperatorRight > a{
@@ -1048,7 +1063,7 @@ textarea {
 }
 
 .jp-list-group-special > .list-group-item{
-	color: #27568F;
+	color: #3685D4;
 	border: none;
 	margin-bottom: 0;
 }
@@ -1403,12 +1418,12 @@ textarea {
 }
 
 #jp-volume-back-link {
-	color: #27568F;
+	color: #3685D4;
 	padding-bottom: 15px;
 }
 
 #jp-volume-back-link > a {
-	color: #27568F;
+	color: #3685D4;
 }
 
 .active-list-item {
@@ -1421,7 +1436,7 @@ textarea {
 }
 
 .jp-objectlist-metadata > a {
-	color: #27568F;
+	color: #3685D4;
 }
 
 /*******************************************************
@@ -1434,7 +1449,7 @@ textarea {
 
 .journalList .tab-panel h3 a {
 	font-size: inherit;
-	color: #27568F;
+	color: #3685D4;
 }
 
 #firstLetterTab {
@@ -1461,7 +1476,7 @@ textarea {
 }
 
 #firstLetterTab .tab-nav li.active {
-	color: #27568F;
+	color: #3685D4;
 }
 
 #firstLetterTab .atoz .filter {
