@@ -17,12 +17,12 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
+import fsu.jportal.mets.*;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRUtils;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -30,16 +30,11 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
+import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import fsu.jportal.mets.ConvertException;
-import fsu.jportal.mets.LLZMetsConverter;
-import fsu.jportal.mets.LLZMetsImporter;
-import fsu.jportal.mets.LLZMetsUtils;
 
 @Path("mets/llz")
 public class METSImportResource {
@@ -75,27 +70,29 @@ public class METSImportResource {
         return returnObject.toString();
     }
 
-    @POST
-    @Path("import/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String importMets(@PathParam("id") String derivateId) throws FileNotFoundException, IOException,
-        JDOMException, ConvertException {
-        checkPermission(derivateId);
-        // load mets
-        Document uibkMets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
-        // import
-        LLZMetsImporter importer = new LLZMetsImporter();
-        importer.importMets(uibkMets, MCRObjectID.getInstance(derivateId));
-        Gson gson = MCRJSONManager.instance().createGson();
-        return gson.toJson(importer.getErrorList()).toString();
-    }
+//    @POST
+//    @Path("import/{id}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public String importMets(@PathParam("id") String derivateId) throws FileNotFoundException, IOException,
+//        JDOMException, ConvertException {
+////        checkPermission(derivateId);
+////        // load mets
+////        Document uibkMets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
+////        // import
+////        LLZMetsImporter importer = new LLZMetsImporter();
+//////        importer.importMets(uibkMets, MCRObjectID.getInstance(derivateId));
+//        Gson gson = MCRJSONManager.instance().createGson();
+////        return gson.toJson(importer.getErrorList()).toString();
+//        return gson.toString();
+//    }
 
     @POST
     @Path("convert/{id}")
-    public void convert(@PathParam("id") String derivateId) throws FileNotFoundException, IOException, JDOMException,
+    public void convertAndImport(@PathParam("id") String derivateId) throws IOException, JDOMException,
         ConvertException, ValidationException {
-        Document mcrMets = convertMets(derivateId);
-        byte[] bytes = MCRUtils.getByteArray(mcrMets);
+        Mets mcrMets = convertMets(derivateId);
+        Document mcrDoc = mcrMets.asDocument();
+        byte[] bytes = MCRUtils.getByteArray(mcrDoc, Format.getPrettyFormat());
         // check with METSValidator
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         METSValidator validator = new METSValidator(in);
@@ -111,6 +108,9 @@ public class METSImportResource {
             LOGGER.info("Writing error mets file to " + errorDir);
             throw exceptionList.get(0);
         }
+        // import mets
+        LLZMetsImporter importer = new LLZMetsImporter();
+        importer.importMets(mcrMets, MCRObjectID.getInstance(derivateId));
         // replace with new mets.xml
         MCRPath path = MCRPath.getPath(derivateId, "/mets.xml");
         Files.write(path, bytes);
@@ -120,14 +120,14 @@ public class METSImportResource {
     @Path("print/{id}")
     @Produces(MediaType.APPLICATION_XML)
     public String print(@PathParam("id") String derivateId) throws IOException, JDOMException, ConvertException {
-        Document mcrMets = convertMets(derivateId);
+        Document mcrMets = convertMets(derivateId).asDocument();
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         StringWriter writer = new StringWriter();
         out.output(mcrMets, writer);
         return writer.toString();
     }
 
-    private Document convertMets(String derivateId) throws FileNotFoundException, IOException, JDOMException,
+    private Mets convertMets(String derivateId) throws IOException, JDOMException,
         ConvertException {
         checkPermission(derivateId);
         MCRJerseyUtil.checkPermission(derivateId, "writedb");
@@ -135,7 +135,7 @@ public class METSImportResource {
         Document uibkMets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
         // convert
         LLZMetsConverter converter = new LLZMetsConverter();
-        return converter.convert(uibkMets).asDocument();
+        return converter.convert(uibkMets);
     }
 
     /**

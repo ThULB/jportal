@@ -1,38 +1,24 @@
 package fsu.jportal.mets;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+        import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
+        import fsu.jportal.mets.LLZMetsUtils.FileHrefStrategy;
+        import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
+        import org.jdom2.Attribute;
+        import org.jdom2.Document;
+        import org.jdom2.Element;
+        import org.jdom2.filter.Filters;
+        import org.jdom2.xpath.XPathExpression;
+        import org.jdom2.xpath.XPathFactory;
+        import org.mycore.mets.misc.StructLinkGenerator;
+        import org.mycore.mets.model.IMetsElement;
+        import org.mycore.mets.model.Mets;
+        import org.mycore.mets.model.files.FLocat;
+        import org.mycore.mets.model.files.File;
+        import org.mycore.mets.model.files.FileGrp;
+        import org.mycore.mets.model.struct.*;
 
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
-import org.mycore.mets.misc.StructLinkGenerator;
-import org.mycore.mets.model.IMetsElement;
-import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.files.FLocat;
-import org.mycore.mets.model.files.File;
-import org.mycore.mets.model.files.FileGrp;
-import org.mycore.mets.model.struct.AbstractLogicalDiv;
-import org.mycore.mets.model.struct.Area;
-import org.mycore.mets.model.struct.Fptr;
-import org.mycore.mets.model.struct.LOCTYPE;
-import org.mycore.mets.model.struct.LogicalDiv;
-import org.mycore.mets.model.struct.LogicalStructMap;
-import org.mycore.mets.model.struct.LogicalSubDiv;
-import org.mycore.mets.model.struct.PhysicalDiv;
-import org.mycore.mets.model.struct.PhysicalStructMap;
-import org.mycore.mets.model.struct.PhysicalSubDiv;
-import org.mycore.mets.model.struct.Seq;
-
-import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
-import fsu.jportal.mets.LLZMetsUtils.FileHrefStrategy;
-import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
+        import java.net.URISyntaxException;
+        import java.util.*;
 
 /**
  * Converts the llz output format from uibk to the mycore mets format.
@@ -61,7 +47,7 @@ public class LLZMetsConverter {
         FileGrp masterGroup = handleFileGroup(uibk, "MASTER",
                 "mets:fileSec//mets:fileGrp[@ID='OCRMasterFiles']/mets:file", "image/tiff", new TiffHrefStrategy());
         FileGrp altoGroup = handleFileGroup(uibk, "ALTO",
-                "mets:fileSec//mets:fileGrp[@ID='Index_ALTO_Files']/mets:file", "text/xml", new AltoHrefStrategy());
+                "mets:fileSec//mets:fileGrp[@ID='ALTOFiles']/mets:file", "text/xml", new AltoHrefStrategy());
         mcr.getFileSec().addFileGrp(masterGroup);
         mcr.getFileSec().addFileGrp(altoGroup);
     }
@@ -83,17 +69,17 @@ public class LLZMetsConverter {
         return group;
     }
 
-    private void handlePhysicalStructure(Element llzElement, Mets mets) {
+    private void handlePhysicalStructure(Element llz, Mets mets) {
         PhysicalStructMap structMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
         PhysicalDiv physicalDiv = new PhysicalDiv();
         structMap.setDivContainer(physicalDiv);
 
-        setID(physicalDiv, llzElement);
+        setID(physicalDiv, llz);
 
         XPathExpression<Element> xpathExp = XPathFactory.instance()
-                .compile("mets:structMap[@TYPE='PHYSICAL']//mets:div[mets:fptr]", Filters.element(), null,
+                .compile("mets:structMap[@TYPE='physical_structmap']//mets:div[mets:fptr]", Filters.element(), null,
                         IMetsElement.METS);
-        List<Element> divs = new ArrayList<Element>(xpathExp.evaluate(llzElement));
+        List<Element> divs = new ArrayList<Element>(xpathExp.evaluate(llz));
         Collections.sort(divs, new Comparator<Element>() {
             @Override
             public int compare(Element e1, Element e2) {
@@ -106,8 +92,12 @@ public class LLZMetsConverter {
             Element divElement = divs.get(i);
             PhysicalSubDiv div = new PhysicalSubDiv(divElement.getAttributeValue("ID"), "page", i + 1);
             List<Element> fptrs = divElement.getChildren("fptr", IMetsElement.METS);
-            div.add(new Fptr(fptrs.get(0).getAttributeValue("FILEID")));
-            div.add(new Fptr(fptrs.get(1).getAttributeValue("FILEID")));
+            for (Element ftpr : fptrs) {
+                String fileID = ftpr.getAttributeValue("FILEID");
+                if (fileID.endsWith("OCRMASTER") || fileID.endsWith("ALTO")) {
+                    div.add(new Fptr(fileID));
+                }
+            }
             physicalDiv.add(div);
         }
     }
@@ -131,50 +121,44 @@ public class LLZMetsConverter {
         physicalDiv.setId(id);
     }
 
-    private void handleLogicalStructure(Element llzElement, Mets mets) {
+    private void handleLogicalStructure(Element llz, Mets mets) {
         LogicalStructMap structMap = (LogicalStructMap) mets.getStructMap(LogicalStructMap.TYPE);
         XPathExpression<Element> xpathExp = XPathFactory.instance()
                 .compile("mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null,
                         IMetsElement.METS);
-        Element volumeDiv = xpathExp.evaluateFirst(llzElement);
-
-        //        LogicalDiv logDivContainer = new LogicalDiv(logDivContainerElem.getAttributeValue("ID"),
-        //                logDivContainerElem.getAttributeValue("TYPE"), logDivContainerElem.getAttributeValue("LABEL"),
-        //                Integer.valueOf(logDivContainerElem.getAttributeValue("ORDER")),
-        //                logDivContainerElem.getAttributeValue("ADMID"), logDivContainerElem.getAttributeValue("DMDID"));
-
+        Element volumeDiv = xpathExp.evaluateFirst(llz);
         LogicalDiv volume = new LogicalDiv(volumeDiv.getAttributeValue("ID"), "volume",
                 volumeDiv.getAttributeValue("LABEL"));
         String order = volumeDiv.getAttributeValue("ORDER");
         if (order != null) {
             volume.setOrder(Integer.valueOf(order));
         }
-
         structMap.setDivContainer(volume);
-        handleLogicalDivs(volumeDiv, volume);
+        handleLogicalDivs(volumeDiv, volume , llz);
     }
 
-    private void handleLogicalDivs(Element divElement, AbstractLogicalDiv div) {
+    private void handleLogicalDivs(Element divElement, AbstractLogicalDiv div, Element llz) {
         List<Element> children = divElement.getChildren("div", IMetsElement.METS);
         for (Element subDivElement : children) {
             // create sub div
             String type = subDivElement.getAttributeValue("TYPE").toLowerCase();
-            LogicalSubDiv subdDiv = getLogicalDiv(subDivElement);
+            String dmdID = LLZMetsUtils.getDmDId(subDivElement);
+            LogicalSubDiv subdDiv = getLogicalDiv(subDivElement, dmdID, llz);
             if (type.equals("issue") || type.equals("volumeparts")) {
-                handleLogicalDivs(subDivElement, subdDiv);
+                handleLogicalDivs(subDivElement, subdDiv, llz);
                 div.add(subdDiv);
                 continue;
             } else if (type.equals("rezension") && subDivElement.getChildren().size() > 0) {
-                handleRecension(subDivElement, subdDiv);
+                handleRecension(subDivElement, subdDiv, dmdID, llz);
             } else if (type.equals("tp")) {
                 subdDiv.setLabel("Titelblatt");
-                subdDiv.setType("titlepage");
+                subdDiv.setType("title_page");
             } else if (type.equals("preface")) {
                 subdDiv.setLabel("Vorwort");
                 subdDiv.setType("preface");
             } else if (type.equals("toc")) {
                 subdDiv.setLabel("Register");
-                subdDiv.setType("toc");
+                subdDiv.setType("index");
             } else {
                 continue;
             }
@@ -183,11 +167,17 @@ public class LLZMetsConverter {
         }
     }
 
-    private void handleRecension(Element recensionDiv, LogicalSubDiv recension) {
+    private void handleRecension(Element recensionDiv, LogicalSubDiv recension, String dmdID, Element llz) {
         // type
         recension.setType("article");
         // label
-        String bibLabel = LLZMetsUtils.getBibLabel(recensionDiv);
+        String bibLabel;
+        if (dmdID != null) {
+            bibLabel = LLZMetsUtils.getFullLabel(dmdID, llz);
+        }
+        else {
+            bibLabel = LLZMetsUtils.getBibLabel(recensionDiv);
+        }
         if (bibLabel != null) {
             recension.setLabel(bibLabel);
             this.lastBibLabel = bibLabel;
@@ -203,7 +193,7 @@ public class LLZMetsConverter {
 
     private void handleLogicalFilePointer(Element divElement, AbstractLogicalDiv div) {
         XPathExpression<Element> areaExp = XPathFactory.instance()
-                .compile("mets:div/mets:fptr/mets:area[contains(@FILEID, 'INDEXALTO')]", Filters.element(), null,
+                .compile("mets:div/mets:fptr/mets:area[contains(@FILEID, 'ALTO')]", Filters.element(), null,
                         IMetsElement.METS);
         List<Element> areas = areaExp.evaluate(divElement);
         String lastFileID = null, lastContentID = null;
@@ -213,7 +203,7 @@ public class LLZMetsConverter {
         Area area = null;
         for (Element areaElement : areas) {
             String fileID = areaElement.getAttributeValue("FILEID");
-            String contentID = areaElement.getAttributeValue("CONTENTIDS");
+            String contentID = areaElement.getParentElement().getParentElement().getAttributeValue("ID").replace("LS", "Group_");
             if (!fileID.equals(lastFileID)) {
                 if (area != null) {
                     area.setEnd(lastContentID);
@@ -233,13 +223,14 @@ public class LLZMetsConverter {
         }
     }
 
-    private LogicalSubDiv getLogicalDiv(Element divElement) {
+    private LogicalSubDiv getLogicalDiv(Element divElement, String dmdID, Element llz) {
         String id = divElement.getAttributeValue("ID");
         String type = divElement.getAttributeValue("TYPE").toLowerCase();
         String label = divElement.getAttributeValue("LABEL");
+        if (dmdID != null){
+            label = LLZMetsUtils.getFullLabel(dmdID, llz);
+        }
         String order = divElement.getAttributeValue("ORDER");
-        LogicalSubDiv div = new LogicalSubDiv(id, type, label, Integer.valueOf(order));
-        return div;
+        return new LogicalSubDiv(id, type, label, Integer.valueOf(order));
     }
-
 }

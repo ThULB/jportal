@@ -8,17 +8,18 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.solr.client.solrj.SolrServerException;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
+import org.jdom2.*;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -37,16 +38,32 @@ public abstract class LLZMetsUtils {
 
     public final static DecimalFormat EIGHT_DIGIT_FORMAT;
 
+    private static final ArrayList<Namespace> NS_LIST;
+
     private static final XPathExpression<Attribute> BIB_LABEL_EXP;
 
     private static final XPathExpression<Attribute> DMDID_EXP;
 
+    private static final XPathExpression<Element> MODS_EXPRESSION;
+
+    private static final XPathExpression<Text> TITLE_EXPRESSION;
+
     static {
+        NS_LIST = new ArrayList<Namespace>();
+        NS_LIST.add(MCRConstants.METS_NAMESPACE);
+        NS_LIST.add(MCRConstants.MODS_NAMESPACE);
+        NS_LIST.add(MCRConstants.XLINK_NAMESPACE);
+        Map<String, Object> vars = new HashMap<String, Object>();
+        vars.put("id", null);
         BIB_LABEL_EXP = XPathFactory.instance().compile("mets:div[@TYPE='Bibliographischer Eintrag']/@LABEL",
             Filters.attribute(), null, IMetsElement.METS);
         DMDID_EXP = XPathFactory.instance().compile("mets:div[@TYPE='Bibliographischer Eintrag']/@DMDID",
             Filters.attribute(), null, IMetsElement.METS);
         EIGHT_DIGIT_FORMAT = new DecimalFormat("00000000");
+        MODS_EXPRESSION = XPathFactory.instance().compile("mets:dmdSec[@ID=$id]/mets:mdWrap/mets:xmlData/mods:mods",
+                Filters.element(), vars, NS_LIST);
+        TITLE_EXPRESSION = XPathFactory.instance().compile("mods:recordInfo/mods:recordOrigin/text()", Filters.text(),
+                null, NS_LIST);
     }
 
     /**
@@ -65,10 +82,14 @@ public abstract class LLZMetsUtils {
         }
         // check profile
         String profile = rootElement.getAttributeValue("PROFILE");
-        if (!profile.equals("DEA_METSALTO_WITH_IDREFS")) {
+        if (!profile.equals("ENMAP")) {
             ValidatorUtil.throwException(rootElement, "Invalid PROFILE. Its '" + profile
-                + "' but should be 'DEA_METSALTO_WITH_IDREFS'.");
+                + "' but should be 'ENMAP'.");
         }
+//        if (!profile.equals("DEA_METSALTO_WITH_IDREFS")) {
+//            ValidatorUtil.throwException(rootElement, "Invalid PROFILE. Its '" + profile
+//                + "' but should be 'DEA_METSALTO_WITH_IDREFS'.");
+//        }
         // check agent
         String agent = ValidatorUtil
             .checkXPath(rootElement, "mets:metsHdr/mets:agent/mets:name/text()", Filters.text()).getText();
@@ -99,7 +120,7 @@ public abstract class LLZMetsUtils {
      * @param derivateId the derivate where to get the mets.xml
      * @return the mets.xml as {@link InputStream}
      */
-    public static InputStream getMetsXMLasStream(String derivateId) throws FileNotFoundException, IOException {
+    public static InputStream getMetsXMLasStream(String derivateId) throws IOException {
         MCRPath metsXML = MCRPath.getPath(derivateId, "/mets.xml");
         if (!Files.exists(metsXML)) {
             throw new FileNotFoundException("No mets.xml in this derivate " + derivateId);
@@ -121,7 +142,7 @@ public abstract class LLZMetsUtils {
      * @throws JDOMException when the file exists but couldn't be parsed with jdom
      * @return the mets.xml as jdom document
      */
-    public static Document getMetsXMLasDocument(String derivateId) throws FileNotFoundException, IOException,
+    public static Document getMetsXMLasDocument(String derivateId) throws IOException,
         JDOMException {
         InputStream metsXMLStream = getMetsXMLasStream(derivateId);
         SAXBuilder builder = new SAXBuilder();
@@ -142,6 +163,22 @@ public abstract class LLZMetsUtils {
         Attribute labelAttribute = BIB_LABEL_EXP.evaluateFirst(parentDiv);
         if (labelAttribute != null) {
             return labelAttribute.getValue();
+        }
+        return null;
+    }
+
+    /**
+     * Returns the full label of an bibliographical entry.
+     *
+     * @param dmdID
+     * @return
+     */
+    public static String getFullLabel(String dmdID, Element metsDocument) {
+        MODS_EXPRESSION.setVariable("id", dmdID);
+        Element mods = MODS_EXPRESSION.evaluateFirst(metsDocument);
+        Text title = TITLE_EXPRESSION.evaluateFirst(mods);
+        if (title != null) {
+            return title.getText();
         }
         return null;
     }
