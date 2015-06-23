@@ -1,5 +1,6 @@
 package fsu.jportal.backend.io;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -8,6 +9,8 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -15,12 +18,20 @@ import java.util.HashSet;
  * @author Huu Chi Vu
  */
 public class RecursiveImporter {
+    private static Logger LOGGER = Logger.getLogger(RecursiveImporter.class);
 
     private final ImportSource src;
 
     private final ImportSink sink;
 
-    private HashSet<String> idsOfImportedObjs;
+    private HashSet<String> idsOfImportedObjs = new HashSet<>();
+    private HashSet<String> idsOfImportedClassis = new HashSet<>();
+
+    private ArrayList<Document> objXMLs = new ArrayList<>();
+    private ArrayList<Document> classiXMLs = new ArrayList<>();
+
+    int classiCount = 0;
+    int objCount = 0;
 
     public RecursiveImporter(ImportSource importSource, ImportSink importSink) {
         this.src = importSource;
@@ -40,29 +51,37 @@ public class RecursiveImporter {
         for (Document objXML : getSrc().getObjs()) {
             importObj(objXML);
         }
+        save();
+    }
+
+    private void save() {
+        LOGGER.info("Count: " + classiCount + " # List: " + classiXMLs.size() + " # Set: " + idsOfImportedClassis.size());
+        LOGGER.info("Count: " + objCount + " # List: " + objXMLs.size() + " # Set: " + idsOfImportedObjs.size());
+        for (Document classiXML : classiXMLs) {
+            getSink().saveClassification(classiXML);
+        }
+
+        for (Document objXML : objXMLs) {
+            getSink().save(objXML);
+        }
     }
 
     private void importObj(Document objXML) {
         Element metadata = getMetadata(objXML);
         importParticipants(metadata);
         importClassification(metadata);
-        getSink().save(objXML);
+//        getSink().save(objXML);
+        objXMLs.add(objXML);
         Element structure = getStructure(objXML);
         importChildren(structure);
     }
 
-    private void importChildren(Element structureXML) {
-        Namespace xlink = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
-        XPathExpression<Attribute> participantsXpath = XPathFactory.instance()
-                .compile("children/child/@xlink:href", Filters.attribute(), null, xlink);
-        for (Attribute objIDAttr : participantsXpath.evaluate(structureXML)) {
-            String objID = objIDAttr.getValue();
-            setIdsOfImportedObjs(new HashSet<String>());
-            if (!getIdsOfImportedObjs().contains(objID)) {
-                getIdsOfImportedObjs().add(objID);
-                importObj(getSrc().getObj(objID));
-            }
-        }
+
+
+    private Document getObjXML(String objID) {
+        Document objXML = getSrc().getObj(objID);
+        LOGGER.info("Add object " + objID + " to List.");
+        return objXML;
     }
 
     private Element getStructure(Document objXML) {
@@ -82,34 +101,51 @@ public class RecursiveImporter {
                 .compile("*[@class='MCRMetaClassification']/*/@classid", Filters.attribute());
         for (Attribute attribute : classificationXpath.evaluate(metaDataXML)) {
             String classID = attribute.getValue();
-            if (!getIdsOfImportedObjs().contains(classID)) {
-                getIdsOfImportedObjs().add(classID);
-                getSink().saveClassification(getSrc().getClassification(classID));
+            if (!idsOfImportedClassis.contains(classID)) {
+                idsOfImportedClassis.add(classID);
+                getClassificationXML(classID);
+                classiCount++;
+//                getSink().saveClassification();
+            }else{
+                LOGGER.info("Classification exists: " + classID);
             }
         }
     }
 
-    public HashSet<String> getIdsOfImportedObjs() {
-        if(idsOfImportedObjs == null){
-            setIdsOfImportedObjs(new HashSet<String>());
-        }
+    private Document getClassificationXML(String classID) {
 
-        return idsOfImportedObjs;
+        Document classiXML = getSrc().getClassification(classID);
+        classiXMLs.add(classiXML);
+        LOGGER.info("Add classification " + classID + " to List.");
+        return classiXML;
     }
 
+
     private void importParticipants(Element metaDataXML) {
+        importObj(metaDataXML, "participants/participant/@xlink:href");
+    }
+
+    private void importChildren(Element structureXML) {
+        importObj(structureXML, "children/child/@xlink:href");
+    }
+
+    private void importObj(Element metaDataXML, String xpath) {
         Namespace xlink = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
         XPathExpression<Attribute> participantsXpath = XPathFactory.instance()
-                .compile("participants/participant/@xlink:href", Filters.attribute(), null, xlink);
+                .compile(xpath, Filters.attribute(), null, xlink);
         for (Attribute objIDAttr : participantsXpath.evaluate(metaDataXML)) {
             String objID = objIDAttr.getValue();
 
-            if (!getIdsOfImportedObjs().contains(objID)) {
-                getIdsOfImportedObjs().add(objID);
-                importObj(getSrc().getObj(objID));
+            if (!idsOfImportedObjs.contains(objID)) {
+                idsOfImportedObjs.add(objID);
+                importObj(getObjXML(objID));
+                objCount++;
+            }else{
+                LOGGER.info("Object exists: " + objID);
             }
         }
     }
+
 
     public void setIdsOfImportedObjs(HashSet<String> idsOfImportedObjs) {
         this.idsOfImportedObjs = idsOfImportedObjs;

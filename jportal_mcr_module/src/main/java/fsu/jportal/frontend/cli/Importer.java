@@ -35,6 +35,7 @@ public class Importer {
     }
 
     private static class LocalSystemSink implements ImportSink {
+
         @Override
         public void save(Document objXML) {
             MCRObject mcrObject = new MCRObject(objXML);
@@ -46,10 +47,10 @@ public class Importer {
                 } catch (MCRActiveLinkException e) {
                     e.printStackTrace();
                 }
-                LOGGER.info("Updated: " + mcrObject.getId().toString());
+                LOGGER.info("Updated object: " + mcrObject.getId().toString());
             } else {
                 MCRMetadataManager.create(mcrObject);
-                LOGGER.info("Created: " + mcrObject.getId().toString());
+                LOGGER.info("Created object: " + mcrObject.getId().toString());
             }
         }
 
@@ -61,10 +62,10 @@ public class Importer {
                 MCRCategoryDAO categoryDAO = MCRCategoryDAOFactory.getInstance();
                 if (categoryDAO.exist(category.getId())) {
                     categoryDAO.replaceCategory(category);
-                    LOGGER.info("Updated: " + category.getId().toString());
+                    LOGGER.info("Updated classification: " + category.getId().toString());
                 } else {
                     categoryDAO.addCategory(null, category);
-                    LOGGER.info("Created: " + category.getId().toString());
+                    LOGGER.info("Created classification: " + category.getId().toString());
                 }
             } catch (URISyntaxException e) {
                 e.printStackTrace();
