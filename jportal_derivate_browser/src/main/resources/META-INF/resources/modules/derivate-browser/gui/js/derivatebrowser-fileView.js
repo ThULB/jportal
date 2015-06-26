@@ -262,9 +262,12 @@ var derivateBrowserFileView = (function () {
         if (links != undefined){
             $("#journal-info-linklist").html("");
             $.each(links, function(i, link) {
-                var img = $("<div class='link-preview'><img class='link-preview-img' src='" + jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + link + "'></div>");
+                var img = $("<div class='link-preview'><img class='link-preview-img' src=''><img class='img-placeholder-link-preview img-placeholder' src=''></div>");
                 $(img).append("<div class='link-info'><h6 class='mightOverflow'>" + link + "</h6><span class='btn-remove-link glyphicon glyphicon-remove'></span></div>");
                 $(img).data("path", link);
+                var deriID = link.substring(0,link.indexOf("/"));
+                var path = link.substring(link.indexOf("/"));
+                derivateBrowserTools.setImgPath($(img).find("img.link-preview-img"), deriID, path)
                 $("#journal-info-linklist").append(img);
             });
             $("#journal-info-linklist").removeClass("hidden");

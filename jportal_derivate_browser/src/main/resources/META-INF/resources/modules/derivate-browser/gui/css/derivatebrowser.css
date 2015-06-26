@@ -112,6 +112,8 @@ ul{
 	height: 100%;
 	border: 1px solid #DDD;
 	margin-bottom: 0;
+	border-bottom: 0;
+	border-top: 0;
 }
 
 #files{
@@ -432,6 +434,7 @@ span.btn.faded{
 	box-shadow: 3px 3px 10px 0 rgba(50, 50, 50, 0.5);
 	position: relative;
 	z-index: 2;
+	border-top: 0;
 }
 
 .panel-img-cap{
@@ -795,13 +798,13 @@ div.statusbar-progress-single-status.noAnimation {
 	position: relative;
 	background-color: #FAFAFA;
 	border-top: 1px solid #DDD;
-	padding: 12px 2px;
+	padding: 12px 2px 13px 2px;
 
 }
 
 #journal-browser-bottom-btns{
 	text-align: right;
-	padding: 8px 15px;
+	padding: 9px 15px;
 }
 
 #derivate-browser-footer{
@@ -1245,7 +1248,7 @@ div.statusbar-progress-single-status.noAnimation {
     position: relative;
     background-color: #FAFAFA;
     border-top: 1px solid #DDD;
-    height: 101px;
+    height: 100px;
     padding-top: 10px;
     white-space: nowrap;
     overflow-y: auto;
@@ -1300,6 +1303,11 @@ div.statusbar-progress-single-status.noAnimation {
 .link-preview-img {
     max-height: 70px;
     display: block;
+}
+
+.img-placeholder-link-preview{
+	max-height: 70px;
+	display: block;
 }
 
 .drag-info{
