@@ -5,6 +5,7 @@
   <xsl:template match="jpindex">
 
     <div class="jp-layout-index col-sm-8 col-sm-offset-2">
+    <!--<div class="jp-layout-index col-sm-12">-->
       <div class="jp-layout-index-intro">
         <h1>
           <xsl:value-of select="i18n:translate('jp.site.home.header.gwlb')" />
@@ -15,7 +16,7 @@
           <xsl:value-of select="i18n:translate('jp.site.home.greeting2.gwlb')" />
         </p>
         <div class="center-block">
-          <a class="btn btn-primary jp-layout-index-gwlb-button" href="{$WebApplicationBaseURL}content/main/journalList.xml#A">
+          <a class="btn btn-primary jp-layout-index-gwlb-button" href="{$WebApplicationBaseURL}content/main/journalListGWLB.xml#*">
             <i class="fa fa-book"></i> weiter zum Zeitschriftenserver der GWLB
           </a>
         </div>

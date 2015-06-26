@@ -30,7 +30,7 @@
 					</xsl:variable>
 					<li>
 						<a
-							href="{$WebApplicationBaseURL}content/main/{$azList}List.xml#{$hash}">
+							href="{$WebApplicationBaseURL}content/main/{$azList}ListGWLB.xml#*">
 							<xsl:value-of select="'A-Z'" />
 						</a>
 					</li>

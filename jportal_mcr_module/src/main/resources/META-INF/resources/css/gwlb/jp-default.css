@@ -48,7 +48,7 @@
 ********************************************************/
 html, body {
 	background-color: #F7F7F7;
-	font-family: "Source Sans Pro",Calibri,Candara,Arial,sans-serif;
+	font-family: Verdane,Arial,sans-serif;
 	font-size: 0.9rem;
 	font-weight: 400;
 	padding-bottom: 5px;
@@ -60,7 +60,15 @@ html a {
 	text-decoration: none;
 }
 html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-layout-intro a {
-	color: #3685D4;
+	color: #27568F;
+}
+
+h1 {
+	font-family: "Source Sans Pro",Calibri,Candara,Arial,sans-serif;
+}
+
+p {
+	font-size: 12px;
 }
 
 .hidden {
@@ -88,6 +96,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 .jp-layout-index-intro > p.greeting {
 	margin-bottom: 60px;
+	font-size: 14px;
 }
 .jp-layout-index-list {
 	margin-bottom: 35px;
@@ -189,8 +198,8 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	overflow: hidden; 
 }
 .jp-layout-index-gwlb-button{
-	background-color: #3685D4;
-	border-color: #426B9E;
+	background: #7390c4 linear-gradient(to right, #7390c4 0%, #5781bd 100%);
+	border-color: #fff;
 }
 .jp-layout-footer {
 	text-align: center;
@@ -224,7 +233,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 #jp-breadcrumb-container li, #jp-breadcrumb-container a{
-	color: #3685D4;
+	color: #27568F;
 }
 
 #jp-breadcrumb-container .jp-layout-scroller {
@@ -279,7 +288,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	margin-bottom: 22px;
 }
 
-#jp-journal-content {
+#jp-journal-content.col-sm-9 {
 	border-left: 1px solid #F0F0F0;
 	margin-left: -1px;
 }
@@ -342,6 +351,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	list-style: none outside none;
 	overflow: hidden;
 	padding-left: 0;
+	/*margin-left: 15px;*/
 }
 
 .jp-layout-metadataList li span {
@@ -363,8 +373,10 @@ p.jp-layout-metadata-list {
 	display: none;
 }
 
-.jp-layout-tableOfContent {
+.jp-layout-tableOfContent.jp-list-group-special {
 	clear: both;
+	max-height: 380px;
+	overflow-y: auto;
 }
 
 .jp-layout-hidden-Button {
@@ -396,7 +408,7 @@ p.jp-layout-metadata-list {
 }
 
 .jp-layout-clickLabel a {
-	color: #3685D4;
+	color: #27568F;
 	/*color: #4B4E49;*/
 	/*font-weight: bold;*/
 }
@@ -522,7 +534,7 @@ p.jp-layout-metadata-list {
 
 #globalHeader a {
 	/*font-weight: bold;*/
-	font-size: 12px;
+	font-size: 10px;
 }
 
 #logo {
@@ -569,7 +581,7 @@ p.jp-layout-metadata-list {
 
 #searchBar .input-group-addon > span {
 	padding: 7px 7px;
-	background-color: #3685D4;
+	/*background: #7390c4 linear-gradient(to right, #7390c4 0%, #5781bd 100%);*/
 	border-radius: 4px;
 	top: 0;
 	right: 1px;
@@ -935,7 +947,7 @@ ul.ckeditorButtons li:last-child {
 }
 
 .jp-layout-mainHeader-UlLeft a{
-	color: #3685D4;
+	color: #27568F;
 }
 
 .jp-layout-mainHeader-LiPaPushleft{
@@ -949,7 +961,7 @@ ul.ckeditorButtons li:last-child {
 
 .jp-layout-mainHeader-SeperatorRight:after{
 	content: '\2022';
-	color: #3685D4;
+	color: #27568F;
 }
 
 .jp-navigation-topHeader-UlRightWraper > .jp-layout-mainHeader-SeperatorRight > a{
@@ -1063,7 +1075,7 @@ textarea {
 }
 
 .jp-list-group-special > .list-group-item{
-	color: #3685D4;
+	color: #27568F;
 	border: none;
 	margin-bottom: 0;
 }
@@ -1086,7 +1098,7 @@ textarea {
 }
 
 .jp-list-group-special > a.selected, .jp-list-group-special > a.list-group-item:hover{
-	background-color: #C7D7E8;
+	background-color: #C8D8E8;
 	/*color: #fff;*/
 	/*margin-left: -0.5em !important;*/
 	/*margin-right: -0.5em !important;*/
@@ -1240,7 +1252,7 @@ textarea {
 /* Small devices Tablets (≥768px) */
 @media (min-width: 768px) {	
 	.jp-layout-metadataList > dt:not(:first-child),.jp-layout-metadataList > dd:not(:nth-child(2)) {
-		border-top: 1px solid #F7F7F7;
+		/*border-top: 1px solid #F7F7F7;*/
 		padding-top: 5px;
 	}
 	
@@ -1418,16 +1430,16 @@ textarea {
 }
 
 #jp-volume-back-link {
-	color: #3685D4;
+	color: #27568F;
 	padding-bottom: 15px;
 }
 
 #jp-volume-back-link > a {
-	color: #3685D4;
+	color: #27568F;
 }
 
 .active-list-item {
-	background-color: #C7D7E8;
+	background-color: #C8D8E8;
 }
 
 .jp-objectlist-title {
@@ -1436,7 +1448,7 @@ textarea {
 }
 
 .jp-objectlist-metadata > a {
-	color: #3685D4;
+	color: #27568F;
 }
 
 /*******************************************************
@@ -1448,8 +1460,8 @@ textarea {
 }
 
 .journalList .tab-panel h3 a {
-	font-size: inherit;
-	color: #3685D4;
+	font-size: 12px;
+	color: #27568F;
 }
 
 #firstLetterTab {
@@ -1472,11 +1484,11 @@ textarea {
 
 #firstLetterTab .tab-nav li.selected-tab {
 	border: none;
-	background-color: #C7D7E8;
+	background-color: #C8D8E8;
 }
 
 #firstLetterTab .tab-nav li.active {
-	color: #3685D4;
+	color: #27568F;
 }
 
 #firstLetterTab .atoz .filter {

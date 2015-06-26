@@ -14,3 +14,11 @@
     	word-break: break-all;
 	}
 }
+
+#searchBar {
+    background-image: url("../IMAGES/searchbar.png");
+}
+
+#searchBar .input-group-addon > span {
+    background: #7390c4 linear-gradient(to right, #7390c4 0%, #5781bd 100%);
+}

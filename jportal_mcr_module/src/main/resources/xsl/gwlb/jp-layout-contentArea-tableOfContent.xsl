@@ -20,15 +20,8 @@
     <xsl:variable name="q" select="encoder:encode(concat('+parent:', $parentID, ' +objectType:jpvolume'))" />
     <xsl:variable name="rows" select="$settings/numPerPage[@for='volume']" />
     <xsl:variable name="sort">
-      <xsl:value-of select="'indexPosition%20asc'" />
-      <xsl:choose>
-        <xsl:when test="$isPartOfOnlineJournal">
-          <xsl:value-of select="',date.published%20desc'" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="',date.published%20asc'" />
-        </xsl:otherwise>
-      </xsl:choose>
+      <!--<xsl:value-of select="'indexPosition%20asc'" />-->
+      <xsl:value-of select="'date.published%20desc'" />
       <xsl:value-of select="',maintitle%20asc'" />
     </xsl:variable>
     <xsl:variable name="start">
@@ -48,11 +41,16 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
-    <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
+    <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999&amp;fq=volContentClassi1:volume','&amp;start=', $start))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <xsl:apply-templates mode="jp.printVolumeList" select="$volumes/response/result" />
-      <xsl:apply-templates mode="jp.printMonographList" select="$volumes/response/result" />
+      <!--<xsl:apply-templates mode="jp.printMonographList" select="$volumes/response/result" />-->
+    </xsl:if>
+
+    <xsl:variable name="monograph" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999&amp;fq=volContentClassi1:monograph','&amp;start=', $start))" />
+    <xsl:if test="$monograph/response/result/@numFound &gt; 0">
+      <!--<xsl:apply-templates mode="jp.printVolumeList" select="$volumes/response/result" />-->
+      <xsl:apply-templates mode="jp.printMonographList" select="$monograph/response/result" />
     </xsl:if>
   </xsl:template>
 
@@ -80,7 +78,7 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="articles" select="document(concat('solr:q=', $q,'&amp;fq=', $fq, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
+    <xsl:variable name="articles" select="document(concat('solr:q=', $q,'&amp;fq=', $fq, '&amp;sort=', $sort, '&amp;rows=99999','&amp;start=', $start))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
       <div id="jp-tableOfContent" class="jp-layout-tableOfContent container-fluid jp-objectlist jp-content-block row">
         <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
@@ -117,11 +115,24 @@
           <div class="jp-objectlist-object">
             <div class="jp-objectlist-metadata">
               <div class="jp-objectlist-title">
-                  <xsl:value-of select="str[@name='maintitle']" />
+                <xsl:choose>
+                  <xsl:when test="not(mcrxml:isCurrentUserGuestUser())">
+                    <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
+                      <xsl:value-of select="str[@name='maintitle']" />
+                    </a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                      <xsl:value-of select="str[@name='maintitle']" />
+                  </xsl:otherwise>
+                </xsl:choose>
+
               </div>
-              <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
-                lesen
-              </a>
+              <xsl:variable name="link" select="arr[@name='derivateLink']" />
+              <xsl:if test="$link != ''">
+                <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{$link}">
+                  lesen
+                </a>
+              </xsl:if>
               <ul class="jp-layout-metadaInSearchResults">
                 <xsl:for-each select="xalan:nodeset($fields)/field">
                   <xsl:variable name="fieldName" select="@name" />
@@ -214,7 +225,7 @@
         <i class="fa fa-sort-desc"></i>
       </a>
       <div class="collapse in list-group jp-list-group-special" id="jp-journal-child-list">
-        <div id="jp-tableOfContent" class="jp-layout-tableOfContent list-group jp-list-group-special">
+        <div class="jp-layout-tableOfContent list-group jp-list-group-special">
           <xsl:choose>
             <xsl:when test="$rubric = 'essays'">
               <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=essays">
@@ -254,7 +265,7 @@
         <i class="fa fa-sort-desc"></i>
       </a>
       <div class="collapse in list-group jp-list-group-special" id="jp-journal-volume-list">
-        <div id="jp-tableOfContent" class="jp-layout-tableOfContent list-group jp-list-group-special">
+        <div id="jp-tableOfContent -vol" class="jp-layout-tableOfContent list-group jp-list-group-special">
           <xsl:apply-templates mode="jp.printVolume" select="./doc" />
         </div>
       </div>
@@ -279,7 +290,7 @@
         <i class="fa fa-sort-desc"></i>
       </a>
       <div class="collapse in list-group jp-list-group-special" id="jp-journal-monograph-list">
-        <div id="jp-tableOfContent" class="jp-layout-tableOfContent list-group jp-list-group-special">
+        <div id="jp-tableOfContent-mono" class="jp-layout-tableOfContent list-group jp-list-group-special">
           <xsl:apply-templates mode="jp.printMonograph" select="./doc" />
         </div>
       </div>
@@ -299,8 +310,8 @@
     <xsl:variable name="q" select="encoder:encode(concat('+parent:', $parentID, ' +objectType:jpvolume'))" />
     <xsl:variable name="rows" select="$settings/numPerPage[@for='volume']" />
     <xsl:variable name="sort">
-      <xsl:value-of select="'indexPosition%20asc'" />
-      <xsl:value-of select="',date.published%20asc'" />
+      <!--<xsl:value-of select="'indexPosition%20asc'" />-->
+      <xsl:value-of select="'date.published%20desc'" />
       <xsl:value-of select="',maintitle%20asc'" />
     </xsl:variable>
     <xsl:variable name="start">
@@ -321,7 +332,7 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
+    <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=9999','&amp;start=', $start))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <xsl:apply-templates mode="jp.toc.printVolumeSelect" select="$volumes/response/result" />
     </xsl:if>
@@ -348,11 +359,13 @@
         <xsl:when test="$currentID = $currentObjID">
           <option value="{$WebApplicationBaseURL}receive/{$currentID}" selected="true">
             <xsl:value-of select="$maintitle" />
+            <xsl:apply-templates mode="jp.toc.published" select="str" />
           </option>
         </xsl:when>
         <xsl:otherwise>
           <option value="{$WebApplicationBaseURL}receive/{$currentID}">
             <xsl:value-of select="$maintitle" />
+            <xsl:apply-templates mode="jp.toc.published" select="str" />
           </option>
         </xsl:otherwise>
       </xsl:choose>
