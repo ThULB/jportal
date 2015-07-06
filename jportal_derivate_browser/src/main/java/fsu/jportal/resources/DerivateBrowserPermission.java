@@ -14,91 +14,97 @@ public class DerivateBrowserPermission implements MCRResourceAccessChecker {
     public boolean isPermitted(ContainerRequest request) {
         String method = request.getMethod();
         String path = request.getPath();
-        
-        if (method.equals("GET")){
+
+        if (method.equals("GET")) {
             //load derivate-browser
-            if (path.equals("derivatebrowser/start") && !MCRAccessManager.getAccessImpl().checkPermission("administrate-jportal")) {
+            if (path.equals("derivatebrowser/start") && !MCRAccessManager.checkPermission("administrate-jportal")) {
                 LOGGER.info("Permission denied on Derivate Browser");
                 return false;
-            }            
+            }
         }
-        
-        if (method.equals("DELETE")){
+
+        if (method.equals("DELETE")) {
             //delete files in derivate
-            if (path.equals("derivatebrowser/multiple") && !MCRAccessManager.getAccessImpl().checkPermission("delete-derivate")){
+            if (path.equals("derivatebrowser/multiple") && !checkDefaultPermission("delete-derivate")) {
                 LOGGER.info("Permission denied to delete derivate files");
                 return false;
-            }
-            else{
+            } else {
                 //delete derivate
-                if (path.contains("derivate") && !path.contains("multiple") && !MCRAccessManager.getAccessImpl().checkPermission("delete-derivate")) {
+                if (path.contains("derivate") && !path.contains("multiple") && !checkDefaultPermission(
+                        "delete-derivate")) {
                     LOGGER.info("Permission denied to delete derivate");
                     return false;
                 }
                 //delete journal
-                if (path.contains("jpjournal") && !MCRAccessManager.getAccessImpl().checkPermission("delete-jpjournal")) {
+                if (path.contains("jpjournal") && !checkDefaultPermission("delete-jpjournal")) {
                     LOGGER.info("Permission denied to delete journal");
                     return false;
                 }
                 //delete article
-                if (path.contains("jparticle") && !MCRAccessManager.getAccessImpl().checkPermission("delete-jparticle")) {
+                if (path.contains("jparticle") && !checkDefaultPermission("delete-jparticle")) {
                     LOGGER.info("Permission denied to delete article");
                     return false;
                 }
                 //delete volume
-                if (path.contains("jpvolume") && !MCRAccessManager.getAccessImpl().checkPermission("delete-jpvolume")) {
+                if (path.contains("jpvolume") && !checkDefaultPermission("delete-jpvolume")) {
                     LOGGER.info("Permission denied to delete volume");
                     return false;
                 }
             }
         }
-        
-        if (method.equals("POST")){
+
+        if (method.equals("POST")) {
             //rename derivate file
-            if (path.equals("derivatebrowser/rename") && !MCRAccessManager.getAccessImpl().checkPermission("update-derivate")) {
+            if (path.equals("derivatebrowser/rename") && !checkDefaultPermission("update-derivate")) {
                 LOGGER.info("Permission denied to rename derivate files");
                 return false;
             }
             //move derivate files
-            if (path.equals("derivatebrowser/moveDeriFiles") && !MCRAccessManager.getAccessImpl().checkPermission("update-derivate")) {
+            if (path.equals("derivatebrowser/moveDeriFiles") && !checkDefaultPermission("update-derivate")) {
                 LOGGER.info("Permission denied to move derivate files");
                 return false;
             }
             //check if files already exist
-            if (path.equals("derivatebrowser/exists") && !MCRAccessManager.getAccessImpl().checkPermission("update-derivate")) {
+            if (path.equals("derivatebrowser/exists") && !checkDefaultPermission("update-derivate")) {
                 LOGGER.info("Permission denied to check if files already exist");
                 return false;
             }
             //upload files to derivate / create derivate
-            if (path.equals("derivatebrowser/upload") && !MCRAccessManager.getAccessImpl().checkPermission("create-derivate")) {
+            if (path.equals("derivatebrowser/upload") && !MCRAccessManager.checkPermission("create-derivate")) {
                 LOGGER.info("Permission denied to upload files");
                 return false;
             }
             //add URN to derivate
-            if (path.equals("derivatebrowser/addURN") && !MCRAccessManager.getAccessImpl().checkPermission("update-derivate")) {
+            if (path.equals("derivatebrowser/addURN") && !checkDefaultPermission("update-derivate")) {
                 LOGGER.info("Permission denied to add URN to derivate");
                 return false;
             }
             //create folder in derivate
-            if (path.contains("derivate") && !path.contains("rename") && !path.contains("moveDeriFiles") && !path.contains("exists") && !path.contains("upload") && !path.contains("addURN") && !MCRAccessManager.getAccessImpl().checkPermission("create-derivate")) {
+            if (path.contains("derivate") && !path.contains("rename") && !path.contains("moveDeriFiles") && !path
+                    .contains("exists") && !path.contains("upload") && !path.contains("addURN") && !MCRAccessManager
+                    .checkPermission("create-derivate")) {
                 LOGGER.info("Permission denied to create derivate folder");
                 return false;
             }
         }
-        
-        if (method.equals("PUT")){
+
+        if (method.equals("PUT")) {
             //move documents
-            if (path.equals("derivatebrowser/moveDocs") && !MCRAccessManager.getAccessImpl().checkPermission("move-objects")) {
+            if (path.equals("derivatebrowser/moveDocs") && !MCRAccessManager.checkPermission("move-objects")) {
                 LOGGER.info("Permission denied to move documents");
                 return false;
             }
             //change mainfile
-            if (path.contains("derivate") && !path.contains("moveDocs") && !MCRAccessManager.getAccessImpl().checkPermission("update-derivate")) {
+            if (path.contains("derivate") && !path.contains("moveDocs") && !checkDefaultPermission("update-derivate")) {
                 LOGGER.info("Permission denied change mainfile");
                 return false;
             }
         }
-        
+
         return true;
+    }
+
+    private boolean checkDefaultPermission(String permission) {
+        return MCRAccessManager.checkPermission("default", permission);
     }
 }
