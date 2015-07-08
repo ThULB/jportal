@@ -1,14 +1,17 @@
 package fsu.jportal.frontend.cli.io;
 
+import fsu.jportal.backend.ImportDerivateObject;
 import fsu.jportal.backend.io.ImportSource;
-import org.apache.log4j.Logger;
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +73,49 @@ public class HttpImportSource implements ImportSource {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    public ImportDerivateObject getDerivate(String deriID) {
+        try {
+            URL url = getUrl("/receive/" + deriID + "?XSL.Style=xml");
+            System.out.println("Get Deri: " + url);
+            InputStream inputStream = url.openStream();
+            Document doc = buildXML(inputStream);
+            ImportDerivateObject impDeri = new ImportDerivateObject(deriID, doc);
+            addDerivateFiles(impDeri, "");
+            return impDeri;
+        } catch (IOException | JDOMException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void addDerivateFiles(ImportDerivateObject derivate, String path) {
+        Document derivateFiles = getDerivateFiles(derivate.getDerivateID() + path);
+        XPathExpression<Element> participantsXpath = XPathFactory.instance()
+                .compile("/mcr_directory/children/child", Filters.element());
+        for (Element file : participantsXpath.evaluate(derivateFiles)) {
+            String name = XPathFactory.instance().compile("name", Filters.element()).evaluateFirst(file).getValue();
+            long size = Long.valueOf(XPathFactory.instance().compile("size", Filters.element()).evaluateFirst(file).getValue());
+            String type = XPathFactory.instance().compile("@type", Filters.attribute()).evaluateFirst(file).getValue();
+            if (type.equals("directory")) {
+                addDerivateFiles(derivate, "/" + name);
+            }
+            else {
+                derivate.addChild(path + "/" + name, size);
+            }
+        }
+    }
+
+    private Document getDerivateFiles(String path) {
+        try {
+            URL url = getUrl("/servlets/MCRFileNodeServlet/" + path + "/?XSL.Style=xml");
+            InputStream inputStream = url.openStream();
+           return buildXML(inputStream);
+        } catch (IOException | JDOMException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

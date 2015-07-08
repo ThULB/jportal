@@ -1,5 +1,6 @@
 package fsu.jportal.backend.io;
 
+import fsu.jportal.backend.ImportDerivateObject;
 import org.jdom2.Document;
 
 /**
@@ -10,4 +11,8 @@ public interface ImportSink {
     void save(Document objXML);
 
     void saveClassification(Document classificationXML);
+
+    void saveDerivate(ImportDerivateObject deriObj);
+
+    void saveDerivateLinks();
 }

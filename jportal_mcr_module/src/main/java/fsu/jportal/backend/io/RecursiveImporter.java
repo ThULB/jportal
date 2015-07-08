@@ -1,5 +1,6 @@
 package fsu.jportal.backend.io;
 
+import fsu.jportal.backend.ImportDerivateObject;
 import org.apache.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -10,7 +11,6 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -26,12 +26,15 @@ public class RecursiveImporter {
 
     private HashSet<String> idsOfImportedObjs = new HashSet<>();
     private HashSet<String> idsOfImportedClassis = new HashSet<>();
+    private HashSet<String> idsOfImportedDeris = new HashSet<>();
 
     private ArrayList<Document> objXMLs = new ArrayList<>();
     private ArrayList<Document> classiXMLs = new ArrayList<>();
+    private ArrayList<ImportDerivateObject> deriObjs = new ArrayList<>();
 
     int classiCount = 0;
     int objCount = 0;
+    int deriCount = 0;
 
     public RecursiveImporter(ImportSource importSource, ImportSink importSink) {
         this.src = importSource;
@@ -57,6 +60,8 @@ public class RecursiveImporter {
     private void save() {
         LOGGER.info("Count: " + classiCount + " # List: " + classiXMLs.size() + " # Set: " + idsOfImportedClassis.size());
         LOGGER.info("Count: " + objCount + " # List: " + objXMLs.size() + " # Set: " + idsOfImportedObjs.size());
+        LOGGER.info("Count: " + deriCount + " # List: " + deriObjs.size() + " # Set: " + idsOfImportedDeris.size());
+
         for (Document classiXML : classiXMLs) {
             getSink().saveClassification(classiXML);
         }
@@ -64,6 +69,12 @@ public class RecursiveImporter {
         for (Document objXML : objXMLs) {
             getSink().save(objXML);
         }
+
+        for (ImportDerivateObject deriObj : deriObjs) {
+            getSink().saveDerivate(deriObj);
+        }
+
+        getSink().saveDerivateLinks();
     }
 
     private void importObj(Document objXML) {
@@ -73,10 +84,9 @@ public class RecursiveImporter {
 //        getSink().save(objXML);
         objXMLs.add(objXML);
         Element structure = getStructure(objXML);
+        importDerivate(structure);
         importChildren(structure);
     }
-
-
 
     private Document getObjXML(String objID) {
         Document objXML = getSrc().getObj(objID);
@@ -120,6 +130,28 @@ public class RecursiveImporter {
         return classiXML;
     }
 
+    private void importDerivate(Element structureXML) {
+        Namespace xlink = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
+        XPathExpression<Attribute> participantsXpath = XPathFactory.instance()
+                .compile("derobjects/derobject/@xlink:href", Filters.attribute(), null, xlink);
+        for (Attribute objIDAttr : participantsXpath.evaluate(structureXML)) {
+            String objID = objIDAttr.getValue();
+
+            if (!idsOfImportedDeris.contains(objID)) {
+                idsOfImportedDeris.add(objID);
+                getDerivate(objID);
+                deriCount++;
+            }else{
+                LOGGER.info("Derivates exists: " + objID);
+            }
+        }
+    }
+
+    private void getDerivate(String deriID) {
+        ImportDerivateObject deriObj = getSrc().getDerivate(deriID);
+        deriObjs.add(deriObj);
+        LOGGER.info("Add derivate " + deriID + " to List.");
+    }
 
     private void importParticipants(Element metaDataXML) {
         importObj(metaDataXML, "participants/participant/@xlink:href");

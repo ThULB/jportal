@@ -1,5 +1,6 @@
 package fsu.jportal.backend.io;
 
+import fsu.jportal.backend.ImportDerivateObject;
 import org.jdom2.Document;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface ImportSource {
     Document getObj(String objID);
 
     Document getClassification(String classID);
+
+    ImportDerivateObject getDerivate(String deriID);
 }

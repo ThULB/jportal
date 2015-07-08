@@ -1,11 +1,13 @@
 package fsu.jportal.frontend.cli;
 
+import fsu.jportal.backend.ImportDerivateObject;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.RecursiveImporter;
 import fsu.jportal.frontend.cli.io.HttpImportSource;
 import org.jdom2.*;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -26,9 +28,12 @@ public class RecursiveImporterTest {
 
         private ArrayList<Document> classifications;
 
+        private ArrayList<ImportDerivateObject> derivates;
+
         public MockImportSink() {
             objs = new ArrayList<>();
             classifications = new ArrayList<>();
+            derivates = new ArrayList<>();
         }
 
         public ArrayList<Document> getObjs() {
@@ -59,9 +64,22 @@ public class RecursiveImporterTest {
 //            printXML(classificationXML);
             getClassifications().add(classificationXML);
         }
+
+        public ArrayList<ImportDerivateObject> getDerivates() {
+            return derivates;
+         }
+
+        public void saveDerivate(ImportDerivateObject deriObj) {
+            getDerivates().add(deriObj);
+        }
+
+        public void saveDerivateLinks() {
+
+        }
     }
 
     @Test
+    @Ignore
     public void testGetParticipants() throws Exception {
         HttpImportSource httpImportSource = new HttpImportSource("http://zs.thulb.uni-jena.de",
                 "jportal_jpjournal_00001219");
