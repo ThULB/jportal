@@ -148,9 +148,28 @@ public class RecursiveImporter {
     }
 
     private void getDerivate(String deriID) {
-        ImportDerivateObject deriObj = getSrc().getDerivate(deriID);
-        deriObjs.add(deriObj);
+        Document doc = getSrc().getObj(deriID);
+        ImportDerivateObject impDeri = new ImportDerivateObject(deriID, doc);
+        addDerivateFiles(impDeri, "");
+        deriObjs.add(impDeri);
         LOGGER.info("Add derivate " + deriID + " to List.");
+    }
+
+    private void addDerivateFiles(ImportDerivateObject derivate, String path) {
+        Document derivateFiles = getSrc().getDerivateFiles(derivate.getDerivateID() + path);
+        XPathExpression<Element> participantsXpath = XPathFactory.instance()
+                .compile("/mcr_directory/children/child", Filters.element());
+        for (Element file : participantsXpath.evaluate(derivateFiles)) {
+            String name = XPathFactory.instance().compile("name", Filters.element()).evaluateFirst(file).getValue();
+            long size = Long.valueOf(XPathFactory.instance().compile("size", Filters.element()).evaluateFirst(file).getValue());
+            String type = XPathFactory.instance().compile("@type", Filters.attribute()).evaluateFirst(file).getValue();
+            if (type.equals("directory")) {
+                addDerivateFiles(derivate, "/" + name);
+            }
+            else {
+                derivate.addChild(path + "/" + name, size);
+            }
+        }
     }
 
     private void importParticipants(Element metaDataXML) {

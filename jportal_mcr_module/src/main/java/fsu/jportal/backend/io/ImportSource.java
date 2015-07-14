@@ -16,5 +16,5 @@ public interface ImportSource {
 
     Document getClassification(String classID);
 
-    ImportDerivateObject getDerivate(String deriID);
+    Document getDerivateFiles(String path);
 }
