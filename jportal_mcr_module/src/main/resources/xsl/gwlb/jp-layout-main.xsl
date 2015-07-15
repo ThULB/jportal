@@ -11,7 +11,7 @@
   <xsl:include href="jp-layout-functions.xsl" />
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
   <xsl:include href="/gwlb/jp-layout-contentArea.xsl" />
-  <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
+  <xsl:include href="/gwlb/jp-layout-contentArea-objectEditing.xsl" />
   <xsl:include href="jp-layout-contentArea-advancedsearch.xsl" />
   <xsl:include href="jp-layout-footer.xsl" />
 
@@ -169,6 +169,13 @@
                     <xsl:value-of select="i18n:translate('jp.site.imprint')" />
                   </a>
                 </li>
+                <xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">
+                  <li class="jp-layout-mainHeader-SeperatorRight">
+                    <a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">
+                      <xsl:value-of select="i18n:translate('jp.site.partner')" />
+                    </a>
+                  </li>
+                </xsl:if>
                 <li class="jp-layout-mainHeader-LiPaPushleft">
                   <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
                     Kontakt

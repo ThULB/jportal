@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,7 +64,11 @@ public class ImprintResource {
     @GET
     @Path("retrieve/{imprintID}")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response retrieve(@PathParam("imprintID") String imprintID) {
+    public Response retrieve(@PathParam("imprintID") String imprintID, @QueryParam("objID") String objID) {
+        if (fsType.equals("link")) {
+            Map<String, String> map = getPropAsMap(objID);
+            return Response.ok(map.get(imprintID)).build();
+        }
         Element section = getImprintContent(imprintID);
         XMLOutputter xout = new XMLOutputter(Format.getCompactFormat());
         return Response.ok(xout.outputString(section.getContent())).build(); 
@@ -78,11 +79,17 @@ public class ImprintResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(String data) {
         SaveObj save = new Gson().fromJson(data, SaveObj.class);
-        saveImprint(save.imprintID, save.content);
+        if (fsType.equals("link")) {
+            saveLink(save.objID, save.imprintID, save.content, null);
+        }
+        else {
+            saveImprint(save.imprintID, save.content);
+        }
         return Response.ok().build();
     }
-    
+
     private static class SaveObj {
+        private String objID;
         private String imprintID;
         private String content;
         
@@ -94,8 +101,13 @@ public class ImprintResource {
 
     @DELETE
     @Path("delete/{imprintID}")
-    public Response delete(@PathParam("imprintID") String imprintID) {
-        deleteImprint(imprintID);
+    public Response delete(@PathParam("imprintID") String imprintID, @QueryParam("objID") String objID) {
+        if (fsType.equals("link")) {
+            deleteLink(objID, imprintID);
+        }
+        else {
+            deleteImprint(imprintID);
+        }
         return Response.ok().build();
     }
 
@@ -104,19 +116,24 @@ public class ImprintResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response edit(String data) throws IOException {
         EditObj editO = new Gson().fromJson(data, EditObj.class);
-
-        if (!editO.oldImprintID.equals(editO.newImprintID)){
-            editImprintID(editO.oldImprintID, editO.newImprintID);
+        if (fsType.equals("link")) {
+            saveLink(editO.objID, editO.newImprintID, editO.newContent, editO.oldImprintID);
         }
+        else {
+            if (!editO.oldImprintID.equals(editO.newImprintID)){
+                editImprintID(editO.oldImprintID, editO.newImprintID);
+            }
 
-        if (!editO.oldContent.equals(editO.newContent)) {
-            saveImprint(editO.newImprintID, editO.newContent);
+            if (!editO.oldContent.equals(editO.newContent)) {
+                saveImprint(editO.newImprintID, editO.newContent);
+            }
         }
 
         return Response.ok().build();
     }
 
     private static class EditObj {
+        private String objID;
         private String oldImprintID;
         private String newImprintID;
         private String oldContent;
@@ -166,13 +183,24 @@ public class ImprintResource {
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response list() {
+    public Response list(@QueryParam("objID") String objID) {
         List<String> idList;
-        try {
-            idList = getImprintFS().list();
-        } catch (Exception exc) {
-            LOGGER.error("while retrieving imprint list", exc);
-            throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
+        if (fsType.equals("link")){
+            Map<String, String> map = getPropAsMap(objID);
+            if (map != null) {
+                idList = new ArrayList<>(map.keySet());
+            }
+            else {
+                idList = new ArrayList<>();
+            }
+        }
+        else {
+            try {
+                idList = getImprintFS().list();
+            } catch (Exception exc) {
+                LOGGER.error("while retrieving imprint list", exc);
+                throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
+            }
         }
         String jsonList = new Gson().toJson(idList);
         String normalizedJsonList = Normalizer.normalize(jsonList, Form.NFC);
@@ -291,6 +319,59 @@ public class ImprintResource {
         // set links
         setLinks(references, newImprintID);
     }
+
+    private void saveLink(String objID, String imprintID, String content, String oldImprintID) {
+        if (objID == null) {
+            LOGGER.error("unable to store link content, ObjectID is null");
+            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+        }
+        JournalConfig journalConf = getJournalConf(objID);
+        Map<String, String> newMap = getPropAsMap(objID);
+        if (newMap == null) {
+            newMap = new HashMap<>();
+            newMap.put(imprintID, content);
+        }
+        else {
+            journalConf.removeKey(fsType);
+            if (oldImprintID != null && !oldImprintID.equals("") && !oldImprintID.equals(imprintID)) {
+                newMap.remove(oldImprintID);
+            }
+            newMap.put(imprintID, content);
+        }
+        journalConf.setKey(fsType, mapToProp(newMap));
+    }
+
+    private void deleteLink(String objID, String imprintID) {
+        if (objID == null) {
+            LOGGER.error("unable to store link content, ObjectID is null");
+            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+        }
+        JournalConfig journalConf = getJournalConf(objID);
+        Map<String, String> newMap = getPropAsMap(objID);
+        if (newMap != null) {
+            journalConf.removeKey(fsType);
+            newMap.remove(imprintID);
+        }
+        if (newMap.size() > 0) {
+            journalConf.setKey(fsType, mapToProp(newMap));
+        }
+    }
+
+    private Map<String, String> getPropAsMap(String objID) {
+        String prop = getImprintID(objID, fsType);
+        Map<String, String> map = new HashMap<>();
+        if (prop != null || !prop.equals("")) {
+            Gson gson = new Gson();
+            map = gson.fromJson(prop, map.getClass());
+        }
+        return map;
+    }
+
+    private String mapToProp(Map<String, String> map) {
+        Gson gson = new Gson();
+        return gson.toJson(map);
+    }
+
 
     private void saveImprint(String imprintID, String content) {
         try {

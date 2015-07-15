@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
-  xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="layoutTools acl mcrxml mcr xlink">
+  xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:imprint="xalan://fsu.jportal.util.ImprintUtil" exclude-result-prefixes="layoutTools acl mcrxml mcr xlink imprint">
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
@@ -59,7 +59,9 @@
               </xsl:call-template>
             </xsl:if>
             <xsl:if test="$currentType = 'jpjournal'">
-              <xsl:call-template name="jp.volumeLinks" />
+              <xsl:call-template name="jp.volumeLinks">
+                <xsl:with-param name="id" select="./@ID" />
+              </xsl:call-template>
             </xsl:if>
           </xsl:if>
         </div>
@@ -189,21 +191,26 @@
   </xsl:template>
 
   <xsl:template name="jp.volumeLinks">
-    <div class="list-group">
-      <a class="dt-collapse collapsed" data-toggle="collapse" data-target="#jp-journal-link-list">
-        <span class="jp-layout-facet-group-head">
-          Link
-        </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
-      </a>
-      <div class="collapse list-group jp-list-group-special" id="jp-journal-link-list">
-        <div id="jp-tableOfContent" class="jp-layout-tableOfContent list-group jp-list-group-special">
-          <a class="list-group-item" href="">
-            Test Link
-          </a>
+    <xsl:param name="id" />
+    <xsl:if test="imprint:has($id, 'link')">
+      <div class="list-group">
+        <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-link-list">
+          <span class="jp-layout-facet-group-head">
+            Links
+          </span>
+          <i class="fa fa-sort-asc"></i>
+          <i class="fa fa-sort-desc"></i>
+        </a>
+        <div class="list-group jp-list-group-special" id="jp-journal-link-list">
+          <div id="jp-tableOfContent" class="jp-layout-tableOfContent list-group jp-list-group-special">
+            <xsl:for-each select="imprint:getLinks($id)">
+              <a class="list-group-item" href="{./@href}">
+                <xsl:value-of select="./@text"></xsl:value-of>
+              </a>
+            </xsl:for-each>
+          </div>
         </div>
       </div>
-    </div>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>

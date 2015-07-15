@@ -13,6 +13,10 @@ var ImprintEditor = function (objID, type) {
 			//noinspection JSUnresolvedVariable
 			loadI18nKeys(currentLang);
 			loadImprintList();
+			if (currentType == "link") {
+				$("#imprint-preview-button").addClass("hidden");
+				$("#imprint-link-button").removeClass("hidden");
+			}
 
 			CKEDITOR.replace("imprint-editor", {
 				resize_enabled: false,
@@ -58,6 +62,10 @@ var ImprintEditor = function (objID, type) {
 				closeImprintEditor();
 			});
 
+			$("#imprintGUIMain").on("click", "#imprint-link-close", function () {
+				closeImprintEditor();
+			});
+
 			$("#imprintGUIMain").on("click", "#imprint-editor-cancel", function () {
 				hideEditor();
 			});
@@ -78,12 +86,16 @@ var ImprintEditor = function (objID, type) {
 			loadI18nKeys(currentLang);
 			loadImprintList();
 			$("#imprint-modal").modal("show");
+			if (currentType == "link") {
+				$("#imprint-preview-button").addClass("hidden");
+				$("#imprint-link-button").removeClass("hidden");
+			}
 		}
 	};
 
 	function loadImprintList() {
 		$.ajax({
-			url: jp.baseURL + "rsc/fs/" + currentType +  "/list",
+			url: jp.baseURL + "rsc/fs/" + currentType +  "/list" + "?objID=" + currentObjID,
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
@@ -91,7 +103,9 @@ var ImprintEditor = function (objID, type) {
 					$.each(data , function(i, elm){
 						appendImprintToList(elm);
 					});
-					selectCurrentImprint(currentObjID);
+					if (currentType != "link") {
+						selectCurrentImprint(currentObjID);
+					}
 				}
 				else {
 					$("#imprint-no-imprint").removeClass("hidden");
@@ -106,7 +120,7 @@ var ImprintEditor = function (objID, type) {
 	function saveImprint(imprintName, imprintText) {
 		$.ajax({
 			url: jp.baseURL + "rsc/fs/" + currentType +  "/save",
-			data: JSON.stringify({imprintID: imprintName, content: imprintText}),
+			data: JSON.stringify({objID: currentObjID, imprintID: imprintName, content: imprintText}),
 			contentType: 'application/json',
 			dataType: "json",
 			type: "POST",
@@ -126,7 +140,7 @@ var ImprintEditor = function (objID, type) {
 
 	function deleteImprint(imprintName) {
 		$.ajax({
-			url: jp.baseURL + "rsc/fs/" + currentType +  "/delete/" + imprintName,
+			url: jp.baseURL + "rsc/fs/" + currentType +  "/delete/" + imprintName  + "?objID=" + currentObjID,
 			type: "DELETE",
 			statusCode: {
 				200: function () {
@@ -155,7 +169,7 @@ var ImprintEditor = function (objID, type) {
 	function editImprint(oldImprintName, newImprintName, oldImprintText, newImprintText) {
 		$.ajax({
 			url: jp.baseURL + "rsc/fs/" + currentType +  "/edit",
-			data: JSON.stringify({oldImprintID: oldImprintName, newImprintID: newImprintName,
+			data: JSON.stringify({objID: currentObjID, oldImprintID: oldImprintName, newImprintID: newImprintName,
 				oldContent: oldImprintText, newContent: newImprintText}),
 			contentType: 'application/json',
 			dataType: "json",
@@ -209,7 +223,7 @@ var ImprintEditor = function (objID, type) {
 
 	function getImprint(imprintName) {
 		$.ajax({
-			url: jp.baseURL + "rsc/fs/" + currentType +  "/retrieve/" + imprintName,
+			url: jp.baseURL + "rsc/fs/" + currentType +  "/retrieve/" + imprintName + "?objID=" + currentObjID,
 			type: "GET",
 			success: function(data){
 				$("#imprint-preview").html(data);
@@ -250,14 +264,19 @@ var ImprintEditor = function (objID, type) {
 		$("#imprint-editor-panel").removeClass("has-error");
 		$("#imprint-preview-title").removeClass("hidden");
 		$("#imprint-preview-panel").removeClass("hidden");
-		$("#imprint-preview-button").removeClass("hidden");
+		if (currentType == "link") {
+			$("#imprint-link-button").removeClass("hidden");
+		}
+		else {
+			$("#imprint-preview-button").removeClass("hidden");
+		}
 		$("#imprint-new-title").addClass("hidden");
 		$("#imprint-editor-title").addClass("hidden");
 		$("#imprint-editor-panel").addClass("hidden");
 		$("#imprint-editor-button").addClass("hidden");
 		$("#imprint-no-imprint").addClass("hidden");
 		$("#imprint-no-link").addClass("hidden");
-		if ($("#imprint-preview").html() == "<div />" || $("#imprint-preview").html() == "") {
+		if (currentType != "link" && ($("#imprint-preview").html() == "<div />" || $("#imprint-preview").html() == "")) {
 			if($("#imprintSelBox").is(":empty")){
 				$("#imprint-no-imprint").removeClass("hidden");
 			} else {
@@ -283,6 +302,7 @@ var ImprintEditor = function (objID, type) {
 		$("#imprint-preview-title").addClass("hidden");
 		$("#imprint-preview-panel").addClass("hidden");
 		$("#imprint-preview-button").addClass("hidden");
+		$("#imprint-link-button").addClass("hidden");
 		$("#imprint-editor-panel").removeClass("hidden");
 		$("#imprint-editor-button").removeClass("hidden");
 	}
@@ -296,12 +316,17 @@ var ImprintEditor = function (objID, type) {
 	}
 
 	function closeImprintEditor() {
+		if (currentType == "link") {
+			location.reload();
+		}
 		$("#imprintSelBox").html("");
 		$("#imprint-preview").html("");
 		$("#imprintGUIMain > .modal").modal("hide");
 		$("#imprint-preview-edit").addClass("hidden");
 		$("#imprint-no-link").addClass("hidden");
 		$("#imprint-no-imprint").addClass("hidden");
+		$("#imprint-link-button").addClass("hidden");
+		$("#imprint-preview-button").removeClass("hidden");
 	}
 
 	function saveEditor() {

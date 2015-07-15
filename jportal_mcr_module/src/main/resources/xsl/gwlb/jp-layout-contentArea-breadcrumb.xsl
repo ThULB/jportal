@@ -38,7 +38,8 @@
 				<xsl:variable name="parents"
 					select="document(concat('parents:',/mycoreobject/@ID))/parents" />
 				<xsl:choose>
-					<xsl:when test="($rubric = 'essays') or ($rubric = 'recension')">
+					<!--<xsl:when test="($rubric = 'essays') or ($rubric = 'recension')">-->
+					<xsl:when test="$rubric = not('')">
 						<xsl:apply-templates mode="jp.printListEntry"
 											 select="$parents/parent" />
 						<xsl:call-template name="jp.printListEntryWithRubric">
@@ -199,19 +200,10 @@
 
 		<li>
 			<span>
-				<xsl:if test="$rubric = 'essays'">
-					<xsl:call-template name="shortenString">
-						<xsl:with-param name="string" select="'Aufsätze'" />
-						<xsl:with-param name="length" select="20" />
-					</xsl:call-template>
-				</xsl:if>
-
-				<xsl:if test="$rubric = 'recension'">
-					<xsl:call-template name="shortenString">
-						<xsl:with-param name="string" select="'Rezensionen'" />
-						<xsl:with-param name="length" select="20" />
-					</xsl:call-template>
-				</xsl:if>
+				<xsl:call-template name="shortenString">
+					<xsl:with-param name="string" select="$rubric" />
+					<xsl:with-param name="length" select="20" />
+				</xsl:call-template>
 			</span>
 		</li>
 	</xsl:template>

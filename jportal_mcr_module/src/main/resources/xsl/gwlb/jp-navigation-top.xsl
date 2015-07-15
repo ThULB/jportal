@@ -12,13 +12,6 @@
             <a> <xsl:value-of select="layoutTools:getUserName()" /></a>
           </li>
         </xsl:if>
-        <xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">
-          <li>
-            <a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">
-              <xsl:value-of select="i18n:translate('jp.site.partner')" />
-            </a>
-          </li>
-        </xsl:if>
         <xsl:if test="acl:checkPermission('administrate-jportal')">
           <li>
             <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>
