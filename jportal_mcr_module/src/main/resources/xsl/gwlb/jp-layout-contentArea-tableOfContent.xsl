@@ -8,8 +8,6 @@
                 exclude-result-prefixes="xalan encoder mcr mcrxml solrxml i18n">
 
   <xsl:param name="referer" />
-  <xsl:param name="vol.start" />
-  <xsl:param name="art.start" />
   <xsl:param name="rubric" />
 
   <xsl:template name="tableOfContent">
@@ -22,48 +20,41 @@
   <xsl:template name="jp.toc.printVolumes">
     <xsl:param name="parentID" />
     <xsl:variable name="q" select="encoder:encode(concat('+parent:', $parentID, ' +objectType:jpvolume'))" />
-    <xsl:variable name="rows" select="$settings/numPerPage[@for='volume']" />
     <xsl:variable name="sort">
       <!--<xsl:value-of select="'indexPosition%20asc'" />-->
       <xsl:value-of select="'date.published%20desc'" />
       <xsl:value-of select="',maintitle%20asc'" />
     </xsl:variable>
-    <xsl:variable name="start">
-      <xsl:choose>
-        <xsl:when test="$vol.start">
-          <xsl:value-of select="$vol.start" />
-        </xsl:when>
-        <xsl:when test="$referer">
-          <xsl:call-template name="jp.toc.getRefererStart">
-            <xsl:with-param name="q" select="$q" />
-            <xsl:with-param name="sort" select="$sort" />
-            <xsl:with-param name="rows" select="$rows" />
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="'0'" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999','&amp;start=', $start))" />
+    <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999'))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <xsl:choose>
         <xsl:when test="$volumes/response/result/doc/arr[@name='volContentClassi1'] != ''">
-          <xsl:variable name="classi" select="$volumes/response/result/doc/arr[@name='classification']/str"></xsl:variable>
+          <xsl:variable name="classi" select="$volumes/response/result/doc/arr[@name='classification']/str"/>
           <xsl:for-each select="document(concat('classification:metadata:all:children:',$classi))/mycoreclass/categories/category/@ID">
-            <xsl:variable name="cat" select="."></xsl:variable>
+            <xsl:variable name="cat" select="."/>
             <xsl:variable name="catUsed" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999&amp;fq=', 'volContentClassi1', ':', encoder:encode($cat)))" />
             <xsl:if test="$catUsed/response/result/@numFound &gt; 0">
               <xsl:call-template name="jp.printVolumeListCat">
-                <xsl:with-param name="volumes" select="$catUsed/response/result"></xsl:with-param>
-                <xsl:with-param name="catID" select="$cat"></xsl:with-param>
-                <xsl:with-param name="catTxt" select="document(concat('classification:metadata:all:children:',$classi,':',$cat))/mycoreclass/categories/category[@ID=$cat]/label[@xml:lang=$CurrentLang]/@text"></xsl:with-param>
+                <xsl:with-param name="volumes" select="$catUsed/response/result"/>
+                <xsl:with-param name="catTxt" select="document(concat('classification:metadata:all:children:',$classi,':',$cat))/mycoreclass/categories/category[@ID=$cat]/label[@xml:lang=$CurrentLang]/@text"/>
               </xsl:call-template>
             </xsl:if>
           </xsl:for-each>
+          <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+            <xsl:variable name="noCat" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999&amp;fq=', '-volContentClassi1', ':*'))" />
+            <xsl:if test="$noCat/response/result/@numFound &gt; 0">
+              <xsl:call-template name="jp.printVolumeListCat">
+                <xsl:with-param name="volumes" select="$noCat/response/result"/>
+                <xsl:with-param name="catTxt" select="'nicht zugewiesen'"/>
+              </xsl:call-template>
+            </xsl:if>
+          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates mode="jp.printVolumeList" select="$volumes/response/result" />
+          <xsl:call-template name="jp.printVolumeListCat">
+            <xsl:with-param name="volumes" select="$volumes/response/result"/>
+            <xsl:with-param name="catTxt" select="'Jahrgang'"/>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
@@ -72,45 +63,23 @@
   <xsl:template name="jp.toc.printArticles">
     <xsl:param name="parentID" />
     <xsl:variable name="q" select="encoder:encode(concat('+parent:', $parentID, ' +objectType:jparticle'))" />
-    <xsl:variable name="fq" select="encoder:encode(concat('rubricText:', $rubric))" />
-    <xsl:variable name="rows" select="$settings/numPerPage[@for='article']" />
-    <xsl:variable name="sort" select="'size%20asc,maintitle%20asc'" />
-    <xsl:variable name="start">
+    <xsl:variable name="fq">
       <xsl:choose>
-        <xsl:when test="$art.start">
-          <xsl:value-of select="$art.start" />
-        </xsl:when>
-        <xsl:when test="$referer">
-          <xsl:call-template name="jp.toc.getRefererStart">
-            <xsl:with-param name="q" select="$q" />
-            <xsl:with-param name="sort" select="$sort" />
-            <xsl:with-param name="rows" select="$rows" />
-          </xsl:call-template>
+        <xsl:when test="$rubric = 'nicht zugewiesen'">
+          <xsl:value-of select="encoder:encode('-rubricText:*')"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="'0'" />
+          <xsl:value-of select="encoder:encode(concat('rubricText:', $rubric))"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
-    <xsl:variable name="articles" select="document(concat('solr:q=', $q,'&amp;fq=', $fq, '&amp;sort=', $sort, '&amp;rows=99999','&amp;start=', $start))" />
+    <xsl:variable name="sort" select="'size%20asc,maintitle%20asc'" />
+    <xsl:variable name="articles" select="document(concat('solr:q=', $q,'&amp;fq=', $fq, '&amp;sort=', $sort, '&amp;rows=99999'))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
       <div id="jp-tableOfContent" class="jp-layout-tableOfContent container-fluid jp-objectlist jp-content-block row">
         <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
-        <xsl:apply-templates mode="jp.pagination" select="$articles/response">
-          <xsl:with-param name="startParam" select="'XSL.art.start'" />
-        </xsl:apply-templates>
       </div>
     </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="jp.toc.getRefererStart">
-    <xsl:param name="q" />
-    <xsl:param name="sort" />
-    <xsl:param name="rows" />
-    <xsl:variable name="xml" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999&amp;fl=id'))" />
-    <xsl:variable name="positionInParent" select="count($xml/response/result/doc[str[@name] = $referer]/preceding-sibling::*)" />
-    <xsl:value-of select="floor($positionInParent div $rows) * $rows" />
   </xsl:template>
 
   <xsl:template mode="artList" match="doc">
@@ -143,19 +112,18 @@
 
               </div>
               <xsl:variable name="link" select="arr[@name='derivateLink']" />
-              <xsl:value-of select="$link"></xsl:value-of>
+              <xsl:value-of select="$link"/>
               <xsl:if test="$link != not('')">
                 <xsl:variable name="derivateCount" select="long[@name='derivateCount']" />
                  <xsl:if test="$derivateCount &gt; 0">
                    <xsl:variable name="q" select="encoder:encode(concat('+derivateOwner:', $mcrId, ' +objectType:derivate'))" />
                    <xsl:variable name="derivates" select="document(concat('solr:q=', $q))" />
                      <xsl:if test="$derivates/response/result/@numFound &gt; 0">
-                       <xsl:variable name="deri" select="$derivates/response/result/doc"></xsl:variable>
+                       <xsl:variable name="deri" select="$derivates/response/result/doc"/>
                        <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{$deri/str[@name='id']}/{$deri/str[@name='maindoc']}">
                         lesen
                        </a>
                      </xsl:if>
-                   <!--</xsl:if>-->
                  </xsl:if>
               </xsl:if>
               <ul class="jp-layout-metadaInSearchResults">
@@ -208,8 +176,6 @@
 
   <xsl:template mode="jp.printListEntryContent" match="doc">
     <xsl:variable name="mcrId" select="str[@name='id']" />
-    <xsl:variable name="cat" select="arr[@name='category']" />
-    <xsl:variable name="category" select="substring-after($cat, ':')" />
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">
         <!--<li>-->
@@ -243,156 +209,154 @@
     <xsl:param name="id" />
     <xsl:variable name="q" select="encoder:encode(concat('+parent:', $id, ' +objectType:jparticle'))" />
     <xsl:variable name="articles" select="document(concat('solr:q=', $q))" />
-    <xsl:variable name="rubricCat" select="$articles/response/result/doc/arr[@name='rubric']" />
-    <xsl:variable name="classID" select="substring-before($rubricCat,'#')" />
-    <div>
-      <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-child-list">
-        <span class="jp-layout-facet-group-head">
-          Inhalt
-        </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
-      </a>
-      <div class="collapse in list-group jp-list-group-special" id="jp-journal-child-list">
-        <div class="jp-layout-tableOfContent list-group jp-list-group-special">
-          <xsl:for-each select="document(concat('classification:metadata:all:children:',$classID))/mycoreclass/categories/category/label[@xml:lang=$CurrentLang]/@text">
-            <xsl:variable name="cat" select="."></xsl:variable>
-            <xsl:variable name="catUsed" select="document(concat('solr:q=', $q, '&amp;rows=99999&amp;fq=', 'rubricText', ':', encoder:encode($cat)))" />
-            <xsl:if test="$catUsed/response/result/@numFound &gt; 0">
-              <xsl:choose>
-                <xsl:when test="$rubric = $cat">
-                  <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric={$cat}">
-                    <xsl:value-of select="$cat" />
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric={$cat}">
-                    <xsl:value-of select="$cat" />
-                  </a>
-                </xsl:otherwise>
-              </xsl:choose>
+    <xsl:if test="$articles/response/result/@numFound &gt; 0">
+      <xsl:variable name="rubricCat" select="$articles/response/result/doc/arr[@name='rubric']" />
+      <xsl:variable name="classID" select="substring-before($rubricCat,'#')" />
+      <div>
+        <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-child-list">
+          <span class="jp-layout-facet-group-head">
+            Inhalt
+          </span>
+          <i class="fa fa-sort-asc"></i>
+          <i class="fa fa-sort-desc"></i>
+        </a>
+        <div class="collapse in list-group jp-list-group-special" id="jp-journal-child-list">
+          <div class="jp-layout-tableOfContent list-group jp-list-group-special">
+            <xsl:if test="$classID != ''">
+              <xsl:for-each select="document(concat('classification:metadata:all:children:',$classID))/mycoreclass/categories/category/label[@xml:lang=$CurrentLang]/@text">
+                <xsl:variable name="cat" select="."/>
+                <xsl:variable name="catUsed" select="document(concat('solr:q=', $q, '&amp;rows=99999&amp;fq=', 'rubricText', ':', encoder:encode($cat)))" />
+                <xsl:if test="$catUsed/response/result/@numFound &gt; 0">
+                  <xsl:choose>
+                    <xsl:when test="$rubric = $cat">
+                      <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric={$cat}">
+                        <xsl:value-of select="$cat" />
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric={$cat}">
+                        <xsl:value-of select="$cat" />
+                      </a>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
+              </xsl:for-each>
+              <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+                <xsl:variable name="noCat" select="document(concat('solr:q=', $q, '&amp;rows=99999&amp;fq=', '-rubricText', ':*'))" />
+                <xsl:if test="$noCat/response/result/@numFound &gt; 0">
+                  <xsl:choose>
+                    <xsl:when test="$rubric = 'nicht zugewiesen'">
+                      <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=nicht zugewiesen">
+                        <xsl:value-of select="'nicht zugewiesen'" />
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=nicht zugewiesen">
+                        <xsl:value-of select="'nicht zugewiesen'" />
+                      </a>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
+              </xsl:if>
             </xsl:if>
-          </xsl:for-each>
+          </div>
         </div>
       </div>
-    </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="jp.printVolumeListCat">
-    <xsl:param name="volumes"></xsl:param>
-    <xsl:param name="catID"></xsl:param>
-    <xsl:param name="catTxt"></xsl:param>
+    <xsl:param name="volumes"/>
+    <xsl:param name="catTxt"/>
     <div class="list-group">
       <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-volume-list">
         <span class="jp-layout-facet-group-head">
-          <xsl:value-of select="$catTxt"></xsl:value-of>
+          <xsl:value-of select="$catTxt"/>
         </span>
         <i class="fa fa-sort-asc"></i>
         <i class="fa fa-sort-desc"></i>
       </a>
       <div class="collapse in list-group jp-list-group-special" id="jp-journal-volume-list">
         <div id="jp-tableOfContent -vol" class="jp-layout-tableOfContent list-group jp-list-group-special">
-          <xsl:apply-templates mode="jp.printVolume" select="$volumes/doc" />
+          <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/doc" />
         </div>
       </div>
     </div>
-  </xsl:template>
-
-  <xsl:template mode="jp.printVolumeList" match="result">
-    <div class="list-group">
-      <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-volume-list">
-        <span class="jp-layout-facet-group-head">
-          Jahrgänge
-        </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
-      </a>
-      <div class="collapse in list-group jp-list-group-special" id="jp-journal-volume-list">
-        <div id="jp-tableOfContent -vol" class="jp-layout-tableOfContent list-group jp-list-group-special">
-          <xsl:apply-templates mode="jp.printVolume" select="./doc" />
-        </div>
-      </div>
-    </div>
-  </xsl:template>
-
-  <xsl:template mode="jp.printVolume" match="doc">
-    <xsl:variable name="cat" select="arr[@name='category']" />
-    <xsl:variable name="category" select="substring-after($cat, ':')" />
-    <xsl:apply-templates mode="jp.printListEntryContent" select="." />
-  </xsl:template>
-
-  <xsl:template mode="jp.printMonographList" match="result">
-    <div class="list-group">
-      <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-monograph-list">
-        <span class="jp-layout-facet-group-head">
-          Monographien
-        </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
-      </a>
-      <div class="collapse in list-group jp-list-group-special" id="jp-journal-monograph-list">
-        <div id="jp-tableOfContent-mono" class="jp-layout-tableOfContent list-group jp-list-group-special">
-          <xsl:apply-templates mode="jp.printMonograph" select="./doc" />
-        </div>
-      </div>
-    </div>
-  </xsl:template>
-
-  <xsl:template mode="jp.printMonograph" match="doc">
-    <xsl:variable name="cat" select="arr[@name='category']" />
-    <xsl:variable name="category" select="substring-after($cat, ':')" />
-    <xsl:if test="$category = 'monograph'">
-      <xsl:apply-templates mode="jp.printListEntryContent" select="." />
-    </xsl:if>
   </xsl:template>
 
   <xsl:template name="jp.toc.buildVolumeSelect">
     <xsl:param name="parentID" />
+    <xsl:variable name="qCat" select="encoder:encode(concat('+id:', $currentObjID, ' +objectType:jpvolume'))" />
     <xsl:variable name="q" select="encoder:encode(concat('+parent:', $parentID, ' +objectType:jpvolume'))" />
-    <xsl:variable name="rows" select="$settings/numPerPage[@for='volume']" />
+    <xsl:variable name="fqCat" select="encoder:encode('volContentClassi1:*')"/>
+    <xsl:variable name="fq" select="encoder:encode('-volContentClassi1:*')"/>
     <xsl:variable name="sort">
       <!--<xsl:value-of select="'indexPosition%20asc'" />-->
       <xsl:value-of select="'date.published%20desc'" />
       <xsl:value-of select="',maintitle%20asc'" />
     </xsl:variable>
-    <xsl:variable name="start">
-      <xsl:choose>
-        <xsl:when test="$vol.start">
-          <xsl:value-of select="$vol.start" />
-        </xsl:when>
-        <xsl:when test="$referer">
-          <xsl:call-template name="jp.toc.getRefererStart">
-            <xsl:with-param name="q" select="$q" />
-            <xsl:with-param name="sort" select="$sort" />
-            <xsl:with-param name="rows" select="$rows" />
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="'0'" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
 
-    <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=9999','&amp;start=', $start))" />
-    <xsl:if test="$volumes/response/result/@numFound &gt; 0">
-      <xsl:apply-templates mode="jp.toc.printVolumeSelect" select="$volumes/response/result" />
-    </xsl:if>
+    <xsl:variable name="hasCat" select="document(concat('solr:q=', $qCat, '&amp;fq=', $fqCat, '&amp;sort=', $sort, '&amp;rows=9999'))" />
+    <xsl:choose>
+      <xsl:when test="$hasCat/response/result/@numFound &gt; 0">
+        <xsl:variable name="catID" select="$hasCat/response/result/doc/arr[@name='volContentClassi1']"/>
+        <xsl:variable name="classi" select="$hasCat/response/result/doc/arr[@name='classification']/str"/>
+        <xsl:variable name="fqCatID" select="encoder:encode(concat('volContentClassi1:', $catID))"/>
+        <xsl:variable name="volumesCat" select="document(concat('solr:q=', $q, '&amp;fq=', $fqCatID, '&amp;sort=', $sort, '&amp;rows=9999'))"/>
+        <xsl:call-template name="jp.toc.getCatVolumeSelect">
+          <xsl:with-param name="catID" select="$catID"/>
+          <xsl:with-param name="classi" select="$classi"/>
+          <xsl:with-param name="volumesCat" select="$volumesCat/response/result"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;fq=', $fq, '&amp;sort=', $sort, '&amp;rows=9999'))" />
+        <xsl:if test="$volumes/response/result/@numFound &gt; 0">
+          <xsl:variable name="noCat" select="document(concat('solr:q=', $q, '&amp;fq=', $fqCat, '&amp;sort=', $sort, '&amp;rows=9999'))" />
+          <xsl:variable name="catTxt">
+            <xsl:choose>
+              <xsl:when test="$noCat/response/result/@numFound &gt; 0">
+                <xsl:value-of select="'nicht zugewiesen'"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="'Jahrgang'"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:call-template name="jp.toc.printVolumeSelect">
+            <xsl:with-param name="volumes" select="$volumes/response/result"/>
+            <xsl:with-param name="catText" select="$catTxt"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
-  <xsl:template mode="jp.toc.printVolumeSelect" match="result">
+  <xsl:template name="jp.toc.getCatVolumeSelect">
+    <xsl:param name="catID"/>
+    <xsl:param name="classi"/>
+    <xsl:param name="volumesCat"/>
+    <xsl:variable name="catTxt" select="document(concat('classification:metadata:all:children:',$classi,':',$catID))/mycoreclass/categories/category[@ID=$catID]/label[@xml:lang=$CurrentLang]/@text"/>
+    <xsl:call-template name="jp.toc.printVolumeSelect">
+      <xsl:with-param name="volumes" select="$volumesCat"/>
+      <xsl:with-param name="catText" select="$catTxt"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="jp.toc.printVolumeSelect">
+    <xsl:param name="volumes"/>
+    <xsl:param name="catText"/>
     <div class="jp-volume-sidebar-group">
       <h2 class="jp-volume-selectCaption">
-        Jahrgang wechseln
+        <xsl:value-of select="$catText"/>
       </h2>
       <select id="jp-volume-select" onchange="location = this.options[this.selectedIndex].value;">
-        <xsl:apply-templates mode="jp.toc.printVolume" select="./doc" />
+        <xsl:apply-templates mode="jp.toc.printVolume" select="$volumes/doc" />
       </select>
     </div>
   </xsl:template>
 
   <xsl:template mode="jp.toc.printVolume" match="doc">
-    <xsl:variable name="cat" select="arr[@name='category']" />
-    <xsl:variable name="category" select="substring-after($cat, ':')" />
     <xsl:variable name="maintitle" select="str[@name='maintitle']" />
     <xsl:variable name="currentID" select="str[@name='id']" />
     <xsl:choose>
