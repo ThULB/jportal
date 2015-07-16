@@ -429,6 +429,7 @@ var derivateBrowserFileView = (function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.deleted"), true);
 				},
 			error: function(error) {
+                    derivateBrowserTools.hideLoadingScreen();
                     console.log(error);
                     if (error.status == 401) {
                         derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);

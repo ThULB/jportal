@@ -462,7 +462,9 @@ var derivateBrowserUpload = (function () {
             for (var i = 0; i < files.length; ++i) {
                 //noinspection JSUnresolvedFunction
                 var entry = files[i].webkitGetAsEntry();
-                getWebkitFiles(entry);
+                if (entry != null) {
+                    getWebkitFiles(entry);
+                }
             }
         }
         else {
