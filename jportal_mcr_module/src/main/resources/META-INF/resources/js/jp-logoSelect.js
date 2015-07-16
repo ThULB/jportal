@@ -123,7 +123,7 @@ $(function() {
 		$(list).each(function() {
 			var href = $(this).attr("href");
 			var logoAdress = logoURLBase + "/" + subfolder + href;
-			if(href.contains(".svg")) {
+			if(href.indexOf(".svg") > -1) {
 				var inputBase = '<a class="list-group-item thumbnail text-center" value="' + logoAdress + '" ><h5>' + decodeURIComponent(href) + '</h5></a>';
 				$("#personSelect-modal-body > .editor-logoSelect-container").append(inputBase);
 				loadElement(encodeURIComponent(logoAdress.substring(41)), function(data){
