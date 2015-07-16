@@ -222,47 +222,63 @@
         </a>
         <div class="collapse in list-group jp-list-group-special" id="jp-journal-child-list">
           <div class="jp-layout-tableOfContent list-group jp-list-group-special">
-            <xsl:if test="$classID != ''">
-              <xsl:for-each select="document(concat('classification:metadata:all:children:',$classID))/mycoreclass/categories/category/label[@xml:lang=$CurrentLang]/@text">
-                <xsl:variable name="cat" select="."/>
-                <xsl:variable name="catUsed" select="document(concat('solr:q=', $q, '&amp;rows=99999&amp;fq=', 'rubricText', ':', encoder:encode($cat)))" />
-                <xsl:if test="$catUsed/response/result/@numFound &gt; 0">
-                  <xsl:choose>
-                    <xsl:when test="$rubric = $cat">
-                      <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric={$cat}">
-                        <xsl:value-of select="$cat" />
-                      </a>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric={$cat}">
-                        <xsl:value-of select="$cat" />
-                      </a>
-                    </xsl:otherwise>
-                  </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="$classID != ''">
+                <xsl:for-each select="document(concat('classification:metadata:all:children:',$classID))/mycoreclass/categories/category/label[@xml:lang=$CurrentLang]/@text">
+                  <xsl:variable name="cat" select="."/>
+                  <xsl:variable name="catUsed" select="document(concat('solr:q=', $q, '&amp;rows=99999&amp;fq=', 'rubricText', ':', encoder:encode($cat)))" />
+                  <xsl:if test="$catUsed/response/result/@numFound &gt; 0">
+                    <xsl:choose>
+                      <xsl:when test="$rubric = $cat">
+                        <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric={$cat}">
+                          <xsl:value-of select="$cat" />
+                        </a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric={$cat}">
+                          <xsl:value-of select="$cat" />
+                        </a>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:if>
+                </xsl:for-each>
+                <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+                  <xsl:variable name="noCat" select="document(concat('solr:q=', $q, '&amp;rows=99999&amp;fq=', '-rubricText', ':*'))" />
+                  <xsl:if test="$noCat/response/result/@numFound &gt; 0">
+                    <xsl:call-template name="jp.printContentList.noCat">
+                      <xsl:with-param name="id" select="$id"/>
+                    </xsl:call-template>
+                  </xsl:if>
                 </xsl:if>
-              </xsl:for-each>
-              <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
-                <xsl:variable name="noCat" select="document(concat('solr:q=', $q, '&amp;rows=99999&amp;fq=', '-rubricText', ':*'))" />
-                <xsl:if test="$noCat/response/result/@numFound &gt; 0">
-                  <xsl:choose>
-                    <xsl:when test="$rubric = 'nicht zugewiesen'">
-                      <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=nicht zugewiesen">
-                        <xsl:value-of select="'nicht zugewiesen'" />
-                      </a>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=nicht zugewiesen">
-                        <xsl:value-of select="'nicht zugewiesen'" />
-                      </a>
-                    </xsl:otherwise>
-                  </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+                  <xsl:call-template name="jp.printContentList.noCat">
+                    <xsl:with-param name="id" select="$id"/>
+                  </xsl:call-template>
                 </xsl:if>
-              </xsl:if>
-            </xsl:if>
+              </xsl:otherwise>
+            </xsl:choose>
           </div>
         </div>
       </div>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="jp.printContentList.noCat">
+    <xsl:param name="id"/>
+    <xsl:choose>
+      <xsl:when test="$rubric = 'nicht zugewiesen'">
+        <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=nicht zugewiesen">
+          <xsl:value-of select="'nicht zugewiesen'" />
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=nicht zugewiesen">
+          <xsl:value-of select="'nicht zugewiesen'" />
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="jp.printVolumeListCat">
