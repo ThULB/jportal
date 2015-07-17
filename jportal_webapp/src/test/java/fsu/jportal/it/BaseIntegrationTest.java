@@ -1,5 +1,7 @@
 package fsu.jportal.it;
 
+import static org.junit.Assert.assertEquals;
+
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.System;
@@ -14,9 +16,11 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import javax.imageio.ImageIO;
@@ -73,13 +77,13 @@ public class BaseIntegrationTest {
 
     public static int LOCAL_PORT;
 
-    public static String TEST_APP;
-
-    public static String START_URL, SOURCE_HTML, TEST_URL;
+    public static String TEST_APP, START_URL;
+    
+    public String SOURCE_HTML, TEST_URL;
 
     public static WebDriver DRIVER;
 
-    public static byte[] screenShot;
+    public byte[] screenShot;
 
     @BeforeClass
     public static void setupClass() {
@@ -105,8 +109,14 @@ public class BaseIntegrationTest {
         LOGGER.info("Server running on '" + START_URL + "'");
         DRIVER = new FirefoxDriver();
         
-				TestUtils.home(DRIVER);
-    		TestUtils.login(DRIVER);
+        //call jportal homepage
+        DRIVER.get(getHomeAddress());
+        assertEquals("invald index page - title does not match", "journals@UrMEL - JPortal", DRIVER.getTitle());
+        DRIVER.findElement(By.xpath("//div[@id='navbar-collapse-globalHeader']/ul/li[2]/a")).click();
+        WebElement uid = DRIVER.findElement(By.xpath("//input[@name='uid']"));
+        uid.sendKeys("administrator");
+        DRIVER.findElement(By.xpath("//input[@name='pwd']")).sendKeys("alleswirdgut");
+        uid.submit();
     }
 
     @AfterClass
@@ -116,24 +126,18 @@ public class BaseIntegrationTest {
 
     @Before
     public void setup() {
-    	screenShot = null;
-    	TestUtils.home(DRIVER);
+    	DRIVER.get(getHomeAddress());
+      assertEquals("invald index page - title does not match", "journals@UrMEL - JPortal", DRIVER.getTitle());
     }
 
     @After
     public void tearDown() {
-        screenshot();
+        SOURCE_HTML = DRIVER.getPageSource();
+        if (DRIVER instanceof TakesScreenshot) {
+            screenShot = ((TakesScreenshot) DRIVER).getScreenshotAs(OutputType.BYTES);
+        }
+        TEST_URL = DRIVER.getCurrentUrl();
     }
-
-		public static void screenshot() {
-			if(screenShot == null){
-				SOURCE_HTML = DRIVER.getPageSource();
-				if (DRIVER instanceof TakesScreenshot) {
-				    screenShot = ((TakesScreenshot) DRIVER).getScreenshotAs(OutputType.BYTES);
-				}
-				TEST_URL = DRIVER.getCurrentUrl();
-			}
-		}
 
     public static String getHomeAddress() {
         return START_URL + "/content/below/index.xml";
@@ -143,7 +147,7 @@ public class BaseIntegrationTest {
         return START_URL;
     }
 
-    public static BufferedImage takeScreenshot() throws IOException {
+    public BufferedImage takeScreenshot() throws IOException {
         if (DRIVER instanceof TakesScreenshot) {
             ByteArrayInputStream inputStream;
             inputStream =  new ByteArrayInputStream(((TakesScreenshot) DRIVER).getScreenshotAs(OutputType.BYTES));
