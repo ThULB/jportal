@@ -15,6 +15,7 @@
     <var name="createInst" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpinst')}" />
     <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpvolume')}" />
     <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jparticle')}" />
+    <var name="deleteDoublets" value="{acl:checkPermission('default', 'delete-doublets')}" />
     <var name="deleteDeriv" value="{acl:checkPermission('default_derivate', 'deletedb')}" />
     <var name="currentType" value="{$currentType}" />
     <var name="currentObjID" value="{$currentObjID}" />
@@ -97,8 +98,7 @@
         </item>
       </item>
       <item type="menu">
-        <restriction name="updatePerm" value="true" />
-        <restriction name="createJournal" value="true" />
+        <restriction name="deleteDoublets" value="true" />
         <item>
           <label name="Dublettenfinder" href="{$WebApplicationBaseURL}rsc/doublets" />
         </item>

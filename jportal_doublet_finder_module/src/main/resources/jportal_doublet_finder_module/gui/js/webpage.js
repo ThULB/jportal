@@ -16,7 +16,7 @@ $(document).ready(function() {
 						$("#delDubButton").removeAttr("disabled");
 					}
 			    },"json")
-			})
+			});
 			
 			$("span.numGND").on("initGUIElem", function(){
 				var numDubDispl = $(this);
@@ -30,32 +30,31 @@ $(document).ready(function() {
 						$("#"+type+"_gnd a.gndLink").show();
 					}
 				},"json")
-			})
+			});
 			
 			$("span.message").on("toggleMsg", function(){
 				$(this).toggle();
-			})
+			});
 			
 			$("#delDubButton").on({
 				click : function(){
-					var button = $(this);
-					$.get(jp.baseURL + 'servlets/MCRWebCLIServlet?request=getKnownCommands', function(data){
-						button.trigger("removeDub");
-				    }).error(function(err){
-				        if(err.status == 403){
-				        	$(location).attr('href', jp.baseURL + "servlets/MCRLoginServlet?action=login&url=%2Frsc%2Fdoublets");
-				        }
-				    });
+					$(this).trigger("removeDub");
 				},
 				
 				removeDub : function(){
 					$.each(["person", "jpinst"], function(index, type){
-						$.get(jp.baseURL + 'servlets/MCRWebCLIServlet?run=jp clean up ' + type, function(data){
+						$.ajax({
+							method: "DELETE",
+							url: jp.baseURL + 'rsc/doublets/' + type,
+						}).success(function(data){
 							if(!dubCheckGUI.data("statusTriggered")){
 								dubCheckGUI.trigger("status");
 								dubCheckGUI.data("statusTriggered", true);
 							}
 					    }).error(function(err){
+							if (err.status == "401") {
+								$(location).attr('href', jp.baseURL + "servlets/MCRLoginServlet?action=login&url=" + jp.baseURL + "rsc%2Fdoublets");
+							}
 					        console.log('removeDuplicate failed with Error Code ' + err.status);
 					    });
 					})
@@ -64,7 +63,7 @@ $(document).ready(function() {
 				initGUIElem : function(){
 					$(this).attr("disabled","disabled");
 				}
-			})
+			});
 			
 			$("#delDubButton").trigger("initGUIElem");
 			$("span.numDub").trigger("initGUIElem");
@@ -76,14 +75,19 @@ $(document).ready(function() {
 			var processRunning = true;
 			$.ajax({ 
 		        type :  'GET',
-		        url: jp.baseURL + 'servlets/MCRWebCLIServlet?request=getStatus', 
+		        url: jp.baseURL + "servlets/solr/select?wt=json&q=%2BdoubletOf:*",
+				dataType: "json",
 		        success: function(data){
-		            processRunning = data.running;
+					if (data.response.numFound < 1) {
+						processRunning = false;
+					}
 		        }, 
 		        complete: function(){
 		        	if(processRunning == true){
 		        		$("#progressMsg").show();
-		        		dubCheckGUI.trigger("status");
+						setTimeout(function() {
+							dubCheckGUI.trigger("status");
+						}, 1000);
 		        	}else {
 		        		$("#progressMsg").hide();
 		        		dubCheckGUI.trigger("init");

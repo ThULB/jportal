@@ -2,6 +2,8 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,8 +44,13 @@ public class DoubletsFinderResource {
     @Path("{type}")
     public Response removeDuplicatesFor(@PathParam("type") String type) {
         MCRCommandManager mcrKnownCommands = new MCRCommandManager();
+        List<String> commandList = new ArrayList<>();
+        commandList.add("jp clean up " + type);
         try {
-            mcrKnownCommands.invokeCommand("jp clean up " + type);
+            for (int i = 0; i < commandList.size(); i++){
+                List<String> returnList = mcrKnownCommands.invokeCommand(commandList.get(i));
+                commandList.addAll(returnList);
+            }
             return Response.ok().build();
         } catch (Exception e) {
             // TODO Auto-generated catch block
