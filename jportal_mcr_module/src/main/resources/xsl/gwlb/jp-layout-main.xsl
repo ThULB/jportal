@@ -8,7 +8,7 @@
   xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="i18n imprint xsi mcr mcrxml acl xalan layoutUtils websiteWriteProtection jpxml">
 
   <xsl:include href="jp-layout-tools.xsl" />
-  <xsl:include href="jp-layout-functions.xsl" />
+  <xsl:include href="/gwlb/jp-layout-functions.xsl" />
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
   <xsl:include href="/gwlb/jp-layout-contentArea.xsl" />
   <xsl:include href="/gwlb/jp-layout-contentArea-objectEditing.xsl" />
