@@ -67,6 +67,10 @@
           <!-- <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" /> -->
           <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}" />
         </item>
+        <item>
+          <restriction name="createJournal" value="true"/>
+          <label name="Objectbrowser" href="{$WebApplicationBaseURL}rsc/derivatebrowser/start?lang=de#/{$currentObjID}"/>
+        </item>
       </item>
       <item type="menu">
         <item>
