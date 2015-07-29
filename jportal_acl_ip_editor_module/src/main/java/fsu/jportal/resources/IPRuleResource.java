@@ -1,5 +1,6 @@
 package fsu.jportal.resources;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,19 +47,21 @@ import fsu.jportal.pref.JournalConfig;
 @MCRRestrictedAccess(IPRuleAccess.class)
 public class IPRuleResource {
     static Logger LOGGER = Logger.getLogger(IPRuleResource.class);
-    
-//    static MCRCache<String, MCRAccessRule> accessCache;
-//
-//    static {
-//        MCRAccessControlSystem.instance();
-//        accessCache = MCRAccessControlSystem.getCache();
-//    }
 
-    @PathParam("objID")
-    String objID;
+    private String defRule;
+
+    private MCRRuleStore ruleStore;
+
+    private MCRAccessRule rule;
+
+    private  Map<String, IPAddress> ipAddressMap;
+
+    @PathParam("objID") String objID;
 
     JournalConfig journalConf = null;
-    
+
+    private String ruleStr;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String listJSON() {
@@ -93,10 +96,24 @@ public class IPRuleResource {
 
     @POST
     public Response add(String ip) {
-        String ruleId = getJournalConfKeys().getKey("ruleId");
-        String defRule = getJournalConfKeys().getKey("defRule");
-        
-        return response(addIp(ruleId, ip, defRule));
+        StatusType status;
+        try {
+            IPAddress ipAddress = IPAddress.getFromString(ip);
+            if (getIpAddressMap().containsKey(ipAddress.getIP())) {
+                return response(HttpStatus.ALLREADY_EXIST);
+            }
+
+            getIpAddressMap().put(ipAddress.getIP(), ipAddress);
+
+            save();
+            return response(Status.CREATED);
+        } catch (IPFormatException e) {
+            e.printStackTrace();
+            return response(HttpStatus.INPUT_ERR);
+        } catch (IPRuleParseException e) {
+            e.printStackTrace();
+            return response(HttpStatus.RULE_DB_ERR);
+        }
     }
 
     private Response response(StatusType statusType) {
@@ -105,21 +122,20 @@ public class IPRuleResource {
 
     @DELETE
     public Response remove(String ipStr) {
-        String ruleId = getJournalConfKeys().getKey("ruleId");
-        String defRule = getJournalConfKeys().getKey("defRule");
+        try {
+            IPAddress toRemoveIpAddress = IPAddress.getFromString(ipStr);
+            if (getIpAddressMap().remove(toRemoveIpAddress.getIP()) == null) {
+                return response(Status.NOT_FOUND);
+            }
 
-        return response(removeIp(ruleId, ipStr, defRule));
-    }
-
-    @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String removeList(String json) {
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-        JsonArray ipsAsJSONArray = jsonObject.getAsJsonArray("ips");
-        String ruleId = getJournalConfKeys().getKey("ruleId");
-
-        return ipsAsJSONArray.toString();
+            save();
+            return response(Status.OK);
+        } catch (IPFormatException e) {
+            return response(HttpStatus.INPUT_ERR);
+        } catch (IPRuleParseException e) {
+            e.printStackTrace();
+            return response(HttpStatus.RULE_DB_ERR);
+        }
     }
 
     @PUT
@@ -127,149 +143,75 @@ public class IPRuleResource {
     public Response update(String data) {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
-        String newIp = jsonObject.get("newIp").getAsString();
         String oldIp = jsonObject.get("oldIp").getAsString();
+        String newIp = jsonObject.get("newIp").getAsString();
 
-        String ruleId = getJournalConfKeys().getKey("ruleId");
-        String defRule = getJournalConfKeys().getKey("defRule");
-        
-        StatusType removeStatus = removeIp(ruleId, oldIp, defRule);
-        
-        if(removeStatus.getStatusCode() != Status.OK.getStatusCode()){
-            return response(removeStatus);
-        }
-        
-        return response(addIp(ruleId, newIp, defRule));
-    }
-
-    class IPSet implements IPAddressList<Set<String>> {
-        private Set<String> ipSet = new HashSet<String>();
-
-        @Override
-        public Set<String> getList() {
-            return ipSet;
-        }
-
-        @Override
-        public void add(IPAddress address) {
-            ipSet.add(address.getIP());
-        }
-
-    }
-
-    private StatusType addIp(String ruleid, String ip, String defRule) {
-        MCRRuleStore ruleStore = MCRRuleStore.getInstance();
-        MCRAccessRule rule = ruleStore.getRule(ruleid);
-        String ruleStr = rule.getRuleString();
-        
         try {
-            IPAddress ipAddress = IPAddress.getFromString(ip);
-            Map<String, IPAddress> ipRules = IPRuleParser.parseRule(ruleStr, new IPMap());
-            if(ipRules.containsKey(ipAddress.getIP())){
-                return HttpStatus.ALLREADY_EXIST;
+            IPAddress oldIpAddress = IPAddress.getFromString(oldIp);
+            IPAddress newIpAddress = IPAddress.getFromString(newIp);
+            if (getIpAddressMap().remove(oldIpAddress.getIP()) == null) {
+                return response(Status.NOT_FOUND);
             }
-            
-            ipRules.put(ipAddress.getIP(), ipAddress);
 
-            rule.setRule(buildRule(ipRules.values(), defRule));
-            ruleStore.updateRule(rule);
-//            updateRuleCache(ruleid, rule);
-            
-            return Status.CREATED;
+            ipAddressMap.put(newIpAddress.getIP(), newIpAddress);
+
+            save();
+            return response(Status.OK);
         } catch (IPFormatException e) {
             e.printStackTrace();
-            return HttpStatus.INPUT_ERR;
+            return response(HttpStatus.INPUT_ERR);
         } catch (IPRuleParseException e) {
-            return HttpStatus.RULE_DB_ERR;
+            e.printStackTrace();
+            return response(HttpStatus.RULE_DB_ERR);
         }
     }
 
-//    private void updateRuleCache(String ruleid, MCRAccessRule rule) {
-//        MCRCache<String, MCRAccessRule> cache = MCRAccessControlSystem.getCache();
-//        cache.put(ruleid, rule);
-//        cache.remove(ruleid);
-//    }
+    private Map<String, IPAddress> getIpRules() throws IPRuleParseException {
+        String ruleId = getJournalConfKeys().getKey("ruleId");
+        MCRRuleStore ruleStore = MCRRuleStore.getInstance();
+        MCRAccessRule rule = ruleStore.getRule(ruleId);
+        String ruleStr = rule.getRuleString();
+        return IPRuleParser.parseRule(ruleStr, new IPMap());
+    }
+
+    private void saveIpRules(Map<String, IPAddress> ipRules) {
+        String defRule = getJournalConfKeys().getKey("defRule");
+    }
+
+    public Map<String, IPAddress> getIpAddressMap() throws IPRuleParseException {
+        if(ipAddressMap == null){
+            String ruleId = getJournalConfKeys().getKey("ruleId");
+            defRule = getJournalConfKeys().getKey("defRule");
+            ruleStore = MCRRuleStore.getInstance();
+            rule = ruleStore.getRule(ruleId);
+            ruleStr = rule.getRuleString();
+            ipAddressMap = IPRuleParser.parseRule(ruleStr, new IPMap());
+        }
+
+        return ipAddressMap;
+    }
+
+    private void save() {
+        rule.setRule(buildRule(ipAddressMap.values(), defRule));
+        ruleStore.updateRule(rule);
+    }
 
     private String buildRule(Collection<IPAddress> values, String defRule) {
         StringBuffer newRuleStr = new StringBuffer();
-        for (Iterator iterator = values.iterator(); iterator.hasNext();) {
+        for (Iterator iterator = values.iterator(); iterator.hasNext(); ) {
             IPAddress ipAddress = (IPAddress) iterator.next();
-            newRuleStr.append("(ip " + ipAddress.toString() +")");
-            
-            if(iterator.hasNext()){
+            newRuleStr.append("(ip " + ipAddress.toString() + ")");
+
+            if (iterator.hasNext()) {
                 newRuleStr.append(" OR ");
             }
         }
-        
-        if(!values.isEmpty()){
+
+        if (!values.isEmpty()) {
             newRuleStr.append(" OR ");
         }
         newRuleStr.append(defRule);
-        
+
         return newRuleStr.toString();
     }
-    
-    
-
-    private StatusType removeIp(String ruleid, String ipStr, String defRule) {
-        MCRRuleStore ruleStore = MCRRuleStore.getInstance();
-        MCRAccessRule rule = ruleStore.getRule(ruleid);
-        String ruleStr = rule.getRuleString();
-        
-            try {
-                IPAddress toRemoveIpAddress = IPAddress.getFromString(ipStr);
-                Map<String, IPAddress> ipRules = IPRuleParser.parseRule(ruleStr, new IPMap());
-                if(ipRules.remove(toRemoveIpAddress.getIP()) == null){
-                    return Status.NOT_FOUND;
-                }
-                
-                rule.setRule(buildRule(ipRules.values(), defRule));
-                ruleStore.updateRule(rule);
-//                updateRuleCache(ruleid, rule);
-                
-                return Status.OK;
-            } catch (IPRuleParseException e) {
-                return HttpStatus.RULE_DB_ERR;
-            } catch (IPFormatException e) {
-                return HttpStatus.INPUT_ERR;
-            }
-    }
-    
-    private StatusType updateIp(String ruleid, String oldIpStr, String newIpStr) {
-        MCRRuleStore ruleStore = MCRRuleStore.getInstance();
-        MCRAccessRule rule = ruleStore.getRule(ruleid);
-        String ruleStr = rule.getRuleString();
-        
-        try {
-            IPAddress oldIpAddress = IPAddress.getFromString(oldIpStr);
-            IPAddress newIpAddress = IPAddress.getFromString(newIpStr);
-            Map<String, IPAddress> ipRules = IPRuleParser.parseRule(ruleStr, new IPMap());
-            if(ipRules.remove(oldIpAddress.getIP()) == null){
-                return Status.NOT_FOUND;
-            }
-            
-            ipRules.put(newIpAddress.getIP(), newIpAddress);
-            StringBuffer newRuleStr = new StringBuffer();
-            Collection<IPAddress> values = ipRules.values();
-            for (Iterator iterator = values.iterator(); iterator.hasNext();) {
-                IPAddress ipAddress = (IPAddress) iterator.next();
-                newRuleStr.append("(ip " + ipAddress.toString() +")");
-                newRuleStr.append("(ip " + ipAddress.toString() +")");
-                
-                if(iterator.hasNext()){
-                    newRuleStr.append(" OR ");
-                }
-            }
-            
-            return Status.OK;
-        } catch (IPRuleParseException e) {
-            return HttpStatus.RULE_DB_ERR;
-        } catch (IPFormatException e) {
-            return HttpStatus.INPUT_ERR;
-        }
-    }
-
-//    protected static MCRCache<String, MCRAccessRule> getAccessCache() {
-//        return accessCache;
-//    }
 }

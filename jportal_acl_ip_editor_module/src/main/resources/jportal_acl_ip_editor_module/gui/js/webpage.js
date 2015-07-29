@@ -109,7 +109,7 @@ $(document).ready(function(){
 						handleAs : "json",
 						data: JSON.stringify({newIp: newIp, oldIp: oldIp}),
 						statusCode: {
-							201: function() {
+							200: function() {
 								elem.empty();
 								elem.text(newValue);
 								tdIPAbo.toggleClass("ipAbo");
@@ -212,7 +212,7 @@ $(document).ready(function(){
 		$('#myModal').modal('hide');
 	}).fail(function(data){
 		if(data.status == 401){
-			window.location = "/servlets/MCRLoginServlet?url=" + window.location.pathname;
+			window.location = jp.baseURL + "servlets/MCRLoginServlet?url=" + window.location.pathname;
 		}
 	})
 	
