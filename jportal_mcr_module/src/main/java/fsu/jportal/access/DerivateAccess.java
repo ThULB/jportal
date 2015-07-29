@@ -6,15 +6,23 @@ import java.util.Calendar;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.ModifiableSolrParams;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.datamodel.common.MCRISO8601Date;
 import org.mycore.solr.MCRSolrClientFactory;
 
 import fsu.jportal.pref.JournalConfig;
 
 public class DerivateAccess {
+
     public static boolean checkPermission(String id, String date){
         JournalConfig journalConfig = new JournalConfig(id, "fsu.jportal.derivate.access");
         String accessClassName = journalConfig.getKey("accessClass");
+
+        String permission = "read-derivate";
+        MCRAccessManager.invalidPermissionCache(id, permission);
+        if (MCRAccessManager.checkPermission(id, permission)) {
+            return true;
+        }
         
         if(accessClassName != null && "klostermann".equals(accessClassName)){
             if(date.equals("")){

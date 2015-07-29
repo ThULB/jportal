@@ -36,7 +36,7 @@
     <xsl:param name="mode" select="'metadata'" />
     <xsl:param name="published" select="/mycoreobject/metadata/dates/date[@type='published' and @inherited=0]" />
 
-    <xsl:if test="acl:checkPermission($journalID,'read-derivate') or derivAccess:checkPermission($journalID, $published)">
+    <xsl:if test="derivAccess:checkPermission($journalID, $published)">
       <xsl:if test="count($nodes) &gt; 0">
         <div class="jp-layout-derivateList">
           <xsl:apply-templates mode="derivateDisplay" select="$nodes">
