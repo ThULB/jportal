@@ -3,102 +3,151 @@ package fsu.jportal.frontend;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.jdom2.Attribute;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRObjectUtils;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.jdom2.Document;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.utils.MCRCategoryTransformer;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRClassification2Commands;
 import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.frontend.cli.MCRObjectCommands;
 
-import fsu.jportal.frontend.cli.ObjectTools;
+import fsu.jportal.backend.ImportDerivateObject;
+import fsu.jportal.backend.io.ImportSink;
+import fsu.jportal.backend.io.ImportSource;
 
 public class RecursiveObjectExporter {
-	private static Logger LOGGER = Logger.getLogger(ObjectTools.class.getName());
-	private Set<String> storage = new HashSet<String>();
-	
-	public void start(String objectID, String dest){
-		if(!storage.contains(objectID)){
-			MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(objectID);
-			saveObject(mcrObject, dest);
-			storage.add(objectID);
-		}
-	}
-	
-	public void saveObject(MCRObject mcrObject, String dest) {
-		String type = mcrObject.getId().getTypeId();
-		String location = dest + "/" + type;
-		createDir(location);
-		MCRObjectCommands.export(mcrObject.getId().toString(), location, "");
+	public static class ExporterSink implements ImportSink {
+		private static Logger LOGGER = Logger.getLogger(ExporterSink.class);
+		private Path saveTo;
+		private List<Link> derivateLinkList = new ArrayList<>();
 		
-		saveObjChildren(mcrObject, dest);
-		saveExternObject(mcrObject, dest);
-	}
-	
-	public void saveObjChildren(MCRObject parent, String dest) {
-		List<MCRObject> mcrchildren = MCRObjectUtils.getDescendants(parent);
-		for (MCRObject mcrchild : mcrchildren) {
-			saveObject(mcrchild, dest);
+		public ExporterSink(Path dest) {
+	    this.saveTo = dest;
 		}
-	}
-	
-	public void saveExternObject(MCRObject mcrObject, String dest) {
-    Element metadataXML = mcrObject.getMetadata().createXML();
-    Element structureXML = mcrObject.getStructure().createXML();
-    
-    saveMetaLinkChilds(dest, metadataXML);
-    saveMetaLinkChilds(dest, structureXML);
-    saveClassification(dest, metadataXML);
-	}
+		
+    private class Link {
+      String document;
+      String file;
 
-	private void saveClassification(String dest, Element metadataXML) {
-		XPathExpression<Attribute> participantXpath = XPathFactory.instance().compile("*[@class='MCRMetaClassification']/*/@classid", Filters.attribute(), null);
-  	for (Attribute attribute : participantXpath.evaluate(metadataXML)) {
-  		if(!storage.contains(attribute.getValue())) {
-  			try {
-  				MCRClassification2Commands.export(attribute.getValue(), dest + "/classification", "");
-  			} catch (Exception e) {
-  				LOGGER.error("Failed to export Classification: " + e.getMessage());
-  			}
-  			storage.add(attribute.getValue());
-  		}
+      public Link(String document, String file) {
+          this.document = document;
+          this.file = file;
+      }
     }
-	}
+		
+		@Override
+		public void save(Document objXML) {
+			MCRObject mcrObject = new MCRObject(objXML);
+			String type = mcrObject.getId().getTypeId();
+			Path path = saveTo.resolve(type);
+			createDir(path);
+			MCRObjectCommands.export(mcrObject.getId().toString(), path.toAbsolutePath().toString(), "");
+			saveDerivateLink(mcrObject);
+		}
 
-	private void saveMetaLinkChilds(String dest, Element metadataXML) {
-		XPathExpression<Element> childElements = XPathFactory.instance().compile("*[@class='MCRMetaLinkID']/*", Filters.element(), null, MCRConstants.XLINK_NAMESPACE);
-    for (Element element : childElements.evaluate(metadataXML)) {
-    	String href = element.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE);
-			if(element.getName().equals("derobject")){
-				String derivateDir = dest + "/derivate";
-				createDir(derivateDir);
-    		MCRDerivateCommands.export(href, derivateDir, "");
-    	} else {
-    		start(href, dest);
-    	}
-  		storage.add(href);
-    }
-	}
-
-	public void createDir(String dest) {
-		Path classiDir = Paths.get(dest);
-		if(!Files.exists(classiDir)) {
+		@Override
+		public void saveClassification(Document classificationXML) {
 			try {
-				Files.createDirectories(classiDir);
-			} catch (IOException e) {
-				LOGGER.error("Unable to create Directory: " + e.getMessage());
+				Path path = saveTo.resolve("classification");
+				createDir(path);
+				String id = classificationXML.getRootElement().getAttributeValue("ID");
+				MCRClassification2Commands.export(id, path.toAbsolutePath().toString(), "");
+			} catch (Exception e) {
+				LOGGER.error("Couldn't save Classification");
+				e.printStackTrace();
 			}
 		}
+
+		@Override
+		public void saveDerivate(ImportDerivateObject deriObj) {
+			MCRDerivateCommands.export(deriObj.getDerivateID(), saveTo.resolve(deriObj.getDocumentID().split("_")[1]).toAbsolutePath().toString(), "");
+		}
+
+    @Override
+    public void saveDerivateLinks() {
+        for (Link link : derivateLinkList) {
+            try {
+            	Path path = saveTo.resolve(link.document.split("_")[1]);
+      				createDir(path);
+            	MCRDerivateCommands.export(link.file, path.toAbsolutePath().toString(), "");
+            } catch (Exception e) {
+                LOGGER.error("Error while saving DerivateLinks from " + link.document + " with file " + link.file);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void saveDerivateLink(MCRObject obj) {
+        MCRMetaElement deriLinks = obj.getMetadata().getMetadataElement("derivateLinks");
+        String href = "";
+        if (deriLinks != null) {
+            for (MCRMetaInterface link : deriLinks) {
+            	  href = ((MCRMetaDerivateLink) link).getXLinkHref().split("/")[0];
+                derivateLinkList.add(new Link(obj.getId().toString(), href));
+            }
+        }
+        obj.getMetadata().removeMetadataElement("derivateLinks");
+    }
+    
+		public void createDir(Path dest) {
+			if(!Files.exists(dest)) {
+				try {
+					Files.createDirectories(dest);
+				} catch (IOException e) {
+					LOGGER.error("Unable to create Directory: " + e.getMessage());
+				}
+			}
+		}
+		
+	}
+	
+	public static class ExporterSource implements ImportSource {
+	  private List<Document> objs;
+		
+		public ExporterSource(String id) {
+			Document objXML = getObj(id);
+			getObjs().add(objXML);
+		}
+		
+		@Override
+		public List<Document> getObjs() {
+	    if (objs == null) {
+	      objs = new ArrayList<Document>();
+	    }
+	    return objs;
+		}
+
+		@Override
+		public Document getObj(String objID) {
+			try {
+				return MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(objID));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		public Document getClassification(String classID) {
+      MCRCategory cl = MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.rootID(classID), -1);
+			return MCRCategoryTransformer.getMetaDataDocument(cl, false);
+		}
+
+		@Override
+		public Document getDerivateFiles(String path) {
+			return getObj(path);
+		}
+		
 	}
 }

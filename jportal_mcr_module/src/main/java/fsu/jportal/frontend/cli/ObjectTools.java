@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -40,8 +41,11 @@ import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.iview2.frontend.MCRIView2Commands;
 
-import fsu.jportal.frontend.RecursiveObjectExporter;
+import fsu.jportal.backend.io.ImportSink;
+import fsu.jportal.backend.io.ImportSource;
+import fsu.jportal.backend.io.RecursiveImporter;
 import fsu.jportal.frontend.util.DerivateLinkUtil;
+import fsu.jportal.frontend.RecursiveObjectExporter.*;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {
@@ -53,11 +57,13 @@ public class ObjectTools {
         MCRMetadataManager.update(mcrObject);
     }
 
-	  @MCRCommand(help = "export object and children and their derivate from [objectID] to [destination].", syntax = "export object recursiv from {0} to {1}")
-	  public static void exportObject(String objectID, String dest) {
-	    RecursiveObjectExporter exportIt = new RecursiveObjectExporter();
-	    exportIt.start(objectID, dest);
-	  }
+    @MCRCommand(help = "export object and children and their derivate from [objectID] to [destination].", syntax = "export object recursiv from {0} to {1}")
+    public static void exportObject(String objectID, String dest) {
+  	    ImportSource importSource = new ExporterSource(objectID);
+  	    ImportSink importSink = new ExporterSink(Paths.get(dest));
+  	    RecursiveImporter recursiveImporter = new RecursiveImporter(importSource, importSink);
+  	    recursiveImporter.start();
+    }
 
     // dataModelCoverage: browse, fully
     @MCRCommand(help = "cp [source ID] [n times] [layoutTemplate] [dataModelCoverage]", syntax = "cp {0} {1} {2} {3}")
