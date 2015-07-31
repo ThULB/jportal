@@ -14,7 +14,7 @@ import fsu.jportal.it.TestUtils;
 
 public class BaseITCase extends BaseIntegrationTest {
 
-	@Test
+  @Test
   public void loginAndLogout() throws Exception {
 	  if (TestUtils.isLoggedIn(DRIVER)) {
 	      TestUtils.logout(DRIVER);
@@ -171,8 +171,10 @@ public class BaseITCase extends BaseIntegrationTest {
     //del testInst
     DRIVER.findElement(By.id("delDubButton")).click();
 
-    Thread.sleep(500);
-    assertEquals("didn't deleted", "0", DRIVER.findElement(By.xpath("//p[@id='jpinst_doublets']/span[@class='numDub']")).getText());
+    WebDriverWait wait = new WebDriverWait(DRIVER, 2);
+    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("progressMsg")));
+    wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("progressMsg")));
+    assertEquals("Failed to delet!", "0", DRIVER.findElement(By.xpath("//p[@id='jpinst_doublets']/span[@class='numDub']")).getText());
 
     DRIVER.findElement(By.linkText("(Institutionen ohne GND anzeigen...)")).click();
     DRIVER.findElement(By.linkText("parentTestInst")).click();
