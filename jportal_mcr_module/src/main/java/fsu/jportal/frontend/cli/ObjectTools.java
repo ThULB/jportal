@@ -46,6 +46,8 @@ import fsu.jportal.backend.io.ImportSource;
 import fsu.jportal.backend.io.RecursiveImporter;
 import fsu.jportal.frontend.util.DerivateLinkUtil;
 import fsu.jportal.frontend.RecursiveObjectExporter.*;
+import fsu.jportal.frontend.cli.io.LocalExportSink;
+import fsu.jportal.frontend.cli.io.LocalExportSource;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {
@@ -63,6 +65,14 @@ public class ObjectTools {
   	    ImportSink importSink = new ExporterSink(Paths.get(dest));
   	    RecursiveImporter recursiveImporter = new RecursiveImporter(importSource, importSink);
   	    recursiveImporter.start();
+    }
+    
+    @MCRCommand(help = "export recursive derivate from [objectID] to [destination].", syntax = "exportDerivates from {0} to {1}")
+    public static void exportPics(String objectID, String dest) {
+      ImportSource importSource = new LocalExportSource(objectID);
+      ImportSink importSink = new LocalExportSink(Paths.get(dest));
+      RecursiveImporter recursiveImporter = new RecursiveImporter(importSource, importSink);
+      recursiveImporter.start();
     }
 
     // dataModelCoverage: browse, fully
