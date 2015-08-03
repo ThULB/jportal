@@ -18,7 +18,27 @@ def getDate() {
     return formattedDate
 }
 
-allprojects {
+buildscript {
+    repositories {
+        jcenter()
+        // enable this to use snapshot versions of Gretty:
+        // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+    }
+
+    dependencies {
+        classpath 'org.akhikhl.gretty:gretty:1.2.3'
+        classpath "org.hsqldb:hsqldb:2.3.2"
+        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.10'
+    }
+}
+
+repositories {
+    jcenter()
+    // enable this to use snapshot versions of Gretty:
+    // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+}
+
+subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'eclipse'
@@ -75,55 +95,13 @@ allprojects {
         testCompile 'log4j:log4j:1.2.17'
         testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
     }
-}
 
-def mcrComplDep = [
-        "org.mycore:mycore-base:$mcrVersion",
-        "org.mycore:mycore-solr:$mcrVersion",
-        "org.mycore:mycore-mets:$mcrVersion",
-        "org.mycore:mycore-iview2:$mcrVersion",
-        "org.mycore:mycore-user2:$mcrVersion",
-        "org.mycore:mycore-classeditor:$mcrVersion",
-        "org.mycore:mycore-mets:$mcrVersion",
-        "org.mycore:mycore-oai:$mcrVersion",
-        "org.mycore:mycore-session-listing:$mcrVersion",
-        "org.mycore:mycore-swf:$mcrVersion",
-        'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT',
-        'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT',
-        'org.mycore.mets:mets-model:0.6-SNAPSHOT',
-        'org.mycore.mets:mets-validator:1.1-SNAPSHOT',
-        'javax.servlet:javax.servlet-api:3.1.0',
-        'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
-]
-
-
-
-subprojects {
-
-    def noMCRDep = [
-            "jportal_jetty_tools",
-            "jportal_web_tests",
-            "java_agent"
-    ]
-
-    if (!(project.name in noMCRDep)) {
-        dependencies {
-            mcrComplDep.each { dep -> compile dep }
-        }
+    if (project.name != 'jportal_webapp') {
+        resourcePaths.addAll(sourceSets.main.resources.srcDirs);
     }
 
-    def noJPModuleDep = [
-            "jportal-commons",
-            "jportal_ext_web_lib",
-            "jportal_iview2_plugin",
-            "jportal_emb_hsql",
-            "jportal_jetty_tools",
-            "java_agent",
-            "jportal_web_tests"
-    ]
-
-    if (project.name != 'jportal_mcr_module' && !(project.name in noJPModuleDep)) {
-        dependencies { compile project(':jportal_mcr_module') }
+    test {
+        systemProperty "project.buildDir", project.buildDir.absolutePath
     }
 
     def mcrModule = [
@@ -135,7 +113,7 @@ subprojects {
     ]
 
     if (project.name in mcrModule) {
-        println "MCRModule $project.name"
+        println "$project.name is MCRModule"
         jar {
             manifest {
                 attributes("MCR-Application-Module": "$project.name")
@@ -145,19 +123,67 @@ subprojects {
             }
         }
     }
-    resourcePaths.addAll(sourceSets.main.resources.srcDirs);
 
-    test {
-        systemProperty "project.buildDir", project.buildDir.absolutePath
+    def mcrDepProj = [
+            "jportal_acl_ip_editor_module",
+            "jportal_derivate_browser",
+            "jportal_doublet_finder_module",
+            "jportal_experiments",
+            "jportal_jquery_cnd",
+            "jportal_laws",
+            "jportal_mcr_module",
+            "jportal_move_obj_module",
+            "jportal_person_fix",
+            "jportal_sample_data",
+            "jportal_webapp_wizard"
+
+    ]
+    if (project.name in mcrDepProj) {
+        println "$project.name depends on mycore"
+        dependencies {
+            compile "org.mycore:mycore-base:$mcrVersion"
+            compile "org.mycore:mycore-solr:$mcrVersion"
+            compile "org.mycore:mycore-mets:$mcrVersion"
+            compile "org.mycore:mycore-iview2:$mcrVersion"
+            compile "org.mycore:mycore-user2:$mcrVersion"
+            compile "org.mycore:mycore-classeditor:$mcrVersion"
+            compile "org.mycore:mycore-mets:$mcrVersion"
+            compile "org.mycore:mycore-oai:$mcrVersion"
+            compile "org.mycore:mycore-session-listing:$mcrVersion"
+            compile "org.mycore:mycore-swf:$mcrVersion"
+            compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
+            compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
+            compile 'org.mycore.mets:mets-model:0.7'
+            compile 'org.mycore.mets:mets-validator:1.1-SNAPSHOT'
+            compile 'javax.servlet:javax.servlet-api:3.1.0'
+            compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
+        }
     }
+
+    def jpDepProj = [
+            "jportal_acl_ip_editor_module",
+            "jportal_derivate_browser",
+            "jportal_experiments",
+            "jportal_laws",
+            "jportal_doublet_finder_module",
+            "jportal_webapp"
+    ]
+    if (project.name in jpDepProj) {
+        println "$project.name depends on jportal_mcr_module"
+        dependencies {
+            compile project(':jportal_mcr_module')
+        }
+    }
+
 }
 
 project(':jportal_mcr_module') {
+    apply plugin: 'com.moowork.grunt'
+
     configurations { iview }
 
     dependencies {
         compile project(':jportal-commons')
-        compile project(':jportal_ext_web_lib')
         compile project(':jportal_iview2_plugin')
         compile 'de.uni-jena.thulb.oai:archive-oai-resources:0.0.1-SNAPSHOT'
         compile 'log4j:log4j:1.2.17'
@@ -173,64 +199,62 @@ project(':jportal_mcr_module') {
     }
 
     def gruntBuildDir = "$project.buildDir/grunt"
-    processResources.doFirst {
-        copy {
-            from 'grunt'
-            include '**/*'
-            into gruntBuildDir
-        }
 
-        def iviewJar
-        configurations.iview.each { file ->
-            iviewJar = file.absolutePath
-        }
-        copy {
-            from zipTree(iviewJar)
-            include '**/iview-client-base.d.ts', '**/iview-client-mets.d.ts', '**/jquery.d.ts'
-            into "$gruntBuildDir/iview-client"
-            includeEmptyDirs = false
-        }
+    node {
+        // Version of node to use.
+        version = '0.11.10'
 
-        exec {
-            workingDir gruntBuildDir
-            commandLine 'npm', 'install'
-        }
+        // Version of npm to use.
+        npmVersion = '2.1.5'
 
-        exec {
-            workingDir gruntBuildDir
-            commandLine "node_modules/grunt-cli/bin/grunt"
+        // If true, it will download node using above parameters.
+        // If false, it will try to use globally installed node.
+        download = true
+
+        // Set the work directory where node_modules should be located
+        nodeModulesDir = file(gruntBuildDir)
+    }
+
+    installGrunt {
+        doFirst {
+            copy {
+                from 'grunt'
+                include '**/*'
+                into gruntBuildDir
+            }
+
+            def iviewJar
+            configurations.iview.each { file ->
+                iviewJar = file.absolutePath
+            }
+            copy {
+                from zipTree(iviewJar)
+                include '**/iview-client-base.d.ts', '**/iview-client-mets.d.ts', '**/jquery.d.ts'
+                into "$gruntBuildDir/iview-client"
+                includeEmptyDirs = false
+            }
         }
     }
+
+    grunt {
+        workDir = file(gruntBuildDir)
+    }
+
+    grunt_default.dependsOn installGrunt
+    grunt_default.dependsOn npmInstall
+
+    processResources.dependsOn grunt_default
 
     processResources {
         //copy iview link js into META-INF
         from("$gruntBuildDir/classes/META-INF") { into 'META-INF' }
-        from("$project.buildDir/templateName.xml") { into 'META-INF/resources/templates' }
     }
-}
-
-buildscript {
-    repositories {
-        jcenter()
-        // enable this to use snapshot versions of Gretty:
-        // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
-    }
-
-    dependencies {
-        classpath 'org.akhikhl.gretty:gretty:1.2.3'
-        classpath "org.hsqldb:hsqldb:2.3.2"
-    }
-}
-
-repositories {
-    jcenter()
-    // enable this to use snapshot versions of Gretty:
-    // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
 }
 
 project(':jportal_webapp') {
     apply plugin: 'war'
     apply plugin: 'org.akhikhl.gretty'
+
 
     configurations {
         applet
@@ -240,6 +264,7 @@ project(':jportal_webapp') {
     dependencies {
         testCompile 'junit:junit:4.+'
         testCompile "log4j:log4j:1.2.17"
+        testCompile "org.hamcrest:hamcrest-library:1.3"
         testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
         testCompile "org.mycore:mycore-viewer:0.4-SNAPSHOT:tests"
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
@@ -254,6 +279,8 @@ project(':jportal_webapp') {
         runtime project(':jportal_doublet_finder_module')
         runtime project(':jportal_move_obj_module')
         runtime project(':jportal_acl_ip_editor_module')
+        runtime project(':jportal_ext_web_lib')
+        runtime project(':jportal_mcr_module')
         applet "org.mycore.fileupload:fileupload-applet:1.+"
     }
 
@@ -285,6 +312,8 @@ project(':jportal_webapp') {
             gretty 'org.hsqldb:hsqldb:2.3.2'
         }
 
+
+
         ['App', 'WebTests'].each { farmName ->
             farm farmName, {
                 def pathName = farmName.equals('App') ? "jportal" : "jportal-webTests"
@@ -307,7 +336,7 @@ project(':jportal_webapp') {
                         }
                     }
                     jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
-                } else if(farmName.equals('WebTests')) {
+                } else if (farmName.equals('WebTests')) {
                     // Gretty don't load static files from META-INF in jar files, so this is a workaround
                     webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
                     // Gretty need the webapp project to run the webtests, this is due to the workaround above
