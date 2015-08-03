@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.mets.ConvertException;
+import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.LLZMetsUtils;
 import mockit.Invocation;
 import mockit.Mock;
@@ -14,8 +15,11 @@ import org.apache.log4j.Logger;
 import org.jdom2.*;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mycore.common.MCRConstants;
@@ -25,7 +29,14 @@ import org.mycore.common.xml.MCRLayoutTransformerFactory;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.IMetsElement;
+import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.files.FileGrp;
+import org.mycore.mets.model.sections.DmdSec;
+import org.mycore.mets.model.sections.MdWrapSection;
+import org.mycore.mets.model.struct.*;
+import org.mycore.mets.validator.validators.SchemaValidator;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,6 +122,7 @@ public class LLZMetsImporterTest {
             Element rootDiv = LOGICAL_STRUCTMAP_EXPRESSION.evaluateFirst(mets.getRootElement());
             try {
                 handleLogicalDivs(rootDiv);
+
             } catch (ConvertException e) {
                 e.printStackTrace();
             }
@@ -244,6 +256,7 @@ public class LLZMetsImporterTest {
     }
 
     @Test
+    @Ignore
     public void testLLZImport() throws Exception {
 
         BasicConfigurator.configure();
@@ -256,6 +269,7 @@ public class LLZMetsImporterTest {
     }
 
     @Test
+    @Ignore
     public void testNewImporter() throws Exception {
         new MockUp<LLZMetsParser>(){
             int invCount = 0;
@@ -341,13 +355,14 @@ public class LLZMetsImporterTest {
     }
 
     @Test
+    @Ignore
     public void testCountIssue() throws Exception {
         ParserMock parserMock = new ParserMock();
 
         BasicConfigurator.configure();
 
         LLZMetsParser llzMetsParser = new LLZMetsParser();
-        InputStream metsStream = getClass().getResourceAsStream("/mets/mets.xml");
+        InputStream metsStream = getClass().getResourceAsStream("/mets/mets_1.xml");
         Document metsXML = new SAXBuilder().build(metsStream);
 
         llzMetsParser.parse(metsXML);
@@ -358,7 +373,7 @@ public class LLZMetsImporterTest {
 
         parserMock.resetCounter();
 
-        InputStream mets_wfs2_Stream = getClass().getResourceAsStream("/mets/mets_wfs2_Abgleich.xml");
+        InputStream mets_wfs2_Stream = getClass().getResourceAsStream("/mets/mets_1_wfs2_Abgleich.xml");
         Document mets_wfs2_XML = new SAXBuilder().build(mets_wfs2_Stream);
 
         llzMetsParser.parse(mets_wfs2_XML);
@@ -375,6 +390,103 @@ public class LLZMetsImporterTest {
         assertEquals(mets_Order, mets_wfs2_Order);
         System.out.println("Link: " + mets_Link + " # " + mets_wfs2_Link);
         assertEquals(mets_Link, mets_wfs2_Link);
+    }
+
+    @Test
+    @Ignore
+    public void testValidation() throws Exception {
+        InputStream mets_wfs2_Stream = getClass().getResourceAsStream("/mets/mets_1_wfs2_Abgleich.xml");
+        Document mets_wfs2_XML = new SAXBuilder().build(mets_wfs2_Stream);
+        InputStream metsStream = getClass().getResourceAsStream("/mets/mets_1.xml");
+        Document metsXML = new SAXBuilder().build(metsStream);
+        SchemaValidator schemaValidator = new SchemaValidator();
+        schemaValidator.validate(metsXML);
+        schemaValidator.validate(mets_wfs2_XML);
+
+    }
+
+    @Test
+    @Ignore
+    public void testConverter() throws Exception {
+        LLZMetsConverter llzMetsConverter = new LLZMetsConverter();
+        InputStream mets_wfs2_Stream = getClass().getResourceAsStream("/mets/mets_wfs2_Abgleich.xml");
+        Document mets_wfs2_XML = new SAXBuilder().build(mets_wfs2_Stream);
+        InputStream metsStream = getClass().getResourceAsStream("/mets/mets.xml");
+        Document metsXML = new SAXBuilder().build(metsStream);
+        Mets mets_wfs2 = llzMetsConverter.convert(mets_wfs2_XML);
+        Mets mets = llzMetsConverter.convert(metsXML);
+
+        System.out.println("size: " + mets_wfs2.getFileSec().getFileGroup("MASTER").getFileList().size());
+        System.out.println("size: " + mets.getFileSec().getFileGroup("MASTER").getFileList().size());
+        assertEquals(mets_wfs2.getFileSec().getFileGroup("MASTER").getFileList().size(),
+                mets.getFileSec().getFileGroup("MASTER").getFileList().size());
+
+        LogicalStructMap structMap = (LogicalStructMap) mets_wfs2.getStructMap(LogicalStructMap.TYPE);
+
+        List<LogicalSubDiv> children = structMap.getDivContainer().getChildren();
+        for (LogicalSubDiv child : children) {
+            System.out.println("Label: " + child.getLabel());
+
+        }
+
+    }
+
+    @Test
+    @Ignore
+    public void testMets() throws Exception {
+        InputStream mets_wfs2_Stream = getClass().getResourceAsStream("/mets/mets_wfs2_Abgleich.xml");
+        Document mets_wfs2_XML = new SAXBuilder().build(mets_wfs2_Stream);
+        createDmdSec(mets_wfs2_XML);
+//        Mets mets = new Mets(mets_wfs2_XML);
+//        for (FileGrp fileGrp : mets.getFileSec().getFileGroups()) {
+//            XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+//            xmlOutputter.output(fileGrp.asElement(), System.out);
+//        }
+
+    }
+
+    private void createDmdSec(Document source) throws JDOMException {
+        XPathExpression<Element> xp = getXpathExpression("mets:mets/mets:dmdSec");
+        XPathFactory.instance().compile("mets:mets/mets:dmdSec", Filters.element(), null, IMetsElement.METS);
+
+        for (Element section : xp.evaluate(source)) {
+            DmdSec dmdSec = new DmdSec(section.getAttributeValue("ID"));
+//            dmdsecs.put(dmdSec.getId(), dmdSec);
+
+            // handle mdWrap
+            xp = getXpathExpression("mets:mdWrap");
+
+            for (Element wrap : xp.evaluate(section)) {
+                XPathExpression<Element> xmlDataXP = getXpathExpression("mets:xmlData/*");
+                Element element = xmlDataXP.evaluateFirst(wrap);
+                MdWrap mdWrap = new MdWrap(MdWrapSection.findTypeByName(wrap.getAttributeValue("MDTYPE")),
+                        (Element) element.clone());
+                dmdSec.setMdWrap(mdWrap);
+            }
+
+            // handle mdRef
+            xp = getXpathExpression("mets:mdRef");
+
+            for (Element refElem : xp.evaluate(section)) {
+                LOCTYPE loctype = LOCTYPE.valueOf(refElem.getAttributeValue("LOCTYPE"));
+                String mimetype = refElem.getAttributeValue("MIMETYPE");
+                MDTYPE mdtype = MdWrapSection.findTypeByName(refElem.getAttributeValue("MDTYPE"));
+                String href = refElem.getAttributeValue("href", IMetsElement.XLINK);
+                MdRef mdRef = new MdRef(href, loctype, mimetype, mdtype, refElem.getText());
+                dmdSec.setMdRef(mdRef);
+            }
+
+            XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+            try {
+                xmlOutputter.output(dmdSec.asElement(), System.out);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private XPathExpression<Element> getXpathExpression(String xpath) {
+        return XPathFactory.instance().compile(xpath, Filters.element(), null, IMetsElement.METS);
     }
 }
 
