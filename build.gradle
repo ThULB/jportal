@@ -3,7 +3,7 @@ import java.nio.file.Files
 import java.nio.file.Paths;
 import java.util.HashSet;
 
-def mcrVersion = '2015.06-SNAPSHOT'
+def mcrVersion = '2015.08-SNAPSHOT'
 def jettyVersion = "9.2.7.v20150116"
 def jerseyVersion = "1.19"
 def hibernateVersion = "4.3.4.Final"
@@ -195,7 +195,7 @@ project(':jportal_mcr_module') {
         compile 'xmlunit:xmlunit:1.3'
         compile 'javax.xml.bind:jaxb-api:2.2.1'
         compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
-        iview 'org.mycore:mycore-viewer:0.5-SNAPSHOT'
+        iview 'org.mycore:mycore-viewer:0.6-SNAPSHOT'
     }
 
     def gruntBuildDir = "$project.buildDir/grunt"
@@ -266,7 +266,7 @@ project(':jportal_webapp') {
         testCompile "log4j:log4j:1.2.17"
         testCompile "org.hamcrest:hamcrest-library:1.3"
         testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
-        testCompile "org.mycore:mycore-viewer:0.4-SNAPSHOT:tests"
+        testCompile "org.mycore:mycore-viewer:0.6-SNAPSHOT:tests"
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
         runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.mycore:mycore-acl-editor2:$mcrVersion"
