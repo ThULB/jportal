@@ -15,9 +15,20 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.ModifiableSolrParams;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jdom2.Document;
@@ -38,28 +49,35 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.frontend.cli.MCRAccessCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
+import org.mycore.solr.MCRSolrCore;
+import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.user2.MCRUserCommands;
 import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXParseException;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.nio.JarResource;
+import fsu.jportal.resolver.ClassificationResolver;
 
 public class InitHandler implements AutoExecutable {
+
+    private static final Logger LOGGER = Logger.getLogger(InitHandler.class);
 
     private Session session;
 
     private Transaction transaction;
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return "Init JPortal";
     }
 
-    @Override public int getPriority() {
+    @Override
+    public int getPriority() {
         return 0;
     }
 
-    @Override public void startUp(ServletContext servletContext) {
+    @Override
+    public void startUp(ServletContext servletContext) {
         startSession();
 
         if (isTableEmpty(MCRACCESSRULE.class)) {
@@ -75,6 +93,8 @@ public class InitHandler implements AutoExecutable {
         closeSession();
 
         initCLI();
+
+        initSolr();
     }
 
     private void initCLI() {
@@ -105,7 +125,7 @@ public class InitHandler implements AutoExecutable {
             HashMap<String, String> props = new HashMap<>();
             props.put("MCR.CLI.Classes.External", cliClassName.toString());
             MCRConfiguration.instance().initialize(props, false);
-//            info("found CLI classes " + cliClassName);
+            //            info("found CLI classes " + cliClassName);
         }
 
     }
@@ -179,7 +199,7 @@ public class InitHandler implements AutoExecutable {
         BufferedReader cmdFileReader = new BufferedReader(new InputStreamReader(cmdFileIS));
 
         try {
-            for (String cmdLine; (cmdLine = cmdFileReader.readLine()) != null; ) {
+            for (String cmdLine; (cmdLine = cmdFileReader.readLine()) != null;) {
                 if (cmdLine != null && !cmdLine.trim().equals("")) {
                     info(cmdLine);
                     createRule(cmdLine);
@@ -226,8 +246,8 @@ public class InitHandler implements AutoExecutable {
     }
 
     private Object[] parseParams(String cmdLine) throws NoSuchMethodException, ParseException {
-        Method method = MCRAccessCommands.class
-                .getMethod("permissionUpdateForID", String.class, String.class, String.class, String.class);
+        Method method = MCRAccessCommands.class.getMethod("permissionUpdateForID", String.class, String.class,
+            String.class, String.class);
         String pattern = method.getAnnotation(MCRCommand.class).syntax();
         MessageFormat mf = new MessageFormat(pattern);
         Object[] params = mf.parse(cmdLine);
@@ -238,6 +258,84 @@ public class InitHandler implements AutoExecutable {
         MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
         AI.addRule(id, permission, rule, description);
+    }
+
+    private void initSolr() {
+        Runnable initTask = () -> {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<?> future = executor.submit(new SolrClassificationInitTask());
+            try {
+                future.get(5, TimeUnit.MINUTES);
+            } catch (TimeoutException timeout) {
+                LOGGER.error("Unable to find solr server after five minutes prior application start.", timeout);
+            } catch (Exception exc) {
+                LOGGER.error("Unable initialize solr.", exc);
+            }
+            executor.shutdownNow();
+        };
+        new Thread(initTask).start();
+    }
+
+    private static class SolrClassificationInitTask implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                MCRSolrCore core = MCRSolrClassificationUtil.getCore();
+                HttpSolrClient client = core.getClient();
+                awaitSolr(client);
+                if (!isInitialized(client)) {
+                    index(client);
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+
+        /**
+         * Waits until the solr server is available.
+         * 
+         * @throws IOException
+         * @throws InterruptedException
+         */
+        private void awaitSolr(SolrClient solrClient) throws IOException, InterruptedException {
+            boolean solrRunning = false;
+            do {
+                try {
+                    solrClient.ping();
+                    solrRunning = true;
+                } catch (SolrServerException sse) {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                }
+            } while (!solrRunning);
+        }
+
+        /**
+         * Checks if the solr server has already indexed the classifications.
+         * 
+         * @return
+         * @throws SolrServerException 
+         */
+        private boolean isInitialized(SolrClient solrClient) throws IOException, SolrServerException {
+            ModifiableSolrParams params = new ModifiableSolrParams();
+            params.set("rows", 0);
+            QueryResponse response = solrClient.query(params);
+            return response.getResults().getNumFound() != 0;
+        }
+
+        /**
+         * Rebuilds the classification index.
+         * 
+         * @param solrClient
+         */
+        private void index(SolrClient solrClient) {
+            Session session = MCRHIBConnection.instance().getSession();
+            Transaction transaction = session.beginTransaction();
+            MCRSolrClassificationUtil.rebuildIndex();
+            transaction.commit();
+            session.close();
+        }
+
     }
 
 }
