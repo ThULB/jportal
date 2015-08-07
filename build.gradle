@@ -307,6 +307,8 @@ project(':jportal_webapp') {
         systemProperty "project.build.directory", project.reportsDir
     }
 
+
+
     farms {
         dependencies {
             gretty 'org.hsqldb:hsqldb:2.3.2'
@@ -335,7 +337,7 @@ project(':jportal_webapp') {
                             agentOp = agentOp + "," + path
                         }
                     }
-                    jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
+//                    jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
                 } else if (farmName.equals('WebTests')) {
                     // Gretty don't load static files from META-INF in jar files, so this is a workaround
                     webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
@@ -346,49 +348,53 @@ project(':jportal_webapp') {
 
                 def appPath = "$mcrHome/$pathName"
                 def solrHome = "$appPath/solr-home"
+                def confDir = "$project.projectDir/config"
 
                 systemProperty "MCR.AppName", pathName
                 systemProperty "MCR.Home", mcrHome
                 systemProperty "solr.solr.home", solrHome
 
                 jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+                jvmArgs '-Xmx2048m'
                 port = 8291
                 serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
 
                 onStart {
-                    copy {
-                        from("$project.projectDir/config") {
-                            include "**"
-                            exclude "jetty/**"
-                        }
-                        into appPath
+                    if (!file(appPath).exists()) {
+                        copy {
+                            from(confDir) {
+                                include "**"
+                                exclude "jetty/**"
+                            }
+                            into appPath
 
-                        def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+                            def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
 
-                        configurations {
-                            solr
-                        }
-                        dependencies {
-                            solr "org.mycore:mycore-solr:$mcrVersion@jar"
-                        }
-                        def solrJar
-                        configurations.solr.each { file ->
-                            solrJar = file.absolutePath
-                            println "Solr Jar $solrJar";
-                        }
+                            configurations {
+                                solr
+                            }
+                            dependencies {
+                                solr "org.mycore:mycore-solr:$mcrVersion@jar"
+                            }
+                            def solrJar
+                            configurations.solr.each { file ->
+                                solrJar = file.absolutePath
+                                println "Solr Jar $solrJar";
+                            }
 
-                        into("solr-home") {
-                            from moduleFiles
-                            include '**/solr.xml'
-                        }
+                            into("solr-home") {
+                                from moduleFiles
+                                include '**/solr.xml'
+                            }
 
-                        into("solr-home/conf") {
-                            from moduleFiles
-                            include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-                            from zipTree(solrJar).files
-                            include 'classificationSchema.xml'
-                        }
+                            into("solr-home/conf") {
+                                from moduleFiles
+                                include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                                from zipTree(solrJar).files
+                                include 'classificationSchema.xml'
+                            }
 
+                        }
                     }
 
 
@@ -411,4 +417,4 @@ configurations.all {
     }
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '2.2.1' }
+task wrapper(type: Wrapper) { gradleVersion = '2.5' }
