@@ -1,3 +1,21 @@
+buildscript {
+    repositories {
+        jcenter()
+        // enable this to use snapshot versions of Gretty:
+        // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+    }
+
+    dependencies {
+        classpath 'org.akhikhl.gretty:gretty:1.2.3'
+        classpath "org.hsqldb:hsqldb:2.3.2"
+//        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.10'
+    }
+}
+
+plugins {
+    id "com.moowork.node" version "0.10"
+}
+
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths;
@@ -9,7 +27,7 @@ def jerseyVersion = "1.19"
 def hibernateVersion = "4.3.4.Final"
 def jpgroup = "fsu.thulb"
 def jpversion = "2.0.18-SNAPSHOT"
-
+def javaVersion = 1.8
 def resourcePaths = new HashSet<File>();
 
 def getDate() {
@@ -18,19 +36,6 @@ def getDate() {
     return formattedDate
 }
 
-buildscript {
-    repositories {
-        jcenter()
-        // enable this to use snapshot versions of Gretty:
-        // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
-    }
-
-    dependencies {
-        classpath 'org.akhikhl.gretty:gretty:1.2.3'
-        classpath "org.hsqldb:hsqldb:2.3.2"
-        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.10'
-    }
-}
 
 repositories {
     jcenter()
@@ -44,13 +49,13 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
 
     eclipse {
         jdt {
-            sourceCompatibility = 1.8
-            targetCompatibility = 1.8
+            sourceCompatibility = javaVersion
+            targetCompatibility = javaVersion
         }
         classpath { downloadSources = true }
     }
@@ -178,9 +183,11 @@ subprojects {
 }
 
 project(':jportal_mcr_module') {
-    apply plugin: 'com.moowork.grunt'
+    apply plugin: 'com.moowork.node'
 
-    configurations { iview }
+    configurations {
+        iview
+    }
 
     dependencies {
         compile project(':jportal-commons')
@@ -198,7 +205,7 @@ project(':jportal_mcr_module') {
         iview 'org.mycore:mycore-viewer:0.6-SNAPSHOT'
     }
 
-    def gruntBuildDir = "$project.buildDir/grunt"
+    def nodeBuildDir = "$project.buildDir/node"
 
     node {
         // Version of node to use.
@@ -212,17 +219,22 @@ project(':jportal_mcr_module') {
         download = true
 
         // Set the work directory where node_modules should be located
-        nodeModulesDir = file(gruntBuildDir)
+        nodeModulesDir = file(nodeBuildDir)
     }
 
-    installGrunt {
+    task npmSetupDir {
         doFirst {
             copy {
-                from 'grunt'
+                from 'node'
                 include '**/*'
-                into gruntBuildDir
+                into nodeBuildDir
             }
+        }
+    }
 
+    task gruntInstall(type: NodeTask, dependsOn: npmInstall) {
+
+        doFirst {
             def iviewJar
             configurations.iview.each { file ->
                 iviewJar = file.absolutePath
@@ -230,24 +242,38 @@ project(':jportal_mcr_module') {
             copy {
                 from zipTree(iviewJar)
                 include '**/iview-client-base.d.ts', '**/iview-client-mets.d.ts', '**/jquery.d.ts'
-                into "$gruntBuildDir/iview-client"
+                into "$nodeBuildDir/iview-client"
                 includeEmptyDirs = false
             }
         }
+        script = file("$nodeBuildDir/node_modules/grunt-cli/bin/grunt")
+        args=["--gruntfile=$nodeBuildDir/GruntFile.js"]
     }
 
-    grunt {
-        workDir = file(gruntBuildDir)
+    task bowerInstall(type: NodeTask, dependsOn: npmInstall) {
+        def bowerCacheDir = "${gradle.getGradleUserHomeDir()}/caches/bower"
+        script = file("$nodeBuildDir/node_modules/bower/bin/bower")
+        args = ["--config.storage.cache=$bowerCacheDir/cache",
+                "--config.storage.packages=$bowerCacheDir/packages",
+                "--config.storage.registry=$bowerCacheDir/registry",
+                "--config.cwd=$nodeBuildDir",
+                'install',
+                "jquery",
+                "jquery-ui",
+                "bootstrap",
+                "eonasdan-bootstrap-datetimepicker",
+                "bootstrap-dialog",
+                "fontawesome"
+        ]
     }
 
-    grunt_default.dependsOn installGrunt
-    grunt_default.dependsOn npmInstall
-
-    processResources.dependsOn grunt_default
+    npmSetup.dependsOn npmSetupDir
+    build.dependsOn bowerInstall
+    build.dependsOn gruntInstall
 
     processResources {
         //copy iview link js into META-INF
-        from("$gruntBuildDir/classes/META-INF") { into 'META-INF' }
+        from("$nodeBuildDir/classes/META-INF") { into 'META-INF' }
     }
 }
 
