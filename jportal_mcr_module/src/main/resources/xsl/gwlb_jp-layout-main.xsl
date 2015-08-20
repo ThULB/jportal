@@ -8,17 +8,17 @@
   xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="i18n imprint xsi mcr mcrxml acl xalan layoutUtils websiteWriteProtection jpxml">
 
   <xsl:include href="jp-layout-tools.xsl" />
-  <xsl:include href="/gwlb/jp-layout-functions.xsl" />
+  <xsl:include href="gwlb_jp-layout-functions.xsl" />
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
-  <xsl:include href="/gwlb/jp-layout-contentArea.xsl" />
-  <xsl:include href="/gwlb/jp-layout-contentArea-objectEditing.xsl" />
+  <xsl:include href="gwlb_jp-layout-contentArea.xsl" />
+  <xsl:include href="gwlb_jp-layout-contentArea-objectEditing.xsl" />
   <xsl:include href="jp-layout-contentArea-advancedsearch.xsl" />
   <xsl:include href="jp-layout-footer.xsl" />
 
-  <xsl:include href="/gwlb/jp-navigation-top.xsl" />
+  <xsl:include href="gwlb_jp-navigation-top.xsl" />
   <xsl:include href="jp-globalmessage.xsl" />
 
-  <xsl:include href="/gwlb/jp-layout-searchbar.xsl" />
+  <xsl:include href="gwlb_jp-layout-searchbar.xsl" />
 
   <!--<xsl:include href="xslInclude:index" />-->
   <xsl:include href="xslInclude:modules" />
@@ -96,12 +96,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!-- add html stuff to head for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/head/top/*" />
-        <link href="{$WebApplicationBaseURL}bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{$WebApplicationBaseURL}bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="{$WebApplicationBaseURL}css/gwlb/jp-default.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-move-obj.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
 
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext,cyrillic' rel='stylesheet' type='text/css' />
@@ -127,11 +127,11 @@
           jp.journalID = '<xsl:value-of select="$journalID" />';
           jp.journalID = jp.journalID != '' ? jp.journalID : null;
         </script>
-        <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/jquery/dist/jquery.min.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
-        <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap/js/bootstrap.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/bootstrap/dist/js/bootstrap.js" />
         <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
-          <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-dialog/bootstrap-dialog.min.js" />
+          <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.min.js" />
         </xsl:if>
 
         <!-- Piwik -->

@@ -115,12 +115,12 @@
         <meta content="MyCoRe" lang="de" name="generator" />
         <!-- add html stuff to head for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/head/top/*"/>
-        <link href="{$WebApplicationBaseURL}css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{$WebApplicationBaseURL}bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-gbv.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-move-obj.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <xsl:if test="$template != ''">
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
             <style type="text/css">
@@ -133,9 +133,9 @@
             <link href="{$templateWebURL}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
           </xsl:if>
         </xsl:if>
-        <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/jquery/dist/jquery.min.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/jquery-ui/jquery-ui.min.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/ckeditor/ckeditor.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
         <!-- TODO: don't init iview2 if no image is available -->

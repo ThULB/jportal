@@ -133,7 +133,6 @@ subprojects {
             "jportal_acl_ip_editor_module",
             "jportal_derivate_browser",
             "jportal_doublet_finder_module",
-            "jportal_experiments",
             "jportal_jquery_cnd",
             "jportal_laws",
             "jportal_mcr_module",
@@ -252,7 +251,7 @@ project(':jportal_mcr_module') {
 
     task copyIviewMod(type: Copy, dependsOn: buildIviewMod){
         from "$nodeBuildDir/classes/META-INF"
-        into 'resources/main/META-INF'
+        into "$project.buildDir/resources/main/META-INF"
     }
 
     task getWebLib(type: NodeTask, dependsOn: npmInstall) {
@@ -266,9 +265,12 @@ project(':jportal_mcr_module') {
                 'install',
                 "jquery",
                 "jquery-ui",
+                "jquery-address",
                 "bootstrap",
                 "eonasdan-bootstrap-datetimepicker",
                 "bootstrap-dialog",
+                "mustache.js",
+                "ckeditor",
                 "fontawesome"
         ]
     }
@@ -306,7 +308,6 @@ project(':jportal_webapp') {
         runtime project(':jportal_doublet_finder_module')
         runtime project(':jportal_move_obj_module')
         runtime project(':jportal_acl_ip_editor_module')
-        runtime project(':jportal_ext_web_lib')
         runtime project(':jportal_mcr_module')
         applet "org.mycore.fileupload:fileupload-applet:1.+"
     }

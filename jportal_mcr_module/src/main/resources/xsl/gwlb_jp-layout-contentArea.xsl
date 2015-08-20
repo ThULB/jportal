@@ -7,8 +7,8 @@
   <xsl:param name="RequestURL" />
   <xsl:param name="rubric" />
 
-  <xsl:include href="/gwlb/jp-layout-contentArea-breadcrumb.xsl" />
-  <xsl:include href="/gwlb/jp-layout-contentArea-tableOfContent.xsl" />
+  <xsl:include href="gwlb_jp-layout-contentArea-breadcrumb.xsl" />
+  <xsl:include href="gwlb_jp-layout-contentArea-tableOfContent.xsl" />
   <xsl:include href="jp-layout-contentArea-derivates.xsl" />
   <xsl:include href="jp-layout-contentArea-metadata.xsl" />
   <xsl:include href="jp-layout-contentArea-linkedMetadata.xsl" />

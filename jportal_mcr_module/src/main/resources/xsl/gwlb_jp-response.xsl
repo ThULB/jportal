@@ -6,7 +6,7 @@
   &html-output;
 
   <xsl:include href="MyCoReLayout.xsl" />
-  <xsl:include href="/gwlb/jp-response-default.xsl" />
+  <xsl:include href="gwlb_jp-response-default.xsl" />
   <xsl:include href="jp-response-subselect.xsl" />
 
   <xsl:variable name="PageTitle" select="'Result'" />
