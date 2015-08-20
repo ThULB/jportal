@@ -20,8 +20,7 @@
     <module>jportal_gbv</module>
     <module>jportal_doublet_finder_module</module>
     <module>jportal_jquery_cnd</module>
-    <module>jportal_experiments</module>
-    
+
     <module>jportal-commons</module>
 
     <module>jportal_acl_ip_editor_module</module>
