@@ -232,7 +232,7 @@ project(':jportal_mcr_module') {
         }
     }
 
-    task gruntInstall(type: NodeTask, dependsOn: npmInstall) {
+    task buildIviewMod(type: NodeTask, dependsOn: npmInstall) {
 
         doFirst {
             def iviewJar
@@ -250,13 +250,19 @@ project(':jportal_mcr_module') {
         args=["--gruntfile=$nodeBuildDir/GruntFile.js"]
     }
 
-    task bowerInstall(type: NodeTask, dependsOn: npmInstall) {
+    task copyIviewMod(type: Copy, dependsOn: buildIviewMod){
+        from "$nodeBuildDir/classes/META-INF"
+        into 'resources/main/META-INF'
+    }
+
+    task getWebLib(type: NodeTask, dependsOn: npmInstall) {
         def bowerCacheDir = "${gradle.getGradleUserHomeDir()}/caches/bower"
         script = file("$nodeBuildDir/node_modules/bower/bin/bower")
         args = ["--config.storage.cache=$bowerCacheDir/cache",
                 "--config.storage.packages=$bowerCacheDir/packages",
                 "--config.storage.registry=$bowerCacheDir/registry",
                 "--config.cwd=$nodeBuildDir",
+                "--config.directory=../resources/main/META-INF/resources/bower_components",
                 'install',
                 "jquery",
                 "jquery-ui",
@@ -268,13 +274,8 @@ project(':jportal_mcr_module') {
     }
 
     npmSetup.dependsOn npmSetupDir
-    build.dependsOn bowerInstall
-    build.dependsOn gruntInstall
-
-    processResources {
-        //copy iview link js into META-INF
-        from("$nodeBuildDir/classes/META-INF") { into 'META-INF' }
-    }
+    jar.dependsOn getWebLib
+    jar.dependsOn copyIviewMod
 }
 
 project(':jportal_webapp') {
