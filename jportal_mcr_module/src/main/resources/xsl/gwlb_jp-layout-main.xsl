@@ -42,6 +42,8 @@
   <xsl:variable name="ImageBaseURL" select="concat($WebApplicationBaseURL,'images/') " />
   <xsl:variable name="MainTitle" select="$MCR.NameOfProject" />
 
+  <xsl:variable name="PageTitleGWLB" select="i18n:translate('jp.site.home.title.gwlb')" />
+
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
   </xsl:variable>
@@ -216,7 +218,7 @@
 
         </div>
         <!-- footer -->
-        <xsl:call-template name="jp.layout.footer" />
+        <!--<xsl:call-template name="jp.layout.footer" />-->
 
         <!-- delete -->
         <xsl:call-template name="jp.object.editing.delete.dialog" />
@@ -247,7 +249,15 @@
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:copy-of select="$PageTitle" />
+          <xsl:choose>
+            <xsl:when test="/MyCoReWebPage/section/jpindex">
+              <!--<xsl:copy-of select="$PageTitleGWLB" />-->
+              <xsl:copy-of select="$JP.Site.label" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:copy-of select="$PageTitle" />
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
