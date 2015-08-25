@@ -135,7 +135,7 @@
         </xsl:if>
 
         <!-- Piwik -->
-        <xsl:call-template name="jp.piwik" />
+        <!--<xsl:call-template name="jp.piwik" />-->
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
 
@@ -154,31 +154,36 @@
               </button>
             
               <ul class="list-inline jp-layout-mainHeader-UlLeft">
-                <li class="jp-layout-mainHeader-SeperatorRight">
-                  <xsl:variable name="imprintHref">
-                    <xsl:choose>
-                      <xsl:when test="$journalID != '' and imprint:has($journalID, 'imprint')">
-                        <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/', $journalID)" />
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <a href="{$imprintHref}">
-                    <xsl:value-of select="i18n:translate('jp.site.imprint')" />
-                  </a>
-                </li>
-                <xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">
-                  <li class="jp-layout-mainHeader-SeperatorRight">
-                    <a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">
-                      <xsl:value-of select="i18n:translate('jp.site.partner')" />
-                    </a>
-                  </li>
-                </xsl:if>
+                <!--<li class="jp-layout-mainHeader-SeperatorRight">-->
+                  <!--<xsl:variable name="imprintHref">-->
+                    <!--<xsl:choose>-->
+                      <!--<xsl:when test="$journalID != '' and imprint:has($journalID, 'imprint')">-->
+                        <!--<xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/', $journalID)" />-->
+                      <!--</xsl:when>-->
+                      <!--<xsl:otherwise>-->
+                        <!--<xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />-->
+                      <!--</xsl:otherwise>-->
+                    <!--</xsl:choose>-->
+                  <!--</xsl:variable>-->
+                  <!--<a href="{$imprintHref}">-->
+                    <!--<xsl:value-of select="i18n:translate('jp.site.imprint')" />-->
+                  <!--</a>-->
+                <!--</li>-->
+                <!--<xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">-->
+                  <!--<li class="jp-layout-mainHeader-SeperatorRight">-->
+                    <!--<a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">-->
+                      <!--<xsl:value-of select="i18n:translate('jp.site.partner')" />-->
+                    <!--</a>-->
+                  <!--</li>-->
+                <!--</xsl:if>-->
+                <!--<li class="jp-layout-mainHeader-LiPaPushleft">-->
+                  <!--<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">-->
+                    <!--Kontakt-->
+                  <!--</a>-->
+                <!--</li>-->
                 <li class="jp-layout-mainHeader-LiPaPushleft">
                   <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
-                    Kontakt
+                    Zeitschriftenserver der GWLB
                   </a>
                 </li>
               </ul>

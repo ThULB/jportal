@@ -6,9 +6,16 @@
   <xsl:template name="jp.navigation.top">
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
       <ul class="list-inline jp-navigation-topHeader-UlRightWraper nav navbar-nav">
+        <xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">
+        <li class="jp-layout-mainHeader-SeperatorRight">
+         <a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">
+          <xsl:value-of select="i18n:translate('jp.site.partner')" />
+         </a>
+        </li>
+        </xsl:if>
        
         <xsl:if test="not($isGuest)">
-          <li class="userName">
+          <li class="userName jp-layout-mainHeader-SeperatorRight">
             <a> <xsl:value-of select="layoutTools:getUserName()" /></a>
           </li>
         </xsl:if>
@@ -24,6 +31,21 @@
             </a>
           </li>
         </xsl:if>
+        <li>
+          <xsl:variable name="imprintHref">
+            <xsl:choose>
+              <xsl:when test="$journalID != '' and imprint:has($journalID, 'imprint')">
+                <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/', $journalID)" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <a href="{$imprintHref}">
+            <xsl:value-of select="i18n:translate('jp.site.imprint')" />
+          </a>
+        </li>
         <li>
           <a>
             <xsl:attribute name="href">
@@ -49,7 +71,8 @@
   <xsl:template name="jp.navigation.top.language">
       <li id="languageMenu" class="dropdown-toggle"> 
         <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
-          <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush" />
+          <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush" />-->
+          <p class="jp-navigation-topHeader-ImgPush"><xsl:value-of select="$CurrentLang"></xsl:value-of></p>
           <span class="caret"></span>
         </a>
 
@@ -70,7 +93,8 @@
 	                    <xsl:with-param name="url" select="$newurl" />
 	                   </xsl:call-template>
 	                </xsl:attribute>
-                  <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{text()}.png" alt="{text()}" />
+                  <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{text()}.png" alt="{text()}" />-->
+                  <p><xsl:value-of select="text()"></xsl:value-of></p>
                 </a>
               </li>
             </xsl:if>

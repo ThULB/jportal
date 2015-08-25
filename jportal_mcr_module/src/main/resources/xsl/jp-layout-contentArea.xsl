@@ -75,7 +75,7 @@
             <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
               <dl class="col-sm-8 jp-layout-metadataList">
                 <xsl:if test="not(structure/derobjects or metadata/derivateLinks)">
-                  <xsl:attribute name="class">col-sm-8 col-sm-offset-2 jp-layout-metadataList</xsl:attribute>
+                  <xsl:attribute name="class">col-sm-10 col-sm-offset-1 jp-layout-metadataList</xsl:attribute>
                 </xsl:if>
                 <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
 

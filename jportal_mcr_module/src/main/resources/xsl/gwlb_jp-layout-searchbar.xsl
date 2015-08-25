@@ -75,7 +75,7 @@
             <xsl:variable name="mobileCol">
               <xsl:choose>
                 <xsl:when test="$objectEditing//li/a">
-                  <xsl:value-of select="'col-xs-10 col-xs-offset-1'" />
+                  <xsl:value-of select="'col-xs-8 col-xs-offset-2'" />
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="'col-xs-12'" />

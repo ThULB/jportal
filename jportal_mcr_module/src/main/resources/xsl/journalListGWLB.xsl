@@ -11,8 +11,8 @@
 
     <!-- =================================================================== -->
     <xsl:template match="journalListGWLB[@mode='javascript']">
-      <div id="firstLetterTab" class="journalList col-sm-8 col-sm-offset-2" additionalQuery="{additionalQuery}">
-        <div class="atoz col-md-12 hidden">
+      <div id="firstLetterTab" class="journalList col-sm-10 col-sm-offset-1" additionalQuery="{additionalQuery}">
+        <div class="atoz col-md-12">
           <ul id="tabNav" class="nav nav-tabs tab-nav col-md-10" />
           <div class="col-md-2 jp-layout-atozilter">
 	          <input id="atozFilter" class="form-control filter" type="text" placeholder="Filter" />

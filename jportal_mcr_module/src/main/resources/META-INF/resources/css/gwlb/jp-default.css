@@ -43,6 +43,10 @@
 	overflow-y: visible;
 }
 
+#navbar-collapse-globalHeader {
+	margin-right: 0;
+}
+
 /*******************************************************
 *
 ********************************************************/
@@ -95,7 +99,7 @@ p {
 	text-align: center;
 }
 .jp-layout-index-intro > p.greeting {
-	margin-bottom: 60px;
+	margin-bottom: 30px;
 	font-size: 14px;
 }
 .jp-layout-index-list {
@@ -955,26 +959,27 @@ ul.ckeditorButtons li:last-child {
 }
 
 .jp-layout-mainHeader-SeperatorRight{
-	/*border-right: 2px solid #000; */
-	/*padding-right: 13px !important; */
+	border-right: 1px solid #000;
+	padding-right: 0.65em !important;
 }
 
-.jp-layout-mainHeader-SeperatorRight:after{
-	content: '\2022';
-	color: #27568F;
-}
+/*.jp-layout-mainHeader-SeperatorRight:after{*/
+	/*content: '\2022';*/
+	/*color: #27568F;*/
+/*}*/
 
 .jp-navigation-topHeader-UlRightWraper > .jp-layout-mainHeader-SeperatorRight > a{
 	font-weight: normal !important;
 }
 
-/*.jp-layout-mainHeader-SeperatorRight > a:hover{*/
-	/*color: #000;*/
-	/*text-decoration: none !important;*/
-/*}*/
+.jp-layout-mainHeader-SeperatorRight > a:hover{
+	color: rgb(70, 70, 70);
+	text-decoration: none !important;
+}
 
 .jp-navigation-topHeader-ImgPush{
 	padding-right: 4px;
+	display: inline;
 }
 
 .jp-navigation-topHeader-DropdownBorder{
@@ -1265,11 +1270,12 @@ textarea {
 	}
 		
 	.jp-navigation-topHeader-DropdownMenu{
-		min-width: 55px; 
+		min-width: 40px;
 		margin-top: 0.3em !important;
 		margin-right: -0.3em;
+		padding-bottom: 0;
 	}
-	
+
 	.jp-navigation-topHeader-DropdownMenu > li > a{
 		padding-left: 0; 
 		padding-right: 0;
@@ -1403,8 +1409,13 @@ textarea {
 	margin-bottom: 0;
 }
 
+#languageMenu p{
+	font-size: 10px;
+}
+
 #languageMenu > a.jp-navigation-topHeader-DropdownBorder{
 	background-color: #F7F7F7;
+	text-decoration: none;
 }
 
 .jp-volume-sidebar-group {
@@ -1454,11 +1465,6 @@ textarea {
 /*******************************************************
 * jp-journalList includes for GWLB
 ********************************************************/
-#firstLetterTab {
-	width: 66.6667%;
-	margin-left: 16.6667%;
-}
-
 .journalList .tab-panel h3 a {
 	font-size: 12px;
 	color: #27568F;
@@ -1499,4 +1505,26 @@ textarea {
 	left: 6.5em;
 	top: 0.3em;
 	position: absolute;
+}
+
+#gwlb-layout-index-list {
+	border-top: 1px solid #F0F0F0;
+	padding-bottom: 20px;
+}
+
+#gwlb-layout-index-list ul {
+	list-style: none;
+}
+
+#gwlb-layout-index-list h2 {
+	font-size: 20px;
+}
+
+#gwlb-layout-index-list h3 {
+	font-size: 13px;
+}
+
+#gwlb-layout-index-list a {
+	font-size: medium;
+	color: #27568F;
 }

@@ -64,7 +64,7 @@
         </div>
       </div>
     </xsl:if>
-    <div id="resultList" class="row container-fluid col-sm-8 col-sm-offset-2">
+    <div id="resultList" class="row container-fluid col-sm-10 col-sm-offset-1">
       <xsl:apply-templates mode="resultList" select="." />
     </div>
   </xsl:template>

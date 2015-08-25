@@ -5,7 +5,7 @@
 
 	<xsl:param name="rubric" />
 	<xsl:template name="breadcrumb">
-		<div id="jp-breadcrumb-container" class="col-sm-8 col-sm-offset-2">
+		<div id="jp-breadcrumb-container" class="col-sm-10 col-sm-offset-1">
 			<ol class="col-sm-10 breadcrumb jp-layout-mcbreadcrumb">
 				<xsl:if
 					test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
@@ -72,7 +72,7 @@
 		<xsl:param name="returnHash" />
 		<xsl:param name="returnID" />
 		<xsl:param name="returnName" />
-		<div id="jp-breadcrumb-container" class="col-sm-8 col-sm-offset-2">
+		<div id="jp-breadcrumb-container" class="col-sm-10 col-sm-offset-1">
 			<ol class="breadcrumb jp-layout-mcbreadcrumb">
 				<xsl:variable name="hash">
 					<xsl:if test="not($objID = '')">	
@@ -98,7 +98,7 @@
 					</xsl:choose>
 				</xsl:variable>
 				<li>
-					<a href="{$WebApplicationBaseURL}content/main/{$azList}List.xml#{$hash}">
+					<a href="{$WebApplicationBaseURL}content/main/{$azList}ListGWLB.xml#{$hash}">
 						<xsl:value-of select="'A-Z'" />
 					</a>
 				</li>
