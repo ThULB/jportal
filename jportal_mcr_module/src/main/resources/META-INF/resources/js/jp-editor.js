@@ -94,12 +94,10 @@ $.fn.dateCombiner = function() {
 
 /* settings for datetimepicker */
 				parent.datetimepicker({
-					language : $("#hiddenLanguage").text(),
-					pickTime : false,
+					locale : $("#hiddenLanguage").text(),
 					minDate : '0001-01-01',
-					startDate: '+0d',
-//					format: 'YYYY-MM-DD',
-//					forceParse: false 
+					format: 'YYYY-MM-DD',
+					widgetPositioning: {horizontal: 'right'}
 				}).on("dp.hide", function() {
 					dateInputJq.val(dateInputJq.val().replace(/\./g, "-"));
 					var token = dateInputJq.val().split("-");
