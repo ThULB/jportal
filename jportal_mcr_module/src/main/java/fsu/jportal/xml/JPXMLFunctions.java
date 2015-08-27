@@ -2,6 +2,8 @@ package fsu.jportal.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -254,6 +257,25 @@ public class JPXMLFunctions {
         } catch (Exception exc) {
             LOGGER.error("Unable to parse request url " + requestURL, exc);
             return "";
+        }
+    }
+
+    /**
+     * This method encodes the url. After the encoding the url is redirectable.
+     * taken from MCRServlet
+     *
+     * @param url
+     *            the source URL
+     */
+    public static String encodeURL(String url) throws URISyntaxException {
+        try {
+            return MCRXMLFunctions.normalizeAbsoluteURL(url);
+        } catch (MalformedURLException | URISyntaxException e) {
+            try {
+                return MCRXMLFunctions.encodeURIPath(url);
+            } catch (URISyntaxException e2) {
+                throw e2;
+            }
         }
     }
 
