@@ -487,6 +487,10 @@ p.jp-layout-metadata-list {
 	font-weight: bold;
 }
 
+#globalHeader .navbar-right{
+	margin-right: 0px;
+}
+
 #logo {
 	background-image: url("../jp_templates/template_master2/IMAGES/logo.png");
 	background-position: left top;
