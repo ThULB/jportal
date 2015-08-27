@@ -1,6 +1,10 @@
 package fsu.jportal.access;
 
 import java.io.IOException;
+import java.time.temporal.ChronoField;
+import java.time.temporal.IsoFields;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalField;
 import java.util.Calendar;
 
 import org.apache.solr.client.solrj.SolrServerException;
@@ -30,11 +34,11 @@ public class DerivateAccess {
             }
             
             try {
+
                 MCRISO8601Date objDate = new MCRISO8601Date(date);
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(objDate.getDate());
-                int year = calendar.get(Calendar.YEAR) + 1;
-                int month = calendar.get(Calendar.MONTH) + 1;
+                TemporalAccessor dt = objDate.getDt();
+                int year = dt.get(ChronoField.YEAR) + 1;
+                int month = dt.get(ChronoField.MONTH_OF_YEAR) + 1;
                 
                 String sorlQuery = "+journalID:" + id +" +objectType:jparticle +published_sort:[" + year + "-"+month+"-01T00:00:00.000Z TO "+year+"-"+month+"-31T23:59:59.999Z]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
