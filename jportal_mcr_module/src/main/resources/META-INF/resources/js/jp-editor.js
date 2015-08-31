@@ -1,4 +1,4 @@
-$(document).ready(function() {			
+$(document).ready(function() {
 	createDate();
 });
 
@@ -92,11 +92,19 @@ $.fn.dateCombiner = function() {
 
 				var parent = dateInputJq.parent();
 
+                var dateSplited = dateInputJq.val().split("-")
+
+				var format = "YYYY-MM-DD";
+				if(dateSplited.length == 1){
+					format = "YYYY"
+				}else if(dateSplited.length == 2){
+					format = "YYYY-MM"
+                }
+
 /* settings for datetimepicker */
 				parent.datetimepicker({
 					locale : $("#hiddenLanguage").text(),
-					minDate : '0001-01-01',
-					format: 'YYYY-MM-DD',
+					format: format,
 					widgetPositioning: {horizontal: 'right'}
 				}).on("dp.hide", function() {
 					dateInputJq.val(dateInputJq.val().replace(/\./g, "-"));
@@ -111,12 +119,12 @@ $.fn.dateCombiner = function() {
 					combineDate();
 				});
 
-/* 
+/*
  * error if yyyy-_-dd or _-mm-dd
- * error by letters, day 01 - 31, month 01 - 12 
- * save data on original input 
+ * error by letters, day 01 - 31, month 01 - 12
+ * save data on original input
  * can add missed 0  ---> year = 2  now complete to  year = 0002  automatically on original input
- * 
+ *
  * */
 				var combineDate = function() {
 					if(forms["Jahr"].val() != "") {
@@ -131,7 +139,7 @@ $.fn.dateCombiner = function() {
 							}
 							dateInputJq.val(dateInputJq.val() + forms["Jahr"].val());
 							killError(forms["Jahr"]);
-							
+
 							if(forms["Monat"].val() != "") {
 								// check right month input
 								if(forms["Monat"].val() > "12" || forms["Monat"].val() < "01") {
@@ -140,7 +148,7 @@ $.fn.dateCombiner = function() {
 									var extraNul = "";
 									if(forms["Monat"].val().length < 2) extraNul = "0";
 									dateInputJq.val(dateInputJq.val() + "-" + extraNul + forms["Monat"].val());
-									
+
 									if(forms["Tag"].val() != "") {
 										// check right day input
 										if(forms["Tag"].val() > "31" || forms["Tag"].val() < "01") {
@@ -167,7 +175,7 @@ $.fn.dateCombiner = function() {
 						dateInputJq.val("");
 					}
 				};
-				
+
 				var setDateTimerPickerVal = function() {
 					combineDate();
 					//set Date on picker only if jahr and mounth and day not null
@@ -176,7 +184,7 @@ $.fn.dateCombiner = function() {
 					}
 				};
 
-				
+
 				$("#dateSelect").on("change keyup", function() {
 					forms["Jahr"].val(null);
 					forms["Monat"].val(null);
@@ -185,7 +193,8 @@ $.fn.dateCombiner = function() {
 				});
 
 				var content = dateInputJq.val().split("-");
-				var zaehler = 2; 
+				var zaehler = 2;
+
 				/* settings for the input */
 				for ( var placeHolder in formsData) {
 					var maxlength = formsData[placeHolder].length;
@@ -198,7 +207,7 @@ $.fn.dateCombiner = function() {
 					forms[placeHolder].on("keyup click", combineDate);
 					forms[placeHolder].on("change", setDateTimerPickerVal);
 					forms[placeHolder].insertAfter(dateInputJq);
-					zaehler --; 
+					zaehler --;
 				}
 			});
 };
