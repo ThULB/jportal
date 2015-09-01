@@ -23,6 +23,10 @@ public class UpdateJournaldHandler extends MCREventHandlerBase {
             if (partnerID != null) {
                 ltm.addReferenceLink(mcrIdString, partnerID, "partner", null);
             }
+            String greetingID = getImprintID(mcrIdString, "greeting");
+            if (greetingID != null) {
+                ltm.addReferenceLink(mcrIdString, greetingID, "greeting", null);
+            }
         }
     }
 }

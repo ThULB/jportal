@@ -47,10 +47,10 @@
           <restriction name="createJournal" value="true" />
           <label name="Kinder verschieben" ref="moveObjResource" path="start?objId={$currentObjID}" />
         </item>
-        <item>
-          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Beschreibung bearbeiten" id="ckeditorButton" />
-        </item>
+        <!--<item>-->
+          <!--<restriction name="dataModel" value="datamodel-jpjournal.xsd" />-->
+          <!--<label name="Beschreibung bearbeiten" id="ckeditorButton" />-->
+        <!--</item>-->
         <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Rubrik bearbeiten" id="diagButton" />
@@ -64,6 +64,11 @@
           <label name="Partner auswählen" id="partnerButton" class="jp-infoFiles-button" type="partner" journalid="{$currentObjID}" containerid="main"/>
         </item>
         <item>
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
+          <label name="Begrüßung auswählen" id="Button" class="jp-infoFiles-button" type="greeting" journalid="{$currentObjID}" containerid="main"/>
+        </item>
+        <item>
+          <restriction name="dataModel" contains="datamodel-" />
           <!-- <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" /> -->
           <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}" />
         </item>

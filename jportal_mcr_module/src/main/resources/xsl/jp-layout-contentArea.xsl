@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
-  xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="layoutTools acl mcrxml mcr">
+  xmlns:mcr="http://www.mycore.org/" xmlns:imprint="xalan://fsu.jportal.util.ImprintUtil" exclude-result-prefixes="imprint layoutTools acl mcrxml mcr">
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
@@ -56,7 +56,17 @@
       <!-- journal text -->
       <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
         <div id="intro">
-          <xsl:apply-templates mode="renderIntroTxt" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
+          <xsl:if test="imprint:has($journalID, 'greeting')">
+            <xsl:variable name="journalIntro" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']"/>
+            <xsl:choose>
+              <xsl:when test="$journalIntro = not('')">
+                <xsl:apply-templates mode="renderIntroTxt" select="$journalIntro" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates mode="renderIntroTxt" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='all']" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
         </div>
       </xsl:if>
 
@@ -129,7 +139,7 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template mode="renderIntroTxt" match="section[@xml:lang='de']">
+  <xsl:template mode="renderIntroTxt" match="section[@xml:lang]">
     <xsl:attribute name="class">
       <xsl:value-of select="'jp-layout-intro jp-content-block row'" />
     </xsl:attribute>

@@ -1,3 +1,7 @@
+body.modal-open {
+    padding-right: 0!important;
+}
+
 #imprint-preview{
     max-height: 30em;
     overflow: auto;

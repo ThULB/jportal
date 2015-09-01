@@ -11,7 +11,7 @@ public class ImprintManager {
             imprintFS = new ImprintFS(fsType);
             fsMap.put(fsType, imprintFS);
         }
-        
+
         return imprintFS;
     }
 }

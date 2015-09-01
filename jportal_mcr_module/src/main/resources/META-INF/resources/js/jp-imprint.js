@@ -4,6 +4,24 @@ var ImprintEditor = function (objID, type) {
 		i18nKeys =[];
 	return {
 		init: function () {
+			if (currentType == "imprint" && objID == "index" && $(".imprint-standard").length < 1) {
+				$("#imprintSelBox").append('<div class="list-group-item imprint-list-elm active imprint-standard"><div class="imprint-list-link">standart Impressum</div></div>');
+			}
+
+			if (currentType == "greeting" && $(".greeting-standard").length < 1) {
+				if (currentObjID == "index") {
+					$("#imprintSelBox").append('<div class="list-group-item imprint-list-elm active greeting-standard"><div class="imprint-list-link">standart Begrüßung</div></div>');
+				}
+				else {
+					$("#imprintSelBox").append('<div class="list-group-item imprint-list-elm active greeting-standard"><div class="imprint-list-link">keine Begrüßung</div></div>');
+				}
+				$("#imprintSelBox").append('<div class="list-group-item imprint-list-elm active"><div class="imprint-list-link">Begrüßung</div></div>');
+				$("#imprint-new-btn").parent().addClass("hidden");
+			}
+			else {
+				$("#imprint-new-btn").parent().removeClass("hidden");
+			}
+
 			$("#imprint-modal").modal("show");
 
 			$('#imprint-modal').on('shown.bs.modal', function () {
@@ -12,7 +30,12 @@ var ImprintEditor = function (objID, type) {
 
 			//noinspection JSUnresolvedVariable
 			loadI18nKeys(currentLang);
-			loadImprintList();
+			if (currentType != "greeting") {
+				loadImprintList();
+			}
+			else {
+				selectCurrentImprint(currentObjID);
+			}
 			if (currentType == "link") {
 				$("#imprint-preview-button").addClass("hidden");
 				$("#imprint-link-button").removeClass("hidden");
@@ -31,8 +54,13 @@ var ImprintEditor = function (objID, type) {
 			});
 
 			$("#imprintGUIMain").on("click", ".imprint-list-link", function () {
-				$("#imprint-preview-edit").removeClass("hidden");
-				selectImprint($(this).html());
+				if (!$(this).parent().hasClass("imprint-standard") && !$(this).parent().hasClass("greeting-standard")){
+					$("#imprint-preview-edit").removeClass("hidden");
+				}
+				else {
+					$("#imprint-preview-edit").addClass("hidden");
+				}
+				selectImprint($(this).parent());
 			});
 
 			$("#imprintGUIMain").on("click", "#imprint-new-btn", function () {
@@ -75,16 +103,50 @@ var ImprintEditor = function (objID, type) {
 			});
 
 			$("#imprintGUIMain").on("click", "#imprint-preview-save", function () {
-				linkImprint(currentObjID, getImprintNameWithElm($(".imprint-list-elm.active")));
+				if (!$(".imprint-list-elm.active").hasClass("imprint-standard") && !$(".imprint-list-elm.active").hasClass("greeting-standard")) {
+					if (currentType != "greeting") {
+						linkImprint(currentObjID, getImprintNameWithElm($(".imprint-list-elm.active")));
+					}
+					else {
+						linkImprint(currentObjID, "intro");
+					}
+
+				}
+				else {
+					removeImprintLink();
+				}
 			});
 		},
 
 		open: function (objID, type) {
 			currentObjID = objID;
 			currentType = type;
+
+			if (currentType == "imprint" && objID == "index" &&  $(".imprint-standard").length < 1) {
+				$("#imprintSelBox").append('<div class="list-group-item imprint-list-elm active imprint-standard"><div class="imprint-list-link">standart Impressum</div></div>');
+			}
+
+			if (currentType == "greeting" && $(".greeting-standard").length < 1) {
+				if (currentObjID == "index") {
+					$("#imprintSelBox").append('<div class="list-group-item imprint-list-elm active greeting-standard"><div class="imprint-list-link">standart Begrüßung</div></div>');
+				}
+				else {
+					$("#imprintSelBox").append('<div class="list-group-item imprint-list-elm active greeting-standard"><div class="imprint-list-link">keine Begrüßung</div></div>');
+				}
+				$("#imprintSelBox").append('<div class="list-group-item imprint-list-elm active"><div class="imprint-list-link">Begrüßung</div></div>');
+				$("#imprint-new-btn").parent().addClass("hidden");
+			}
+			else {
+				$("#imprint-new-btn").parent().removeClass("hidden");
+			}
 			//noinspection JSUnresolvedVariable
 			loadI18nKeys(currentLang);
-			loadImprintList();
+			if (currentType != "greeting") {
+				loadImprintList();
+			}
+			else {
+				selectCurrentImprint(currentObjID);
+			}
 			$("#imprint-modal").modal("show");
 			if (currentType == "link") {
 				$("#imprint-preview-button").addClass("hidden");
@@ -128,7 +190,7 @@ var ImprintEditor = function (objID, type) {
 				200: function () {
 					appendImprintToList(imprintName);
 					hideEditor();
-					selectImprint(imprintName);
+					selectImprint(getImprintWithName(imprintName));
 					scrollToCurrentElm();
 				},
 				500: function () {
@@ -147,11 +209,11 @@ var ImprintEditor = function (objID, type) {
 					var listElm = getImprintWithName(imprintName);
 					listElm.remove();
 					if ($(".current-imprint").length == 1) {
-						selectImprint(getImprintNameWithElm($(".current-imprint")));
+						selectImprint($(".current-imprint"));
 					}
 					else {
 						if ($(".imprint-list-elm").length > 0) {
-							selectImprint(getImprintNameWithElm($(".imprint-list-elm").first()));
+							selectImprint($(".imprint-list-elm").first());
 						}
 						else {
 							$("#imprint-no-imprint").removeClass("hidden");
@@ -162,6 +224,19 @@ var ImprintEditor = function (objID, type) {
 				500: function () {
 					alert("Error while deleting imprint.");
 				}
+			}
+		});
+	}
+
+	function removeImprintLink() {
+		$.ajax({
+			url: jp.baseURL + "rsc/fs/" + currentType +  "/removeLink/" + currentObjID,
+			type: "DELETE",
+			success: function(){
+				location.reload();
+			},
+			error: function(){
+				alert("Error while linking imprint.");
 			}
 		});
 	}
@@ -178,7 +253,12 @@ var ImprintEditor = function (objID, type) {
 				200: function () {
 					getImprintWithName(oldImprintName).find(".imprint-list-link").html(newImprintName);
 					hideEditor();
-					selectImprint(newImprintName);
+					if (currentType != "greeting") {
+						selectImprint(getImprintWithName(newImprintName));
+					}
+					else {
+						selectImprint(getImprintWithName("Begrüßung"));
+					}
 				},
 				500: function () {
 					alert("Error while editing imprint.");
@@ -192,7 +272,7 @@ var ImprintEditor = function (objID, type) {
 			url: jp.baseURL + "rsc/fs/" + currentType +  "/set/?objID=" + docID + "&imprintID=" + imprintName,
 			type: "POST",
 			success: function(){
-				closeImprintEditor();
+				location.reload();
 			},
 			error: function(){
 				alert("Error while linking imprint.");
@@ -208,9 +288,20 @@ var ImprintEditor = function (objID, type) {
 				200: function (data) {
 					if (data == "") {
 						$("#imprint-no-link").removeClass("hidden");
+						if (currentType == "imprint" && currentObjID == "index") {
+							selectImprint($(".imprint-standard"));
+							$(".imprint-standard").append("<i class='fa fa-2x fa-check current-imprint'></i>");
+						}
+						if (currentType == "greeting") {
+							selectImprint($(".greeting-standard"));
+							$(".greeting-standard").append("<i class='fa fa-2x fa-check current-imprint'></i>");
+						}
 					}
 					else {
-						selectImprint(data);
+						if (currentType == "greeting") {
+							data = "Begrüßung";
+						}
+						selectImprint(getImprintWithName(data));
 						getImprintWithName(data).append("<i class='fa fa-2x fa-check current-imprint'></i>");
 					}
 				},
@@ -227,7 +318,7 @@ var ImprintEditor = function (objID, type) {
 			type: "GET",
 			success: function(data){
 				$("#imprint-preview").html(data);
-				if (data != "<div />") {
+				if (data != "<div />" && data != "") {
 					$("#imprint-no-imprint").addClass("hidden");
 				}
 				else {
@@ -307,12 +398,27 @@ var ImprintEditor = function (objID, type) {
 		$("#imprint-editor-button").removeClass("hidden");
 	}
 
-	function selectImprint(imprintName) {
+	function selectImprint(imprintElm) {
 		$("#imprint-no-link").addClass("hidden");
-		var elm = getImprintWithName(imprintName);
 		$(".active").removeClass("active");
-		$(elm).addClass("active");
-		getImprint(imprintName);
+		$(imprintElm).addClass("active");
+		if (!$(imprintElm).hasClass("imprint-standard") && !$(imprintElm).hasClass("greeting-standard")) {
+			if (currentType != "greeting") {
+				getImprint($(imprintElm).find(".imprint-list-link").html());
+			}
+			else {
+				getImprint("intro");
+			}
+		}
+		else {
+			if ((currentObjID == "index" && currentType != "greeting")) {
+				getImprint("master");
+			}
+			else {
+				$("#imprint-preview").html("");
+			}
+
+		}
 	}
 
 	function closeImprintEditor() {
@@ -343,7 +449,12 @@ var ImprintEditor = function (objID, type) {
 		}
 		if ($("#imprint-editor-panel").hasClass("new-imprint")) {
 			if (getImprintWithName(imprintName).length < 1) {
-				saveImprint(imprintName, imprintText);
+				if (currentType != "greeting") {
+					saveImprint(imprintName, imprintText);
+				}
+				else {
+					saveImprint("intro", imprintText);
+				}
 			}
 			else {
 				showEditorAlert("name");
@@ -352,7 +463,12 @@ var ImprintEditor = function (objID, type) {
 		else {
 			var oldImprintName = getImprintNameWithElm($(".imprint-list-elm.active"));
 			if (getImprintWithName(imprintName).length < 1 || imprintName == oldImprintName) {
-				editImprint(oldImprintName, imprintName, $("#imprint-preview").html(), imprintText);
+				if (currentType != "greeting") {
+					editImprint(oldImprintName, imprintName, $("#imprint-preview").html(), imprintText);
+				}
+				else {
+					editImprint("intro", "intro", $("#imprint-preview").html(), imprintText);
+				}
 			}
 			else {
 				showEditorAlert("name");
@@ -381,7 +497,9 @@ var ImprintEditor = function (objID, type) {
 			$("#imprintSelBox").animate({
 				scrollTop: $('#imprintSelBox > .active').index() * $('#imprintSelBox > .active').outerHeight()
 			}, 1);
-			$("#imprint-preview-edit").removeClass("hidden");
+			if (!$(".imprint-list-elm.active").hasClass("imprint-standard") && !$(".imprint-list-elm.active").hasClass("greeting-standard")){
+				$("#imprint-preview-edit").removeClass("hidden");
+			}
 		}
 	}
 
@@ -435,6 +553,7 @@ $(document).ready(function() {
 				statusCode: {
 					200: function(data) {
 						var html = $("<div></div>").append(data).find("#imprintGUIMain");
+						$("head").append('<link href="'+ jp.baseURL + '/css/jp-imprint.css" rel="stylesheet" type="text/css">');
 						$("body").append(html);
 						imprintEditorInstance = new ImprintEditor(objID, type);
 						imprintEditorInstance.init();

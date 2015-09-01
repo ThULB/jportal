@@ -24,13 +24,13 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
+import fsu.jportal.backend.GreetingsFS;
+import fsu.jportal.backend.GreetingsManager;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.transform.JDOMResult;
-import org.jdom2.transform.JDOMSource;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.datamodel.common.MCRLinkTableManager;
@@ -43,6 +43,8 @@ import fsu.jportal.pref.JournalConfig;
 import fsu.jportal.util.ImprintUtil;
 import fsu.jportal.xml.MCRWebpage;
 import fsu.jportal.xml.XMLTools;
+import org.mycore.services.i18n.MCRTranslation;
+
 import static fsu.jportal.util.ImprintUtil.*;
 
 @Path("fs/{fsType}")
@@ -52,6 +54,7 @@ public class ImprintResource {
     private static final Logger LOGGER = Logger.getLogger(ImprintResource.class);
     private @PathParam("fsType") String fsType;
     private ImprintFS imprintFS;
+    private GreetingsFS greetingFS;
     private JournalConfig journalConfig;
     
     public ImprintFS getImprintFS() {
@@ -59,6 +62,13 @@ public class ImprintResource {
             imprintFS = ImprintManager.createFS(fsType);
         }
         return imprintFS;
+    }
+
+    public GreetingsFS getGreetingFS(String journalID) {
+        if(greetingFS == null){
+            greetingFS = GreetingsManager.createFS(journalID);
+        }
+        return greetingFS;
     }
 
     @GET
@@ -69,7 +79,16 @@ public class ImprintResource {
             Map<String, String> map = getPropAsMap(objID);
             return Response.ok(map.get(imprintID)).build();
         }
-        Element section = getImprintContent(imprintID);
+        Element section = null;
+        if (fsType.equals("greeting")) {
+            section = ImprintUtil.getGreetingContent(getGreetingFS(objID), MCRTranslation.getCurrentLocale().getLanguage());
+            if (section == null) {
+                return Response.ok("").build();
+            }
+        }
+        else {
+            section = ImprintUtil.getImprintContent(imprintID, getImprintFS(), MCRTranslation.getCurrentLocale().getLanguage());
+        }
         XMLOutputter xout = new XMLOutputter(Format.getCompactFormat());
         return Response.ok(xout.outputString(section.getContent())).build(); 
     }
@@ -83,7 +102,7 @@ public class ImprintResource {
             saveLink(save.objID, save.imprintID, save.content, null);
         }
         else {
-            saveImprint(save.imprintID, save.content);
+            saveImprint(save.imprintID, save.content, save.objID);
         }
         return Response.ok().build();
     }
@@ -100,13 +119,26 @@ public class ImprintResource {
     }
 
     @DELETE
+    @Path("removeLink/{objID}")
+    public Response removeLink(@PathParam("objID") String objID) {
+        MCRLinkTableManager ltm = MCRLinkTableManager.instance();
+        String imprintID = getImprintID(objID, fsType);
+        if (imprintID != null) {
+            ltm.deleteReferenceLink(objID, imprintID, fsType);
+            JournalConfig journalConf = getJournalConf(objID);
+            journalConf.removeKey(fsType);
+        }
+        return Response.ok().build();
+    }
+
+    @DELETE
     @Path("delete/{imprintID}")
     public Response delete(@PathParam("imprintID") String imprintID, @QueryParam("objID") String objID) {
         if (fsType.equals("link")) {
             deleteLink(objID, imprintID);
         }
         else {
-            deleteImprint(imprintID);
+            deleteImprint(imprintID, objID);
         }
         return Response.ok().build();
     }
@@ -125,7 +157,7 @@ public class ImprintResource {
             }
 
             if (!editO.oldContent.equals(editO.newContent)) {
-                saveImprint(editO.newImprintID, editO.newContent);
+                saveImprint(editO.newImprintID, editO.newContent, editO.objID);
             }
         }
 
@@ -164,7 +196,9 @@ public class ImprintResource {
         InputStream guiXSL = getClass().getResourceAsStream("/xsl/jp-imprint-webpage.xsl");
         JDOMResult result = new JDOMResult();
         Map<String, Object> params = new HashMap<>();
-        params.put("journalID", objID);
+        if (!objID.equals("index") && !objID.equals("")) {
+            params.put("journalID", objID);
+        }
         try {
             new XMLTools().transform(xmlSource, new StreamSource(guiXSL), params, result);
             MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(result.getDocument()));
@@ -236,10 +270,15 @@ public class ImprintResource {
         setLink(objID, imprintID);
     }
 
-    private void deleteImprint (String imprintID) throws WebApplicationException {
+    private void deleteImprint (String imprintID, String journalID) throws WebApplicationException {
         // delete file
         try {
-            getImprintFS().delete(imprintID);
+            if (fsType.equals("greeting")) {
+                getGreetingFS(journalID).delete();
+            }
+            else {
+                getImprintFS().delete(imprintID);
+            }
         } catch(Exception exc) {
             LOGGER.error("unable to delete imprint file '" + imprintID + "'", exc);
             throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
@@ -248,24 +287,24 @@ public class ImprintResource {
         removeLinks(imprintID);
     }
 
-    private Element getImprintContent(String imprintID) throws WebApplicationException {
-        JDOMSource xmlSource = null;
-        try {
-            xmlSource = getImprintFS().receive(imprintID);
-        } catch(JDOMException jdomExc) {
-            LOGGER.error("unable to parse imprint webpage of " + imprintID, jdomExc);
-            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
-        } catch (Exception exc) {
-            LOGGER.error("while retrieving imprint " + imprintID, exc);
-            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
-        }
-        Element section = xmlSource.getDocument().getRootElement().getChild("section");
-        if (section == null) {
-            LOGGER.error("unable to get section of imprint " + imprintID);
-            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
-        }
-        return section;
-    }
+//    private Element getImprintContent(String imprintID) throws WebApplicationException {
+//        JDOMSource xmlSource = null;
+//        try {
+//            xmlSource = getImprintFS().receive(imprintID);
+//        } catch(JDOMException jdomExc) {
+//            LOGGER.error("unable to parse imprint webpage of " + imprintID, jdomExc);
+//            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+//        } catch (Exception exc) {
+//            LOGGER.error("while retrieving imprint " + imprintID, exc);
+//            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+//        }
+//        Element section = xmlSource.getDocument().getRootElement().getChild("section");
+//        if (section == null) {
+//            LOGGER.error("unable to get section of imprint " + imprintID);
+//            throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+//        }
+//        return section;
+//    }
 
     private void setLink(String objID, String imprintID) {
         JournalConfig journalConf = getJournalConf(objID);
@@ -307,14 +346,14 @@ public class ImprintResource {
         Collection<String> references = ltm.getSourceOf(oldImprintID);
 
         // get content
-        Element content = getImprintContent(oldImprintID).getParentElement();
+        Element content = ImprintUtil.getImprintContent(oldImprintID, getImprintFS(), MCRTranslation.getCurrentLocale().getLanguage()).getParentElement();
         content.detach();
 
         // create new
         getImprintFS().store(newImprintID, new MCRJDOMContent(content));
 
         // delete file
-        deleteImprint(oldImprintID);
+        deleteImprint(oldImprintID, "");
 
         // set links
         setLinks(references, newImprintID);
@@ -373,11 +412,16 @@ public class ImprintResource {
     }
 
 
-    private void saveImprint(String imprintID, String content) {
+    private void saveImprint(String imprintID, String content, String journalID) {
         try {
             MCRWebpage mcrWebpage = new MCRWebpage();
             mcrWebpage.addSection(new MCRWebpage.Section().addContent(content));
-            getImprintFS().store(imprintID, new MCRJDOMContent(mcrWebpage.toXML()));
+            if (fsType.equals("greeting")) {
+                getGreetingFS(journalID).store(new MCRJDOMContent(mcrWebpage.toXML()));
+            }
+            else {
+                getImprintFS().store(imprintID, new MCRJDOMContent(mcrWebpage.toXML()));
+            }
         } catch (Exception exc) {
             LOGGER.error("unable to store imprint content '" + imprintID + "'", exc);
             throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);

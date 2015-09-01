@@ -1,9 +1,6 @@
 package fsu.jportal.backend;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,6 +25,8 @@ public class ImprintFS {
 
     private final Path IMPRINT_DIR;
 
+    private final String fsType;
+
 //    static {
 //        String baseDir = MCRConfiguration.instance().getString("JP.imprint.baseDir", "/data/imprint");
 //        IMPRINT_DIR = Paths.get(baseDir);
@@ -41,6 +40,7 @@ public class ImprintFS {
 //    }
     
     public ImprintFS(String fsType) {
+        this.fsType = fsType;
         String baseDir = MCRConfiguration.instance().getString("JP."+ fsType + ".baseDir", "/data/" + fsType);
         IMPRINT_DIR = Paths.get(baseDir);
         if(!Files.exists(IMPRINT_DIR)) {
@@ -79,6 +79,17 @@ public class ImprintFS {
     }
 
     public JDOMSource receive(String imprintID) throws IOException, JDOMException {
+        SAXBuilder builder = new SAXBuilder();
+        if (imprintID.equals("master") || imprintID.equals("")){
+            InputStream is;
+            if (fsType.equals("imprint")){
+                is = this.getClass().getClassLoader().getResourceAsStream("META-INF/resources/jp-imprint.xml");
+            }
+            else {
+                is = this.getClass().getClassLoader().getResourceAsStream("META-INF/resources/jp-index.xml");
+            }
+            return new JDOMSource(builder.build(is));
+        }
         Path receivePath = getPath(imprintID);
         try (BufferedReader reader = Files.newBufferedReader(receivePath, Charsets.UTF_8)) {
             StringBuffer buf = new StringBuffer();
@@ -86,7 +97,6 @@ public class ImprintFS {
             while ((line = reader.readLine()) != null) {
                 buf.append(line);
             }
-            SAXBuilder builder = new SAXBuilder();
             return new JDOMSource(builder.build(new StringReader(buf.toString())));
         }
     }

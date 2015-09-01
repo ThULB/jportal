@@ -1,15 +1,27 @@
 package fsu.jportal.util;
 
 import com.google.gson.Gson;
+import fsu.jportal.backend.GreetingsFS;
+import fsu.jportal.backend.ImprintFS;
+import fsu.jportal.backend.ImprintManager;
 import fsu.jportal.pref.JournalConfig;
+import org.apache.log4j.Logger;
 import org.apache.xalan.extensions.ExpressionContext;
 import org.apache.xpath.NodeSet;
 import org.apache.xpath.objects.XNodeSet;
 import org.apache.xpath.objects.XNodeSetForDOM;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.output.DOMOutputter;
+import org.jdom2.transform.JDOMSource;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,6 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ImprintUtil {
+
+    private static final Logger LOGGER = Logger.getLogger(ImprintUtil.class);
 
     /**
      * Returns the imprint of the given object id or throws a 404 not
@@ -70,5 +84,79 @@ public abstract class ImprintUtil {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static Element getImprintContent(String objID, String fsType, String lang) throws WebApplicationException, JDOMException {
+        DOMOutputter out = new DOMOutputter();
+        String imprintID = getImprintID(objID, fsType);
+        if (imprintID == null) {
+            imprintID = "master";
+        }
+        if (imprintID.equals("") && fsType.equals("greeting") && !objID.equals("index")) {
+            return null;
+        }
+        org.jdom2.Element element = getImprintContent(imprintID, ImprintManager.createFS(fsType), lang);
+        return out.output(element);
+    }
+
+    public static org.jdom2.Element getImprintContent(String imprintID, ImprintFS imprintFS, String lang) throws WebApplicationException {
+        JDOMSource xmlSource = null;
+        try {
+            xmlSource = imprintFS.receive(imprintID);
+        } catch(JDOMException jdomExc) {
+            LOGGER.error("unable to parse imprint webpage of " + imprintID, jdomExc);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        } catch (Exception exc) {
+            LOGGER.error("while retrieving imprint " + imprintID, exc);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+        if (xmlSource != null) {
+            return getContentSection(xmlSource, lang, imprintID, true);
+        }
+        else {
+            LOGGER.error("while retrieving imprint " + imprintID);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public static org.jdom2.Element getGreetingContent(GreetingsFS greetingsFS, String lang) throws WebApplicationException {
+        JDOMSource xmlSource = null;
+        try {
+            xmlSource = greetingsFS.receive();
+        } catch(JDOMException jdomExc) {
+            LOGGER.error("unable to parse imprint greeting of " + greetingsFS.getjournalID(), jdomExc);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        } catch (Exception exc) {
+            LOGGER.error("while retrieving greeting " + greetingsFS.getjournalID(), exc);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+        if (xmlSource != null) {
+            return getContentSection(xmlSource, lang, greetingsFS.getjournalID(), false);
+        }
+        else {
+            return null;
+        }
+    }
+
+    private static org.jdom2.Element getContentSection(JDOMSource xmlSource, String lang, String id, Boolean withoutTitle) {
+        String notTitle = "";
+        if (withoutTitle) {
+            notTitle = " and not(@title)";
+        }
+        XPathExpression<org.jdom2.Element> xpathExpression = XPathFactory.instance().compile("//*[@xml:lang=\""+ lang + "\"" + notTitle + "]", Filters.element());
+        org.jdom2.Element section = xpathExpression.evaluateFirst(xmlSource.getDocument());
+        if (section == null) {
+            xpathExpression = XPathFactory.instance().compile("//*[@xml:lang=\"all\"" + notTitle + "]", Filters.element());
+            section = xpathExpression.evaluateFirst(xmlSource.getDocument());
+        }
+        if (section == null) {
+            xpathExpression = XPathFactory.instance().compile("//*[@xml:lang=\"de\"" + notTitle + "]", Filters.element());
+            section = xpathExpression.evaluateFirst(xmlSource.getDocument());
+        }
+        if (section == null) {
+            LOGGER.error("unable to get section of " + id);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+        return section;
     }
 }
