@@ -15,6 +15,7 @@
     <var name="createInst" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpinst')}" />
     <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpvolume')}" />
     <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jparticle')}" />
+    <var name="deleteDoublets" value="{acl:checkPermission('default', 'delete-doublets')}" />
     <var name="deleteDeriv" value="{acl:checkPermission('default_derivate', 'deletedb')}" />
     <var name="currentType" value="{$currentType}" />
     <var name="currentObjID" value="{$currentObjID}" />
@@ -34,8 +35,19 @@
       <link id="newEditorResource" href="{$WebApplicationBaseURL}editor" />
 
       <link id="moveObjResource" href="{$WebApplicationBaseURL}rsc/moveObj" />
+
+      <xsl:if test="starts-with($RequestURL, concat($WebApplicationBaseURL, 'content/below/index.xml')) and not(mcrxml:isCurrentUserGuestUser())">
+        <item type="menu">
+          <item>
+            <label name="Impressum auswählen" id="imprintButtonIndex" class="jp-infoFiles-button" type="imprint" journalid="index" containerid="main"/>
+          </item>
+          <item>
+            <label name="Begrüßung auswählen" id="greetingButtonIndex" class="jp-infoFiles-button" type="greeting" journalid="index" containerid="main"/>
+          </item>
+        </item>
+      </xsl:if>
       <item type="menu">
-        <!-- <label name="Bearbeiten" /> -->
+         <!--<label name="Bearbeiten" />-->
         <restriction name="updatePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
@@ -46,10 +58,10 @@
           <restriction name="createJournal" value="true" />
           <label name="Kinder verschieben" ref="moveObjResource" path="start?objId={$currentObjID}" />
         </item>
-        <item>
-          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Beschreibung bearbeiten" id="ckeditorButton" />
-        </item>
+        <!--<item>-->
+          <!--<restriction name="dataModel" value="datamodel-jpjournal.xsd" />-->
+          <!--<label name="Beschreibung bearbeiten" id="ckeditorButton" />-->
+        <!--</item>-->
         <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Rubrik bearbeiten" id="diagButton" />
@@ -62,13 +74,22 @@
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Partner auswählen" id="partnerButton" class="jp-infoFiles-button" type="partner" journalid="{$currentObjID}" containerid="main"/>
         </item>
+        <item>
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
+          <label name="Begrüßung auswählen" id="Button" class="jp-infoFiles-button" type="greeting" journalid="{$currentObjID}" containerid="main"/>
+        </item>
         <item >
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Links bearbeiten" id="linkButton" class="jp-infoFiles-button" type="link" journalid="{$currentObjID}" containerid="main"/>
         </item>
         <item>
+          <restriction name="dataModel" contains="datamodel-" />
           <!-- <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" /> -->
           <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}" />
+        </item>
+        <item>
+          <restriction name="createJournal" value="true"/>
+          <label name="Objectbrowser" href="{$WebApplicationBaseURL}rsc/derivatebrowser/start?lang=de#/{$currentObjID}"/>
         </item>
       </item>
       <item type="menu">
@@ -101,8 +122,7 @@
         </item>
       </item>
       <item type="menu">
-        <restriction name="updatePerm" value="true" />
-        <restriction name="createJournal" value="true" />
+        <restriction name="deleteDoublets" value="true" />
         <item>
           <label name="Dublettenfinder" href="{$WebApplicationBaseURL}rsc/doublets" />
         </item>
@@ -180,7 +200,7 @@
 
   <xsl:template name="jp.object.editing.items">
     <xsl:apply-templates mode="menuItem" select="$menu/item" />
-    <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
+    <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')] or /MyCoReWebPage/section/jpindex ">
       <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/ckeditor/ckeditor.js" />
       <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/ckeditor/adapters/jquery.js" />
       <xsl:call-template name="classificationEditorDiag" />

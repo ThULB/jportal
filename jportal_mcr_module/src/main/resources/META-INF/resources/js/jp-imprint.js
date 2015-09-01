@@ -374,6 +374,7 @@ var ImprintEditor = function (objID, type) {
 				$("#imprint-no-link").removeClass("hidden");
 			}
 		}
+		$("#imprint-editor-input").removeAttr("readonly");
 	}
 
 	function showEditor(newImprint) {
@@ -396,6 +397,9 @@ var ImprintEditor = function (objID, type) {
 		$("#imprint-link-button").addClass("hidden");
 		$("#imprint-editor-panel").removeClass("hidden");
 		$("#imprint-editor-button").removeClass("hidden");
+		if (currentType == "greeting") {
+			$("#imprint-editor-input").attr("readonly", true);
+		}
 	}
 
 	function selectImprint(imprintElm) {
@@ -411,7 +415,7 @@ var ImprintEditor = function (objID, type) {
 			}
 		}
 		else {
-			if ((currentObjID == "index" && currentType != "greeting")) {
+			if (currentObjID == "index") {
 				getImprint("master");
 			}
 			else {

@@ -81,13 +81,7 @@ public class ImprintFS {
     public JDOMSource receive(String imprintID) throws IOException, JDOMException {
         SAXBuilder builder = new SAXBuilder();
         if (imprintID.equals("master") || imprintID.equals("")){
-            InputStream is;
-            if (fsType.equals("imprint")){
-                is = this.getClass().getClassLoader().getResourceAsStream("META-INF/resources/jp-imprint.xml");
-            }
-            else {
-                is = this.getClass().getClassLoader().getResourceAsStream("META-INF/resources/jp-index.xml");
-            }
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("META-INF/resources/jp-imprint.xml");
             return new JDOMSource(builder.build(is));
         }
         Path receivePath = getPath(imprintID);

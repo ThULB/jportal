@@ -6,14 +6,10 @@ import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.transform.JDOMSource;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
 
 import java.io.*;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GreetingsFS {
 
@@ -64,6 +60,12 @@ public class GreetingsFS {
             }
         }
         return null;
+    }
+
+    public JDOMSource receiveDefault() throws IOException, JDOMException {
+        SAXBuilder builder = new SAXBuilder();
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("META-INF/resources/jp-index.xml");
+        return new JDOMSource(builder.build(is));
     }
 
     public void delete() throws IOException {

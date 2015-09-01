@@ -2,6 +2,7 @@ package fsu.jportal.util;
 
 import com.google.gson.Gson;
 import fsu.jportal.backend.GreetingsFS;
+import fsu.jportal.backend.GreetingsManager;
 import fsu.jportal.backend.ImprintFS;
 import fsu.jportal.backend.ImprintManager;
 import fsu.jportal.pref.JournalConfig;
@@ -86,6 +87,31 @@ public abstract class ImprintUtil {
         return result;
     }
 
+    public static org.jdom2.Element getDefaultGreeting(String objID, String lang) {
+        JDOMSource xmlSource = null;
+        try {
+            xmlSource =  GreetingsManager.createFS(objID).receiveDefault();
+        } catch(JDOMException jdomExc) {
+            LOGGER.error("unable to parse imprint greeting of " + objID, jdomExc);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        } catch (Exception exc) {
+            LOGGER.error("while retrieving greeting " + objID, exc);
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+        if (xmlSource != null) {
+            return getContentSection(xmlSource, lang, objID, true);
+        }
+        else {
+            return null;
+        }
+    }
+
+    public static Element getDefaultGreetingXSL(String objID, String lang) throws WebApplicationException, JDOMException {
+        DOMOutputter out = new DOMOutputter();
+        org.jdom2.Element element = getDefaultGreeting(objID, lang);
+        return out.output(element);
+    }
+
     public static Element getImprintContent(String objID, String fsType, String lang) throws WebApplicationException, JDOMException {
         DOMOutputter out = new DOMOutputter();
         String imprintID = getImprintID(objID, fsType);
@@ -94,6 +120,10 @@ public abstract class ImprintUtil {
         }
         if (imprintID.equals("") && fsType.equals("greeting") && !objID.equals("index")) {
             return null;
+        }
+        if (fsType.equals("greeting")) {
+            org.jdom2.Element element = getGreetingContent(GreetingsManager.createFS(objID), lang);
+            return out.output(element);
         }
         org.jdom2.Element element = getImprintContent(imprintID, ImprintManager.createFS(fsType), lang);
         return out.output(element);

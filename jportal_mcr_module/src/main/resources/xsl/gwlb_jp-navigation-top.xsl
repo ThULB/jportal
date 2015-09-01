@@ -38,7 +38,14 @@
                 <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/', $journalID)" />
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />
+                <xsl:choose>
+                  <xsl:when test="imprint:has('index', 'imprint')">
+                    <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/index')" />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>

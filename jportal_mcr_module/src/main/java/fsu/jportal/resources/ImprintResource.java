@@ -81,7 +81,12 @@ public class ImprintResource {
         }
         Element section = null;
         if (fsType.equals("greeting")) {
-            section = ImprintUtil.getGreetingContent(getGreetingFS(objID), MCRTranslation.getCurrentLocale().getLanguage());
+            if (imprintID.equals("master")) {
+                section = ImprintUtil.getDefaultGreeting(objID, MCRTranslation.getCurrentLocale().getLanguage());
+            }
+            else {
+                section = ImprintUtil.getGreetingContent(getGreetingFS(objID), MCRTranslation.getCurrentLocale().getLanguage());
+            }
             if (section == null) {
                 return Response.ok("").build();
             }

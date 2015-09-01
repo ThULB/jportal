@@ -98,8 +98,11 @@ p {
 	margin: 30px 60px;
 	text-align: center;
 }
-.jp-layout-index-intro > p.greeting {
+.jp-layout-index-intro > span.section {
 	margin-bottom: 30px;
+	font-size: 14px;
+}
+.jp-layout-index-intro > span.section p {
 	font-size: 14px;
 }
 .jp-layout-index-list {
@@ -700,6 +703,18 @@ p.jp-layout-metadata-list {
 	padding-top: 15px;
 	margin-top: 15px;
 }
+
+/*#main #intro:not(:empty) {*/
+	/*border-bottom: 1px solid #F7F7F7;*/
+	/*padding-bottom: 15px;*/
+	/*margin-bottom: 15px;*/
+/*}*/
+
+/*#intro > section, #intro > div {*/
+	/*border-bottom: 1px solid #F7F7F7;*/
+	/*padding-top: 15px;*/
+	/*margin-top: 15px;*/
+/*}*/
 
 .jp-layout-derivateList .jp-layout-derivate .edit {
 	margin: 0px;
