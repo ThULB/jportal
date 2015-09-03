@@ -3,7 +3,7 @@
   xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan layoutTools mcrxml xlink">
 
-  <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response|/journalList" />
+  <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response|/journalList|/mcr_directory" />
 <!--   <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response" /> -->
   <xsl:variable name="tagsWithSearchModeInfo" select="/response|/MyCoReWebPage" />
 
@@ -56,6 +56,12 @@
 
   <xsl:template mode="journalID" match="mycoreobject">
     <xsl:value-of select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+  </xsl:template>
+
+  <xsl:template mode="journalID" match="mcr_directory">
+    <xsl:variable name="ownerID" select="ownerID"/>
+    <xsl:variable name="derivateParent" select="document(concat('parents:',$ownerID))/parents/parent/@xlink:href"/>
+    <xsl:value-of select="layoutTools:getJournalID($derivateParent)"/>
   </xsl:template>
 
   <xsl:template mode="journalID" match="journalList">

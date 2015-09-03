@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:imprint="xalan://fsu.jportal.util.ImprintUtil" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
-  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="mcrxml i18n imprint acl">
+  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:encoder="xalan://java.net.URLEncoder"  exclude-result-prefixes="mcrxml i18n imprint acl encoder">
 
   <xsl:template name="jp.navigation.top">
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
@@ -57,7 +57,7 @@
           <a>
             <xsl:attribute name="href">
             <xsl:if test="$isGuest">
-              <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRLoginServlet?url=', $RequestURL)" />
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRLoginServlet?url=', encoder:encode($RequestURL))" />
             </xsl:if>
             <xsl:if test="not($isGuest)">
               <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/logout')" />

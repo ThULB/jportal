@@ -1,5 +1,6 @@
 package fsu.jportal.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -19,8 +20,19 @@ public class ContentTools {
         MCRObjectID mcrChildID = MCRObjectID.getInstance(childID);
         if (MCRXMLMetadataManager.instance().exists(mcrChildID)) {
             XPathExpression<Text> titleXpath = XPathFactory.instance().compile(
-                    "/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()", Filters.text());
-            List<MCRObject> parents = MCRObjectUtils.getAncestors(MCRMetadataManager.retrieveMCRObject(mcrChildID));
+                        "/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()", Filters.text());
+            List<MCRObject> parents;
+            if (mcrChildID.getTypeId().equals("derivate")) {
+                parents = new ArrayList<>();
+                String prentID  = MCRMetadataManager.retrieveMCRDerivate(mcrChildID).getDerivate().getMetaLink()
+                        .getXLinkHref();
+                parents.add(MCRMetadataManager.retrieveMCRObject(prentID));
+                List<MCRObject> secList = MCRObjectUtils.getAncestors(MCRMetadataManager.retrieveMCRObject(prentID));
+                parents.addAll(secList);
+            }
+            else {
+                parents = MCRObjectUtils.getAncestors(MCRMetadataManager.retrieveMCRObject(mcrChildID));
+            }
             String referer = childID;
             for (int i = 0; i < parents.size(); i++) {
                 MCRObject parent = parents.get(i);
