@@ -116,6 +116,9 @@ var ImprintEditor = function (objID, type) {
 					removeImprintLink();
 				}
 			});
+
+			//Fix: CKEDITOR URL input doesn't work when embedded in a bootstrap modal
+			$.fn.modal.Constructor.prototype.enforceFocus = function() {};
 		},
 
 		open: function (objID, type) {
