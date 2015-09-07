@@ -23,10 +23,12 @@
           <xsl:if test="$journalList/response/result/@numFound &gt; 0">
             <xsl:for-each select="$journalList/response/result/doc">
               <div class="col-sm-4 pull-left gwlb-layout-index-list-elm">
-                <img src="http://localhost:8291/jportal/images/gwlb/{str[@name='id']}/cover.png"></img>
-                <h3>
-                  <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}"><xsl:value-of select="str[@name='maintitle']"/></a>
-                </h3>
+                <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
+                  <img src="http://localhost:8291/jportal/images/gwlb/{str[@name='id']}/cover.png"></img>
+                  <h3>
+                    <xsl:value-of select="str[@name='maintitle']"/>
+                  </h3>
+                </a>
               </div>
             </xsl:for-each>
           </xsl:if>
