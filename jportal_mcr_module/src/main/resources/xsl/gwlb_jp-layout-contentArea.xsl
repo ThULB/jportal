@@ -37,7 +37,7 @@
     <xsl:if test="not($currentType='person' or $currentType='jpinst')">
       <xsl:call-template name="breadcrumb" />
     </xsl:if>
-    <div class="jp-content container-fluid col-sm-10 col-sm-offset-1">
+    <div class="jp-content container-fluid col-sm-12">
       <!-- left side -->
       <xsl:if test="$currentType != 'jparticle'">
         <div id="jp-journal-childs" class="col-sm-3">
@@ -76,7 +76,7 @@
         </div>
       </xsl:when>
       <xsl:otherwise>
-        <div id="jp-journal-content" class="col-sm-12">
+        <div id="jp-journal-content">
           <xsl:call-template name="jp.journal.content" />
         </div>
       </xsl:otherwise>

@@ -4,7 +4,7 @@
 
   <xsl:template match="jpindex">
 
-    <div class="jp-layout-index col-sm-10 col-sm-offset-1">
+    <div class="jp-layout-index col-sm-8 col-sm-offset-2">
       <div class="jp-layout-index-intro">
         <xsl:variable name="currentLang" select="i18n:getCurrentLocale()" />
         <xsl:choose>
@@ -17,19 +17,20 @@
         </xsl:choose>
       </div>
       <div id="gwlb-layout-index-list">
-        <h2>verfügbare Zeitschriften</h2>
-        <ul>
+        <h2>Zeitschriften</h2>
+        <div>
           <xsl:variable name="journalList" select="document('solr:q=+objectType:jpjournal&amp;rows=99999&amp;sort=maintitle_sort%20asc')" />
           <xsl:if test="$journalList/response/result/@numFound &gt; 0">
             <xsl:for-each select="$journalList/response/result/doc">
-              <li>
+              <div class="col-sm-4 pull-left gwlb-layout-index-list-elm">
+                <img src="http://localhost:8291/jportal/images/gwlb/{str[@name='id']}/cover.png"></img>
                 <h3>
                   <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}"><xsl:value-of select="str[@name='maintitle']"/></a>
                 </h3>
-              </li>
+              </div>
             </xsl:for-each>
           </xsl:if>
-        </ul>
+        </div>
       </div>
     </div>
   </xsl:template>
