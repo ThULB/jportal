@@ -4,7 +4,7 @@
 
   <xsl:template match="jpindex">
 
-    <div class="jp-layout-index col-sm-8 col-sm-offset-2">
+    <div class="jp-layout-index col-sm-10 col-sm-offset-1">
       <div class="jp-layout-index-intro">
         <xsl:variable name="currentLang" select="i18n:getCurrentLocale()" />
         <xsl:choose>
@@ -24,7 +24,7 @@
             <xsl:for-each select="$journalList/response/result/doc">
               <div class="col-sm-4 pull-left gwlb-layout-index-list-elm">
                 <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
-                  <img src="http://localhost:8291/jportal/images/gwlb/{str[@name='id']}/cover.png"></img>
+                  <img src="{$WebApplicationBaseURL}images/gwlb/{str[@name='id']}/cover.png"></img>
                   <h3>
                     <xsl:value-of select="str[@name='maintitle']"/>
                   </h3>

@@ -82,7 +82,7 @@ p {
 	cursor: pointer;
 }
 .jp-layout-index{
-	border-top: 1px solid #F0F0F0;
+	border-top: 1px solid #B2B2B2;
 	margin-top: 90px;
 	padding: 0;
 }
@@ -1526,13 +1526,8 @@ textarea {
 }
 
 #gwlb-layout-index-list {
-	border-top: 1px solid #F0F0F0;
+	border-top: 1px solid #B2B2B2;
 	padding-bottom: 20px;
-}
-
-#gwlb-layout-index-list div {
-	height: 230px;
-	overflow: hidden;
 }
 
 #gwlb-layout-index-list h2 {
@@ -1553,7 +1548,7 @@ textarea {
 
 .gwlb-layout-index-list-elm {
 	text-align: center;
-	border-right: 1px solid #F0F0F0;
+	border-right: 1px solid #B2B2B2;
 }
 
 .gwlb-layout-index-list-elm:nth-child(3){

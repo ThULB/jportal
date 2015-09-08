@@ -218,7 +218,7 @@
 
         </div>
         <!-- footer -->
-        <!--<xsl:call-template name="jp.layout.footer" />-->
+        <xsl:call-template name="jp.layout.footer" />
 
         <!-- delete -->
         <xsl:call-template name="jp.object.editing.delete.dialog" />
