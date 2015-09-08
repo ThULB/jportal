@@ -90,7 +90,7 @@ var ImprintEditor = function (objID, type) {
 				closeImprintEditor();
 			});
 
-			$("#imprintGUIMain").on("click", "#imprint-link-close", function () {
+			$("#imprintGUIMain").on("click", ".imprint-link-close", function () {
 				closeImprintEditor();
 			});
 
@@ -370,6 +370,7 @@ var ImprintEditor = function (objID, type) {
 		$("#imprint-editor-button").addClass("hidden");
 		$("#imprint-no-imprint").addClass("hidden");
 		$("#imprint-no-link").addClass("hidden");
+		$("button.imprint-link-close").removeClass("hidden");
 		if (currentType != "link" && ($("#imprint-preview").html() == "<div />" || $("#imprint-preview").html() == "")) {
 			if($("#imprintSelBox").is(":empty")){
 				$("#imprint-no-imprint").removeClass("hidden");
@@ -400,6 +401,7 @@ var ImprintEditor = function (objID, type) {
 		$("#imprint-link-button").addClass("hidden");
 		$("#imprint-editor-panel").removeClass("hidden");
 		$("#imprint-editor-button").removeClass("hidden");
+		$("button.imprint-link-close").addClass("hidden");
 		if (currentType == "greeting") {
 			$("#imprint-editor-input").attr("readonly", true);
 		}
