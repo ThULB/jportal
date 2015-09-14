@@ -376,10 +376,10 @@ public class DerivateTools {
         try {
             session.beginTransaction();
             handler.receiveFile(filePath, inputStream, filesize, null);
+            handler.finishUpload();
             session.commitTransaction();
         } finally {
             session.rollbackTransaction();
-            handler.finishUpload();
             handler.unregister();
         }
         return derivateID;
