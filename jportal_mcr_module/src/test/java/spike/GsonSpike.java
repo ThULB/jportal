@@ -1,9 +1,5 @@
 package spike;
 
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
-
 import org.junit.Test;
 
 import com.google.gson.Gson;

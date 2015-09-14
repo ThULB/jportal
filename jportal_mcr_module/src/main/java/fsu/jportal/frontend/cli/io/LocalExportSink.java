@@ -1,21 +1,5 @@
 package fsu.jportal.frontend.cli.io;
 
-import fsu.jportal.backend.ImportDerivateObject;
-import fsu.jportal.backend.io.ImportSink;
-import fsu.jportal.frontend.cli.Importer;
-
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
-import org.apache.log4j.Logger;
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.*;
-import org.mycore.datamodel.niofs.MCRPath;
-import org.mycore.imagetiler.MCRImage;
-import org.mycore.imagetiler.MCRTiledPictureProps;
-import org.mycore.iview2.services.MCRIView2Tools;
-
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -33,9 +17,26 @@ import javax.imageio.ImageIO;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.imagetiler.MCRImage;
+import org.mycore.imagetiler.MCRTiledPictureProps;
+import org.mycore.iview2.services.MCRIView2Tools;
+
+import fsu.jportal.backend.ImportDerivateObject;
+import fsu.jportal.backend.io.ImportSink;
+
 public class LocalExportSink implements ImportSink {
 
-    private static Logger LOGGER = Logger.getLogger(LocalExportSink.class);
+    private static Logger LOGGER = LogManager.getLogger(LocalExportSink.class);
     private Path saveTo;
 
     public LocalExportSink(Path dest) {

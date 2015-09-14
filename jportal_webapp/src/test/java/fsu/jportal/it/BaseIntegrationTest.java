@@ -6,7 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.System;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -27,7 +28,7 @@ import javax.imageio.ImageIO;
 
 public class BaseIntegrationTest {
 
-    private static final Logger LOGGER = Logger.getLogger(BaseIntegrationTest.class);
+    private static final Logger LOGGER = LogManager.getLogger(BaseIntegrationTest.class);
 
     @ClassRule
     public static TemporaryFolder alternateDirectory = new TemporaryFolder();

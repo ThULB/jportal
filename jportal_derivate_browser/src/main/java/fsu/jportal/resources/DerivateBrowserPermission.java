@@ -1,6 +1,7 @@
 package fsu.jportal.resources;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
 
@@ -8,7 +9,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
 
 public class DerivateBrowserPermission implements MCRResourceAccessChecker {
 
-    private static Logger LOGGER = Logger.getLogger(DerivateBrowserPermission.class);
+    private static Logger LOGGER = LogManager.getLogger(DerivateBrowserPermission.class);
 
     @Override
     public boolean isPermitted(ContainerRequest request) {

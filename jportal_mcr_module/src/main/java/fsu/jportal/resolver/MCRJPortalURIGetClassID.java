@@ -4,7 +4,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
@@ -18,7 +19,7 @@ import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
 @URIResolverSchema(schema = "jportal_getClassID")
 public class MCRJPortalURIGetClassID implements URIResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetClassID.class);
+    private static final Logger LOGGER = LogManager.getLogger(MCRJPortalURIGetClassID.class);
 
     private static String URI = "jportal_getClassID";
 

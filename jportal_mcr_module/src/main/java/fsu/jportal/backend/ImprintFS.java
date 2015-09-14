@@ -1,6 +1,10 @@
 package fsu.jportal.backend;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,7 +14,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.transform.JDOMSource;
@@ -21,7 +26,7 @@ import com.google.common.base.Charsets;
 
 public class ImprintFS {
 
-    private static final Logger LOGGER = Logger.getLogger(ImprintFS.class);
+    private static final Logger LOGGER = LogManager.getLogger(ImprintFS.class);
 
     private final Path IMPRINT_DIR;
 

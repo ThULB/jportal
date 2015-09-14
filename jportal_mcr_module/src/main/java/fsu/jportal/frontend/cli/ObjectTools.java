@@ -16,7 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
@@ -44,14 +45,15 @@ import org.mycore.iview2.frontend.MCRIView2Commands;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.ImportSource;
 import fsu.jportal.backend.io.RecursiveImporter;
-import fsu.jportal.frontend.util.DerivateLinkUtil;
-import fsu.jportal.frontend.RecursiveObjectExporter.*;
+import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSink;
+import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSource;
 import fsu.jportal.frontend.cli.io.LocalExportSink;
 import fsu.jportal.frontend.cli.io.LocalExportSource;
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {
-    private static Logger LOGGER = Logger.getLogger(ObjectTools.class.getName());
+    private static Logger LOGGER = LogManager.getLogger(ObjectTools.class.getName());
 
     @MCRCommand(help = "export import [objectID].", syntax = "export import object {0}")
     public static void exportImport(String objectID) throws MCRPersistenceException, MCRActiveLinkException {

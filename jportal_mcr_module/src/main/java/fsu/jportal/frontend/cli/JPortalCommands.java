@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -34,15 +35,15 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-import fsu.jportal.frontend.util.DerivateLinkUtil;
 import org.xml.sax.SAXException;
 
 import fsu.jportal.backend.DerivateTools;
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 
 @MCRCommandGroup(name = "JP Commands")
 public class JPortalCommands {
 
-    private static Logger LOGGER = Logger.getLogger(JPortalCommands.class.getName());
+    private static Logger LOGGER = LogManager.getLogger(JPortalCommands.class.getName());
 
     @MCRCommand(help = "Export object XML with id to file: export object {id} to file {name}.", syntax = "export object {0} to file {1}")
     public static void exportBlob(String objectID, String file) throws SAXException, JDOMException, IOException {

@@ -2,7 +2,8 @@ package fsu.jportal.urn;
 
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFileNodeServlet;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -17,7 +18,7 @@ import de.uni_jena.thulb.archive.urn.epicurlite.EpicurLite;
 import de.uni_jena.thulb.archive.urn.epicurlite.IEpicurLiteProvider;
 
 public class EpicurLiteProvider implements IEpicurLiteProvider {
-    static final Logger LOGGER = Logger.getLogger(EpicurLiteProvider.class);
+    static final Logger LOGGER = LogManager.getLogger(EpicurLiteProvider.class);
 
     @Override
     public EpicurLite getEpicurLite(MCRURN urn) {

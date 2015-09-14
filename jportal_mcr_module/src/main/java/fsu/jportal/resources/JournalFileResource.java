@@ -27,7 +27,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.StreamingOutput;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Content;
 import org.jdom2.DocType;
 import org.jdom2.Document;
@@ -43,7 +44,7 @@ import org.mycore.common.content.util.MCRServletContentHelper;
 
 @Path("journalFile/{id}")
 public class JournalFileResource {
-    static Logger LOGGER = Logger.getLogger(JournalFileResource.class);
+    static Logger LOGGER = LogManager.getLogger(JournalFileResource.class);
 
     @PathParam("id")
     String journalID;

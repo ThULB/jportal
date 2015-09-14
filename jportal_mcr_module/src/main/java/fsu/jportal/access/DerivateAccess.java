@@ -2,10 +2,7 @@ package fsu.jportal.access;
 
 import java.io.IOException;
 import java.time.temporal.ChronoField;
-import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalField;
-import java.util.Calendar;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;

@@ -7,7 +7,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
@@ -21,7 +22,7 @@ import fsu.jportal.annotation.URIResolverSchema;
 @URIResolverSchema(schema = "jportal_getALLClassIDs")
 public class MCRJPortalURIGetAllClassIDs implements URIResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetAllClassIDs.class);
+    private static final Logger LOGGER = LogManager.getLogger(MCRJPortalURIGetAllClassIDs.class);
 
     private String URI = "jportal_getALLClassIDs:";
 

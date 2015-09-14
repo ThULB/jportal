@@ -1,12 +1,8 @@
 package fsu.jportal.resources;
 
-import java.io.File;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -21,11 +17,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 //import org.mycore.access.mcrimpl.MCRAccessControlSystem;
 import org.mycore.access.mcrimpl.MCRAccessRule;
 import org.mycore.access.mcrimpl.MCRRuleStore;
-import org.mycore.common.MCRCache;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import com.google.gson.JsonArray;
@@ -36,7 +32,6 @@ import fsu.jportal.http.HttpStatus;
 import fsu.jportal.jersey.access.IPRuleAccess;
 import fsu.jportal.parser.IPAddress;
 import fsu.jportal.parser.IPAddress.IPFormatException;
-import fsu.jportal.parser.IPAddressList;
 import fsu.jportal.parser.IPJsonArray;
 import fsu.jportal.parser.IPMap;
 import fsu.jportal.parser.IPRuleParser;
@@ -46,7 +41,7 @@ import fsu.jportal.pref.JournalConfig;
 @Path("IPRule/{objID}")
 @MCRRestrictedAccess(IPRuleAccess.class)
 public class IPRuleResource {
-    static Logger LOGGER = Logger.getLogger(IPRuleResource.class);
+    static Logger LOGGER = LogManager.getLogger(IPRuleResource.class);
 
     private String defRule;
 

@@ -1,24 +1,38 @@
 package fsu.jportal.mets;
 
-        import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
-        import fsu.jportal.mets.LLZMetsUtils.FileHrefStrategy;
-        import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
-        import org.jdom2.Attribute;
-        import org.jdom2.Document;
-        import org.jdom2.Element;
-        import org.jdom2.filter.Filters;
-        import org.jdom2.xpath.XPathExpression;
-        import org.jdom2.xpath.XPathFactory;
-        import org.mycore.mets.misc.StructLinkGenerator;
-        import org.mycore.mets.model.IMetsElement;
-        import org.mycore.mets.model.Mets;
-        import org.mycore.mets.model.files.FLocat;
-        import org.mycore.mets.model.files.File;
-        import org.mycore.mets.model.files.FileGrp;
-        import org.mycore.mets.model.struct.*;
-
         import java.net.URISyntaxException;
-        import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.mycore.mets.misc.StructLinkGenerator;
+import org.mycore.mets.model.IMetsElement;
+import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.files.FLocat;
+import org.mycore.mets.model.files.File;
+import org.mycore.mets.model.files.FileGrp;
+import org.mycore.mets.model.struct.AbstractLogicalDiv;
+import org.mycore.mets.model.struct.Area;
+import org.mycore.mets.model.struct.Fptr;
+import org.mycore.mets.model.struct.LOCTYPE;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.LogicalStructMap;
+import org.mycore.mets.model.struct.LogicalSubDiv;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
+import org.mycore.mets.model.struct.Seq;
+
+import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
+import fsu.jportal.mets.LLZMetsUtils.FileHrefStrategy;
+import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
 
 /**
  * Converts the llz output format from uibk to the mycore mets format.

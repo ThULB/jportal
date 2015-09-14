@@ -1,9 +1,8 @@
 package fsu.jportal.backend.io;
 
-import fsu.jportal.backend.ImportDerivateObject;
-import org.jdom2.Document;
-
 import java.util.List;
+
+import org.jdom2.Document;
 
 /**
  * Created by chi on 24.04.15.

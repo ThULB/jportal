@@ -9,14 +9,15 @@ import java.util.Map;
 
 import javax.xml.transform.URIResolver;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.common.xml.MCRURIResolver.MCRResolverProvider;
 
 import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.nio.JarResource;
 
 public class JPResolverProvider implements MCRResolverProvider {
-    private static final Logger LOGGER = Logger.getLogger(JPResolverProvider.class);
+    private static final Logger LOGGER = LogManager.getLogger(JPResolverProvider.class);
     @Override
     public Map<String, URIResolver> getURIResolverMapping() {
         HashMap<String, URIResolver> resolverMap = new HashMap<String, URIResolver>();

@@ -1,8 +1,14 @@
 package fsu.jportal.mets;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPVolume;
-import org.apache.log4j.Logger;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -17,11 +23,13 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.File;
-import org.mycore.mets.model.struct.*;
+import org.mycore.mets.model.struct.AbstractLogicalDiv;
+import org.mycore.mets.model.struct.LogicalStructMap;
+import org.mycore.mets.model.struct.LogicalSubDiv;
+import org.mycore.mets.model.struct.SmLink;
 
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.util.*;
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPVolume;
 
 /**
  * LLZ METS importer class.
@@ -30,7 +38,7 @@ import java.util.*;
  */
 public class LLZMetsImporter {
 
-    private static Logger LOGGER = Logger.getLogger(LLZMetsImporter.class);
+    private static Logger LOGGER = LogManager.getLogger(LLZMetsImporter.class);
 
     private static final ArrayList<Namespace> NS_LIST;
 

@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.base.Function;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
@@ -28,7 +29,7 @@ import javax.imageio.ImageIO;
 
 public class DerivateBrowserTest extends BaseIntegrationTest {
 
-    private static final Logger LOGGER = Logger.getLogger(DerivateBrowserTest.class);
+    private static final Logger LOGGER = LogManager.getLogger(DerivateBrowserTest.class);
 
     WebDriverWait WAIT = new WebDriverWait(DRIVER, 10);
     static JavascriptExecutor JS = (JavascriptExecutor)DRIVER;

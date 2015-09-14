@@ -1,18 +1,24 @@
 package fsu.jportal.mets.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.mets.ConvertException;
-import fsu.jportal.mets.LLZMetsConverter;
-import fsu.jportal.mets.LLZMetsUtils;
-import mockit.Invocation;
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.integration.junit4.JMockit;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
-import org.jdom2.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.Text;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
@@ -22,26 +28,25 @@ import org.jdom2.xpath.XPathFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mycore.common.MCRConstants;
-import org.mycore.common.content.MCRContent;
-import org.mycore.common.content.transformer.MCRContentTransformer;
-import org.mycore.common.xml.MCRLayoutTransformerFactory;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.IMetsElement;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.files.FileGrp;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.sections.MdWrapSection;
-import org.mycore.mets.model.struct.*;
+import org.mycore.mets.model.struct.LOCTYPE;
+import org.mycore.mets.model.struct.LogicalStructMap;
+import org.mycore.mets.model.struct.LogicalSubDiv;
+import org.mycore.mets.model.struct.MDTYPE;
+import org.mycore.mets.model.struct.MdRef;
+import org.mycore.mets.model.struct.MdWrap;
 import org.mycore.mets.validator.validators.SchemaValidator;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import fsu.jportal.mets.ConvertException;
+import fsu.jportal.mets.LLZMetsConverter;
+import fsu.jportal.mets.LLZMetsUtils;
+import mockit.Invocation;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.integration.junit4.JMockit;
 
 /**
  * Created by chi on 02.04.15.
@@ -69,7 +74,7 @@ public class LLZMetsImporterTest {
     }
 
     public static class LLZMetsParser{
-        private static Logger LOGGER = Logger.getLogger(LLZMetsParser.class);
+        private static Logger LOGGER = LogManager.getLogger(LLZMetsParser.class);
 
         private static final ArrayList<org.jdom2.Namespace> NS_LIST;
 

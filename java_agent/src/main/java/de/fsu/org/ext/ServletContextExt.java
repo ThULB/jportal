@@ -8,12 +8,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import de.fsu.org.instrumentation.JavaAgent;
 
 public class ServletContextExt {
-    static final Logger LOGGER = Logger.getLogger(ServletContextExt.class);
+    static final Logger LOGGER = LogManager.getLogger(ServletContextExt.class);
         
     public URL _getResource(String path) throws MalformedURLException {
         String[] resources = JavaAgent.getArgsArrays();

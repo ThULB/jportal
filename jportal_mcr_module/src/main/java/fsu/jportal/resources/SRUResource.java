@@ -9,7 +9,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
@@ -20,7 +21,7 @@ import fsu.jportal.util.GndUtil;
 @Path("sru")
 public class SRUResource {
 
-    static Logger LOGGER = Logger.getLogger(SRUResource.class);
+    static Logger LOGGER = LogManager.getLogger(SRUResource.class);
 
     @GET
     @Path("search")

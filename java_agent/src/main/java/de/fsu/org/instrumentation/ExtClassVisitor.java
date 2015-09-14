@@ -6,7 +6,8 @@ import static org.objectweb.asm.Opcodes.ASM5;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -21,7 +22,7 @@ public abstract class ExtClassVisitor extends ClassVisitor {
     public ExtClassVisitor(ClassVisitor cv, Class<?> extClass) {
         super(ASM5, cv);
         setEXT_CLASS(extClass);
-        LOGGER = Logger.getLogger(getClass());
+        LOGGER = LogManager.getLogger(getClass());
     }
 
     @Override

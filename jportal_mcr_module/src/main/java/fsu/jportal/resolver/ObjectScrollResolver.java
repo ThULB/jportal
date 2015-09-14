@@ -11,7 +11,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -48,7 +49,7 @@ import fsu.jportal.annotation.URIResolverSchema;
 @URIResolverSchema(schema = "objectScroll")
 public class ObjectScrollResolver implements URIResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(ObjectScrollResolver.class);
+    private static final Logger LOGGER = LogManager.getLogger(ObjectScrollResolver.class);
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {

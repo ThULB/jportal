@@ -3,13 +3,13 @@ package spike;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Ignore;
+
+import junit.framework.TestCase;
 
 @Ignore
 public class XMLOutputterTest extends TestCase {

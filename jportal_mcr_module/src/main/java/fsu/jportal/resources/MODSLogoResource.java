@@ -12,7 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -33,7 +34,7 @@ import fsu.jportal.xml.mapper.MODSLogoEntityXMLMapper;
 
 @Path("modslogos")
 public class MODSLogoResource {
-    static Logger LOGGER = Logger.getLogger(MODSLogoResource.class);
+    static Logger LOGGER = LogManager.getLogger(MODSLogoResource.class);
 
     @GET
     @Path("{hiddenJournalId}")

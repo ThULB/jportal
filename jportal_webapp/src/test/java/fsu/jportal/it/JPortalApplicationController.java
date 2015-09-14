@@ -11,7 +11,8 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.mycore.iview.tests.DriverFactory;
 import org.mycore.iview.tests.controller.ApplicationController;
 import org.mycore.iview.tests.model.TestDerivate;
@@ -39,7 +40,7 @@ public class JPortalApplicationController extends ApplicationController {
   	initDriver.quit();
 	}
 
-	static final Logger LOGGER = Logger.getLogger(JPortalApplicationController.class);
+	static final Logger LOGGER = LogManager.getLogger(JPortalApplicationController.class);
 
 	private static final String FILE_LOCATION = "testImages";
 

@@ -4,12 +4,13 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 public class ClassLoaderTransformer implements ClassFileTransformer {
-    static Logger LOGGER = Logger.getLogger(ClassLoaderTransformer.class);
+    static Logger LOGGER = LogManager.getLogger(ClassLoaderTransformer.class);
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,

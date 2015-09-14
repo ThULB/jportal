@@ -3,7 +3,8 @@ package fsu.jportal.access;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.access.mcrimpl.MCRAccessData;
 import org.mycore.access.mcrimpl.MCRIPClause;
@@ -12,7 +13,7 @@ import org.mycore.parsers.bool.MCRIPCondition;
 import fsu.jportal.parser.IPAddress;
 
 public class IPClause implements MCRIPCondition {
-    static Logger LOGGER = Logger.getLogger(IPClause.class);
+    static Logger LOGGER = LogManager.getLogger(IPClause.class);
 
     private IPAddress ipAddress;
 

@@ -1,12 +1,17 @@
 package fsu.jportal.util;
 
-import com.google.gson.Gson;
-import fsu.jportal.backend.GreetingsFS;
-import fsu.jportal.backend.GreetingsManager;
-import fsu.jportal.backend.ImprintFS;
-import fsu.jportal.backend.ImprintManager;
-import fsu.jportal.pref.JournalConfig;
-import org.apache.log4j.Logger;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.xalan.extensions.ExpressionContext;
 import org.apache.xpath.NodeSet;
 import org.apache.xpath.objects.XNodeSet;
@@ -21,18 +26,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.Gson;
+
+import fsu.jportal.backend.GreetingsFS;
+import fsu.jportal.backend.GreetingsManager;
+import fsu.jportal.backend.ImprintFS;
+import fsu.jportal.backend.ImprintManager;
+import fsu.jportal.pref.JournalConfig;
 
 public abstract class ImprintUtil {
 
-    private static final Logger LOGGER = Logger.getLogger(ImprintUtil.class);
+    private static final Logger LOGGER = LogManager.getLogger(ImprintUtil.class);
 
     /**
      * Returns the imprint of the given object id or throws a 404 not

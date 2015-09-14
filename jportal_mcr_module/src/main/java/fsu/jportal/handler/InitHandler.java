@@ -23,7 +23,8 @@ import java.util.concurrent.TimeoutException;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -56,11 +57,10 @@ import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXParseException;
 
 import fsu.jportal.nio.JarResource;
-import fsu.jportal.resolver.ClassificationResolver;
 
 public class InitHandler implements AutoExecutable {
 
-    private static final Logger LOGGER = Logger.getLogger(InitHandler.class);
+    private static final Logger LOGGER = LogManager.getLogger(InitHandler.class);
 
     private Session session;
 

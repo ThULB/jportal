@@ -10,7 +10,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrDocument;
@@ -35,7 +36,7 @@ import fsu.jportal.backend.MetaDataTools;
 @MCRCommandGroup(name = "JP doubletOf Commands")
 public class RedundancyCommands{
 
-    private static final Logger LOGGER = Logger.getLogger(RedundancyCommands.class);
+    private static final Logger LOGGER = LogManager.getLogger(RedundancyCommands.class);
 
     @MCRCommand(help = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "fix title of {0} for link {1}")
     public static void removeDoublets(String objId, String linkID){

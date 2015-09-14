@@ -1,7 +1,6 @@
 package fsu.jportal.resources;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
@@ -17,8 +16,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import fsu.jportal.mets.*;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
@@ -36,10 +35,15 @@ import org.mycore.mets.validator.validators.ValidationException;
 
 import com.google.gson.JsonObject;
 
+import fsu.jportal.mets.ConvertException;
+import fsu.jportal.mets.LLZMetsConverter;
+import fsu.jportal.mets.LLZMetsImporter;
+import fsu.jportal.mets.LLZMetsUtils;
+
 @Path("mets/llz")
 public class METSImportResource {
 
-    private static Logger LOGGER = Logger.getLogger(METSImportResource.class);
+    private static Logger LOGGER = LogManager.getLogger(METSImportResource.class);
 
     /**
      * Checks if the given derivate has a mets.xml which is importable.

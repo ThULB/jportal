@@ -1,10 +1,17 @@
 package fsu.jportal.resources;
 
+import static fsu.jportal.util.ImprintUtil.getImprintID;
+import static fsu.jportal.util.ImprintUtil.getJournalConf;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,9 +31,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
-import fsu.jportal.backend.GreetingsFS;
-import fsu.jportal.backend.GreetingsManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -34,24 +40,24 @@ import org.jdom2.transform.JDOMResult;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.datamodel.common.MCRLinkTableManager;
+import org.mycore.services.i18n.MCRTranslation;
 
 import com.google.gson.Gson;
 
+import fsu.jportal.backend.GreetingsFS;
+import fsu.jportal.backend.GreetingsManager;
 import fsu.jportal.backend.ImprintFS;
 import fsu.jportal.backend.ImprintManager;
 import fsu.jportal.pref.JournalConfig;
 import fsu.jportal.util.ImprintUtil;
 import fsu.jportal.xml.MCRWebpage;
 import fsu.jportal.xml.XMLTools;
-import org.mycore.services.i18n.MCRTranslation;
-
-import static fsu.jportal.util.ImprintUtil.*;
 
 @Path("fs/{fsType}")
 //@MCRRestrictedAccess(IPRuleAccess.class)
 public class ImprintResource {
 
-    private static final Logger LOGGER = Logger.getLogger(ImprintResource.class);
+    private static final Logger LOGGER = LogManager.getLogger(ImprintResource.class);
     private @PathParam("fsType") String fsType;
     private ImprintFS imprintFS;
     private GreetingsFS greetingFS;

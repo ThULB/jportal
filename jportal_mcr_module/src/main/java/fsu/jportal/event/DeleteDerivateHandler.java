@@ -1,13 +1,15 @@
 package fsu.jportal.event;
 
-import org.apache.log4j.Logger;
+import java.io.IOException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
-import fsu.jportal.frontend.util.DerivateLinkUtil;
 
-import java.io.IOException;
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 
 /**
  * This event handler tries to delete all corresponding derivate links
@@ -18,7 +20,7 @@ import java.io.IOException;
  * @author Matthias Eichner
  */
 public class DeleteDerivateHandler extends MCREventHandlerBase {
-    private static Logger LOGGER = Logger.getLogger(DeleteDerivateHandler.class);
+    private static Logger LOGGER = LogManager.getLogger(DeleteDerivateHandler.class);
 
     @Override
     protected void handleDerivateDeleted(MCREvent evt, MCRDerivate der) {

@@ -42,7 +42,8 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
@@ -62,7 +63,7 @@ public class UrmelFooter implements MCRFooterInterface {
 
     static final Font MAX_FONT = new Font(Font.MONOSPACED, Font.BOLD, 16);
 
-    private static Logger LOGGER = Logger.getLogger(UrmelFooter.class);
+    private static Logger LOGGER = LogManager.getLogger(UrmelFooter.class);
 
     private final HashMap<String, BufferedImage> logos = new HashMap<String, BufferedImage>();
 

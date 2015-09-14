@@ -7,7 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFileMetadataManager;
@@ -22,7 +23,7 @@ import org.w3c.dom.Document;
 
 public abstract class LawsXMLFunctions {
 
-    private static final Logger LOGGER = Logger.getLogger(LawsXMLFunctions.class);
+    private static final Logger LOGGER = LogManager.getLogger(LawsXMLFunctions.class);
 
     private static final ThreadLocal<DocumentBuilder> BUILDER_LOCAL = new ThreadLocal<DocumentBuilder>() {
         @Override

@@ -1,12 +1,12 @@
 package fsu.jportal.frontend.cli;
 
+import org.mycore.frontend.cli.annotation.MCRCommand;
+import org.mycore.frontend.cli.annotation.MCRCommandGroup;
+
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.RecursiveImporter;
 import fsu.jportal.frontend.cli.io.HttpImportSource;
 import fsu.jportal.frontend.cli.io.LocalSystemSink;
-
-import org.mycore.frontend.cli.annotation.MCRCommand;
-import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
 /**
  * Created by chi on 22.04.15.

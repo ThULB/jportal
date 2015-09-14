@@ -1,6 +1,7 @@
 package fsu.jportal.common.xml;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -16,7 +17,7 @@ import fsu.jportal.xml.JPXMLFunctions;
 
 public class MCRJPortalURIGetJournalID {
 
-    private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetJournalID.class);
+    private static final Logger LOGGER = LogManager.getLogger(MCRJPortalURIGetJournalID.class);
 
     private static String URI = "getJournalID";
 

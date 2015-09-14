@@ -15,7 +15,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
 import org.mycore.common.config.MCRConfiguration;
@@ -36,7 +37,7 @@ import fsu.jportal.mets.LLZMetsUtils;
 
 public class JPXMLFunctions {
 
-    private static final Logger LOGGER = Logger.getLogger(JPXMLFunctions.class);
+    private static final Logger LOGGER = LogManager.getLogger(JPXMLFunctions.class);
 
     private static final ThreadLocal<DocumentBuilder> BUILDER_LOCAL = new ThreadLocal<DocumentBuilder>() {
         @Override

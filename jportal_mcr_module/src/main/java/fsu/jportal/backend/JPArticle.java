@@ -25,10 +25,10 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import fsu.jportal.frontend.util.DerivateLinkUtil;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 import fsu.jportal.mets.LLZMetsUtils;
 
 /**

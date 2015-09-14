@@ -4,13 +4,14 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 public class MCRXSLTransformerTransformer implements ClassFileTransformer {
     
-    static final Logger LOGGER = Logger.getLogger(MCRXSLTransformerTransformer.class);
+    static final Logger LOGGER = LogManager.getLogger(MCRXSLTransformerTransformer.class);
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,

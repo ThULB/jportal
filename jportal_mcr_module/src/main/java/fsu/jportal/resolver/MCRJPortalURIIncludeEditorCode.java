@@ -3,14 +3,14 @@ package fsu.jportal.resolver;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Map;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -29,7 +29,7 @@ import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
 @URIResolverSchema(schema = "jportal_includeEditorCode")
 public class MCRJPortalURIIncludeEditorCode implements URIResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIIncludeEditorCode.class);
+    private static final Logger LOGGER = LogManager.getLogger(MCRJPortalURIIncludeEditorCode.class);
 
     private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
 

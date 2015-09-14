@@ -14,7 +14,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRConstants;
@@ -43,7 +44,7 @@ import de.uni_jena.thulb.mcr.acl.MoveObjectAccess;
 @Path("moveObj")
 @MCRRestrictedAccess(MoveObjectAccess.class)
 public class MoveObjResource {
-    static Logger LOGGER = Logger.getLogger(MoveObjResource.class);
+    static Logger LOGGER = LogManager.getLogger(MoveObjResource.class);
 
     @Context
     HttpServletRequest request;

@@ -1,18 +1,13 @@
 package fsu.jportal.frontend.cli.io;
 
-import fsu.jportal.backend.io.ImportSource;
-
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.xml.sax.SAXException;
-
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jdom2.Document;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.io.ImportSource;
 
 public class LocalExportSource implements ImportSource {
     private List<Document> objs;

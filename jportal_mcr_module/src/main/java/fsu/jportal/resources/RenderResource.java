@@ -11,7 +11,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRStringContent;
@@ -24,7 +25,7 @@ import org.mycore.frontend.jersey.MCRJerseyUtil;
 @Path("render")
 public class RenderResource {
 
-    static Logger LOGGER = Logger.getLogger(RenderResource.class);
+    static Logger LOGGER = LogManager.getLogger(RenderResource.class);
 
     @GET
     @Path("object/{id}")

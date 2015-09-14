@@ -16,7 +16,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
@@ -44,7 +45,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
 @MCRCommandGroup(name = "JP Migrating Commands")
 public class MigratingCMDs {
-    private static Logger LOGGER = Logger.getLogger(MigratingCMDs.class);
+    private static Logger LOGGER = LogManager.getLogger(MigratingCMDs.class);
 
     @MCRCommand(helpKey = "Move intro xml from webapp into data folder.", syntax = "migrate intro xml")
     public static void migrateIntroXML() throws JDOMException, IOException {

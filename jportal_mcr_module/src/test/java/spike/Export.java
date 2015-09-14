@@ -1,7 +1,5 @@
 package spike;
 
-import static org.junit.Assert.*;
-
 import java.io.InputStream;
 
 import javax.xml.transform.Transformer;

@@ -1,20 +1,15 @@
 package spike;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Properties;
 
 import org.apache.commons.io.output.WriterOutputStream;
 import org.junit.Test;
-
-import com.sun.jersey.server.impl.model.parameter.multivalued.StringReaderFactory;
 
 public class PropertiesSpikes {
     @Test

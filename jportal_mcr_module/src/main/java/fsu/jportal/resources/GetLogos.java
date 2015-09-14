@@ -10,12 +10,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
 
 @Path("logoImporter")
 public class GetLogos {	
-	private static Logger LOGGER = Logger.getLogger(GlobalMessageFile.class);
+	private static Logger LOGGER = LogManager.getLogger(GetLogos.class);
 	
 	@GET
 	@Path("getList/{path:.*}")

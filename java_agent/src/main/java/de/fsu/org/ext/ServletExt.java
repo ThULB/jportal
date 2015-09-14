@@ -10,12 +10,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import de.fsu.org.instrumentation.JavaAgent;
 
 public class ServletExt {
-static final Logger LOGGER = Logger.getLogger(ServletExt.class);
+static final Logger LOGGER = LogManager.getLogger(ServletExt.class);
     
     public boolean _doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String[] resourcePaths = JavaAgent.getArgsArrays();

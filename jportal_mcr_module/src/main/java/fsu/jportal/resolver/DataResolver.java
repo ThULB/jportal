@@ -8,7 +8,7 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
 import fsu.jportal.annotation.URIResolverSchema;
-import fsu.jportal.resources.GlobalMessageFile;
+import fsu.jportal.frontend.GlobalMessageFile;
 
 /**
  * get the file from .mycore/jportal/data/config/jp-globalmessage.xml

@@ -6,7 +6,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -28,7 +29,7 @@ import fsu.jportal.backend.io.ImportSource;
 
 public class RecursiveObjectExporter {
 	public static class ExporterSink implements ImportSink {
-		private static Logger LOGGER = Logger.getLogger(ExporterSink.class);
+		private static Logger LOGGER = LogManager.getLogger(ExporterSink.class);
 		private Path saveTo;
 		private List<Link> derivateLinkList = new ArrayList<>();
 		

@@ -1,12 +1,12 @@
 package fsu.jportal.event;
 
+import static fsu.jportal.util.ImprintUtil.getImprintID;
+
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import static fsu.jportal.util.ImprintUtil.getImprintID;
 
 public class UpdateJournaldHandler extends MCREventHandlerBase {
     @Override

@@ -2,7 +2,8 @@ package fsu.jportal.frontend.cli;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -15,7 +16,7 @@ import fsu.jportal.backend.ClassificationHelper;
 
 @MCRCommandGroup(name = "Classification Tools")
 public class ClassificationTools{
-    private static Logger LOGGER = Logger.getLogger(ClassificationTools.class.getName());
+    private static Logger LOGGER = LogManager.getLogger(ClassificationTools.class.getName());
 
     public ClassificationTools() {
         super();

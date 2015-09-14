@@ -4,7 +4,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
@@ -17,7 +18,7 @@ import fsu.jportal.annotation.URIResolverSchema;
 @URIResolverSchema(schema = "xClassification")
 public class ClassificationResolver implements URIResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(ClassificationResolver.class);
+    private static final Logger LOGGER = LogManager.getLogger(ClassificationResolver.class);
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {

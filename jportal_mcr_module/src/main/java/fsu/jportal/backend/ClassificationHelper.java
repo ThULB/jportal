@@ -2,7 +2,8 @@ package fsu.jportal.backend;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.datamodel.classifications2.MCRCategory;
@@ -14,7 +15,7 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
 public class ClassificationHelper {
-    private static Logger LOGGER = Logger.getLogger(ClassificationHelper.class.getName());
+    private static Logger LOGGER = LogManager.getLogger(ClassificationHelper.class.getName());
 
     public static void repairLeftRightValue(String classID) {
         final Session session = MCRHIBConnection.instance().getSession();

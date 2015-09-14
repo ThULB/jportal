@@ -4,7 +4,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
@@ -16,7 +17,7 @@ import fsu.jportal.xml.ParentsListXML;
 @URIResolverSchema(schema = "parents")
 public class ParentsResolver implements URIResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(ParentsResolver.class);
+    private static final Logger LOGGER = LogManager.getLogger(ParentsResolver.class);
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {

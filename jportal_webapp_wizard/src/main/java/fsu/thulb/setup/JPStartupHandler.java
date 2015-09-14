@@ -16,7 +16,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationDir;
 import org.mycore.common.events.MCRShutdownHandler.Closeable;
@@ -28,7 +29,7 @@ public class JPStartupHandler implements AutoExecutable, Closeable {
 
     private static final Class<WizardRequestFilter> WIZARD_FILTER_CLASS = WizardRequestFilter.class;
 
-    static Logger LOGGER = Logger.getLogger(JPStartupHandler.class);
+    static Logger LOGGER = LogManager.getLogger(JPStartupHandler.class);
 
     @Override
     public void prepareClose() {

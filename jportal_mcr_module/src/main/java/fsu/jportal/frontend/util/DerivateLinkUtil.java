@@ -7,7 +7,8 @@ import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -32,7 +33,7 @@ import org.mycore.solr.MCRSolrClientFactory;
 
 public abstract class DerivateLinkUtil {
 
-    private static Logger LOGGER = Logger.getLogger(DerivateLinkUtil.class);
+    private static Logger LOGGER = LogManager.getLogger(DerivateLinkUtil.class);
 
     public static final String IMAGE_BOOKMARK_DERIVATE_ID = "image_bookmark_derivateId";
 

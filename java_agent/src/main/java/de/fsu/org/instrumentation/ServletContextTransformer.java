@@ -6,13 +6,14 @@ import java.security.ProtectionDomain;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 public class ServletContextTransformer implements ClassFileTransformer {
 
-    static Logger LOGGER = Logger.getLogger(ServletContextTransformer.class);
+    static Logger LOGGER = LogManager.getLogger(ServletContextTransformer.class);
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,

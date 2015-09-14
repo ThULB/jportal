@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -43,7 +44,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
-import fsu.jportal.frontend.util.DerivateLinkUtil;
 import org.mycore.iview2.frontend.MCRIView2Commands;
 import org.mycore.iview2.services.MCRIView2Tools;
 import org.mycore.urn.hibernate.MCRURN;
@@ -54,6 +54,7 @@ import org.xml.sax.SAXException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import fsu.jportal.frontend.util.DerivateLinkUtil;
 import fsu.jportal.gson.DerivateTypeAdapter;
 import fsu.jportal.gson.FileNodeWraper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
@@ -62,7 +63,7 @@ import fsu.jportal.urn.URNTools;
 import fsu.jportal.util.DerivatePath;
 
 public class DerivateTools {
-    static Logger LOGGER = Logger.getLogger(DerivateTools.class);
+    static Logger LOGGER = LogManager.getLogger(DerivateTools.class);
 
     private static boolean cp(final MCRPath source, MCRPath targetDir, String newName,
         final Map<MCRPath, MCRPath> copyHistory) {

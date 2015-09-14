@@ -9,12 +9,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import de.fsu.org.instrumentation.JavaAgent;
 
 public class ClassLoaderExt {
-    static final Logger LOGGER = Logger.getLogger(ClassLoaderExt.class);
+    static final Logger LOGGER = LogManager.getLogger(ClassLoaderExt.class);
 
     public ArrayList<URL> _getResources(String name) throws IOException {
         ArrayList<URL> arrayList = new ArrayList<URL>();
