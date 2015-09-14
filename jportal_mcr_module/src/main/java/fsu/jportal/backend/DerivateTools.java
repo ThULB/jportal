@@ -369,16 +369,21 @@ public class DerivateTools {
             String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
         }
-        MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
-        handler.startUpload(1);
-        session.commitTransaction();
+        MCRUploadHandlerIFS handler;
+        try {
+            session.beginTransaction();
+            handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
+            handler.startUpload(1);
+            session.commitTransaction();
+        } finally {
+            session.rollbackTransaction();
+        }
         handler.receiveFile(filePath, inputStream, filesize, null);
-        session.beginTransaction();
         handler.finishUpload();
         handler.unregister();
         return derivateID;
     }
-    
+
     public static void setAsMain(String derivateID, String path) {
         Derivate derivate = new Derivate(derivateID);
         derivate.setMaindoc(path);
