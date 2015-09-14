@@ -288,6 +288,7 @@ project(':jportal_webapp') {
     configurations {
         applet
         agent
+        runtime.exclude group: "org.slf4j", module: "slf4j-nop"
     }
 
     dependencies {
