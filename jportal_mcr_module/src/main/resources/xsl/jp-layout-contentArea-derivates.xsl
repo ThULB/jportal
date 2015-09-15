@@ -122,7 +122,7 @@
                 </li>
               </xsl:if>
               <li>
-                <a href="{$WebApplicationBaseURL}metseditor/start_mets_editor.xml?derivate={@xlink:href}&amp;useExistingMets=true">Mets Editor</a>
+                <a href="{$WebApplicationBaseURL}rsc/mets/editor/start/{@xlink:href}">Mets Editor</a>
               </li>
             </xsl:if>
             <xsl:if test="$deleteDB">
