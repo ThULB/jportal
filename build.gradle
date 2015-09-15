@@ -138,7 +138,6 @@ subprojects {
             "jportal_laws",
             "jportal_mcr_module",
             "jportal_move_obj_module",
-            "jportal_person_fix",
             "jportal_sample_data",
             "jportal_webapp_wizard"
 

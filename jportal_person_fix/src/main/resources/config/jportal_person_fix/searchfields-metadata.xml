@@ -1,1 +1,0 @@
-  <field name="corruptParticipants" type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/participants" value="count(participant[@type=@xlink:title])" />

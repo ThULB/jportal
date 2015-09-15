@@ -1,9 +1,0 @@
-<servlet id="PersonFixServlet">
-    <servlet-name>PersonFixServlet</servlet-name>
-    <servlet-class>fsu.jportal.fix.PersonFixServlet</servlet-class>
-</servlet>
-
-<servlet-mapping>
-    <servlet-name>PersonFixServlet</servlet-name>
-    <url-pattern>/personfix/*</url-pattern>
-</servlet-mapping>
