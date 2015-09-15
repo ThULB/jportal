@@ -156,7 +156,7 @@ subprojects {
             compile "org.mycore:mycore-oai:$mcrVersion"
             compile "org.mycore:mycore-session-listing:$mcrVersion"
             compile "org.mycore:mycore-swf:$mcrVersion"
-            compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
+            compile "org.mycore:mycore-urn:$mcrVersion"
             compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
             compile 'org.mycore.mets:mets-model:0.7'
             compile 'org.mycore.mets:mets-validator:1.1-SNAPSHOT'
@@ -192,7 +192,6 @@ project(':jportal_mcr_module') {
     dependencies {
         compile project(':jportal-commons')
         compile project(':jportal_iview2_plugin')
-        compile 'de.uni-jena.thulb.oai:archive-oai-resources:0.0.1-SNAPSHOT'
         compile 'org.apache.logging.log4j:log4j-api:2.3'
         compile 'org.apache.logging.log4j:log4j-core:2.3'
         compile "com.sun.jersey.jersey-test-framework:jersey-test-framework-grizzly:$jerseyVersion"
@@ -300,6 +299,7 @@ project(':jportal_webapp') {
         testCompile "org.hamcrest:hamcrest-library:1.3"
         testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
         testCompile "org.mycore:mycore-viewer:0.6-SNAPSHOT:tests"
+        runtime "org.apache.logging.log4j:log4j-web:2.3"
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
         runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.mycore:mycore-acl-editor2:$mcrVersion"

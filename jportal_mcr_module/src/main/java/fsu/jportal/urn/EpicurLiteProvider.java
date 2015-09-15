@@ -12,10 +12,9 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.iview2.services.MCRIView2Tools;
+import org.mycore.urn.epicurlite.EpicurLite;
+import org.mycore.urn.epicurlite.IEpicurLiteProvider;
 import org.mycore.urn.hibernate.MCRURN;
-
-import de.uni_jena.thulb.archive.urn.epicurlite.EpicurLite;
-import de.uni_jena.thulb.archive.urn.epicurlite.IEpicurLiteProvider;
 
 public class EpicurLiteProvider implements IEpicurLiteProvider {
     static final Logger LOGGER = LogManager.getLogger(EpicurLiteProvider.class);
