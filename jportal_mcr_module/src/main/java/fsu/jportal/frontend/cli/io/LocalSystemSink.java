@@ -100,7 +100,7 @@ public class LocalSystemSink  implements ImportSink{
                 String completePath = deriObj.getDerivateID() + file.getPath();
                 try {
                     URL url = new URL(this.host + "/servlets/MCRFileNodeServlet/" + completePath);
-                    DerivateTools.uploadFile(url.openStream(), file.getSize(), deriObj.getDocumentID(), deriObj.getDerivateID(), file.getPath());
+                    DerivateTools.uploadFileWithoutTransaction(url.openStream(), file.getSize(), deriObj.getDocumentID(), deriObj.getDerivateID(), file.getPath());
                 } catch (Exception e) {
                     LOGGER.error("Error while uploading File " + completePath);
                     e.printStackTrace();

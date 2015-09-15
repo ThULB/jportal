@@ -122,7 +122,7 @@
                 </li>
               </xsl:if>
               <li>
-                <a href="{$WebApplicationBaseURL}rsc/mets/editor/start/{@xlink:href}">Mets Editor</a>
+                <a href="javascript:window.open(&quot;{$WebApplicationBaseURL}rsc/mets/editor/start/{@xlink:href}&quot;,&quot;Mets Editor&quot;,&quot;scrollbars=no,location=no&quot;);void(0);">Mets Editor</a>
               </li>
             </xsl:if>
             <xsl:if test="$deleteDB">

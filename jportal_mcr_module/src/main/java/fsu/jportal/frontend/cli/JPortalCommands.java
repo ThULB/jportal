@@ -129,7 +129,7 @@ public class JPortalCommands {
                             }else{
                                 InputStream inputStream = Files.newInputStream(childPath);
                                 long filesize = Files.size(childPath);
-                                derivateID = DerivateTools.uploadFile(inputStream, filesize, objID, derivateID, pathStr);
+                                derivateID = DerivateTools.uploadFileWithoutTransaction(inputStream, filesize, objID, derivateID, pathStr);
                             }
                         }
                         

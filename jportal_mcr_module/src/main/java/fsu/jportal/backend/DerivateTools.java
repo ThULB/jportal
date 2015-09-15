@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.apache.commons.fileupload.UploadContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -365,22 +366,48 @@ public class DerivateTools {
         return 1; //OK
     }
 
+    /**
+     * Uploads a new file. No database transaction is required. In fact, a "nested transaction
+     * is not supported" error is thrown when a transaction is already started.
+     * 
+     * @see #uploadFile(InputStream, long, String, String, String)
+     */
+    public static String uploadFileWithoutTransaction(InputStream inputStream, long filesize, String documentID,
+        String derivateID, String filePath) throws Exception {
+        MCRSession session = MCRSessionMgr.getCurrentSession();
+        try {
+            session.beginTransaction();
+            derivateID = uploadFile(inputStream, filesize, documentID, derivateID, filePath);
+            session.commitTransaction();
+        } finally {
+            session.rollbackTransaction();
+        }
+        return derivateID;
+    }
+
+    /**
+     * Uploads a new file. A valid database transaction is required.
+     * 
+     * @param inputStream input stream to upload
+     * @param filesize size of the file
+     * @param documentID mycore object where the derivate is added
+     * @param derivateID derivate where the file is added (when null, a new derivate is created)
+     * @param filePath path of the file
+     * @return derivateId
+     * @throws Exception
+     */
     public static String uploadFile(InputStream inputStream, long filesize, String documentID, String derivateID,
         String filePath) throws Exception {
-        MCRSession session = MCRSessionMgr.getCurrentSession();
         if (derivateID == null) {
             String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
         }
         MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
-        handler.startUpload(1);
         try {
-            session.beginTransaction();
+            handler.startUpload(1);
             handler.receiveFile(filePath, inputStream, filesize, null);
             handler.finishUpload();
-            session.commitTransaction();
         } finally {
-            session.rollbackTransaction();
             handler.unregister();
         }
         return derivateID;
