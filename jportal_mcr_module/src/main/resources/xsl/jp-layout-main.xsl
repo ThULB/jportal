@@ -93,13 +93,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!-- add html stuff to head for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/head/top/*" />
-        <link href="{$WebApplicationBaseURL}bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{$WebApplicationBaseURL}webjars/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-move-obj.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-
 
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext,cyrillic' rel='stylesheet' type='text/css' />
         <xsl:if test="starts-with($RequestURL, concat($WebApplicationBaseURL, 'content/below/index.xml'))">
@@ -124,12 +123,12 @@
           jp.journalID = '<xsl:value-of select="$journalID" />';
           jp.journalID = jp.journalID != '' ? jp.journalID : null;
         </script>
-        <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/jquery/dist/jquery.min.js" />
-        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
-        <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/bootstrap/dist/js/bootstrap.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/jquery/2.1.4/dist/jquery.min.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/js/bootstrap.min.js" />
         <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
-          <script type="text/javascript" src="{$WebApplicationBaseURL}bower_components/bootstrap-dialog/dist/js/bootstrap-dialog.min.js" />
+          <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap-dialog/1.34.6/dist/js/bootstrap-dialog.min.js" />
         </xsl:if>
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
 
         <!-- Piwik -->
         <xsl:call-template name="jp.piwik" />

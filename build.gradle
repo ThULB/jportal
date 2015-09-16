@@ -202,6 +202,18 @@ project(':jportal_mcr_module') {
         compile 'javax.xml.bind:jaxb-api:2.2.1'
         compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
         iview 'org.mycore:mycore-viewer:0.6-SNAPSHOT'
+
+        // webjars
+        compile 'org.webjars.bower:jquery:2.1.4'
+        compile 'org.webjars:jquery-ui:1.11.4'
+        compile 'org.webjars:cowwoc-jquery-address:1.6'
+        compile 'org.webjars:bootstrap:3.3.4'
+        compile 'org.webjars:Eonasdan-bootstrap-datetimepicker:4.15.35'
+        compile 'org.webjars.npm:bootstrap-dialog:1.34.6'
+        compile 'org.webjars:mustachejs:0.8.2'
+        compile 'org.webjars:ckeditor:4.5.3'
+        compile 'org.webjars:font-awesome:4.4.0'
+        compile 'org.webjars:momentjs:2.10.6'
     }
 
     def nodeBuildDir = "$project.buildDir/node"
@@ -254,29 +266,7 @@ project(':jportal_mcr_module') {
         into "$project.buildDir/resources/main/META-INF"
     }
 
-    task getWebLib(type: NodeTask, dependsOn: npmInstall) {
-        def bowerCacheDir = "${gradle.getGradleUserHomeDir()}/caches/bower"
-        script = file("$nodeBuildDir/node_modules/bower/bin/bower")
-        args = ["--config.storage.cache=$bowerCacheDir/cache",
-                "--config.storage.packages=$bowerCacheDir/packages",
-                "--config.storage.registry=$bowerCacheDir/registry",
-                "--config.cwd=$nodeBuildDir",
-                "--config.directory=../resources/main/META-INF/resources/bower_components",
-                'install',
-                "jquery",
-                "jquery-ui",
-                "jquery-address",
-                "bootstrap",
-                "eonasdan-bootstrap-datetimepicker",
-                "bootstrap-dialog",
-                "mustache.js",
-                "ckeditor",
-                "fontawesome"
-        ]
-    }
-
     npmSetup.dependsOn npmSetupDir
-    jar.dependsOn getWebLib
     jar.dependsOn copyIviewMod
 }
 
