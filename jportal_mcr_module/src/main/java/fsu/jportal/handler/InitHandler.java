@@ -318,6 +318,7 @@ public class InitHandler implements AutoExecutable {
          */
         private boolean isInitialized(SolrClient solrClient) throws IOException, SolrServerException {
             ModifiableSolrParams params = new ModifiableSolrParams();
+            params.set("q", "*:*");
             params.set("rows", 0);
             QueryResponse response = solrClient.query(params);
             return response.getResults().getNumFound() != 0;
