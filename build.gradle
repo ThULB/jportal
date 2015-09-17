@@ -274,7 +274,6 @@ project(':jportal_webapp') {
     apply plugin: 'war'
     apply plugin: 'org.akhikhl.gretty'
 
-
     configurations {
         applet
         agent
@@ -328,107 +327,126 @@ project(':jportal_webapp') {
         systemProperty "project.build.directory", project.reportsDir
     }
 
-
-
     farms {
         dependencies {
             gretty 'org.hsqldb:hsqldb:2.3.2'
         }
 
+		// Single: starts app and db
+		// App: starts app, solr and db
+		// WebTests: runs web tests
 
-
-        ['App', 'WebTests'].each { farmName ->
+        ['Single', 'App', 'WebTests'].each { farmName ->
             farm farmName, {
-                def pathName = farmName.equals('App') ? "jportal" : "jportal-webTests"
-                def mcrHome = System.getProperty("user.home") + "/.mycore"
-                webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
-                webapp project, contextPath: "/$pathName"
+			    def appName = "jportal"
+				def mcrHome = System.getProperty("user.home") + "/.mycore"
+				def confDir = "$project.projectDir/config"
+				def appPath = "$mcrHome/$appName"
+				def solrHome = "$appPath/solr-home"
 
-                integrationTestTask = "webTests"
+            	if(farmName.equals('WebTests')) {
+            		appName = "jportal-webTests"
+                	mcrHome = "$project.buildDir/mcrHome"
+                	integrationTestTask = "webTests"
+            	}
+            	if(!farmName.equals('Single')) {
+                	webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
+                }
+                webapp project, contextPath: "/$appName"
 
-                if (farmName.equals('App')) {
+                if (farmName.equals('App') || farmName.equals('Single')) {
                     dependencies {
                         gretty project(':java_agent')
                     }
-                    def agentOp
-                    for (path in resourcePaths) {
-                        if (agentOp == null) {
-                            agentOp = path.toString()
-                        } else {
-                            agentOp = agentOp + "," + path
-                        }
-                    }
-//                    jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
+                    def agentOp = getAgentOp(resourcePaths);
+					// jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
                 } else if (farmName.equals('WebTests')) {
                     // Gretty don't load static files from META-INF in jar files, so this is a workaround
-                    webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$pathName"
+                    webapp project(':jportal_webapp').tasks.getByPath(':jportal_webapp:war').archivePath, contextPath: "/$appName"
                     // Gretty need the webapp project to run the webtests, this is due to the workaround above
                     webapp project
-                    mcrHome = "$project.buildDir/mcrHome"
                 }
 
-                def appPath = "$mcrHome/$pathName"
-                def solrHome = "$appPath/solr-home"
-                def confDir = "$project.projectDir/config"
+			    appPath = "$mcrHome/$appName"
+			    solrHome = "$appPath/solr-home"
 
-                systemProperty "MCR.AppName", pathName
-                systemProperty "MCR.Home", mcrHome
-                systemProperty "solr.solr.home", solrHome
+			    systemProperty "MCR.AppName", appName
+			    systemProperty "MCR.Home", mcrHome
+			    systemProperty "solr.solr.home", solrHome
 
-                jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-                jvmArgs '-Xmx2048m'
-                port = 8291
-                serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
+				jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+			    jvmArgs '-Xmx2048m'
+			    port = 8291
+			    serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
 
                 onStart {
-                    if (!file(appPath).exists()) {
-                        copy {
-                            from(confDir) {
-                                include "**"
-                                exclude "jetty/**"
-                            }
-                            into appPath
-
-                            def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
-
-                            configurations {
-                                solr
-                            }
-                            dependencies {
-                                solr "org.mycore:mycore-solr:$mcrVersion@jar"
-                            }
-                            def solrJar
-                            configurations.solr.each { file ->
-                                solrJar = file.absolutePath
-                                println "Solr Jar $solrJar";
-                            }
-
-                            into("solr-home") {
-                                from moduleFiles
-                                include '**/solr.xml'
-                            }
-
-                            into("solr-home/conf") {
-                                from moduleFiles
-                                include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-                                from zipTree(solrJar).files
-                                include 'classificationSchema.xml'
-                            }
-
-                        }
-                    }
-
-
-                    def hsqlDBPath = Paths.get(mcrHome, pathName, "hsqldb-data", "database")
-                    String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
-
-                    org.hsqldb.Server.main(args)
+                	if(!farmName.equals('Single')) {
+                    	initSolr(appPath, confDir)
+					}
+					startDB(mcrHome, appName)
                 }
             }
 
         }
     }
 
+}
+
+def getAgentOp(resourcePaths) {
+	def agentOp
+    for (path in resourcePaths) {
+        if (agentOp == null) {
+            agentOp = path.toString()
+        } else {
+            agentOp = agentOp + "," + path
+        }
+    }
+    return agentOp;
+}
+
+def initSolr(appPath, confDir) {
+	if (!file(appPath).exists()) {
+	    copy {
+	        from(confDir) {
+	            include "**"
+	            exclude "jetty/**"
+	        }
+	        into appPath
+	
+	        def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+	
+	        configurations {
+	            solr
+	        }
+	        dependencies {
+	            solr "org.mycore:mycore-solr:$mcrVersion@jar"
+	        }
+	        def solrJar
+	        configurations.solr.each { file ->
+	            solrJar = file.absolutePath
+	            println "Solr Jar $solrJar";
+	        }
+
+	        into("solr-home") {
+	            from moduleFiles
+	            include '**/solr.xml'
+	        }
+
+	        into("solr-home/conf") {
+	            from moduleFiles
+	            include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+	            from zipTree(solrJar).files
+	            include 'classificationSchema.xml'
+	        }
+
+	    }
+	}
+}
+
+def startDB(mcrHome, appName) {
+	def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
+	String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
+	org.hsqldb.Server.main(args)
 }
 
 configurations.all {
