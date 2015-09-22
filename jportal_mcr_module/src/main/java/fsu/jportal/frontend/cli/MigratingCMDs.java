@@ -15,6 +15,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
+import fsu.jportal.pref.JournalConfig;
+import fsu.jportal.resolver.JournalFilesResolver;
+import fsu.jportal.util.ImprintUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,6 +49,24 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 @MCRCommandGroup(name = "JP Migrating Commands")
 public class MigratingCMDs {
     private static Logger LOGGER = LogManager.getLogger(MigratingCMDs.class);
+
+    @MCRCommand(helpKey = "Set intro xml in journal properties.", syntax = "set intro prop")
+    public static void setIntroProp() throws JDOMException, IOException {
+        List<String> jpjournalIDs = MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
+        for (String jpjournalID : jpjournalIDs) {
+            JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
+            try {
+                Source resolve = journalFilesResolver.resolve("journalFile:" + jpjournalID + "/intro.xml+", null);
+                if(resolve != null){
+                    JournalConfig journalConf = getJournalConf(jpjournalID);
+                    journalConf.setKey("greeting", "intro");
+                    LOGGER.info("Set intro for " + jpjournalID);
+                }
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @MCRCommand(helpKey = "Move intro xml from webapp into data folder.", syntax = "migrate intro xml")
     public static void migrateIntroXML() throws JDOMException, IOException {
