@@ -1,27 +1,26 @@
 package fsu.jportal.mets;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
+import org.mycore.mets.model.files.FileSec;
+import org.mycore.mets.model.struct.*;
 import org.mycore.solr.MCRSolrClientFactory;
 
 public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
-    private static Logger LOGGER = LogManager.getLogger(JPortalMetsGenerator.class);
+    private static Logger LOGGER = Logger.getLogger(JPortalMetsGenerator.class);
 
     protected String getType(MCRObject obj) {
         return obj.getId().getTypeId().substring(2);
