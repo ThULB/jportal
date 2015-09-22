@@ -78,19 +78,22 @@ public class InitHandler implements AutoExecutable {
 
     @Override
     public void startUp(ServletContext servletContext) {
-        startSession();
-
-        if (isTableEmpty(MCRACCESSRULE.class)) {
-            createDefaultRules();
+        try {
+            startSession();
+            if (isTableEmpty(MCRCategoryImpl.class)) {
+                createClass();
+            }
+            if (isTableEmpty(MCRACCESSRULE.class)) {
+                createDefaultRules();
+            }
+            initSuperUser();
+            closeSession();
+        } catch(Exception exc) {
+            if(transaction != null) {
+                transaction.rollback();
+            }
+            exc.printStackTrace();
         }
-
-        if (isTableEmpty(MCRCategoryImpl.class)) {
-            createClass();
-        }
-
-        initSuperUser();
-
-        closeSession();
 
         initCLI();
 
@@ -130,7 +133,7 @@ public class InitHandler implements AutoExecutable {
 
     }
 
-    public boolean isTableEmpty(Class clazz) {
+    public boolean isTableEmpty(Class<?> clazz) {
         return session.createCriteria(clazz).setMaxResults(1).list().isEmpty();
     }
 
@@ -169,13 +172,10 @@ public class InitHandler implements AutoExecutable {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (MCRException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (SAXParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -206,7 +206,6 @@ public class InitHandler implements AutoExecutable {
                 }
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -238,10 +237,8 @@ public class InitHandler implements AutoExecutable {
             Document ruleDom = MCRXMLParserFactory.getParser().parseXML(new MCRStreamContent(resourceIS));
             return ruleDom.getRootElement();
         } catch (MCRException | SAXParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         return null;
     }
 

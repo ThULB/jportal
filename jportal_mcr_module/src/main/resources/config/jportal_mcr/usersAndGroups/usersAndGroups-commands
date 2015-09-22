@@ -1,4 +1,0 @@
-import role from file xml/supervisorrole.xml
-import role from file xml/journalrole.xml
-import role from file xml/editorsrole.xml
-import role from file xml/derivaterole.xml

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="mcr-roles">
+  <label xml:lang="en" text="system roles" />
+  <label xml:lang="de" text="Systemrollen" />
+  <categories>
+    <category ID="supervisor">
+      <label xml:lang="en" text="supervisor" description="Can manage everything." />
+    </category>
+    <category ID="admin">
+      <label xml:lang="en" text="admin" description="The admin group. Allowed everything." />
+    </category>
+    <category ID="editorsgroup">
+      <label xml:lang="en" text="editorsgroup" description="Create, edit, delete: articles, persons, institutions and manage derivates for articles" />
+    </category>
+    <category ID="journalgroup">
+      <label xml:lang="en" text="journalgroup" description="Create, edit journals and manage derivates" />
+    </category>
+    <category ID="derivategroup">
+      <label xml:lang="en" text="derivategroup" description="Berechtigt derivate zu bearbeiten" />
+    </category>
+  </categories>
+</mycoreclass>
