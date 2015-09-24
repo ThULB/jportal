@@ -7,8 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import fsu.jportal.frontend.SolrToc;
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -18,6 +21,11 @@ import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.mets.model.files.FileSec;
 import org.mycore.mets.model.struct.*;
 import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.search.MCRSolrSearchUtils;
+import org.mycore.solr.search.MCRSolrURL;
+
+import static fsu.jportal.frontend.SolrToc.buildQuery;
+import static fsu.jportal.frontend.SolrToc.getSort;
 
 public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
     private static Logger LOGGER = Logger.getLogger(JPortalMetsGenerator.class);
@@ -41,23 +49,49 @@ public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
     }
 
     protected List<MCRMetaLinkID> getChildren(MCRObject parentObject) {
-        String sorlQuery = "+parent:" + parentObject.getId().toString();
-        ModifiableSolrParams solrParams = new ModifiableSolrParams();
-        solrParams.set("q", sorlQuery);
-        solrParams.set("sort", "size asc");
-        ArrayList<MCRMetaLinkID> linkList = new ArrayList<>();
+        List<MCRMetaLinkID> metaLinkIDs = getMcrMetaLinkIDs(parentObject, "jpvolume");
+        metaLinkIDs.addAll(getMcrMetaLinkIDs(parentObject, "jparticle"));
+        return metaLinkIDs;
+    }
+
+    private List<MCRMetaLinkID> getMcrMetaLinkIDs(MCRObject parentObject, String objectType) {
+        String parentID = parentObject.getId().toString();
+        String sort = getSort(parentID, objectType);
+        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, sort);
+        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+
+        SolrTocHandler tocHandler = new SolrTocHandler(parentObject);
         try {
-            QueryResponse response = MCRSolrClientFactory.getSolrClient().query(solrParams);
-            for (SolrDocument solrDoc : response.getResults()) {
-                String id = (String) solrDoc.getFieldValue("id");
-                MCRMetaLinkID metaLinkID = new MCRMetaLinkID("child", MCRObjectID.getInstance(id), parentObject.getLabel(), id);
-                linkList.add(metaLinkID);
-            }
+            return MCRSolrSearchUtils.list(solrClient, solrParams, tocHandler);
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
 
-        return linkList;
+        return null;
+    }
+
+    private class SolrTocHandler implements MCRSolrSearchUtils.DocumentHandler<MCRMetaLinkID>{
+        private final MCRObject parentObject;
+
+        public SolrTocHandler(MCRObject parentObject) {
+            this.parentObject = parentObject;
+        }
+
+        @Override
+        public MCRMetaLinkID getResult(SolrDocument document) {
+            String id = (String) document.getFieldValue("id");
+            String label = parentObject.getLabel();
+            if(label == null || label.equals("")){
+                label = id;
+            }
+
+            return new MCRMetaLinkID("child", MCRObjectID.getInstance(id), label, id);
+        }
+
+        @Override
+        public String fl() {
+            return "id objectType";
+        }
     }
 
     protected String getEnclosingDerivateLinkName() {
