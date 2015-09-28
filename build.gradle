@@ -159,7 +159,7 @@ subprojects {
             compile "org.mycore:mycore-urn:$mcrVersion"
             compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
             compile 'org.mycore.mets:mets-model:0.7'
-            compile 'org.mycore.mets:mets-validator:1.1-SNAPSHOT'
+            compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
             compile 'javax.servlet:javax.servlet-api:3.1.0'
             compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
         }
