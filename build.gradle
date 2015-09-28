@@ -28,6 +28,7 @@ def hibernateVersion = "4.3.4.Final"
 def jpgroup = "fsu.thulb"
 def jpversion = "2.0.18-SNAPSHOT"
 def javaVersion = 1.8
+def solrVersion = '4.10.4-SNAPSHOT'
 def resourcePaths = new HashSet<File>();
 
 def getDate() {
@@ -350,7 +351,7 @@ project(':jportal_webapp') {
                 	integrationTestTask = "webTests"
             	}
             	if(!farmName.equals('Single')) {
-                	webapp "org.mycore.solr:solr:4.7.2@war", contextPath: "/solr"
+                	webapp "org.mycore.solr:solr:$solrVersion@war", contextPath: "/solr"
                 }
                 webapp project, contextPath: "/$appName"
 
