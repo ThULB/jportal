@@ -2,10 +2,7 @@ package fsu.jportal.mets;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import fsu.jportal.frontend.SolrToc;
 import org.apache.log4j.Logger;
@@ -49,6 +46,10 @@ public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
     }
 
     protected List<MCRMetaLinkID> getChildren(MCRObject parentObject) {
+        if (parentObject.getId().getTypeId().equals("jparticle")) {
+            return Collections.emptyList();
+        }
+
         List<MCRMetaLinkID> metaLinkIDs = getMcrMetaLinkIDs(parentObject, "jpvolume");
         metaLinkIDs.addAll(getMcrMetaLinkIDs(parentObject, "jparticle"));
         return metaLinkIDs;
@@ -70,7 +71,7 @@ public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
         return null;
     }
 
-    private class SolrTocHandler implements MCRSolrSearchUtils.DocumentHandler<MCRMetaLinkID>{
+    private class SolrTocHandler implements MCRSolrSearchUtils.DocumentHandler<MCRMetaLinkID> {
         private final MCRObject parentObject;
 
         public SolrTocHandler(MCRObject parentObject) {
@@ -81,7 +82,7 @@ public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
         public MCRMetaLinkID getResult(SolrDocument document) {
             String id = (String) document.getFieldValue("id");
             String label = parentObject.getLabel();
-            if(label == null || label.equals("")){
+            if (label == null || label.equals("")) {
                 label = id;
             }
 
