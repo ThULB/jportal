@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.akhikhl.gretty:gretty:1.2.3'
+        classpath 'org.akhikhl.gretty:gretty:1.2.4'
         classpath "org.hsqldb:hsqldb:2.3.2"
 //        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.10'
     }
@@ -180,6 +180,14 @@ subprojects {
         }
     }
 
+
+    jar << {
+        copy{
+            from "$project.buildDir/tmp/jar"
+            include "MANIFEST.MF"
+            into "$project.buildDir/resources/main/META-INF"
+        }
+    }
 }
 
 project(':jportal_mcr_module') {
