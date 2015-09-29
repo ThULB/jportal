@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -40,6 +42,8 @@ import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
  * @author Matthias Eichner
  */
 public class LLZMetsConverter {
+
+    private static Logger LOGGER = LogManager.getLogger(LLZMetsConverter.class);
 
     private String lastBibLabel;
 
@@ -159,6 +163,10 @@ public class LLZMetsConverter {
             String dmdID = LLZMetsUtils.getDmDId(subDivElement);
             LogicalSubDiv subdDiv = getLogicalDiv(subDivElement, dmdID, llz);
             if (type.equals("issue") || type.equals("volumeparts")) {
+                if(subDivElement.getChildren().size() == 0) {
+                    LOGGER.warn("Empty mets:div @type=" + type + " id=" + subDivElement.getAttributeValue("ID") + ". Ignore it and continue.");
+                    continue;
+                }
                 handleLogicalDivs(subDivElement, subdDiv, llz);
                 div.add(subdDiv);
                 continue;
