@@ -63,31 +63,28 @@ public class ObjectTools {
 
     @MCRCommand(help = "export object and children and their derivate from [objectID] to [destination].", syntax = "export object recursiv from {0} to {1}")
     public static void exportObject(String objectID, String dest) {
-  	    ImportSource importSource = new ExporterSource(objectID);
-  	    ImportSink importSink = new ExporterSink(Paths.get(dest));
-  	    RecursiveImporter recursiveImporter = new RecursiveImporter(importSource, importSink);
-  	    recursiveImporter.start();
+        ImportSource importSource = new ExporterSource(objectID);
+        ImportSink importSink = new ExporterSink(Paths.get(dest));
+        RecursiveImporter recursiveImporter = new RecursiveImporter(importSource, importSink);
+        recursiveImporter.start();
     }
-    
+
     @MCRCommand(help = "export recursive derivate from [objectID] to [destination].", syntax = "exportDerivates from {0} to {1}")
     public static void exportPics(String objectID, String dest) {
-      ImportSource importSource = new LocalExportSource(objectID);
-      ImportSink importSink = new LocalExportSink(Paths.get(dest));
-      RecursiveImporter recursiveImporter = new RecursiveImporter(importSource, importSink);
-      recursiveImporter.start();
+        ImportSource importSource = new LocalExportSource(objectID);
+        ImportSink importSink = new LocalExportSink(Paths.get(dest));
+        RecursiveImporter recursiveImporter = new RecursiveImporter(importSource, importSink);
+        recursiveImporter.start();
     }
 
     // dataModelCoverage: browse, fully
-    @MCRCommand(help = "cp [source ID] [n times] [layoutTemplate] [dataModelCoverage]", syntax = "cp {0} {1} {2} {3}")
-    public static List<String> cp(String sourceID, int times, String layoutTemp, String dataModelCoverage) {
+    @MCRCommand(help = "cp(n) [source ID] [n times]", syntax = "cp(n) {0} {1}")
+    public static List<String> cp(String sourceID, int times) {
         List<String> cmd = new ArrayList<String>();
-
         for (int i = 0; i < times; i++) {
-            cmd.add("cp " + sourceID + " " + layoutTemp + " " + dataModelCoverage);
+            cmd.add("cp " + sourceID);
         }
-
         return cmd;
-
     }
 
     @MCRCommand(help = "merge several derivates", syntax = "merge derivates {0}")
@@ -135,8 +132,8 @@ public class ObjectTools {
         return executeMoreCMDs;
     }
 
-    @MCRCommand(help = "cp [sourceID] [layoutTemplate] [dataModelCoverage].", syntax = "cp {0} {1} {2}")
-    public static void cp(String sourceMcrIdStr, String layoutTemp, String dataModelCoverage) throws Exception {
+    @MCRCommand(help = "cp [sourceID]", syntax = "cp {0}")
+    public static void cp(String sourceMcrIdStr) throws Exception {
         MCRObjectID sourceMcrId = MCRObjectID.getInstance(sourceMcrIdStr);
         Document mcrOrigObjXMLDoc = MCRXMLMetadataManager.instance().retrieveXML(sourceMcrId);
 
@@ -146,43 +143,32 @@ public class ObjectTools {
             children.detach();
         }
 
+        MCRObjectID newMcrID = MCRObjectID.getNextFreeId(sourceMcrId.getBase());
+
+        // set id
+        mcrOrigObjXMLDoc.getRootElement().setAttribute("ID", newMcrID.toString());
+
+        // set maintitle
         Element maintitleElem = null;
         String mainTitlePath = "/mycoreobject/metadata/maintitles/maintitle";
         maintitleElem = getElementWithXpath(mcrOrigObjXMLDoc, mainTitlePath);
-
-        Element hidden_jpjournalIDElem = null;
-        String hidden_jpjournalIDPath = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID";
-        hidden_jpjournalIDElem = getElementWithXpath(mcrOrigObjXMLDoc, hidden_jpjournalIDPath);
-
-        if (!dataModelCoverage.equals("")) {
-            Element dataModelCoverageElem = null;
-            String dataModelCoverageLocation = "/mycoreobject/metadata/dataModelCoverages/dataModelCoverage";
-            dataModelCoverageElem = getElementWithXpath(mcrOrigObjXMLDoc, dataModelCoverageLocation);
-            if (dataModelCoverageElem != null) {
-                dataModelCoverageElem.setAttribute("categid", dataModelCoverage);
-            }
-        }
-        MCRObjectID newMcrID = MCRObjectID.getNextFreeId(sourceMcrId.getBase());
         if (maintitleElem != null) {
             maintitleElem.setText(maintitleElem.getText() + "[Copy] " + newMcrID.getNumberAsInteger());
         }
-        if (hidden_jpjournalIDElem != null) {
-            hidden_jpjournalIDElem.setText(newMcrID.toString());
-        }
-        mcrOrigObjXMLDoc.getRootElement().setAttribute("ID", newMcrID.toString());
-        MCRXMLMetadataManager.instance().create(newMcrID, mcrOrigObjXMLDoc, new Date());
+
+        // set hidden journal id for journal's
         if (newMcrID.getTypeId().equals("jpjournal")) {
-            // creating ACL for copy
-            // retrieve ACL from source Object
-            Element servAcl = MCRURIResolver.instance().resolve("access:action=all&object=" + sourceMcrIdStr);
-            List<Element> permissions = servAcl.getChildren("servacl");
-            for (Iterator<Element> iterator = permissions.iterator(); iterator.hasNext();) {
-                Element perm = (Element) iterator.next();
-                String permName = perm.getAttributeValue("permission");
-                MCRAccessManager.addRule(newMcrID, permName, perm.getChild("condition"), permName + " permission for "
-                    + newMcrID.toString());
+            Element hidden_jpjournalIDElem = null;
+            String hidden_jpjournalIDPath = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID";
+            hidden_jpjournalIDElem = getElementWithXpath(mcrOrigObjXMLDoc, hidden_jpjournalIDPath);
+            if (hidden_jpjournalIDElem != null) {
+                hidden_jpjournalIDElem.setText(newMcrID.toString());
             }
         }
+
+        // create
+        MCRObject newObj = new MCRObject(mcrOrigObjXMLDoc);
+        MCRMetadataManager.create(newObj);
     }
 
     private static Element getElementWithXpath(Document xmlDoc, String xpathExpression) {
@@ -326,8 +312,8 @@ public class ObjectTools {
             MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(link.getXLinkHref()));
             List<MCRMetaLinkID> derivateLinkList = mcrChild.getStructure().getDerivates();
             for (MCRMetaLinkID derivateLink : derivateLinkList) {
-                MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateLink
-                    .getXLinkHref()));
+                MCRDerivate mcrDer = MCRMetadataManager
+                    .retrieveMCRDerivate(MCRObjectID.getInstance(derivateLink.getXLinkHref()));
                 idMap.put(mcrDer, mcrChild);
             }
             idMap.putAll(getDescendants(mcrChild));
