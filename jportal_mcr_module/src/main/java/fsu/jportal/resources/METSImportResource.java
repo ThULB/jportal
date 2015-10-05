@@ -32,7 +32,6 @@ import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
-import org.mycore.mets.validator.validators.AltoValidator;
 
 import com.google.gson.JsonObject;
 
@@ -101,8 +100,6 @@ public class METSImportResource {
         // check with METSValidator
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         METSValidator validator = new METSValidator(in);
-        // add additional alto validation
-        validator.getValidators().add(new AltoValidator());
         List<ValidationException> exceptionList = validator.validate();
         if (!exceptionList.isEmpty()) {
             String dataDir = MCRConfiguration.instance().getString("MCR.datadir");

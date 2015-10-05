@@ -245,7 +245,7 @@ public abstract class LLZMetsUtils {
     }
 
     /**
-     * Converts a llz *.tiff file href to mycore style href .
+     * Converts an absolute *.jpg file href to a relative *.tif.
      */
     static class TiffHrefStrategy implements FileHrefStrategy {
         private static Pattern JPG_PATTERN = Pattern.compile("\\.jpg", Pattern.CASE_INSENSITIVE);
