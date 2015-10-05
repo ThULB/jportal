@@ -25,7 +25,7 @@
         <xsl:when test="$vol.start">
           <xsl:value-of select="$vol.start" />
         </xsl:when>
-        <xsl:when test="$referer">
+        <xsl:when test="$referer and contains($referer, '_jpvolume_')">
           <xsl:value-of select="concat('ref=', $referer)"/>
         </xsl:when>
         <xsl:otherwise>
@@ -56,7 +56,7 @@
         <xsl:when test="$art.start">
           <xsl:value-of select="$art.start" />
         </xsl:when>
-        <xsl:when test="$referer">
+        <xsl:when test="$referer and contains($referer, '_jparticle_')">
           <xsl:value-of select="concat('ref=', $referer)"/>
         </xsl:when>
         <xsl:otherwise>

@@ -46,10 +46,6 @@ public class SolrToc {
         return solrParams;
     }
 
-    public static ModifiableSolrParams buildQuery(String parentID, String sort, int rows, int start) {
-        return buildQuery(parentID, null, sort, rows, start);
-    }
-
     public static Source getToc(String parentID, String objectType, int start, int rows) {
         String sort = getSort(parentID, objectType);
         ModifiableSolrParams solrParams = buildQuery(parentID, objectType, sort, rows, start);
@@ -96,9 +92,9 @@ public class SolrToc {
         return false;
     }
 
-    public static int getRefererStart(String parentID, String objectType, String referer) throws TransformerException {
+    public static int getRefererStart(String parentID, String objectType, String referer, int rows) throws TransformerException {
         String sort = getSort(parentID, objectType);
-        ModifiableSolrParams solrParams = buildQuery(parentID, sort, 99999, 0).set("fl", "id");
+        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, sort, 99999, 0).set("fl", "id");
 
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         MCRSolrURL solrURL = new MCRSolrURL((HttpSolrClient) solrClient, solrParams.toString());
@@ -106,11 +102,11 @@ public class SolrToc {
             MCRURLContent result = new MCRURLContent(solrURL.getUrl());
             Document resultXML = result.asXML();
             XPathExpression<Element> precedingSiblings = XPathFactory.instance()
-                    .compile("/response/result/doc[str[@name] = " + referer + "]/preceding-sibling::*",
+                    .compile("/response/result/doc[str[@name='id'] = '" + referer + "']/preceding-sibling::*",
                             Filters.element());
-
             List<Element> precedingSiblingList = precedingSiblings.evaluate(resultXML);
-            return precedingSiblingList.size();
+            int positionInParent = precedingSiblingList.size();
+            return (int)Math.floor(positionInParent / rows) * rows;
         } catch (IOException e) {
             throw new TransformerException("Unable to get input stream from solr: " + solrURL.getUrl(), e);
         } catch (JDOMException | SAXException e) {

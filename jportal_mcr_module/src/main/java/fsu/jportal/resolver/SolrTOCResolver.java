@@ -31,16 +31,13 @@ public class SolrTOCResolver implements URIResolver {
         int start = 0;
         if(startStr.startsWith("ref=")){
             String refID = startStr.substring(4);
-
             if(refID.equals("")){
                 throw new IllegalArgumentException("Invalid format of of referer: " + href);
             }
-
-            start = SolrToc.getRefererStart(parentID, objectType, refID);
+            start = SolrToc.getRefererStart(parentID, objectType, refID, rows);
         }else{
             start = Integer.valueOf(startStr);
         }
-
         return SolrToc.getToc(parentID, objectType, start, rows);
     }
 }
