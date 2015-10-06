@@ -21,10 +21,10 @@ import java.nio.file.Files
 import java.nio.file.Paths;
 import java.util.HashSet;
 
-def mcrVersion = '2015.08-SNAPSHOT'
+//def mcrVersion = '2015.08-SNAPSHOT'
 def jettyVersion = "9.2.7.v20150116"
 def jerseyVersion = "1.19"
-def hibernateVersion = "4.3.4.Final"
+def hibernateVersion = "5.0.2.Final"
 def jpgroup = "fsu.thulb"
 def jpversion = "2.0.18-SNAPSHOT"
 def javaVersion = 1.8
@@ -140,7 +140,7 @@ subprojects {
             "jportal_mcr_module",
             "jportal_move_obj_module",
             "jportal_sample_data",
-            "jportal_webapp_wizard"
+//            "jportal_webapp_wizard"
 
     ]
     if (project.name in mcrDepProj) {
@@ -182,7 +182,7 @@ subprojects {
 
 
     jar << {
-        copy{
+        copy {
             from "$project.buildDir/tmp/jar"
             include "MANIFEST.MF"
             into "$project.buildDir/resources/main/META-INF"
@@ -267,10 +267,10 @@ project(':jportal_mcr_module') {
             }
         }
         script = file("$nodeBuildDir/node_modules/grunt-cli/bin/grunt")
-        args=["--gruntfile=$nodeBuildDir/GruntFile.js"]
+        args = ["--gruntfile=$nodeBuildDir/GruntFile.js"]
     }
 
-    task copyIviewMod(type: Copy, dependsOn: buildIviewMod){
+    task copyIviewMod(type: Copy, dependsOn: buildIviewMod) {
         from "$nodeBuildDir/classes/META-INF"
         into "$project.buildDir/resources/main/META-INF"
     }
@@ -285,7 +285,6 @@ project(':jportal_webapp') {
 
     configurations {
         applet
-        agent
         runtime.exclude group: "org.slf4j", module: "slf4j-nop"
     }
 
@@ -341,9 +340,9 @@ project(':jportal_webapp') {
             gretty 'org.hsqldb:hsqldb:2.3.2'
         }
 
-		// Single: starts app and db
-		// App: starts app, solr and db
-		// WebTests: runs web tests
+        // Single: starts app and db
+        // App: starts app, solr and db
+        // WebTests: runs web tests
 
         ['Single', 'App', 'WebTests'].each { farmName ->
             farm farmName, {
@@ -386,13 +385,51 @@ project(':jportal_webapp') {
 				jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
 			    jvmArgs '-Xmx2048m'
 			    port = 8291
+
 			    serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
 
                 onStart {
                 	if(!farmName.equals('Single')) {
-                    	initSolr(appPath, confDir)
+                        if (!file(appPath).exists()) {
+                            copy {
+                                from(confDir) {
+                                    include "**"
+                                    exclude "jetty/**"
+                                }
+                                into appPath
+
+                                def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+
+                                configurations {
+                                    solr
+                                }
+                                dependencies {
+                                    solr "org.mycore:mycore-solr:$mcrVersion@jar"
+                                }
+                                def solrJar
+                                configurations.solr.each { file ->
+                                    solrJar = file.absolutePath
+                                    println "Solr Jar $solrJar";
+                                }
+
+                                into("solr-home") {
+                                    from moduleFiles
+                                    include '**/solr.xml'
+                                }
+
+                                into("solr-home/conf") {
+                                    from moduleFiles
+                                    include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                                    from zipTree(solrJar).files
+                                    include 'classificationSchema.xml'
+                                }
+
+                            }
+                        }
 					}
-					startDB(mcrHome, appName)
+                    def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
+                    String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
+                    org.hsqldb.Server.main(args)
                 }
             }
 
@@ -402,7 +439,7 @@ project(':jportal_webapp') {
 }
 
 def getAgentOp(resourcePaths) {
-	def agentOp
+    def agentOp
     for (path in resourcePaths) {
         if (agentOp == null) {
             agentOp = path.toString()
@@ -413,49 +450,49 @@ def getAgentOp(resourcePaths) {
     return agentOp;
 }
 
-def initSolr(appPath, confDir) {
-	if (!file(appPath).exists()) {
-	    copy {
-	        from(confDir) {
-	            include "**"
-	            exclude "jetty/**"
-	        }
-	        into appPath
-	
-	        def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
-	
-	        configurations {
-	            solr
-	        }
-	        dependencies {
-	            solr "org.mycore:mycore-solr:$mcrVersion@jar"
-	        }
-	        def solrJar
-	        configurations.solr.each { file ->
-	            solrJar = file.absolutePath
-	            println "Solr Jar $solrJar";
-	        }
+void initSolr(appPath, confDir) {
+    if (!file(appPath).exists()) {
+        copy {
+            from(confDir) {
+                include "**"
+                exclude "jetty/**"
+            }
+            into appPath
 
-	        into("solr-home") {
-	            from moduleFiles
-	            include '**/solr.xml'
-	        }
+            def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
 
-	        into("solr-home/conf") {
-	            from moduleFiles
-	            include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-	            from zipTree(solrJar).files
-	            include 'classificationSchema.xml'
-	        }
+            configurations {
+                solr
+            }
+            dependencies {
+                solr "org.mycore:mycore-solr:$mcrVersion@jar"
+            }
+            def solrJar
+            configurations.solr.each { file ->
+                solrJar = file.absolutePath
+                println "Solr Jar $solrJar";
+            }
 
-	    }
-	}
+            into("solr-home") {
+                from moduleFiles
+                include '**/solr.xml'
+            }
+
+            into("solr-home/conf") {
+                from moduleFiles
+                include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                from zipTree(solrJar).files
+                include 'classificationSchema.xml'
+            }
+
+        }
+    }
 }
 
-def startDB(mcrHome, appName) {
-	def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
-	String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
-	org.hsqldb.Server.main(args)
+void startDB(mcrHome, appName) {
+    def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
+    String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
+    org.hsqldb.Server.main(args)
 }
 
 configurations.all {
