@@ -17,44 +17,48 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
-import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
-import org.mycore.mets.validator.validators.AltoValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
 import fsu.jportal.mets.ConvertException;
+import fsu.jportal.mets.ENMAPConverter;
 import fsu.jportal.mets.LLZMetsConverter;
 
 public class LLZChecker {
 
-    public List<Path> listAbgleich(Path base) throws IOException {
-        MetsFileVisitor visitor = new MetsFileVisitor();
+    public List<Path> listAbgleich(Path base, String endsWith) throws IOException {
+        MetsFileVisitor visitor = new MetsFileVisitor(endsWith);
         Files.walkFileTree(base, visitor);
         return visitor.getPaths();
     }
 
-    public Document convert(Path metsFile) throws JDOMException, IOException, ConvertException {
+    public Document convert(Path metsFile, ENMAPConverter converter) throws JDOMException, IOException, ConvertException {
         SAXBuilder b = new SAXBuilder();
         Document document = b.build(metsFile.toFile());
-        LLZMetsConverter c = new LLZMetsConverter();
-        Mets mets = c.convert(document);
+        Mets mets = converter.convert(document);
         return mets.asDocument();
     }
 
     public List<ValidationException> validate(InputStream in) throws JDOMException, IOException {
         METSValidator validator = new METSValidator(in);
-        validator.getValidators().add(new AltoValidator());
         return validator.validate();
     }
 
     static class MetsFileVisitor extends SimpleFileVisitor<Path> {
+
+        String endsWith;
+
+        public MetsFileVisitor(String endsWith) {
+            this.endsWith = endsWith;
+        }
+
         List<Path> paths = new ArrayList<>();
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-            if (file.getFileName().toString().endsWith("mets_Abgleich.xml")) {
+            if (file.getFileName().toString().endsWith(endsWith)) {
                 paths.add(file);
                 return FileVisitResult.SKIP_SIBLINGS;
             }
@@ -66,7 +70,7 @@ public class LLZChecker {
         }
     }
 
-    private static ByteArrayInputStream toByteStream(Document doc) throws IOException {
+    public static ByteArrayInputStream toByteStream(Document doc) throws IOException {
         byte[] bytes = getByteArray(doc, Format.getPrettyFormat());
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         return in;
@@ -86,10 +90,10 @@ public class LLZChecker {
     public static void main(String[] args) throws Exception {
         LLZChecker llzChecker = new LLZChecker();
         // check
-//        List<Path> listAbgleich = llzChecker.listAbgleich(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/"));
+//        List<Path> listAbgleich = llzChecker.listAbgleich(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/"), "_mets_Abgleich.xml");
 //        for (Path p : listAbgleich) {
 //            try {
-//                Document doc = llzChecker.convert(p);
+//                Document doc = llzChecker.convert(p, new LLZMetsConverter());
 //                ByteArrayInputStream in = toByteStream(doc);
 //                List<ValidationException> excs = llzChecker.validate(in);
 //                for (Exception e : excs) {
@@ -102,14 +106,14 @@ public class LLZChecker {
 //        }
 
         // convert
-        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00011/1804/THULB_00011_1804_wfs2_mets_Abgleich.xml"));
+        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00003/1802/THULB_00003_1802_wfs2_mets_Abgleich.xml"), new LLZMetsConverter());
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         out.output(doc, System.out);
         
         ByteArrayInputStream in = toByteStream(doc);
         List<ValidationException> excs = llzChecker.validate(in);
-        for (Exception e : excs) {
-            e.printStackTrace();
+        for (ValidationException e : excs) {
+            System.out.println(e.toJSON());
         }
     }
 

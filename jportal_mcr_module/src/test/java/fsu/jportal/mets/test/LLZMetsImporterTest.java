@@ -33,8 +33,8 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.sections.MdWrapSection;
 import org.mycore.mets.model.struct.LOCTYPE;
+import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
-import org.mycore.mets.model.struct.LogicalSubDiv;
 import org.mycore.mets.model.struct.MDTYPE;
 import org.mycore.mets.model.struct.MdRef;
 import org.mycore.mets.model.struct.MdWrap;
@@ -428,8 +428,8 @@ public class LLZMetsImporterTest {
 
         LogicalStructMap structMap = (LogicalStructMap) mets_wfs2.getStructMap(LogicalStructMap.TYPE);
 
-        List<LogicalSubDiv> children = structMap.getDivContainer().getChildren();
-        for (LogicalSubDiv child : children) {
+        List<LogicalDiv> children = structMap.getDivContainer().getChildren();
+        for (LogicalDiv child : children) {
             System.out.println("Label: " + child.getLabel());
 
         }

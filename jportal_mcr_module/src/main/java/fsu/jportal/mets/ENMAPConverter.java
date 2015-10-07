@@ -18,13 +18,11 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.File;
 import org.mycore.mets.model.files.FileGrp;
-import org.mycore.mets.model.struct.AbstractLogicalDiv;
 import org.mycore.mets.model.struct.Area;
 import org.mycore.mets.model.struct.Fptr;
 import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
-import org.mycore.mets.model.struct.LogicalSubDiv;
 import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
@@ -168,17 +166,17 @@ public class ENMAPConverter {
      * @param enmapDiv
      * @param mcrDiv
      */
-    protected void handleLogicalDivs(Element enmap, Element enmapDiv, AbstractLogicalDiv mcrDiv) {
+    protected void handleLogicalDivs(Element enmap, Element enmapDiv, LogicalDiv mcrDiv) {
         List<Element> children = enmapDiv.getChildren("div", IMetsElement.METS);
         for (Element enmapSubDiv : children) {
-            LogicalSubDiv mcrSubdDiv = getLogicalSubDiv(enmap, enmapSubDiv);
+            LogicalDiv mcrSubdDiv = getLogicalSubDiv(enmap, enmapSubDiv);
             if(mcrSubdDiv != null) {
                 mcrDiv.add(mcrSubdDiv);
             }
         }
     }
 
-    protected void handleLogicalFilePointer(Element enmapDiv, AbstractLogicalDiv mcrDiv) {
+    protected void handleLogicalFilePointer(Element enmapDiv, LogicalDiv mcrDiv) {
         XPathExpression<Element> areaExp = XPathFactory.instance().compile(
             "mets:div/mets:fptr/mets:area[contains(@FILEID, 'ALTO')]", Filters.element(), null, IMetsElement.METS);
         List<Element> areas = areaExp.evaluate(enmapDiv);
@@ -220,8 +218,8 @@ public class ENMAPConverter {
      * @param enmapDiv
      * @return
      */
-    protected LogicalSubDiv getLogicalSubDiv(Element enmap, Element enmapDiv) {
-        LogicalSubDiv mcrDiv = buildLogicalSubDiv(enmapDiv);
+    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv) {
+        LogicalDiv mcrDiv = buildLogicalSubDiv(enmapDiv);
         // handle children
         handleLogicalDivs(enmap, enmapDiv, mcrDiv);
         // handle fptr
@@ -229,12 +227,12 @@ public class ENMAPConverter {
         return mcrDiv;
     }
 
-    protected LogicalSubDiv buildLogicalSubDiv(Element enmapDiv) {
+    protected LogicalDiv buildLogicalSubDiv(Element enmapDiv) {
         String id = enmapDiv.getAttributeValue("ID");
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
         String label = enmapDiv.getAttributeValue("LABEL");
         String order = enmapDiv.getAttributeValue("ORDER");
-        return new LogicalSubDiv(id, type, (label == null || label.equals("")) ? type : label, Integer.valueOf(order));
+        return new LogicalDiv(id, type, (label == null || label.equals("")) ? type : label, Integer.valueOf(order));
     }
 
     /**

@@ -23,9 +23,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.File;
-import org.mycore.mets.model.struct.AbstractLogicalDiv;
+import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
-import org.mycore.mets.model.struct.LogicalSubDiv;
 import org.mycore.mets.model.struct.SmLink;
 
 import fsu.jportal.backend.JPArticle;
@@ -99,9 +98,9 @@ public class LLZMetsImporter {
         }
     }
 
-    private void handleLogicalDivs(AbstractLogicalDiv parentDiv, JPVolume volume) throws ConvertException {
-        List<LogicalSubDiv> children = parentDiv.getChildren();
-        for (LogicalSubDiv div : children) {
+    private void handleLogicalDivs(LogicalDiv parentDiv, JPVolume volume) throws ConvertException {
+        List<LogicalDiv> children = parentDiv.getChildren();
+        for (LogicalDiv div : children) {
             String type = div.getType();
             if (type.equals("issue")) {
                 volume.addChild(buildVolume(div, div.getLabel()));
@@ -122,7 +121,7 @@ public class LLZMetsImporter {
         }
     }
 
-    private JPVolume buildVolume(LogicalSubDiv logicalDiv, String defaultTitle) throws ConvertException {
+    private JPVolume buildVolume(LogicalDiv logicalDiv, String defaultTitle) throws ConvertException {
         JPVolume volume = new JPVolume();
         MCRObjectID volumeId = volume.getObject().getId();
         // title
@@ -142,7 +141,7 @@ public class LLZMetsImporter {
         return volume;
     }
 
-//    private JPArticle buildArticle(LogicalSubDiv logicalDiv) throws ConvertException {
+//    private JPArticle buildArticle(LogicalDiv logicalDiv) throws ConvertException {
 //        String dmdId = dmdIDs.get(logicalDiv.getId());
 //
 //        if (dmdId != null) {
@@ -170,7 +169,7 @@ public class LLZMetsImporter {
      * @return JPArticle object
      * @throws ConvertException
      */
-    protected JPArticle buildArticle(LogicalSubDiv logicalDiv) throws ConvertException {
+    protected JPArticle buildArticle(LogicalDiv logicalDiv) throws ConvertException {
         String logicalId = logicalDiv.getId();
         JPArticle article = new JPArticle();
         MCRObjectID articleId = article.getObject().getId();
@@ -219,6 +218,7 @@ public class LLZMetsImporter {
             }
         }
         // id's
+        
 //        List<Element> identifiers = mods.getChildren("identifier", MCRConstants.MODS_NAMESPACE);
 //        for (Element identifier : identifiers) {
 //            String attr = identifier.getAttributeValue("type");
@@ -226,8 +226,8 @@ public class LLZMetsImporter {
 //                String type = attr.toLowerCase();
 //                type = type.equals("gbv") ? "ppn" : type;
 //                String id = identifier.getTextNormalize();
-//                if (id.startsWith("(")) {
-//                    // don't store the queries
+//                // don't store the queries
+//                if (id.startsWith("(gbv) ")) {
 //                    article.setIdenti(type, id.substring(6));
 //                }
 //            }
@@ -237,7 +237,7 @@ public class LLZMetsImporter {
         return article;
     }
 
-    private void handleArticleOrder(LogicalSubDiv logicalDiv, JPArticle article) {
+    private void handleArticleOrder(LogicalDiv logicalDiv, JPArticle article) {
         int order = logicalDiv.getOrder();
         if (order != 0) {
             article.setSize(order);
@@ -249,7 +249,7 @@ public class LLZMetsImporter {
         }
     }
 
-    public void handleDerivateLink(LogicalSubDiv logicalDiv, JPArticle article) {
+    public void handleDerivateLink(LogicalDiv logicalDiv, JPArticle article) {
         String logicalId = logicalDiv.getId();
         MCRObjectID articleId = article.getObject().getId();
         List<SmLink> links = mets.getStructLink().getSmLinkByFrom(logicalId);
@@ -265,6 +265,7 @@ public class LLZMetsImporter {
                         MCRPath path = MCRPath.getPath(derivate.getId().toString(), file.getFLocat().getHref());
                         if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
                             article.setDerivateLink(derivate, newHref);
+                            return;
                         } else {
                             String msg = articleId + ": There is no image " + newHref + " in this derivate.";
                             getErrorList().add(msg);

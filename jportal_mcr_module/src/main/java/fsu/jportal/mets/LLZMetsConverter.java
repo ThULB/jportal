@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.mets.model.struct.LogicalDiv;
-import org.mycore.mets.model.struct.LogicalSubDiv;
 
 /**
  * Converts the the enmap llz format to mycore mets format. 
@@ -25,8 +24,8 @@ public class LLZMetsConverter extends ENMAPConverter {
     }
 
     @Override
-    protected LogicalSubDiv getLogicalSubDiv(Element enmap, Element enmapDiv) {
-        LogicalSubDiv logicalSubDiv = this.buildLogicalSubDiv(enmapDiv);
+    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv) {
+        LogicalDiv logicalSubDiv = this.buildLogicalSubDiv(enmapDiv);
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
         String dmdID = LLZMetsUtils.getDmDId(enmapDiv);
         if (type.equals("issue") || type.equals("volumeparts")) {
@@ -55,7 +54,7 @@ public class LLZMetsConverter extends ENMAPConverter {
         return logicalSubDiv;
     }
 
-    protected void handleRecension(Element enmap, Element recensionDiv, LogicalSubDiv recension, String dmdID) {
+    protected void handleRecension(Element enmap, Element recensionDiv, LogicalDiv recension, String dmdID) {
         // type
         recension.setType("article");
         // label
