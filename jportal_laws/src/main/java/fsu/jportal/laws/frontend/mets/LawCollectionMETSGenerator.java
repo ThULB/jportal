@@ -28,7 +28,6 @@ import org.mycore.mets.model.struct.Fptr;
 import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
-import org.mycore.mets.model.struct.LogicalSubDiv;
 import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
@@ -60,7 +59,7 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
         LogicalStructMap logicalStructMap = (LogicalStructMap) mets.getStructMap(LogicalStructMap.TYPE);
 
         LogicalIdProvider idProvider = new LogicalIdProvider("log_", 6);
-        LogicalSubDiv logDiv = null;
+        LogicalDiv logDiv = null;
         int logicalOrder = 0;
 
         Path[] nodes = files.toArray(new Path[files.size()]);
@@ -79,7 +78,7 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
             String[] filenameParts = filename.split("_");
 
             if (logDiv == null) {
-                logDiv = new LogicalSubDiv(idProvider.getNextId(), DFGTypeProvider.getDFGType(filenameParts[3]),
+                logDiv = new LogicalDiv(idProvider.getNextId(), DFGTypeProvider.getDFGType(filenameParts[3]),
                     LabelProvider.getLabel(filenameParts[3]), ++logicalOrder);
                 logicalStructMap.getDivContainer().add(logDiv);
             }
