@@ -2,6 +2,7 @@ package fsu.jportal.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -27,26 +28,57 @@ public class SRUResource {
     @Path("search")
     @Produces(MediaType.APPLICATION_XML)
     public Response query(@QueryParam("q") String query) {
-        PicaRecord picaRecord = null;
-        try {
-            picaRecord = GndUtil.retrieveFromSRU(query);
-        } catch (Exception exc) {
-            throw new WebApplicationException(exc, Response.status(Status.INTERNAL_SERVER_ERROR)
-                .entity("unable to retrieve pica record (" + query + ") from sru interface").build());
+        PicaRecord picaRecord = getPicaRecord(query);
+        Document mcrObjectXML = toMCRObjectDocument(picaRecord);
+        return renderXML(mcrObjectXML);
+    }
+
+    @GET
+    @Path("check/{gnd}")
+    public Response check(@PathParam("gnd") String gnd) {
+        PicaRecord picaRecord = getPicaRecord(gnd);
+        if(picaRecord == null) {
+            return Response.status(Status.NOT_FOUND).entity("Catalog entry with " + gnd + " not found.").build();
         }
+        return Response.ok().build();
+    }
+
+    private Response renderXML(Document mcrObjectXML) {
         try {
-            Document mcrObjectXML = GndUtil.toMCRObjectDocument(picaRecord);
             Element returnElement = new Element("sruobjects");
             returnElement.addContent(mcrObjectXML.getRootElement().detach());
             XMLOutputter out = new XMLOutputter();
             return Response.ok(out.outputString(returnElement), MediaType.APPLICATION_XML).build();
         } catch (Exception exc) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(picaRecord);
-            }
-            throw new WebApplicationException(exc, Response.status(Status.INTERNAL_SERVER_ERROR)
-                .entity("unable to parse pica record").build());
+            throw new WebApplicationException(exc,
+                Response.status(Status.INTERNAL_SERVER_ERROR).entity("unable to parse pica record").build());
         }
     }
 
+    private Document toMCRObjectDocument(PicaRecord picaRecord) {
+        try {
+            return GndUtil.toMCRObjectDocument(picaRecord);
+        } catch (Exception exc) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(picaRecord);
+            }
+            throw new WebApplicationException(exc,
+                Response.status(Status.INTERNAL_SERVER_ERROR).entity("unable to parse pica record").build());
+        }
+    }
+
+    private PicaRecord getPicaRecord(String gnd) {
+        PicaRecord picaRecord = null;
+        try {
+            picaRecord = GndUtil.retrieveFromSRU(gnd);
+        } catch (Exception exc) {
+            throw new WebApplicationException(exc, Response.status(Status.INTERNAL_SERVER_ERROR)
+                .entity("unable to retrieve pica record (" + gnd + ") from sru interface").build());
+        }
+        if(picaRecord == null) {
+            throw new WebApplicationException(Response.status(Status.NOT_FOUND)
+                .entity("unable to retrieve pica record (" + gnd + ") from sru interface").build());
+        }
+        return picaRecord;
+    }
 }

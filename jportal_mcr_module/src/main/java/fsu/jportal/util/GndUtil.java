@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -18,6 +21,7 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.sru.SRUConnector;
@@ -52,6 +56,26 @@ public class GndUtil {
             return null;
         }
         return results.get(0);
+    }
+
+    /**
+     * Returns the gnd identifier of a mycore object.
+     * 
+     * @param mcrObject
+     * @return
+     */
+    public static Optional<String> getGND(MCRObject mcrObject) {
+        return StreamSupport.stream(mcrObject.getMetadata().spliterator(), false)
+            .filter(me -> me.getTag().equals("def.identifier"))
+            .flatMap(me -> StreamSupport.stream(me.spliterator(), false))
+            .filter(meta -> meta instanceof MCRMetaLangText)
+            .map(meta -> (MCRMetaLangText)meta)
+            .filter(meta -> Optional
+                                .ofNullable(meta.getType())
+                                .filter(s -> s.toLowerCase(Locale.ROOT).equals("gnd"))
+                                .isPresent())
+            .map(MCRMetaLangText::getText)
+            .findFirst();
     }
 
     /**
@@ -144,6 +168,9 @@ public class GndUtil {
         XPathExpression<Element> xp = XPathFactory.instance().compile("//pica:record", Filters.element(), null,
             namespaces);
         Element recordElement = xp.evaluateFirst(doc);
+        if(recordElement == null) {
+            return null;
+        }
         return convertToPica(recordElement);
     }
 

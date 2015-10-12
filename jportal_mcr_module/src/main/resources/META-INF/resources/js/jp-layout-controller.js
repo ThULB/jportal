@@ -441,33 +441,50 @@ $(document).ready(function() {
 		});
 	}
 
-	//// CONVERT
-	//var convertDialog = $("#convertMetsDialog");
-	//var convertDialogIcon = $("#convertMetsDialogIcon");
-	//var convertDialogContent = $("#convertMetsDialogContent");
-	//var convertClose = $("#convertMetsDialogClose");
-	//var convertStart = $("#convertMetsDialogStart");
-    //
-	//convertStart.on("click", function() {
-	//	convertDialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin'></i>");
-	//	convertDialogContent.html("Konvertiere. Bitte warten...");
-	//	convertStart.remove();
-	//	$.post(jp.baseURL + "rsc/mets/llz/convert/" + convertDialog.attr("data-id")).done(function(data) {
-	//		convertDialogIcon.html("<i class='fa fa-3x fa-check' />");
-	//		convertDialogContent.html("Konvertierung erfolgreich!");
-	//		convertClose.on("click", function() {
-	//			location.reload();
-	//		});
-	//	}).fail(function(e) {
-	//		console.log(e);
-	//		convertDialogIcon.html("<i class='fa fa-3x fa-ban' />");
-	//		var msg = "Es ist ein Fehler während der Konvertierung aufgetreten. " +
-	//			"Bitte wenden Sie sich an den Adminstrator!"
-	//		if(e.status == "401") {
-	//			msg = "Sie haben nicht die notwendigen Rechte.";
-	//		}
-	//		convertDialogContent.html(msg);
-	//	});
-	//});
+});
+
+// SRU IMPORT
+$(document).ready(function() {
+	$("#updateSRU").on("click", function() {
+		var dialog = new BootstrapDialog({
+            closable: false,
+            message: function(dialogRef) {
+            	var sruDialogInfo = $(
+            		"<div style='text-align: center'>" +
+            		"<p>Katalogdatenbank wird angefragt. Bitte warten...</p>" +
+            		"<p><i class='fa fa-3x fa-circle-o-notch fa-spin'></i></p>" +
+            		"</div>"
+            	);
+        		var id = $("#updateSRU").attr("mcrid");
+        		var gnd = $("#updateSRU").attr("gnd");
+            	fetchData(id, gnd).fail(function(jqXHR, textStatus) {
+            		var infoText = jqXHR.statusText;
+            		if(jqXHR.status == 404) {
+            			infoText = "Katalogeintrag mit GND-Nummer " + gnd + " wurde nicht gefunden.";
+            		}
+            		sruDialogInfo.html("<p>Anfrage fehlgeschlagen: " + infoText + ".</p>");
+            		var close = $("<button class='btn btn-primary btn-lg btn-block'>Schließen</button>");
+            		close.on('click', {dialogRef: dialogRef}, function(event) {
+            			event.data.dialogRef.close();
+            		});
+            		sruDialogInfo.append(close);
+            	})
+            	return sruDialogInfo;
+            }
+		});
+        dialog.realize();
+        dialog.getModalHeader().hide();
+        dialog.getModalFooter().hide();
+        dialog.open();
+	});
+
+	function fetchData(id, gnd) {
+		var ajax = $.ajax({
+			url: jp.baseURL + "rsc/sru/check/" + gnd
+		}).done(function() {
+			window.location = jp.baseURL + "editor/start.xed?action=update&id=" + id + "&gnd=" + gnd + "&type=" + id.split("_")[1];
+		});
+		return ajax;
+	}
 
 });
