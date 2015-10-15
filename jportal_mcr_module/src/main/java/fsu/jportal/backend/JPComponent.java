@@ -1,10 +1,15 @@
 package fsu.jportal.backend;
 
+import java.text.DecimalFormat;
+
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObject;
 
 public interface JPComponent {
+
+    public static DecimalFormat EIGHT_DIGIT_FORMAT =  new DecimalFormat("00000000");
+    public static DecimalFormat FOUR_DIGIT_FORMAT =  new DecimalFormat("0000");
 
     /**
      * The corresponding mycore object.

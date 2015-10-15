@@ -14,8 +14,6 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.jportal.mets.LLZMetsUtils;
-
 /**
  * Volume abstraction. Be aware that this class is not complete.
  * 
@@ -86,7 +84,7 @@ public class JPVolume implements JPContainer {
     }
 
     public void setHiddenPosition(int position) {
-        setHiddenPosition(LLZMetsUtils.EIGHT_DIGIT_FORMAT.format(Integer.valueOf(position)));
+        setHiddenPosition(EIGHT_DIGIT_FORMAT.format(Integer.valueOf(position)));
     }
 
     public MCRObject getObject() {

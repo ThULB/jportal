@@ -7,7 +7,6 @@ import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,8 +40,6 @@ import fsu.jportal.util.GndUtil;
 
 public abstract class LLZMetsUtils {
 
-    public final static DecimalFormat EIGHT_DIGIT_FORMAT;
-
     private static final ArrayList<Namespace> NS_LIST;
 
     private static final XPathExpression<Attribute> BIB_LABEL_EXP;
@@ -64,7 +61,6 @@ public abstract class LLZMetsUtils {
             Filters.attribute(), null, IMetsElement.METS);
         DMDID_EXP = XPathFactory.instance().compile("mets:div[@TYPE='Bibliographischer Eintrag']/@DMDID",
             Filters.attribute(), null, IMetsElement.METS);
-        EIGHT_DIGIT_FORMAT = new DecimalFormat("00000000");
         MODS_EXPRESSION = XPathFactory.instance().compile("mets:dmdSec[@ID=$id]/mets:mdWrap/mets:xmlData/mods:mods",
                 Filters.element(), vars, NS_LIST);
         TITLE_EXPRESSION = XPathFactory.instance().compile("mods:recordInfo/mods:recordOrigin/text()", Filters.text(),

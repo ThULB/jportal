@@ -19,6 +19,7 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
@@ -29,7 +30,6 @@ import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
 import fsu.jportal.frontend.util.DerivateLinkUtil;
-import fsu.jportal.mets.LLZMetsUtils;
 
 /**
  * Simple java abstraction of a jportal article. This class is not complete at all.
@@ -49,6 +49,15 @@ public class JPArticle implements JPComponent, Cloneable {
 
     public MCRObject getObject() {
         return article;
+    }
+
+    public void setParent(String parentId) {
+        MCRMetaLinkID parent = article.getStructure().getParent();
+        if (parent == null) {
+            parent = new MCRMetaLinkID("parent", 0);
+            article.getStructure().setParent(parent);
+        }
+        parent.setReference(parentId, null, null);
     }
 
     public void setTitle(String title) {
@@ -77,6 +86,41 @@ public class JPArticle implements JPComponent, Cloneable {
         MCRMetadataManager.update(article);
     }
 
+    public void setDate(String from, String until) {
+        if (from == null) {
+            article.getMetadata().removeMetadataElement("dates");
+            return;
+        }
+        MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", false, true, null);
+        MCRMetaISO8601Date mcrFrom = new MCRMetaISO8601Date();
+        mcrFrom.setSubTag("date");
+        mcrFrom.setType(until == null ? "published" : "published_Original_From");
+        mcrFrom.setDate(from);
+        dates.addMetaObject(mcrFrom);
+        if (until != null) {
+            MCRMetaISO8601Date mcrUntil = new MCRMetaISO8601Date();
+            mcrUntil.setSubTag("date");
+            mcrUntil.setType("published_Original_Till");
+            mcrUntil.setDate(until);
+            dates.addMetaObject(mcrUntil);
+        }
+        article.getMetadata().setMetadataElement(dates);
+    }
+
+    public List<MCRMetaISO8601Date> getDates() {
+        MCRMetaElement dates = article.getMetadata().getMetadataElement("dates");
+        List<MCRMetaISO8601Date> dateList = new ArrayList<>();
+        if (dates == null) {
+            return dateList;
+        }
+        for (MCRMetaInterface date : dates) {
+            if (date instanceof MCRMetaISO8601Date) {
+                dateList.add((MCRMetaISO8601Date) date);
+            }
+        }
+        return dateList;
+    }
+
     public void setSize(String size) {
         if (size == null) {
             article.getMetadata().removeMetadataElement("sizes");
@@ -88,7 +132,7 @@ public class JPArticle implements JPComponent, Cloneable {
     }
 
     public void setSize(int size) {
-        setSize(LLZMetsUtils.EIGHT_DIGIT_FORMAT.format(Integer.valueOf(size)));
+        setSize(EIGHT_DIGIT_FORMAT.format(Integer.valueOf(size)));
     }
 
     public String getSize() {
@@ -137,6 +181,23 @@ public class JPArticle implements JPComponent, Cloneable {
     }
 
     /**
+     * Adds a note to the article.
+     * 
+     * @param note the note to add
+     * @param publicNote if its public or not
+     */
+    public void addNote(String note, boolean publicNote) {
+        MCRMetaElement notes = article.getMetadata().getMetadataElement("notes");
+        if (notes == null) {
+            notes = new MCRMetaElement(MCRMetaLangText.class, "notes", false, true, null);
+            article.getMetadata().setMetadataElement(notes);
+        }
+        MCRMetaLangText mcrNote = new MCRMetaLangText("note", null, (publicNote ? "annotation" : "internalNote"), 0,
+            "plain", note);
+        notes.addMetaObject(mcrNote);
+    }
+
+    /**
      * Adds the heading to the rubric classification.
      * 
      * @param heading
@@ -144,8 +205,8 @@ public class JPArticle implements JPComponent, Cloneable {
      */
     public void addHeading(String heading) throws SolrServerException, IOException {
         HttpSolrClient client = MCRSolrClassificationUtil.getCore().getClient();
-        SolrDocument doc = MCRSolrSearchUtils.first(client, "+classification:jportal_class_rubric_llz +label.de:\""
-            + heading + "\"");
+        SolrDocument doc = MCRSolrSearchUtils.first(client,
+            "+classification:jportal_class_rubric_llz +label.de:\"" + heading + "\"");
         MCRCategoryID categId;
         String classId = "jportal_class_rubric_llz";
         if (doc == null) {
@@ -203,8 +264,8 @@ public class JPArticle implements JPComponent, Cloneable {
             try {
                 clone.setDerivateLink(derivateLink);
             } catch (Exception exc) {
-                throw new RuntimeException("Unable to set derivate link " + derivateLink + " to object "
-                    + clone.getObject().getId(), exc);
+                throw new RuntimeException(
+                    "Unable to set derivate link " + derivateLink + " to object " + clone.getObject().getId(), exc);
             }
         }
         // TODO: rubrics (heading)
