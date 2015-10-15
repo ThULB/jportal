@@ -30,53 +30,67 @@ public abstract class LawsXMLFunctions {
         protected DocumentBuilder initialValue() {
             try {
                 return DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            } catch(ParserConfigurationException pce) {
+            } catch (ParserConfigurationException pce) {
                 LOGGER.error("Unable to create document builder", pce);
                 return null;
             }
         }
     };
 
-    public static Document getXML(String objectID) {
-        if(objectID == null) {
+    public static MCRDerivate getXMLDerivate(String objectID) {
+        if (objectID == null) {
             return null;
         }
-        try {
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
-            List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
-            for(MCRMetaLinkID derLink : metaLinkList) {
-                String derID = derLink.getXLinkHref();
-                MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derID));
-                MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
-                String mainDoc = metaIFS.getMainDoc();
-                // assume that the first xml is the right one
-                if(mainDoc.toLowerCase().endsWith(".xml")) {
-                    MCRFilesystemNode xmlFile = MCRFileMetadataManager.instance().retrieveChild(metaIFS.getIFSID(), mainDoc);
-                    if(xmlFile instanceof MCRFile) {
-                        InputStream is = ((MCRFile)xmlFile).getContentAsInputStream();
-                        return BUILDER_LOCAL.get().parse(is);
-                    }
-                }
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
+        List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
+        for (MCRMetaLinkID derLink : metaLinkList) {
+            String derID = derLink.getXLinkHref();
+            MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derID));
+            MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
+            String mainDoc = metaIFS.getMainDoc();
+            // assume that the first xml is the right one
+            if (mainDoc.toLowerCase().endsWith(".xml")) {
+                return derivate;
             }
-        } catch(Exception exc) {
+        }
+
+        return null;
+    }
+
+    public static Document getXML(String objectID) {
+        try {
+            MCRDerivate derivate = getXMLDerivate(objectID);
+            MCRFilesystemNode xmlFile = getMainDoc(derivate);
+            if (xmlFile instanceof MCRFile) {
+                InputStream is = ((MCRFile) xmlFile).getContentAsInputStream();
+                return BUILDER_LOCAL.get().parse(is);
+            }
+        } catch (Exception exc) {
             LOGGER.error("while retrieving register", exc);
         }
         return null;
     }
 
+    public static MCRFilesystemNode getMainDoc(MCRDerivate derivate) {
+        MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
+        String mainDoc = metaIFS.getMainDoc();
+        MCRFilesystemNode xmlFile = MCRFileMetadataManager.instance().retrieveChild(metaIFS.getIFSID(), mainDoc);
+        return xmlFile;
+    }
+
     public static String getImageDerivate(String objectID) {
-        if(objectID == null) {
+        if (objectID == null) {
             return null;
         }
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
         List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
-        for(MCRMetaLinkID derLink : metaLinkList) {
+        for (MCRMetaLinkID derLink : metaLinkList) {
             String derID = derLink.getXLinkHref();
             MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derID));
             MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
             String mainDoc = metaIFS.getMainDoc();
             // just tiff's, should be fine
-            if(mainDoc.toLowerCase().endsWith(".tif") || mainDoc.toLowerCase().endsWith(".tiff")) {
+            if (mainDoc.toLowerCase().endsWith(".tif") || mainDoc.toLowerCase().endsWith(".tiff")) {
                 return derID;
             }
         }
@@ -85,11 +99,11 @@ public abstract class LawsXMLFunctions {
 
     public static String getImageByLaw(String numberOfLaw, String derivateId) {
         // check null and empty
-        if(numberOfLaw == null || numberOfLaw.equals("")) {
+        if (numberOfLaw == null || numberOfLaw.equals("")) {
             LOGGER.warn("Lawnumber is null or empty");
             return null;
         }
-        if(derivateId == null || derivateId.equals("")) {
+        if (derivateId == null || derivateId.equals("")) {
             LOGGER.warn("Derivate id is null or empty");
             return null;
         }
@@ -97,13 +111,13 @@ public abstract class LawsXMLFunctions {
         int number;
         try {
             number = Integer.parseInt(numberOfLaw);
-        } catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             LOGGER.warn("while parsing law number " + numberOfLaw, nfe);
             return null;
         }
         // get files
         MCRDirectory dir = MCRDirectory.getRootDirectory(derivateId);
-        if(dir == null) {
+        if (dir == null) {
             LOGGER.warn("Unable to get diretory of derivate " + derivateId);
             return null;
         }
@@ -120,10 +134,10 @@ public abstract class LawsXMLFunctions {
      */
     private static String getImageByNumber(MCRDirectory parent, int number) {
         MCRFilesystemNode[] children = parent.getChildren();
-        for(MCRFilesystemNode node : children) {
+        for (MCRFilesystemNode node : children) {
             if (node instanceof MCRDirectory) {
-                String fileName = getImageByNumber((MCRDirectory)node, number);
-                if(fileName != null)
+                String fileName = getImageByNumber((MCRDirectory) node, number);
+                if (fileName != null)
                     return fileName;
             } else {
                 try {
@@ -131,9 +145,9 @@ public abstract class LawsXMLFunctions {
                     String numberPart = fileName.split("_")[3];
                     numberPart = numberPart.substring(3);
                     int compareNumber = Integer.parseInt(numberPart);
-                    if(number == compareNumber)
+                    if (number == compareNumber)
                         return fileName;
-                } catch(Exception exc) {
+                } catch (Exception exc) {
                     continue;
                 }
             }
