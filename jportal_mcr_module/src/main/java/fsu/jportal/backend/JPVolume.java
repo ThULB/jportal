@@ -33,6 +33,10 @@ public class JPVolume implements JPContainer {
         childrenMap = new HashMap<MCRObjectID, JPComponent>();
     }
 
+    public JPVolume(String id) {
+        this(MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id)));
+    }
+
     public JPVolume(MCRObject volume) {
         if (!volume.getId().getTypeId().equals("jpvolume")) {
             throw new IllegalArgumentException("Object is not a jpvolume " + volume.getId());
@@ -51,7 +55,9 @@ public class JPVolume implements JPContainer {
     @Override
     public void removeChild(MCRObjectID id) {
         JPComponent component = childrenMap.remove(id);
-        component.getObject().getStructure().setParent((MCRMetaLinkID) null);
+        if (component != null) {
+            component.getObject().getStructure().setParent((MCRMetaLinkID) null);
+        }
     }
 
     @Override
@@ -102,6 +108,16 @@ public class JPVolume implements JPContainer {
             return null;
         }
         return maintitle.getText();
+    }
+
+    public void addSubTitle(String title, String type) {
+        MCRMetaElement subtitles = volume.getMetadata().getMetadataElement("subtitles");
+        if (subtitles == null) {
+            subtitles = new MCRMetaElement(MCRMetaLangText.class, "subtitles", false, true, null);
+            volume.getMetadata().setMetadataElement(subtitles);
+        }
+        MCRMetaLangText subtitle = new MCRMetaLangText("subtitle", null, type, 0, "plain", title);
+        subtitles.addMetaObject(subtitle);
     }
 
 }
