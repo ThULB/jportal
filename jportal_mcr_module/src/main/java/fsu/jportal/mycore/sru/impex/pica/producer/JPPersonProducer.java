@@ -1,5 +1,9 @@
 package fsu.jportal.mycore.sru.impex.pica.producer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.jdom2.Element;
 
 import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
@@ -21,6 +25,17 @@ public class JPPersonProducer extends PersonProducer {
     @Override
     protected String getGenderClassification() {
         return "urmel_class_00000001";
+    }
+
+    @Override
+    protected Element createDefIdentifierElement() {
+        Element e = super.createDefIdentifierElement();
+        // no pnd, we already have gnd!
+        List<Element> filteredContent = StreamSupport.stream(e.getChildren().spliterator(), false)
+            .filter(ide -> !ide.getAttributeValue("type").equals("pnd")).collect(Collectors.toList());
+        e.removeContent();
+        e.addContent(filteredContent);
+        return e;
     }
 
     @Override
