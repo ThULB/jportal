@@ -17,6 +17,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPVolume;
 import fsu.jportal.laws.common.xml.LawsXMLFunctions;
 
 @MCRCommandGroup(name = "Law Commands")
@@ -44,6 +45,15 @@ public class LawCommands {
         Document document = b.build(is);
         Element root = document.getRootElement();
         Element register = root.getChild("register", NS);
+        // volume
+        String title = register.getChildText("titel", NS);
+        if (title != null) {
+            JPVolume jpVolume = new JPVolume(id);
+            jpVolume.addSubTitle(title, "misc");
+            jpVolume.importComponent();
+        }
+
+        // articles
         Element gesetze = register.getChild("gesetze", NS);
         for (Element gesetz : gesetze.getChildren("gesetz", NS)) {
             JPArticle article = buildJPArticle(gesetz, imgDerivateId);
