@@ -10,6 +10,7 @@ public class ResourceAccess implements MCRResourceAccessChecker{
     private static final String RESOURCE_EDIT = "resourceEdit";
     private static final String DELETE_DOUBLETS = "delete-doublets";
     private static final String PATH_DOUBLETS = "doublets";
+    private static final String PATH_DEFAULT = "default";
 
     @Override
     public boolean isPermitted(ContainerRequest request) {
@@ -20,7 +21,7 @@ public class ResourceAccess implements MCRResourceAccessChecker{
             return true;
         }
 
-        if("DELETE".equals(method) && path.contains(PATH_DOUBLETS) && MCRAccessManager.hasRule(path, DELETE_DOUBLETS)){
+        if("DELETE".equals(method) && path.contains(PATH_DOUBLETS) && MCRAccessManager.checkPermission(PATH_DEFAULT, DELETE_DOUBLETS)){
             return true;
         }
         
