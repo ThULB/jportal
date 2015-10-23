@@ -105,26 +105,6 @@ subprojects {
         systemProperty "project.buildDir", project.buildDir.absolutePath
     }
 
-    def mcrModule = [
-            "jportal_mcr_module",
-            "jportal_derivate_browser",
-            "jportal_move_obj_module",
-//            "jportal_laws",
-            "jportal_doublet_finder_module"
-    ]
-
-    if (project.name in mcrModule) {
-        println "$project.name is MCRModule"
-        jar {
-            manifest {
-                attributes("MCR-Application-Module": "$project.name")
-                attributes("MCR-Artifact-Id": "$project.name")
-                attributes("version": "$project.version")
-                attributes("timestamp": getDate())
-            }
-        }
-    }
-
     ext.mcrModule = {
         jar {
             manifest {
@@ -135,54 +115,6 @@ subprojects {
             }
         }
     }
-
-    def mcrDepProj = [
-            "jportal_acl_ip_editor_module",
-            "jportal_derivate_browser",
-            "jportal_doublet_finder_module",
-            "jportal_laws",
-            "jportal_mcr_module",
-            "jportal_move_obj_module",
-//            "jportal_webapp_wizard"
-
-    ]
-    if (project.name in mcrDepProj) {
-        println "$project.name depends on mycore"
-        dependencies {
-            compile "org.mycore:mycore-base:$mcrVersion"
-            compile "org.mycore:mycore-solr:$mcrVersion"
-            compile "org.mycore:mycore-mets:$mcrVersion"
-            compile "org.mycore:mycore-iview2:$mcrVersion"
-            compile "org.mycore:mycore-user2:$mcrVersion"
-            compile "org.mycore:mycore-classeditor:$mcrVersion"
-            compile "org.mycore:mycore-mets:$mcrVersion"
-            compile "org.mycore:mycore-oai:$mcrVersion"
-            compile "org.mycore:mycore-session-listing:$mcrVersion"
-            compile "org.mycore:mycore-swf:$mcrVersion"
-            compile "org.mycore:mycore-urn:$mcrVersion"
-            compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
-            compile 'org.mycore.mets:mets-model:0.8-SNAPSHOT'
-            compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
-            compile 'javax.servlet:javax.servlet-api:3.1.0'
-            compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
-        }
-    }
-
-    def jpDepProj = [
-            "jportal_acl_ip_editor_module",
-            "jportal_derivate_browser",
-            "jportal_experiments",
-            "jportal_laws",
-            "jportal_doublet_finder_module",
-            "jportal_webapp"
-    ]
-    if (project.name in jpDepProj) {
-        println "$project.name depends on jportal_mcr_module"
-        dependencies {
-            compile project(':jportal_mcr_module')
-        }
-    }
-
 
     jar << {
         copy {
@@ -196,12 +128,30 @@ subprojects {
 project(':jportal_mcr_module') {
     apply plugin: 'com.moowork.node'
 
+    mcrModule()
+
     configurations {
         iview
     }
 
     dependencies {
-        compile project(':jportal_iview2_plugin')
+        compile "org.mycore:mycore-base:$mcrVersion"
+        compile "org.mycore:mycore-solr:$mcrVersion"
+        compile "org.mycore:mycore-mets:$mcrVersion"
+        compile "org.mycore:mycore-iview2:$mcrVersion"
+        compile "org.mycore:mycore-user2:$mcrVersion"
+        compile "org.mycore:mycore-classeditor:$mcrVersion"
+        compile "org.mycore:mycore-mets:$mcrVersion"
+        compile "org.mycore:mycore-oai:$mcrVersion"
+        compile "org.mycore:mycore-session-listing:$mcrVersion"
+        compile "org.mycore:mycore-swf:$mcrVersion"
+        compile "org.mycore:mycore-urn:$mcrVersion"
+        compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
+        compile 'org.mycore.mets:mets-model:0.8-SNAPSHOT'
+        compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
+        compile 'javax.servlet:javax.servlet-api:3.1.0'
+        compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
+
         compile 'org.apache.logging.log4j:log4j-api:2.3'
         compile 'org.apache.logging.log4j:log4j-core:2.3'
         compile "com.sun.jersey.jersey-test-framework:jersey-test-framework-grizzly:$jerseyVersion"
@@ -281,8 +231,38 @@ project(':jportal_mcr_module') {
     jar.dependsOn copyIviewMod
 }
 
+project(':jportal_acl_ip_editor_module'){
+    dependencies {
+        compile project(':jportal_mcr_module')
+    }
+}
+
+project(':jportal_derivate_browser'){
+    mcrModule()
+    dependencies {
+        compile project(':jportal_mcr_module')
+    }
+}
+
+project(':jportal_move_obj_module'){
+    mcrModule()
+    dependencies {
+        compile project(':jportal_mcr_module')
+    }
+}
+
+project(':jportal_doublet_finder_module'){
+    mcrModule()
+    dependencies {
+        compile project(':jportal_mcr_module')
+    }
+}
+
 project(':jportal_laws') {
     mcrModule()
+    dependencies {
+        compile project(':jportal_mcr_module')
+    }
 }
 project(':jportal_webapp') {
     apply plugin: 'war'
