@@ -1,9 +1,0 @@
-load all classifications from directory ${app.home}/config/classifications
-
-init superuser
-
-import role from file ${app.home}/config/user/journalrole.xml
-import role from file ${app.home}/config/user/editorsrole.xml
-import role from file ${app.home}/config/user/derivaterole.xml
-
-process ${app.home}/config/acl/defaultrules-commands.txt
