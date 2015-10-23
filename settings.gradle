@@ -6,7 +6,7 @@ def subDirs = rootDir.listFiles(new FileFilter() {
         if (file.name == 'buildSrc') {
             return false
         }
-        return file.name.startsWith("jportal") && !file.name.startsWith("jportal_gbv")
+        return file.name.startsWith("jportal")
     }
 });
 
