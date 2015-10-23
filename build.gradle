@@ -38,6 +38,19 @@ repositories {
     // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
 }
 
+allprojects{
+    def releaseURL = "http://artifactory.mycore.de/mycore-releases"
+    def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
+
+    repositories {
+        mavenLocal()
+
+        maven { url releaseURL }
+
+        maven { url snapshotsURL }
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -60,17 +73,6 @@ subprojects {
             downloadJavadoc = true
             downloadSources = true
         }
-    }
-
-    def releaseURL = "http://artifactory.mycore.de/mycore-releases"
-    def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
-
-    repositories {
-        mavenLocal()
-
-        maven { url releaseURL }
-
-        maven { url snapshotsURL }
     }
 
     configurations { deployerJars }
@@ -375,46 +377,9 @@ project(':jportal_webapp') {
 
                 onStart {
                 	if(!farmName.equals('Single')) {
-                        if (!file(appPath).exists()) {
-                            copy {
-                                from(confDir) {
-                                    include "**"
-                                    exclude "jetty/**"
-                                }
-                                into appPath
-
-                                def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
-
-                                configurations {
-                                    solr
-                                }
-                                dependencies {
-                                    solr "org.mycore:mycore-solr:$mcrVersion@jar"
-                                }
-                                def solrJar
-                                configurations.solr.each { file ->
-                                    solrJar = file.absolutePath
-                                    println "Solr Jar $solrJar";
-                                }
-
-                                into("solr-home") {
-                                    from moduleFiles
-                                    include '**/solr.xml'
-                                }
-
-                                into("solr-home/conf") {
-                                    from moduleFiles
-                                    include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-                                    from zipTree(solrJar).files
-                                    include 'classificationSchema.xml'
-                                }
-
-                            }
-                        }
+                        initSolr(appPath, confDir)
 					}
-                    def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
-                    String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
-                    org.hsqldb.Server.main(args)
+                    startDB(mcrHome, appName)
                 }
             }
 
@@ -435,7 +400,7 @@ def getAgentOp(resourcePaths) {
     return agentOp;
 }
 
-void initSolr_(appPath, confDir) {
+def initSolr(appPath, confDir) {
     if (!file(appPath).exists()) {
         copy {
             from(confDir) {
@@ -474,7 +439,7 @@ void initSolr_(appPath, confDir) {
     }
 }
 
-void startDB(mcrHome, appName) {
+def startDB(mcrHome, appName) {
     def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
     String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
     org.hsqldb.Server.main(args)
