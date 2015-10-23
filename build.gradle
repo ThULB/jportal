@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath 'org.akhikhl.gretty:gretty:1.2.4'
-        classpath "org.hsqldb:hsqldb:2.3.2"
+        classpath "org.hsqldb:hsqldb:$hsqldbVersion"
 //        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.10'
     }
 }
@@ -22,13 +22,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 
 //def mcrVersion = '2015.08-SNAPSHOT'
-def jettyVersion = "9.2.7.v20150116"
-def jerseyVersion = "1.19"
-def hibernateVersion = "5.0.2.Final"
-def jpgroup = "fsu.thulb"
-def jpversion = "2.0.18-SNAPSHOT"
-def javaVersion = 1.8
-def solrVersion = '4.10.4-SNAPSHOT'
+
 def resourcePaths = new HashSet<File>();
 
 def getDate() {
@@ -115,7 +109,7 @@ subprojects {
             "jportal_mcr_module",
             "jportal_derivate_browser",
             "jportal_move_obj_module",
-            "jportal_laws",
+//            "jportal_laws",
             "jportal_doublet_finder_module"
     ]
 
@@ -131,15 +125,24 @@ subprojects {
         }
     }
 
+    ext.mcrModule = {
+        jar {
+            manifest {
+                attributes("MCR-Application-Module": "$project.name")
+                attributes("MCR-Artifact-Id": "$project.name")
+                attributes("version": "$project.version")
+                attributes("timestamp": getDate())
+            }
+        }
+    }
+
     def mcrDepProj = [
             "jportal_acl_ip_editor_module",
             "jportal_derivate_browser",
             "jportal_doublet_finder_module",
-            "jportal_jquery_cnd",
             "jportal_laws",
             "jportal_mcr_module",
             "jportal_move_obj_module",
-            "jportal_sample_data",
 //            "jportal_webapp_wizard"
 
     ]
@@ -198,7 +201,6 @@ project(':jportal_mcr_module') {
     }
 
     dependencies {
-        compile project(':jportal-commons')
         compile project(':jportal_iview2_plugin')
         compile 'org.apache.logging.log4j:log4j-api:2.3'
         compile 'org.apache.logging.log4j:log4j-core:2.3'
@@ -279,6 +281,9 @@ project(':jportal_mcr_module') {
     jar.dependsOn copyIviewMod
 }
 
+project(':jportal_laws') {
+    mcrModule()
+}
 project(':jportal_webapp') {
     apply plugin: 'war'
     apply plugin: 'org.akhikhl.gretty'
@@ -337,7 +342,7 @@ project(':jportal_webapp') {
 
     farms {
         dependencies {
-            gretty 'org.hsqldb:hsqldb:2.3.2'
+            gretty "org.hsqldb:hsqldb:$hsqldbVersion"
         }
 
         // Single: starts app and db
@@ -450,7 +455,7 @@ def getAgentOp(resourcePaths) {
     return agentOp;
 }
 
-void initSolr(appPath, confDir) {
+void initSolr_(appPath, confDir) {
     if (!file(appPath).exists()) {
         copy {
             from(confDir) {
