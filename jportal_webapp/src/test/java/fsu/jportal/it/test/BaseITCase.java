@@ -3,6 +3,7 @@ package fsu.jportal.it.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,7 @@ import fsu.jportal.it.TestUtils;
 
 public class BaseITCase extends BaseIntegrationTest {
 
+  @Ignore
   @Test
   public void loginAndLogout() throws Exception {
 	  if (TestUtils.isLoggedIn(DRIVER)) {
@@ -24,6 +26,7 @@ public class BaseITCase extends BaseIntegrationTest {
 	  TestUtils.login(DRIVER);
   }
 
+  @Ignore
   @Test
   public void language() throws Exception {
     DRIVER.findElement(By.xpath("//li[@id='languageMenu']/a")).click();
@@ -38,6 +41,7 @@ public class BaseITCase extends BaseIntegrationTest {
         .findElement(By.xpath("//div[@class='jp-layout-index-intro']/h1")).getText());
   }
 
+  @Ignore
   @Test
   public void aToZ() throws Exception {
   	WebDriverWait wait = new WebDriverWait(DRIVER, 2);
@@ -57,6 +61,7 @@ public class BaseITCase extends BaseIntegrationTest {
     TestUtils.deletObj(DRIVER, "Der Spiegel");
   }
 
+  @Ignore
   @Test
   public void navigate() throws Exception {
 		TestUtils.creatMinJournal(DRIVER, "Der Spiegel");
@@ -84,6 +89,7 @@ public class BaseITCase extends BaseIntegrationTest {
 		TestUtils.deletObj(DRIVER, "Der Spiegel");
   }
 
+  @Ignore
   @Test
   public void search() throws Exception {
 		TestUtils.creatMinJournal(DRIVER, "Der Spiegel");
@@ -110,8 +116,9 @@ public class BaseITCase extends BaseIntegrationTest {
     
     TestUtils.deletObj(DRIVER, "Der Spiegel");
   }
-    
-	@Test
+
+  @Ignore
+  @Test
   public void advancedSearch() throws Exception {
 		TestUtils.createMinPerson(DRIVER, "Schiller");
 		TestUtils.home(DRIVER);
@@ -139,7 +146,8 @@ public class BaseITCase extends BaseIntegrationTest {
 		
 		TestUtils.deletObj(DRIVER, "Schiller");
 	}
-	
+
+  @Ignore
   @Test
   public void doublet() throws Exception {
     TestUtils.creatMinInst(DRIVER, "parentTestInst");
@@ -181,7 +189,8 @@ public class BaseITCase extends BaseIntegrationTest {
     
     TestUtils.deletObj(DRIVER, "parentTestInst");
   }
-  
+
+  @Ignore
   @Test
   public void versionsInfo() throws Exception {
     TestUtils.createMinPerson(DRIVER, "testPerson");
