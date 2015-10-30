@@ -1,17 +1,12 @@
 package fsu.jportal.handler;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -23,6 +18,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.servlet.ServletContext;
 
+import fsu.jportal.backend.ACLTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -34,8 +30,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.mycore.access.MCRAccessInterface;
-import org.mycore.access.MCRAccessManager;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.hibernate.tables.MCRACCESSRULE;
 import org.mycore.common.MCRException;
@@ -48,8 +42,6 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
-import org.mycore.frontend.cli.MCRAccessCommands;
-import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.solr.MCRSolrCore;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.user2.MCRUserCommands;
@@ -61,6 +53,8 @@ import fsu.jportal.nio.JarResource;
 public class InitHandler implements AutoExecutable {
 
     private static final Logger LOGGER = LogManager.getLogger(InitHandler.class);
+
+    private final fsu.jportal.backend.ACLTools ACLTools = new ACLTools();
 
     private Session session;
 
@@ -196,65 +190,7 @@ public class InitHandler implements AutoExecutable {
     private void createDefaultRules() {
         info("creating default ACL rules ...");
         InputStream cmdFileIS = getClass().getResourceAsStream("/config/jportal_mcr/acl/defaultrules-commands");
-        BufferedReader cmdFileReader = new BufferedReader(new InputStreamReader(cmdFileIS));
-
-        try {
-            for (String cmdLine; (cmdLine = cmdFileReader.readLine()) != null;) {
-                if (cmdLine != null && !cmdLine.trim().equals("")) {
-                    info(cmdLine);
-                    createRule(cmdLine);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void createRule(String cmdLine) {
-        try {
-            Object[] params = parseParams(cmdLine);
-
-            String permission = (String) params[0];
-            String id = (String) params[1];
-            Element rule = getRuleXML((String) params[2]);
-            String description = (String) params[3];
-
-            addRule(id, permission, rule, description);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private Element getRuleXML(String source) {
-        Path path = Paths.get("/config/jportal_mcr/acl", source);
-        String ruleXML = path.toString();
-        InputStream resourceIS = getClass().getResourceAsStream(ruleXML);
-        try {
-            Document ruleDom = MCRXMLParserFactory.getParser().parseXML(new MCRStreamContent(resourceIS));
-            return ruleDom.getRootElement();
-        } catch (MCRException | SAXParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Object[] parseParams(String cmdLine) throws NoSuchMethodException, ParseException {
-        Method method = MCRAccessCommands.class.getMethod("permissionUpdateForID", String.class, String.class,
-            String.class, String.class);
-        String pattern = method.getAnnotation(MCRCommand.class).syntax();
-        MessageFormat mf = new MessageFormat(pattern);
-        Object[] params = mf.parse(cmdLine);
-        return params;
-    }
-
-    private void addRule(String id, String permission, Element rule, String description) {
-        MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
-
-        AI.addRule(id, permission, rule, description);
+        ACLTools.createRules(cmdFileIS);
     }
 
     private void initSolr() {

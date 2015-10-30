@@ -1,15 +1,18 @@
 package fsu.jportal.it.test;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.io.InputStream;
+
 import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -17,6 +20,12 @@ import static org.junit.Assert.assertThat;
  * @author Huu Chi Vu
  */
 public class ACLEditorITCase extends BaseITCase {
+    @BeforeClass
+    public static void setUp() throws Exception {
+        InputStream resourceAsStream = Class.class.getResourceAsStream("/IT/ACLEditor/ACLRules.txt");
+        assertNotNull(resourceAsStream);
+    }
+
     @Before
     public void gotoACLEditor() {
         DRIVER.findElement(By.linkText("Admin")).click();
@@ -63,6 +72,12 @@ public class ACLEditorITCase extends BaseITCase {
                 "Regelzuweisung für testObject erfolgreich hinzugefügt.");
         waiting((long) 5.1).until(ExpectedConditions.invisibilityOfElementLocated(alertDiv));
 
+        checkSearchAccessRule(accessID);
+    }
+
+    @Test
+    public void changeObjID() throws Exception {
+        String accessID = "changeObjID";
         checkSearchAccessRule(accessID);
     }
 

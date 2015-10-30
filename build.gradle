@@ -24,6 +24,7 @@ import java.util.HashSet;
 //def mcrVersion = '2015.08-SNAPSHOT'
 
 def resourcePaths = new HashSet<File>();
+resourcePaths.addAll('/Users/chi/Development/projects/mycore/mycore-acl-editor2/src/main/resources');
 
 def getDate() {
     def date = new Date()
