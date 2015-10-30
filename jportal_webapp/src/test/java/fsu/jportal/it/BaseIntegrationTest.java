@@ -23,6 +23,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.imageio.ImageIO;
 
@@ -41,7 +42,7 @@ public class BaseIntegrationTest {
             if (description.isTest()) {
                 String className = description.getClassName();
                 String method = description.getMethodName();
-                File failedTestClassDirectory = new File(MAVEN_OUTPUT_DIRECTORY, className);
+                File failedTestClassDirectory = new File(OUTPUT_DIRECTORY, className);
                 File failedTestDirectory = new File(failedTestClassDirectory, method);
                 failedTestDirectory.mkdirs();
                 if (e != null) {
@@ -74,7 +75,7 @@ public class BaseIntegrationTest {
         }
     };
 
-    public static File MAVEN_OUTPUT_DIRECTORY;
+    public static File OUTPUT_DIRECTORY;
 
     public static int LOCAL_PORT;
 
@@ -92,28 +93,27 @@ public class BaseIntegrationTest {
         if (buildDirectory == null) {
             LOGGER.warn("Did not get System property 'project.build.directory'");
             File targetDirectory = new File("target");
-            MAVEN_OUTPUT_DIRECTORY = targetDirectory.isDirectory() ? targetDirectory : alternateDirectory.getRoot();
+            OUTPUT_DIRECTORY = targetDirectory.isDirectory() ? targetDirectory : alternateDirectory.getRoot();
         } else {
-            MAVEN_OUTPUT_DIRECTORY = new File(buildDirectory);
+            OUTPUT_DIRECTORY = new File(buildDirectory);
         }
-        MAVEN_OUTPUT_DIRECTORY = new File(MAVEN_OUTPUT_DIRECTORY, "failed-it");
-        if(!MAVEN_OUTPUT_DIRECTORY.exists()){
-            MAVEN_OUTPUT_DIRECTORY.mkdirs();
+        OUTPUT_DIRECTORY = new File(OUTPUT_DIRECTORY, "failed-it");
+        if(!OUTPUT_DIRECTORY.exists()){
+            OUTPUT_DIRECTORY.mkdirs();
         }
-        LOGGER.info("Using " + MAVEN_OUTPUT_DIRECTORY.getAbsolutePath() + " as replacement.");
-//        String port = System.getProperty("it.port", "8080");
+        LOGGER.info("Using " + OUTPUT_DIRECTORY.getAbsolutePath() + " as replacement.");
         String port = System.getProperty("it.port", "8291");
         LOCAL_PORT = Integer.parseInt(port);
         TEST_APP = System.getProperty("it.context", "");
-//        START_URL = "http://localhost:" + LOCAL_PORT + "/" + TEST_APP;
         START_URL = "http://localhost:" + LOCAL_PORT + "/jportal-webTests" + TEST_APP;
         LOGGER.info("Server running on '" + START_URL + "'");
         DRIVER = new FirefoxDriver();
         
         //call jportal homepage
         DRIVER.get(getHomeAddress());
-        assertEquals("invald index page - title does not match", "journals@UrMEL - JPortal", DRIVER.getTitle());
-        DRIVER.findElement(By.xpath("//div[@id='navbar-collapse-globalHeader']/ul/li[2]/a")).click();
+        assertEquals("invalid index page - title does not match", "journals@UrMEL - JPortal", DRIVER.getTitle());
+//        DRIVER.findElement(By.xpath("//div[@id='navbar-collapse-globalHeader']/ul/li[2]/a")).click();
+        DRIVER.findElement(By.id("jp.login.button")).click();
         WebElement uid = DRIVER.findElement(By.xpath("//input[@name='uid']"));
         uid.sendKeys("administrator");
         DRIVER.findElement(By.xpath("//input[@name='pwd']")).sendKeys("alleswirdgut");
@@ -155,5 +155,9 @@ public class BaseIntegrationTest {
             return ImageIO.read(inputStream);
         }
         return null;
+    }
+
+    public WebDriverWait waiting(long seconds){
+        return new WebDriverWait(DRIVER, seconds);
     }
 }
