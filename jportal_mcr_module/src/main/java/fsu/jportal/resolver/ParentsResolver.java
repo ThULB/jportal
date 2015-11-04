@@ -11,7 +11,7 @@ import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
 
 import fsu.jportal.annotation.URIResolverSchema;
-import fsu.jportal.util.ContentTools;
+import fsu.jportal.util.ResolverUtil;
 import fsu.jportal.xml.ParentsListXML;
 
 @URIResolverSchema(schema = "parents")
@@ -23,7 +23,7 @@ public class ParentsResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         String childID = href.replaceAll("parents:", "");
         try {
-            Element parents = new ContentTools().getParents(childID, new ParentsListXML());
+            Element parents = ResolverUtil.getParents(childID, new ParentsListXML());
             return new JDOMSource(parents);
         } catch (Exception exc) {
             LOGGER.error("unable to retrieve parents of mcr object " + childID);

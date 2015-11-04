@@ -24,6 +24,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRUtils;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -96,7 +97,7 @@ public class METSImportResource {
         ConvertException, ValidationException {
         Mets mcrMets = convertMets(derivateId);
         Document mcrDoc = mcrMets.asDocument();
-        byte[] bytes = MCRUtils.getByteArray(mcrDoc, Format.getPrettyFormat());
+        byte[] bytes = new MCRJDOMContent(mcrDoc).asByteArray();
         // check with METSValidator
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         METSValidator validator = new METSValidator(in);

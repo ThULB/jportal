@@ -10,12 +10,12 @@ import javax.xml.transform.URIResolver;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
-import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 
 import fsu.jportal.annotation.URIResolverSchema;
+import fsu.jportal.util.ResolverUtil;
 
 /**
  * <p><blockquote><pre>
@@ -52,11 +52,9 @@ public class ClassificationsResolver implements URIResolver {
         while (ci.hasNext()) {
             MCRCategoryID cid = (MCRCategoryID) ci.next();
             String classID = cid.getRootID();
-            MCRCategory rootCat = categDAO.getRootCategory(cid, 0);
             Element item = new Element("option").setAttribute("value", classID);
             Element label = new Element("label").setAttribute("lang", "de", Namespace.XML_NAMESPACE);
-            label.setText((rootCat.getLabels() != null ? rootCat.getCurrentLabel().getText() : "") + " (" + classID
-                + ")");
+            label.setText(ResolverUtil.getClassLabel(classID).orElse("") + " (" + classID + ")");
             item.addContent(label);
             returnXML.addContent(item);
         }

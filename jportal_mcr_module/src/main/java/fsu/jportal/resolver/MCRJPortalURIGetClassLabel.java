@@ -8,13 +8,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
-import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
-import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.services.i18n.MCRTranslation;
 
 import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
+import fsu.jportal.util.ResolverUtil;
 
 @URIResolverSchema(schema = "jportal_getClassLabel")
 public class MCRJPortalURIGetClassLabel implements URIResolver {
@@ -71,7 +69,7 @@ public class MCRJPortalURIGetClassLabel implements URIResolver {
         if (journalID != null && !journalID.equals(""))
             classID = MCRJPortalURIGetClassID.getClassID(journalID, params[2]);
         if (classID != null)
-            label = getClassLabel(classID);
+            label = ResolverUtil.getClassLabel(classID).orElse("undefined");
         // use default i18n one's
         else
             label = MCRTranslation.translate(I18NDEFAULTLABELPREFIX + params[2]);
@@ -89,26 +87,13 @@ public class MCRJPortalURIGetClassLabel implements URIResolver {
      */
     private Element resolveDirectely(String uri) {
         String[] params = uri.split(":");
-        String label = getClassLabel(params[2]);
+        String label = ResolverUtil.getClassLabel(params[2]).orElse("undefined");
 
         // answer xml
         Element returnXML;
         returnXML = new Element("dummyRoot");
         returnXML.addContent(new Element("label").setText(label));
         return returnXML;
-    }
-
-    private String getClassLabel(String classID) {
-        // TODO: use cache
-        MCRCategory rootCategory = MCRCategoryDAOFactory.getInstance()
-                .getRootCategory(MCRCategoryID.rootID(classID), 0);
-        if (rootCategory == null) {
-            LOGGER.warn("Could not found ROOT Category <" + classID+ ">");
-        } else if (rootCategory.getLabels() != null && rootCategory.getLabels().size() > 0) {
-            return rootCategory.getCurrentLabel().getText();
-        }
-        
-        return "";
     }
 
     private boolean wellURI(String uri) {

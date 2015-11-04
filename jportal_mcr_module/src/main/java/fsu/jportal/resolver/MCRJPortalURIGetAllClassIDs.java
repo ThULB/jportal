@@ -82,8 +82,9 @@ public class MCRJPortalURIGetAllClassIDs implements URIResolver {
             String classID = cid.getRootID();
             String descr = "";
             MCRCategory rootCat = categDAO.getRootCategory(cid, 0);
-            if ((null != rootCat.getLabels()))
-                descr = rootCat.getCurrentLabel().getText();
+            if ((null != rootCat.getLabels())) {
+                descr = rootCat.getCurrentLabel().get().getText();
+            }
             Element item = new Element("item").setAttribute("value", classID);
             Element label = new Element("label").setAttribute("lang", "de", Namespace.XML_NAMESPACE);
             label.setText(descr + " (" + classID + ")");
