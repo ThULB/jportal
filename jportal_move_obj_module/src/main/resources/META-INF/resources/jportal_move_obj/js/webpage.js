@@ -111,7 +111,15 @@ $(document).ready(function(){
 	$("body").on("click", "#mom_button_move_cancel", function() {
 		window.location.replace(jpMoveObjConf.baseUrl + "receive/" +  objID);
 	});
-		
+
+	$("body").on("click", "#mom_childlist_paginator > ul.pagination > li > a", function() {
+		getChildren($(this).data("query"), $(this).data("start"));
+	});
+
+	$("body").on("click", "#mom_movelist_paginator > ul.pagination > li > a", function() {
+		getMoveList($(this).data("query"), $(this).data("start"));
+	});
+
 	function moveTo(json, newparentID) {
 		$.ajax({
 			url: "move",
@@ -164,7 +172,8 @@ $(document).ready(function(){
 		$.getJSON(solrUrl + "?q=%2Bparent%3A" + id + "&start=" + start + "&rows=10&wt=json&sort="+jpMoveObjConf.sort+"%20asc&wt=json", function(search){
 			if(search.response.numFound > 0){
 				buildTree(search.response.docs);
-				buildPaginator(id,search.response,"#mom_childlist_paginator");
+				var paginator = new Paginator(id,search.response,"#mom_childlist_paginator");
+				paginator.buildPaginator();
 				subselect.init(".mom_childlist_entry", "#mom_childlist_objectPreviewContainer");
 			}
 		});
@@ -197,7 +206,8 @@ $(document).ready(function(){
 				for (result in results){
 					addSearchResult(results[result]);
 				}
-				buildPaginator(id,search.response,"#mom_movelist_paginator");
+				var paginator = new Paginator(id,search.response,"#mom_movelist_paginator");
+				paginator.buildPaginator();
 				subselect.init(".mom_resultlist_entry", "#mom_resultlist_objectPreviewContainer");
 			}
 			else{
@@ -207,104 +217,7 @@ $(document).ready(function(){
 			}
 		});
 	}
-	
-	function buildPaginator(id, response, elm) {
-		$(elm).find(".pagination").html("");
-		var numPerPage = 10;
-		var pagecount = Math.ceil(response.numFound / numPerPage);
-		var page = Math.ceil(response.start / numPerPage);
-				
-		if(pagecount > 3){
-			if(page > 2){
-				if (page < pagecount - 1){
-					//e.g. first ... 2 3 4 ... last
-					addPageToPaginator(0, 1, "", id, elm);
-					addPageToPaginator(0, "...", "disabled", id, elm);
-					for(var i = page -1 ; i <= page + 1; i++){
-						if(i == page){
-							addPageToPaginator((i-1)*numPerPage, i, "active", id, elm);
-						}
-						else{
-							addPageToPaginator((i-1)*numPerPage, i, "", id, elm);
-						}
-					}
-					addPageToPaginator(0, "...", "disabled", id, elm);
-					addPageToPaginator((pagecount-1)*numPerPage , pagecount, "", id,elm);
-				}
-				else{
-					//e.g. first ... 4 5 6
-					addPageToPaginator(0, 1, "", id, elm);
-					addPageToPaginator(0, "...", "disabled", id, elm);
-					for(var i = pagecount - 2 ; i <= pagecount; i++){
-						if(i == page){
-							addPageToPaginator((i-1)*numPerPage, i, "active", id, elm);
-						}
-						else{
-							addPageToPaginator((i-1)*numPerPage, i, "", id, elm);
-						}
-					}
-				}
-			}
-			else{
-				//e.g. 1 2 3 ... last
-				for(var i = 0; i < 3; i++){
-					if(i == page){
-						addPageToPaginator(i*numPerPage, i+1, "active", id, elm);
-					}
-					else{
-						addPageToPaginator(i*numPerPage, i+1, "", id, elm);
-					}
-				}
-				addPageToPaginator(0, "...", "disabled", id, elm);
-				addPageToPaginator((pagecount-1)*numPerPage, pagecount, "", id, elm);
-			}
-		}
-		else{
-			if(pagecount != 1){
-				//e.g. 1 2 3
-				for(var i = 0; i < pagecount; i++){
-					if(i == page){
-						addPageToPaginator(i*numPerPage, i+1, "active", id, elm);
-					}
-					else{
-						addPageToPaginator(i*numPerPage, i+1, "", id, elm);
-					}
-					
-				}
-			}
-			else{
-				addPageToPaginator(0, 1, "active", id, elm);
-			}
-		}
-	}
-	
-	function addPageToPaginator(start, name, state, id, elm) {
-		if (elm == "#mom_childlist_paginator"){
-			if (state == ""){
-				var pageButton = $('<a href="#" onclick="return false;">' + name + '</a>');
-				pageButton.bind("click", function() {
-					getChildren(id, start);
-				});
-			}
-			else{
-				var pageButton = $('<span>' + name + '</span>');
-			}
-		}
-		else{
-			if (state == ""){
-				var pageButton = $('<a href="#" onclick="return false;">' + name + '</a>');
-				pageButton.bind("click", function() {
-					getMoveList(id, start);
-				});
-			}
-			else{
-				var pageButton = $('<span>' + name + '</span>');
-			}
-		}
-		
-		$("<li></li>").append(pageButton).addClass(state).appendTo($(elm).find(".pagination"));
-	}
-	
+
 	function buildTree(childs) {
 		$("#mom_childlist").html("");
 		for (child in childs){

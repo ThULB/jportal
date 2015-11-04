@@ -123,7 +123,7 @@ public class MoveObjResource {
         confObj.add("parentTypes", parentTypeJson);
         String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url", "");
         if(!url.equals("")) {
-            confObj.addProperty("url", uri.getBaseUriBuilder().replacePath(url).build().toString());
+            confObj.addProperty("url", baseURL + url.substring(1, url.length()));
         }
         
         confObj.addProperty("baseUrl", baseURL);
