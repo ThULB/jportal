@@ -23,8 +23,6 @@ import fsu.jportal.laws.common.xml.LawsXMLFunctions;
 @MCRCommandGroup(name = "Law Commands")
 public class LawCommands {
 
-    private static final Namespace NS = Namespace.getNamespace("http://www.thulb.uni-jena.de/gesetzessammlung/");
-
     @MCRCommand(help = "Imports a laws.xml from an object and generates articles", syntax = "law import {0}")
     public static void importLaws(String id) throws Exception {
         MCRDerivate xmlDerivate = LawsXMLFunctions.getXMLDerivate(id);
@@ -44,9 +42,10 @@ public class LawCommands {
         SAXBuilder b = new SAXBuilder();
         Document document = b.build(is);
         Element root = document.getRootElement();
-        Element register = root.getChild("register", NS);
+        Namespace ns = root.getNamespace();
+        Element register = root.getChild("register", ns);
         // volume
-        String title = register.getChildText("titel", NS);
+        String title = register.getChildText("titel", ns);
         if (title != null) {
             JPVolume jpVolume = new JPVolume(id);
             jpVolume.addSubTitle(title, "misc");
@@ -54,31 +53,31 @@ public class LawCommands {
         }
 
         // articles
-        Element gesetze = register.getChild("gesetze", NS);
-        for (Element gesetz : gesetze.getChildren("gesetz", NS)) {
-            JPArticle article = buildJPArticle(gesetz, imgDerivateId);
+        Element gesetze = register.getChild("gesetze", ns);
+        for (Element gesetz : gesetze.getChildren("gesetz", ns)) {
+            JPArticle article = buildJPArticle(gesetz, imgDerivateId, ns);
             article.setParent(id);
             article.importComponent();
         }
     }
 
-    private static JPArticle buildJPArticle(Element gesetz, String imgDerivateId) throws MCRActiveLinkException {
-        String inhalt = gesetz.getChildText("inhalt", NS);
-        String nummer = gesetz.getChildText("nummer", NS);
+    private static JPArticle buildJPArticle(Element gesetz, String imgDerivateId, Namespace ns) throws MCRActiveLinkException {
+        String inhalt = gesetz.getChildText("inhalt", ns);
+        String nummer = gesetz.getChildText("nummer", ns);
         String erlass = null;
         String ausgabe = null;
         String seiteVon = null;
         String seiteBis = null;
 
-        Element datum = gesetz.getChild("datum", NS);
+        Element datum = gesetz.getChild("datum", ns);
         if (datum != null) {
-            erlass = datum.getChildText("erlass", NS);
-            ausgabe = datum.getChildText("ausgabe", NS);
+            erlass = datum.getChildText("erlass", ns);
+            ausgabe = datum.getChildText("ausgabe", ns);
         }
-        Element seite = gesetz.getChild("seite", NS);
+        Element seite = gesetz.getChild("seite", ns);
         if (seite != null) {
-            seiteVon = seite.getChildText("von", NS);
-            seiteBis = seite.getChildText("bis", NS);
+            seiteVon = seite.getChildText("von", ns);
+            seiteBis = seite.getChildText("bis", ns);
         }
 
         JPArticle article = new JPArticle();
