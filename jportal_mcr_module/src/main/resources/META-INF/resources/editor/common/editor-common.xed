@@ -42,7 +42,7 @@
 
   <xed:template id="maintitle">
     <jp:template name="textArea"
-      xpath="maintitles[@class='MCRMetaLangText']/maintitle[@inherited='0'][@form='plain']"
+      xpath="maintitles[@class='MCRMetaLangText'][@heritable='true']/maintitle[@inherited='0'][@form='plain']"
       i18n="editormask.labels.bibdescript" validate="required" />
   </xed:template>
 
@@ -62,7 +62,7 @@
         	<option i18n="metaData.jpjournal.date.published_from_until" value="published_from" />
     </jp:template>
   
-	  <jp:template name="date_select" xpath="dates[@class='MCRMetaISO8601Date']">
+	  <jp:template name="date_select" xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true']">
 		    <jp:template type="date" id_container="dateContainer" class="input-group" id_input="publshDate" span_date="after" xpath="date[@inherited='0'][@type='published']" />
 		    <jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 pull-left" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_from']" seperator="true" />
 		    <jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="untilDate" xpath="date[@inherited='0'][@type='published_until']" />
