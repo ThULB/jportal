@@ -136,6 +136,18 @@
                     </li>
                   </ul>
                 </div><!-- end input-group-btn -->
+
+                <!-- not sure why its necessary to declare qry again. But if this is missing the input will be empty. -->
+                <xsl:variable name="qry">
+                  <xsl:variable name="encodedQry">
+                    <xsl:call-template name="UrlGetParam">
+                      <xsl:with-param name="url" select="$RequestURL" />
+                      <xsl:with-param name="par" select="'qry'" />
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <xsl:value-of select="decoder:decode($encodedQry, 'UTF-8')" />
+                </xsl:variable>
+
                 <input class="form-control" type="text" id="inputField" name="qry" value="{$qry}" />
                   <span class="input-group-addon">
                     <span class="glyphicon glyphicon-search glyphSearchBar"
