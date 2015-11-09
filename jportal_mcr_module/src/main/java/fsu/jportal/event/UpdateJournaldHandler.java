@@ -16,15 +16,15 @@ public class UpdateJournaldHandler extends MCREventHandlerBase {
         if ("jpjournal".equals(mcrId.getTypeId())) {
             MCRLinkTableManager ltm = MCRLinkTableManager.instance();
             String imprintID = getImprintID(mcrIdString, "imprint");
-            if (imprintID != null) {
+            if (imprintID != null && !imprintID.trim().isEmpty()) {
                 ltm.addReferenceLink(mcrIdString, imprintID, "imprint", null);
             }
             String partnerID = getImprintID(mcrIdString, "partner");
-            if (partnerID != null) {
+            if (partnerID != null && !partnerID.trim().isEmpty()) {
                 ltm.addReferenceLink(mcrIdString, partnerID, "partner", null);
             }
             String greetingID = getImprintID(mcrIdString, "greeting");
-            if (greetingID != null) {
+            if (greetingID != null && !greetingID.trim().isEmpty()) {
                 ltm.addReferenceLink(mcrIdString, greetingID, "greeting", null);
             }
         }
