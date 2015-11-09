@@ -2,6 +2,8 @@ package fsu.jportal.frontend.cli;
 
 import java.io.InputStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -23,6 +25,8 @@ import fsu.jportal.laws.common.xml.LawsXMLFunctions;
 @MCRCommandGroup(name = "Law Commands")
 public class LawCommands {
 
+    private static final Logger LOGGER = LogManager.getLogger(LawCommands.class);
+    
     @MCRCommand(help = "Imports a laws.xml from an object and generates articles", syntax = "law import {0}")
     public static void importLaws(String id) throws Exception {
         MCRDerivate xmlDerivate = LawsXMLFunctions.getXMLDerivate(id);
@@ -86,10 +90,14 @@ public class LawCommands {
         article.setTitle(inhalt);
         // size
         if (seiteVon != null) {
-            seiteVon = JPComponent.FOUR_DIGIT_FORMAT.format(Integer.valueOf(seiteVon));
-            seiteBis = seiteBis != null ? JPComponent.FOUR_DIGIT_FORMAT.format(Integer.valueOf(seiteBis)) : null;
-            String size = seiteVon + ((seiteBis != null && !seiteBis.equals(seiteVon)) ? (" - " + seiteBis) : "");
-            article.setSize(size);
+            try {
+                seiteVon = JPComponent.FOUR_DIGIT_FORMAT.format(Integer.valueOf(seiteVon));
+                seiteBis = seiteBis != null ? JPComponent.FOUR_DIGIT_FORMAT.format(Integer.valueOf(seiteBis)) : null;
+                String size = seiteVon + ((seiteBis != null && !seiteBis.equals(seiteVon)) ? (" - " + seiteBis) : "");
+                article.setSize(size);
+            } catch(Exception exc) {
+                LOGGER.warn("Unable to set size for register entry: " + inhalt, exc);
+            }
         }
         // dates
         if (erlass != null) {

@@ -66,7 +66,7 @@ public abstract class LawsXMLFunctions {
                 return BUILDER_LOCAL.get().parse(is);
             }
         } catch (Exception exc) {
-            LOGGER.error("while retrieving register", exc);
+            LOGGER.error("while retrieving register for object " + objectID, exc);
         }
         return null;
     }
