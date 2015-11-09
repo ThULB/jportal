@@ -178,6 +178,7 @@ project(':jportal_mcr_module') {
         compile 'org.webjars:ckeditor:4.5.3'
         compile 'org.webjars:font-awesome:4.4.0'
         compile 'org.webjars:momentjs:2.10.6'
+        compile 'org.webjars:highstock:2.0.4'
     }
 
     def nodeBuildDir = "$project.buildDir/node"
@@ -290,7 +291,7 @@ project(':jportal_webapp') {
         runtime "org.mycore:mycore-ifs:$mcrVersion"
         runtime "org.hibernate:hibernate-c3p0:$hibernateVersion"
         runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
-        runtime 'com.mchange:c3p0:0.9.2.1'
+        runtime 'com.mchange:c3p0:0.9.5.1'
         runtime project(':jportal_laws')
         runtime project(':jportal_derivate_browser')
         runtime project(':jportal_doublet_finder_module')
