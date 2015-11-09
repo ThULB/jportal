@@ -64,7 +64,7 @@
                   <xsl:value-of select="./metadata/derivateLinks/derivateLink/@xlink:href" />
                 </xsl:when>
                 <xsl:when test="./structure/derobjects/derobject and iview2:getSupportedMainFile($derivateID) != ''">
-                  <xsl:value-of select="iview2:getSupportedMainFileByOwner(@ID)" />
+                  <xsl:value-of select="concat($derivateID, '/', iview2:getSupportedMainFile($derivateID))" />
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="document(concat('mcrobject:',$derivateID))/mycorederivate/derivate/internals/internal/@maindoc" />
