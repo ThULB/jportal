@@ -7,7 +7,7 @@
   <xsl:param name="returnHash" />
   <xsl:param name="returnID" />
   <xsl:param name="returnName" />
-    
+
   <!-- facets without selected -->
   <xsl:variable name="filteredFacetsXML">
     <xsl:variable name="numFound" select="/response/result/@numFound" />
@@ -24,6 +24,16 @@
           </xsl:for-each>
         </lst>
       </xsl:for-each>
+    </lst>
+    <lst name="facet_ranges">
+      <!-- hard coded published sort -->
+      <lst name="published_sort">
+        <xsl:for-each select="/response/lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='published_sort']/date">
+          <date name="{@name}">
+            <xsl:value-of select="text()" />
+          </date>
+        </xsl:for-each>
+      </lst>
     </lst>
   </xsl:variable>
   <xsl:variable name="filteredFacets" select="xalan:nodeset($filteredFacetsXML)" />
@@ -48,6 +58,16 @@
   <xsl:variable name="selectedFacets" select="xalan:nodeset($selectedFacetsXML)" />
 
   <xsl:template match="/response">
+
+    <!-- javascript & css imports -->
+    <link href="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/js/bootstrap-datetimepicker.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/highstock/2.0.4/highstock.src.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-facetDateQuery.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-publishedPopup.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-response-default.js" />
+
   	<xsl:call-template name="searchBreadcrumb" >
   		<xsl:with-param name="objID" select="$journalID" />
   		<xsl:with-param name="returnURL" select="$returnURL" />
@@ -114,31 +134,19 @@
 
   <xsl:template mode="resultList" match="response[result/@numFound &gt;= 1]">
     <div class="col-sm-3">
-      <!-- bootstrap visible-xs and navbar-collapse have problems to be in the same class, so wrap visible around navbar-collapse -->
-      <div class="visible-xs">
-        <div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
-          <xsl:apply-templates select="." mode="getFacetList">
-            <xsl:with-param name="colapsedId" select="1" />
-          </xsl:apply-templates>
-        </div>
-      </div>
       <div class="jp-layout-searchResult-style">
         <xsl:apply-templates mode="searchResultText" select="." />
-
         <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-searchResult">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-
         <div class="jp-layout-triangle visible-xs"></div>
         <div class="jp-layout-triangle visible-xs"></div>
       </div>
-      <div class="jp-layout-searchList hidden-xs">
-        <xsl:apply-templates select="." mode="getFacetList">
-          <xsl:with-param name="colapsedId" select="2" />
-        </xsl:apply-templates>
+      <div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
+        <xsl:apply-templates select="." mode="getFacetList" />
       </div>
     </div>
     <div class="col-sm-9 jp-layout-hits">
@@ -152,26 +160,21 @@
   </xsl:template>
 
   <xsl:template mode="getFacetList" match="response[result/@numFound &gt;= 1]">
-    <xsl:param name="colapsedId" />
+
     <xsl:apply-templates mode="jp.response.navigation" select="." />
 
-    <xsl:if test="$selectedFacets/lst/lst/int or $filteredFacets/lst/lst/int">
-      <div class="jp-layout-search-sidebar-group">
-        <h2 class="jp-layout-resultLCaption">
-          <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
-        </h2>
+    <div class="jp-layout-search-sidebar-group">
+      <h2 class="jp-layout-resultLCaption">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
+      </h2>
 
-        <div class="list-group jp-list-group-special hidden-xs">
-          <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int">
-            <xsl:with-param name="colapsedId" select="$colapsedId" />
-          </xsl:apply-templates>
-        </div>
-
-        <xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst">
-          <xsl:with-param name="colapsedId" select="$colapsedId" />
-        </xsl:apply-templates>
+      <div class="list-group jp-list-group-special hidden-xs">
+        <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int" />
       </div>
-    </xsl:if>
+
+      <xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst" />
+      <xsl:apply-templates mode="facetRanges" select="$filteredFacets/lst[@name='facet_ranges']/lst" />
+    </div>
   </xsl:template>
 
   <xsl:variable name="searchResultsFields">
@@ -445,15 +448,15 @@
   <!-- *************************************************** -->
   <xsl:template mode="facetGroup" match="lst">
   </xsl:template>
+
   <xsl:template mode="filteredFacetGroup" match="lst">
   </xsl:template>
 
   <xsl:template mode="facetGroup" match="lst[count(*) &gt; 0]">
-    <xsl:param name="colapsedId" />
     <div>
       <a class="dt-collapse" data-toggle="collapse">
         <xsl:attribute name="data-target">
-              <xsl:value-of select="concat('#', @name, '_', $colapsedId)" />
+              <xsl:value-of select="concat('#', @name)" />
           </xsl:attribute>
         <span class="jp-layout-facet-group-head">
           <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
@@ -461,7 +464,7 @@
         <i class="fa fa-sort-asc"></i>
         <i class="fa fa-sort-desc"></i>
       </a>
-      <div class="collapse in list-group jp-list-group-special" id="{@name}_{$colapsedId}">
+      <div class="collapse in list-group jp-list-group-special" id="{@name}">
         <xsl:apply-templates select="int" mode="facetField" />
       </div>
     </div>
@@ -517,6 +520,54 @@
         <xsl:value-of select="$count" />
       </span>
     </a>
+  </xsl:template>
+
+  <!-- FACET RANGE -->
+  <xsl:template mode="facetRanges" match="lst">
+    <div>
+      <a class="dt-collapse" data-toggle="collapse">
+        <xsl:attribute name="data-target">
+          <xsl:value-of select="concat('#', @name)" />
+        </xsl:attribute>
+        <span class="jp-layout-facet-group-head">
+          <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
+        </span>
+        <i class="fa fa-sort-asc"></i>
+        <i class="fa fa-sort-desc"></i>
+      </a>
+      <div class="collapse in list-group jp-list-group-special" id="{@name}">
+       <div style="display: flex;">
+          <div style="display: flex; flex-direction: column; justify-content: space-between; margin-right: 8px;">
+            <a id="{@name}_accept_button" href="javascript:void(0)" type="button"
+              class="btn btn-xs btn-primary disabled" role="button" ><i class="fa fa-check"></i>
+            </a>
+            <a id="{@name}_popup_button" href="javascript:void(0)" type="button"
+              class="btn btn-xs btn-default" role="button" ><i class="fa fa-bar-chart"></i>
+            </a>
+            <a id="{@name}_cancel_button" href="javascript:void(0)" type="button"
+              class="btn btn-xs btn-danger disabled" role="button" ><i class="fa fa-times"></i>
+            </a>
+          </div>
+          <div>
+            <div class='input-group date' id='{@name}_from'>
+              <input type='text' class="form-control" /> <span
+                class="input-group-addon"> <span
+                class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+            <div class="text-center">
+              <i class="fa fa-angle-down"></i>
+            </div>
+            <div class='input-group date' id='{@name}_to'>
+              <input type='text' class="form-control" /> <span
+                class="input-group-addon"> <span
+                class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </xsl:template>
 
 </xsl:stylesheet>
