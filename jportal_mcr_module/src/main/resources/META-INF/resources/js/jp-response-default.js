@@ -15,7 +15,7 @@ $(document).ready(function() {
 
 	var urlParameter = getUrlParameter();
 	var published_sort = urlParameter["fq"] == null ? null : urlParameter["fq"].filter(function(p) {
-		return p.startsWith("published_sort[");
+		return p.startsWith("published_sort:[");
 	})[0];
 	var fromString = published_sort == null ? null : published_sort.slice(published_sort.indexOf("[") + 1, published_sort.indexOf(" TO "));
 	var untilString = published_sort == null ? null : published_sort.slice(published_sort.indexOf(" TO ") + 4, published_sort.indexOf("]"));
@@ -100,7 +100,7 @@ $(document).ready(function() {
 		var from = moment(fromDate.data("DateTimePicker").date()).utc().format(fdq.utcFormat());
 		var until = moment(toDate.data("DateTimePicker").date()).utc().format(fdq.utcFormat());
 		var search = removePublishedSortFromSearch();
-		search = search + (search.length == 0 ? "?" : "&") + "fq=published_sort[" + from + " TO " + until + "]";
+		search = search + (search.length == 0 ? "?" : "&") + "fq=published_sort:[" + from + " TO " + until + "]";
 		window.location.search=search;
 	});
 	cancelButton.on("click", function() {
@@ -111,7 +111,7 @@ $(document).ready(function() {
 
 	function removePublishedSortFromSearch() {
 		var search = window.location.search;
-		var i = search.indexOf("fq=published_sort");
+		var i = search.indexOf("fq=published_sort:");
 		if(i != -1) {
 			search = search.substring(0, i - 1) + search.substring(search.indexOf("]", i + 1)  + 1, search.length)
 		}
