@@ -65,7 +65,7 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/js/bootstrap-datetimepicker.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/highstock/2.0.4/highstock.src.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-facetDateQuery.js" />
-    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-publishedPopup.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-publishedDialog.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-response-default.js" />
 
   	<xsl:call-template name="searchBreadcrumb" >
