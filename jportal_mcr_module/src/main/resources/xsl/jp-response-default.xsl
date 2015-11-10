@@ -110,7 +110,7 @@
     <xsl:apply-templates mode="jp.response.sort" select="." />
   </xsl:template>
 
-  <xsl:template mode="resultList" match="response[result/@numFound = 0]">
+  <xsl:template name="jp-response-default-noHits">
     <p>
       <xsl:value-of select="i18n:translate('jp.metadata.search.no_results')" />
       <br />
@@ -132,7 +132,7 @@
     </p>
   </xsl:template>
 
-  <xsl:template mode="resultList" match="response[result/@numFound &gt;= 1]">
+  <xsl:template mode="resultList" match="response">
     <div class="col-sm-3">
       <div class="jp-layout-searchResult-style">
         <xsl:apply-templates mode="searchResultText" select="." />
@@ -153,13 +153,20 @@
       <div class="jp-layout-triangle hidden-xs"></div>
       <div class="jp-layout-triangle hidden-xs"></div>
       <div class="jp-objectlist">
-        <xsl:apply-templates mode="searchResults" select="result/doc" />
-        <xsl:apply-templates mode="jp.pagination" select="." />
+        <xsl:choose>
+          <xsl:when test="result/doc">
+            <xsl:apply-templates mode="searchResults" select="result/doc" />
+            <xsl:apply-templates mode="jp.pagination" select="." />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="jp-response-default-noHits" />
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
     </div>
   </xsl:template>
 
-  <xsl:template mode="getFacetList" match="response[result/@numFound &gt;= 1]">
+  <xsl:template mode="getFacetList" match="response">
 
     <xsl:apply-templates mode="jp.response.navigation" select="." />
 
@@ -400,6 +407,9 @@
   <!-- * SORT -->
   <!-- *************************************************** -->
   <xsl:template mode="jp.response.sort" match="response">
+  </xsl:template>
+
+  <xsl:template mode="jp.response.sort" match="response[result/@numFound &gt;= 2]">
     <xsl:variable name="sort" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='sort']/text()" />
     <xsl:variable name="sortOptionsXML">
       <option value="score desc">
