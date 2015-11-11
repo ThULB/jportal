@@ -7,7 +7,6 @@ import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.ParseException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -15,8 +14,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import javax.servlet.ServletContext;
 
 import fsu.jportal.backend.ACLTools;
 import org.apache.logging.log4j.LogManager;
@@ -29,13 +26,11 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jdom2.Document;
-import org.jdom2.Element;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.hibernate.tables.MCRACCESSRULE;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRStreamContent;
-import org.mycore.common.events.MCRStartupHandler.AutoExecutable;
 import org.mycore.common.xml.MCRXMLParserFactory;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
@@ -44,21 +39,13 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.solr.MCRSolrCore;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
-import org.mycore.user2.MCRUserCommands;
-import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXParseException;
 
 import fsu.jportal.nio.JarResource;
 
-public class InitHandler implements AutoExecutable {
+public class InitHandler extends MCRInitHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(InitHandler.class);
-
-    private final fsu.jportal.backend.ACLTools ACLTools = new ACLTools();
-
-    private Session session;
-
-    private Transaction transaction;
 
     @Override
     public String getName() {
@@ -71,27 +58,20 @@ public class InitHandler implements AutoExecutable {
     }
 
     @Override
-    public void startUp(ServletContext servletContext) {
-        try {
-            startSession();
-            if (isTableEmpty(MCRCategoryImpl.class)) {
-                createClass();
-            }
-            if (isTableEmpty(MCRACCESSRULE.class)) {
-                createDefaultRules();
-            }
-            initSuperUser();
-            closeSession();
-        } catch(Exception exc) {
-            if(transaction != null) {
-                transaction.rollback();
-            }
-            exc.printStackTrace();
-        }
-
+    protected void run() {
         initCLI();
 
         initSolr();
+    }
+
+    @Override
+    protected void runWithSession() {
+        if (isTableEmpty(MCRCategoryImpl.class)) {
+            createClass();
+        }
+        if (isTableEmpty(MCRACCESSRULE.class)) {
+            createACLRules("creating default ACL rules ...", "/config/jportal_mcr/acl/defaultrules-commands");
+        }
     }
 
     private void initCLI() {
@@ -131,16 +111,6 @@ public class InitHandler implements AutoExecutable {
         return session.createCriteria(clazz).setMaxResults(1).list().isEmpty();
     }
 
-    private void closeSession() {
-        transaction.commit();
-        session.close();
-    }
-
-    private void startSession() {
-        session = MCRHIBConnection.instance().getSession();
-        transaction = session.beginTransaction();
-    }
-
     private void createClass() {
         info("creating default classifications ...");
 
@@ -172,25 +142,6 @@ public class InitHandler implements AutoExecutable {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-    }
-
-    private void initSuperUser() {
-        info("superuser ...");
-        String superuser = MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName", "administrator");
-        if (!MCRUserManager.exists(superuser)) {
-            MCRUserCommands.initSuperuser();
-        }
-        info("superuser initialized");
-    }
-
-    private void info(String msg) {
-        System.out.println("Init: " + msg);
-    }
-
-    private void createDefaultRules() {
-        info("creating default ACL rules ...");
-        InputStream cmdFileIS = getClass().getResourceAsStream("/config/jportal_mcr/acl/defaultrules-commands");
-        ACLTools.createRules(cmdFileIS);
     }
 
     private void initSolr() {
@@ -227,7 +178,7 @@ public class InitHandler implements AutoExecutable {
 
         /**
          * Waits until the solr server is available.
-         * 
+         *
          * @throws IOException
          * @throws InterruptedException
          */
@@ -245,9 +196,9 @@ public class InitHandler implements AutoExecutable {
 
         /**
          * Checks if the solr server has already indexed the classifications.
-         * 
+         *
          * @return
-         * @throws SolrServerException 
+         * @throws SolrServerException
          */
         private boolean isInitialized(SolrClient solrClient) throws IOException, SolrServerException {
             ModifiableSolrParams params = new ModifiableSolrParams();
@@ -259,7 +210,7 @@ public class InitHandler implements AutoExecutable {
 
         /**
          * Rebuilds the classification index.
-         * 
+         *
          * @param solrClient
          */
         private void index(SolrClient solrClient) {

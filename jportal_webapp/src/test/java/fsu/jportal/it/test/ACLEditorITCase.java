@@ -1,9 +1,11 @@
 package fsu.jportal.it.test;
 
+import org.hamcrest.core.CombinableMatcher;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -58,31 +60,40 @@ public class ACLEditorITCase extends BaseITCase {
 
         click(By.id("acle2-new-rule-add"));
 
-        WebElement alertArea = getElementWaitTillVissible(By.id("acle2-alert-area"));
-        assertThat(alertArea.getText(),
-                both(containsString(ruleDescTxt)).and(containsString("erfolgreich hinzugefügt")));
-
-        By alertDiv = By.xpath("//div[@id='acle2-alert-area' and @class='alert fade alert-success in']");
-        waiting((long) 5.1).until(ExpectedConditions.invisibilityOfElementLocated(alertDiv));
+        checkAlertPopup("Regel " + ruleDescTxt + " unter der ID SYSTEMRULE0000000002 erfolgreich hinzugefügt.");
 
         click(By.id("acle2-button-new-access"));
 
-        alertArea = getElementWaitTillVissible(By.id("acle2-alert-area"));
-        assertEquals("didn't save - content does not match", alertArea.getText(),
-                "Regelzuweisung für testObject erfolgreich hinzugefügt.");
-        waiting((long) 5.1).until(ExpectedConditions.invisibilityOfElementLocated(alertDiv));
+        checkAlertPopup("Regelzuweisung für " + accessID + " erfolgreich hinzugefügt.");
 
         checkSearchAccessRule(accessID);
+    }
+
+    private void checkAlertPopup(String expected) {
+        WebElement alertArea = getElementWaitTillVissible(By.id("acle2-alert-area"));
+        assertEquals("didn't save - content does not match", expected, alertArea.getText());
+
+        By alertDiv = By.xpath("//div[@id='acle2-alert-area' and @class='alert fade alert-success in']");
+        waiting((long) 5.1).until(ExpectedConditions.invisibilityOfElementLocated(alertDiv));
     }
 
     @Test
     public void changeObjID() throws Exception {
         String accessID = "changeObjID";
         checkSearchAccessRule(accessID);
+        DRIVER.findElement(By.cssSelector(".acle2-access-id > i")).click();
+        DRIVER.findElement(By.cssSelector(".acle2-access-id > input")).sendKeys("testObject2");
+        DRIVER.findElement(By.cssSelector(".acle2-access-id > input")).sendKeys(Keys.ENTER);
+
+        checkAlertPopup("Regelzuweisung erfolgreich geändert.");
     }
 
     private void checkSearchAccessRule(String accessID) {
-        DRIVER.findElement(By.id("acle2-access-filter-input-id")).sendKeys(accessID);
+        WebElement searchInput = DRIVER.findElement(By.id("acle2-access-filter-input-id"));
+        waiting(2).until(ExpectedConditions.visibilityOf(searchInput));
+        searchInput.click();
+        searchInput.clear();
+        searchInput.sendKeys(accessID);
         DRIVER.findElement(By.id("acle2-button-access-filter")).click();
 
         assertEquals("content does not match", accessID,

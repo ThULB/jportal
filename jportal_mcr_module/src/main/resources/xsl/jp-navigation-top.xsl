@@ -47,7 +47,7 @@
           </li>
         </xsl:if>
         <li>
-          <a>
+          <a id="jp.login.button">
             <xsl:attribute name="href">
             <xsl:if test="$isGuest">
               <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRLoginServlet?action=login')" />
