@@ -1,6 +1,5 @@
 package fsu.jportal.it.test;
 
-import org.hamcrest.core.CombinableMatcher;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,11 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.InputStream;
 
-import static org.hamcrest.CoreMatchers.both;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * Created by chi on 29.10.15.
@@ -40,8 +35,9 @@ public class ACLEditorITCase extends BaseITCase {
     @Test
     public void createNewAccessWithNewRule() throws Exception {
         String accessID = "testObject";
+        String accessPerm = "testCreate";
         inputText(By.id("acle2-new-access-id"), accessID);
-        inputText(By.id("acle2-new-access-pool"), "testCreate");
+        inputText(By.id("acle2-new-access-pool"), accessPerm);
 
         // click on new access -> rule drop down menu
         click(By.xpath("//th[@class='acle2-new-access-rule']/div/a[@class='select2-choice']"));
@@ -60,26 +56,41 @@ public class ACLEditorITCase extends BaseITCase {
 
         click(By.id("acle2-new-rule-add"));
 
-        checkAlertPopup("Regel " + ruleDescTxt + " unter der ID SYSTEMRULE0000000002 erfolgreich hinzugefügt.");
+        checkAlertPopup("Regel " + ruleDescTxt + " unter der ID SYSTEMRULE0000000007 erfolgreich hinzugefügt.");
 
         click(By.id("acle2-button-new-access"));
 
         checkAlertPopup("Regelzuweisung für " + accessID + " erfolgreich hinzugefügt.");
 
-        checkSearchAccessRule(accessID);
+        checkSearchAccessRule(accessID, accessPerm);
     }
 
     @Test
     public void changeAccessID() throws Exception {
         String accessID = "changeAccessID";
+        String accessPerm = "read";
         String accessIDchanged = "AccessIDchanged";
-        checkSearchAccessRule(accessID);
+        checkSearchAccessRule(accessID, accessPerm);
         DRIVER.findElement(By.cssSelector(".acle2-access-id > i")).click();
         inputText(By.cssSelector(".acle2-access-id > input"), accessIDchanged);
         DRIVER.findElement(By.cssSelector(".acle2-access-id > input")).sendKeys(Keys.ENTER);
 
         checkAlertPopup("Regelzuweisung erfolgreich geändert.");
-        checkSearchAccessRule(accessIDchanged);
+        checkSearchAccessRule(accessIDchanged, accessPerm);
+    }
+
+    @Test
+    public void changeAccessPermission() throws Exception {
+        String accessID = "TestAccessID";
+        String accessPerm = "changeAccessPermission";
+        String accessPermchanged = "AccessPermissionChanged";
+        checkSearchAccessRule(accessID, accessPerm);
+        DRIVER.findElement(By.cssSelector(".acle2-access-pool > i")).click();
+        inputText(By.cssSelector(".acle2-access-pool > input"), accessPermchanged);
+        DRIVER.findElement(By.cssSelector(".acle2-access-pool > input")).sendKeys(Keys.ENTER);
+
+        checkAlertPopup("Regelzuweisung erfolgreich geändert.");
+        checkSearchAccessRule(accessID, accessPermchanged);
     }
 
     private void checkAlertPopup(String expected) {
@@ -90,16 +101,23 @@ public class ACLEditorITCase extends BaseITCase {
         waiting((long) 5.1).until(ExpectedConditions.invisibilityOfElementLocated(alertDiv));
     }
 
-    private void checkSearchAccessRule(String accessID) {
+    private void checkSearchAccessRule(String accessID, String accessPerm) {
         WebElement searchInput = DRIVER.findElement(By.id("acle2-access-filter-input-id"));
         waiting(2).until(ExpectedConditions.visibilityOf(searchInput));
         searchInput.click();
         searchInput.clear();
         searchInput.sendKeys(accessID);
         DRIVER.findElement(By.id("acle2-button-access-filter")).click();
-
-        assertEquals("content does not match", accessID,
-                DRIVER.findElement(By.cssSelector(".acle2-access-id")).getText());
+        By accessIDCol = By
+                .xpath("//td[@class='acle2-access-id acle2-table-access-entry-td' and not(contains(@style,'display:none'))]");
+        By accessPermCol = By
+                .xpath("//td[@class='acle2-access-pool acle2-table-access-entry-td' and not(contains(@style,'display:none'))]");
+        WebElement element = DRIVER.findElement(accessIDCol);
+        assertNotNull("Should be not Null", element);
+        assertTrue("Should be diplayed", element.isDisplayed());
+        assertEquals("Access id does not match", accessID, element.getText());
+        assertEquals("Access permission does not match", accessPerm,
+                DRIVER.findElement(accessPermCol).getText());
     }
 
     private WebElement getAlertPopup() {

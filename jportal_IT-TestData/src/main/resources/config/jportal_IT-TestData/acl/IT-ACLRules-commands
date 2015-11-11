@@ -1,1 +1,2 @@
 update permission read for id changeAccessID with rulefile xml/grant-all.xml described by always allowed
+update permission changeAccessPermission for id TestAccessID with rulefile xml/grant-all.xml described by always allowed
