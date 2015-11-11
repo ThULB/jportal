@@ -69,23 +69,25 @@ public class ACLEditorITCase extends BaseITCase {
         checkSearchAccessRule(accessID);
     }
 
+    @Test
+    public void changeAccessID() throws Exception {
+        String accessID = "changeAccessID";
+        String accessIDchanged = "AccessIDchanged";
+        checkSearchAccessRule(accessID);
+        DRIVER.findElement(By.cssSelector(".acle2-access-id > i")).click();
+        inputText(By.cssSelector(".acle2-access-id > input"), accessIDchanged);
+        DRIVER.findElement(By.cssSelector(".acle2-access-id > input")).sendKeys(Keys.ENTER);
+
+        checkAlertPopup("Regelzuweisung erfolgreich geändert.");
+        checkSearchAccessRule(accessIDchanged);
+    }
+
     private void checkAlertPopup(String expected) {
         WebElement alertArea = getElementWaitTillVissible(By.id("acle2-alert-area"));
         assertEquals("didn't save - content does not match", expected, alertArea.getText());
 
         By alertDiv = By.xpath("//div[@id='acle2-alert-area' and @class='alert fade alert-success in']");
         waiting((long) 5.1).until(ExpectedConditions.invisibilityOfElementLocated(alertDiv));
-    }
-
-    @Test
-    public void changeObjID() throws Exception {
-        String accessID = "changeObjID";
-        checkSearchAccessRule(accessID);
-        DRIVER.findElement(By.cssSelector(".acle2-access-id > i")).click();
-        DRIVER.findElement(By.cssSelector(".acle2-access-id > input")).sendKeys("testObject2");
-        DRIVER.findElement(By.cssSelector(".acle2-access-id > input")).sendKeys(Keys.ENTER);
-
-        checkAlertPopup("Regelzuweisung erfolgreich geändert.");
     }
 
     private void checkSearchAccessRule(String accessID) {
@@ -120,6 +122,9 @@ public class ACLEditorITCase extends BaseITCase {
 
     private void inputText(By element, String text) {
         waiting(2).until(ExpectedConditions.elementToBeClickable(element));
-        DRIVER.findElement(element).sendKeys(text);
+        WebElement inputField = DRIVER.findElement(element);
+        inputField.click();
+        inputField.clear();
+        inputField.sendKeys(text);
     }
 }
