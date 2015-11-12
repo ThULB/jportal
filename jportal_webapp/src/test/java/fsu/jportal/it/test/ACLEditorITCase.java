@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.InputStream;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -70,8 +71,10 @@ public class ACLEditorITCase extends BaseITCase {
         String accessID = "changeAccessID";
         String accessPerm = "read";
         String accessIDchanged = "AccessIDchanged";
-        checkSearchAccessRule(accessID, accessPerm);
-        DRIVER.findElement(By.cssSelector(".acle2-access-id > i")).click();
+        WebElement[] accessRule = checkSearchAccessRule(accessID, accessPerm);
+        WebElement accessIDElem = accessRule[0];
+        //click edit button
+        accessIDElem.findElement(By.xpath("./i")).click();
         inputText(By.cssSelector(".acle2-access-id > input"), accessIDchanged);
         DRIVER.findElement(By.cssSelector(".acle2-access-id > input")).sendKeys(Keys.ENTER);
 
@@ -84,8 +87,10 @@ public class ACLEditorITCase extends BaseITCase {
         String accessID = "TestAccessID";
         String accessPerm = "changeAccessPermission";
         String accessPermchanged = "AccessPermissionChanged";
-        checkSearchAccessRule(accessID, accessPerm);
-        DRIVER.findElement(By.cssSelector(".acle2-access-pool > i")).click();
+        WebElement[] accessRule = checkSearchAccessRule(accessID, accessPerm);
+        WebElement accessPermElem = accessRule[1];
+        //click edit button
+        accessPermElem.findElement(By.xpath("./i")).click();
         inputText(By.cssSelector(".acle2-access-pool > input"), accessPermchanged);
         DRIVER.findElement(By.cssSelector(".acle2-access-pool > input")).sendKeys(Keys.ENTER);
 
@@ -101,30 +106,24 @@ public class ACLEditorITCase extends BaseITCase {
         waiting((long) 5.1).until(ExpectedConditions.invisibilityOfElementLocated(alertDiv));
     }
 
-    private void checkSearchAccessRule(String accessID, String accessPerm) {
-        WebElement searchInput = DRIVER.findElement(By.id("acle2-access-filter-input-id"));
-        waiting(2).until(ExpectedConditions.visibilityOf(searchInput));
-        searchInput.click();
-        searchInput.clear();
-        searchInput.sendKeys(accessID);
+    private WebElement[] checkSearchAccessRule(String accessID, String accessPerm) {
+        inputText(By.id("acle2-access-filter-input-id"), accessID);
         DRIVER.findElement(By.id("acle2-button-access-filter")).click();
-        By accessIDCol = By
-                .xpath("//td[@class='acle2-access-id acle2-table-access-entry-td' and not(contains(@style,'display:none'))]");
-        By accessPermCol = By
-                .xpath("//td[@class='acle2-access-pool acle2-table-access-entry-td' and not(contains(@style,'display:none'))]");
-        WebElement element = DRIVER.findElement(accessIDCol);
-        assertNotNull("Should be not Null", element);
-        assertTrue("Should be diplayed", element.isDisplayed());
-        assertEquals("Access id does not match", accessID, element.getText());
-        assertEquals("Access permission does not match", accessPerm,
-                DRIVER.findElement(accessPermCol).getText());
-    }
-
-    private WebElement getAlertPopup() {
-        By alertDiv = By.xpath("//div[@id='acle2-alert-area' and @class='alert fade alert-success in']");
-        WebElement alertArea = DRIVER.findElement(alertDiv);
-        waiting(2).until(ExpectedConditions.visibilityOf(alertArea));
-        return alertArea;
+        By elemAccessor = By.cssSelector(".acle2-table-access-entry");
+        List<WebElement> elements = DRIVER.findElements(elemAccessor);
+        for (WebElement element : elements) {
+            if(element.isDisplayed()){
+                WebElement accessIDElem = element.findElement(By.xpath(
+                        "./td[@class = 'acle2-access-id acle2-table-access-entry-td']"));
+                assertEquals("content does not match", accessID, accessIDElem.getText());
+                WebElement accessPermElem = element.findElement(By.xpath(
+                        "./td[@class = 'acle2-access-pool acle2-table-access-entry-td']"));
+                assertEquals("content does not match", accessPerm, accessPermElem.getText());
+                return new WebElement[] { accessIDElem, accessPermElem };
+            }
+        }
+        fail("Could not found " + accessID + " # " + accessPerm);
+        return new WebElement[0];
     }
 
     private WebElement getElementWaitTillVissible(By element) {
