@@ -18,12 +18,6 @@ import static org.junit.Assert.*;
  * @author Huu Chi Vu
  */
 public class ACLEditorITCase extends BaseITCase {
-    @BeforeClass
-    public static void setUp() throws Exception {
-        InputStream resourceAsStream = Class.class.getResourceAsStream("/IT/ACLEditor/ACLRules.txt");
-        assertNotNull(resourceAsStream);
-    }
-
     @Before
     public void gotoACLEditor() {
         DRIVER.findElement(By.linkText("Admin")).click();
