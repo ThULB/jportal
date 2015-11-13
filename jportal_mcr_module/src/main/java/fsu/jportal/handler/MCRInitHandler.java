@@ -11,6 +11,7 @@ import org.mycore.user2.MCRUserManager;
 
 import javax.servlet.ServletContext;
 import java.io.InputStream;
+import java.nio.file.Paths;
 
 /**
  * Created by chi on 11.11.15.
@@ -69,7 +70,6 @@ public abstract class MCRInitHandler implements MCRStartupHandler.AutoExecutable
 
     protected void createACLRules(String msg, String pathToRuleCMDs) {
         info(msg);
-        InputStream cmdFileIS = getClass().getResourceAsStream(pathToRuleCMDs);
-        ACLTools.createRules(cmdFileIS);
+        ACLTools.createRules(Paths.get(pathToRuleCMDs));
     }
 }
