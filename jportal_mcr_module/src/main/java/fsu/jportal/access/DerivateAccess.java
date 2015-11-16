@@ -33,12 +33,6 @@ public class DerivateAccess {
             }
             
             try {
-
-                MCRISO8601Date objDate = new MCRISO8601Date(date);
-                TemporalAccessor dt = objDate.getDt();
-                int year = dt.get(ChronoField.YEAR) + 1;
-                int month = dt.get(ChronoField.MONTH_OF_YEAR);
-                
                 String sorlQuery = "+journalID:" + id +" +objectType:jparticle +published_sort:[NOW -1YEAR TO NOW]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
                 solrParams.set("q", sorlQuery).set("rows", 1).set("fl", "id");
