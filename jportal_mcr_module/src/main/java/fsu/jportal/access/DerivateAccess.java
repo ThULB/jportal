@@ -6,6 +6,8 @@ import java.time.temporal.TemporalAccessor;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.datamodel.common.MCRISO8601Date;
@@ -37,15 +39,18 @@ public class DerivateAccess {
                 int year = dt.get(ChronoField.YEAR) + 1;
                 int month = dt.get(ChronoField.MONTH_OF_YEAR);
                 
-                String sorlQuery = "+journalID:" + id +" +objectType:jparticle +published_sort:[" + year + "-"+month+"-01T00:00:00.000Z TO "+year+"-"+month+"-31T23:59:59.999Z]";
+                String sorlQuery = "+journalID:" + id +" +objectType:jparticle +published_sort:[NOW -1YEAR TO NOW]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
-                solrParams.set("q", sorlQuery).set("rows", 1);
+                solrParams.set("q", sorlQuery).set("rows", 1).set("fl", "id");
                 QueryResponse response = MCRSolrClientFactory.getSolrClient().query(solrParams);
-                
-                if(!response.getResults().isEmpty()){
-                    return true;
+
+                SolrDocumentList results = response.getResults();
+                for (SolrDocument result : results) {
+                    String idFromResultList = (String)result.getFieldValue("id");
+                    if(id.equals(idFromResultList)){
+                        return false;
+                    }
                 }
-                
             } catch (SolrServerException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -53,6 +58,6 @@ public class DerivateAccess {
                 e.printStackTrace();
             }
         }
-        return false;
+        return true;
     }
 }
