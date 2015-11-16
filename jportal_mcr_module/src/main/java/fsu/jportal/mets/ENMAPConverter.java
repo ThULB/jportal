@@ -106,8 +106,8 @@ public class ENMAPConverter {
         setID(enmap, physicalDiv);
 
         XPathExpression<Element> xpathExp = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='physical_structmap' or @TYPE='PHYSICAL']//mets:div[mets:fptr]", Filters.element(), null,
-            IMetsElement.METS);
+            "mets:structMap[@TYPE='physical_structmap' or @TYPE='PHYSICAL']//mets:div[mets:fptr]", Filters.element(),
+            null, IMetsElement.METS);
         List<Element> divs = new ArrayList<Element>(xpathExp.evaluate(enmap));
         Collections.sort(divs, new Comparator<Element>() {
             @Override
@@ -133,8 +133,8 @@ public class ENMAPConverter {
 
     protected void setID(Element enmap, PhysicalDiv mcrPhysicalDiv) {
         XPathExpression<Attribute> physMapExp = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='physical_structmap' or @TYPE='PHYSICAL']/mets:div[@TYPE='physSequence']/@id", Filters.attribute(), null,
-            IMetsElement.METS);
+            "mets:structMap[@TYPE='physical_structmap' or @TYPE='PHYSICAL']/mets:div[@TYPE='physSequence']/@id",
+            Filters.attribute(), null, IMetsElement.METS);
         Attribute idAttr = physMapExp.evaluateFirst(enmap);
         String id = null;
         if (idAttr != null) {
@@ -170,7 +170,7 @@ public class ENMAPConverter {
         List<Element> children = enmapDiv.getChildren("div", IMetsElement.METS);
         for (Element enmapSubDiv : children) {
             LogicalDiv mcrSubdDiv = getLogicalSubDiv(enmap, enmapSubDiv);
-            if(mcrSubdDiv != null) {
+            if (mcrSubdDiv != null) {
                 mcrDiv.add(mcrSubdDiv);
             }
         }

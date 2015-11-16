@@ -6,6 +6,8 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.transform.TransformerException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,11 +34,14 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.SmLink;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
 import com.google.gson.JsonObject;
 
+import fsu.jportal.backend.JPComponent;
 import fsu.jportal.mets.ConvertException;
 import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.LLZMetsImporter;
@@ -93,32 +99,51 @@ public class METSImportResource {
 
     @POST
     @Path("convert/{id}")
-    public void convertAndImport(@PathParam("id") String derivateId) throws IOException, JDOMException,
+    public void convertAndImport(@PathParam("id") String derivateId) throws TransformerException, IOException, JDOMException,
         ConvertException, ValidationException {
         Mets mcrMets = convertMets(derivateId);
-        Document mcrDoc = mcrMets.asDocument();
-        byte[] bytes = new MCRJDOMContent(mcrDoc).asByteArray();
-        // check with METSValidator
-        ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-        METSValidator validator = new METSValidator(in);
+        // validate
+        METSValidator validator = new METSValidator(mcrMets.asDocument());
         List<ValidationException> exceptionList = validator.validate();
         if (!exceptionList.isEmpty()) {
-            String dataDir = MCRConfiguration.instance().getString("MCR.datadir");
-            java.nio.file.Path errorDir = Paths.get(dataDir).resolve("error");
-            if(!Files.exists(errorDir)){
-                Files.createDirectories(errorDir);
+            for(Exception exc : exceptionList) {
+                LOGGER.error("while validating mets.xml of derivate " + derivateId, exc);
             }
-            java.nio.file.Path errorMets = errorDir.resolve("mets.xml");
-            Files.write(errorMets, bytes);
-            LOGGER.info("Writing error mets file to " + errorDir);
             throw exceptionList.get(0);
         }
         // import mets
         LLZMetsImporter importer = new LLZMetsImporter();
-        importer.importMets(mcrMets, MCRObjectID.getInstance(derivateId));
-        // replace with new mets.xml
+        Map<LogicalDiv, JPComponent> logicalComponentMap = importer.importMets(mcrMets, MCRObjectID.getInstance(derivateId));
+        // update logical id's
+        updateLogicalIds(mcrMets, logicalComponentMap);
+        // write mets.xml
+        Document mcrDoc = mcrMets.asDocument();
+        byte[] bytes = new MCRJDOMContent(mcrDoc).asByteArray();
         MCRPath path = MCRPath.getPath(derivateId, "/mets.xml");
         Files.write(path, bytes);
+    }
+
+    /**
+     * This method updates the divs of the logical struct map and the struct link section with mycore ids.
+     * This is important because then we know which logical div is assigned to which mycore object.
+     * 
+     * @param mets the mets to update
+     * @param logicalComponentMap a map of logical divs and their corresponding <code>JPComponent's<code>
+     */
+    private void updateLogicalIds(Mets mets, Map<LogicalDiv, JPComponent> logicalComponentMap) {
+        // the import is done -> now update the mets document with the mycore id's
+        for (Entry<LogicalDiv, JPComponent> entry : logicalComponentMap.entrySet()) {
+            LogicalDiv logicalDiv = entry.getKey();
+            String mycoreId = entry.getValue().getObject().getId().toString();
+            String oldId = logicalDiv.getId();
+            // update logical div
+            logicalDiv.setId(mycoreId);
+            // update logical struct map
+            List<SmLink> links = mets.getStructLink().getSmLinkByFrom(oldId);
+            for(SmLink link : links) {
+                link.setFrom(mycoreId);
+            }
+        }
     }
 
     @GET
