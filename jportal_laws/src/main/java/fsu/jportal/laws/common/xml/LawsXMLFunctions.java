@@ -18,6 +18,7 @@ import org.mycore.datamodel.metadata.MCRMetaIFS;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectDerivate;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.w3c.dom.Document;
 
@@ -60,6 +61,9 @@ public abstract class LawsXMLFunctions {
     public static Document getXML(String objectID) {
         try {
             MCRDerivate derivate = getXMLDerivate(objectID);
+            if(derivate == null) {
+                return null;
+            }
             MCRFilesystemNode xmlFile = getMainDoc(derivate);
             if (xmlFile instanceof MCRFile) {
                 InputStream is = ((MCRFile) xmlFile).getContentAsInputStream();
@@ -72,7 +76,11 @@ public abstract class LawsXMLFunctions {
     }
 
     public static MCRFilesystemNode getMainDoc(MCRDerivate derivate) {
-        MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
+        MCRObjectDerivate objectDerivate = derivate.getDerivate();
+        if(objectDerivate == null) {
+            return null;
+        }
+        MCRMetaIFS metaIFS = objectDerivate.getInternals();
         String mainDoc = metaIFS.getMainDoc();
         MCRFilesystemNode xmlFile = MCRFileMetadataManager.instance().retrieveChild(metaIFS.getIFSID(), mainDoc);
         return xmlFile;
