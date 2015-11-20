@@ -24,7 +24,6 @@ import java.util.HashSet;
 //def mcrVersion = '2015.08-SNAPSHOT'
 
 def resourcePaths = new HashSet<File>();
-resourcePaths.addAll('/Users/chi/Development/projects/mycore/mycore-acl-editor2/src/main/resources');
 
 def getDate() {
     def date = new Date()
@@ -39,7 +38,7 @@ repositories {
     // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
 }
 
-allprojects{
+allprojects {
     def releaseURL = "http://artifactory.mycore.de/mycore-releases"
     def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
 
@@ -79,7 +78,7 @@ subprojects {
 
     uploadArchives {
         repositories.mavenDeployer {
-            repository(url: "http://artifactory.mycore.de/libs-${project.version.endsWith('-SNAPSHOT')?'snapshots':'releases'}-local")
+            repository(url: "http://artifactory.mycore.de/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}-local")
         }
     }
 
@@ -227,27 +226,27 @@ project(':jportal_mcr_module') {
     jar.dependsOn copyIviewMod
 }
 
-project(':jportal_acl_ip_editor_module'){
+project(':jportal_acl_ip_editor_module') {
     dependencies {
         compile project(':jportal_mcr_module')
     }
 }
 
-project(':jportal_derivate_browser'){
+project(':jportal_derivate_browser') {
     mcrModule()
     dependencies {
         compile project(':jportal_mcr_module')
     }
 }
 
-project(':jportal_move_obj_module'){
+project(':jportal_move_obj_module') {
     mcrModule()
     dependencies {
         compile project(':jportal_mcr_module')
     }
 }
 
-project(':jportal_doublet_finder_module'){
+project(':jportal_doublet_finder_module') {
     mcrModule()
     dependencies {
         compile project(':jportal_mcr_module')
@@ -339,19 +338,19 @@ project(':jportal_webapp') {
 
         ['Single', 'App', 'WebTests'].each { farmName ->
             farm farmName, {
-			    def appName = "jportal"
-				def mcrHome = System.getProperty("user.home") + "/.mycore"
+                def appName = "jportal"
+                def mcrHome = System.getProperty("user.home") + "/.mycore"
 
-            	if(farmName.equals('WebTests')) {
+                if (farmName.equals('WebTests')) {
                     dependencies {
                         runtime project(':jportal_IT-TestData')
                     }
-            		appName = "jportal-webTests"
-                	mcrHome = "$project.buildDir/mcrHome"
-                	integrationTestTask = "webTests"
-            	}
-            	if(!farmName.equals('Single')) {
-                	webapp "org.mycore.solr:solr:$solrVersion@war", contextPath: "/solr"
+                    appName = "jportal-webTests"
+                    mcrHome = "$project.buildDir/mcrHome"
+                    integrationTestTask = "webTests"
+                }
+                if (!farmName.equals('Single')) {
+                    webapp "org.mycore.solr:solr:$solrVersion@war", contextPath: "/solr"
                 }
                 webapp project, contextPath: "/$appName"
 
@@ -366,22 +365,22 @@ project(':jportal_webapp') {
                 }
 
 
-			    systemProperty "MCR.AppName", appName
-			    systemProperty "MCR.Home", mcrHome
+                systemProperty "MCR.AppName", appName
+                systemProperty "MCR.Home", mcrHome
 
-				jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-			    jvmArgs '-Xmx2048m'
-			    port = 8291
+                jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+                jvmArgs '-Xmx2048m'
+                port = 8291
 
-			    serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
+                serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
 
                 onStart {
-                	if(!farmName.equals('Single')) {
-				        def appPath = "$mcrHome/$appName"
-				        def confDir = "$project.projectDir/config"
+                    if (!farmName.equals('Single')) {
+                        def appPath = "$mcrHome/$appName"
+                        def confDir = "$project.projectDir/config"
                         systemProperty "solr.solr.home", "$appPath/solr-home"
                         initSolr(appPath, confDir)
-					}
+                    }
                     startDB(mcrHome, appName)
                 }
             }
