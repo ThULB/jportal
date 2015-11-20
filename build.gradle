@@ -57,7 +57,6 @@ subprojects {
     apply plugin: 'maven'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
-    apply plugin: 'maven-publish'
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
 
@@ -78,16 +77,9 @@ subprojects {
 
     configurations { deployerJars }
 
-    dependencies {
-        deployerJars "org.apache.maven.wagon:wagon-http:2.8"
-    }
-
     uploadArchives {
         repositories.mavenDeployer {
-            configuration = configurations.deployerJars
-            repository(url: "scp://repos.mycompany.com/releases") {
-                authentication(userName: "me", password: "myPassword")
-            }
+            repository(url: "http://artifactory.mycore.de/libs-${project.version.endsWith('-SNAPSHOT')?'snapshots':'releases'}-local")
         }
     }
 
