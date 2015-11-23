@@ -78,7 +78,9 @@ subprojects {
 
     uploadArchives {
         repositories.mavenDeployer {
-            repository(url: "http://artifactory.mycore.de/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}-local")
+            repository(url: "http://artifactory.mycore.de/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}-local"){
+                authentication(userName: mavenUser, accessKey: mavenPassword)
+            }
         }
     }
 
