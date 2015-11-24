@@ -38,13 +38,12 @@ public class LayoutTools {
 
         public <T> T get(MCRObjectInfo<T> fromObj) throws JDOMException, IOException, SAXException {
             MCRObjectID mcrid = MCRObjectID.getInstance(id);
-            MCRXMLMetadataManager metadataManager = MCRXMLMetadataManager.instance();
-            if (metadataManager.exists(mcrid)) {
+            if (MCRXMLMetadataManager.instance().exists(mcrid)) {
                 List<Object> nodes = new ArrayList<Object>();
-                Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(mcrid);
+                Document xml = MCRXMLMetadataManager.instance().retrieveXML(mcrid);
                 for (String xpath : xpathList) {
-                    XPathExpression<Object> hiddenTemplateXpath = XPathFactory.instance().compile(xpath);
-                    Object node = hiddenTemplateXpath.evaluateFirst(journalXML);
+                    XPathExpression<Object> exp = XPathFactory.instance().compile(xpath);
+                    Object node = exp.evaluateFirst(xml);
                     if (node != null) {
                         nodes.add(node);
                     }
@@ -125,13 +124,13 @@ public class LayoutTools {
         return infoProvider.get(new SimpleText());
     }
 
-    public String getMaintitle(String journalID) throws TransformerException, JDOMException, IOException, SAXException {
-        InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/maintitles/maintitle/text()");
+    public String getMaintitle(String mcrID) throws TransformerException, JDOMException, IOException, SAXException {
+        InfoProvider infoProvider = new InfoProvider(mcrID, "/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()");
         return infoProvider.get(new SimpleText());
     }
 
-    public String getListType(String journalID) throws TransformerException, JDOMException, IOException, SAXException {
-        InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/contentClassis1/contentClassi1/@categid");
+    public String getListType(String mcrID) throws TransformerException, JDOMException, IOException, SAXException {
+        InfoProvider infoProvider = new InfoProvider(mcrID, "/mycoreobject/metadata/contentClassis1/contentClassi1/@categid");
         return infoProvider.get(new SimpleAttribute());
     }
 
