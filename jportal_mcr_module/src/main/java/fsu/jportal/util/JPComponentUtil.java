@@ -33,8 +33,8 @@ public abstract class JPComponentUtil {
 
         public <T> T get(JPObjectInfo<T> fromObj) {
             MCRObjectID mcrid = MCRObjectID.getInstance(id);
+            List<Object> nodes = new ArrayList<Object>();
             if (MCRMetadataManager.exists(mcrid)) {
-                List<Object> nodes = new ArrayList<Object>();
                 Document xml = MCRMetadataManager.retrieve(mcrid).createXML();
                 for (String xpath : xpathList) {
                     XPathExpression<Object> exp = XPathFactory.instance().compile(xpath);
@@ -43,9 +43,8 @@ public abstract class JPComponentUtil {
                         nodes.add(node);
                     }
                 }
-                return fromObj.getInfo(nodes);
             }
-            return null;
+            return fromObj.getInfo(nodes);
         }
     }
 
