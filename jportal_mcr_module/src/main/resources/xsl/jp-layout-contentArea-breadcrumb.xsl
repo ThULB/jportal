@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
-	xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="i18n">
 
 	<xsl:template name="breadcrumb">

@@ -3,6 +3,7 @@ package fsu.jportal.resources;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +29,8 @@ import org.xml.sax.SAXException;
 
 import fsu.jportal.resolver.EditorPreProc;
 import fsu.jportal.resolver.EditorPreProc.ParamsXML;
-import fsu.jportal.xsl.LayoutTools;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.xml.LayoutTools;
 
 @Path("editor")
 public class EditorResource {
@@ -56,11 +58,9 @@ public class EditorResource {
 
         if (parentID != null) {
             paramsXML.put("sourceUri", "xslStyle:asParent:mcrobject:" + parentID);
-            try {
-                String journalID = new LayoutTools().getJournalID(parentID);
-                paramsXML.put("journalID", journalID);
-            } catch (TransformerException | JDOMException | IOException | SAXException e) {
-                e.printStackTrace();
+            Optional<String> journalID = JPComponentUtil.getJournalID(parentID);
+            if(journalID.isPresent()) {
+                paramsXML.put("journalID", journalID.get());
             }
         }
         paramsXML.put("mcrid", "jportal_" + type + "_00000000");
@@ -93,12 +93,8 @@ public class EditorResource {
         paramsXML.put("editServlet", "UpdateObjectServlet");
         paramsXML.put("sourceUri", "xslStyle:mycoreobject-editor:mcrobject:" + id);
         paramsXML.put("cancelUrl", "receive/" + id);
-        try {
-            String journalID = "jpjournal".equals(type) ? id : new LayoutTools().getJournalID(id);
-            paramsXML.put("journalID", journalID);
-        } catch (TransformerException | JDOMException | IOException | SAXException e) {
-            e.printStackTrace();
-        }
+        String journalID = "jpjournal".equals(type) ? id : JPComponentUtil.getJournalID(id).orElse("");
+        paramsXML.put("journalID", journalID);
         MCRContent content = transform("update", type, paramsXML);
         return Response.ok(content.getInputStream()).build();
     }

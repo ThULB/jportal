@@ -3,7 +3,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor"
 	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jp="http://www.mycore.de/components/jp"
 	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-	xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
+	xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
 	exclude-result-prefixes="xed xlink jp i18n encoder">
 
 	<xsl:include href="copynodes.xsl" />

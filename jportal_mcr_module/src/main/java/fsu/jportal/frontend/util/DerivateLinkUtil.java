@@ -2,8 +2,11 @@ package fsu.jportal.frontend.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.ws.rs.WebApplicationException;
 
@@ -31,6 +34,11 @@ import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.solr.MCRSolrClientFactory;
 
+/**
+ * Collection of util methods for {@link MCRMetaDerivateLink}.
+ * 
+ * @author Matthias Eichner
+ */
 public abstract class DerivateLinkUtil {
 
     private static Logger LOGGER = LogManager.getLogger(DerivateLinkUtil.class);
@@ -68,11 +76,28 @@ public abstract class DerivateLinkUtil {
             return null;
         return new StringBuffer(derivateId).append(file.startsWith("/") ? "" : "/").append(file).toString();
     }
-    
+
+    /**
+     * Returns the linked derivates of the given mycore object.
+     * 
+     * @param mcrObj mycore object
+     * @return list of linked derivate ids or an empty list
+     */
+    public static List<String> getLinks(MCRObject mcrObj) {
+        MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
+        if (derLinks == null) {
+            return Collections.emptyList();
+        }
+        return StreamSupport.stream(derLinks.spliterator(), false)
+            .map(c -> (MCRMetaDerivateLink)c)
+            .map(MCRMetaDerivateLink::getXLinkHref)
+            .collect(Collectors.toList());
+    }
+
     public static void setLinks(List<MCRObjectID> idList, MCRPath pathOfImage) {
         setLinks(idList, pathOfImage.getOwner() + pathOfImage.getOwnerRelativePath());
     }
-    
+
     public static void setLinks(List<MCRObjectID> idList, String pathOfImage) {
         for (MCRObjectID id : idList) {
             try {
@@ -164,7 +189,7 @@ public abstract class DerivateLinkUtil {
           }
         }
     }
-    
+
     public static void deleteFileLinks(List<MCRObjectID> idList, MCRPath pathOfImg) {
         for (MCRObjectID id : idList) {
             try {
@@ -194,7 +219,7 @@ public abstract class DerivateLinkUtil {
     public static List<MCRObjectID> getLinks(MCRPath pathOfImg) throws SolrServerException, IOException {
         return getLinks(pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
     }
-        
+
     public static List<MCRObjectID> getLinks(String pathOfImg) throws SolrServerException, IOException {
         SolrClient solrServer = MCRSolrClientFactory.getSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();

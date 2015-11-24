@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan layoutTools mcrxml xlink">
 
   <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response|/journalList|/mcr_directory" />

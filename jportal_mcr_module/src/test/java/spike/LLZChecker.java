@@ -106,7 +106,7 @@ public class LLZChecker {
 //        }
 
         // convert
-        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00003/1802/THULB_00003_1802_wfs2_mets_Abgleich.xml"), new LLZMetsConverter());
+        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00036/1824/THULB_00036_1824_wfs2_mets_Abgleich.xml"), new LLZMetsConverter());
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         out.output(doc, System.out);
         

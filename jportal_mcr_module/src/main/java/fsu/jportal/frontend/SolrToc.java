@@ -1,6 +1,8 @@
 package fsu.jportal.frontend;
 
-import fsu.jportal.xsl.LayoutTools;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.xml.LayoutTools;
+
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -72,23 +74,11 @@ public class SolrToc {
     }
 
     public static boolean isPartOfOnlineJournal(String parentID) {
-        LayoutTools layoutTools = new LayoutTools();
-        try {
-            String journalID = layoutTools.getJournalID(parentID);
-            String listType = layoutTools.getListType(journalID);
-            if (listType.equals("online")) {
-                return true;
-            }
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+        String journalID = JPComponentUtil.getJournalID(parentID).orElse("");
+        String listType = JPComponentUtil.getListType(journalID).orElse("");
+        if (listType.equals("online")) {
+            return true;
         }
-
         return false;
     }
 
