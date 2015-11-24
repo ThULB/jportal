@@ -28,13 +28,24 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.servlets.MCRServlet;
 
-import fsu.jportal.constants.ParticipantRoleTypes;
 import fsu.jportal.mods.MODSLogoEntity;
 import fsu.jportal.xml.mapper.MODSLogoEntityXMLMapper;
 
 @Path("modslogos")
 public class MODSLogoResource {
     static Logger LOGGER = LogManager.getLogger(MODSLogoResource.class);
+
+    private static enum ParticipantRoleTypes {
+        operator, sponsor, partner;
+        public static boolean equals(String type) {
+            for (ParticipantRoleTypes participantType : ParticipantRoleTypes.values()) {
+                if (type.equals(participantType.toString())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     @GET
     @Path("{hiddenJournalId}")
@@ -56,8 +67,8 @@ public class MODSLogoResource {
                     String role = participant.getType();
                     if (role != null && ParticipantRoleTypes.equals(role)) {
                         String participantID = participant.getXLinkHref();
-                        MCRObject participantMcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID
-                            .getInstance(participantID));
+                        MCRObject participantMcrObj = MCRMetadataManager
+                            .retrieveMCRObject(MCRObjectID.getInstance(participantID));
                         entities.add(createLogoEntity(role, participantMcrObj));
                     }
                 }
