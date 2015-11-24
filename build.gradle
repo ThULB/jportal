@@ -76,10 +76,12 @@ subprojects {
 
     configurations { deployerJars }
 
-    uploadArchives {
-        repositories.mavenDeployer {
-            repository(url: "http://artifactory.mycore.de/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}-local"){
-                authentication(userName: mavenUser, password: mavenPassword)
+    if (project.hasProperty('mavenUser') && project.hasProperty('mavenPassword')) {
+        uploadArchives {
+            repositories.mavenDeployer {
+                repository(url: "http://artifactory.mycore.de/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}-local") {
+                    authentication(userName: mavenUser, password: mavenPassword)
+                }
             }
         }
     }
