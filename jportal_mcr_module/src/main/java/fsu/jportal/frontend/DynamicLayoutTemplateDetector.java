@@ -9,43 +9,29 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 
-import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
+public class DynamicLayoutTemplateDetector {
 
-public class JPortalLayoutTemplateDetector {
-
-    private final static Logger LOGGER = LogManager.getLogger(JPortalLayoutTemplateDetector.class);
+    private final static Logger LOGGER = LogManager.getLogger(DynamicLayoutTemplateDetector.class);
 
     private final static String KEY_PREFIX = "MCR.Module-JPortal.DynamicLayoutTemplates.";
 
     public static String getTemplateID(String id) {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(mcrId);
-        MCRMetaElement me = obj.getMetadata().getMetadataElement("hidden_jpjournalsID");
-        if (me != null && me.size() == 1) {
-            MCRMetaLangText metaText = (MCRMetaLangText) me.getElement(0);
-            return getJournalTemplateID(metaText.getText());
+        MCRObject journal = obj;
+        if (!journal.getId().getTypeId().equals("jpjournal")) {
+            journal = MCRObjectUtils.getRoot(obj);
         }
-        return getTemplateID();
-    }
-
-    public static String getTemplateID() {
-        // get id of current watched journal
-        String journalID = MCRJPortalURIGetJournalID.getID();
-
-        if (journalID.equals("")) {
-            LOGGER.debug("Journal-ID cannot be calculated, return ''");
-            return "";
-        }
-        return getJournalTemplateID(journalID);
+        return getJournalTemplateID(journal.getId().toString());
     }
 
     private static String getJournalTemplateID(String journalID) {
+        // TODO use JPJournal API here!!
         // get "date-from" of journal
         Document objXML;
         try {
@@ -57,10 +43,11 @@ public class JPortalLayoutTemplateDetector {
         Integer dateOfJournal = 0;
         Element dateNode = null;
         XPathExpression<Element> xpath = XPathFactory.instance().compile(
-                "/mycoreobject/metadata/dates/date[@type='published_from' or @type='published']", Filters.element());
+            "/mycoreobject/metadata/dates/date[@type='published_from' or @type='published']", Filters.element());
         dateNode = xpath.evaluateFirst(objXML);
         if (dateNode == null) {
-            LOGGER.error("No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return empty string.");
+            LOGGER.error(
+                "No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return empty string.");
             return "";
         }
         dateOfJournal = Integer.valueOf(dateNode.getTextTrim());
