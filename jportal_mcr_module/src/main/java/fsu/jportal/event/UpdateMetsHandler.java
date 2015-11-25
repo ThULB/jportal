@@ -3,7 +3,6 @@ package fsu.jportal.event;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -115,6 +114,9 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
             return Optional.empty();
         }
         LogicalDiv div = rootDiv.getLogicalSubDiv(mcrId);
+        if(div == null) {
+            return Optional.empty();
+        }
         if (newTitle.equals(div.getLabel())) {
             return Optional.empty();
         }
