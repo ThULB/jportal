@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:urn="xalan://org.mycore.urn.services.MCRURNManager" exclude-result-prefixes="i18n xsi xlink mcrxml">
+  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" xmlns:urn="xalan://org.mycore.urn.services.MCRURNManager"
+  exclude-result-prefixes="i18n xsi xlink mcrxml jpxml">
 
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
   <xsl:key name="identis" match="identi[@inherited='0']" use="@type" />
@@ -181,7 +182,7 @@
         <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="document(concat('jportal_getClassLabel:getDirectely:',@classid))//label/text()" />
+        <xsl:value-of select="jpxml:getClassificationLabel(@classid)" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

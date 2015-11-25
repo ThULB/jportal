@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import fsu.jportal.mets.LLZMetsUtils;
+import fsu.jportal.util.ResolverUtil;
 
 public class JPXMLFunctions {
 
@@ -278,6 +279,16 @@ public class JPXMLFunctions {
                 throw e2;
             }
         }
+    }
+
+    /**
+     * Returns the label of the given classID.
+     * 
+     * @param classID classification identifier
+     * @return label of the classification or "undefined"
+     */
+    public static String getClassificationLabel(String classID) {
+        return ResolverUtil.getClassLabel(classID).orElse("undefined");
     }
 
 }
