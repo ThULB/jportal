@@ -21,13 +21,19 @@ public class DynamicLayoutTemplateDetector {
     private final static String KEY_PREFIX = "MCR.Module-JPortal.DynamicLayoutTemplates.";
 
     public static String getTemplateID(String id) {
-        MCRObjectID mcrId = MCRObjectID.getInstance(id);
-        MCRObject obj = MCRMetadataManager.retrieveMCRObject(mcrId);
-        MCRObject journal = obj;
-        if (!journal.getId().getTypeId().equals("jpjournal")) {
-            journal = MCRObjectUtils.getRoot(obj);
+        try {
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            MCRObject obj = MCRMetadataManager.retrieveMCRObject(mcrId);
+            MCRObject journal = obj;
+            if (!journal.getId().getTypeId().equals("jpjournal")) {
+                journal = MCRObjectUtils.getRoot(obj);
+            }
+            return getJournalTemplateID(journal.getId().toString());
+        } catch(Exception exc) {
+            LOGGER.error("Something went wrong while getting the template id for " + id, exc);
+            // return default template
+            return "template_default";
         }
-        return getJournalTemplateID(journal.getId().toString());
     }
 
     private static String getJournalTemplateID(String journalID) {
