@@ -13,8 +13,6 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.jportal.annotation.URIResolverSchema;
-
 @URIResolverSchema(schema = "xClassification")
 public class ClassificationResolver implements URIResolver {
 

@@ -8,8 +8,6 @@ import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRException;
 
-import fsu.jportal.annotation.URIResolverSchema;
-
 @URIResolverSchema(schema = "xClassificationID")
 public class ClassificationIdResolver implements URIResolver {
 

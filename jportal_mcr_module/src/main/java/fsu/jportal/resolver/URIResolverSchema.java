@@ -1,4 +1,4 @@
-package fsu.jportal.annotation;
+package fsu.jportal.resolver;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

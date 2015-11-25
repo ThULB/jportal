@@ -7,7 +7,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.frontend.GlobalMessageFile;
 
 /**

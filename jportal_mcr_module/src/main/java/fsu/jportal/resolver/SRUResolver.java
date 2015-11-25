@@ -12,7 +12,6 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.util.GndUtil;
 
 @URIResolverSchema(schema = "sru")

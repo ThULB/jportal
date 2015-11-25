@@ -7,7 +7,6 @@ import javax.xml.transform.URIResolver;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.util.ResolverUtil;
 
 @URIResolverSchema(schema = "xClassificationLabel")

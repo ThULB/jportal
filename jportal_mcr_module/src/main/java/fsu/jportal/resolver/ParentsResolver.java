@@ -10,7 +10,6 @@ import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.util.ResolverUtil;
 import fsu.jportal.xml.ParentsListXML;
 

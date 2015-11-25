@@ -10,7 +10,6 @@ import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.services.i18n.MCRTranslation;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
 import fsu.jportal.util.ResolverUtil;
 

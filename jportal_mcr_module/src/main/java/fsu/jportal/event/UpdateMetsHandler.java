@@ -24,8 +24,8 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 
-import fsu.jportal.frontend.util.DerivateLinkUtil;
 import fsu.jportal.mets.LLZMetsUtils;
+import fsu.jportal.util.DerivateLinkUtil;
 import fsu.jportal.util.JPComponentUtil;
 
 /**

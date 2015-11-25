@@ -11,8 +11,6 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.mycore.common.config.MCRConfiguration;
 
-import fsu.jportal.annotation.URIResolverSchema;
-
 @URIResolverSchema(schema = "journalFile")
 public class JournalFilesResolver implements URIResolver {
 

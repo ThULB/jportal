@@ -49,7 +49,7 @@ import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSink;
 import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSource;
 import fsu.jportal.frontend.cli.io.LocalExportSink;
 import fsu.jportal.frontend.cli.io.LocalExportSource;
-import fsu.jportal.frontend.util.DerivateLinkUtil;
+import fsu.jportal.util.DerivateLinkUtil;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {

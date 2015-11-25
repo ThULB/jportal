@@ -9,7 +9,7 @@ import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
 
-import fsu.jportal.frontend.util.DerivateLinkUtil;
+import fsu.jportal.util.DerivateLinkUtil;
 
 /**
  * This event handler tries to delete all corresponding derivate links

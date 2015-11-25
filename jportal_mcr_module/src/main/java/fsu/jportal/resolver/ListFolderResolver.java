@@ -12,8 +12,6 @@ import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.config.MCRConfiguration;
 
-import fsu.jportal.annotation.URIResolverSchema;
-
 @URIResolverSchema(schema = "templates")
 public class ListFolderResolver implements URIResolver{
 

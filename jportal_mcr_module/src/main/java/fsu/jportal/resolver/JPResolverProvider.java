@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.xml.MCRURIResolver.MCRResolverProvider;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.nio.JarResource;
 
 public class JPResolverProvider implements MCRResolverProvider {

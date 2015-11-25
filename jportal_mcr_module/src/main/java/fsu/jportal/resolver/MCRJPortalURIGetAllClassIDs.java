@@ -17,8 +17,6 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 
-import fsu.jportal.annotation.URIResolverSchema;
-
 @URIResolverSchema(schema = "jportal_getALLClassIDs")
 public class MCRJPortalURIGetAllClassIDs implements URIResolver {
 

@@ -55,12 +55,12 @@ import org.xml.sax.SAXException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import fsu.jportal.frontend.util.DerivateLinkUtil;
 import fsu.jportal.gson.DerivateTypeAdapter;
 import fsu.jportal.gson.FileNodeWraper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
 import fsu.jportal.mets.MetsTools;
 import fsu.jportal.urn.URNTools;
+import fsu.jportal.util.DerivateLinkUtil;
 import fsu.jportal.util.DerivatePath;
 
 public class DerivateTools {

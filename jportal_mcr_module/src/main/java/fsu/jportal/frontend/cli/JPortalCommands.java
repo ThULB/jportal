@@ -38,7 +38,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.xml.sax.SAXException;
 
 import fsu.jportal.backend.DerivateTools;
-import fsu.jportal.frontend.util.DerivateLinkUtil;
+import fsu.jportal.util.DerivateLinkUtil;
 
 @MCRCommandGroup(name = "JP Commands")
 public class JPortalCommands {

@@ -10,8 +10,6 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
 
-import fsu.jportal.annotation.URIResolverSchema;
-
 /**
  * Gets the journal by any children id. For creating new objects the 'parent'
  * part id is used, for editing objects the 'id' part is used as a reference object. 

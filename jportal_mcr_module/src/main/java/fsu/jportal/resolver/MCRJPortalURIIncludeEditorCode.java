@@ -23,7 +23,6 @@ import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRURIResolver;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
 
 @URIResolverSchema(schema = "jportal_includeEditorCode")

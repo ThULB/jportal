@@ -36,8 +36,6 @@ import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrURL;
 
-import fsu.jportal.annotation.URIResolverSchema;
-
 /**
  * Resolves the previous and the next object.
  * 

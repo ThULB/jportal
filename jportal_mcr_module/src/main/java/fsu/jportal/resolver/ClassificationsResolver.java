@@ -14,7 +14,6 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.util.ResolverUtil;
 
 /**

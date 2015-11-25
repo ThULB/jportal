@@ -15,7 +15,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 
-import fsu.jportal.frontend.util.DerivateLinkUtil;
+import fsu.jportal.util.DerivateLinkUtil;
 
 @Path("derivate/link")
 public class DerivateLinkResource {

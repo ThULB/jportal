@@ -13,7 +13,6 @@ import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRURIResolver;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.common.xml.MCRJPortalURIGetJournalID;
 
 @URIResolverSchema(schema = "jportal_getClass")

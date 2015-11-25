@@ -1,4 +1,4 @@
-package fsu.jportal.solr;
+package fsu.jportal.frontend.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -6,7 +6,6 @@ import javax.xml.transform.URIResolver;
 
 import org.jdom2.transform.JDOMSource;
 
-import fsu.jportal.annotation.URIResolverSchema;
 import fsu.jportal.resources.MODSLogoResource;
 
 @URIResolverSchema(schema = "logo")

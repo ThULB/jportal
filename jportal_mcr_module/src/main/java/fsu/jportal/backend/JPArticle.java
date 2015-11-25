@@ -29,7 +29,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
-import fsu.jportal.frontend.util.DerivateLinkUtil;
+import fsu.jportal.util.DerivateLinkUtil;
 
 /**
  * Simple java abstraction of a jportal article. This class is not complete at all.
