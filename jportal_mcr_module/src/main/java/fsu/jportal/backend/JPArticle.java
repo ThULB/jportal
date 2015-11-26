@@ -24,6 +24,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
+import fsu.jportal.backend.JPPeriodicalComponent.DateType;
+
 /**
  * Simple java abstraction of a jportal article. This class is not complete at all.
  * 
@@ -31,9 +33,36 @@ import org.mycore.solr.search.MCRSolrSearchUtils;
  */
 public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
+    public static enum RecensionDateType {
+        published_Original, published_Original_From, published_Original_Till
+    }
+
     @Override
     public String getType() {
         return "jparticle";
+    }
+
+    /**
+     * Articles can have recension dates. Use this method when you want to set a
+     * recension date instead of a default published date. Be aware that articles
+     * can have only one date, either recension or published.
+     * 
+     * @param from from recension
+     * @param until until recension
+     */
+    public void setRecensionDate(String from, String until) {
+        if (from == null) {
+            object.getMetadata().removeMetadataElement("dates");
+            return;
+        }
+        MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", true, false, null);
+        String fromType = until == null ? RecensionDateType.published_Original.name()
+            : RecensionDateType.published_Original_From.name();
+        dates.addMetaObject(buildISODate(from, fromType));
+        if (until != null) {
+            dates.addMetaObject(buildISODate(until, RecensionDateType.published_Original_Till.name()));
+        }
+        object.getMetadata().setMetadataElement(dates);
     }
 
     public void setParent(String parentId) {
@@ -43,41 +72,6 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
             object.getStructure().setParent(parent);
         }
         parent.setReference(parentId, null, null);
-    }
-
-    public void setDate(String from, String until) {
-        if (from == null) {
-            object.getMetadata().removeMetadataElement("dates");
-            return;
-        }
-        MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", false, true, null);
-        MCRMetaISO8601Date mcrFrom = new MCRMetaISO8601Date();
-        mcrFrom.setSubTag("date");
-        mcrFrom.setType(until == null ? "published" : "published_Original_From");
-        mcrFrom.setDate(from);
-        dates.addMetaObject(mcrFrom);
-        if (until != null) {
-            MCRMetaISO8601Date mcrUntil = new MCRMetaISO8601Date();
-            mcrUntil.setSubTag("date");
-            mcrUntil.setType("published_Original_Till");
-            mcrUntil.setDate(until);
-            dates.addMetaObject(mcrUntil);
-        }
-        object.getMetadata().setMetadataElement(dates);
-    }
-
-    public List<MCRMetaISO8601Date> getDates() {
-        MCRMetaElement dates = object.getMetadata().getMetadataElement("dates");
-        List<MCRMetaISO8601Date> dateList = new ArrayList<>();
-        if (dates == null) {
-            return dateList;
-        }
-        for (MCRMetaInterface date : dates) {
-            if (date instanceof MCRMetaISO8601Date) {
-                dateList.add((MCRMetaISO8601Date) date);
-            }
-        }
-        return dateList;
     }
 
     public void setSize(String size) {

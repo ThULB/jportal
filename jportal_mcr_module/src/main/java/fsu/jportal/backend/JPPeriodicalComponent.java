@@ -1,5 +1,7 @@
 package fsu.jportal.backend;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -8,6 +10,8 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -21,6 +25,10 @@ import fsu.jportal.util.DerivateLinkUtil;
  * @author Matthias Eichner
  */
 public abstract class JPPeriodicalComponent implements JPComponent {
+
+    public static enum DateType {
+        published, published_from, published_until
+    }
 
     protected MCRObject object;
 
@@ -136,6 +144,62 @@ public abstract class JPPeriodicalComponent implements JPComponent {
         }
         MCRMetaDerivateLink derivateLink = (MCRMetaDerivateLink) derivateLinks.getElementByName("derivateLink");
         return derivateLink.getXLinkHref();
+    }
+
+    /**
+     * Sets the date for the component. If until is null, it will be ignored and only from is set.
+     * If from is null, the date will be removed. From and until should be in the form of YYYY-MM-DD
+     * or YYYY-MM or YYYY.
+     * 
+     * @param from from as string
+     * @param until until as string
+     */
+    public void setDate(String from, String until) {
+        if (from == null) {
+            object.getMetadata().removeMetadataElement("dates");
+            return;
+        }
+        MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", true, false, null);
+        String fromType = until == null ? DateType.published.name() : DateType.published_from.name();
+        dates.addMetaObject(buildISODate(from, fromType));
+        if (until != null) {
+            dates.addMetaObject(buildISODate(until, DateType.published_until.name()));
+        }
+        object.getMetadata().setMetadataElement(dates);
+    }
+
+    /**
+     * Builds an <code>MCRMetaISO8601Date</code> based on the date and a type.
+     * 
+     * @param dateString the date, should be in form of YYYY-MM-DD, YYYY-MM or YYYY.
+     * @param type the type of the date (e.g. published)
+     * @return an {@link MCRMetaISO8601Date}
+     */
+    protected MCRMetaISO8601Date buildISODate(String dateString, String type) {
+        MCRMetaISO8601Date isoDate = new MCRMetaISO8601Date();
+        isoDate.setSubTag("date");
+        isoDate.setType(type);
+        isoDate.setDate(dateString);
+        return isoDate;
+    }
+
+    /**
+     * Return all dates of this component and all inherited from parents.
+     * 
+     * @return list of dates.
+     */
+    public List<MCRMetaISO8601Date> getDates() {
+        MCRMetaElement dates = object.getMetadata().getMetadataElement("dates");
+        List<MCRMetaISO8601Date> dateList = new ArrayList<>();
+        if (dates == null) {
+            return dateList;
+        }
+        for (MCRMetaInterface date : dates) {
+            if (date instanceof MCRMetaISO8601Date) {
+                dateList.add((MCRMetaISO8601Date) date);
+            }
+        }
+        return dateList;
     }
 
     @Override

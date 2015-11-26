@@ -14,6 +14,8 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
 
+import fsu.jportal.backend.JPJournal;
+
 public class DynamicLayoutTemplateDetector {
 
     private final static Logger LOGGER = LogManager.getLogger(DynamicLayoutTemplateDetector.class);
@@ -37,6 +39,8 @@ public class DynamicLayoutTemplateDetector {
     }
 
     private static String getJournalTemplateID(String journalID) {
+//        JPJournal journal = new JPJournal(journalID);
+        
         // TODO use JPJournal API here!!
         // get "date-from" of journal
         Document objXML;
