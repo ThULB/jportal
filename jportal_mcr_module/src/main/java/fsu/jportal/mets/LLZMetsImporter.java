@@ -94,7 +94,7 @@ public class LLZMetsImporter {
             Map<LogicalDiv, JPComponent> divMap = handleLogicalDivs(structMap.getDivContainer(), volume);
 
             // import to mycore system
-            volume.importComponent();
+            volume.store();
             return divMap;
         } catch (Exception exc) {
             throw new ConvertException("Unable to import component", exc);
@@ -110,14 +110,17 @@ public class LLZMetsImporter {
             JPComponent jpComponent = null;
             if (type.equals("issue")) {
                 jpComponent = new JPVolume();
+                jpComponent.getObject().setImportMode(true);
                 divMap.putAll(buildVolume(div, div.getLabel(), (JPVolume) jpComponent));
             } else if (type.equals("volumeparts")) {
                 jpComponent = new JPVolume();
+                jpComponent.getObject().setImportMode(true);
                 divMap.putAll(buildVolume(div, "Volume Parts", (JPVolume) jpComponent));
             } else if (type.equals("article")) {
                 jpComponent = buildArticle(div);
             } else if (type.equals("title_page") || type.equals("preface") || type.equals("index")) {
                 JPArticle article = new JPArticle();
+                article.getObject().setImportMode(true);
                 String title = type.equals("title_page") ? "Titelblatt"
                     : type.equals("preface") ? "Vorwort" : "Register";
                 article.setTitle(title);
@@ -182,6 +185,7 @@ public class LLZMetsImporter {
     protected JPArticle buildArticle(LogicalDiv logicalDiv) throws ConvertException {
         String logicalId = logicalDiv.getId();
         JPArticle article = new JPArticle();
+        article.getObject().setImportMode(true);
         MCRObjectID articleId = article.getObject().getId();
         // title
         String title = logicalDiv.getLabel();

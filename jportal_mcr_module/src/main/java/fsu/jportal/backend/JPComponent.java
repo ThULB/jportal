@@ -6,6 +6,12 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObject;
 
+/**
+ * Base jportal interface of components. This includes persons, institutions, articles,
+ * volumes and journals. Internally a {@link MCRObject} is used.
+ * 
+ * @author Matthias Eichner
+ */
 public interface JPComponent {
 
     public static DecimalFormat EIGHT_DIGIT_FORMAT =  new DecimalFormat("00000000");
@@ -14,7 +20,7 @@ public interface JPComponent {
     /**
      * The corresponding mycore object.
      * 
-     * @return
+     * @return the base <code>MCRObject</code>
      */
     public MCRObject getObject();
 
@@ -26,12 +32,13 @@ public interface JPComponent {
     public String getTitle();
 
     /**
-     * Imports the component and all its children (when its a {@link JPContainer}) 
+     * Stores the component and all its children (when its a {@link JPContainer}) 
      * to the mycore system. This method checks if the component is already added,
      * if so an update is done.
+     * 
      * @throws MCRActiveLinkException 
      * @throws MCRPersistenceException 
      */
-    public void importComponent() throws MCRPersistenceException, MCRActiveLinkException;
+    public void store() throws MCRPersistenceException, MCRActiveLinkException;
 
 }
