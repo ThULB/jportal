@@ -1,20 +1,23 @@
 package fsu.jportal.frontend;
 
+import java.time.Year;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
 
 import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPPeriodicalComponent;
 
 public class DynamicLayoutTemplateDetector {
 
@@ -31,7 +34,7 @@ public class DynamicLayoutTemplateDetector {
                 journal = MCRObjectUtils.getRoot(obj);
             }
             return getJournalTemplateID(journal.getId().toString());
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             LOGGER.error("Something went wrong while getting the template id for " + id, exc);
             // return default template
             return "template_default";
@@ -39,29 +42,21 @@ public class DynamicLayoutTemplateDetector {
     }
 
     private static String getJournalTemplateID(String journalID) {
-//        JPJournal journal = new JPJournal(journalID);
-        
-        // TODO use JPJournal API here!!
-        // get "date-from" of journal
-        Document objXML;
-        try {
-            objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
-        } catch (Exception exc) {
-            LOGGER.error("Unable to get journal " + journalID, exc);
-            return "";
-        }
-        Integer dateOfJournal = 0;
-        Element dateNode = null;
-        XPathExpression<Element> xpath = XPathFactory.instance().compile(
-            "/mycoreobject/metadata/dates/date[@type='published_from' or @type='published']", Filters.element());
-        dateNode = xpath.evaluateFirst(objXML);
-        if (dateNode == null) {
-            LOGGER.error(
+        JPJournal journal = new JPJournal(journalID);
+        // collect all inherited == 0 dates
+        List<MCRMetaISO8601Date> dates = StreamSupport.stream(journal.getDates().spliterator(), false)
+            .filter(d -> d.getInherited() == 0).collect(Collectors.toList());
+        // get the from date
+        Optional<MCRMetaISO8601Date> from = StreamSupport.stream(dates.spliterator(), false)
+            .filter(d -> d.getType().equals(JPPeriodicalComponent.DateType.published.name())
+                || d.getType().equals(JPPeriodicalComponent.DateType.published_from.name()))
+            .findFirst();
+        // is there a from date?
+        if (!from.isPresent()) {
+            throw new MCRException(
                 "No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return empty string.");
-            return "";
         }
-        dateOfJournal = Integer.valueOf(dateNode.getTextTrim());
-
+        Integer yearOfJournal = Year.from(from.get().getMCRISO8601Date().getDt()).getValue();
         // get template
         MCRConfiguration mcrConfig = MCRConfiguration.instance();
         String template = "";
@@ -76,13 +71,13 @@ public class DynamicLayoutTemplateDetector {
             else
                 dateUntil = 10000;
             // date with template found ?
-            if ((dateOfJournal >= dateFrom) && (dateOfJournal <= dateUntil)) {
+            if ((yearOfJournal >= dateFrom) && (yearOfJournal <= dateUntil)) {
                 template = mcrConfig.getString(KEY_PREFIX + "name." + Integer.toString(pos));
             }
             pos++;
         }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Calculated template=" + template + " for date=" + dateOfJournal);
+            LOGGER.debug("Calculated template=" + template + " for date=" + yearOfJournal);
         }
         return template;
     }
