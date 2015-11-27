@@ -24,7 +24,7 @@ import fsu.jportal.util.DerivateLinkUtil;
  * 
  * @author Matthias Eichner
  */
-public abstract class JPPeriodicalComponent implements JPComponent {
+public abstract class JPPeriodicalComponent extends JPBaseComponent {
 
     public static enum DateType {
         published, published_from, published_until
@@ -36,9 +36,7 @@ public abstract class JPPeriodicalComponent implements JPComponent {
      * Creates a new <code>MCRObject</code> based on the {@link #getType()} method.
      */
     public JPPeriodicalComponent() {
-        object = new MCRObject();
-        object.setId(MCRObjectID.getNextFreeId("jportal_" + getType()));
-        object.setSchema("datamodel-" + getType() + ".xsd");
+        super();
     }
 
     /**
@@ -47,7 +45,7 @@ public abstract class JPPeriodicalComponent implements JPComponent {
      * @param mcrId a mycore object id
      */
     public JPPeriodicalComponent(String mcrId) {
-        this(MCRObjectID.getInstance(mcrId));
+        super(mcrId);
     }
 
     /**
@@ -56,7 +54,7 @@ public abstract class JPPeriodicalComponent implements JPComponent {
      * @param mcrId a mycore object id
      */
     public JPPeriodicalComponent(MCRObjectID mcrId) {
-        this(MCRMetadataManager.retrieveMCRObject(mcrId));
+        super(mcrId);
     }
 
     /**
@@ -65,10 +63,7 @@ public abstract class JPPeriodicalComponent implements JPComponent {
      * @param mcrObject the mycore object
      */
     public JPPeriodicalComponent(MCRObject mcrObject) {
-        if (!mcrObject.getId().getTypeId().equals(getType())) {
-            throw new IllegalArgumentException("Object " + mcrObject.getId() + " is not a " + getType());
-        }
-        this.object = mcrObject;
+        super(mcrObject);
     }
 
     @Override
@@ -201,22 +196,5 @@ public abstract class JPPeriodicalComponent implements JPComponent {
         }
         return dateList;
     }
-
-    @Override
-    public MCRObject getObject() {
-        return object;
-    }
-
-    @Override
-    public void store() throws MCRPersistenceException, MCRActiveLinkException {
-        MCRMetadataManager.update(object);
-    }
-
-    /**
-     * Returns the type of the component. One of jpjournal, jpvolume or jparticle should be returned.
-     * 
-     * @return the tpye of the component
-     */
-    public abstract String getType();
 
 }
