@@ -53,7 +53,7 @@ public class LawCommands {
         if (title != null) {
             JPVolume jpVolume = new JPVolume(id);
             jpVolume.addSubTitle(title, "misc");
-            jpVolume.importComponent();
+            jpVolume.store();
         }
 
         // articles
@@ -61,7 +61,7 @@ public class LawCommands {
         for (Element gesetz : gesetze.getChildren("gesetz", ns)) {
             JPArticle article = buildJPArticle(gesetz, imgDerivateId, ns);
             article.setParent(id);
-            article.importComponent();
+            article.store();
         }
     }
 
