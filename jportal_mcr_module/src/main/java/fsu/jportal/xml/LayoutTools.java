@@ -14,7 +14,7 @@ import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPComponentUtil.JPInfoProvider;
 import fsu.jportal.util.JPComponentUtil.JPObjectInfo;
 
-public class LayoutTools {
+public abstract class LayoutTools {
 
     private static class DerivateDisplay implements JPObjectInfo<Boolean> {
         @Override
@@ -50,35 +50,35 @@ public class LayoutTools {
         }
     }
 
-    public String getNameOfTemplate(String journalID) {
+    public static String getNameOfTemplate(String journalID) {
         return JPComponentUtil.getNameOfTemplate(journalID).orElse("");
     }
 
-    public String getJournalID(String mcrID) {
+    public static String getJournalID(String mcrID) {
         return JPComponentUtil.getJournalID(mcrID).orElse("");
     }
 
-    public String getMaintitle(String mcrID) {
+    public static String getMaintitle(String mcrID) {
         return JPComponentUtil.getMaintitle(mcrID).orElse("");
     }
 
-    public String getListType(String mcrID) {
+    public static String getListType(String mcrID) {
         return JPComponentUtil.getListType(mcrID).orElse("");
     }
 
-    public String getDerivateDisplay(String derivateID) {
+    public static String getDerivateDisplay(String derivateID) {
         JPInfoProvider infoProvider = new JPInfoProvider(derivateID,
             "/mycorederivate/derivate[not(@display) or @display!='false']");
         return infoProvider.get(new DerivateDisplay()).toString();
     }
 
-    public Node getDatesInfo(String journalID) {
+    public static Node getDatesInfo(String journalID) {
         JPInfoProvider infoProvider = new JPInfoProvider(journalID, "/mycoreobject/metadata/dates",
             "/mycoreobject/metadata/hidden_genhiddenfields1");
         return infoProvider.get(new DatesInfo());
     }
 
-    public String getUserName() {
+    public static String getUserName() {
         MCRUserInformation userInformation = MCRSessionMgr.getCurrentSession().getUserInformation();
         String realname = userInformation.getUserAttribute(MCRUserInformation.ATT_REAL_NAME);
         if (realname != null && !"".equals(realname.trim())) {

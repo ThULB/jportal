@@ -1,7 +1,6 @@
 package fsu.jportal.frontend;
 
 import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.xml.LayoutTools;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
