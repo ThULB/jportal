@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,8 +87,10 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
         // run through the derivates of ancestors and self
         List<MCRObject> ancestorsAndSelf = MCRObjectUtils.getAncestorsAndSelf(obj);
         // return list of all derivate Links
-        return StreamSupport.stream(ancestorsAndSelf.spliterator(), false)
-            .flatMap(o -> o.getStructure().getDerivates().stream()).map(MCRMetaLinkID::getXLinkHref).distinct()
+        return ancestorsAndSelf.stream()
+            .flatMap(o -> o.getStructure().getDerivates().stream())
+            .map(MCRMetaLinkID::getXLinkHref)
+            .distinct()
             .collect(Collectors.toList());
     }
 
