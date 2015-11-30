@@ -147,7 +147,7 @@ public class JPXMLFunctions {
 
     public static int getCentury(String date) {
         try {
-            return Integer.valueOf(date.substring(0, 2));
+            return (Integer.valueOf(date.substring(0, 2)) + 1);
         } catch(Exception exc) {
             LOGGER.warn("unable to format date " + date + " to century.");
             // return default 18 century
