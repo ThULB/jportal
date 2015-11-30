@@ -78,12 +78,13 @@ public class UrmelURNProvider implements MCRIURNProvider {
             return null;
         }
 
-        MCRURN[] urn = new MCRURN[amount];
+        MCRURN[] urns = new MCRURN[amount];
 
         for (int i = 0; i < amount; i++) {
-            urn[i] = new MCRURN(nsIdentifiers, pattern.generate(i + 1));
+            urns[i] = new MCRURN(nsIdentifiers, pattern.generate(i + 1));
         }
-        return null;
+
+        return urns;
     }
 
     private class PatternGenerator implements NSSpecificPartPattern {
@@ -113,7 +114,7 @@ public class UrmelURNProvider implements MCRIURNProvider {
     }
 
     /** Central method to generate uuids */
-    private static UUID getUUID() {
+    static UUID getUUID() {
         return UUID.randomUUID();
     }
 }
