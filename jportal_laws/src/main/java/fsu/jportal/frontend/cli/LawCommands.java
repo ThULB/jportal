@@ -85,6 +85,7 @@ public class LawCommands {
         }
 
         JPArticle article = new JPArticle();
+        article.getObject().setImportMode(true);
         // inhalt
         inhalt = nummer != null ? nummer + ". " + inhalt : inhalt;
         article.setTitle(inhalt);
