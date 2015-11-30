@@ -145,8 +145,14 @@ public class JPXMLFunctions {
         return "";
     }
 
-    public static int getCentury(int year) {
-        return (int) Math.ceil((float) year / 100);
+    public static int getCentury(String date) {
+        try {
+            return Integer.valueOf(date.substring(0, 2));
+        } catch(Exception exc) {
+            LOGGER.warn("unable to format date " + date + " to century.");
+            // return default 18 century
+            return 18;
+        }
     }
 
     /**

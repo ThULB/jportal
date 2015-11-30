@@ -30,8 +30,6 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
         published, published_from, published_until
     }
 
-    protected MCRObject object;
-
     /**
      * Creates a new <code>MCRObject</code> based on the {@link #getType()} method.
      */
