@@ -94,7 +94,8 @@ public class UrmelURNProvider implements MCRIURNProvider {
 
         private String id = "";
 
-        public PatternGenerator(int leadingZeros, String nsIdentifiersSpecParts) {
+        public PatternGenerator(int amount, String nsIdentifiersSpecParts) {
+            int leadingZeros = String.valueOf(amount).length();
             this.format = "%0" + leadingZeros + "d";
             this.nsIdentifiersSpecParts = nsIdentifiersSpecParts;
         }
