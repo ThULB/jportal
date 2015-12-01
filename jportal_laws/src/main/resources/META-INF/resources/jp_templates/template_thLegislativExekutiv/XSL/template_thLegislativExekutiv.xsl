@@ -2,7 +2,7 @@
 <!-- ============================================== -->
 <!-- $Revision: 575 $ $Date: 2008-09-04 14:26:32 +0200 (Do, 04 Sep 2008) $ -->
 <!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
   xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions" xmlns:decoder="xalan://java.net.URLDecoder" xmlns:escapeUtils="org.apache.commons.lang.StringEscapeUtils"
   exclude-result-prefixes="layoutTools laws decoder escapeUtils">
 
