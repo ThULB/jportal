@@ -20,6 +20,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import fsu.jportal.backend.JPInstitution;
 import fsu.jportal.backend.JPPerson;
 import fsu.jportal.mods.MODSLogoEntity;
 import fsu.jportal.xml.mapper.MODSLogoEntityXMLMapper;
@@ -87,8 +88,15 @@ public class LogoResolver implements URIResolver {
     }
 
     protected static String getLogoURL(MCRObject participantMcrObj) {
-        JPPerson person = new JPPerson(participantMcrObj);
-        return person.getLogo();
+        String type = participantMcrObj.getId().getTypeId();
+        if(type.equals("person")) {
+            JPPerson person = new JPPerson(participantMcrObj);
+            return person.getLogo();
+        } else if(type.equals("jpinst")) {
+            JPInstitution jpinst = new JPInstitution(participantMcrObj);
+            return jpinst.getLogo();
+        }
+        return null;
     }
 
     protected static String getFullname(MCRObject participantMcrObj) {
