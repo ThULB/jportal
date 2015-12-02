@@ -1,4 +1,4 @@
-package fsu.jportal.mycore.sru.impex.pica.producer;
+package fsu.jportal.backend.pica;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
 import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
 import fsu.archiv.mycore.sru.impex.pica.producer.CorporationProducer;
 
-public class InstitutionProducer extends CorporationProducer {
+public class JPInstitutionProducer extends CorporationProducer {
 
-    public InstitutionProducer() {
+    public JPInstitutionProducer() {
         super("jpinst");
     }
 

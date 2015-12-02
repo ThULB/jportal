@@ -32,8 +32,8 @@ import fsu.archiv.mycore.sru.SRUQueryParser;
 import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
 import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
-import fsu.jportal.mycore.sru.impex.pica.producer.InstitutionProducer;
-import fsu.jportal.mycore.sru.impex.pica.producer.JPPersonProducer;
+import fsu.jportal.backend.pica.JPInstitutionProducer;
+import fsu.jportal.backend.pica.JPPersonProducer;
 
 public class GndUtil {
 
@@ -143,7 +143,7 @@ public class GndUtil {
         if (isPerson(objectType)) {
             return new JPPersonProducer().procudeRawMCRObject(picaRecord);
         } else if (isInstitution(objectType)) {
-            return new InstitutionProducer().produceRawMCRObject(picaRecord);
+            return new JPInstitutionProducer().produceRawMCRObject(picaRecord);
         }
         throw new IllegalArgumentException("Invalid object type. Cannot parse " + objectType);
     }
