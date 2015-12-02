@@ -36,7 +36,7 @@
     <servlet-class>org.mycore.iview2.frontend.MCRTileCombineServlet</servlet-class>
     <init-param>
       <param-name>org.mycore.iview2.frontend.MCRFooterInterface</param-name>
-      <param-value>fsu.jportal.iview2.UrmelFooter</param-value>
+      <param-value>fsu.jportal.frontend.iview.UrmelFooter</param-value>
     </init-param>
   </servlet>
 

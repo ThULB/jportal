@@ -1,4 +1,4 @@
-package fsu.jportal.iview2;
+package fsu.jportal.frontend.iview;
 
 import javax.servlet.http.HttpServletRequest;
 
