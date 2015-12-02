@@ -72,6 +72,24 @@
     <xsl:apply-templates mode="partnerEntity" select="." />
   </xsl:template>
 
+  <xsl:template match="mets:mets">
+    <mets:mets>
+      <xsl:if test="not(mets:amdSec)">
+        <xsl:variable name="emptryAMDSec">
+          <mets:amdSec />
+        </xsl:variable>
+        <xsl:apply-templates select="xalan:nodeset($emptryAMDSec)" />
+      </xsl:if>
+      <xsl:if test="not(mets:dmdSec)">
+        <xsl:variable name="emptyDMDSec">
+          <mets:dmdSec ID="dmd_{$derivateID}"/>
+        </xsl:variable>
+        <xsl:apply-templates select="xalan:nodeset($emptyDMDSec)" />
+      </xsl:if>
+      <xsl:apply-templates />
+    </mets:mets>
+  </xsl:template>
+
   <xsl:template match="mets:dmdSec">
     <mets:dmdSec ID="dmd_{$derivateID}">
       <mets:mdWrap MDTYPE="MODS">
