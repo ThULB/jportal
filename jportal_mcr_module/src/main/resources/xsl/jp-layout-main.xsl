@@ -139,7 +139,7 @@
       <body>
         <div id="globalHeader">
           <div class="row">
-            <div class="col-md-6 navbar-header">
+            <div class="col-md-5 navbar-header">
               <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-globalHeader">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -167,7 +167,7 @@
                 </xsl:if>
               </ul>
             </div>
-            <div id="navbar-collapse-globalHeader" class="col-md-6 collapse navbar-collapse navbar-right">
+            <div id="navbar-collapse-globalHeader" class="col-md-7 collapse navbar-collapse navbar-right">
               <!-- <ul class="list-inline" style="padding: 10px"> </ul> -->
               <xsl:call-template name="jp.navigation.top" />
             </div>
