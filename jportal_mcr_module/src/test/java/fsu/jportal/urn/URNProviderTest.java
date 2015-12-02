@@ -86,23 +86,6 @@ public class URNProviderTest {
         }
     }
 
-    @Test
-    public void testFoo() throws Exception {
-        MCRURN base = new MCRURN(NS_IDENT, NS_SPEC);
-        System.out.println("JP URN: " + urmelURNProvider.generateURN().toString());
-        System.out.println("JP URN: " + urmelURNProvider.generateURN(1)[0].toString());
-        MCRURN[] mcrurnsJP = urmelURNProvider.generateURN(10, base);
-        System.out.println("JP URN: " + mcrurnsJP[0].toString());
-        System.out.println("JP URN: " + mcrurnsJP[1].toString());
-        ArchiveURNProvider archiveURNProvider = new ArchiveURNProvider();
-        System.out.println("AR URN: " + archiveURNProvider.generateURN().toString());
-        System.out.println("AR URN: " + archiveURNProvider.generateURN(1)[0].toString());
-        MCRURN[] mcrurnsAR = archiveURNProvider.generateURN(10, base);
-        System.out.println("AR URN: " + mcrurnsAR[0].toString());
-        System.out.println("AR URN: " + mcrurnsAR[1].toString());
-
-    }
-
     private void assertURN(MCRURN urmelurn) {
         assertURN(urmelurn, 0);
     }
