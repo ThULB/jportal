@@ -78,10 +78,11 @@ public abstract class DerivateLinkUtil {
     }
 
     /**
-     * Returns the linked derivates of the given mycore object.
+     * Returns the linked paths of the given mycore object. The links are
+     * in the form of jportal_derivate_xxxxxxx/path_to_linked_file.
      * 
      * @param mcrObj mycore object
-     * @return list of linked derivate ids or an empty list
+     * @return list of linked derivate paths or an empty list
      */
     public static List<String> getLinks(MCRObject mcrObj) {
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
@@ -91,6 +92,17 @@ public abstract class DerivateLinkUtil {
         return StreamSupport.stream(derLinks.spliterator(), false)
             .map(c -> (MCRMetaDerivateLink)c)
             .map(MCRMetaDerivateLink::getXLinkHref)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a list of all derivate id's which are linked with the given object.
+     * 
+     * @param mcrObj the object
+     * @return list of linked derivate id's
+     */
+    public static List<String> getLinkedDerivates(MCRObject mcrObj) {
+        return getLinks(mcrObj).stream().map(link -> link.substring(0, link.indexOf('/'))).distinct()
             .collect(Collectors.toList());
     }
 

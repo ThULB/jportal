@@ -80,7 +80,7 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
      */
     private List<String> getDerivateLinks(MCRObject obj) {
         // first derivate links
-        List<String> links = DerivateLinkUtil.getLinks(obj);
+        List<String> links = DerivateLinkUtil.getLinkedDerivates(obj);
         if (!links.isEmpty()) {
             return links;
         }
