@@ -56,7 +56,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fsu.jportal.gson.DerivateTypeAdapter;
-import fsu.jportal.gson.FileNodeWraper;
+import fsu.jportal.gson.FileNodeWrapper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
 import fsu.jportal.mets.MetsTools;
 import fsu.jportal.urn.URNTools;
@@ -535,7 +535,7 @@ public class DerivateTools {
             return null;
         }
         String maindoc = derivate.getMaindoc();
-        FileNodeWraper wrapper = new FileNodeWraper(node, maindoc);
+        FileNodeWrapper wrapper = new FileNodeWrapper(node, maindoc);
         JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
 
         json.addProperty("display", isHidden(derivateID));

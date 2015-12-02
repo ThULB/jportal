@@ -15,12 +15,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 
-public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWraper> {
+public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
     private static final String dateFormat = "dd.MM.yyyy HH:mm:ss";
     private static final DateFormat dateFormatter = new SimpleDateFormat(dateFormat);
     
     @Override
-    public JsonElement serialize(FileNodeWraper deriv, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(FileNodeWrapper deriv, Type typeOfSrc, JsonSerializationContext context) {
         String maindoc = deriv.getMaindoc();
         JsonObject nodeJSON = createJSON(context, maindoc, deriv.getNode());
         if (!deriv.isDir()) {
@@ -63,7 +63,7 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWraper> {
     }
 
     @Override
-    public FileNodeWraper deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public FileNodeWrapper deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         // TODO Auto-generated method stub
         return null;

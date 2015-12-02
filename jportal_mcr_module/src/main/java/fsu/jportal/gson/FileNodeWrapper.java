@@ -3,13 +3,13 @@ package fsu.jportal.gson;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 
-public class FileNodeWraper {
+public class FileNodeWrapper {
     private String maindoc;
     private MCRFilesystemNode[] children;
     private MCRFilesystemNode node;
     private boolean isDir = false;
     
-    public FileNodeWraper(MCRFilesystemNode node, String maindoc) {
+    public FileNodeWrapper(MCRFilesystemNode node, String maindoc) {
         if(node instanceof MCRDirectory){
             setChildren(((MCRDirectory) node).getChildren());
             setDir(true);
