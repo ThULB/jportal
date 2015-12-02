@@ -9,8 +9,12 @@ import javax.xml.transform.URIResolver;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.Attribute;
 import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
+import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
@@ -20,9 +24,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.jportal.mods.MODSLogoEntity;
 import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.xml.mapper.MODSLogoEntityXMLMapper;
 
 /**
  * URIResolver to retrieve the logos of participant partners.
@@ -120,4 +122,108 @@ public class LogoResolver implements URIResolver {
         }
         return null;
     }
+
+    protected static class MODSLogoEntity {
+
+        private String name;
+
+        private String role;
+
+        private String siteURL;
+
+        private String logo;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public void setRole(String role) {
+            this.role = role;
+        }
+
+        public void setSiteURL(String siteURL) {
+            this.siteURL = siteURL;
+        }
+
+        public String getSiteURL() {
+            return siteURL;
+        }
+
+        public void setLogo(String logo) {
+            this.logo = logo;
+        }
+
+        public String getLogo() {
+            return logo;
+        }
+
+    }
+
+    protected static class MODSLogoEntityXMLMapper {
+        private List<MODSLogoEntity> entities;
+
+        private Namespace urmelNamespace = Namespace.getNamespace("urmel", "http://www.urmel-dl.de/ns/mods-entities");
+
+        public MODSLogoEntityXMLMapper(List<MODSLogoEntity> entities) {
+            this.entities = entities;
+        }
+
+        public Document getXML() {
+            Document modsLogoEntities = new Document();
+            Element entitiesTag = createUrmelTag("entities");
+            entitiesTag.addNamespaceDeclaration(MCRConstants.XLINK_NAMESPACE);
+            for (MODSLogoEntity entity : entities) {
+                Element entityTag = createEntityTag(entity);
+                if (entity.getSiteURL() != null) {
+                    entityTag.addContent(createSiteTag(entity.getSiteURL()));
+                }
+                if (entity.getLogo() != null) {
+                    entityTag.addContent(createLogoTag("logo", entity.getLogo()));
+                }
+                entitiesTag.addContent(entityTag);
+            }
+
+            modsLogoEntities.setRootElement(entitiesTag);
+            return modsLogoEntities;
+        }
+
+        protected Element createLogoTag(String tagName, String url) {
+            Element logoTag = createUrmelTag(tagName);
+            logoTag.setAttribute(createXlinkAttr("href", url));
+            logoTag.setAttribute(createXlinkAttr("type", "resource"));
+            return logoTag;
+        }
+
+        protected Element createSiteTag(String url) {
+            Element siteTag = createUrmelTag("site");
+            siteTag.setAttribute(createXlinkAttr("href", url));
+            siteTag.setAttribute(createXlinkAttr("type", "locator"));
+            return siteTag;
+        }
+
+        protected Element createEntityTag(MODSLogoEntity entity) {
+            Element entityTag = createUrmelTag("entity");
+            entityTag.setAttribute(createXlinkAttr("title", entity.getName()));
+            entityTag.setAttribute(createXlinkAttr("type", "extended"));
+            entityTag.setAttribute(new Attribute("type", entity.getRole()));
+            return entityTag;
+        }
+
+        protected Attribute createXlinkAttr(String attrName, String attrValue) {
+            return new Attribute(attrName, attrValue, MCRConstants.XLINK_NAMESPACE);
+        }
+
+        protected Element createUrmelTag(String tagName) {
+            return new Element(tagName, urmelNamespace);
+        }
+    }
+
 }
