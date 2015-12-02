@@ -20,6 +20,7 @@ import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.mycore.solr.search.MCRSolrSearchUtils;
@@ -33,13 +34,50 @@ import fsu.jportal.backend.JPPeriodicalComponent.DateType;
  */
 public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
+    public static String TYPE = "jparticle";
+
     public static enum RecensionDateType {
         published_Original, published_Original_From, published_Original_Till
     }
 
+
+    /**
+     * Creates a new jportal article.
+     */
+    public JPArticle() {
+        super();
+    }
+
+    /**
+     * Creates a new JPArticle container for the given mcrId.
+     * 
+     * @param mcrId a mycore object id
+     */
+    public JPArticle(String mcrId) {
+        super(mcrId);
+    }
+
+    /**
+     * Creates a new JPArticle container for the given mcrId.
+     * 
+     * @param mcrId a mycore object id
+     */
+    public JPArticle(MCRObjectID mcrId) {
+        super(mcrId);
+    }
+
+    /**
+     * Creates a new JPArticle container for the mycore object.
+     * 
+     * @param mcrObject the mycore object
+     */
+    public JPArticle(MCRObject mcrObject) {
+        super(mcrObject);
+    }
+    
     @Override
     public String getType() {
-        return "jparticle";
+        return TYPE;
     }
 
     /**

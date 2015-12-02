@@ -6,17 +6,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+/**
+ * Person abstraction. Be aware this class is not fully implemented.
+ * 
+ * @author Matthias Eichner
+ */
 public class JPPerson extends JPLegalEntity {
+
+    public static String TYPE = "person";
 
     public JPPerson() {
         super();
@@ -123,12 +127,7 @@ public class JPPerson extends JPLegalEntity {
      * @return the heading.
      */
     protected Optional<MCRMetaXML> getHeading() {
-        MCRMetaElement heading = object.getMetadata().getMetadataElement("def.heading");
-        if (heading == null) {
-            return Optional.empty();
-        }
-        return StreamSupport.stream(heading.spliterator(), false).filter(m -> m.getInherited() == 0)
-            .map(c -> (MCRMetaXML) c).findFirst();
+        return streamNotInherited("def.heading").map(c -> (MCRMetaXML) c).findFirst();
     }
 
     /**
@@ -137,17 +136,12 @@ public class JPPerson extends JPLegalEntity {
      * @return list of <code>MCRMetaXML</code>
      */
     protected List<MCRMetaXML> getAlternative() {
-        MCRMetaElement alternative = object.getMetadata().getMetadataElement("def.alternative");
-        if (alternative == null) {
-            return Collections.emptyList();
-        }
-        return StreamSupport.stream(alternative.spliterator(), false).filter(m -> m.getInherited() == 0)
-            .map(c -> (MCRMetaXML) c).collect(Collectors.toList());
+        return streamNotInherited("def.alternative").map(c -> (MCRMetaXML) c).collect(Collectors.toList());
     }
 
     @Override
     public String getType() {
-        return "person";
+        return TYPE;
     }
 
 }

@@ -3,8 +3,13 @@ package fsu.jportal.backend;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
@@ -14,6 +19,7 @@ import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 
 import fsu.jportal.util.DerivateLinkUtil;
 
@@ -23,6 +29,8 @@ import fsu.jportal.util.DerivateLinkUtil;
  * @author Matthias Eichner
  */
 public abstract class JPPeriodicalComponent extends JPBaseComponent {
+
+    static Logger LOGGER = LogManager.getLogger(JPPeriodicalComponent.class);
 
     public static enum DateType {
         published, published_from, published_until
@@ -88,17 +96,12 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
     }
 
     /**
-     * Returns the correct main title as <code>MCRMetaInterface</code> for this component.
+     * Returns the correct main title as <code>MCRMetaLangText</code> for this component.
      * 
      * @return the main title
      */
     protected Optional<MCRMetaLangText> getMaintitle() {
-        MCRMetaElement maintitles = object.getMetadata().getMetadataElement("maintitles");
-        if (maintitles == null) {
-            return Optional.empty();
-        }
-        return StreamSupport.stream(maintitles.spliterator(), false).filter(m -> m.getInherited() == 0)
-            .map(c -> (MCRMetaLangText) c).findFirst();
+        return streamNotInherited("maintitles").map(c -> (MCRMetaLangText) c).findFirst();
     }
 
     /**
@@ -129,12 +132,8 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
      * @return derivate link as string
      */
     public String getDerivateLink() {
-        MCRMetaElement derivateLinks = object.getMetadata().getMetadataElement("derivateLinks");
-        if (derivateLinks == null) {
-            return null;
-        }
-        MCRMetaDerivateLink derivateLink = (MCRMetaDerivateLink) derivateLinks.getElementByName("derivateLink");
-        return derivateLink.getXLinkHref();
+        return streamNotInherited("derivateLinks").map(c -> ((MCRMetaDerivateLink) c).getXLinkHref()).findFirst()
+            .orElse(null);
     }
 
     /**
@@ -180,17 +179,23 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
      * @return list of dates.
      */
     public List<MCRMetaISO8601Date> getDates() {
-        MCRMetaElement dates = object.getMetadata().getMetadataElement("dates");
-        List<MCRMetaISO8601Date> dateList = new ArrayList<>();
-        if (dates == null) {
-            return dateList;
+        return stream("dates").map(c -> (MCRMetaISO8601Date) c).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the template name for this component. Each component is either a journal or
+     * should have a journal as an ancestor. This method returns the template of this journal.
+     * 
+     * @return the template name
+     */
+    public String getNameOfTemplate() {
+        MCRObject journal = MCRObjectUtils.getRoot(object);
+        if (journal.getId().getTypeId().equals(JPJournal.TYPE)) {
+            throw new MCRException("Unable to get template of object " + journal.getId()
+                + " because its not a journal but the root ancestor of " + object.getId()
+                + ". Return default_template.");
         }
-        for (MCRMetaInterface date : dates) {
-            if (date instanceof MCRMetaISO8601Date) {
-                dateList.add((MCRMetaISO8601Date) date);
-            }
-        }
-        return dateList;
+        return new JPJournal(journal).getNameOfTemplate();
     }
 
 }

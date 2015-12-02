@@ -12,6 +12,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  */
 public class JPVolume extends JPContainer {
 
+    public static String TYPE = "jpvolume";
+
     public JPVolume() {
         super();
     }
@@ -30,7 +32,7 @@ public class JPVolume extends JPContainer {
 
     @Override
     public String getType() {
-        return "jpvolume";
+        return TYPE;
     }
 
     public void setHiddenPosition(String position) {

@@ -15,6 +15,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  */
 public class JPInstitution extends JPLegalEntity {
 
+    public static String TYPE = "jpinst";
+    
     public JPInstitution() {
         super();
     }
@@ -43,7 +45,7 @@ public class JPInstitution extends JPLegalEntity {
 
     @Override
     public String getType() {
-        return "jpinst";
+        return TYPE;
     }
 
     /**

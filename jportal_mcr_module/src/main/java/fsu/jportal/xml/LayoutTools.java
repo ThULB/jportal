@@ -1,20 +1,28 @@
 package fsu.jportal.xml;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.output.DOMOutputter;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.w3c.dom.Node;
 
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.resolver.LogoResolver;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPComponentUtil.JPInfoProvider;
 import fsu.jportal.util.JPComponentUtil.JPObjectInfo;
 
 public abstract class LayoutTools {
+
+    static Logger LOGGER = LogManager.getLogger(LogoResolver.class);
 
     private static class DerivateDisplay implements JPObjectInfo<Boolean> {
         @Override
@@ -50,8 +58,14 @@ public abstract class LayoutTools {
         }
     }
 
-    public static String getNameOfTemplate(String journalID) {
-        return JPComponentUtil.getNameOfTemplate(journalID).orElse("");
+    public static String getNameOfTemplate(String id) {
+        try {
+            Optional<JPPeriodicalComponent> periodical = JPComponentUtil.getPeriodical(MCRObjectID.getInstance(id));
+            return periodical.get().getNameOfTemplate();
+        } catch(Exception exc) {
+            LOGGER.error("Unable to get name of template for object " + id + ". Return default template.", exc);
+            return "template_default";
+        }
     }
 
     public static String getJournalID(String mcrID) {

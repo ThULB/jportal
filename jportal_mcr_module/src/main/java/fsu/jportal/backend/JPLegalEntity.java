@@ -1,9 +1,7 @@
 package fsu.jportal.backend;
 
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
-import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -48,12 +46,7 @@ public abstract class JPLegalEntity extends JPBaseComponent {
      * @return logo if present
      */
     protected Optional<String> findLogo(String type) {
-        MCRMetaElement logo = object.getMetadata().getMetadataElement("logo");
-        if (logo == null) {
-            return null;
-        }
-        return StreamSupport.stream(logo.spliterator(), false)
-            .filter(m -> m.getInherited() == 0 && type.equals(m.getType())).map(c -> (MCRMetaLangText) c)
+        return streamNotInherited("logo").filter(m -> type.equals(m.getType())).map(c -> (MCRMetaLangText) c)
             .map(MCRMetaLangText::getText).findFirst();
     }
 

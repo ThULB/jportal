@@ -1,5 +1,6 @@
 package fsu.jportal.backend;
 
+import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -9,6 +10,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * @author Matthias Eichner
  */
 public class JPJournal extends JPContainer {
+
+    public static String TYPE = "jpjournal";
 
     public JPJournal() {
         super();
@@ -28,7 +31,12 @@ public class JPJournal extends JPContainer {
 
     @Override
     public String getType() {
-        return "jpjournal";
+        return TYPE;
+    }
+
+    public String getNameOfTemplate() {
+        return streamNotInherited("hidden_templates").map(c -> ((MCRMetaLangText) c).getText()).findFirst()
+            .orElse(null);
     }
 
 }
