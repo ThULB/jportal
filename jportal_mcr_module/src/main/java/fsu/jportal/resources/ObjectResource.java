@@ -85,7 +85,7 @@ public class ObjectResource {
         }
         String objectType = obj.getId().getTypeId();
         MCRJerseyUtil.checkPermission("create-" + objectType);
-        obj.setId(MCRObjectID.getNextFreeIdByType(objectType));
+        obj.setId(MCRObjectID.getNextFreeId("jportal", objectType));
         MCRMetadataManager.create(obj);
         return Response.ok(obj.getId().toString()).build();
     }
