@@ -60,7 +60,7 @@
 
   <xsl:template mode="journalID" match="mcr_directory">
     <xsl:variable name="ownerID" select="ownerID"/>
-    <xsl:variable name="derivateParent" select="document(concat('parents:',$ownerID))/parents/parent/@xlink:href"/>
+    <xsl:variable name="derivateParent" select="document(concat('mcrobject:',$ownerID))/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href"/>
     <xsl:value-of select="layoutTools:getJournalID($derivateParent)"/>
   </xsl:template>
 
