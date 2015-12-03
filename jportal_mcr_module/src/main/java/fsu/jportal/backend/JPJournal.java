@@ -34,9 +34,10 @@ public class JPJournal extends JPContainer {
         return TYPE;
     }
 
+    @Override
     public String getNameOfTemplate() {
-        return streamNotInherited("hidden_templates").map(c -> ((MCRMetaLangText) c).getText()).findFirst()
-            .orElse(null);
+        return metadataStreamNotInherited("hidden_templates", MCRMetaLangText.class).map(MCRMetaLangText::getText)
+            .findFirst().orElse(null);
     }
 
 }

@@ -145,7 +145,7 @@ $(function() {
 	
 	function loadElement(path, callback){
 		$.ajax({
-			url: jp.baseURL + "rsc/logoImporter/getList/" + path,
+			url: jp.baseURL + "rsc/logo/get/" + path,
 			type: "GET",
 			success: function(data) {
 				callback(data, path);
@@ -158,7 +158,7 @@ $(function() {
 
 	function getBaseURL(callback) {
 		$.ajax({
-			url: jp.baseURL + "rsc/logoImporter/getLogoURLBase",
+			url: jp.baseURL + "rsc/logo/getLogoURLBase",
 			type: "GET",
 			success: function(data) {
 				callback(data);

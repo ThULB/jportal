@@ -46,7 +46,7 @@ public abstract class JPLegalEntity extends JPBaseComponent {
      * @return logo if present
      */
     protected Optional<String> findLogo(String type) {
-        return streamNotInherited("logo").filter(m -> type.equals(m.getType())).map(c -> (MCRMetaLangText) c)
+        return metadataStreamNotInherited("logo", MCRMetaLangText.class).filter(m -> type.equals(m.getType()))
             .map(MCRMetaLangText::getText).findFirst();
     }
 

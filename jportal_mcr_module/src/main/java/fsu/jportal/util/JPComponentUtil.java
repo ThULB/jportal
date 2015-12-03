@@ -87,10 +87,8 @@ public abstract class JPComponentUtil {
      * @param mcrID mycore object id
      * @return id of the journal
      */
-    public static Optional<String> getJournalID(String mcrID) {
-        JPInfoProvider infoProvider = new JPInfoProvider(mcrID,
-            "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()");
-        return infoProvider.get(new JPSimpleText());
+    public static String getJournalID(String mcrID) {
+        return getPeriodical(MCRObjectID.getInstance(mcrID)).orElse(null).getJournalId();
     }
 
     /**

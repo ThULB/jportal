@@ -127,7 +127,7 @@ public class JPPerson extends JPLegalEntity {
      * @return the heading.
      */
     protected Optional<MCRMetaXML> getHeading() {
-        return streamNotInherited("def.heading").map(c -> (MCRMetaXML) c).findFirst();
+        return metadataStreamNotInherited("def.heading", MCRMetaXML.class).findFirst();
     }
 
     /**
@@ -136,7 +136,7 @@ public class JPPerson extends JPLegalEntity {
      * @return list of <code>MCRMetaXML</code>
      */
     protected List<MCRMetaXML> getAlternative() {
-        return streamNotInherited("def.alternative").map(c -> (MCRMetaXML) c).collect(Collectors.toList());
+        return metadataStreamNotInherited("def.alternative", MCRMetaXML.class).collect(Collectors.toList());
     }
 
     @Override

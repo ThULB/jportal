@@ -1,11 +1,8 @@
 package fsu.jportal.backend;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +12,6 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -101,7 +97,7 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
      * @return the main title
      */
     protected Optional<MCRMetaLangText> getMaintitle() {
-        return streamNotInherited("maintitles").map(c -> (MCRMetaLangText) c).findFirst();
+        return metadataStreamNotInherited("maintitles", MCRMetaLangText.class).findFirst();
     }
 
     /**
@@ -132,8 +128,8 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
      * @return derivate link as string
      */
     public String getDerivateLink() {
-        return streamNotInherited("derivateLinks").map(c -> ((MCRMetaDerivateLink) c).getXLinkHref()).findFirst()
-            .orElse(null);
+        return metadataStreamNotInherited("derivateLinks", MCRMetaDerivateLink.class)
+            .map(MCRMetaDerivateLink::getXLinkHref).findFirst().orElse(null);
     }
 
     /**
@@ -179,23 +175,35 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
      * @return list of dates.
      */
     public List<MCRMetaISO8601Date> getDates() {
-        return stream("dates").map(c -> (MCRMetaISO8601Date) c).collect(Collectors.toList());
+        return metadataStream("dates", MCRMetaISO8601Date.class).collect(Collectors.toList());
     }
 
     /**
      * Returns the template name for this component. Each component is either a journal or
-     * should have a journal as an ancestor. This method returns the template of this journal.
+     * should have a journal as ancestor. This method returns the template of this journal.
      * 
      * @return the template name
      */
     public String getNameOfTemplate() {
         MCRObject journal = MCRObjectUtils.getRoot(object);
-        if (journal.getId().getTypeId().equals(JPJournal.TYPE)) {
+        if (!journal.getId().getTypeId().equals(JPJournal.TYPE)) {
             throw new MCRException("Unable to get template of object " + journal.getId()
-                + " because its not a journal but the root ancestor of " + object.getId()
-                + ". Return default_template.");
+                + " because its not a journal but the root ancestor of " + object.getId() + ".");
         }
         return new JPJournal(journal).getNameOfTemplate();
+    }
+
+    /**
+     * Returns the journal id for this component. Each component is either a journal or
+     * should have a journal as ancestor. This method returns the id of this journal.
+     * By default the journal id is stored in the metadata field 'hidden_jpjournalsID'
+     * and this field is inherited through the whole journal. 
+     * 
+     * @return the journal id
+     */
+    public String getJournalId() {
+        return metadataStream("hidden_jpjournalsID", MCRMetaLangText.class).map(MCRMetaLangText::getText).findFirst()
+            .orElse(null);
     }
 
 }

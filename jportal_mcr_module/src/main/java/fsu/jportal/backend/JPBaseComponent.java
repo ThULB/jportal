@@ -11,6 +11,7 @@ import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectMetadata;
 
 /**
  * Base component for person, jpinst, jparticle, jpvolume and jpjournal.
@@ -78,42 +79,45 @@ public abstract class JPBaseComponent implements JPComponent {
     public abstract String getType();
 
     /**
-     * Returns an optional of the metadata.
+     * Returns an optional of an metadata element.
      * 
      * @param metadataName name of the metadata element
      * @return an optional of the metadata element
      */
-    protected Optional<MCRMetaElement> metadata(String metadataName) {
-        MCRMetaElement metaElement = object.getMetadata().getMetadataElement(metadataName);
-        if (metaElement == null) {
+    protected Optional<MCRMetaElement> metadataElement(String metadataName) {
+        MCRObjectMetadata metadata = object.getMetadata();
+        if(metadata == null) {
             return Optional.empty();
         }
-        return Optional.of(metaElement);
+        MCRMetaElement metaElement = metadata.getMetadataElement(metadataName);
+        return metaElement != null ? Optional.of(metaElement) : Optional.empty();
     }
 
     /**
-     * Streams the content of a metadata element.
+     * Returns a mapped stream of all children of an element.
      * 
      * @param metadataName name of the metadata element
+     * @param type Extended class of <code>MCRMetaInterface</code>
      * @return a stream of metadata children
      */
-    protected Stream<MCRMetaInterface> stream(String metadataName) {
-        Optional<MCRMetaElement> metadata = metadata(metadataName);
+    protected <T extends MCRMetaInterface> Stream<T> metadataStream(String metadataName, Class<T> type) {
+        Optional<MCRMetaElement> metadata = metadataElement(metadataName);
+        // waiting for https://bugs.openjdk.java.net/browse/JDK-8050820
         if (!metadata.isPresent()) {
             return Stream.empty();
         }
-        return StreamSupport.stream(metadata.get().spliterator(), false);
+        return StreamSupport.stream(metadata.get().spliterator(), false).map(m -> type.cast(m));
     }
 
     /**
-     * Streams the content of a metadata element. Only children which are
-     * inherited == 0 are streamed, the rest is filtered.
+     * Returns a mapped stream of elements where only children are returned which
+     * are not inherited by an parent object.
      * 
      * @param metadataName name of the metadata element
      * @return a stream of metadata children
      */
-    protected Stream<MCRMetaInterface> streamNotInherited(String metadataName) {
-        return stream(metadataName).filter(m -> m.getInherited() == 0);
+    protected <T extends MCRMetaInterface> Stream<T> metadataStreamNotInherited(String metadataName, Class<T> type) {
+        return metadataStream(metadataName, type).filter(m -> m.getInherited() == 0);
     }
 
 }

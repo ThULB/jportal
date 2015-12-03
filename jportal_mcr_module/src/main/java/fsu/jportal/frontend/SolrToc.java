@@ -73,7 +73,10 @@ public class SolrToc {
     }
 
     public static boolean isPartOfOnlineJournal(String parentID) {
-        String journalID = JPComponentUtil.getJournalID(parentID).orElse("");
+        String journalID = JPComponentUtil.getJournalID(parentID);
+        if(journalID == null) {
+            return false;
+        }
         String listType = JPComponentUtil.getListType(journalID).orElse("");
         if (listType.equals("online")) {
             return true;

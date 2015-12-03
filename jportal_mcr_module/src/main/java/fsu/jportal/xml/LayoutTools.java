@@ -69,7 +69,12 @@ public abstract class LayoutTools {
     }
 
     public static String getJournalID(String mcrID) {
-        return JPComponentUtil.getJournalID(mcrID).orElse("");
+        String journalID = JPComponentUtil.getJournalID(mcrID);
+        if(journalID == null) {
+            LOGGER.warn("Unable to get journal id of " + mcrID);
+            return "";
+        }
+        return journalID;
     }
 
     public static String getMaintitle(String mcrID) {
