@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 
+import fsu.jportal.util.JPComponentUtil;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -33,23 +35,30 @@ public class DerivateAccess {
             }
             
             try {
-                String sorlQuery = "+journalID:" + id +" +objectType:jparticle +published_sort:[NOW-1YEAR TO NOW]";
+                String journalID = JPComponentUtil.getJournalID(id);
+                String sorlQuery = "+journalID:" + journalID +" +objectType:jparticle +published_sort:[NOW-1YEAR TO NOW]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
-                solrParams.set("q", sorlQuery).set("rows", 1).set("fl", "id");
-                QueryResponse response = MCRSolrClientFactory.getSolrClient().query(solrParams);
+                solrParams.set("q", sorlQuery).set("fl", "id");
+                SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+                QueryResponse response = solrClient.query(solrParams);
 
                 SolrDocumentList results = response.getResults();
+                long numFound = results.getNumFound();
+
+                solrParams.set("rows", (int) numFound);
+                response = solrClient.query(solrParams);
+                results = response.getResults();
+
                 for (SolrDocument result : results) {
                     String idFromResultList = (String)result.getFieldValue("id");
                     if(id.equals(idFromResultList)){
                         return false;
                     }
                 }
-            } catch (SolrServerException e) {
+            } catch (SolrServerException | IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                return false;
             }
         }
         return true;
