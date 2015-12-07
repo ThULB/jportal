@@ -11,7 +11,7 @@
 
 	<xsl:template match="jp:journalID">
 		<xsl:choose>
-			<xsl:when test="$xedIncParam != '{$parent}' and $xedIncParam != ''">
+			<xsl:when test="$xedIncParam != '{$parent}' and $xedIncParam != '' and (contains($xedIncParam, '_journal_') or contains($xedIncParam, '_volume_') or contains($xedIncParam, '_article_'))">
 				<xsl:value-of select="layoutTools:getJournalID($xedIncParam)" />
 			</xsl:when>
 			<xsl:otherwise>
