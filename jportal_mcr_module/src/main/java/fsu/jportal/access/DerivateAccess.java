@@ -23,12 +23,6 @@ public class DerivateAccess {
         JournalConfig journalConfig = new JournalConfig(id, "fsu.jportal.derivate.access");
         String accessClassName = journalConfig.getKey("accessClass");
 
-        String permission = "read-derivate";
-        MCRAccessManager.invalidPermissionCache(id, permission);
-        if (MCRAccessManager.checkPermission(id, permission)) {
-            return true;
-        }
-        
         if(accessClassName != null && "klostermann".equals(accessClassName)){
             if(date.equals("")){
                 return true;
@@ -60,7 +54,12 @@ public class DerivateAccess {
                 e.printStackTrace();
                 return false;
             }
+
+            return true;
         }
-        return true;
+
+        String permission = "read-derivate";
+        MCRAccessManager.invalidPermissionCache(id, permission);
+        return MCRAccessManager.checkPermission(id, permission);
     }
 }
