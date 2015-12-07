@@ -1,5 +1,6 @@
 package fsu.jportal.access;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -19,17 +20,17 @@ import fsu.jportal.pref.JournalConfig;
 
 public class DerivateAccess {
 
-    public static boolean checkPermission(String id, String date){
-        JournalConfig journalConfig = new JournalConfig(id, "fsu.jportal.derivate.access");
+    public static boolean checkPermission(String id, String journalID, String date){
+        JournalConfig journalConfig = new JournalConfig(journalID, "fsu.jportal.derivate.access");
         String accessClassName = journalConfig.getKey("accessClass");
 
         if(accessClassName != null && "klostermann".equals(accessClassName)){
             if(date.equals("")){
                 return true;
             }
-            
+
             try {
-                String journalID = JPComponentUtil.getJournalID(id);
+//                String journalID = JPComponentUtil.getJournalID(id);
                 String sorlQuery = "+journalID:" + journalID +" +objectType:jparticle +published_sort:[NOW-1YEAR TO NOW]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
                 solrParams.set("q", sorlQuery).set("fl", "id");
@@ -46,7 +47,7 @@ public class DerivateAccess {
                 for (SolrDocument result : results) {
                     String idFromResultList = (String)result.getFieldValue("id");
                     if(id.equals(idFromResultList)){
-                        return false;
+                        return checkPerm(id, journalID);
                     }
                 }
             } catch (SolrServerException | IOException e) {
@@ -58,8 +59,21 @@ public class DerivateAccess {
             return true;
         }
 
+        return checkPerm(id, journalID);
+    }
+
+    private static boolean checkPerm(String id, String journalID) {
         String permission = "read-derivate";
         MCRAccessManager.invalidPermissionCache(id, permission);
-        return MCRAccessManager.checkPermission(id, permission);
+        MCRAccessManager.invalidPermissionCache(journalID, permission);
+
+        boolean objAccess = MCRAccessManager.checkPermission(id, permission);
+        boolean journalAccess = MCRAccessManager.checkPermission(journalID, permission);
+
+        if(objAccess){
+            return journalAccess;
+        }
+
+        return objAccess;
     }
 }

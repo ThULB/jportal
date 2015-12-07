@@ -6,12 +6,14 @@
 
   <xsl:template name="derivatePreview">
     <xsl:param name="mcrObj" />
+    <xsl:variable name="objID" select="$mcrObj/@ID" />
     <xsl:variable name="journalID" select="$mcrObj/metadata/hidden_jpjournalsID/hidden_jpjournalID" />
     <xsl:variable name="published" select="$mcrObj/metadata/dates/date[@type='published' and @inherited=0]" />
     <xsl:choose>
       <xsl:when test="$mcrObj/metadata/derivateLinks/derivateLink[1]">
         <xsl:call-template name="derivateDisplay">
           <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
+          <xsl:with-param name="objID" select="$journalID" />
           <xsl:with-param name="journalID" select="$journalID" />
           <xsl:with-param name="mode" select="'preview'" />
           <xsl:with-param name="published" select="$published" />
@@ -20,6 +22,7 @@
       <xsl:when test="$mcrObj/structure/derobjects/derobject">
         <xsl:call-template name="derivateDisplay">
           <xsl:with-param name="nodes" select="$mcrObj/structure/derobjects/derobject[1]" />
+          <xsl:with-param name="objID" select="$objID" />
           <xsl:with-param name="journalID" select="$journalID" />
           <xsl:with-param name="editable" select="'false'" />
           <xsl:with-param name="mode" select="'preview'" />
@@ -31,12 +34,13 @@
 
   <xsl:template name="derivateDisplay">
     <xsl:param name="nodes" />
+    <xsl:param name="objID" />
     <xsl:param name="journalID" />
     <xsl:param name="editable" select="'true'" />
     <xsl:param name="mode" select="'metadata'" />
     <xsl:param name="published" select="/mycoreobject/metadata/dates/date[@type='published' and @inherited=0]" />
 
-    <xsl:if test="derivAccess:checkPermission($journalID, $published)">
+    <xsl:if test="derivAccess:checkPermission($objID, $journalID, $published)">
       <xsl:if test="count($nodes) &gt; 0">
         <div class="jp-layout-derivateList">
           <xsl:apply-templates mode="derivateDisplay" select="$nodes">
