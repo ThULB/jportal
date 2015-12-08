@@ -248,7 +248,8 @@ var derivateBrowserTools = (function () {
         $(elm).popover({
             content: content,
             html: true,
-            trigger: "manual"
+            trigger: "manual",
+            container: 'body'
         }).on("mouseenter", function() {
             var pop = this;
             clearTimeout(timer);

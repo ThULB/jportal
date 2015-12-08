@@ -77,6 +77,10 @@
 											<dd id="derivat-panel-size"></dd>
 											<dt><text class="i18n" i18n="db.label.fileLastMod" i18n-def="zuletzt geändert"></text>:</dt>
 											<dd id="derivat-panel-last"></dd>
+                                            <dt><text class="i18n" i18n="db.label.fileFileCount" i18n-def="Dateien"></text>:</dt>
+                                            <dd id="derivat-panel-files">0</dd>
+                                            <dt><text class="i18n" i18n="db.label.fileFolderCount" i18n-def="Verzeichnisse"></text>:</dt>
+                                            <dd id="derivat-panel-folder">0</dd>
                                             <dt></dt>
                                             <dd id="derivate-hidden" class="alert-warning-text hidden"><text class="i18n" i18n="db.label.hidden" i18n-def="Versteckt"></text></dd>
 										</dl>
@@ -152,6 +156,11 @@
                                         <span class="glyphicon glyphicon glyphicon-chevron-up hidden"></span>
                                         <span class="glyphicon glyphicon glyphicon-chevron-down hidden"></span>
                                     </th>
+                                    <th id="browser-table-sort-click-lastMod">
+                                        <text class="i18n" i18n="db.label.fileLastMod" i18n-def="geändert"></text>
+                                        <span class="glyphicon glyphicon glyphicon-chevron-up hidden"></span>
+                                        <span class="glyphicon glyphicon glyphicon-chevron-down hidden"></span>
+                                    </th>
 									<th><text class="i18n" i18n="db.label.fileUrn" i18n-def="URN"></text></th>
 								</tr>
 							</thead>
@@ -164,6 +173,7 @@
                                     <th></th>
                                     <th></th>
                                     <th id="browser-table-sort" data-sort="string"></th>
+                                    <th id="browser-table-sort-last" data-sort="int"></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -493,6 +503,7 @@
 				</div>
 			</td>
 			<td class="browser-table-file-name mightOverflow">{{name}}</td>
+			<td class="browser-table-file-lastMod mightOverflow" data-sort-value="{{lastmodifiedValue}}">{{lastmodified}}</td>
 			<td class="browser-table-file-urn mightOverflow">
 				{{#urn}}
 					{{urn}}
@@ -521,6 +532,7 @@
 				</div>
 			</td>
 			<td class="browser-table-file-name mightOverflow">{{name}}</td>
+			<td class="browser-table-file-lastMod mightOverflow" data-sort-value="{{lastmodifiedValue}}">{{lastmodified}}</td>
 			<td class="browser-table-file-urn mightOverflow">
 				{{#urn}}
 					{{urn}}
@@ -548,6 +560,7 @@
 			{{^temp}}
 				<td class="browser-table-file-name mightOverflow">{{name}}</td>
 			{{/temp}}
+			<td class="browser-table-file-lastMod mightOverflow" data-sort-value="{{lastmodifiedValue}}">{{lastmodified}}</td>
 			<td class="browser-table-file-urn mightOverflow">
 				{{#urn}}
 					{{urn}}
@@ -680,6 +693,7 @@
  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
  	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
  	<script type="text/javascript" src="gui/js/derivatebrowser.js"></script>
  	<script type="text/javascript" src="gui/js/derivatebrowser-uploadEntry.js"></script>

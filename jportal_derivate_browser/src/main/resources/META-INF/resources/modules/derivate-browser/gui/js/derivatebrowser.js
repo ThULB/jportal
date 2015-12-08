@@ -70,6 +70,10 @@ var DerivateBrowser = function () {
                 $("#browser-table-sort").click();
             });
 
+            $("body").on("click", "#browser-table-sort-click-lastMod", function () {
+                $("#browser-table-sort-last").click();
+            });
+
             $("body").on("click", "#browser-table-sort", function () {
 
             });
@@ -506,9 +510,10 @@ var DerivateBrowser = function () {
                             $(this).parent().html($(this).parent().data("oldName"));
                         }
                     }
-                    if (event.which == 27) {
-                        $(this).parent().html($(this).parent().data("oldName"));
+                    if (event.which == 27 && !$(this).parent().hasClass("spinnerInInput")) {
+                        $(this).parent().removeClass("has-error");
                         $(this).closest(".browser-table-entry").find(".btn-edit").removeData("edit");
+                        $(this).parent().html($(this).parent().data("oldName"));
                     }
                 }
             });
@@ -660,6 +665,7 @@ var DerivateBrowser = function () {
                 }
                 if (event.which == 27) {
                     $(this).parents(".browser-table-entry").remove();
+                    $("#derivat-panel-folder").html(parseInt($("#derivat-panel-folder").html()) - 1);
                 }
             });
 
@@ -768,12 +774,28 @@ var DerivateBrowser = function () {
                 $("#browser-table-sort-click").find(".glyphicon").addClass("hidden");
                 var dir = $.fn.stupidtable.dir;
                 if (data.direction == dir.ASC){
-                    derivateBrowserLargeView.sortList("ASC");
-                    $("#browser-table-sort-click").find(".glyphicon-chevron-up").removeClass("hidden");
+                    if (data.column == "2") {
+                        $("#browser-table-sort-click-lastMod > span").addClass("hidden");
+                        derivateBrowserLargeView.sortList("ASC");
+                        $("#browser-table-sort-click").find(".glyphicon-chevron-up").removeClass("hidden");
+                    }
+                    else {
+                        $("#browser-table-sort-click > span").addClass("hidden");
+                        $("#browser-table-sort-click-lastMod > span").addClass("hidden");
+                        $("#browser-table-sort-click-lastMod").find(".glyphicon-chevron-up").removeClass("hidden");
+                    }
                 }
                 else{
-                    derivateBrowserLargeView.sortList("DESC");
-                    $("#browser-table-sort-click").find(".glyphicon-chevron-down").removeClass("hidden");
+                    if (data.column == "2") {
+                        $("#browser-table-sort-click-lastMod > span").addClass("hidden");
+                        derivateBrowserLargeView.sortList("DESC");
+                        $("#browser-table-sort-click").find(".glyphicon-chevron-down").removeClass("hidden");
+                    }
+                    else {
+                        $("#browser-table-sort-click > span").addClass("hidden");
+                        $("#browser-table-sort-click-lastMod > span").addClass("hidden");
+                        $("#browser-table-sort-click-lastMod").find(".glyphicon-chevron-down").removeClass("hidden");
+                    }
                 }
             });
             readQueryParameter();
@@ -1073,7 +1095,7 @@ var DerivateBrowser = function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.tile.success"), true);
                 },
                 500: function () {
-                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.tile.success"), false);
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.tile.error"), false);
                 },
                 401: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);

@@ -268,11 +268,9 @@ var derivateBrowserNavigation = (function () {
             }
             else {
                 if (count == undefined){
-                    console.log("BLA2");
                     count = 1;
                     derivateBrowserTools.showLoadingScreen();
                 }
-                console.log(count);
                 if (count < 4) {
                     setTimeout(function () {
                         getDocPerID(docID, callback, docs, count+1);

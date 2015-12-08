@@ -18,6 +18,21 @@ html,body{
       }
 }
 
+@-webkit-keyframes spinner {
+	0% { -webkit-transform: rotate(0deg) }
+	100% { -webkit-transform: rotate(360deg) }
+}
+
+@keyframes spinner {
+	0% {
+		transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+	} 100% {
+		  transform: rotate(360deg);
+		  -webkit-transform: rotate(360deg);
+	  }
+}
+
 @-webkit-keyframes bouncedelayUpload {
     0% { -webkit-transform: scale(1.0) }
     50% { -webkit-transform: scale(1.05) }
@@ -250,6 +265,7 @@ ul{
 }
 
 #browser-table .browser-table-entry > td{
+	position: relative;
 	height: 38px;
 	border-bottom: 1px solid #F7F7F7;
 	border-top-width: 0;
@@ -258,6 +274,10 @@ ul{
 
 .browser-table-entry td:nth-child(3) {
 	width: 30%; 
+}
+
+.browser-table-entry td:nth-child(4) {
+	width: 170px;
 }
 
 #browser-table-head{
@@ -270,6 +290,7 @@ ul{
 	border-width: 0;
 	padding-top: 15px;
 	padding-bottom: 10px;
+	padding-left: 0;
 }
 
 #browser-table-head th:nth-child(1) {
@@ -281,9 +302,12 @@ ul{
 }
 
 #browser-table-head th:nth-child(3) {
-	width: 30%; 
+	width: 30%;
 }
 
+#browser-table-head th:nth-child(4) {
+	width: 170px;
+}
 
 span.btn{
 	padding-left: 3px;
@@ -1356,6 +1380,18 @@ div.statusbar-progress-single-status.noAnimation {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.spinnerInInput > input {
+	padding-right: 25px;
+}
+
+.input-spinner {
+	position: absolute;
+	right: 10px;
+	top: 23px;
+	-webkit-animation: spinner 1500ms infinite linear;
+	animation: spinner 1500ms infinite linear;
 }
 
 .derivate-button{

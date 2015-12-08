@@ -63,11 +63,11 @@ UploadEntry.prototype.getCheckJson = function() {
 };
 
 UploadEntry.prototype.getaddToBrowserJson = function() {
-	var currentDate = new Date();
+	var currentDate = moment();
 	return {
 			name: this.name,
 			size: this.rawSize,
-			lastmodified: currentDate.toLocaleDateString() + " " + currentDate.toLocaleTimeString(),
+			lastmodified: currentDate.format("DD.MM.YYYY HH:mm:ss"),
 			absPath: this.getCompletePath(),
 			deriID: this.docID,
 			md5: this.md5,
