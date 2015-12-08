@@ -43,13 +43,20 @@ public class ParentsResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         String childId = href.replaceAll("parents:", "");
         try {
+            if (!MCRMetadataManager.exists(MCRObjectID.getInstance(childId))) {
+                error("Error: the object with the id " + childId + " does not exists.");
+            }
             return new JDOMSource(getParents(childId));
         } catch (Exception exc) {
             LOGGER.error("unable to retrieve parents of mcr object " + childId);
-            Element parent = new Element("parent").setAttribute("error", "Error: unable to load parent")
-                .setAttribute("href", "unknown", MCRConstants.XLINK_NAMESPACE);
-            return new JDOMSource(new Element("parents").addContent(parent));
+            return error("Error: unable to load parents of object " + childId);
         }
+    }
+
+    private Source error(String message) {
+        Element parent = new Element("parent").setAttribute("error", message).setAttribute("href", "unknown",
+            MCRConstants.XLINK_NAMESPACE);
+        return new JDOMSource(new Element("parents").addContent(parent));
     }
 
     public static Element getParents(String childId) {
