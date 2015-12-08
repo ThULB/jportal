@@ -48,7 +48,7 @@ public class ParentsResolver implements URIResolver {
             }
             return new JDOMSource(getParents(childId));
         } catch (Exception exc) {
-            LOGGER.error("unable to retrieve parents of mcr object " + childId);
+            LOGGER.error("unable to retrieve parents of mcr object " + childId, exc);
             return error("Error: unable to load parents of object " + childId);
         }
     }
