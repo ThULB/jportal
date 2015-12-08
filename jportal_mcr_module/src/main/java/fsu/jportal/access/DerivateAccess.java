@@ -67,13 +67,14 @@ public class DerivateAccess {
         MCRAccessManager.invalidPermissionCache(id, permission);
         MCRAccessManager.invalidPermissionCache(journalID, permission);
 
-        boolean objAccess = MCRAccessManager.checkPermission(id, permission);
-        boolean journalAccess = MCRAccessManager.checkPermission(journalID, permission);
-
-        if(objAccess){
-            return journalAccess;
+        if(MCRAccessManager.hasRule(id, permission)){
+            return MCRAccessManager.checkPermission(id, permission);
         }
 
-        return objAccess;
+        if(MCRAccessManager.hasRule(journalID, permission)){
+            return MCRAccessManager.checkPermission(journalID, permission);
+        }
+
+        return MCRAccessManager.checkPermission("default", permission);
     }
 }
