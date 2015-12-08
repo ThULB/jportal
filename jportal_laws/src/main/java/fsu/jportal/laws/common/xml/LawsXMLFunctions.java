@@ -150,11 +150,18 @@ public abstract class LawsXMLFunctions {
             } else {
                 try {
                     String fileName = node.getName();
-                    String numberPart = fileName.split("_")[3];
-                    numberPart = numberPart.substring(3);
+                    String[] numberParts = fileName.split("_");
+                    if(numberParts.length <= 4) {
+                        continue;
+                    }
+                    String numberPart = numberParts[3].replaceAll("[^0-9]", "");
+                    if(numberPart.isEmpty()) {
+                        continue;
+                    }
                     int compareNumber = Integer.parseInt(numberPart);
-                    if (number == compareNumber)
+                    if (number == compareNumber) {
                         return fileName;
+                    }
                 } catch (Exception exc) {
                     continue;
                 }
