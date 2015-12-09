@@ -61,8 +61,7 @@ public class ImprintResource {
     private @PathParam("fsType") String fsType;
     private ImprintFS imprintFS;
     private GreetingsFS greetingFS;
-    private JournalConfig journalConfig;
-    
+
     public ImprintFS getImprintFS() {
         if(imprintFS == null){
             imprintFS = ImprintManager.createFS(fsType);
@@ -410,7 +409,7 @@ public class ImprintResource {
     private Map<String, String> getPropAsMap(String objID) {
         String prop = getImprintID(objID, fsType);
         Map<String, String> map = new HashMap<>();
-        if (prop != null || !prop.equals("")) {
+        if (prop != null && !prop.equals("")) {
             Gson gson = new Gson();
             map = gson.fromJson(prop, map.getClass());
         }

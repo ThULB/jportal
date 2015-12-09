@@ -2,6 +2,8 @@ package spike;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileVisitResult;
@@ -106,9 +108,9 @@ public class LLZChecker {
 //        }
 
         // convert
-        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00036/1824/THULB_00036_1824_wfs2_mets_Abgleich.xml"), new LLZMetsConverter());
+        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00010/1803/THULB_00010_1803_wfs2_mets_Final.xml"), new LLZMetsConverter());
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-        out.output(doc, System.out);
+        out.output(doc, new FileOutputStream(new File("/data/temp/mets.xml")));
         
         ByteArrayInputStream in = toByteStream(doc);
         List<ValidationException> excs = llzChecker.validate(in);
