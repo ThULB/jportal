@@ -3,13 +3,10 @@ package fsu.jportal.resources;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -21,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.jdom2.Document;
+import org.mycore.common.MCRStreamUtils;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
@@ -28,6 +26,8 @@ import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
+
+import com.google.gson.JsonObject;
 
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.mets.LLZMetsUtils;
@@ -70,7 +70,10 @@ public class METSSyncResource {
         if (!updatedList.isEmpty()) {
             write(mets.asDocument(), derivateId);
         }
-        return Response.ok().entity("{updated: " + updatedList.size() + "}").build();
+        // return json object
+        JsonObject json = new JsonObject();
+        json.addProperty("updated", updatedList.size());
+        return Response.ok().entity(json.toString()).build();
     }
 
     /**
@@ -108,7 +111,7 @@ public class METSSyncResource {
             throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR)
                 .entity("The logical struct map of the mets.xml does not contain any logical div.").build());
         }
-        return flatten(divContainer, LogicalDiv::getChildren).collect(Collectors.toList());
+        return MCRStreamUtils.flatten(divContainer, LogicalDiv::getChildren, true).collect(Collectors.toList());
     }
 
     /**
@@ -134,11 +137,6 @@ public class METSSyncResource {
             }
         }
         return updateList;
-    }
-
-    private static <T> Stream<T> flatten(T node, Function<T, Collection<T>> subnodeSupplier) {
-        return Stream.concat(Stream.of(node),
-            subnodeSupplier.apply(node).stream().flatMap(subnode -> flatten(subnode, subnodeSupplier)));
     }
 
     /**
