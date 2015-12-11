@@ -11,7 +11,6 @@ import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectMetadata;
 
 /**
  * Base component for person, jpinst, jparticle, jpvolume and jpjournal.
@@ -85,12 +84,7 @@ public abstract class JPBaseComponent implements JPComponent {
      * @return an optional of the metadata element
      */
     protected Optional<MCRMetaElement> metadataElement(String metadataName) {
-        MCRObjectMetadata metadata = object.getMetadata();
-        if(metadata == null) {
-            return Optional.empty();
-        }
-        MCRMetaElement metaElement = metadata.getMetadataElement(metadataName);
-        return metaElement != null ? Optional.of(metaElement) : Optional.empty();
+        return Optional.ofNullable(object.getMetadata()).map(m -> m.getMetadataElement(metadataName));
     }
 
     /**
