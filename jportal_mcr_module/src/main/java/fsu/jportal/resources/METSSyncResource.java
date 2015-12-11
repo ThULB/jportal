@@ -15,7 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.jdom2.Document;
 import org.mycore.common.MCRStreamUtils;
@@ -89,8 +88,9 @@ public class METSSyncResource {
             Mets mets = new Mets(metsXML);
             return mets;
         } catch (Exception exc) {
-            throw new WebApplicationException(exc,
-                Response.status(Status.INTERNAL_SERVER_ERROR).entity("Error while reading mets.xml.").build());
+            JsonObject json = new JsonObject();
+            json.addProperty("errorMsg", "mets.xml not found");
+            throw new WebApplicationException(exc, Response.ok().entity(json.toString()).build());
         }
     }
 
@@ -103,13 +103,15 @@ public class METSSyncResource {
     private List<LogicalDiv> getLogicalDivs(Mets mets) {
         LogicalStructMap logicalStructMap = (LogicalStructMap) mets.getStructMap(LogicalStructMap.TYPE);
         if (logicalStructMap == null) {
-            throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR)
-                .entity("The mets.xml does not contain any logical struct map.").build());
+            JsonObject json = new JsonObject();
+            json.addProperty("errorMsg", "The mets.xml does not contain any logical struct map.");
+            throw new WebApplicationException(Response.ok().entity(json.toString()).build());
         }
         LogicalDiv divContainer = logicalStructMap.getDivContainer();
         if (divContainer == null) {
-            throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR)
-                .entity("The logical struct map of the mets.xml does not contain any logical div.").build());
+            JsonObject json = new JsonObject();
+            json.addProperty("errorMsg", "The logical struct map of the mets.xml does not contain any logical div.");
+            throw new WebApplicationException(Response.ok().entity(json.toString()).build());
         }
         return MCRStreamUtils.flatten(divContainer, LogicalDiv::getChildren, true).collect(Collectors.toList());
     }
@@ -152,8 +154,9 @@ public class METSSyncResource {
             MCRPath path = MCRPath.getPath(derivateId, "/mets.xml");
             Files.write(path, bytes);
         } catch (Exception exc) {
-            throw new WebApplicationException(exc, Response.status(Status.INTERNAL_SERVER_ERROR)
-                .entity("Unable to store mets.xml of derivate " + derivateId).build());
+            JsonObject json = new JsonObject();
+            json.addProperty("errorMsg", "Unable to store mets.xml of derivate " + derivateId);
+            throw new WebApplicationException(Response.ok().entity(json.toString()).build());
         }
     }
 

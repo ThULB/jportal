@@ -1,7 +1,3 @@
-/*
- * This file overrides the mets editor plugins js. Add an mets synchronize button.
- */
-
 $(document).ready(function() {
 
 	// load css stuff
@@ -52,6 +48,9 @@ $(document).ready(function() {
         		}).done(function(data) {
         			if(data.updated == 0) {
         				sruDialogInfo.html("<p>Synchronisation erfolgreich. Es konnten keine Differenzen festgestellt werden. Die Mets-Datei ist auf dem aktuellen Stand.</p>");
+        				sruDialogInfo.append(getCloseButton(false, "Schließen"));
+        			} else if(data.errorMsg) {
+        				sruDialogInfo.html("<p>Synchronisation fehlgeschlagen: " + data.errorMsg + "</p>");
         				sruDialogInfo.append(getCloseButton(false, "Schließen"));
         			} else {
         				sruDialogInfo.html("<p>Synchronisation erfolgreich. Es wurden " + data.updated + " Einträge aktualisiert. Der Editor muss neu geladen werden.</p>");
