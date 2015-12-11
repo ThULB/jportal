@@ -67,4 +67,13 @@ public abstract class JPLegalEntity extends JPBaseComponent {
     public Optional<String> getLogoPlusText() {
         return findLogo("logoPlusText");
     }
+
+    /**
+     * Returns the identifier by type. Valid types are 'gnd', 'pnd' and 'ppn'.
+     * 
+     * @param type type of the identifer
+     * @return the identifier itself or null
+     */
+    public abstract Optional<String> getId(String type);
+
 }

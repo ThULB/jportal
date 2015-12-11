@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -137,6 +138,12 @@ public class JPPerson extends JPLegalEntity {
      */
     protected List<MCRMetaXML> getAlternative() {
         return metadataStreamNotInherited("def.alternative", MCRMetaXML.class).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<String> getId(String type) {
+        return metadataStreamNotInherited("def.identifier", MCRMetaLangText.class).filter(t -> t.getType().equals(type))
+            .map(MCRMetaLangText::getText).findFirst();
     }
 
     @Override

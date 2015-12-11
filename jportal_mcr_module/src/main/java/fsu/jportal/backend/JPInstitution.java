@@ -5,6 +5,7 @@ import java.util.stream.StreamSupport;
 
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -16,7 +17,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 public class JPInstitution extends JPLegalEntity {
 
     public static String TYPE = "jpinst";
-    
+
     public JPInstitution() {
         super();
     }
@@ -71,6 +72,12 @@ public class JPInstitution extends JPLegalEntity {
         Optional<MCRMetaInstitutionName> name = StreamSupport.stream(names.spliterator(), false)
             .filter(m -> m.getInherited() == 0).map(c -> (MCRMetaInstitutionName) c).findFirst();
         return name.orElse(null).getFullName();
+    }
+
+    @Override
+    public Optional<String> getId(String type) {
+        return metadataStreamNotInherited("identifiers", MCRMetaLangText.class).filter(t -> t.getType().equals(type))
+            .map(MCRMetaLangText::getText).findFirst();
     }
 
 }

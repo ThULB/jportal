@@ -1,6 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xsi xalan mcrxml encoder" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" version="1.0">
+  xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xalan="http://xml.apache.org/xalan" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
+  exclude-result-prefixes="xsi xalan layoutTools" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" version="1.0">
   <xsl:output method="xml" encoding="utf-8" />
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="MCR.OPAC.CATALOG" />
@@ -179,9 +179,14 @@
         </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
-      <xsl:variable name="personObj" select="document(concat('mcrobject:',@xlink:href))" />
+      <xsl:variable name="participant" select="document(concat('mcrobject:',@xlink:href))/mycoreobject" />
+      
+      <!-- identifier -->
+      <xsl:variable name="gnd" select="layoutTools:getIdentifier(@xlink:href, 'gnd')" />
+      <xsl:variable name="pnd" select="layoutTools:getIdentifier(@xlink:href, 'pnd')" />
+      <xsl:variable name="ppn" select="layoutTools:getIdentifier(@xlink:href, 'ppn')" />
       <xsl:choose>
-        <xsl:when test="$personObj/mycoreobject/metadata/def.identifier/identifier[@type='gnd']">
+        <xsl:when test="$gnd">
           <xsl:attribute name="authority">
             <xsl:value-of select="'gnd'" />
           </xsl:attribute>
@@ -189,10 +194,10 @@
             <xsl:value-of select="'http://d-nb.info/gnd/'" />
           </xsl:attribute>
           <xsl:attribute name="valueURI">
-            <xsl:value-of select="concat('http://d-nb.info/gnd/',$personObj/mycoreobject/metadata/def.identifier/identifier[@type='gnd'])" />
+            <xsl:value-of select="concat('http://d-nb.info/gnd/',$gnd)" />
           </xsl:attribute>
         </xsl:when>
-        <xsl:when test="$personObj/mycoreobject/metadata/def.identifier/identifier[@type='pnd']">
+        <xsl:when test="$pnd">
           <xsl:attribute name="authority">
             <xsl:value-of select="'pnd'" />
           </xsl:attribute>
@@ -200,28 +205,29 @@
             <xsl:value-of select="'http://d-nb.info/gnd/'" />
           </xsl:attribute>
           <xsl:attribute name="valueURI">
-            <xsl:value-of select="concat('http://d-nb.info/gnd/',$personObj/mycoreobject/metadata/def.identifier/identifier[@type='pnd'])" />
+            <xsl:value-of select="concat('http://d-nb.info/gnd/',$pnd)" />
           </xsl:attribute>
         </xsl:when>
-        <xsl:when test="$personObj/mycoreobject/metadata/def.identifier/identifier[@type='ppn']">
-          <!-- just kidding -->
+        <xsl:when test="$ppn">
           <xsl:attribute name="authority">
             <xsl:value-of select="'gvk-ppn'" />
           </xsl:attribute>
-            <xsl:variable name="sourceCatalog">
-              <xsl:value-of select="'https://kataloge.thulb.uni-jena.de'"></xsl:value-of>
-            </xsl:variable>
-            <xsl:attribute name="authorityURI">
-              <xsl:value-of select="$sourceCatalog" />
-            </xsl:attribute>
-            <xsl:attribute name="valueURI">
-              <xsl:call-template name="generateCatalogURL">
-                <xsl:with-param name="catalog" select="$sourceCatalog" />
-                <xsl:with-param name="ppn" select="$personObj/mycoreobject/metadata/def.identifier/identifier[@type='ppn']" />
-              </xsl:call-template>
-            </xsl:attribute>
+          <xsl:variable name="sourceCatalog">
+            <xsl:value-of select="'https://kataloge.thulb.uni-jena.de'"></xsl:value-of>
+          </xsl:variable>
+          <xsl:attribute name="authorityURI">
+            <xsl:value-of select="$sourceCatalog" />
+          </xsl:attribute>
+          <xsl:attribute name="valueURI">
+            <xsl:call-template name="generateCatalogURL">
+              <xsl:with-param name="catalog" select="$sourceCatalog" />
+              <xsl:with-param name="ppn" select="$ppn" />
+            </xsl:call-template>
+          </xsl:attribute>
         </xsl:when>
       </xsl:choose>
+
+      <!-- role -->
       <xsl:if test="@type">
         <mods:role>
           <mods:roleTerm type="code" authority="marcrelator">
@@ -229,8 +235,10 @@
           </mods:roleTerm>
         </mods:role>
       </xsl:if>
-      <xsl:variable name="name" select="$personObj/mycoreobject/metadata/def.heading/heading/name" />
-      <xsl:variable name="collocation" select="$personObj/mycoreobject/metadata/def.heading/heading/collocation" />
+
+      <!-- name -->
+      <xsl:variable name="name" select="$participant/metadata/def.heading/heading/name" />
+      <xsl:variable name="collocation" select="$participant/metadata/def.heading/heading/collocation" />
       <xsl:choose>
         <xsl:when test="$name">
           <mods:namePart type="given">
@@ -245,20 +253,15 @@
             <xsl:value-of select="$name" />
           </mods:displayForm>
         </xsl:when>
-        <xsl:when test="$personObj/mycoreobject/metadata/def.unittitle/unittitle">
+        <xsl:when test="$participant/metadata/names/name/fullname">
           <mods:displayForm>
-            <xsl:value-of select="$personObj/mycoreobject/metadata/def.unittitle/unittitle" />
-          </mods:displayForm>
-        </xsl:when>
-        <xsl:when test="$personObj/mycoreobject/metadata/names/name/fullname">
-          <mods:displayForm>
-            <xsl:value-of select="$personObj/mycoreobject/metadata/names/name/fullname" />
+            <xsl:value-of select="$participant/metadata/names/name/fullname" />
           </mods:displayForm>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="lastName" select="$personObj/mycoreobject/metadata/def.heading/heading/lastName" />
-          <xsl:variable name="firstName" select="$personObj/mycoreobject/metadata/def.heading/heading/firstName" />
-          <xsl:variable name="nameAffix" select="$personObj/mycoreobject/metadata/def.heading/heading/nameAffix" />
+          <xsl:variable name="lastName" select="$participant/metadata/def.heading/heading/lastName" />
+          <xsl:variable name="firstName" select="$participant/metadata/def.heading/heading/firstName" />
+          <xsl:variable name="nameAffix" select="$participant/metadata/def.heading/heading/nameAffix" />
           <xsl:if test="$lastName">
             <mods:namePart type="family">
               <xsl:value-of select="$lastName" />
@@ -274,8 +277,8 @@
           </mods:displayForm>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:variable name="dateOfBirth" select="$personObj/mycoreobject/metadata/def.dateOfBirth/dateOfBirth" />
-      <xsl:variable name="dateOfDeath" select="$personObj/mycoreobject/metadata/def.dateOfDeath/dateOfDeath" />
+      <xsl:variable name="dateOfBirth" select="$participant/metadata/def.dateOfBirth/dateOfBirth" />
+      <xsl:variable name="dateOfDeath" select="$participant/metadata/def.dateOfDeath/dateOfDeath" />
       <xsl:if test="$dateOfBirth | $dateOfDeath">
         <mods:namePart type="date">
           <xsl:value-of select="concat($dateOfBirth,' - ',$dateOfDeath)" />

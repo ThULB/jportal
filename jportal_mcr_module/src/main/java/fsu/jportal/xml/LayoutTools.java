@@ -14,6 +14,7 @@ import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.w3c.dom.Node;
 
+import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.resolver.LogoResolver;
 import fsu.jportal.util.JPComponentUtil;
@@ -62,7 +63,7 @@ public abstract class LayoutTools {
         try {
             Optional<JPPeriodicalComponent> periodical = JPComponentUtil.getPeriodical(MCRObjectID.getInstance(id));
             return periodical.get().getNameOfTemplate();
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             LOGGER.error("Unable to get name of template for object " + id + ". Return default template.", exc);
             return "template_default";
         }
@@ -70,7 +71,7 @@ public abstract class LayoutTools {
 
     public static String getJournalID(String mcrID) {
         String journalID = JPComponentUtil.getJournalID(mcrID);
-        if(journalID == null) {
+        if (journalID == null) {
             LOGGER.warn("Unable to get journal id of " + mcrID);
             return "";
         }
@@ -106,4 +107,10 @@ public abstract class LayoutTools {
             return userInformation.getUserID();
         }
     }
+
+    public static String getIdentifier(String mcrID, String type) {
+        Optional<JPLegalEntity> legalEntity = JPComponentUtil.getLegalEntity(MCRObjectID.getInstance(mcrID));
+        return legalEntity.map(le -> le.getId(type).orElse(null)).orElse(null);
+    }
+
 }
