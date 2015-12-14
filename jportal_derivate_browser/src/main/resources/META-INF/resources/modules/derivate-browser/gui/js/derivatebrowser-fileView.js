@@ -524,7 +524,6 @@ var derivateBrowserFileView = (function () {
         $(entry).find(".browser-table-file-name > .input-spinner").remove();
         $(entry).find(".browser-table-file-name").removeClass("spinnerInInput");
         updateFileDate(entry);
-        updatePopover(entry);
     }
 
     function updateFileDate(entry) {
