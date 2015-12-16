@@ -182,7 +182,10 @@
   <xsl:template mode="jp.toc.published" match="str">
   </xsl:template>
   <xsl:template mode="jp.toc.published" match="str[@name='date.published']">
-    <xsl:value-of select="concat(' (', text(), ')')" />
+    <!-- only apply date when the main title is not equal this date -->
+    <xsl:if test="../str[@name='maintitle']/text() != text()">
+      <xsl:value-of select="concat(' (', text(), ')')" />
+    </xsl:if>
   </xsl:template>
   <xsl:template mode="jp.toc.published" match="str[@name='date.published_from']">
     <xsl:value-of select="concat(' (', text())" />
