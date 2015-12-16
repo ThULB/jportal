@@ -185,7 +185,7 @@ public class JPXMLFunctions {
             SimpleDateFormat solrDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             return solrDateFormat.format(solrDate);
         } catch (Exception exc) {
-            return "";
+            return null;
         }
     }
 
