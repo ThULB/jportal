@@ -81,7 +81,7 @@ $(document).ready(function() {
 	var popupButton = $("#published_sort_popup_button");
 	var dialog = new jp.PublishedDialog({
 		query : fdq,
-		title: "Erschienene Werke",
+		title: "Erschienene Werke/Artikel",
 		filterButtonText: "Filter anwenden"
 	});
 	$(dialog).on("filter", function(e, from, until) {

@@ -66,7 +66,7 @@ jp.PublishedDialog.prototype.updateChart = function() {
 	var that = this;
 	return this.query.execute().then(function(data) {
 		if(data == null) {
-			that.renderContent("<div class='text-center'>Keine Werke in diesem Zeitraum gefunden.</div>");
+			that.renderContent("<div class='text-center'>Keine Werke/Artikel in diesem Zeitraum gefunden.</div>");
 			return null;
 		} else {
 			var plotData = that.buildPlotData(data);
@@ -130,7 +130,7 @@ jp.PublishedDialog.prototype.getHighchartOptions = function(plotData) {
             type: 'column',
             tooltip: {
                 valueDecimals: 0,
-                valueSuffix: " Werk(e)",
+                valueSuffix: " Werke/Artikel",
                 xDateFormat: this.toHighChartsDateFormat(uot)
             }
         }],
