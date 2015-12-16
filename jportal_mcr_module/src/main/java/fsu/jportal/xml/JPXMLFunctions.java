@@ -6,8 +6,12 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -17,6 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.xpath.NodeSet;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
 import org.mycore.common.config.MCRConfiguration;
@@ -32,6 +37,8 @@ import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import fsu.jportal.mets.LLZMetsUtils;
 import fsu.jportal.util.ResolverUtil;
@@ -148,7 +155,7 @@ public class JPXMLFunctions {
     public static int getCentury(String date) {
         try {
             return (Integer.valueOf(date.substring(0, 2)) + 1);
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             LOGGER.warn("unable to format date " + date + " to century.");
             // return default 18 century
             return 18;
@@ -295,6 +302,49 @@ public class JPXMLFunctions {
      */
     public static String getClassificationLabel(String classID) {
         return ResolverUtil.getClassLabel(classID).orElse("undefined");
+    }
+
+    /**
+     * Returns the best published date of a dates container. The type of the date has
+     * to be equals 'published' or 'published_from' and has the lowest inherited value.
+     * 
+     * @param dates element of dates
+     * @return the published date or null
+     */
+    public static String getPublishedDate(Object o) {
+        Element dates = (Element) ((NodeSet) o).getCurrentNode();
+        List<Element> publishedList = new ArrayList<>();
+        NodeList nodeList = dates.getChildNodes();
+        // get all elements which are published or published_from
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (!(node instanceof Element)) {
+                continue;
+            }
+            Element child = (Element) node;
+            String type = child.getAttribute("type");
+            if (!(type.equals("published") || type.equals("published_from"))) {
+                continue;
+            }
+            publishedList.add(child);
+        }
+        if(publishedList.isEmpty()) {
+            return null;
+        }
+        // sort by inherited
+        Collections.sort(publishedList, new Comparator<Element>() {
+            @Override
+            public int compare(Element e1, Element e2) {
+                String i1 = e1.getAttribute("inherited");
+                String i2 = e2.getAttribute("inherited");
+                if (i1.equals("") || i2.equals("")) {
+                    return 0;
+                }
+                return Integer.compare(Integer.valueOf(i1), Integer.valueOf(i2));
+            }
+        });
+        // get the lowest date and format it
+        return formatDate(publishedList.get(0).getTextContent());
     }
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
-  exclude-result-prefixes="jpxml">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" 
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+  exclude-result-prefixes="xalan xlink jpxml">
 
   <xsl:include href="coreFunctions.xsl" />
   <xsl:include href="jp-layout-functions.xsl" />
@@ -96,21 +97,23 @@
   </xsl:template>
 
   <!-- dates -->
-  <xsl:template match="dates/date[@inherited='0']" mode="jportal.metadata">
+  <xsl:template match="dates" mode="jportal.metadata">
+    <xsl:variable name="published" select="jpxml:getPublishedDate(xalan:nodeset(.))" />
+    <xsl:if test="$published">
+      <field name="published_sort">
+        <xsl:value-of select="$published" />
+      </field>
+    </xsl:if>
+    <xsl:apply-templates select="date[@inherited='0']" mode="jportal.metadata.date" />
+  </xsl:template>
+
+  <xsl:template match="date" mode="jportal.metadata.date">
     <field name="dates">
       <xsl:value-of select="text()" />
     </field>
     <field name="date.{@type}">
       <xsl:value-of select="text()" />
     </field>
-    <xsl:if test="@type = 'published' or @type = 'published_from'">
-      <xsl:variable name="formattedDate" select="jpxml:formatDate(text())" />
-      <xsl:if test="$formattedDate != ''">
-        <field name="published_sort">
-          <xsl:value-of select="$formattedDate" />
-        </field>
-      </xsl:if>
-    </xsl:if>
   </xsl:template>
 
   <!-- rubric -->
