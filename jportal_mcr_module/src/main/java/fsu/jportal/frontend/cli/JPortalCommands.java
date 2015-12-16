@@ -70,8 +70,13 @@ public class JPortalCommands {
             e.printStackTrace();
         }
         String id = objXML.getRootElement().getAttributeValue("ID");
-        MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(id), objXML, new Date());
-        LOGGER.info("imported object " + id + " to blob from " + file);
+        try {
+            MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(id), objXML, new Date());
+            LOGGER.info("Imported object " + id + " to blob from " + file);
+        } catch (IOException e) {
+            LOGGER.error("Failed import object " + id + " to blob from " + file);
+            e.printStackTrace();
+        }
     }
 
     @MCRCommand(help = "Add derivate link to object: add derivate link {location} to object {id}", syntax = "add derivate link {0} to object {1}")
@@ -111,40 +116,43 @@ public class JPortalCommands {
     public static void mkdir(String newDir) {
         DerivateTools.mkdir(newDir);
     }
-    
+
     @MCRCommand(help = "Add derivate to object: addDerivate objID /path/to/file(s)", syntax = "addDerivate {0} {1}")
-    public static void addDerivate(String objID, String pathStr){
-        if(MCRMetadataManager.exists(MCRObjectID.getInstance(objID))){
+    public static void addDerivate(String objID, String pathStr) {
+        if (MCRMetadataManager.exists(MCRObjectID.getInstance(objID))) {
             Path path = Paths.get(pathStr);
-            if(Files.exists(path)){
-                if(Files.isDirectory(path)){
+            if (Files.exists(path)) {
+                if (Files.isDirectory(path)) {
                     //loop
                     try {
                         Iterator<Path> childrenIter = Files.newDirectoryStream(path).iterator();
                         String derivateID = null;
                         while (childrenIter.hasNext()) {
                             Path childPath = (Path) childrenIter.next();
-                            if(Files.isDirectory(childPath)){
-                                
-                            }else{
+                            if (Files.isDirectory(childPath)) {
+
+                            } else {
                                 InputStream inputStream = Files.newInputStream(childPath);
                                 long filesize = Files.size(childPath);
-                                derivateID = DerivateTools.uploadFileWithoutTransaction(inputStream, filesize, objID, derivateID, pathStr);
+                                derivateID = DerivateTools
+                                        .uploadFileWithoutTransaction(inputStream, filesize, objID, derivateID,
+                                                                      pathStr);
                             }
                         }
-                        
+
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     //load file
                 }
             }
         }
     }
-    
+
     private static final Namespace xlink = Namespace.getNamespace("http://www.w3.org/1999/xlink");
+
     @MCRCommand(syntax = "remove dead links", help = "The command remove dead links.")
     public static void findDeadLinks() {
         LOGGER.info("Find dead Links");
@@ -152,14 +160,16 @@ public class JPortalCommands {
 
         // the SQL query check, if there are references to non existing objects
         @SuppressWarnings("unchecked")
-        List<String[]> list = session.createQuery("select key.mcrfrom,key.mcrto from MCRLINKHREF where key.mcrto not in (select key.id from MCRXMLTABLE)").list();
+        List<String[]> list = session.createQuery(
+                "select key.mcrfrom,key.mcrto from MCRLINKHREF where key.mcrto not in (select key.id from MCRXMLTABLE)")
+                                     .list();
 
         if (list.isEmpty()) {
             LOGGER.info("No dead links found.");
         }
 
         HashMap<String, Document> objectXMLs = new HashMap<String, Document>();
-        for (Iterator<String[]> iter = list.iterator(); iter.hasNext();) {
+        for (Iterator<String[]> iter = list.iterator(); iter.hasNext(); ) {
             String[] resultArray = iter.next();
             String keyMCRFrom = resultArray[0];
             String keyMCRTo = resultArray[1];
@@ -174,23 +184,23 @@ public class JPortalCommands {
                 try {
                     faultyObjDoc = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(keyMCRFrom));
                     objectXMLs.put(keyMCRFrom, faultyObjDoc);
-                } catch(Exception exc) {
+                } catch (Exception exc) {
                     LOGGER.error("Unable to retrieve object " + keyMCRFrom, exc);
                 }
             }
             Filter<Element> hrefFilter = new AbstractFilter<Element>() {
                 @Override
                 public Element filter(Object content) {
-                    if(content instanceof Element) {
-                        if(((Element) content).getAttribute("href", xlink) != null)
-                            return (Element)content;
+                    if (content instanceof Element) {
+                        if (((Element) content).getAttribute("href", xlink) != null)
+                            return (Element) content;
                     }
                     return null;
                 }
             };
             // filter for tags with an xlink:href
             HashMap<Element, Element> deleteMap = new HashMap<Element, Element>();
-            for (Iterator<Element> iterator = faultyObjDoc.getDescendants(hrefFilter); iterator.hasNext();) {
+            for (Iterator<Element> iterator = faultyObjDoc.getDescendants(hrefFilter); iterator.hasNext(); ) {
                 Element elem = iterator.next();
                 String attributeValue = elem.getAttributeValue("href", xlink);
 
@@ -198,7 +208,7 @@ public class JPortalCommands {
                     deleteMap.put(elem.getParentElement(), elem);
                 }
             }
-            for (Iterator<Element> iterator = deleteMap.keySet().iterator(); iterator.hasNext();) {
+            for (Iterator<Element> iterator = deleteMap.keySet().iterator(); iterator.hasNext(); ) {
                 Element key = iterator.next();
                 key.removeContent((Element) deleteMap.get(key));
                 if (key.getChildren().isEmpty()) {
@@ -209,17 +219,22 @@ public class JPortalCommands {
             Element maintitlesElem = faultyObjDoc.getRootElement().getChild("metadata").getChild("maintitles");
             StringBuilder maintitle = new StringBuilder();
 
-            for (Iterator<Element> iterator = maintitlesElem.getChildren().iterator(); iterator.hasNext();) {
+            for (Iterator<Element> iterator = maintitlesElem.getChildren().iterator(); iterator.hasNext(); ) {
                 Element partOfTitle = iterator.next();
                 maintitle.append(partOfTitle.getText());
                 if (iterator.hasNext()) {
                     maintitle.append(" | ");
                 }
             }
-            MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(keyMCRFrom), faultyObjDoc, new Date());
+            try {
+                MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(keyMCRFrom), faultyObjDoc, new Date());
+                // XML holen, fehlerhafte Links löschen
+                LOGGER.info(maintitle.toString() + ": " + keyMCRFrom + " link with " + keyMCRTo);
+            } catch (IOException e) {
+                LOGGER.error("Failed link " + maintitle.toString() + " from " + keyMCRFrom + " with " + keyMCRTo);
+                e.printStackTrace();
+            }
 
-            // XML holen, fehlerhafte Links löschen
-            LOGGER.info(maintitle.toString() + ": " + keyMCRFrom + " link with " + keyMCRTo);
         }
     }
 }

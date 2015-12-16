@@ -57,7 +57,7 @@ public class MigratingCMDs {
             JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
             try {
                 Source resolve = journalFilesResolver.resolve("journalFile:" + jpjournalID + "/intro.xml+", null);
-                if(resolve != null){
+                if (resolve != null) {
                     JournalConfig journalConf = getJournalConf(jpjournalID);
                     journalConf.setKey("greeting", "intro");
                     LOGGER.info("Set intro for " + jpjournalID);
@@ -72,8 +72,9 @@ public class MigratingCMDs {
     public static void migrateIntroXML() throws JDOMException, IOException {
         List<String> journalIDs = (List<String>) MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
         XPathExpression<Element> hiddenWebContextXpath =
-                XPathFactory.instance().compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext", Filters.element());
-        
+                XPathFactory.instance().compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext",
+                                                Filters.element());
+
         String mcrBaseDir = MCRConfiguration.instance().getString("MCR.basedir");
         String webappDir = mcrBaseDir + "/build/webapps";
         String journalFileBase = MCRConfiguration.instance().getString("JournalFileFolder");
@@ -82,7 +83,7 @@ public class MigratingCMDs {
             Document journalXML;
             try {
                 journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
-            } catch(Exception exc) {
+            } catch (Exception exc) {
                 LOGGER.error("Unable to retrieve journal " + journalID, exc);
                 continue;
             }
@@ -113,12 +114,14 @@ public class MigratingCMDs {
             }
         }
     }
-    
-    @MCRCommand(helpKey="Migrate template name from navigation.xml", syntax="migrate template")
-    public static void migrateTemplate() throws JDOMException, IOException{
+
+    @MCRCommand(helpKey = "Migrate template name from navigation.xml", syntax = "migrate template")
+    public static void migrateTemplate() throws JDOMException, IOException {
         List<String> journalIDs = (List<String>) MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
         XPathExpression<Text> hiddenWebContextXpath =
-                XPathFactory.instance().compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()", Filters.text());
+                XPathFactory.instance()
+                            .compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()",
+                                     Filters.text());
         //load navigation.xml
         String mcrBaseDir = MCRConfiguration.instance().getString("MCR.basedir");
         String navigationDir = mcrBaseDir + "/build/webapps/config/navigation.xml";
@@ -130,18 +133,20 @@ public class MigratingCMDs {
             Document journalXML;
             try {
                 journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
-            } catch(Exception exc) {
+            } catch (Exception exc) {
                 LOGGER.error("Unable to retrieve journal " + journalID, exc);
                 continue;
             }
             String journalContextPath = hiddenWebContextXpath.evaluateFirst(journalXML).getText().trim();
-            
-            if(journalContextPath!= null && !journalContextPath.equals("")){
+
+            if (journalContextPath != null && !journalContextPath.equals("")) {
                 LOGGER.info("Add Termplate a Template  to " + journalContextPath);
                 XPathExpression<Attribute> templateXpath =
-                        XPathFactory.instance().compile("/navigation/navi-main/item[@href='/content/main/journalList.xml']/item[@href='" + journalContextPath +  "']/@template", Filters.attribute());
+                        XPathFactory.instance().compile(
+                                "/navigation/navi-main/item[@href='/content/main/journalList.xml']/item[@href='"
+                                        + journalContextPath + "']/@template", Filters.attribute());
                 String journalTemplate = templateXpath.evaluateFirst(navigationXML).getValue();
-                if (journalTemplate != null && !journalTemplate.equals("")){
+                if (journalTemplate != null && !journalTemplate.equals("")) {
                     LOGGER.info("Template: " + journalTemplate);
                     Element journalMetadata = journalXML.getRootElement().getChild("metadata");
                     //create hidden_template            
@@ -155,42 +160,44 @@ public class MigratingCMDs {
                     templates.setAttribute("class", "MCRMetaLangText");
                     templates.setAttribute("heritable", "false");
                     templates.setAttribute("notinherit", "false");
-                    templates.addContent(template);            
-                    
+                    templates.addContent(template);
+
                     journalMetadata.addContent(templates);
-      
+
                     Date date = new Date();
                     MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(journalID), journalXML, date);
                     LOGGER.info("Successful add " + journalTemplate + " to " + journalContextPath);
-                }
-                else{
+                } else {
                     LOGGER.info("No Template found for " + journalID);
                 }
             }
-        }        
+        }
     }
-    
-    @MCRCommand(help="Replace ':' in categID with '_'", syntax="fix colone in categID")
-    public static void fixCategID() throws JDOMException, TransformerException{
+
+    @MCRCommand(help = "Replace ':' in categID with '_'", syntax = "fix colone in categID")
+    public static void fixCategID() throws JDOMException, TransformerException {
         Session dbSession = MCRHIBConnection.instance().getSession();
-        dbSession.createSQLQuery("update MCRCATEGORY set CATEGID=replace(categid,':','-') where CATEGID like '%:%'").executeUpdate();
-        
+        dbSession.createSQLQuery("update MCRCATEGORY set CATEGID=replace(categid,':','-') where CATEGID like '%:%'")
+                 .executeUpdate();
+
         MCRXMLMetadataManager xmlMetaManager = MCRXMLMetadataManager.instance();
         List<String> listIDs = xmlMetaManager.listIDs();
-        
+
         InputStream resourceAsStream = MigratingCMDs.class.getResourceAsStream("/xsl/replaceColoneInCategID.xsl");
         Source stylesheet = new StreamSource(resourceAsStream);
         Transformer xsltTransformer = MCRXSLTransformation.getInstance().getStylesheet(stylesheet).newTransformer();
 
         XPathExpression<Element> xlinkLabel =
-                XPathFactory.instance().compile("/mycoreobject/metadata/*[@class='MCRMetaClassification']/*[contains(@categid,':')]", Filters.element());
+                XPathFactory.instance().compile(
+                        "/mycoreobject/metadata/*[@class='MCRMetaClassification']/*[contains(@categid,':')]",
+                        Filters.element());
 
         for (String ID : listIDs) {
             MCRObjectID mcrid = MCRObjectID.getInstance(ID);
             Document mcrObjXML;
             try {
                 mcrObjXML = xmlMetaManager.retrieveXML(mcrid);
-            } catch(Exception exc) {
+            } catch (Exception exc) {
                 LOGGER.error("Unable to retrieve mcr object " + mcrid, exc);
                 continue;
             }
@@ -199,26 +206,32 @@ public class MigratingCMDs {
                 JDOMResult jdomResult = new JDOMResult();
                 xsltTransformer.transform(xmlSource, jdomResult);
                 Document migratedMcrObjXML = jdomResult.getDocument();
-                xmlMetaManager.update(mcrid, migratedMcrObjXML, new Date());
-                LOGGER.info("Replace ':' in categID for " + mcrid);
+                try {
+                    xmlMetaManager.update(mcrid, migratedMcrObjXML, new Date());
+                    LOGGER.info("Replace ':' in categID for " + mcrid);
+                } catch (IOException e) {
+                    LOGGER.error("Failed replace ':' in categID for " + mcrid);
+                    e.printStackTrace();
+                }
             } else {
                 LOGGER.info("Nothing to replace for " + mcrid);
             }
         }
     }
-    
-    @MCRCommand(help="move imprint link out of DB", syntax="migrate imprint")
-    public static void migrateImprint(){
+
+    @MCRCommand(help = "move imprint link out of DB", syntax = "migrate imprint")
+    public static void migrateImprint() {
         Criteria criteria = MCRHIBConnection.instance().getSession().createCriteria(MCRLINKHREF.class);
-        List<MCRLINKHREFPK> resultList = criteria.add(Restrictions.eq("key.mcrtype", "imprint")).setProjection(Projections.id()).list();
+        List<MCRLINKHREFPK> resultList = criteria.add(Restrictions.eq("key.mcrtype", "imprint"))
+                                                 .setProjection(Projections.id()).list();
         for (MCRLINKHREFPK mcrlinkhrefpk : resultList) {
             String objectID = mcrlinkhrefpk.getMcrfrom();
             String imprintName = mcrlinkhrefpk.getMcrto();
             getJournalConf(objectID).setKey("imprint", imprintName);
             LOGGER.info("Successfully migrating " + objectID + " with imprint " + imprintName);
         }
-        
-        if(resultList.size() == 0){
+
+        if (resultList.size() == 0) {
             LOGGER.info("No Imprint found in database.");
         }
     }
