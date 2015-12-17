@@ -140,16 +140,6 @@ public class JPXMLFunctions {
         return r.resolve(text);
     }
 
-    public static String getLastValidPageID() {
-        String page = (String) MCRSessionMgr.getCurrentSession().get("lastPageID");
-        return page == null ? "" : page;
-    }
-
-    public static String setLastValidPageID(String pageID) {
-        MCRSessionMgr.getCurrentSession().put("lastPageID", pageID);
-        return "";
-    }
-
     public static int getCentury(String date) {
         try {
             return (Integer.valueOf(date.substring(0, 2)) + 1);

@@ -76,10 +76,6 @@
   <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing" />
 
   <xsl:template name="renderLayout">
-    <xsl:if test="/mycoreobject/@ID">
-      <xsl:variable name="setObjIDInSession" select="jpxml:setLastValidPageID(/mycoreobject/@ID)" />
-    </xsl:if>
-
     <html>
       <head>
         <title>
