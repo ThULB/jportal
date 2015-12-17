@@ -98,7 +98,7 @@
 
   <!-- dates -->
   <xsl:template match="dates" mode="jportal.metadata">
-    <xsl:variable name="published" select="jpxml:getPublishedDate(xalan:nodeset(.))" />
+    <xsl:variable name="published" select="jpxml:getPublishedDate(/mycoreobject/@ID)" />
     <xsl:if test="$published">
       <field name="published_sort">
         <xsl:value-of select="$published" />

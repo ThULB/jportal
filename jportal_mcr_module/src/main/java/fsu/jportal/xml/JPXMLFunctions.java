@@ -6,14 +6,12 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,7 +19,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.xpath.NodeSet;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
 import org.mycore.common.config.MCRConfiguration;
@@ -31,16 +28,17 @@ import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.MCRURL;
 import org.mycore.mets.validator.validators.ValidationException;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
+import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.mets.LLZMetsUtils;
+import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.ResolverUtil;
 
 public class JPXMLFunctions {
@@ -308,43 +306,26 @@ public class JPXMLFunctions {
      * Returns the best published date of a dates container. The type of the date has
      * to be equals 'published' or 'published_from' and has the lowest inherited value.
      * 
-     * @param dates element of dates
+     * @param id mycore object identifier
      * @return the published date or null
      */
-    public static String getPublishedDate(Object o) {
-        Element dates = (Element) ((NodeSet) o).getCurrentNode();
-        List<Element> publishedList = new ArrayList<>();
-        NodeList nodeList = dates.getChildNodes();
-        // get all elements which are published or published_from
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (!(node instanceof Element)) {
+    public static String getPublishedDate(String id) {
+        MCRObjectID mcrId = MCRObjectID.getInstance(id);
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+        List<MCRObject> ancestorsAndSelf = MCRObjectUtils.getAncestorsAndSelf(mcrObj);
+        for (MCRObject obj : ancestorsAndSelf) {
+            Optional<JPPeriodicalComponent> periodical = JPComponentUtil.getPeriodical(obj.getId());
+            if (!periodical.isPresent()) {
                 continue;
             }
-            Element child = (Element) node;
-            String type = child.getAttribute("type");
-            if (!(type.equals("published") || type.equals("published_from"))) {
+            MCRMetaISO8601Date published = periodical.get().getDate("published")
+                .orElse(periodical.get().getDate("published_from").orElse(null));
+            if (published == null) {
                 continue;
             }
-            publishedList.add(child);
+            return formatDate(published.getISOString());
         }
-        if(publishedList.isEmpty()) {
-            return null;
-        }
-        // sort by inherited
-        Collections.sort(publishedList, new Comparator<Element>() {
-            @Override
-            public int compare(Element e1, Element e2) {
-                String i1 = e1.getAttribute("inherited");
-                String i2 = e2.getAttribute("inherited");
-                if (i1.equals("") || i2.equals("")) {
-                    return 0;
-                }
-                return Integer.compare(Integer.valueOf(i1), Integer.valueOf(i2));
-            }
-        });
-        // get the lowest date and format it
-        return formatDate(publishedList.get(0).getTextContent());
+        return null;
     }
 
 }

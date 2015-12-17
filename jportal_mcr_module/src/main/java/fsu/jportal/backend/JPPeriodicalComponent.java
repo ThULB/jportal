@@ -179,6 +179,17 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
     }
 
     /**
+     * Returns the first not inherited date based on the given type.
+     * 
+     * @param type the type of the date. e.g. published
+     * @return the date object
+     */
+    public Optional<MCRMetaISO8601Date> getDate(String type) {
+        return metadataStreamNotInherited("dates", MCRMetaISO8601Date.class).filter(d -> d.getType().equals(type))
+            .findFirst();
+    }
+
+    /**
      * Returns the template name for this component. Each component is either a journal or
      * should have a journal as ancestor. This method returns the template of this journal.
      * 
