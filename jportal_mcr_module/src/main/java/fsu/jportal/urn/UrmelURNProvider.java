@@ -1,5 +1,6 @@
 package fsu.jportal.urn;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.mycore.common.config.MCRConfiguration;
@@ -18,18 +19,12 @@ public class UrmelURNProvider implements MCRIURNProvider {
 
     public MCRURN generateURN() {
         return new MCRURN(MCRURN.getDefaultNamespaceIdentifiers(),
-                UrmelURNProvider.NISS + "-" + UrmelURNProvider.getUUID().toString());
+                          getNISS() + "-" + UrmelURNProvider.getUUID().toString());
     }
 
     public MCRURN[] generateURN(int amount) {
-        NSSpecificPartPattern generator = new NSSpecificPartPattern() {
-            @Override
-            public String generate(int i) {
-                return UrmelURNProvider.NISS + "-" + UrmelURNProvider.getUUID().toString() + "-" + i;
-            }
-        };
-
-        return generateURN(amount, MCRURN.getDefaultNamespaceIdentifiers(), generator);
+        return generateURN(amount, MCRURN.getDefaultNamespaceIdentifiers(),
+                           i -> getNISS() + "-" + UrmelURNProvider.getUUID().toString() + "-" + i);
     }
 
     @Override
@@ -38,9 +33,11 @@ public class UrmelURNProvider implements MCRIURNProvider {
             return null;
         }
 
-        PatternGenerator generator = new PatternGenerator(amount, base.getNamespaceIdentfiersSpecificPart());
+        String nsIdentfiersSpecPart = base.getNamespaceIdentfiersSpecificPart();
+        String format = format(amount);
 
-        return generateURN(amount, base.getNamespaceIdentfiers(), generator);
+        return generateURN(amount, base.getNamespaceIdentfiers(),
+                           i -> nsIdentfiersSpecPart + "-" + String.format(format, i));
     }
 
     public MCRURN[] generateURN(int amount, MCRURN base, String setId) {
@@ -55,22 +52,19 @@ public class UrmelURNProvider implements MCRIURNProvider {
             return null;
         }
 
+        String nsIdentfiersSpecPart = base.getNamespaceIdentfiersSpecificPart();
+        String format = format(amount);
+
         if (amount == 1) {
-            return new MCRURN[] { generateURN(base, setId) };
+            return generateURN(amount, base.getNamespaceIdentfiers(), i -> nsIdentfiersSpecPart + "-" + setId);
         }
 
-        PatternGenerator generator = new PatternGenerator(amount, base.getNamespaceIdentfiersSpecificPart());
-        generator.setId(setId);
-
-        return generateURN(amount, base.getNamespaceIdentfiers(), generator);
+        return generateURN(amount, base.getNamespaceIdentfiers(),
+                           i -> nsIdentfiersSpecPart + "-" + setId + "-" + String.format(format, i));
     }
 
     public String getNISS() {
         return UrmelURNProvider.NISS;
-    }
-
-    public MCRURN generateURN(MCRURN base, String setId) {
-        return new MCRURN(base.getNamespaceIdentfiers(), base.getNamespaceIdentfiersSpecificPart() + "-" + setId);
     }
 
     public MCRURN[] generateURN(int amount, String[] nsIdentifiers, NSSpecificPartPattern pattern) {
@@ -87,27 +81,14 @@ public class UrmelURNProvider implements MCRIURNProvider {
         return urns;
     }
 
-    private class PatternGenerator implements NSSpecificPartPattern {
-        private final String format;
+    private long numDigits(long n) {
+        if (n < 10)
+            return 1;
+        return 1 + numDigits(n / 10);
+    }
 
-        private final String nsIdentifiersSpecParts;
-
-        private String id = "";
-
-        public PatternGenerator(int amount, String nsIdentifiersSpecParts) {
-            int leadingZeros = String.valueOf(amount).length();
-            this.format = "%0" + leadingZeros + "d";
-            this.nsIdentifiersSpecParts = nsIdentifiersSpecParts;
-        }
-
-        public void setId(String id) {
-            this.id = id + "-";
-        }
-
-        @Override
-        public String generate(int i) {
-            return nsIdentifiersSpecParts + "-" + id + String.format(format, i);
-        }
+    private String format(int i) {
+        return "%0" + numDigits(i) + "d";
     }
 
     interface NSSpecificPartPattern {

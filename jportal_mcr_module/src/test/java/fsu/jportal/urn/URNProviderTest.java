@@ -99,15 +99,16 @@ public class URNProviderTest {
     }
 
     private void assertURN(MCRURN urmelurn, int counter, String baseNSIdSpec, String setId) {
-        assertEquals("Wrong Schema: ", "urn", urmelurn.getSchema());
-        assertArrayEquals("Wrong name space identifiers: ", NS_IDENT, urmelurn.getNamespaceIdentfiers());
+        String urn = urmelurn.toString();
+        assertEquals("Wrong Schema for urn \"" + urn + "\": ", "urn", urmelurn.getSchema());
+        assertArrayEquals("Wrong name space identifiers for urn \" " + urn + " \": ", NS_IDENT, urmelurn.getNamespaceIdentfiers());
         String namespaceIdentfiersSpecificPart = urmelurn.getNamespaceIdentfiersSpecificPart();
 
         if (baseNSIdSpec != null) {
             String errMsg = errMsgShouldStart(baseNSIdSpec, namespaceIdentfiersSpecificPart);
             assertTrue(errMsg, namespaceIdentfiersSpecificPart.startsWith(baseNSIdSpec));
         } else {
-            assertTrue("Specific part should start with '" + NISS + "': ",
+            assertTrue("Specific part for urn \"" + urn + "\" should start with '" + NISS + "': ",
                     namespaceIdentfiersSpecificPart.startsWith(NISS));
             String uuid = namespaceIdentfiersSpecificPart.substring(6, 42);
             UUID.fromString(uuid);
@@ -120,7 +121,7 @@ public class URNProviderTest {
                 remainder = remainder.replaceAll(setId + "-", "");
             }
 
-            assertEquals("Wrong counter: ", counter, Integer.parseInt(remainder));
+            assertEquals("Wrong counter for urn \"" + urn + "\": ", counter, Integer.parseInt(remainder));
         }
 
     }
