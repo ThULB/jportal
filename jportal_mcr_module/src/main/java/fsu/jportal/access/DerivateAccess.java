@@ -1,11 +1,6 @@
 package fsu.jportal.access;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalAccessor;
-
-import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.pref.JournalConfig;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -13,10 +8,9 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.datamodel.common.MCRISO8601Date;
 import org.mycore.solr.MCRSolrClientFactory;
 
-import fsu.jportal.pref.JournalConfig;
+import java.io.IOException;
 
 public class DerivateAccess {
 
@@ -30,7 +24,6 @@ public class DerivateAccess {
             }
 
             try {
-//                String journalID = JPComponentUtil.getJournalID(id);
                 String sorlQuery = "+journalID:" + journalID +" +objectType:jparticle +published_sort:[NOW-1YEAR TO NOW]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
                 solrParams.set("q", sorlQuery).set("fl", "id");
