@@ -37,22 +37,6 @@
 
 <xsl:template match="fileupload">
 
-  <div>
-    <script type="text/javascript" src="shared/traceur-runtime/0.0.91/traceur-runtime.js"></script>
-    <script type="text/javascript" src="shared/es6-module-loader/0.16.6/es6-module-loader.js"></script>
-    <script type="text/javascript" src="shared/system.js/0.16.11/system@0.16.11.js"></script>
-    <script type="text/javascript" src="shared/angular2/2.0.0-alpha.34/angular2.dev.js"></script> 
-    <script type="text/javascript" src="shared/jquery-ui/1.11.4/jquery-ui.js"></script>
-    <script type="text/javascript" src="shared/blueimp-file-upload/9.11.0/jquery.fileupload.js"></script>
-    <form id="fileupload" action="rsc/upload/derivate/{$UploadID}" method="POST" enctype="multipart/form-data">
-    <!--<form id="fileupload" action="servlets/MCRUploadServlet" method="POST" enctype="multipart/form-data"> 
-      <input value="formBasedUpload" name="method" type="hidden" />
-      <input value="{$UploadID}" name="uploadId" type="hidden" />-->
-      <uploadr></uploadr>
-    </form>
-    <script type="text/javascript">System.import('modules/uploadr/js/Uploadr');</script>
-  </div>
-
   <xsl:variable name="url">  <!-- when applet ends this is shown -->
     <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRUploadServlet',$HttpSession,'?method=redirecturl&amp;uploadId=',$UploadID)"/>
   </xsl:variable>
