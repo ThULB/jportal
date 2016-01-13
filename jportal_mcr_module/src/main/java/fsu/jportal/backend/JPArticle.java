@@ -1,31 +1,11 @@
 package fsu.jportal.backend;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.common.SolrDocument;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
-import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.classifications2.MCRLabel;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
-import org.mycore.datamodel.metadata.MCRMetaClassification;
-import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.solr.classification.MCRSolrClassificationUtil;
-import org.mycore.solr.search.MCRSolrSearchUtils;
-
-import fsu.jportal.backend.JPPeriodicalComponent.DateType;
 
 /**
  * Simple java abstraction of a jportal article. This class is not complete at all.
@@ -147,30 +127,6 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
         identis.addMetaObject(new MCRMetaLangText("identi", null, type, 0, "plain", id));
     }
 
-    public void addParticipant(MCRObjectID id, String title, String type) {
-        MCRMetaElement participants = object.getMetadata().getMetadataElement("participants");
-        if (participants == null) {
-            participants = new MCRMetaElement(MCRMetaLinkID.class, "participants", false, false, null);
-            object.getMetadata().setMetadataElement(participants);
-        }
-        MCRMetaLinkID link = new MCRMetaLinkID("participant", id, null, title);
-        link.setType(type);
-        participants.addMetaObject(link);
-    }
-
-    public List<MCRMetaLinkID> getParticipants() {
-        List<MCRMetaLinkID> participantList = new ArrayList<MCRMetaLinkID>();
-        MCRMetaElement participants = object.getMetadata().getMetadataElement("participants");
-        if (participants == null) {
-            return participantList;
-        }
-        Iterator<MCRMetaInterface> i = participants.iterator();
-        while (i.hasNext()) {
-            participantList.add((MCRMetaLinkID) i.next());
-        }
-        return participantList;
-    }
-
     /**
      * Adds a note to the article.
      * 
@@ -186,37 +142,6 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
         MCRMetaLangText mcrNote = new MCRMetaLangText("note", null, (publicNote ? "annotation" : "internalNote"), 0,
             "plain", note);
         notes.addMetaObject(mcrNote);
-    }
-
-    /**
-     * Adds the heading to the rubric classification.
-     * 
-     * @param heading
-     * @throws SolrServerException
-     */
-    public void addHeading(String heading) throws SolrServerException, IOException {
-        HttpSolrClient client = MCRSolrClassificationUtil.getCore().getClient();
-        SolrDocument doc = MCRSolrSearchUtils.first(client,
-            "+classification:jportal_class_rubric_llz +label.de:\"" + heading + "\"");
-        MCRCategoryID categId;
-        String classId = "jportal_class_rubric_llz";
-        if (doc == null) {
-            // hate this api... its not even an api...
-            MCRCategoryImpl category = new MCRCategoryImpl();
-            categId = new MCRCategoryID(classId, UUID.randomUUID().toString());
-            category.setId(categId);
-            category.getLabels().add(new MCRLabel("de", heading, null));
-            MCRCategoryDAOFactory.getInstance().addCategory(MCRCategoryID.rootID(classId), category);
-        } else {
-            categId = new MCRCategoryID(classId, doc.getFieldValue("category").toString());
-        }
-        MCRMetaElement rubrics = object.getMetadata().getMetadataElement("rubrics");
-        if (rubrics == null) {
-            rubrics = new MCRMetaElement(MCRMetaClassification.class, "rubrics", false, false, null);
-            object.getMetadata().setMetadataElement(rubrics);
-        }
-        MCRMetaClassification metaClassification = new MCRMetaClassification("rubric", 0, null, categId);
-        rubrics.addMetaObject(metaClassification);
     }
 
     /**

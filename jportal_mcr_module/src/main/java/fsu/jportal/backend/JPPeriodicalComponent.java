@@ -13,6 +13,7 @@ import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
@@ -187,6 +188,33 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
     public Optional<MCRMetaISO8601Date> getDate(String type) {
         return metadataStreamNotInherited("dates", MCRMetaISO8601Date.class).filter(d -> d.getType().equals(type))
             .findFirst();
+    }
+
+    /**
+     * Adds a new participant to this object.
+     * 
+     * @param id the object identifier of the participant
+     * @param title the name of the participant
+     * @param type the participant type e.g. author
+     */
+    public void addParticipant(MCRObjectID id, String title, String type) {
+        MCRMetaElement participants = object.getMetadata().getMetadataElement("participants");
+        if (participants == null) {
+            participants = new MCRMetaElement(MCRMetaLinkID.class, "participants", false, false, null);
+            object.getMetadata().setMetadataElement(participants);
+        }
+        MCRMetaLinkID link = new MCRMetaLinkID("participant", id, null, title);
+        link.setType(type);
+        participants.addMetaObject(link);
+    }
+
+    /**
+     * Returns a list of all participants.
+     * 
+     * @return list of participants
+     */
+    public List<MCRMetaLinkID> getParticipants() {
+        return metadataStream("participants", MCRMetaLinkID.class).collect(Collectors.toList());
     }
 
     /**
