@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
+import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -58,6 +59,62 @@ public class JPPerson extends JPLegalEntity {
     public String getTitle() {
         Map<String, String> nameMap = metaXMLToMap(getHeading());
         return buildName(nameMap);
+    }
+
+    /**
+     * Sets the name/title of the person.
+     * 
+     * @param name including first and last name. (required)
+     * @param affix name affix for noble's e.g. "von Guttenberg"
+     * @param collocation name collocation 
+     */
+    public void setName(String name, String affix, String collocation) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("name cannot be null or empty.");
+        }
+        MCRMetaXML xml = buildHeading();
+        xml.addContent(new Element("name").setText(name));
+        addAffixAndCollocation(xml, affix, collocation);
+    }
+
+    /**
+     * Sets the name/title of the person.
+     * 
+     * @param lastName the last name (required)
+     * @param firstName the first name
+     * @param affix name affix for noble's e.g. "von Guttenberg"
+     * @param collocation name collocation
+     */
+    public void setName(String lastName, String firstName, String affix, String collocation) {
+        if (lastName == null || lastName.isEmpty()) {
+            throw new IllegalArgumentException("lastName cannot be null or empty.");
+        }
+        MCRMetaXML xml = buildHeading();
+        xml.addContent(new Element("lastName").setText(lastName));
+        if (firstName != null && !firstName.isEmpty()) {
+            xml.addContent(new Element("firstName").setText(firstName));
+        }
+        addAffixAndCollocation(xml, affix, collocation);
+    }
+
+    protected MCRMetaXML buildHeading() {
+        MCRMetaElement heading = object.getMetadata().getMetadataElement("def.heading");
+        if (heading == null) {
+            heading = new MCRMetaElement(MCRMetaXML.class, "def.heading", true, true, null);
+            object.getMetadata().setMetadataElement(heading);
+        }
+        MCRMetaXML xml = new MCRMetaXML("heading", null, 0);
+        heading.addMetaObject(xml);
+        return xml;
+    }
+
+    protected void addAffixAndCollocation(MCRMetaXML xml, String affix, String collocation) {
+        if (affix != null && !affix.isEmpty()) {
+            xml.addContent(new Element("nameAffix").setText(affix));
+        }
+        if (collocation != null && !collocation.isEmpty()) {
+            xml.addContent(new Element("collocation").setText(collocation));
+        }
     }
 
     /**

@@ -20,7 +20,6 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
         published_Original, published_Original_From, published_Original_Till
     }
 
-
     /**
      * Creates a new jportal article.
      */
@@ -54,7 +53,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     public JPArticle(MCRObject mcrObject) {
         super(mcrObject);
     }
-    
+
     @Override
     public String getType() {
         return TYPE;
@@ -83,13 +82,24 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
         object.getMetadata().setMetadataElement(dates);
     }
 
+    /**
+     * Sets the parent of this component.
+     * 
+     * @param parentId a mycore object id
+     */
     public void setParent(String parentId) {
-        MCRMetaLinkID parent = object.getStructure().getParent();
-        if (parent == null) {
-            parent = new MCRMetaLinkID("parent", 0);
-            object.getStructure().setParent(parent);
-        }
-        parent.setReference(parentId, null, null);
+        setParent(MCRObjectID.getInstance(parentId));
+    }
+
+    /**
+     * Sets the parent of this component.
+     * 
+     * @param parentId a mycore object id
+     */
+    public void setParent(MCRObjectID parentId) {
+        MCRMetaLinkID link = new MCRMetaLinkID("parent", 0);
+        link.setReference(parentId, null, null);
+        object.getStructure().setParent(link);
     }
 
     public void setSize(String size) {

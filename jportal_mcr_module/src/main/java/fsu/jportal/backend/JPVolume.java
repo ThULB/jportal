@@ -2,6 +2,7 @@ package fsu.jportal.backend;
 
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -57,6 +58,26 @@ public class JPVolume extends JPContainer {
         }
         MCRMetaLangText subtitle = new MCRMetaLangText("subtitle", null, type, 0, "plain", title);
         subtitles.addMetaObject(subtitle);
+    }
+
+    /**
+     * Sets the parent of this component.
+     * 
+     * @param parentId a mycore object id
+     */
+    public void setParent(String parentId) {
+        setParent(MCRObjectID.getInstance(parentId));
+    }
+
+    /**
+     * Sets the parent of this component.
+     * 
+     * @param parentId a mycore object id
+     */
+    public void setParent(MCRObjectID parentId) {
+        MCRMetaLinkID link = new MCRMetaLinkID("parent", 0);
+        link.setReference(parentId, null, null);
+        object.getStructure().setParent(link);
     }
 
 }
