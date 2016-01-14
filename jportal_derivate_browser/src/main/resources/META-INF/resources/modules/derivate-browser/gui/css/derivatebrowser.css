@@ -261,7 +261,7 @@ ul{
 }
 
 .browser-table-entry td:nth-child(2) {
-	width: 90px; 
+	width: 110px;
 }
 
 #browser-table .browser-table-entry > td{
@@ -298,7 +298,7 @@ ul{
 }
 
 #browser-table-head th:nth-child(2) {
-	width: 90px; 
+	width: 110px;
 }
 
 #browser-table-head th:nth-child(3) {
@@ -318,6 +318,30 @@ span.btn{
 
 span.btn.faded{
     cursor: default;
+}
+
+a.downloadlink {
+	color: #333;
+}
+
+a.downloadlink:hover {
+	color: #333;
+	text-decoration: none;
+}
+
+a.downloadlink:visited {
+	color: #333;
+	text-decoration: none;
+}
+
+a.downloadlink:active {
+	color: #333;
+	text-decoration: none;
+}
+
+a.downloadlink:link {
+	color: #333;
+	text-decoration: none;
 }
 
 .popover-img{

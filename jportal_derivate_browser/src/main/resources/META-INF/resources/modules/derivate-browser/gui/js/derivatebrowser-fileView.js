@@ -64,6 +64,7 @@ var derivateBrowserFileView = (function () {
 	}
 
 	function addFileToView(file , mainDoc) {
+        file.baseURL = jp.baseURL;
 		var fileEntryTemplate = $("#file-entry-template").html();
 		var fileEntryOutput = $(Mustache.render(fileEntryTemplate, file));
         derivateBrowserTools.updateI18nForElm(fileEntryOutput);
@@ -86,6 +87,7 @@ var derivateBrowserFileView = (function () {
 	}
 
     function addXMLToView(file) {
+        file.baseURL = jp.baseURL;
         var xmlEntryTemplate = $("#xml-entry-template").html();
         var xmlEntryOutput = $(Mustache.render(xmlEntryTemplate, file));
         derivateBrowserTools.updateI18nForElm(xmlEntryOutput);
