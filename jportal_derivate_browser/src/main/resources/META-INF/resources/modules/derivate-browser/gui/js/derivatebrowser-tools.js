@@ -47,6 +47,8 @@ var derivateBrowserTools = (function () {
 	
 	function getImg(img, deriID, path){
         getImgWithPath(img, jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + deriID + path);
+        $(img).data("deriID", deriID);
+        $(img).data("path", path);
         //$(img).siblings(".img-placeholder").attr( "src", jp.baseURL + "images/file-logo.svg");
 		//$(img).attr( "src", jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + deriID + path).on("load", function() {
 		//	$(img).siblings(".img-placeholder").addClass("hidden");
@@ -249,11 +251,11 @@ var derivateBrowserTools = (function () {
             content: content,
             html: true,
             trigger: "manual",
-            container: 'body'
+            container: '#files'
         }).on("mouseenter", function() {
             var pop = this;
             clearTimeout(timer);
-            $(".popover.in").parent().find(".popover-file").popover("hide");
+            $(".popShow").popover("hide");
             timer = setTimeout(function() {
                 if ($(".popover:hover").length == 0) {
                     $(pop).popover("show");
@@ -269,6 +271,10 @@ var derivateBrowserTools = (function () {
                     }
                 }
             }, 200);
+        }).on("hide.bs.popover", function () {
+            $(this).removeClass("popShow");
+        }).on("show.bs.popover", function () {
+            $(this).addClass("popShow");
         });
     }
 

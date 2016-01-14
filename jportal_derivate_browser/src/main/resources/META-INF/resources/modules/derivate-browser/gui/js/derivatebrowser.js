@@ -80,8 +80,7 @@ var DerivateBrowser = function () {
 
             $("body").on("click", ".popover-img", function () {
                 var parent = $(this).closest(".browser-table-entry");
-                parent.find("popover-file").popover("hide");
-                derivateBrowserLargeView.loadViewer(parent.data("docID") + parent.data("path"));
+                derivateBrowserLargeView.loadViewer($(this).data("deriID") + $(this).data("path"));
                 $("#file-view").addClass("hidden");
             });
 
@@ -223,7 +222,7 @@ var DerivateBrowser = function () {
             });
 
             $("body").on("mouseleave", ".popover", function() {
-                $(this).parent().find(".popover-file").popover("hide");
+                $(".popShow").popover("hide");
             });
 
             $("body").on("mousedown", ".popover-file", function () {
