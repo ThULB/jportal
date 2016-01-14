@@ -133,6 +133,8 @@ project(':jportal_mcr_module') {
     }
 
     dependencies {
+    	testCompile 'org.mycore:mycore-base:$mcrVersion:tests'
+
         compile "org.mycore:mycore-base:$mcrVersion"
         compile "org.mycore:mycore-solr:$mcrVersion"
         compile "org.mycore:mycore-mets:$mcrVersion"
