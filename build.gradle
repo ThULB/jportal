@@ -16,10 +16,7 @@ plugins {
     id "com.moowork.node" version "0.10"
 }
 
-import java.io.File
-import java.nio.file.Files
-import java.nio.file.Paths;
-import java.util.HashSet;
+import java.nio.file.Paths
 
 //def mcrVersion = '2015.08-SNAPSHOT'
 
@@ -395,6 +392,115 @@ project(':jportal_webapp') {
         }
     }
 
+    // Webapp runner tasks
+    configurations {
+        jetty
+        solr
+    }
+
+    dependencies {
+        jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
+        jetty "org.hsqldb:hsqldb:$hsqldbVersion"
+        solr "org.mycore.solr:solr:$solrVersion@war"
+    }
+
+    def solrWarFilePath
+    configurations.solr.each { File file -> solrWarFilePath = file.absolutePath }
+
+    def appName = "jportal"
+    def mcrHome = System.getProperty("user.home") + "/.mycore"
+    def appPath = "$mcrHome/$appName"
+    def confDir = "$project.projectDir/config"
+
+    task initSolr {
+        if (!file(appPath).exists()) {
+            copy {
+                from(confDir) {
+                    include "**"
+                    exclude "jetty/**"
+                }
+                into appPath
+
+                def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+
+                configurations {
+                    solr
+                }
+                dependencies {
+                    solr "org.mycore:mycore-solr:$mcrVersion@jar"
+                }
+                def solrJar
+                configurations.solr.each { file ->
+                    solrJar = file.absolutePath
+                    println "Solr Jar $solrJar";
+                }
+
+                into("solr-home") {
+                    from moduleFiles
+                    include '**/solr.xml'
+                }
+
+                into("solr-home/conf") {
+                    from moduleFiles
+                    include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                    from zipTree(solrJar).files
+                    include 'classificationSchema.xml'
+                }
+
+            }
+        }
+    }
+
+//    afterEvaluate {
+        task runDB {
+//            def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
+//            String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
+//            org.hsqldb.Server.main(args)
+//            startDB(mcrHome, appName)
+        }
+//    }
+
+    task runJetty(type: JavaExec) {
+        systemProperties.put("MCR.AppName","jportal")
+        systemProperties.put("solr.solr.home", "$appPath/solr-home")
+        classpath configurations.jetty
+
+        main "org.eclipse.jetty.runner.Runner"
+        args '--config', "$project.projectDir/config/jetty/jetty-config.xml"
+        args '--path', '/solr', solrWarFilePath
+        args '--path', '/jportal', war.archivePath
+
+        dependsOn initSolr
+//        startDB(mcrHome, appName)
+//        dependsOn runDB
+    }
+
+//    task.addRule("Pattern: runApp<OPTIONS>"){ String taskName ->
+//        task(taskName) << {
+//            dependsOn runDB
+//            dependsOn runJetty
+//        }
+//        if(!taskName.endsWith("noSolr")){
+//            dependsOn initSolr
+//        }
+//    }
+}
+
+class MyJavaExec extends JavaExec{
+    String greeting = "################################################"
+
+    public void setGreeting(String greeting){
+        this.greeting = greeting
+    }
+
+    public String getGreeting(){
+        return this.greeting
+    }
+
+    public void exec() {
+        println getGreeting()
+        super.exec()
+    }
 }
 
 def getAgentOp(resourcePaths) {
