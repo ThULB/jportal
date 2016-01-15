@@ -4,18 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import org.jdom2.Content;
 import org.jdom2.Element;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRTestCase;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 
 public class JPPersonTest extends MCRTestCase {
 
-    @Ignore
     @Test
-    public void setName() throws MCRPersistenceException, MCRActiveLinkException {
+    public void setName() {
         JPPerson p = new JPPerson();
         p.setName("Friedrich", null, "II., Preußen, König");
 

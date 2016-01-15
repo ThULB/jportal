@@ -1,5 +1,8 @@
 package fsu.jportal.backend;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -152,6 +155,31 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
         MCRMetaLangText mcrNote = new MCRMetaLangText("note", null, (publicNote ? "annotation" : "internalNote"), 0,
             "plain", note);
         notes.addMetaObject(mcrNote);
+    }
+
+    /**
+     * Adds a keyword to the article.
+     * 
+     * @param keyword the keyword to add
+     */
+    public void addKeyword(String keyword) {
+        MCRMetaElement keywords = object.getMetadata().getMetadataElement("keywords");
+        if (keywords == null) {
+            keywords = new MCRMetaElement(MCRMetaLangText.class, "keywords", false, true, null);
+            object.getMetadata().setMetadataElement(keywords);
+        }
+        MCRMetaLangText mcrKeyword = new MCRMetaLangText("keyword", null, null, 0, "plain", keyword);
+        keywords.addMetaObject(mcrKeyword);
+    }
+
+    /**
+     * Returns a list of keywords. The list is empty if there are no keywords.
+     * 
+     * @return list of keywords
+     */
+    public List<String> getKeywords() {
+        return metadataStream("keywords", MCRMetaLangText.class).map(MCRMetaLangText::getText)
+            .collect(Collectors.toList());
     }
 
     /**
