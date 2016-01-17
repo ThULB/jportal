@@ -395,58 +395,84 @@ project(':jportal_webapp') {
     // Webapp runner tasks
     configurations {
         jetty
-        solr
+        solrWar
     }
 
     dependencies {
         jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
         jetty "org.hsqldb:hsqldb:$hsqldbVersion"
-        solr "org.mycore.solr:solr:$solrVersion@war"
+        solrWar "org.mycore.solr:solr:$solrVersion@war"
     }
-
-    def solrWarFilePath
-    configurations.solr.each { File file -> solrWarFilePath = file.absolutePath }
 
     def appName = "jportal"
     def mcrHome = System.getProperty("user.home") + "/.mycore"
     def appPath = "$mcrHome/$appName"
     def confDir = "$project.projectDir/config"
 
-    task runJetty(type: MyJavaExec) {
+    task configApp << {
+        copy {
+            from(confDir) {
+                include "**"
+                exclude "jetty/**"
+            }
+            into appPath
+
+            def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+
+            configurations {
+                mcrsolr
+            }
+            dependencies {
+                mcrsolr "org.mycore:mycore-solr:$mcrVersion@jar"
+            }
+
+            into("solr-home") {
+                from moduleFiles
+                include '**/solr.xml'
+            }
+
+            into("solr-home/conf") {
+                from moduleFiles
+                include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                from({ zipTree(configurations.mcrsolr.singleFile).files }) {
+                    include 'classificationSchema.xml'
+                }
+            }
+
+        }
+    }
+
+    task runDB << {
+        def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
+        String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
+        org.hsqldb.Server.main(args)
+    }
+
+    task runJetty(type: JavaExec) {
         systemProperties.put("MCR.AppName", "jportal")
         systemProperties.put("solr.solr.home", "$appPath/solr-home")
         classpath configurations.jetty
 
-        onStart {
-            if (!file(appPath).exists()) {
-                copyConfFiles(appPath, confDir)
-            }
-            startDB(mcrHome, appName)
-
-        }
+        jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+        jvmArgs '-Xmx2048m'
 
         main "org.eclipse.jetty.runner.Runner"
         args '--config', "$project.projectDir/config/jetty/jetty-config.xml"
-        args '--path', '/solr', solrWarFilePath
+        args '--path', '/solr', configurations.solrWar.singleFile
         args '--path', '/jportal', war.archivePath
+
+        if (!file(appPath).exists()) {
+            dependsOn configApp
+        }
+        dependsOn runDB
     }
+
+
 
     task copyConfFiles << {
         copyConfFiles(appPath, confDir)
     }
-}
 
-class MyJavaExec extends JavaExec {
-    Closure onStart = {}
-
-    public void setOnStart(Closure arg) {
-        this.onStart = arg
-    }
-
-    public void exec() {
-        this.onStart.run()
-        super.exec()
-    }
 }
 
 def getAgentOp(resourcePaths) {
