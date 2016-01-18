@@ -7,6 +7,12 @@
 
   <name>jportal_mcr_module</name>
 
+  <listener>
+    <listener-class>
+      fsu.jportal.servlet.JPContextListener
+    </listener-class>
+  </listener>
+
   <!-- **************************************************************** -->
   <!-- JPortal Servlet Mapping -->
   <!-- **************************************************************** -->
@@ -67,5 +73,4 @@
     <filter-name>SolrQueryFilter</filter-name>
     <url-pattern>/servlets/solr/*</url-pattern>
   </filter-mapping>
-
 </web-fragment>
