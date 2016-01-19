@@ -1,7 +1,5 @@
 package fsu.jportal.urn;
 
-import java.net.URL;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.ifs.MCRFile;
@@ -15,6 +13,8 @@ import org.mycore.iview2.services.MCRIView2Tools;
 import org.mycore.urn.epicurlite.EpicurLite;
 import org.mycore.urn.epicurlite.IEpicurLiteProvider;
 import org.mycore.urn.hibernate.MCRURN;
+
+import java.net.URL;
 
 public class EpicurLiteProvider implements IEpicurLiteProvider {
     static final Logger LOGGER = LogManager.getLogger(EpicurLiteProvider.class);
@@ -37,25 +37,25 @@ public class EpicurLiteProvider implements IEpicurLiteProvider {
         String path = urn.getPath();
         String filename = urn.getFilename();
 
+
+
         try {
             String spec = null;
             if (urn.getPath() == null || urn.getPath().trim().length() == 0) {
                 MCRDerivate derivate = (MCRDerivate) MCRMetadataManager.retrieve(MCRObjectID.getInstance(urn.getId()));
-                spec = MCRFrontendUtil.getBaseURL() + "receive/" + derivate.getOwnerID() + "?derivate=" + urn.getId();
+                spec = MCRFrontendUtil.getBaseURL() + "receive/" + derivate.getOwnerID();
             }
             // an urn for a certain file, links to iview2
             else {
                 String absPath = path + filename;
                 MCRFile file = MCRFile.getMCRFile(MCRObjectID.getInstance(urn.getId()), absPath);
+                String filePath = "/" + derivID + file.getAbsolutePath();
 
                 if (MCRIView2Tools.isFileSupported(file.toPath())) {
-                    spec = MCRServlet.getServletBaseURL() + "MCRIviewClient?derivate=" + derivID + "&startImage="
-                        + absPath;
+                    spec = MCRFrontendUtil.getBaseURL() + "rsc/viewer" + filePath;
                 } else {
                     LOGGER.info("File is not displayable within iView2. Use "
                         + MCRFileNodeServlet.class.getSimpleName() + " as url");
-                    String derivateId = file.getOwnerID();
-                    String filePath = "/" + derivateId + file.getAbsolutePath();
                     spec = MCRServlet.getServletBaseURL() + MCRFileNodeServlet.class.getSimpleName() + filePath;
                 }
                 return new URL(spec);

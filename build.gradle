@@ -451,6 +451,7 @@ project(':jportal_webapp') {
     task runJetty(type: JavaExec) {
         systemProperties.put("MCR.AppName", "jportal")
         systemProperties.put("solr.solr.home", "$appPath/solr-home")
+        systemProperties.put("URN.log", "$appPath/urnlog")
         classpath configurations.jetty
 
         jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'

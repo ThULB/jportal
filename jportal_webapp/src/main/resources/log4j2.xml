@@ -2,18 +2,28 @@
 <Configuration status="INFO">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
       <!--<PatternLayout pattern="%d %p %c{1.} [%t] %m%n"/>-->
     </Console>
-    <File name="LogFile" fileName="log/upload.log">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-    </File>
+    <!--<File name="URNLogFile" fileName="${sys:URN.log}/upload.log">-->
+      <!--<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
+    <!--</File>-->
+    <RollingFile name="RollingURNLogFile" fileName="${sys:URN.log}/upload.log"
+                 filePattern="${sys:URN.log}/upload-%d{yyyMMdd}-%i.log">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <TimeBasedTriggeringPolicy />
+      <SizeBasedTriggeringPolicy size="20 MB"/>
+    </RollingFile>
   </Appenders>
   <Loggers>
     <Root level="info">
       <AppenderRef ref="Console"/>
-      <AppenderRef ref="LogFile"/>
-
     </Root>
+    <!--<Logger name="org.mycore.frontend.filter.MCRRequestDebugFilter" level="debug" additivity="false">-->
+      <!--<AppenderRef ref="Console"/>-->
+    <!--</Logger>-->
+    <Logger name="org.mycore.urn.rest.URNProcessor" level="info" additivity="false">
+      <AppenderRef ref="RollingURNLogFile"/>
+    </Logger>
   </Loggers>
 </Configuration>
