@@ -22,9 +22,11 @@ import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
+import org.mycore.mets.misc.StructLinkGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
+import org.mycore.mets.model.struct.StructLink;
 
 import com.google.gson.JsonObject;
 
@@ -34,10 +36,14 @@ import fsu.jportal.util.JPComponentUtil;
 
 /**
  * The mets sync resource tries to synchronize the mets.xml of a derivate with the
- * jportal object structure. When the ID's of the logical div's are valid mycore
- * object identifiers, then this resource tries to update the LABEL attribute's of
- * those divs. The maintitle of the objects will be in sync with the LABEL's of the
- * mets.xml.
+ * jportal object structure.
+ * 
+ * This class does two things:
+ * <ul>
+ *  <li>Syncs the label's of the logical divs with the corresponding mycore object titles.
+ *  (this does only work when the identifier of an logical div is an mycore object id)</li>
+ *  <li>Updates the structLink section if necessary.</li>
+ * </ul>
  * 
  * @author Matthias Eichner
  */
@@ -59,20 +65,49 @@ public class METSSyncResource {
         MCRJerseyUtil.checkPermission(MCRObjectID.getInstance(derivateId), "write");
         // get mets
         Mets mets = getMets(derivateId);
-        // get all logical divs
-        List<LogicalDiv> logicalDivList = getLogicalDivs(mets);
 
-        // update mets
-        List<LogicalDiv> updatedList = updateMaintitlesOfLogicalDivs(logicalDivList);
+        // do the sync
+        List<LogicalDiv> labelUpdatedList = syncLabels(mets);
+        boolean structLinkSynced = syncStructLink(mets);
 
         // write mets
-        if (!updatedList.isEmpty()) {
+        if (structLinkSynced || !labelUpdatedList.isEmpty()) {
             write(mets.asDocument(), derivateId);
         }
+
         // return json object
         JsonObject json = new JsonObject();
-        json.addProperty("updated", updatedList.size());
+        json.addProperty("labelsUpdated", labelUpdatedList.size());
+        json.addProperty("structLinkSynced", structLinkSynced);
         return Response.ok().entity(json.toString()).build();
+    }
+
+    /**
+     * Synchronizes the labels of the logical div section with the title of the
+     * corresponding mycore objects.
+     * 
+     * @param mets the mets to sync
+     * @return a list of logicial divs where the labels has changed
+     */
+    private List<LogicalDiv> syncLabels(Mets mets) {
+        List<LogicalDiv> logicalDivList = getLogicalDivs(mets);
+        return updateMaintitlesOfLogicalDivs(logicalDivList);
+    }
+
+    /**
+     * Synchronizes the struct link section of the given mets.
+     * 
+     * @param mets the mets to sync
+     * @return true if the struct link section of the mets changed, otherwise false
+     */
+    private boolean syncStructLink(Mets mets) {
+        StructLink oldStructLink = mets.getStructLink();
+        StructLink newStructLink = new StructLinkGenerator().generate(mets);
+        if(!oldStructLink.equals(newStructLink)) {
+            mets.setStructLink(newStructLink);
+            return true;
+        }
+        return false;
     }
 
     /**

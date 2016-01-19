@@ -46,14 +46,21 @@ $(document).ready(function() {
         			url: baseURL + "rsc/mets/sync/" + derivateID,
         			dataType: "json"
         		}).done(function(data) {
-        			if(data.updated == 0) {
+        			if(data.labelsUpdated == 0 && data.structLinkSynced == false) {
         				sruDialogInfo.html("<p>Synchronisation erfolgreich. Es konnten keine Differenzen festgestellt werden. Die Mets-Datei ist auf dem aktuellen Stand.</p>");
         				sruDialogInfo.append(getCloseButton(false, "Schließen"));
         			} else if(data.errorMsg) {
         				sruDialogInfo.html("<p>Synchronisation fehlgeschlagen: " + data.errorMsg + "</p>");
         				sruDialogInfo.append(getCloseButton(false, "Schließen"));
+        			} else if(ata.labelsUpdated != 0 && data.structLinkSynced == true) {
+        				sruDialogInfo.html("<p>Synchronisation erfolgreich. Es wurden " + data.updated + " Titel Einträge aktualisiert und die structLink Sektion wurde angepasst." +
+        						". Der Editor muss neu geladen werden.</p>");
+        				sruDialogInfo.append(getCloseButton(true, "Editor neu laden"));
+        			} else if(data.labelsUpdated != 0) {
+        				sruDialogInfo.html("<p>Synchronisation erfolgreich. Es wurden " + data.updated + " Titel Einträge aktualisiert. Der Editor muss neu geladen werden.</p>");
+        				sruDialogInfo.append(getCloseButton(true, "Editor neu laden"));
         			} else {
-        				sruDialogInfo.html("<p>Synchronisation erfolgreich. Es wurden " + data.updated + " Einträge aktualisiert. Der Editor muss neu geladen werden.</p>");
+        				sruDialogInfo.html("<p>Synchronisation erfolgreich. Die structLink Sektion wurde aktuallisiert. Der Editor muss neu geladen werden.</p>");
         				sruDialogInfo.append(getCloseButton(true, "Editor neu laden"));
         			}
             	}).fail(function(jqXHR, textStatus) {

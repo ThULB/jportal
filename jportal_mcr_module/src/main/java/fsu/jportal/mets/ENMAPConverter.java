@@ -27,6 +27,7 @@ import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.Seq;
+import org.mycore.mets.model.struct.StructLink;
 
 import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
 import fsu.jportal.mets.LLZMetsUtils.FileHrefStrategy;
@@ -54,7 +55,8 @@ public class ENMAPConverter {
             handleFileSection(enmapRootElement, mets);
             handlePhysicalStructure(enmapRootElement, mets);
             handleLogicalStructure(enmapRootElement, mets);
-            new StructLinkGenerator().generate(mets);
+            StructLink structLink = new StructLinkGenerator().generate(mets);
+            mets.setStructLink(structLink);
             return mets;
         } catch (Exception exc) {
             throw new ConvertException("Unable to convert mets document", exc);
