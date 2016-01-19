@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         classpath 'org.akhikhl.gretty:gretty:1.2.4'
         classpath "org.hsqldb:hsqldb:$hsqldbVersion"
-//        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.10'
     }
 }
 
@@ -17,8 +16,6 @@ plugins {
 }
 
 import java.nio.file.Paths
-
-//def mcrVersion = '2015.08-SNAPSHOT'
 
 def resourcePaths = new HashSet<File>();
 
@@ -125,10 +122,6 @@ project(':jportal_mcr_module') {
 
     mcrModule()
 
-    configurations {
-        iview
-    }
-
     dependencies {
         testCompile 'org.mycore:mycore-base:$mcrVersion:tests'
 
@@ -146,9 +139,10 @@ project(':jportal_mcr_module') {
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
         compile 'org.mycore.mets:mets-model:0.9-SNAPSHOT'
         compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
-        compile 'javax.servlet:javax.servlet-api:3.1.0'
         compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
 
+        // extern libs
+        compile 'javax.servlet:javax.servlet-api:3.1.0'
         compile 'org.apache.logging.log4j:log4j-api:2.3'
         compile 'org.apache.logging.log4j:log4j-core:2.3'
         compile "com.sun.jersey.jersey-test-framework:jersey-test-framework-grizzly:$jerseyVersion"
@@ -159,7 +153,6 @@ project(':jportal_mcr_module') {
         compile 'xmlunit:xmlunit:1.3'
         compile 'javax.xml.bind:jaxb-api:2.2.1'
         compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
-        iview "org.mycore:mycore-viewer:$mcrViewerVersion"
 
         // webjars
         compile 'org.webjars.bower:jquery:2.1.4'
@@ -192,41 +185,37 @@ project(':jportal_mcr_module') {
         nodeModulesDir = file(nodeBuildDir)
     }
 
-    task npmSetupDir {
-        doFirst {
-            copy {
-                from 'node'
-                include '**/*'
-                into nodeBuildDir
-            }
+    task npmSetupDir(type: Copy) {
+        from 'node'
+        include '**/*'
+        into nodeBuildDir
+
+        configurations {
+            iview
+        }
+        dependencies {
+            iview "org.mycore:mycore-viewer:$mcrViewerVersion"
+        }
+
+        into("iview-client") {
+            from zipTree(configurations.iview.singleFile)
+            include '**/iview-client-base.d.ts', '**/iview-client-mets.d.ts', '**/jquery.d.ts'
+            includeEmptyDirs = false
         }
     }
+    npmSetup.dependsOn npmSetupDir
 
-    task buildIviewMod(type: NodeTask, dependsOn: npmInstall) {
-
-        doFirst {
-            def iviewJar
-            configurations.iview.each { file ->
-                iviewJar = file.absolutePath
-            }
-            copy {
-                from zipTree(iviewJar)
-                include '**/iview-client-base.d.ts', '**/iview-client-mets.d.ts', '**/jquery.d.ts'
-                into "$nodeBuildDir/iview-client"
-                includeEmptyDirs = false
-            }
-        }
+    task compileIviewPlugin(type: NodeTask, dependsOn: npmInstall) {
         script = file("$nodeBuildDir/node_modules/grunt-cli/bin/grunt")
         args = ["--gruntfile=$nodeBuildDir/GruntFile.js"]
     }
 
-    task copyIviewMod(type: Copy, dependsOn: buildIviewMod) {
+    task buildIviewPlugin(type: Copy, dependsOn: compileIviewPlugin) {
         from "$nodeBuildDir/classes/META-INF"
         into "$project.buildDir/resources/main/META-INF"
     }
 
-    npmSetup.dependsOn npmSetupDir
-    jar.dependsOn copyIviewMod
+    jar.dependsOn buildIviewPlugin
 }
 
 project(':jportal_acl_ip_editor_module') {
