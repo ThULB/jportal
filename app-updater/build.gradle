@@ -1,0 +1,38 @@
+group 'fsu.thulb'
+version '1.0-SNAPSHOT'
+
+allprojects {
+    def releaseURL = "http://artifactory.mycore.de/mycore-releases"
+    def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
+
+    repositories {
+        mavenLocal()
+
+        maven { url releaseURL }
+
+        maven { url snapshotsURL }
+    }
+}
+
+configurations {
+    app { transitive = false }
+}
+
+dependencies {
+    app "fsu.thulb:jportal_webapp:2.+"
+}
+
+task updateApp << {
+    println configurations.app.singleFile
+    println project.property("webAppPath")
+    println project.property("warPath")
+}
+
+updateApp.onlyIf {
+    boolean hasProp = project.hasProperty('webAppPath') && project.hasProperty('warPath')
+    if (!hasProp){
+        println "updateApp -PwebAppPath=path_to_tomcat_webapp_folder -PwarPath=path_to_war_folder"
+    }
+
+    return hasProp
+}
