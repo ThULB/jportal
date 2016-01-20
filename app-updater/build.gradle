@@ -23,7 +23,6 @@ dependencies {
 }
 
 task updateApp << {
-    println configurations.app.singleFile
     def webAppPath = project.property("webAppPath")
     def warPath = project.property("warPath")
     def date = new Date()
@@ -32,6 +31,7 @@ task updateApp << {
     def absWarPath = "${warPath}/${warFileName}"
 
     copy {
+        println "# Copy ${configurations.app.singleFile} to ${absWarPath}"
         from configurations.app.singleFile
         into warPath
         rename 'jportal_webapp(.*).war', warFileName
@@ -43,19 +43,29 @@ task updateApp << {
         }
     }
 
-    exec {
-        workingDir webAppPath
-        commandLine 'rm', '-r', "ROOT"
+    if (file("${webAppPath}/ROOT").exists()) {
+        exec {
+            println "# Delete ${webAppPath}/ROOT"
+            workingDir webAppPath
+            commandLine 'rm', '-r', "ROOT"
+        }
     }
 
     exec {
+        println "# Unlink ${webAppPath}/ROOT.war"
         workingDir webAppPath
         commandLine 'unlink', "ROOT.war"
     }
 
     exec {
+        println "# Link ${absWarPath} to ${webAppPath}/ROOT.war"
         workingDir webAppPath
         commandLine 'ln', '-s', absWarPath, "./ROOT.war"
+    }
+
+    exec {
+        println "# Delete ${configurations.app.singleFile}"
+        commandLine 'rm', configurations.app.singleFile
     }
 
 
