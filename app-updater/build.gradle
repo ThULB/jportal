@@ -19,19 +19,52 @@ configurations {
 }
 
 dependencies {
-    app "fsu.thulb:jportal_webapp:2.+"
+    app "fsu.thulb:jportal_webapp:2.+@war"
 }
 
 task updateApp << {
     println configurations.app.singleFile
-    println project.property("webAppPath")
-    println project.property("warPath")
+    def webAppPath = project.property("webAppPath")
+    def warPath = project.property("warPath")
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMdd-HHmmss')
+    def warFileName = "jportal_webapp_${formattedDate}.war"
+    def absWarPath = "${warPath}/${warFileName}"
+
+    copy {
+        from configurations.app.singleFile
+        into warPath
+        rename 'jportal_webapp(.*).war', warFileName
+    }
+
+    files(webAppPath, absWarPath).each { f ->
+        if (!f.exists()) {
+            throw new GradleException("${f.absolutePath} does not exists!")
+        }
+    }
+
+    exec {
+        workingDir webAppPath
+        commandLine 'rm', '-r', "ROOT"
+    }
+
+    exec {
+        workingDir webAppPath
+        commandLine 'unlink', "ROOT.war"
+    }
+
+    exec {
+        workingDir webAppPath
+        commandLine 'ln', '-s', absWarPath, "./ROOT.war"
+    }
+
+
 }
 
 updateApp.onlyIf {
     boolean hasProp = project.hasProperty('webAppPath') && project.hasProperty('warPath')
-    if (!hasProp){
-        println "updateApp -PwebAppPath=path_to_tomcat_webapp_folder -PwarPath=path_to_war_folder"
+    if (!hasProp) {
+        println "updateApp -PwebAppPath=abs_path_to_tomcat_webapp_folder -PwarPath=abs_path_to_war_folder"
     }
 
     return hasProp
