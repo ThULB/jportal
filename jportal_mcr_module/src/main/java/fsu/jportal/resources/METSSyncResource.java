@@ -68,6 +68,7 @@ public class METSSyncResource {
 
         // do the sync
         List<LogicalDiv> labelUpdatedList = syncLabels(mets);
+        
         boolean structLinkSynced = syncStructLink(mets);
 
         // write mets
@@ -101,13 +102,19 @@ public class METSSyncResource {
      * @return true if the struct link section of the mets changed, otherwise false
      */
     private boolean syncStructLink(Mets mets) {
-        StructLink oldStructLink = mets.getStructLink();
-        StructLink newStructLink = new StructLinkGenerator().generate(mets);
-        if(!oldStructLink.equals(newStructLink)) {
-            mets.setStructLink(newStructLink);
-            return true;
+        try {
+            StructLink oldStructLink = mets.getStructLink();
+            StructLink newStructLink = new StructLinkGenerator().generate(mets);
+            if(!oldStructLink.equals(newStructLink)) {
+                mets.setStructLink(newStructLink);
+                return true;
+            }
+            return false;
+        } catch(Exception exc) {
+            JsonObject json = new JsonObject();
+            json.addProperty("errorMsg", "unable to generate struct link: " + exc.getMessage());
+            throw new WebApplicationException(exc, Response.ok().entity(json.toString()).build());
         }
-        return false;
     }
 
     /**
