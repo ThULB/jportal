@@ -52,7 +52,7 @@ $(document).ready(function() {
         			} else if(data.errorMsg) {
         				sruDialogInfo.html("<p>Synchronisation fehlgeschlagen: " + data.errorMsg + "</p>");
         				sruDialogInfo.append(getCloseButton(false, "Schließen"));
-        			} else if(ata.labelsUpdated != 0 && data.structLinkSynced == true) {
+        			} else if(data.labelsUpdated != 0 && data.structLinkSynced == true) {
         				sruDialogInfo.html("<p>Synchronisation erfolgreich. Es wurden " + data.updated + " Titel Einträge aktualisiert und die structLink Sektion wurde angepasst." +
         						". Der Editor muss neu geladen werden.</p>");
         				sruDialogInfo.append(getCloseButton(true, "Editor neu laden"));
