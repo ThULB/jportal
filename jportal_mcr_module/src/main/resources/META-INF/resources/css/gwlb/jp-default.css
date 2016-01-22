@@ -375,10 +375,6 @@ p.jp-layout-metadata-list {
 	margin-top: 0px;
 }
 
-#viewerContainerWrapper {
-	display: none;
-}
-
 .jp-layout-tableOfContent.jp-list-group-special {
 	clear: both;
 	max-height: 380px;

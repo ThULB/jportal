@@ -194,7 +194,6 @@
 
         <!-- delete -->
         <xsl:call-template name="jp.object.editing.delete.dialog" />
-        <div id="viewerContainerWrapper" />
         <!-- add html stuff to end of body for MyCoReWebPage -->
         <xsl:copy-of select="/MyCoReWebPage/body/*" />
       </body>
