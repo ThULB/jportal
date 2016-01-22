@@ -179,17 +179,16 @@
         <div id="main">
           <xsl:apply-templates />
           <!-- call dynamic template_*.xsl -->
-          <xsl:if test="$template != ''">
+          <xsl:if test="$template != '' and $journalID != ''">
             <xsl:variable name="templateXML">
               <template id="{$template}" />
             </xsl:variable>
             <xsl:apply-templates select="xalan:nodeset($templateXML)" mode="template">
-              <!-- mcrObj is node mycoreobject root -->
-              <xsl:with-param name="mcrObj" select="/mycoreobject" />
+              <xsl:with-param name="mcrObj" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
             </xsl:apply-templates>
           </xsl:if>
-
         </div>
+
         <!-- footer -->
         <xsl:call-template name="jp.layout.footer" />
 

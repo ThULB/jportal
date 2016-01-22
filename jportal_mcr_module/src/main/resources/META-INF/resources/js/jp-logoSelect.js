@@ -151,7 +151,7 @@ $(function() {
 				callback(data, path);
 			},
 			error: function(error) {
-				alert(error);
+				console.log(error);
 			}
 		});
 	};
@@ -164,7 +164,7 @@ $(function() {
 				callback(data);
 			},
 			error: function(error) {
-				alert(error);
+				console.log(error);
 			}
 		});
 	};
