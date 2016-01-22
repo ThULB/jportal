@@ -186,8 +186,13 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
      * @return the date object
      */
     public Optional<MCRMetaISO8601Date> getDate(String type) {
-        return metadataStreamNotInherited("dates", MCRMetaISO8601Date.class).filter(d -> d.getType().equals(type))
-            .findFirst();
+        return metadataStreamNotInherited("dates", MCRMetaISO8601Date.class).filter(d -> {
+            if(d.getType() == null) {
+                LOGGER.error("Invalid dates/date metadata at '" + getObject().getId() + "'. Missing type attribute.");
+                return false;
+            }
+            return d.getType().equals(type);
+        }).findFirst();
     }
 
     /**
