@@ -300,22 +300,27 @@ public class JPXMLFunctions {
      * @return the published date or null
      */
     public static String getPublishedDate(String id) {
-        MCRObjectID mcrId = MCRObjectID.getInstance(id);
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
-        List<MCRObject> ancestorsAndSelf = MCRObjectUtils.getAncestorsAndSelf(mcrObj);
-        for (MCRObject obj : ancestorsAndSelf) {
-            Optional<JPPeriodicalComponent> periodical = JPComponentUtil.getPeriodical(obj.getId());
-            if (!periodical.isPresent()) {
-                continue;
+        try {
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+            List<MCRObject> ancestorsAndSelf = MCRObjectUtils.getAncestorsAndSelf(mcrObj);
+            for (MCRObject obj : ancestorsAndSelf) {
+                Optional<JPPeriodicalComponent> periodical = JPComponentUtil.getPeriodical(obj.getId());
+                if (!periodical.isPresent()) {
+                    continue;
+                }
+                MCRMetaISO8601Date published = periodical.get().getDate("published")
+                    .orElse(periodical.get().getDate("published_from").orElse(null));
+                if (published == null) {
+                    continue;
+                }
+                return formatDate(published.getISOString());
             }
-            MCRMetaISO8601Date published = periodical.get().getDate("published")
-                .orElse(periodical.get().getDate("published_from").orElse(null));
-            if (published == null) {
-                continue;
-            }
-            return formatDate(published.getISOString());
+            return null;
+        } catch(Exception exc) {
+            LOGGER.error("Unable to retrieve published date of " + id, exc);
+            return null;
         }
-        return null;
     }
 
 }
