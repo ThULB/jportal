@@ -103,6 +103,9 @@
       <field name="published_sort">
         <xsl:value-of select="$published" />
       </field>
+      <field name="published">
+        <xsl:value-of select="$published" />
+      </field>
     </xsl:if>
     <xsl:apply-templates select="date[@inherited='0']" mode="jportal.metadata.date" />
   </xsl:template>

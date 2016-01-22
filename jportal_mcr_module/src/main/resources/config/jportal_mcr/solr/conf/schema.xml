@@ -187,6 +187,7 @@
     <field name="alternatives" type="text" multiValued="true" stored="false" />
     <field name="participants" type="text" multiValued="true" stored="false" />
     <field name="dates" type="text" multiValued="true" stored="false" />
+    <field name="published" type="date" sortMissingLast="true" />
     <field name="size" type="string" />
 
     <field name="titles_de" type="text_de" multiValued="true" stored="false" />
@@ -220,6 +221,7 @@
     <field name="maintitle_sort" type="sort" stored="false" />
     <field name="heading_sort" type="sort" stored="false" />
     <field name="alphabetic_sort" type="sort" stored="false" />
+    <!-- deprecated in upcoming version's -> use published field -->
     <field name="published_sort" type="date" stored="false" sortMissingLast="true" />
     <field name="indexPosition" type="string" default="0" />
 
