@@ -10,16 +10,18 @@ jp.solr = jp.solr || {};
  *  <li><b>from - optional</b>: start date</li>
  *  <li><b>until - optional</b>: end date</li>
  *  <li><b>solrField - optional</b>: date field which is queried by solr. the default value is 'published_sort'</li>
+ *  <li><b>fqArray - optional</b>: array of additionally filter queries.
  * </ul>
  */
 jp.solr.FacetDateQuery = function(options) {
 	options = typeof options !== 'undefined' ?  options : {};
-	/*string*/ this.solrURL = options.solrURL;
-	/*string*/ this.solrField = options.solrField;
-	/*moment.date*/ this.from = options.from;
-	/*moment.date*/ this.until = options.until;
-	/*moment.date*/ this.min = options.min;
-	/*moment.date*/ this.max = options.max;
+	/*string*/         this.solrURL = options.solrURL;
+	/*string*/         this.solrField = options.solrField;
+	/*array<string>*/  this.fqArray = options.fqArray || [];
+	/*moment.date*/    this.from = options.from;
+	/*moment.date*/    this.until = options.until;
+	/*moment.date*/    this.min = options.min;
+	/*moment.date*/    this.max = options.max;
 
 	if(this.solrURL == null) {
 		throw "No solrURL attribute in options parameter";
@@ -122,16 +124,20 @@ jp.solr.FacetDateQuery.prototype.fetchLatest = function() {
  */
 jp.solr.FacetDateQuery.prototype.fetchDate = function(sort) {
 	var url = this.solrURL + "?q=" + this.solrField + ":*&sort=" + sort + "&rows=1&fl=date.published&wt=json";
+	for(var fq of this.fqArray) {
+		url += "&fq=" + fq;
+	}
 	return $.ajax({
 		url: url,
 		dataType: "json",
 	}).then(function(data) {
 		try {
-			return moment.utc(data.response.docs[0]["date.published"], "YYYY-MM-DD");
+			var date = data.response.docs[0]["date.published"];
+			return date != null ? moment.utc(date, "YYYY-MM-DD") : null;
 		} catch(e) {
 			return null;
 		}
-	})
+	});
 }
 
 /**
@@ -174,6 +180,9 @@ jp.solr.FacetDateQuery.prototype.getFacetRangeURL = function() {
 	solrURL += "&facet.range.start=" + moment(this.getFrom().valueOf()).utc().format(utcFormat);
 	solrURL += "&facet.range.end=" + moment(this.getUntil().valueOf()).utc().format(utcFormat);
 	solrURL += "&facet.range.gap=%2B1" + this.unitOfTime().toUpperCase();
+	for(var fq of this.fqArray) {
+		solrURL += "&fq=" + fq;
+	}
 	return solrURL;
 }
 

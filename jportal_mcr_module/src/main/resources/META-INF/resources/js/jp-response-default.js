@@ -15,12 +15,28 @@ $(document).ready(function() {
 		return;
 	}
 
+	// build facet date query
 	var fdq = new jp.solr.FacetDateQuery({
 		solrURL : jp.baseURL + "servlets/solr/select",
 		min : moment("1500", "YYYY"),
 		max : moment()
 	});
+	if(jp.journalID != null) {
+		fdq.fqArray = ["journalID:" + jp.journalID];
+		// this should be synchronized, but its not really required
+		fdq.fetchEarliest().then(function(/*moment*/ earliestDate) {
+			if(earliestDate != null) {
+				fdq.min = earliestDate.startOf("day");
+			}
+		});
+		fdq.fetchLatest().then(function(/*moment*/ latestDate) {
+			if(latestDate != null) {
+				fdq.max = latestDate.endOf("day");
+			}
+		});
+	}
 
+	// build from & until parameter
 	var urlParameter = getUrlParameter();
 	var published_sort = urlParameter["fq"] == null ? null : urlParameter["fq"].filter(function(p) {
 		return p.startsWith("published_sort:[");
