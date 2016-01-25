@@ -850,8 +850,9 @@ ul.ckeditorButtons li:last-child {
 	display: none;
 }
 
-.form-login .form-group {
+.form-login .form-control {
 	max-width: 193px;
+	margin-bottom: 10px;
 }
 
 /*******************************************************
