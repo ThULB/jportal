@@ -8,8 +8,8 @@ $(document).ready(function() {
 		}
 	});
 	
-	var fromDateInput = $('#published_sort_from');
-	var toDateInput = $('#published_sort_to');
+	var fromDateInput = $('#published_from');
+	var toDateInput = $('#published_to');
 	
 	if(!fromDateInput.length || !toDateInput.length) {
 		return;
@@ -38,16 +38,16 @@ $(document).ready(function() {
 
 	// build from & until parameter
 	var urlParameter = getUrlParameter();
-	var published_sort = urlParameter["fq"] == null ? null : urlParameter["fq"].filter(function(p) {
-		return p.startsWith("published_sort:[");
+	var published = urlParameter["fq"] == null ? null : urlParameter["fq"].filter(function(p) {
+		return p.startsWith("published:[");
 	})[0];
-	var fromString = published_sort == null ? null : published_sort.slice(published_sort.indexOf("[") + 1, published_sort.indexOf(" TO "));
-	var untilString = published_sort == null ? null : published_sort.slice(published_sort.indexOf(" TO ") + 4, published_sort.indexOf("]"));
+	var fromString = published == null ? null : published.slice(published.indexOf("[") + 1, published.indexOf(" TO "));
+	var untilString = published == null ? null : published.slice(published.indexOf(" TO ") + 4, published.indexOf("]"));
 	fromString = fromString == "*" ? null : fromString;
 	untilString = untilString == "*" ? null : untilString;
 
-	var acceptButton = $("#published_sort_accept_button");
-	var cancelButton = $("#published_sort_cancel_button");
+	var acceptButton = $("#published_accept_button");
+	var cancelButton = $("#published_cancel_button");
 
 	var fromDate = fromString == null ? null : moment.utc(fromString, fdq.utcFormat()).local();
 	var untilDate = untilString == null ? null : moment.utc(untilString, fdq.utcFormat()).local()
@@ -94,7 +94,7 @@ $(document).ready(function() {
 	});
 
 	// dialog
-	var popupButton = $("#published_sort_popup_button");
+	var popupButton = $("#published_popup_button");
 	var dialog = new jp.PublishedDialog({
 		query : fdq,
 		title: "Erschienene Werke/Artikel",
@@ -114,7 +114,7 @@ $(document).ready(function() {
 
 	function removePublishedSortFromSearch() {
 		var search = window.location.search;
-		var i = search.indexOf("fq=published_sort:");
+		var i = search.indexOf("fq=published:");
 		if(i != -1) {
 			search = search.substring(0, i - 1) + search.substring(search.indexOf("]", i + 1)  + 1, search.length)
 		}
@@ -130,7 +130,7 @@ $(document).ready(function() {
 		}
 		fdq.setUntil(toDateInput.data("DateTimePicker").date());
 		// cancel button
-		if(published_sort == null) {
+		if(published == null) {
 			cancelButton.addClass("disabled");
 		} else {
 			cancelButton.removeClass("disabled");
@@ -141,7 +141,7 @@ $(document).ready(function() {
 		var from = moment(fromDateInput.data("DateTimePicker").date()).utc().format(fdq.utcFormat());
 		var until = moment(toDateInput.data("DateTimePicker").date()).utc().format(fdq.utcFormat());
 		var search = removePublishedSortFromSearch();
-		search = search + (search.length == 0 ? "?" : "&") + "fq=published_sort:[" + from + " TO " + until + "]";
+		search = search + (search.length == 0 ? "?" : "&") + "fq=published:[" + from + " TO " + until + "]";
 		window.location.search=search;
 	}
 

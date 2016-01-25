@@ -402,11 +402,11 @@
       <option value="score desc">
         <xsl:value-of select="i18n:translate('jp.metadata.search.score_desc')" />
       </option>
-      <option value="published_sort asc">
-        <xsl:value-of select="i18n:translate('jp.metadata.search.published_sort_asc')" />
+      <option value="published asc">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.published_asc')" />
       </option>
-      <option value="published_sort desc">
-        <xsl:value-of select="i18n:translate('jp.metadata.search.published_sort desc')" />
+      <option value="published desc">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.published desc')" />
       </option>
       <option value="alphabetic_sort asc">
         <xsl:value-of select="i18n:translate('jp.metadata.search.alphabetic_sort_asc')" />

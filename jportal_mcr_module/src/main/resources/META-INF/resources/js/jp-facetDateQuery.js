@@ -9,7 +9,7 @@ jp.solr = jp.solr || {};
  *  <li><b>solrURL - required</b>: URL to the solr server</li>
  *  <li><b>from - optional</b>: start date</li>
  *  <li><b>until - optional</b>: end date</li>
- *  <li><b>solrField - optional</b>: date field which is queried by solr. the default value is 'published_sort'</li>
+ *  <li><b>solrField - optional</b>: date field which is queried by solr. the default value is 'published'</li>
  *  <li><b>fqArray - optional</b>: array of additionally filter queries.
  * </ul>
  */
@@ -27,7 +27,7 @@ jp.solr.FacetDateQuery = function(options) {
 		throw "No solrURL attribute in options parameter";
 	}
 	if(this.solrField == null) {
-		this.solrField = "published_sort";
+		this.solrField = "published";
 	}
 }
 
@@ -118,7 +118,7 @@ jp.solr.FacetDateQuery.prototype.fetchLatest = function() {
 /**
  * Fetches a single date from solr based on the sorting.
  * 
- * @param sort the field and order (e.g. 'published_sort asc')
+ * @param sort the field and order (e.g. 'published asc')
  * @return jquery promise (@see https://api.jquery.com/promise)
  *   the done(date) method contains the requested date or null if there is none
  */
@@ -205,6 +205,6 @@ jp.solr.FacetDateQuery.prototype.execute = function() {
 				data.facet_counts.facet_ranges[that.solrField].counts.length == 0) {
 			return null;
 		}
-		return data.facet_counts.facet_ranges.published_sort.counts;
+		return data.facet_counts.facet_ranges.published.counts;
 	});
 }

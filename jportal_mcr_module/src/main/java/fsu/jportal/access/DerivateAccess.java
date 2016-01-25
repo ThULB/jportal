@@ -24,7 +24,7 @@ public class DerivateAccess {
             }
 
             try {
-                String sorlQuery = "+journalID:" + journalID +" +objectType:jparticle +published_sort:[NOW-1YEAR TO NOW]";
+                String sorlQuery = "+journalID:" + journalID +" +objectType:jparticle +published:[NOW-1YEAR TO NOW]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
                 solrParams.set("q", sorlQuery).set("fl", "id");
                 SolrClient solrClient = MCRSolrClientFactory.getSolrClient();

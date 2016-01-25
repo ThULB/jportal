@@ -27,8 +27,8 @@
     </lst>
     <lst name="facet_ranges">
       <!-- hard coded published sort -->
-      <lst name="published_sort">
-        <xsl:for-each select="/response/lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='published_sort']/date">
+      <lst name="published">
+        <xsl:for-each select="/response/lst[@name='facet_counts']/lst[@name='facet_ranges']/lst[@name='published']/date">
           <date name="{@name}">
             <xsl:value-of select="text()" />
           </date>
@@ -415,11 +415,11 @@
       <option value="score desc">
         <xsl:value-of select="i18n:translate('jp.metadata.search.score_desc')" />
       </option>
-      <option value="published_sort asc">
-        <xsl:value-of select="i18n:translate('jp.metadata.search.published_sort_asc')" />
+      <option value="published asc">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.published_asc')" />
       </option>
-      <option value="published_sort desc">
-        <xsl:value-of select="i18n:translate('jp.metadata.search.published_sort desc')" />
+      <option value="published desc">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.published_desc')" />
       </option>
       <option value="alphabetic_sort asc">
         <xsl:value-of select="i18n:translate('jp.metadata.search.alphabetic_sort_asc')" />

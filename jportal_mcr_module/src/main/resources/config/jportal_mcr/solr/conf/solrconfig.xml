@@ -1847,7 +1847,7 @@
       </str>
       <int name="rows">10</int>
       <str name="qry">*:*</str>
-      <str name="sort">published_sort asc, maintitle_sort asc</str>
+      <str name="sort">published asc, maintitle_sort asc</str>
     </lst>
     <lst name="appends">
       <str name="fq">+contentClassi2:Gesetzesblaetter</str>

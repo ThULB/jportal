@@ -85,33 +85,7 @@ public class LLZFixer {
     }
 
     public static void main(String[] args) throws Exception {
-        String files[] = {
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00007/1800/THULB_00007_1800_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00013/1805/THULB_00013_1805_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00016/1806/THULB_00016_1806_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00022/1810/THULB_00022_1810_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00023/1810/THULB_00023_1810_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00024/1812/THULB_00024_1812_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00026/1813/THULB_00026_1813_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00028/1815/THULB_00028_1815_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00033/1821/THULB_00033_1821_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00034/1822/THULB_00034_1822_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00038/1826/THULB_00038_1826_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00039/1827/THULB_00039_1827_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00040/1828/THULB_00040_1828_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00041/1829/THULB_00041_1829_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00047/1834/THULB_00047_1834_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00048/1809/THULB_00048_1809_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00018/1807/THULB_00018_1807_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00032/1820/THULB_00032_1820_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00031/1818/THULB_00031_1818_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00049/1809/THULB_00049_1809_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00025/1816/THULB_00025_1816_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00042/1830/THULB_00042_1830_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00021/1808/THULB_00021_1808_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00046/1833/THULB_00046_1833_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00027/1814/THULB_00027_1814_wfs2_mets_Abgleich.xml",
-                "/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00020/1808/THULB_00020_1808_wfs2_mets_Abgleich.xml" };
+        String files[] = {"/data/Dokumente/OCR/innsbruck/2016-01-13/18332/THULB_00050_1833_wfs2_mets_Abgleich.xml" };
         LLZFixer llzFixer = new LLZFixer();
         LLZChecker llzChecker = new LLZChecker();
 
