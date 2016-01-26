@@ -29,17 +29,19 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject[contains(@ID, 'jpjournal') or contains(@ID, 'jpvolume') or contains(@ID, 'jparticle')]" mode="footer">
-    <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
-    <xsl:choose>
-      <xsl:when test="$journal/metadata/participants/participant[@type='partner']">
-        <xsl:call-template name="jp.footer.print.partner">
-          <xsl:with-param name="journal" select="$journal" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="jp.footer.print.default" />
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:if test="$journalID != ''">
+      <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
+      <xsl:choose>
+        <xsl:when test="$journal/metadata/participants/participant[@type='partner']">
+          <xsl:call-template name="jp.footer.print.partner">
+            <xsl:with-param name="journal" select="$journal" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="jp.footer.print.default" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="jp.footer.print.partner">
