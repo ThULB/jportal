@@ -1,0 +1,6 @@
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+  <section xml:lang="all" title="Error Menu">
+    <jp-errorMenu />
+  </section>
+</MyCoReWebPage>

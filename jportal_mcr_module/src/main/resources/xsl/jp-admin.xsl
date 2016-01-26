@@ -69,19 +69,24 @@
         </ul>
       </div>
     </div>
-    <xsl:if test="$isAdmin">
-      <div class="panel-primary col-sm-4">
-        <div class="panel-heading">
-          <h2 class="panel-title">Sitzungen</h2>
-        </div>
-        <div class="panel-body">
-          <ul>
+    <div class="panel-primary col-sm-4">
+      <div class="panel-heading">
+        <h2 class="panel-title">Sonstiges</h2>
+      </div>
+      <div class="panel-body">
+        <ul>
+          <xsl:if test="$isAdmin">
             <li>
               <a href="{$WebApplicationBaseURL}servlets/MCRSessionListingServlet">Aktive Sitzungen</a>
             </li>
-          </ul>
-        </div>
+          </xsl:if>
+          <li>
+            <a href="{$WebApplicationBaseURL}jp-errorMenu.xml">Systemfehler Übersicht</a>
+          </li>
+        </ul>
       </div>
+    </div>
+    <xsl:if test="$isAdmin">
       <div class="panel-primary col-sm-4">
         <div class="panel-heading">
           <h2 class="panel-title">Einstellungen</h2>
