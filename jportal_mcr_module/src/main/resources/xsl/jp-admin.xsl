@@ -83,6 +83,11 @@
           <li>
             <a href="{$WebApplicationBaseURL}jp-errorMenu.xml">Systemfehler Übersicht</a>
           </li>
+          <xsl:if test="acl:checkPermission('default', 'delete-doublets')">
+            <li>
+              <a href="{$WebApplicationBaseURL}rsc/doublets">Dublettenfinder</a>
+            </li>
+           </xsl:if>
         </ul>
       </div>
     </div>
