@@ -6,19 +6,19 @@
 
   <xsl:template match="/template[@id='template_DynamicLayoutTemplates']" mode="template">
     <xsl:param name="mcrObj" />
-    <xsl:apply-templates select="$mcrObj" mode="template_DynamicLayoutTemplates" />
+    <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
+    <xsl:apply-templates select="$journal" mode="template_DynamicLayoutTemplates" />
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_DynamicLayoutTemplates">
     <!-- get template ID from java -->
     <xsl:variable name="template_DynamicLayoutTemplates" select="layoutDetector:getTemplateID(@ID)" />
-    <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
 
     <xsl:variable name="published">
-      <xsl:value-of select="$journal//date[@type='published']" />
+      <xsl:value-of select=".//date[@type='published']" />
     </xsl:variable>
     <xsl:variable name="published_from">
-      <xsl:value-of select="$journal//date[@type='published_from']" />
+      <xsl:value-of select=".//date[@type='published_from']" />
     </xsl:variable>
 
     <xsl:variable name="century">
@@ -33,7 +33,7 @@
     </xsl:variable>
     
     <xsl:variable name="published_until">
-      <xsl:value-of select="$journal//date[@type='published_until']" />
+      <xsl:value-of select=".//date[@type='published_until']" />
     </xsl:variable>
     <xsl:variable name="pubYear">
       <xsl:choose>
@@ -55,7 +55,7 @@
           return;
         }
         $('#logo').css('background-image', 'url(' + baseURL + 'jp_templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
-        var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
+        var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle(@ID))" />';
         $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear" /></div>');
         $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 96) + '</div>');
         if (maintitle.length > 40) {

@@ -184,7 +184,7 @@
               <template id="{$template}" />
             </xsl:variable>
             <xsl:apply-templates select="xalan:nodeset($templateXML)" mode="template">
-              <xsl:with-param name="mcrObj" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
+              <xsl:with-param name="mcrObj" select="/mycoreobject" />
             </xsl:apply-templates>
           </xsl:if>
         </div>
