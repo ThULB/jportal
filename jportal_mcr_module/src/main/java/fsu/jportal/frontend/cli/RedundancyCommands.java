@@ -82,21 +82,22 @@ public class RedundancyCommands{
     @MCRCommand(help = "internal command for replacing links and removing the doublet", syntax = "internal replace links and remove {0} {1}")
     public static List<String> replaceAndRemove(String doublet, String doubletOf) throws Exception {
         ArrayList<String> commandList = new ArrayList<String>();
-        if (!MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf))) {
-            String errorMsg = "'" + doublet + "' is defined as a doublet of the nonexistent object '" + doubletOf + "'!"
-                    + " The doublet is not removed!";
-            // print to console
-            LOGGER.error(errorMsg);
-            // write to file
-            BufferedWriter out = new BufferedWriter(new FileWriter("invalidDoublets.txt", true));
-            out.write(errorMsg + "\n");
-            out.close();
+        boolean validDoubletOf = true;
+        try {
+            validDoubletOf = MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf));
+        } catch (Exception exc) {
+            validDoubletOf = false;
+        }
+        if (!validDoubletOf) {
+            LOGGER.error("'" + doublet + "' is defined as a doublet of the nonexistent object or invalid identifier '"
+                + doubletOf + "'!" + " The doublet is not removed!");
             return commandList;
         }
         Collection<String> list = MCRLinkTableManager.instance().getSourceOf(doublet, "reference");
         for (String source : list) {
-            if(!MCRMetadataManager.exists(MCRObjectID.getInstance(source))) {
-                LOGGER.warn("Reference between " + source + " -> " + doublet + " no more exists. " + source + " already removed. Delete reference...");
+            if (!MCRMetadataManager.exists(MCRObjectID.getInstance(source))) {
+                LOGGER.warn("Reference between " + source + " -> " + doublet + " no more exists. " + source
+                    + " already removed. Delete reference...");
                 MCRLinkTableManager.instance().deleteReferenceLink(source, doublet, "reference");
                 continue;
             }
@@ -107,13 +108,13 @@ public class RedundancyCommands{
             command.append(doubletOf);
             commandList.add(command.toString());
             commandList.add("fix title of " + source + " for link " + doubletOf);
-            
+
         }
         // add delete command
         commandList.add(new StringBuffer("delete object ").append(doublet).toString());
         return commandList;
     }
-    
+
     /**
      * Replaces all links which are found in the source mcrobject xml-tree.
      * @param sourceId The source Id as String.
