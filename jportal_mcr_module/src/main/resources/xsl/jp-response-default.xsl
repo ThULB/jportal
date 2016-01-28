@@ -186,21 +186,6 @@
 
   <xsl:variable name="searchResultsFields">
     <field name="objectType" />
-    <field name="published">
-      <xsl:attribute name="label">
-        <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
-      </xsl:attribute>
-    </field>
-    <field name="published_from">
-      <xsl:attribute name="label">
-        <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
-      </xsl:attribute>
-    </field>
-    <field name="date.published_from">
-      <xsl:attribute name="label">
-        <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
-      </xsl:attribute>
-    </field>
     <field name="dateOfBirth">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('metaData.person.dateOfBirth')" />
@@ -221,17 +206,17 @@
         <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
       </xsl:attribute>
     </field>
+    <field name="date.published_from">
+      <xsl:attribute name="label">
+        <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
+      </xsl:attribute>
+    </field>
     <field name="date.published_Original">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('editormask.labels.coverage')" />
       </xsl:attribute>
     </field>
     <field name="date.published_Original_From">
-      <xsl:attribute name="label">
-        <xsl:value-of select="i18n:translate('editormask.labels.coverage')" />
-      </xsl:attribute>
-    </field>
-    <field name="date.published_Original_Till">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('editormask.labels.coverage')" />
       </xsl:attribute>
