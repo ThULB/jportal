@@ -96,8 +96,8 @@ public class RedundancyCommands{
         Collection<String> list = MCRLinkTableManager.instance().getSourceOf(doublet, "reference");
         for (String source : list) {
             if(!MCRMetadataManager.exists(MCRObjectID.getInstance(source))) {
-                LOGGER.warn("Reference between " + doublet + " -> " + source + " no more exists. " + source + " already removed. Delete reference...");
-                MCRLinkTableManager.instance().deleteReferenceLink(doublet, source, "reference");
+                LOGGER.warn("Reference between " + source + " -> " + doublet + " no more exists. " + source + " already removed. Delete reference...");
+                MCRLinkTableManager.instance().deleteReferenceLink(source, doublet, "reference");
                 continue;
             }
             // add replace command
