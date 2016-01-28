@@ -38,15 +38,12 @@ public class RedundancyCommands{
 
     private static final Logger LOGGER = LogManager.getLogger(RedundancyCommands.class);
 
-    @MCRCommand(help = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "fix title of {0} for link {1}")
-    public static void removeDoublets(String objId, String linkID){
+    @MCRCommand(help = "Updates the participant (linkId) xlink:title's of the object (objId)", syntax = "fix title of {0} for link {1}")
+    public static void updateTitle(String objId, String linkId){
         MCRParameterCollector parameter = new MCRParameterCollector();
-        parameter.setParameter("linkId", linkID);
-        
+        parameter.setParameter("linkId", linkId);
         MetaDataTools.updateWithXslt(objId, "/xsl/fixTitleOfLink.xsl", parameter);
     }
-
-    
     
     @MCRCommand(help = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "jp clean up {0}")
     public static List<String> cleanUp(String type) {
@@ -98,6 +95,11 @@ public class RedundancyCommands{
         }
         Collection<String> list = MCRLinkTableManager.instance().getSourceOf(doublet, "reference");
         for (String source : list) {
+            if(!MCRMetadataManager.exists(MCRObjectID.getInstance(source))) {
+                LOGGER.warn("Reference between " + doublet + " -> " + source + " no more exists. " + source + " already removed. Delete reference...");
+                MCRLinkTableManager.instance().deleteReferenceLink(doublet, source, "reference");
+                continue;
+            }
             // add replace command
             StringBuffer command = new StringBuffer("internal replace links ");
             command.append(source).append(" ");
