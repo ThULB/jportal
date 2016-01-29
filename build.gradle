@@ -1,16 +1,3 @@
-buildscript {
-    repositories {
-        jcenter()
-        // enable this to use snapshot versions of Gretty:
-        // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
-    }
-
-    dependencies {
-        classpath 'org.akhikhl.gretty:gretty:1.2.4'
-        classpath "org.hsqldb:hsqldb:$hsqldbVersion"
-    }
-}
-
 plugins {
     id "com.moowork.node" version "0.10"
 }
@@ -23,13 +10,6 @@ def getDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMdd.HHmmss')
     return formattedDate
-}
-
-
-repositories {
-    jcenter()
-    // enable this to use snapshot versions of Gretty:
-    // maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
 }
 
 allprojects {
@@ -316,80 +296,18 @@ project(':jportal_webapp') {
         systemProperty "project.build.directory", project.reportsDir
     }
 
-//    gretty {
-//        managedClassReload=true
-//    }
-
-    farms {
-        dependencies {
-            gretty "org.hsqldb:hsqldb:$hsqldbVersion"
-        }
-
-        // Single: starts app and db
-        // App: starts app, solr and db
-        // WebTests: runs web tests
-
-        ['Single', 'App', 'WebTests'].each { farmName ->
-            farm farmName, {
-                def appName = "jportal"
-                def mcrHome = System.getProperty("user.home") + "/.mycore"
-
-                if (farmName.equals('WebTests')) {
-                    dependencies {
-                        runtime project(':jportal_IT-TestData')
-                    }
-                    appName = "jportal-webTests"
-                    mcrHome = "$project.buildDir/mcrHome"
-                    integrationTestTask = "webTests"
-                }
-                if (!farmName.equals('Single')) {
-                    webapp "org.mycore.solr:solr:$solrVersion@war", contextPath: "/solr"
-                }
-                webapp project, contextPath: "/$appName"
-
-                if (farmName.equals('App') || farmName.equals('Single')) {
-                    dependencies {
-                        gretty project(':java_agent')
-                    }
-                    def agentOp = getAgentOp(resourcePaths);
-                    jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath + "=$agentOp"
-                } else if (farmName.equals('WebTests')) {
-                    webapp project, contextPath: "/$appName"
-                }
-
-
-                systemProperty "MCR.AppName", appName
-                systemProperty "MCR.Home", mcrHome
-
-                jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-                jvmArgs '-Xmx2048m'
-                port = 8291
-
-                serverConfigFile = "$project.projectDir/config/jetty/jetty-config.xml"
-
-                onStart {
-                    if (!farmName.equals('Single')) {
-                        def appPath = "$mcrHome/$appName"
-                        def confDir = "$project.projectDir/config"
-                        systemProperty "solr.solr.home", "$appPath/solr-home"
-                        copyConfFiles(appPath, confDir)
-                    }
-                    startDB(mcrHome, appName)
-                }
-            }
-
-        }
-    }
-
     // Webapp runner tasks
     configurations {
         jetty
+        jettyStart
+        h2db
         solrWar
     }
 
     dependencies {
         jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
-        jetty "org.hsqldb:hsqldb:$hsqldbVersion"
+        jettyStart "org.eclipse.jetty:jetty-start:$jettyVersion"
+        h2db "com.h2database:h2:1.4.191"
         solrWar "org.mycore.solr:solr:$solrVersion@war"
     }
 
@@ -397,72 +315,172 @@ project(':jportal_webapp') {
     def mcrHome = System.getProperty("user.home") + "/.mycore"
     def appPath = "$mcrHome/$appName"
     def confDir = "$project.projectDir/config"
+    def solrPort = '8391'
+    def stopSolrPort = '8395'
+    def stopSolrKey = 'StopJpSolr'
+    def jettyStopPort = '8296'
+    def jettyStopKey = 'StopJetty'
 
-    task configApp << {
-        copy {
-            from(confDir) {
-                include "**"
-                exclude "jetty/**"
+
+    task configApp(type: Copy) {
+        from(confDir) {
+            include "**"
+            exclude "jetty/**"
+        }
+        into appPath
+
+        def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+
+        configurations {
+            mcrsolr
+        }
+        dependencies {
+            mcrsolr "org.mycore:mycore-solr:$mcrVersion@jar"
+        }
+
+        into("solr-home") {
+            from moduleFiles
+            include '**/solr.xml'
+        }
+
+        into("solr-home/conf") {
+            from moduleFiles
+            include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+            from({ zipTree(configurations.mcrsolr.singleFile).files }) {
+                include 'classificationSchema.xml'
             }
-            into appPath
-
-            def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
-
-            configurations {
-                mcrsolr
-            }
-            dependencies {
-                mcrsolr "org.mycore:mycore-solr:$mcrVersion@jar"
-            }
-
-            into("solr-home") {
-                from moduleFiles
-                include '**/solr.xml'
-            }
-
-            into("solr-home/conf") {
-                from moduleFiles
-                include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-                from({ zipTree(configurations.mcrsolr.singleFile).files }) {
-                    include 'classificationSchema.xml'
-                }
-            }
-
         }
     }
 
-    task runDB << {
-        def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
-        String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
-        org.hsqldb.Server.main(args)
+    task runH2DB(type: JavaProcess) {
+        def h2DBPath = Paths.get(mcrHome, appName, "h2db")
+
+        classpath configurations.h2db
+        main "org.h2.tools.Server"
+        args "-tcp", "-baseDir", h2DBPath.toString()
     }
 
-    task runJetty(type: JavaExec) {
-        systemProperties.put("MCR.AppName", "jportal")
+    task stopH2DB(type: JavaProcess) {
+        classpath configurations.h2db
+        main "org.h2.tools.Server"
+        args "-tcpShutdown", "tcp://localhost:9092"
+    }
+
+    task runSolr(type: JavaProcess) {
         systemProperties.put("solr.solr.home", "$appPath/solr-home")
-        systemProperties.put("URN.log", "$appPath/urnlog")
         classpath configurations.jetty
+        main "org.eclipse.jetty.runner.Runner"
+        args '--port', solrPort
+        args '--stop-port', stopSolrPort
+        args '--stop-key', stopSolrKey
+        args '--path', '/solr', configurations.solrWar.singleFile
+    }
+
+    task stopSolr(type: JavaProcess) {
+        systemProperties.put('STOP.PORT', stopSolrPort)
+        systemProperties.put('STOP.KEY', stopSolrKey)
+        classpath configurations.jettyStart
+        main "org.eclipse.jetty.start.Main"
+        args '--stop'
+    }
+
+    task runJetty(type: JavaProcess) {
+        systemProperties.put("MCR.AppName", "jportal")
+        systemProperties.put("URN.log", "$appPath/urnlog")
+        classpath configurations.jetty, configurations.h2db
 
         jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
         jvmArgs '-Xmx2048m'
 
         main "org.eclipse.jetty.runner.Runner"
         args '--config', "$project.projectDir/config/jetty/jetty-config.xml"
-        args '--path', '/solr', configurations.solrWar.singleFile
+        args '--stop-port', jettyStopPort
+        args '--stop-key', jettyStopKey
         args '--path', '/jportal', war.archivePath
+    }
 
-        if (!file(appPath).exists()) {
-            dependsOn configApp
+    task stopJetty(type: JavaProcess) {
+        systemProperties.put('STOP.PORT', jettyStopPort)
+        systemProperties.put('STOP.KEY', jettyStopKey)
+        classpath configurations.jettyStart
+        main "org.eclipse.jetty.start.Main"
+        args '--stop'
+    }
+
+    task runApp {
+        dependsOn configApp
+        dependsOn runH2DB
+        dependsOn runSolr
+        dependsOn runJetty
+    }
+
+    task stopApp {
+        dependsOn stopJetty
+        dependsOn stopSolr
+        dependsOn stopH2DB
+    }
+}
+
+class JavaProcess extends DefaultTask {
+    def cmd = ["java", "-cp"]
+    def jvmArgs = []
+    def classpath = []
+    def args = []
+    def main = null
+    def wait = false
+
+    def systemProperties = [:]
+
+    def args(Object... obj) {
+        obj.each { o ->
+            args.addAll(o.toString())
         }
-        dependsOn runDB
     }
 
-
-
-    task copyConfFiles << {
-        copyConfFiles(appPath, confDir)
+    def jvmArgs(Object... obj) {
+        obj.each { o ->
+            jvmArgs.add(o.toString())
+        }
     }
 
+    def classpath(FileCollection... fCol) {
+        fCol.each { f ->
+            classpath.add(f.asPath)
+        }
+    }
+
+    def main(name) {
+        main = name
+    }
+
+    def systemProperties() {
+        return systemProperties
+    }
+
+    def wait(boolean wait) {
+        this.wait = wait
+    }
+
+    @TaskAction
+    def run() {
+        cmd.add(classpath.join(File.pathSeparator))
+        cmd.addAll(jvmArgs)
+        systemProperties.each { k, v ->
+            cmd.add("-D$k=$v".toString())
+        }
+        cmd.add(main)
+        cmd.addAll(args)
+        println cmd.join(' ')
+        def processBuilder = new ProcessBuilder(cmd)
+
+        processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT)
+        processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
+        def start = processBuilder.start()
+
+        if (wait) {
+            start.waitForProcessOutput(System.out, System.err)
+        }
+    }
 }
 
 def getAgentOp(resourcePaths) {
@@ -475,50 +493,6 @@ def getAgentOp(resourcePaths) {
         }
     }
     return agentOp;
-}
-
-def copyConfFiles(appPath, confDir) {
-    println "Copy config files"
-    copy {
-        from(confDir) {
-            include "**"
-            exclude "jetty/**"
-        }
-        into appPath
-
-        def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
-
-        configurations {
-            solr
-        }
-        dependencies {
-            solr "org.mycore:mycore-solr:$mcrVersion@jar"
-        }
-        def solrJar
-        configurations.solr.each { file ->
-            solrJar = file.absolutePath
-            println "Solr Jar $solrJar";
-        }
-
-        into("solr-home") {
-            from moduleFiles
-            include '**/solr.xml'
-        }
-
-        into("solr-home/conf") {
-            from moduleFiles
-            include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-            from zipTree(solrJar).files
-            include 'classificationSchema.xml'
-        }
-
-    }
-}
-
-def startDB(mcrHome, appName) {
-    def hsqlDBPath = Paths.get(mcrHome, appName, "hsqldb-data", "database")
-    String[] args = ["-database", hsqlDBPath.toString(), "-port", "8298"]
-    org.hsqldb.Server.main(args)
 }
 
 configurations.all {
