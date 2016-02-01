@@ -98,7 +98,7 @@
 								<xsl:attribute name="style">margin-bottom: 5px</xsl:attribute>
 							</xsl:if>
 							<xsl:apply-templates select="." mode="input" />
-							<xsl:apply-templates select="." mode="required" />
+							<xsl:apply-templates select="." mode="validation" />
 						</div>
 					</xsl:if>
 					<xsl:if test="@name='date_select'">
@@ -167,8 +167,12 @@
 			</div>
 		</xsl:if>
 	</xsl:template>
+  
+  <xsl:template match="jp:template[@validate='display-validation-message']" mode="validation">
+    <xed:display-validation-message />
+  </xsl:template>
 
-	<xsl:template match="jp:template[@validate='required']" mode="required">
+	<xsl:template match="jp:template[@validate='required']" mode="validation">
 		<xed:validate display="here" required="true">
 			<div class="alert alert-danger" role="alert">
 				<xed:output i18n="jp.editor.requiredInput" />
@@ -176,7 +180,7 @@
 		</xed:validate>
 	</xsl:template>
 	
-	<xsl:template match="jp:template[@validate='requiredPersonName']" mode="required">
+	<xsl:template match="jp:template[@validate='requiredPersonName']" mode="validation">
 		<xed:validate display="here" test="(string-length(../lastName) &gt; 0) or (string-length(../firstName) &gt; 0) or (string-length(../name) &gt; 0)">
 			<div class="alert alert-danger" role="alert">
 				<xed:output i18n="jp.editor.requiredPersonName" />
@@ -184,7 +188,7 @@
 		</xed:validate>
 	</xsl:template>
 
-    <xsl:template match="jp:template[@validate='interdependentSelect']" mode="required">
+    <xsl:template match="jp:template[@validate='interdependentSelect']" mode="validation">
       <xed:validate display="here" test="not(string-length(.) = 0 and string-length(..) != 0)">
         <div class="alert alert-danger" role="alert">
           <xed:output i18n="jp.editor.requiredSelect" />
@@ -192,7 +196,7 @@
       </xed:validate>
     </xsl:template>
 
-	<xsl:template match="jp:template[@validate='interdependentInput']" mode="required">
+	<xsl:template match="jp:template[@validate='interdependentInput']" mode="validation">
 		<xed:validate display="here"
 			test="not(string-length({@selectXpath}) = 0 and string-length(text()) != 0)">
 			<div class="alert alert-danger" role="alert">
@@ -200,8 +204,8 @@
 			</div>
 		</xed:validate>
 	</xsl:template>
-
-	<xsl:template match="jp:template[@validate='subselect']" mode="required">
+  
+	<xsl:template match="jp:template[@validate='subselect']" mode="validation">
 		<xed:validate display="here"
 			test="((string-length(.) = 0) and (string-length(../@xlink:href) = 0)) or ((string-length(.) &gt; 0) and (string-length(../@xlink:href) &gt; 0))">
 			<div class="alert alert-danger" role="alert">
