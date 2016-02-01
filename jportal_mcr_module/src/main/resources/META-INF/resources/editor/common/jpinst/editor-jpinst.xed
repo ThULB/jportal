@@ -78,9 +78,8 @@
     		xpathInput1="url[@inherited='0'][@form='plain'][@type='logoPlain']" 
     		xpathInput2="url[@inherited='0'][@form='plain'][@type='logoPlusText']" />
     
-      <jp:template name="textInput"
-        xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']"
-        i18n="editormask.labels.LdoubletOf" maxlength="128" />
+      <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed" ref="def.doubletOf" />
+        
     </jp:section>
     <jp:template name="modal"/>
   </xed:template>

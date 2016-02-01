@@ -120,15 +120,7 @@
         <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
       </xed:repeat>
       
-      <xed:bind xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']">
-        <jp:template name="textInput" xpath="."
-          i18n="editormask.labels.LdoubletOf" validate="display-validation-message" maxlength="128" />
-        <xed:validate display="local" matches=".+_(person|jpinst)_\d{8}">
-          <div class="alert alert-danger" role="alert">
-            <xed:output i18n="jp.editor.personInstIDCheck" />
-          </div>
-        </xed:validate>
-      </xed:bind>
+      <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed" ref="def.doubletOf" />
         
       <div class="col-md-12">
         <label class="editorText">

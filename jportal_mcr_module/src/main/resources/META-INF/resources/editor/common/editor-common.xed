@@ -68,4 +68,17 @@
 		    <jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="untilDate" xpath="date[@inherited='0'][@type='published_until']" />
 	  </jp:template>
   </xed:template>
+  
+  <xed:template id="def.doubletOf">
+    <xed:bind xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']">
+      <jp:template name="textInput" xpath="."
+        i18n="editormask.labels.LdoubletOf" validate="display-validation-message" maxlength="128" />
+      <xed:validate display="local" matches=".+_(person|jpinst)_\d{8}">
+        <div class="alert alert-danger" role="alert">
+          <xed:output i18n="jp.editor.personInstIDCheck" />
+        </div>
+      </xed:validate>
+    </xed:bind>
+  </xed:template>
+  
 </xed:template>
