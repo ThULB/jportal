@@ -9,6 +9,7 @@ import org.jdom2.Document;
 import org.jdom2.Text;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -79,6 +80,26 @@ public abstract class JPComponentUtil {
 
     public static interface JPObjectInfo<T> {
         public T getInfo(List<Object> node);
+    }
+
+    /**
+     * Returns an optional of a mycore id when the identifier is valid
+     * and the object does exists.
+     * 
+     * @param id the id as string
+     * @return optional mycore object id
+     */
+    public static Optional<MCRObjectID> getValidID(String id) {
+        MCRObjectID mcrId = null;
+        try {
+            mcrId = MCRObjectID.getInstance(id);
+        } catch (MCRException mcrExc) {
+            return Optional.empty();
+        }
+        if (!MCRMetadataManager.exists(mcrId)) {
+            return Optional.empty();
+        }
+        return Optional.of(mcrId);
     }
 
     /**
