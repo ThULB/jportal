@@ -1,5 +1,14 @@
 package fsu.jportal.util;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -14,19 +23,15 @@ import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
-import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.solr.MCRSolrClientFactory;
-
-import javax.ws.rs.WebApplicationException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Collection of util methods for {@link MCRMetaDerivateLink}.
@@ -83,10 +88,8 @@ public abstract class DerivateLinkUtil {
         if (derLinks == null) {
             return Collections.emptyList();
         }
-        return StreamSupport.stream(derLinks.spliterator(), false)
-                            .map(c -> (MCRMetaDerivateLink) c)
-                            .map(MCRMetaDerivateLink::getXLinkHref)
-                            .collect(Collectors.toList());
+        return StreamSupport.stream(derLinks.spliterator(), false).map(c -> (MCRMetaDerivateLink) c)
+            .map(MCRMetaDerivateLink::getXLinkHref).collect(Collectors.toList());
     }
 
     /**
@@ -97,7 +100,7 @@ public abstract class DerivateLinkUtil {
      */
     public static List<String> getLinkedDerivates(MCRObject mcrObj) {
         return getLinks(mcrObj).stream().map(link -> link.substring(0, link.indexOf('/'))).distinct()
-                               .collect(Collectors.toList());
+            .collect(Collectors.toList());
     }
 
     public static void setLinks(List<MCRObjectID> idList, MCRPath pathOfImage) throws MCRAccessException {
@@ -115,7 +118,7 @@ public abstract class DerivateLinkUtil {
     }
 
     public static void setLink(MCRObjectID mcrObjId, String pathOfImage)
-            throws MCRActiveLinkException, MCRAccessException {
+        throws MCRActiveLinkException, MCRAccessException {
         // create derivateLinks
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
         if (!MCRAccessManager.checkPermission(mcrObjId, "writedb")) {
@@ -148,7 +151,7 @@ public abstract class DerivateLinkUtil {
     }
 
     public static void removeLink(MCRObjectID mcrObjId, String pathOfImage)
-            throws MCRActiveLinkException, MCRAccessException {
+        throws MCRActiveLinkException, MCRAccessException {
         // get link
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
@@ -166,7 +169,7 @@ public abstract class DerivateLinkUtil {
     }
 
     public static void removeLinks(MCRObjectID mcrObjId, MCRObjectID derivateId)
-            throws MCRActiveLinkException, MCRAccessException {
+        throws MCRActiveLinkException, MCRAccessException {
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
         List<MCRMetaDerivateLink> linkList = getLinks(derLinks, derivateId.toString());
@@ -186,16 +189,15 @@ public abstract class DerivateLinkUtil {
      * @param der
      * @throws SolrServerException
      */
-    public static void deleteDerivateLinks(MCRDerivate der) throws SolrServerException, IOException,
-            MCRAccessException {
+    public static void deleteDerivateLinks(MCRDerivate der)
+        throws SolrServerException, IOException, MCRAccessException {
         MCRObjectID derivateId = der.getId();
         List<MCRObjectID> idList = getLinks(derivateId + "*");
         for (MCRObjectID id : idList) {
             try {
                 DerivateLinkUtil.removeLinks(id, derivateId);
             } catch (MCRException | MCRActiveLinkException exc) {
-                LOGGER.error("unable to delete derivate link of object " + id + " and derivate " + derivateId,
-                             exc);
+                LOGGER.error("unable to delete derivate link of object " + id + " and derivate " + derivateId, exc);
             }
         }
     }
@@ -220,8 +222,7 @@ public abstract class DerivateLinkUtil {
             try {
                 DerivateLinkUtil.removeLink(id, pathOfImg);
             } catch (MCRException | MCRActiveLinkException exc) {
-                LOGGER.error("unable to delete derivate link of object " + id + " and file " + pathOfImg,
-                             exc);
+                LOGGER.error("unable to delete derivate link of object " + id + " and file " + pathOfImg, exc);
             }
         }
     }
@@ -246,10 +247,11 @@ public abstract class DerivateLinkUtil {
             start += results.size();
             for (SolrDocument doc : results) {
                 String docId = (String) doc.getFieldValue("id");
-                try {
-                    idList.add(MCRJerseyUtil.getID(docId));
-                } catch (WebApplicationException e) {
-                    e.printStackTrace();
+                Optional<MCRObjectID> mcrId = JPComponentUtil.getValidID(docId);
+                if (mcrId.isPresent()) {
+                    idList.add(mcrId.get());
+                } else {
+                    LOGGER.warn("Invalid or not existing object id " + docId);
                 }
             }
         }
