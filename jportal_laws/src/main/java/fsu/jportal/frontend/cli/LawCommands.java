@@ -1,13 +1,16 @@
 package fsu.jportal.frontend.cli;
 
-import java.io.InputStream;
-
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.laws.common.xml.LawsXMLFunctions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
+import org.mycore.access.MCRAccessException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
@@ -17,10 +20,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.laws.common.xml.LawsXMLFunctions;
+import java.io.InputStream;
 
 @MCRCommandGroup(name = "Law Commands")
 public class LawCommands {
@@ -65,7 +65,8 @@ public class LawCommands {
         }
     }
 
-    private static JPArticle buildJPArticle(Element gesetz, String imgDerivateId, Namespace ns) throws MCRActiveLinkException {
+    private static JPArticle buildJPArticle(Element gesetz, String imgDerivateId, Namespace ns)
+            throws MCRActiveLinkException, MCRAccessException {
         String inhalt = gesetz.getChildText("inhalt", ns);
         String nummer = gesetz.getChildText("nummer", ns);
         String erlass = null;

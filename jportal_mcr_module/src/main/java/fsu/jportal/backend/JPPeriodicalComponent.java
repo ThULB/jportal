@@ -1,24 +1,16 @@
 package fsu.jportal.backend;
 
+import fsu.jportal.util.DerivateLinkUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRException;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.metadata.*;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
-
-import fsu.jportal.util.DerivateLinkUtil;
 
 /**
  * Base class for jparticle, jpvolume and jpjournal.
@@ -108,7 +100,7 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
      * @param href the image which should be linked
      * @throws MCRActiveLinkException when the link couldn't be set
      */
-    public void setDerivateLink(MCRDerivate derivate, String href) throws MCRActiveLinkException {
+    public void setDerivateLink(MCRDerivate derivate, String href) throws MCRActiveLinkException, MCRAccessException {
         String pathOfImage = derivate.getId().toString() + "/" + href;
         DerivateLinkUtil.setLink(object, pathOfImage);
     }
@@ -119,7 +111,7 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
      * @param link the link, this should include the derivate and the path to the file
      * @throws MCRActiveLinkException
      */
-    public void setDerivateLink(String link) throws MCRActiveLinkException {
+    public void setDerivateLink(String link) throws MCRActiveLinkException, MCRAccessException {
         DerivateLinkUtil.setLink(object, link);
     }
 

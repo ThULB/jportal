@@ -1,44 +1,42 @@
 package fsu.jportal.frontend.cli.io;
 
+import fsu.jportal.backend.DerivateTools;
+import fsu.jportal.backend.ImportDerivateObject;
+import fsu.jportal.backend.ImportFileObject;
+import fsu.jportal.backend.io.ImportSink;
+import fsu.jportal.frontend.cli.Importer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jdom2.Document;
+import org.mycore.access.MCRAccessException;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.metadata.*;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jdom2.Document;
-import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAO;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
-import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-
-import fsu.jportal.backend.DerivateTools;
-import fsu.jportal.backend.ImportDerivateObject;
-import fsu.jportal.backend.ImportFileObject;
-import fsu.jportal.backend.io.ImportSink;
-import fsu.jportal.frontend.cli.Importer;
-
 /**
  * Created by michel on 07.07.15.
  * @author Michel Büchner
  */
-public class LocalSystemSink  implements ImportSink{
+public class LocalSystemSink implements ImportSink {
 
     private static Logger LOGGER = LogManager.getLogger(Importer.class);
+
     private String host;
+
     private List<Link> derivateLinkList = new ArrayList<>();
 
     private class Link {
         String document;
+
         String file;
 
         public Link(String document, String file) {
@@ -56,18 +54,18 @@ public class LocalSystemSink  implements ImportSink{
         MCRObject mcrObject = new MCRObject(objXML);
         saveDerivateLink(mcrObject);
         mcrObject.getStructure().clearDerivates();
-        if (MCRMetadataManager.exists(mcrObject.getId())) {
-            mcrObject.setImportMode(true);
-            try {
+        try {
+            if (MCRMetadataManager.exists(mcrObject.getId())) {
+                mcrObject.setImportMode(true);
                 MCRMetadataManager.update(mcrObject);
-            } catch (MCRActiveLinkException e) {
-                LOGGER.error("Error while updating Object" + mcrObject.getId().toString());
-                e.printStackTrace();
+                LOGGER.info("Updated object: " + mcrObject.getId().toString());
+            } else {
+                MCRMetadataManager.create(mcrObject);
+                LOGGER.info("Created object: " + mcrObject.getId().toString());
             }
-            LOGGER.info("Updated object: " + mcrObject.getId().toString());
-        } else {
-            MCRMetadataManager.create(mcrObject);
-            LOGGER.info("Created object: " + mcrObject.getId().toString());
+        } catch (MCRActiveLinkException | MCRAccessException e) {
+            LOGGER.error("Error while updating Object" + mcrObject.getId().toString());
+            e.printStackTrace();
         }
     }
 
@@ -100,13 +98,15 @@ public class LocalSystemSink  implements ImportSink{
                 String completePath = deriObj.getDerivateID() + file.getPath();
                 try {
                     URL url = new URL(this.host + "/servlets/MCRFileNodeServlet/" + completePath);
-                    DerivateTools.uploadFileWithoutTransaction(url.openStream(), file.getSize(), deriObj.getDocumentID(), deriObj.getDerivateID(), file.getPath());
+                    DerivateTools
+                            .uploadFileWithoutTransaction(url.openStream(), file.getSize(), deriObj.getDocumentID(),
+                                                          deriObj.getDerivateID(), file.getPath());
                 } catch (Exception e) {
                     LOGGER.error("Error while uploading File " + completePath);
                     e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | MCRAccessException e) {
             LOGGER.error("Error while creating Derivate " + derivate.getId().toString());
             e.printStackTrace();
         }
@@ -117,11 +117,36 @@ public class LocalSystemSink  implements ImportSink{
         for (Link link : derivateLinkList) {
             try {
                 DerivateTools.setLink(link.document, link.file);
-            } catch (MCRActiveLinkException e) {
+            } catch (MCRActiveLinkException | MCRAccessException e) {
                 LOGGER.error("Error while linking Document " + link.document + " with file " + link.file);
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean allreadImported(String objID) {
+        return false;
+    }
+
+    @Override
+    public Document getObj(String objID) {
+        return null;
+    }
+
+    @Override
+    public boolean allreadImportedDeriv(String derivateID) {
+        return false;
+    }
+
+    @Override
+    public Document getDeriv(String derivateID) {
+        return null;
+    }
+
+    @Override
+    public void saveDeriv(Document srcObj) {
+
     }
 
     protected void saveDerivateLink(MCRObject obj) {

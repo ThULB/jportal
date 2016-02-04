@@ -1,16 +1,17 @@
 package fsu.jportal.backend;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Component that can contain other components as children.
@@ -73,7 +74,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     }
 
     @Override
-    public void store() throws MCRPersistenceException, MCRActiveLinkException {
+    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         super.store();
         for (JPComponent component : childrenMap.values()) {
             component.store();

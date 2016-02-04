@@ -1,24 +1,15 @@
 package de.uni_jena.thulb.mcr.resources;
 
-import java.io.InputStream;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
-
-import org.apache.logging.log4j.Logger;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import de.uni_jena.thulb.mcr.acl.MoveObjectAccess;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
-import org.mycore.common.MCRConstants;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
@@ -31,15 +22,19 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
-import org.mycore.frontend.servlets.MCRServlet;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-
-import de.uni_jena.thulb.mcr.acl.MoveObjectAccess;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
+import java.io.InputStream;
+import java.util.List;
 
 @Path("moveObj")
 @MCRRestrictedAccess(MoveObjectAccess.class)
@@ -93,7 +88,7 @@ public class MoveObjResource {
             if (!objID.equals(newParentID)) {
                 try {
                     MCRObjectCommands.replaceParent(objID, newParentID);
-                } catch (MCRPersistenceException e) {
+                } catch (MCRPersistenceException | MCRAccessException e) {
                     e.printStackTrace();
                     return Response.status(Status.UNAUTHORIZED).build();
                 } catch (MCRActiveLinkException e) {

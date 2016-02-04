@@ -1,16 +1,13 @@
 package fsu.jportal.backend;
 
+import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRPersistenceException;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.metadata.*;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Base component for person, jpinst, jparticle, jpvolume and jpjournal.
@@ -66,7 +63,7 @@ public abstract class JPBaseComponent implements JPComponent {
     }
 
     @Override
-    public void store() throws MCRPersistenceException, MCRActiveLinkException {
+    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         MCRMetadataManager.update(object);
     }
 

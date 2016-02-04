@@ -1,40 +1,30 @@
 package fsu.jportal.resources;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileAlreadyExistsException;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.sun.jersey.multipart.FormDataParam;
+import fsu.jportal.backend.DerivateTools;
+import fsu.jportal.backend.DocumentTools;
 import org.jdom2.JDOMException;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 import org.xml.sax.SAXException;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.sun.jersey.multipart.FormDataParam;
-
-import fsu.jportal.backend.DerivateTools;
-import fsu.jportal.backend.DocumentTools;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.FileAlreadyExistsException;
+import java.util.List;
 
 @Path("derivatebrowser")
 public class DerivateBrowserResource {
@@ -126,6 +116,8 @@ public class DerivateBrowserResource {
         } catch (IOException e) {
             e.printStackTrace();
             return Response.serverError().build();
+        } catch (MCRAccessException e) {
+            e.printStackTrace();
         }
         if (start) {
             String path = file.substring(0, file.lastIndexOf("/") + 1) + name;
@@ -280,6 +272,8 @@ public class DerivateBrowserResource {
             } catch (MCRActiveLinkException e) {
                 e.printStackTrace();
                 return Response.serverError().build();
+            } catch (MCRAccessException e) {
+                e.printStackTrace();
             }
             return Response.ok().build();
         } else {
@@ -297,6 +291,8 @@ public class DerivateBrowserResource {
             } catch (MCRActiveLinkException e) {
                 e.printStackTrace();
                 return Response.serverError().build();
+            } catch (MCRAccessException e) {
+                e.printStackTrace();
             }
             return Response.ok().build();
         } else {

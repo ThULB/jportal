@@ -1,5 +1,6 @@
 package fsu.jportal.backend;
 
+import org.mycore.access.MCRAccessException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -24,10 +25,10 @@ public class DocumentTools {
                     MCRMetadataManager.delete(mcrObj);
                     return 1; //OK
                 }
-            } catch (MCRActiveLinkException e) {
+            } catch (MCRActiveLinkException | MCRAccessException e) {
                 e.printStackTrace();
                 return 0; //ERROR
-            }       
+            }
         }
         return 2; //NOT_FOUND
     }

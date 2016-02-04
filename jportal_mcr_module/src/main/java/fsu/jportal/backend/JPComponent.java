@@ -1,10 +1,11 @@
 package fsu.jportal.backend;
 
-import java.text.DecimalFormat;
-
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObject;
+
+import java.text.DecimalFormat;
 
 /**
  * Base jportal interface of components. This includes persons, institutions, articles,
@@ -39,6 +40,6 @@ public interface JPComponent {
      * @throws MCRActiveLinkException 
      * @throws MCRPersistenceException 
      */
-    public void store() throws MCRPersistenceException, MCRActiveLinkException;
+    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException;
 
 }

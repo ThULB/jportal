@@ -1,23 +1,14 @@
 package fsu.jportal.backend;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import org.apache.commons.fileupload.UploadContext;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import fsu.jportal.gson.DerivateTypeAdapter;
+import fsu.jportal.gson.FileNodeWrapper;
+import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
+import fsu.jportal.mets.MetsTools;
+import fsu.jportal.urn.URNTools;
+import fsu.jportal.util.DerivateLinkUtil;
+import fsu.jportal.util.DerivatePath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -28,11 +19,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRJSONManager;
-import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRSession;
-import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.MCRUsageException;
+import org.mycore.access.MCRAccessException;
+import org.mycore.common.*;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -52,22 +40,19 @@ import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
 import org.xml.sax.SAXException;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import fsu.jportal.gson.DerivateTypeAdapter;
-import fsu.jportal.gson.FileNodeWrapper;
-import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
-import fsu.jportal.mets.MetsTools;
-import fsu.jportal.urn.URNTools;
-import fsu.jportal.util.DerivateLinkUtil;
-import fsu.jportal.util.DerivatePath;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class DerivateTools {
     static Logger LOGGER = LogManager.getLogger(DerivateTools.class);
 
     private static boolean cp(final MCRPath source, MCRPath targetDir, String newName,
-        final Map<MCRPath, MCRPath> copyHistory) {
+                              final Map<MCRPath, MCRPath> copyHistory) {
         if (newName == null) {
             newName = source.getFileName().toString();
         }
@@ -120,7 +105,7 @@ public class DerivateTools {
         return false;
     }
 
-    public static boolean cp(String sourcePath, String targetPath, boolean delAfterCopy) {
+    public static boolean cp(String sourcePath, String targetPath, boolean delAfterCopy) throws MCRAccessException {
         if (sourcePath == null || targetPath == null) {
             LOGGER.info("Usage: copy {path_to_file} {new_path}");
         }
@@ -165,7 +150,8 @@ public class DerivateTools {
         return false;
     }
 
-    private static void moveAttachedData(Derivate srcDerivate, Map<MCRPath, MCRPath> copyHistory) {
+    private static void moveAttachedData(Derivate srcDerivate, Map<MCRPath, MCRPath> copyHistory)
+            throws MCRAccessException {
         String maindoc = srcDerivate.getMaindoc();
         for (MCRPath sourceNode : copyHistory.keySet()) {
             MCRPath target = copyHistory.get(sourceNode);
@@ -216,7 +202,7 @@ public class DerivateTools {
         return null;
     }
 
-    public static void rename(String filePath, String newName) throws IOException {
+    public static void rename(String filePath, String newName) throws IOException, MCRAccessException {
         String[] pathArray = filePath.split(":");
         final Path source = MCRPath.getPath(pathArray[0], pathArray[1]);
         final Path target = source.resolveSibling(newName);
@@ -246,7 +232,11 @@ public class DerivateTools {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     Path tempPath = mcrPath.resolve(source.relativize(file));
-                    mvSingleFile(MCRPath.toMCRPath(file), MCRPath.toMCRPath(tempPath));
+                    try {
+                        mvSingleFile(MCRPath.toMCRPath(file), MCRPath.toMCRPath(tempPath));
+                    } catch (MCRAccessException e) {
+                        e.printStackTrace();
+                    }
                     return super.visitFile(file, attrs);
                 }
 
@@ -260,7 +250,7 @@ public class DerivateTools {
         }
     }
 
-    private static void mvSingleFile(MCRPath src, MCRPath tgt) throws IOException {
+    private static void mvSingleFile(MCRPath src, MCRPath tgt) throws IOException, MCRAccessException {
         MCRURN urn = URNTools.getURNForFile(src);
         List<MCRObjectID> idList = new ArrayList<MCRObjectID>();
         try {
@@ -282,11 +272,11 @@ public class DerivateTools {
         }
     }
 
-    public static boolean mv(String sourcePath, String targetPath) {
+    public static boolean mv(String sourcePath, String targetPath) throws MCRAccessException {
         return cp(sourcePath, targetPath, true);
     }
 
-    public static void cp(String sourcePath, String targetPath) {
+    public static void cp(String sourcePath, String targetPath) throws MCRAccessException {
         cp(sourcePath, targetPath, false);
     }
 
@@ -325,13 +315,9 @@ public class DerivateTools {
         }
         if (!Files.isDirectory(mcrPath)) {
             try {
-                try {
-                    DerivateLinkUtil.deleteFileLink(mcrPath);
-                } catch (SolrServerException e) {
-                    e.printStackTrace();
-                }
+                DerivateLinkUtil.deleteFileLink(mcrPath);
                 Files.delete(mcrPath);
-            } catch (IOException e) {
+            } catch (IOException | SolrServerException | MCRAccessException e) {
                 e.printStackTrace();
                 return 0;
             }
@@ -342,10 +328,10 @@ public class DerivateTools {
 
                 @Override
                 public FileVisitResult visitFile(java.nio.file.Path file, BasicFileAttributes attrs)
-                    throws IOException {
+                        throws IOException {
                     try {
                         DerivateLinkUtil.deleteFileLink(MCRPath.toMCRPath(file));
-                    } catch (SolrServerException e) {
+                    } catch (SolrServerException | MCRAccessException e) {
                         e.printStackTrace();
                     }
                     Files.delete(file);
@@ -369,11 +355,11 @@ public class DerivateTools {
     /**
      * Uploads a new file. No database transaction is required. In fact, a "nested transaction
      * is not supported" error is thrown when a transaction is already started.
-     * 
+     *
      * @see #uploadFile(InputStream, long, String, String, String)
      */
     public static String uploadFileWithoutTransaction(InputStream inputStream, long filesize, String documentID,
-        String derivateID, String filePath) throws Exception {
+                                                      String derivateID, String filePath) throws Exception {
         MCRSession session = MCRSessionMgr.getCurrentSession();
         try {
             session.beginTransaction();
@@ -387,7 +373,7 @@ public class DerivateTools {
 
     /**
      * Uploads a new file. A valid database transaction is required.
-     * 
+     *
      * @param inputStream input stream to upload
      * @param filesize size of the file
      * @param documentID mycore object where the derivate is added
@@ -397,7 +383,7 @@ public class DerivateTools {
      * @throws Exception
      */
     public static String uploadFile(InputStream inputStream, long filesize, String documentID, String derivateID,
-        String filePath) throws Exception {
+                                    String filePath) throws Exception {
         if (derivateID == null) {
             String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
@@ -511,11 +497,11 @@ public class DerivateTools {
         return MCRURNManager.getURNForFile(derivate, pathToFile, fileName);
     }
 
-    public static void setLink(String documentID, String path) throws MCRActiveLinkException {
+    public static void setLink(String documentID, String path) throws MCRActiveLinkException, MCRAccessException {
         DerivateLinkUtil.setLink(MCRJerseyUtil.getID(documentID), path);
     }
 
-    public static void removeLink(String documentID, String path) throws MCRActiveLinkException {
+    public static void removeLink(String documentID, String path) throws MCRActiveLinkException, MCRAccessException {
         DerivateLinkUtil.removeLink(MCRJerseyUtil.getID(documentID), path);
     }
 

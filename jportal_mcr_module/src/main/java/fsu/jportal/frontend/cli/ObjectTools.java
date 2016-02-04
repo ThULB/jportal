@@ -1,44 +1,5 @@
 package fsu.jportal.frontend.cli;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.ifs.MCRDirectory;
-import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.cli.MCRObjectCommands;
-import org.mycore.frontend.cli.annotation.MCRCommand;
-import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-import org.mycore.iview2.frontend.MCRIView2Commands;
-
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.ImportSource;
 import fsu.jportal.backend.io.RecursiveImporter;
@@ -47,13 +8,37 @@ import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSource;
 import fsu.jportal.frontend.cli.io.LocalExportSink;
 import fsu.jportal.frontend.cli.io.LocalExportSource;
 import fsu.jportal.util.DerivateLinkUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRPersistenceException;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.ifs.MCRDirectory;
+import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.*;
+import org.mycore.frontend.cli.MCRObjectCommands;
+import org.mycore.frontend.cli.annotation.MCRCommand;
+import org.mycore.frontend.cli.annotation.MCRCommandGroup;
+import org.mycore.iview2.frontend.MCRIView2Commands;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Paths;
+import java.util.*;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {
     private static Logger LOGGER = LogManager.getLogger(ObjectTools.class.getName());
 
     @MCRCommand(help = "export import [objectID].", syntax = "export import object {0}")
-    public static void exportImport(String objectID) throws MCRPersistenceException, MCRActiveLinkException {
+    public static void exportImport(String objectID)
+            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
         MCRMetadataManager.update(mcrObject);
     }
@@ -85,7 +70,7 @@ public class ObjectTools {
     }
 
     @MCRCommand(help = "merge several derivates", syntax = "merge derivates {0}")
-    public static List<String> mergeDerivates(String derivateIDs) throws IOException {
+    public static List<String> mergeDerivates(String derivateIDs) throws IOException, MCRAccessException {
         List<String> executeMoreCMDs = new ArrayList<String>();
         String[] derivateIdArray = derivateIDs.split(",");
 
@@ -293,7 +278,7 @@ public class ObjectTools {
     }
 
     @MCRCommand(help = "creates a new derivate link", syntax = "set derivate link to {0} with path {1}")
-    public static void setDerivateLink(String objectId, String path) throws MCRActiveLinkException {
+    public static void setDerivateLink(String objectId, String path) throws MCRActiveLinkException, MCRAccessException {
         DerivateLinkUtil.setLink(MCRObjectID.getInstance(objectId), path);
     }
 
@@ -335,7 +320,7 @@ public class ObjectTools {
     }
 
     @MCRCommand(help = "goes through the hierarchy and rewrites the hidden journal id of every object", syntax = "fix hidden journal id for {0}")
-    public static List<String> fixHiddenJournalId(String objectId) throws MCRActiveLinkException {
+    public static List<String> fixHiddenJournalId(String objectId) throws MCRActiveLinkException, MCRAccessException {
         MCRObjectID mcrId = MCRObjectID.getInstance(objectId);
         if (!MCRMetadataManager.exists(mcrId)) {
             LOGGER.error(objectId + " does not exist!");
@@ -355,7 +340,7 @@ public class ObjectTools {
 
     @MCRCommand(help = "goes through the hierarchy and rewrites the hidden journal id of every object", syntax = "internal fix hidden journal id for {0} {1}")
     public static List<String> fixHiddenJournalId(String objectId, String hiddenJournalID)
-        throws MCRActiveLinkException {
+            throws MCRActiveLinkException, MCRAccessException {
         MCRObjectID mcrId = MCRObjectID.getInstance(objectId);
         if (!MCRMetadataManager.exists(mcrId)) {
             LOGGER.error(objectId + " does not exist!");
@@ -370,7 +355,8 @@ public class ObjectTools {
         return commandList;
     }
 
-    private static void setHiddenJournalID(MCRObject obj, String hiddenJournalID) throws MCRActiveLinkException {
+    private static void setHiddenJournalID(MCRObject obj, String hiddenJournalID)
+            throws MCRActiveLinkException, MCRAccessException {
         MCRMetaElement journalIDElement = obj.getMetadata().getMetadataElement("hidden_jpjournalsID");
         if (journalIDElement == null) {
             MCRMetaElement me = new MCRMetaElement();

@@ -1,28 +1,14 @@
 package fsu.jportal.mets;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.ConnectException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
+import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.jportal.util.GndUtil;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
-import org.jdom2.Text;
+import org.jdom2.*;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRPathContent;
@@ -35,8 +21,17 @@ import org.mycore.mets.validator.ValidatorUtil;
 import org.mycore.mets.validator.validators.SchemaValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.jportal.util.GndUtil;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public abstract class LLZMetsUtils {
 
@@ -209,7 +204,8 @@ public abstract class LLZMetsUtils {
      * @throws ConnectException when no connection to the sru interface could be established (in this case you
      * can assume that the person does not exist in the system)
      */
-    public static MCRObjectID getOrCreatePerson(Element name) throws SolrServerException, IOException {
+    public static MCRObjectID getOrCreatePerson(Element name)
+            throws SolrServerException, IOException, MCRAccessException {
         String authorityURI = name.getAttributeValue("authorityURI");
         if (!"http://d-nb.info/gnd/".equals(authorityURI)) {
             return null;

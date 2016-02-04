@@ -1,18 +1,7 @@
 package fsu.jportal.frontend.cli;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
+import fsu.jportal.backend.DerivateTools;
+import fsu.jportal.util.DerivateLinkUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -25,20 +14,23 @@ import org.jdom2.filter.Filter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.mycore.access.MCRAccessException;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRBase;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.*;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.xml.sax.SAXException;
 
-import fsu.jportal.backend.DerivateTools;
-import fsu.jportal.util.DerivateLinkUtil;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 @MCRCommandGroup(name = "JP Commands")
 public class JPortalCommands {
@@ -80,7 +72,7 @@ public class JPortalCommands {
     }
 
     @MCRCommand(help = "Add derivate link to object: add derivate link {location} to object {id}", syntax = "add derivate link {0} to object {1}")
-    public static void addDerivateLink(String link, String id) throws MCRActiveLinkException {
+    public static void addDerivateLink(String link, String id) throws MCRActiveLinkException, MCRAccessException {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         DerivateLinkUtil.setLink(mcrId, link);
     }
@@ -91,7 +83,7 @@ public class JPortalCommands {
     }
 
     @MCRCommand(help = "Copy file in derivate: copy derivID_1:/path/to/source derivID_2:/path/to/target", syntax = "copy file {0} {1}")
-    public static void copyFile(String oldFile, String newFile) {
+    public static void copyFile(String oldFile, String newFile) throws MCRAccessException {
         DerivateTools.cp(oldFile, newFile);
     }
 
@@ -108,7 +100,7 @@ public class JPortalCommands {
     }
 
     @MCRCommand(help = "Move file in derivate: move derivID_1:/path/to/source derivID_2:/path/to/target", syntax = "move {0} {1}")
-    public static void move(String oldFile, String newFile) {
+    public static void move(String oldFile, String newFile) throws MCRAccessException {
         DerivateTools.mv(oldFile, newFile);
     }
 
