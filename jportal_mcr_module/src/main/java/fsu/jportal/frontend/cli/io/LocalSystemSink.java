@@ -124,31 +124,6 @@ public class LocalSystemSink implements ImportSink {
         }
     }
 
-    @Override
-    public boolean allreadImported(String objID) {
-        return false;
-    }
-
-    @Override
-    public Document getObj(String objID) {
-        return null;
-    }
-
-    @Override
-    public boolean allreadImportedDeriv(String derivateID) {
-        return false;
-    }
-
-    @Override
-    public Document getDeriv(String derivateID) {
-        return null;
-    }
-
-    @Override
-    public void saveDeriv(Document srcObj) {
-
-    }
-
     protected void saveDerivateLink(MCRObject obj) {
         MCRMetaElement deriLinks = obj.getMetadata().getMetadataElement("derivateLinks");
         if (deriLinks != null) {
