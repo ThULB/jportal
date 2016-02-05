@@ -31,7 +31,7 @@
     <xsl:variable name="filePath" select="concat('/',substring-after(@xlink:href,'/'))" />
     <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)" />
     <xsl:call-template name="metadataDisplayURNItem">
-      <xsl:with-param name="urn" select="urn" />
+      <xsl:with-param name="urn" select="$urn" />
     </xsl:call-template>
   </xsl:template>
 
