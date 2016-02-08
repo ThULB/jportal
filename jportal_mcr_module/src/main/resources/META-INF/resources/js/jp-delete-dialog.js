@@ -99,7 +99,7 @@ $(document).ready(function() {
 					var response = data.response;
 					var html = "";
 					if(response.numFound == 0) {
-						html = "Das Dokument ist nicht verknüpft.";
+						html = "Solr konnte keine Verlinkung feststellen. Das Dokument ist wahrscheinlich nicht korrekt indiziert.";
 					} else {
 						var html = "<ul>";
 						var docs = response.docs;
