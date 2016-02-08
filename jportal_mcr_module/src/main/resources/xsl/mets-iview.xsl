@@ -10,12 +10,7 @@
 
   <!-- this is where the master file group is located (files that are referenced by a relative URL) -->
   <xsl:variable name="masterFileGrp"
-    select="/mets:mets/mets:fileSec/mets:fileGrp[
-      mets:file/mets:FLocat/@LOCTYPE='URL' and
-      not(
-        contains(mets:file/mets:FLocat/@xlink:href , '://')
-      )
-    ]" />
+    select="/mets:mets/mets:fileSec/mets:fileGrp[@USE = 'MASTER']" />
 
   <xsl:variable name="urns" select="mcrurn:getURNsForMCRID($derivateID)" />
 
