@@ -88,29 +88,17 @@ $(document).ready(function() {
 				infoDiv.html("<p class='text-danger'>Das Dokument wurde bereits gelöscht.</p>");
 			} else if(error.status == 401) {
 				infoDiv.html("<p class='text-danger'>Sie haben nicht die notwendigen Rechte das Dokument zu löschen.</p>");
-			} else if(error.status == 403 && error.responseText != null && error.responseText != "") {
-				var html = "<p class='text-danger'>" + error.responseText + "</p>";
-				html += "<div><div>Referenziert in:</div><div id='delete-dialog-object-references'><i class='fa fa-circle-o-notch fa-spin'></i></div></div>";
+			} else if(error.status == 400) {
+				var errorData = JSON.parse(error.responseText);
+				var html = "<p class='text-danger'>" + errorData.msg + "</p>";
+				if(errorData.activeLinks && errorData.activeLinks.length > 0) {
+					html += "<div><div>Referenziert in:</div><ul>";
+					errorData.activeLinks.forEach(function(id) {
+						html += "<li><a href='" + jp.baseURL + "receive/" + id + "' target='_blank'>" + id + "</a></li>";
+					});
+					html += "</ul></div>";
+				}
 				infoDiv.html(html);
-				$.ajax({
-					url: jp.baseURL + "servlets/solr/select?wt=json&q=link:" + objectID,
-					dataType: "json"
-				}).done(function(data) {
-					var response = data.response;
-					var html = "";
-					if(response.numFound == 0) {
-						html = "Solr konnte keine Verlinkung feststellen. Das Dokument ist wahrscheinlich nicht korrekt indiziert.";
-					} else {
-						var html = "<ul>";
-						var docs = response.docs;
-						for(var i = 0; i < docs.length; i++) {
-							var doc = docs[i];
-							html += "<li><a href='" + jp.baseURL + "receive/" + doc.id + "'>" + doc.maintitle + "</a></li>";
-						}
-						html += "<ul>";
-					}
-					$("#delete-dialog-object-references").html(html);
-				});
 			} else {
 				infoDiv.html("<p class='text-danger'>Das Dokument mit der ID <b>" + objectID + "</b> konnte nicht gelöscht werden." +
 						" Bitte wenden Sie sich an den Administrator!</p>" +

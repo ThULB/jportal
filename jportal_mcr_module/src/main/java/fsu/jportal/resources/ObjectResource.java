@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRJSONManager;
 import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -14,11 +15,18 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.io.StringReader;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mycore.access.MCRAccessManager.PERMISSION_DELETE;
 import static org.mycore.access.MCRAccessManager.PERMISSION_READ;
@@ -57,8 +65,19 @@ public class ObjectResource {
                 MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
                 MCRMetadataManager.delete(mcrObj);
             }
-        } catch (MCRActiveLinkException | MCRAccessException mcrActExc) {
+        } catch (MCRAccessException mcrActExc) {
             return Response.status(Status.FORBIDDEN).entity(mcrActExc.getMessage()).build();
+        } catch (MCRActiveLinkException e) {
+            JsonObject o = new JsonObject();
+            o.addProperty("type", "error");
+            o.addProperty("msg", e.getMessage());
+            List<String> sources = e.getActiveLinks().values().stream().flatMap(Collection::stream)
+                .collect(Collectors.toList());
+            JsonArray activeLinks = new JsonArray();
+            sources.forEach(source -> activeLinks.add(source));
+            o.add("activeLinks", activeLinks);
+            Gson gson = MCRJSONManager.instance().createGson();
+            return Response.status(Status.BAD_REQUEST).entity(gson.toJson(o)).build();
         }
         return Response.ok().build();
     }
