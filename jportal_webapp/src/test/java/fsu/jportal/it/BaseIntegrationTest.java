@@ -1,31 +1,20 @@
 package fsu.jportal.it;
 
-import static org.junit.Assert.assertEquals;
-
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.lang.System;
-
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.apache.logging.log4j.Logger;
+import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class BaseIntegrationTest {
 
@@ -105,7 +94,7 @@ public class BaseIntegrationTest {
         String port = System.getProperty("it.port", "8291");
         LOCAL_PORT = Integer.parseInt(port);
         TEST_APP = System.getProperty("it.context", "");
-        START_URL = "http://localhost:" + LOCAL_PORT + "/jportal-webTests" + TEST_APP;
+        START_URL = "http://localhost:" + LOCAL_PORT + "/jportal" + TEST_APP;
         LOGGER.info("Server running on '" + START_URL + "'");
         DRIVER = new FirefoxDriver();
         

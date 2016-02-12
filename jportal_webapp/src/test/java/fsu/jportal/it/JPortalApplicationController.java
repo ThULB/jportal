@@ -20,105 +20,112 @@ import java.util.List;
 
 public class JPortalApplicationController extends ApplicationController {
 
-	@Override
-	public void init() {
-		createDerivateFiles();
-  	WebDriver initDriver = DriverFactory.getFactory().getDriver();
-		
-  	TestUtils.home(initDriver);
-  	TestUtils.login(initDriver);
-  	TestUtils.creatMinJournal(initDriver, "testJournal");
-		
-		journalURl = initDriver.getCurrentUrl();
-		uploadFiles(initDriver);
-		deleteFiles();
-		
-  	initDriver.quit();
-	}
+    private boolean hibernateEnabled;
 
-	static final Logger LOGGER = LogManager.getLogger(JPortalApplicationController.class);
+    @Override
+    public void init() {
+        createDerivateFiles();
+        WebDriver initDriver = DriverFactory.getFactory().getDriver();
 
-	private static final String FILE_LOCATION = "testImages";
+        TestUtils.home(initDriver);
+        TestUtils.login(initDriver);
+        TestUtils.creatMinJournal(initDriver, "testJournal");
 
-	private String journalURl = null;
-	private List <File> files = new ArrayList<File>();
-	Path tempDirectory = null; 
-	private int testNumber = 5;
+        journalURl = initDriver.getCurrentUrl();
+        uploadFiles(initDriver);
+        deleteFiles();
 
-	@Override
-	public void setUpDerivate(WebDriver webdriver, TestDerivate testDerivate) {
-			webdriver.get(journalURl);
-	}
+        initDriver.quit();
+    }
 
-	private void uploadFiles(WebDriver webdriver) {
-		TestUtils.clickCreatSelect(webdriver, "Datei hochladen");
-		
-		for(int i = 0, j = 1; i < files.size(); i++, j ++) {
-			webdriver.findElement(By.xpath("//table[@class='editorRepeater']/tbody/tr[" + j + "]/td/input[@class='editorFile']")).sendKeys(files.get(i).getAbsolutePath());
-			if(j == 3 && i < files.size()) {
-				webdriver.findElement(By.xpath("//input[@value='Speichern']")).click();
-				webdriver.findElement(By.linkText("Dateien hinzufügen")).click();
-				j = 0;
-			}
-		}
-		webdriver.findElement(By.xpath("//input[@value='Speichern']")).click();
-	}
-	
-	private void deleteFiles() {
-		for (int i = 0; i < files.size(); i++) {
-			if(!files.get(i).getName().equals("mets.xml")){
-				files.get(i).delete();
-			}
-		}
-		tempDirectory.toFile().delete();
-	}
+    static final Logger LOGGER = LogManager.getLogger(JPortalApplicationController.class);
 
-	@Override
-	public void shutDownDerivate(WebDriver webdriver, TestDerivate testDerivate) {
-		if(--testNumber == 0) {
-			try {
-				TestUtils.home(webdriver);
-				TestUtils.login(webdriver);
-				TestUtils.goToObj(webdriver, "testJournal");
-				Thread.sleep(600);
-				webdriver.findElement(By.linkText("Derivat löschen")).click();
-				Thread.sleep(600);
-				webdriver.findElement(By.cssSelector(".bootstrap-dialog-footer-buttons > button:last-child")).click();
-				webdriver.navigate().refresh();
-				TestUtils.deletObj(webdriver, "");
-			} catch (Exception e) {
-				LOGGER.error("shutDownDerivate error: " + e.toString());
-			}
-		}
-	}
+    private static final String FILE_LOCATION = "testImages";
 
-	@Override
-	public void openViewer(WebDriver webdriver, TestDerivate testDerivate) {
-		webdriver.findElement(By.className("thumbnail")).click();
-	}
-	
-	private void createDerivateFiles() {
-		try {
-			tempDirectory = Files.createTempDirectory(FILE_LOCATION);
-			PaintTestPics pics = new PaintTestPics();
-			
-			int width = 1000;
-			writeImage(pics.oneColorPic(width, Color.BLUE), tempDirectory.resolve("b.png")); 
-			writeImage(pics.oneColorPic(width, Color.GREEN), tempDirectory.resolve("g.png"));
-			writeImage(pics.oneColorPic(width, Color.RED), tempDirectory.resolve("r.png"));
-			writeImage(pics.threeColorPic(width * 10), tempDirectory.resolve("rgb.png"));
-			files.add(new File(getClass().getClassLoader().getResource("viewerTestMets/mets.xml").getFile()));
-		} catch (IOException e) {
-			LOGGER.error("Error while setting up derivate", e);
-		}
-	}
-	
-  private void writeImage(BufferedImage img, Path imagePath) {
-  	try {
-  		ImageIO.write(img, "PNG", imagePath.toFile());
-  		files.add(imagePath.toFile());
-  	} catch (IOException e) {
-  		LOGGER.error("Error while setting up derivate", e);
-  	}
-  }
+    private String journalURl = null;
+
+    private List<File> files = new ArrayList<File>();
+
+    Path tempDirectory = null;
+
+    private int testNumber = 5;
+
+    @Override
+    public void setUpDerivate(WebDriver webdriver, TestDerivate testDerivate) {
+        webdriver.get(journalURl);
+    }
+
+    private void uploadFiles(WebDriver webdriver) {
+        TestUtils.clickCreatSelect(webdriver, "Datei hochladen");
+
+        for (int i = 0, j = 1; i < files.size(); i++, j++) {
+            webdriver.findElement(
+                    By.xpath("//table[@class='editorRepeater']/tbody/tr[" + j + "]/td/input[@class='editorFile']"))
+                     .sendKeys(files.get(i).getAbsolutePath());
+            if (j == 3 && i < files.size()) {
+                webdriver.findElement(By.xpath("//input[@value='Speichern']")).click();
+                webdriver.findElement(By.linkText("Dateien hinzufügen")).click();
+                j = 0;
+            }
+        }
+        webdriver.findElement(By.xpath("//input[@value='Speichern']")).click();
+    }
+
+    private void deleteFiles() {
+        for (int i = 0; i < files.size(); i++) {
+            if (!files.get(i).getName().equals("mets.xml")) {
+                files.get(i).delete();
+            }
+        }
+        tempDirectory.toFile().delete();
+    }
+
+    @Override
+    public void shutDownDerivate(WebDriver webdriver, TestDerivate testDerivate) {
+        if (--testNumber == 0) {
+            try {
+                TestUtils.home(webdriver);
+                TestUtils.login(webdriver);
+                TestUtils.goToObj(webdriver, "testJournal");
+                Thread.sleep(600);
+                webdriver.findElement(By.linkText("Derivat löschen")).click();
+                Thread.sleep(600);
+                webdriver.findElement(By.cssSelector(".bootstrap-dialog-footer-buttons > button:last-child")).click();
+                webdriver.navigate().refresh();
+                TestUtils.deletObj(webdriver, "");
+            } catch (Exception e) {
+                LOGGER.error("shutDownDerivate error: " + e.toString());
+            }
+        }
+    }
+
+    @Override
+    public void openViewer(WebDriver webdriver, TestDerivate testDerivate) {
+        webdriver.findElement(By.className("thumbnail")).click();
+    }
+
+    private void createDerivateFiles() {
+        try {
+            tempDirectory = Files.createTempDirectory(FILE_LOCATION);
+            PaintTestPics pics = new PaintTestPics();
+
+            int width = 1000;
+            writeImage(pics.oneColorPic(width, Color.BLUE), tempDirectory.resolve("b.png"));
+            writeImage(pics.oneColorPic(width, Color.GREEN), tempDirectory.resolve("g.png"));
+            writeImage(pics.oneColorPic(width, Color.RED), tempDirectory.resolve("r.png"));
+            writeImage(pics.threeColorPic(width * 10), tempDirectory.resolve("rgb.png"));
+            files.add(new File(getClass().getClassLoader().getResource("viewerTestMets/mets.xml").getFile()));
+        } catch (IOException e) {
+            LOGGER.error("Error while setting up derivate", e);
+        }
+    }
+
+    private void writeImage(BufferedImage img, Path imagePath) {
+        try {
+            ImageIO.write(img, "PNG", imagePath.toFile());
+            files.add(imagePath.toFile());
+        } catch (IOException e) {
+            LOGGER.error("Error while setting up derivate", e);
+        }
+    }
 }

@@ -239,8 +239,11 @@ project(':jportal_IT-TestData') {
     }
 }
 
+gradle.addListener new WebTestLifecycleListener()
+
 project(':jportal_webapp') {
     apply plugin: 'war'
+
 
     configurations {
         applet
@@ -255,6 +258,7 @@ project(':jportal_webapp') {
         testCompile 'org.seleniumhq.selenium:selenium-java:2.+'
         testCompile "org.mycore:mycore-viewer:$mcrViewerVersion:tests"
         testCompile "org.mycore:selenium-utils:$seleniumUtilsVersion"
+
         runtime "org.apache.logging.log4j:log4j-web:2.3"
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
         runtime "org.mycore:mycore-webcli:$mcrVersion"
@@ -301,62 +305,91 @@ project(':jportal_webapp') {
         jettyStart
         h2db
         solrWar
+        printer
     }
 
     dependencies {
         jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
+        printer "de.uni-jena.thulb:urmel-printer:1.0-SNAPSHOT@war"
         jettyStart "org.eclipse.jetty:jetty-start:$jettyVersion"
         h2db "com.h2database:h2:1.4.191"
         solrWar "org.mycore.solr:solr:$solrVersion@war"
     }
 
-    def appName = "jportal"
-    def mcrHome = System.getProperty("user.home") + "/.mycore"
-    def appPath = "$mcrHome/$appName"
-    def confDir = "$project.projectDir/config"
-    def solrPort = '8391'
-    def stopSolrPort = '8395'
-    def stopSolrKey = 'StopJpSolr'
-    def jettyStopPort = '8296'
-    def jettyStopKey = 'StopJetty'
+    ext.appName = "jportal"
+    ext.mcrHome = System.getProperty("user.home") + "/.mycore"
+    ext.appPath = "$mcrHome/$appName"
+    ext.confDir = "$project.projectDir/config"
+    ext.solrPort = '8391'
+    ext.stopSolrPort = '8395'
+    ext.stopSolrKey = 'StopJpSolr'
+    ext.jettyStopPort = '8296'
+    ext.jettyStopKey = 'StopJetty'
 
-
-    task configApp(type: Copy) {
-        from(confDir) {
-            include "**"
-            exclude "jetty/**"
+    task deleteAppPath << {
+        delete {
+            appPath
         }
-        into appPath
+    }
 
-        def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+    task configApp << {
+        copy {
+            from(confDir) {
+                include "**"
+                exclude "jetty/**"
+            }
+            into appPath
 
-        configurations {
-            mcrsolr
-        }
-        dependencies {
-            mcrsolr "org.mycore:mycore-solr:$mcrVersion@jar"
-        }
+            def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
 
-        into("solr-home") {
-            from moduleFiles
-            include '**/solr.xml'
-        }
+            configurations {
+                mcrsolr
+            }
 
-        into("solr-home/conf") {
-            from moduleFiles
-            include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-            from({ zipTree(configurations.mcrsolr.singleFile).files }) {
-                include 'classificationSchema.xml'
+            dependencies {
+                mcrsolr "org.mycore:mycore-solr:$mcrVersion@jar"
+            }
+
+            into("solr-home") {
+                from moduleFiles
+                include '**/solr.xml'
+            }
+
+            into("solr-home/conf") {
+                from moduleFiles
+                include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+                from({ zipTree(configurations.mcrsolr.singleFile).files }) {
+                    include 'classificationSchema.xml'
+                }
             }
         }
     }
 
-    task runH2DB(type: JavaProcess) {
-        def h2DBPath = Paths.get(mcrHome, appName, "h2db")
+    task configWebTests << {
+        configurations {
+            testData {
+                transitive = false
+            }
+        }
 
-        classpath configurations.h2db
-        main "org.h2.tools.Server"
-        args "-tcp", "-baseDir", h2DBPath.toString()
+        dependencies {
+            testData project(':jportal_IT-TestData')
+        }
+
+        copy {
+            from configurations.testData.singleFile
+            into "$appPath/lib"
+        }
+    }
+
+    task runH2DB(type: JavaProcess) {
+        doFirst {
+            def h2DBPath = Paths.get(appPath, "h2db")
+
+            classpath configurations.h2db
+            main "org.h2.tools.Server"
+            args "-tcp", "-baseDir", h2DBPath.toString()
+        }
     }
 
     task stopH2DB(type: JavaProcess) {
@@ -366,13 +399,15 @@ project(':jportal_webapp') {
     }
 
     task runSolr(type: JavaProcess) {
-        systemProperties.put("solr.solr.home", "$appPath/solr-home")
-        classpath configurations.jetty
-        main "org.eclipse.jetty.runner.Runner"
-        args '--port', solrPort
-        args '--stop-port', stopSolrPort
-        args '--stop-key', stopSolrKey
-        args '--path', '/solr', configurations.solrWar.singleFile
+        doFirst {
+            systemProperties.put("solr.solr.home", "$appPath/solr-home")
+            classpath configurations.jetty
+            main "org.eclipse.jetty.runner.Runner"
+            args '--port', solrPort
+            args '--stop-port', stopSolrPort
+            args '--stop-key', stopSolrKey
+            args '--path', '/solr', configurations.solrWar.singleFile
+        }
     }
 
     task stopSolr(type: JavaProcess) {
@@ -384,18 +419,22 @@ project(':jportal_webapp') {
     }
 
     task runJetty(type: JavaProcess) {
-        systemProperties.put("MCR.AppName", "jportal")
-        systemProperties.put("URN.log", "$appPath/urnlog")
-        classpath configurations.jetty, configurations.h2db
+        doFirst {
+            systemProperties.put("MCR.Home", mcrHome)
+            systemProperties.put("MCR.AppName", "jportal")
+            systemProperties.put("URN.log", "$appPath/urnlog")
+            classpath configurations.jetty, configurations.h2db
 
-        jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-        jvmArgs '-Xmx2048m'
+            jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+            jvmArgs '-Xmx2048m'
 
-        main "org.eclipse.jetty.runner.Runner"
-        args '--config', "$project.projectDir/config/jetty/jetty-config.xml"
-        args '--stop-port', jettyStopPort
-        args '--stop-key', jettyStopKey
-        args '--path', '/jportal', war.archivePath
+            main "org.eclipse.jetty.runner.Runner"
+            args '--config', "$project.projectDir/config/jetty/jetty-config.xml"
+            args '--stop-port', jettyStopPort
+            args '--stop-key', jettyStopKey
+            args '--path', '/jportal', war.archivePath
+            args '--path', '/mets-printer', configurations.printer.singleFile
+        }
     }
 
     task stopJetty(type: JavaProcess) {
@@ -420,6 +459,39 @@ project(':jportal_webapp') {
     }
 }
 
+class WebTestLifecycleListener implements TaskExecutionListener {
+
+    def servers = [H2DB: 'TCP server running', Solr: 'registerSearcher', Jetty: 'Server:main: Started']
+
+    @Override
+    void beforeExecute(Task task) {
+        if (task.name == 'webTests' || task.name == 'webTestsApp') {
+            def testMCRHome = "${task.project.buildDir}/mcrHome"
+            task.project.mcrHome = testMCRHome
+            task.project.appPath = "${testMCRHome}/${task.project.appName}"
+
+            task.project.'deleteAppPath'.execute()
+            task.project.'configApp'.execute()
+            task.project.'configWebTests'.execute()
+            servers.each { serverName, forMsg ->
+                println "Run $serverName"
+                task.project.tasks."run$serverName".ready forMsg
+                task.project.tasks."run$serverName".execute()
+            }
+        }
+    }
+
+    @Override
+    void afterExecute(Task task, TaskState taskState) {
+        if (task.name == 'webTests') {
+            servers.reverseEach { serverName, forMsg ->
+                println "Stop $serverName"
+                task.project.tasks."stop$serverName".execute()
+            }
+        }
+    }
+}
+
 class JavaProcess extends DefaultTask {
     def cmd = ["java", "-cp"]
     def jvmArgs = []
@@ -427,6 +499,7 @@ class JavaProcess extends DefaultTask {
     def args = []
     def main = null
     def wait = false
+    String ready
 
     def systemProperties = [:]
 
@@ -446,6 +519,10 @@ class JavaProcess extends DefaultTask {
         fCol.each { f ->
             classpath.add(f.asPath)
         }
+    }
+
+    def classpath(File... path) {
+        classpath.addAll(path)
     }
 
     def main(name) {
@@ -469,29 +546,37 @@ class JavaProcess extends DefaultTask {
         }
         cmd.add(main)
         cmd.addAll(args)
-        println cmd.join(' ')
         def processBuilder = new ProcessBuilder(cmd)
 
-        processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT)
-        processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
-        def start = processBuilder.start()
+        if (ready == null) {
+            processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT)
+            processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
+        } else {
+            processBuilder.redirectErrorStream(true)
+        }
+
+        Process process = processBuilder.start()
+
+
+        if (ready != null) {
+            InputStream stdout = process.getInputStream()
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stdout))
+
+            def line
+            while ((line = reader.readLine()) != null) {
+                println line
+                if (line.contains(ready)) {
+                    println "$main is ready"
+                    break;
+                }
+            }
+            process.consumeProcessOutput(System.out, System.err)
+        }
 
         if (wait) {
-            start.waitForProcessOutput(System.out, System.err)
+            process.waitForProcessOutput(System.out, System.err)
         }
     }
-}
-
-def getAgentOp(resourcePaths) {
-    def agentOp
-    for (path in resourcePaths) {
-        if (agentOp == null) {
-            agentOp = path.toString()
-        } else {
-            agentOp = agentOp + "," + path
-        }
-    }
-    return agentOp;
 }
 
 configurations.all {

@@ -1,9 +1,6 @@
 package fsu.jportal.handler.it;
 
 import fsu.jportal.handler.MCRInitHandler;
-import org.mycore.common.events.MCRStartupHandler;
-
-import javax.servlet.ServletContext;
 
 /**
  * Created by chi on 09.11.15.
@@ -17,7 +14,7 @@ public class TestDataHandler extends MCRInitHandler {
 
     @Override
     public int getPriority() {
-        return 0;
+        return -10;
     }
 
     @Override
