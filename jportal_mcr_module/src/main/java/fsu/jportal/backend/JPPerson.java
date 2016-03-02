@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -23,6 +25,10 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 public class JPPerson extends JPLegalEntity {
 
     public static String TYPE = "person";
+
+    public static enum Sex {
+        male, female, unknown
+    }
 
     public JPPerson() {
         super();
@@ -197,10 +203,159 @@ public class JPPerson extends JPLegalEntity {
         return metadataStreamNotInherited("def.alternative", MCRMetaXML.class).collect(Collectors.toList());
     }
 
+    /**
+     * Sets the sex for this person.
+     * 
+     * @param sex
+     */
+    public void setGender(Sex sex) {
+        if (sex == null) {
+            object.getMetadata().removeMetadataElement("def.gender");
+            return;
+        }
+        MCRMetaElement defGender = new MCRMetaElement(MCRMetaClassification.class, "def.gender", true, true, null);
+        defGender.addMetaObject(
+            new MCRMetaClassification("gender", 0, null, new MCRCategoryID("urmel_class_00000001", sex.name())));
+        object.getMetadata().setMetadataElement(defGender);
+    }
+
+    /**
+     * Returns the sex of this person.
+     * 
+     * @return null if no sex is specified
+     */
+    public Optional<Sex> getGender() {
+        return metadataStreamNotInherited("def.gender", MCRMetaClassification.class)
+            .map(MCRMetaClassification::getCategId).map(categ -> Sex.valueOf(categ)).findFirst();
+    }
+
+    /**
+     * Adds a new role.
+     * 
+     * @param role the role to add
+     */
+    public void addRole(String role) {
+        addText("def.role", "role", role, null, true, true);
+    }
+
+    /**
+     * A list of roles. Changes on the list have no
+     * effect on the mycore object.
+     * 
+     * @return a copied list of roles.
+     */
+    public List<String> getRoles() {
+        return listText("def.role", null);
+    }
+
+    /**
+     * Sets the place of birth for this person.
+     * 
+     * @param placeOfBirth the place as string
+     */
+    public void setPlaceOfBirth(String placeOfBirth) {
+        setText("def.placeOfBirth", "placeOfBirth", placeOfBirth, null, true, true);
+    }
+
+    /**
+     * Returns the place of birth for this person.
+     * 
+     * @return an optional containing the place of birth
+     */
+    public Optional<String> getPlaceOfBirth() {
+        return getText("def.placeOfBirth", null);
+    }
+
+    /**
+     * Sets the place of death for this person.
+     * 
+     * @param placeOfDeath the place as string
+     */
+    public void setPlaceOfDeath(String placeOfDeath) {
+        setText("def.placeOfDeath", "placeOfDeath", placeOfDeath, null, true, true);
+    }
+
+    /**
+     * Returns the place of death for this person.
+     * 
+     * @return an optional containing the place of death
+     */
+    public Optional<String> getPlaceOfDeath() {
+        return getText("def.placeOfDeath", null);
+    }
+
+    /**
+     * Sets the place of death for this person.
+     * 
+     * @param placeOfDeath the place as string
+     */
+    public void addPlaceOfActivity(String placeOfActivity) {
+        addText("def.placeOfActivity", "placeOfActivity", placeOfActivity, null, true, true);
+    }
+
+    /**
+     * A list of place of activities. Changes on the list have no
+     * effect on the mycore object.
+     * 
+     * @return a copied list of place of activities.
+     */
+    public List<String> listPlaceOfActivities() {
+        return listText("def.placeOfActivity", null);
+    }
+
+    /**
+     * Sets the date of birth. The date should be in the format of
+     * YYYY-MM-DD or YYYY-MM or just YYYY.
+     * 
+     * @param dateOfBirth the date of birth to set
+     */
+    public void setDateOfBirth(String dateOfBirth) {
+        if (dateOfBirth == null) {
+            object.getMetadata().removeMetadataElement("def.dateOfBirth");
+            return;
+        }
+        MCRMetaElement metaElement = new MCRMetaElement(MCRMetaISO8601Date.class, "def.dateOfBirth", true, true, null);
+        metaElement.addMetaObject(buildISODate("dateOfBirth", dateOfBirth, null));
+        object.getMetadata().setMetadataElement(metaElement);
+    }
+
+    /**
+     * Returns the date of birth as {@link MCRMetaISO8601Date}.
+     * 
+     * @return date as mycore meta interface
+     */
+    public Optional<MCRMetaISO8601Date> getDateOfBirth() {
+        return metadataStreamNotInherited("def.dateOfBirth", MCRMetaISO8601Date.class).findFirst();
+    }
+
+    /**
+     * Sets the date of death. The date should be in the format of
+     * YYYY-MM-DD or YYYY-MM or just YYYY.
+     * 
+     * @param dateOfDeath the date of death to set
+     */
+    public void setDateOfDeath(String dateOfDeath) {
+        if (dateOfDeath == null) {
+            object.getMetadata().removeMetadataElement("def.dateOfDeath");
+            return;
+        }
+        MCRMetaElement metaElement = new MCRMetaElement(MCRMetaISO8601Date.class, "def.dateOfDeath", true, true, null);
+        metaElement.addMetaObject(buildISODate("dateOfDeath", dateOfDeath, null));
+        object.getMetadata().setMetadataElement(metaElement);
+    }
+
+    /**
+     * Returns the date of birth as {@link MCRMetaISO8601Date}.
+     * 
+     * @return date as mycore meta interface
+     */
+    public Optional<MCRMetaISO8601Date> getDateOfDeath() {
+        return metadataStreamNotInherited("def.dateOfDeath", MCRMetaISO8601Date.class).findFirst();
+    }
+
     @Override
     public Optional<String> getId(String type) {
-        return metadataStreamNotInherited("def.identifier", MCRMetaLangText.class).filter(t -> t.getType().equals(type))
-            .map(MCRMetaLangText::getText).findFirst();
+        return getText("def.identifier", type);
     }
 
     @Override

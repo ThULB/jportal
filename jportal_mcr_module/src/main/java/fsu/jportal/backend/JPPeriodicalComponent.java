@@ -140,26 +140,11 @@ public abstract class JPPeriodicalComponent extends JPBaseComponent {
         }
         MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", true, false, null);
         String fromType = until == null ? DateType.published.name() : DateType.published_from.name();
-        dates.addMetaObject(buildISODate(from, fromType));
+        dates.addMetaObject(buildISODate("date", from, fromType));
         if (until != null) {
-            dates.addMetaObject(buildISODate(until, DateType.published_until.name()));
+            dates.addMetaObject(buildISODate("date", until, DateType.published_until.name()));
         }
         object.getMetadata().setMetadataElement(dates);
-    }
-
-    /**
-     * Builds an <code>MCRMetaISO8601Date</code> based on the date and a type.
-     * 
-     * @param dateString the date, should be in form of YYYY-MM-DD, YYYY-MM or YYYY.
-     * @param type the type of the date (e.g. published)
-     * @return an {@link MCRMetaISO8601Date}
-     */
-    protected MCRMetaISO8601Date buildISODate(String dateString, String type) {
-        MCRMetaISO8601Date isoDate = new MCRMetaISO8601Date();
-        isoDate.setSubTag("date");
-        isoDate.setType(type);
-        isoDate.setDate(dateString);
-        return isoDate;
     }
 
     /**

@@ -78,9 +78,9 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
         MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", true, false, null);
         String fromType = until == null ? RecensionDateType.published_Original.name()
             : RecensionDateType.published_Original_From.name();
-        dates.addMetaObject(buildISODate(from, fromType));
+        dates.addMetaObject(buildISODate("date", from, fromType));
         if (until != null) {
-            dates.addMetaObject(buildISODate(until, RecensionDateType.published_Original_Till.name()));
+            dates.addMetaObject(buildISODate("date", until, RecensionDateType.published_Original_Till.name()));
         }
         object.getMetadata().setMetadataElement(dates);
     }
@@ -106,13 +106,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     }
 
     public void setSize(String size) {
-        if (size == null) {
-            object.getMetadata().removeMetadataElement("sizes");
-            return;
-        }
-        MCRMetaElement sizes = new MCRMetaElement(MCRMetaLangText.class, "sizes", false, false, null);
-        sizes.addMetaObject(new MCRMetaLangText("size", null, null, 0, "plain", size));
-        object.getMetadata().setMetadataElement(sizes);
+        setText("sizes", "size", size, null, false, false);
     }
 
     public void setSize(int size) {
@@ -132,12 +126,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     }
 
     public void setIdenti(String type, String id) {
-        MCRMetaElement identis = object.getMetadata().getMetadataElement("identis");
-        if (identis == null) {
-            identis = new MCRMetaElement(MCRMetaLangText.class, "identis", false, true, null);
-            object.getMetadata().setMetadataElement(identis);
-        }
-        identis.addMetaObject(new MCRMetaLangText("identi", null, type, 0, "plain", id));
+        setText("identis", "identi", id, type, false, true);
     }
 
     /**
@@ -147,14 +136,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
      * @param publicNote if its public or not
      */
     public void addNote(String note, boolean publicNote) {
-        MCRMetaElement notes = object.getMetadata().getMetadataElement("notes");
-        if (notes == null) {
-            notes = new MCRMetaElement(MCRMetaLangText.class, "notes", false, true, null);
-            object.getMetadata().setMetadataElement(notes);
-        }
-        MCRMetaLangText mcrNote = new MCRMetaLangText("note", null, (publicNote ? "annotation" : "internalNote"), 0,
-            "plain", note);
-        notes.addMetaObject(mcrNote);
+        addText("notes", "note", note, (publicNote ? "annotation" : "internalNote"), false, true);
     }
 
     /**
@@ -163,13 +145,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
      * @param keyword the keyword to add
      */
     public void addKeyword(String keyword) {
-        MCRMetaElement keywords = object.getMetadata().getMetadataElement("keywords");
-        if (keywords == null) {
-            keywords = new MCRMetaElement(MCRMetaLangText.class, "keywords", false, true, null);
-            object.getMetadata().setMetadataElement(keywords);
-        }
-        MCRMetaLangText mcrKeyword = new MCRMetaLangText("keyword", null, null, 0, "plain", keyword);
-        keywords.addMetaObject(mcrKeyword);
+        addText("keywords", "keyword", keyword, null, false, true);
     }
 
     /**

@@ -1,7 +1,5 @@
 package fsu.jportal.backend;
 
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -37,13 +35,7 @@ public class JPVolume extends JPContainer {
     }
 
     public void setHiddenPosition(String position) {
-        if (position == null) {
-            object.getMetadata().removeMetadataElement("hidden_positions");
-            return;
-        }
-        MCRMetaElement positions = new MCRMetaElement(MCRMetaLangText.class, "hidden_positions", false, false, null);
-        positions.addMetaObject(new MCRMetaLangText("hidden_position", null, null, 0, "plain", position));
-        object.getMetadata().setMetadataElement(positions);
+        setText("hidden_positions", "hidden_position", position, null, false, false);
     }
 
     public void setHiddenPosition(int position) {
@@ -51,13 +43,7 @@ public class JPVolume extends JPContainer {
     }
 
     public void addSubTitle(String title, String type) {
-        MCRMetaElement subtitles = object.getMetadata().getMetadataElement("subtitles");
-        if (subtitles == null) {
-            subtitles = new MCRMetaElement(MCRMetaLangText.class, "subtitles", false, true, null);
-            object.getMetadata().setMetadataElement(subtitles);
-        }
-        MCRMetaLangText subtitle = new MCRMetaLangText("subtitle", null, type, 0, "plain", title);
-        subtitles.addMetaObject(subtitle);
+        addText("subtitles", "subtitle", title, type, false, true);
     }
 
     /**

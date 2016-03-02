@@ -2,7 +2,6 @@ package fsu.jportal.backend;
 
 import java.util.Optional;
 
-import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -46,8 +45,7 @@ public abstract class JPLegalEntity extends JPBaseComponent {
      * @return logo if present
      */
     protected Optional<String> findLogo(String type) {
-        return metadataStreamNotInherited("logo", MCRMetaLangText.class).filter(m -> type.equals(m.getType()))
-            .map(MCRMetaLangText::getText).findFirst();
+        return getText("logo", type);
     }
 
     /**
