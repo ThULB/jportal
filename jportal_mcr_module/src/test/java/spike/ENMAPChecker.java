@@ -26,9 +26,9 @@ import org.mycore.mets.validator.validators.ValidationException;
 
 import fsu.jportal.mets.ConvertException;
 import fsu.jportal.mets.ENMAPConverter;
-import fsu.jportal.mets.LLZMetsConverter;
+import fsu.jportal.mets.JVBMetsConverter;
 
-public class LLZChecker {
+public class ENMAPChecker {
 
     public List<Path> listAbgleich(Path base, String endsWith) throws IOException {
         MetsFileVisitor visitor = new MetsFileVisitor(endsWith);
@@ -90,7 +90,7 @@ public class LLZChecker {
     }
 
     public static void main(String[] args) throws Exception {
-        LLZChecker llzChecker = new LLZChecker();
+        ENMAPChecker llzChecker = new ENMAPChecker();
         // check
 //        List<Path> listAbgleich = llzChecker.listAbgleich(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/"), "_mets_Abgleich.xml");
 //        for (Path p : listAbgleich) {
@@ -108,7 +108,7 @@ public class LLZChecker {
 //        }
 
         // convert
-        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/THULB_00010/1803/THULB_00010_1803_wfs2_mets_Final.xml"), new LLZMetsConverter());
+        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/JVB/1914/JVB_19140101_001_167758667/JVB_19140101_001_167758667_wfs1_mets_corrected.xml"), new JVBMetsConverter());
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         out.output(doc, new FileOutputStream(new File("/data/temp/mets.xml")));
         
