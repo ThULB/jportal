@@ -36,7 +36,8 @@ public class ENMAPChecker {
         return visitor.getPaths();
     }
 
-    public Document convert(Path metsFile, ENMAPConverter converter) throws JDOMException, IOException, ConvertException {
+    public Document convert(Path metsFile, ENMAPConverter converter)
+        throws JDOMException, IOException, ConvertException {
         SAXBuilder b = new SAXBuilder();
         Document document = b.build(metsFile.toFile());
         Mets mets = converter.convert(document);
@@ -77,7 +78,7 @@ public class ENMAPChecker {
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         return in;
     }
-    
+
     public static byte[] getByteArray(org.jdom2.Document jdom, Format format) throws IOException {
         ByteArrayOutputStream outb = new ByteArrayOutputStream();
         XMLOutputter outp = new XMLOutputter(format.setEncoding("UTF-8"));
@@ -92,26 +93,30 @@ public class ENMAPChecker {
     public static void main(String[] args) throws Exception {
         ENMAPChecker llzChecker = new ENMAPChecker();
         // check
-//        List<Path> listAbgleich = llzChecker.listAbgleich(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/"), "_mets_Abgleich.xml");
-//        for (Path p : listAbgleich) {
-//            try {
-//                Document doc = llzChecker.convert(p, new LLZMetsConverter());
-//                ByteArrayInputStream in = toByteStream(doc);
-//                List<ValidationException> excs = llzChecker.validate(in);
-//                for (Exception e : excs) {
-//                    out(p, e);
-//                }
-//            } catch (Exception exc) {
-//                out(p, exc);
-//                exc.printStackTrace();
-//            }
-//        }
+        //        List<Path> listAbgleich = llzChecker.listAbgleich(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/"), "_mets_Abgleich.xml");
+        //        for (Path p : listAbgleich) {
+        //            try {
+        //                Document doc = llzChecker.convert(p, new LLZMetsConverter());
+        //                ByteArrayInputStream in = toByteStream(doc);
+        //                List<ValidationException> excs = llzChecker.validate(in);
+        //                for (Exception e : excs) {
+        //                    out(p, e);
+        //                }
+        //            } catch (Exception exc) {
+        //                out(p, exc);
+        //                exc.printStackTrace();
+        //            }
+        //        }
 
         // convert
-        Document doc = llzChecker.convert(Paths.get("/data/Dokumente/OCR/innsbruck/JVB/1914/JVB_19140101_001_167758667/JVB_19140101_001_167758667_wfs1_mets_corrected.xml"), new JVBMetsConverter());
+        Path metsFile = Paths.get(
+            "/data/Dokumente/OCR/innsbruck/JVB/1914/JVB_19140101_001_167758667/JVB_19140101_001_167758667_wfs1_mets_corrected.xml");
+        JVBMetsConverter converter = new JVBMetsConverter();
+        converter.setPath(metsFile.getParent());
+        Document doc = llzChecker.convert(metsFile, converter);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         out.output(doc, new FileOutputStream(new File("/data/temp/mets.xml")));
-        
+
         ByteArrayInputStream in = toByteStream(doc);
         List<ValidationException> excs = llzChecker.validate(in);
         for (ValidationException e : excs) {
