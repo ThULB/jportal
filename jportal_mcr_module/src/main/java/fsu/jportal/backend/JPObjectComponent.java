@@ -5,6 +5,9 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -17,17 +20,20 @@ import java.util.stream.StreamSupport;
  * 
  * @author Matthias Eichner
  */
-public abstract class JPBaseComponent implements JPComponent {
+public abstract class JPObjectComponent implements JPComponent {
 
     protected MCRObject object;
+
+    protected List<JPDerivateComponent> derivates;
 
     /**
      * Creates a new <code>MCRObject</code> based on the {@link #getType()} method.
      */
-    public JPBaseComponent() {
+    public JPObjectComponent() {
         object = new MCRObject();
         object.setId(MCRObjectID.getNextFreeId("jportal_" + getType()));
         object.setSchema("datamodel-" + getType() + ".xsd");
+        derivates = new ArrayList<>();
     }
 
     /**
@@ -35,7 +41,7 @@ public abstract class JPBaseComponent implements JPComponent {
      * 
      * @param mcrId a mycore object id
      */
-    public JPBaseComponent(String mcrId) {
+    public JPObjectComponent(String mcrId) {
         this(MCRObjectID.getInstance(mcrId));
     }
 
@@ -44,7 +50,7 @@ public abstract class JPBaseComponent implements JPComponent {
      * 
      * @param mcrId a mycore object id
      */
-    public JPBaseComponent(MCRObjectID mcrId) {
+    public JPObjectComponent(MCRObjectID mcrId) {
         this(MCRMetadataManager.retrieveMCRObject(mcrId));
     }
 
@@ -53,11 +59,15 @@ public abstract class JPBaseComponent implements JPComponent {
      * 
      * @param mcrObject the mycore object
      */
-    public JPBaseComponent(MCRObject mcrObject) {
+    public JPObjectComponent(MCRObject mcrObject) {
         if (!mcrObject.getId().getTypeId().equals(getType())) {
             throw new IllegalArgumentException("Object " + mcrObject.getId() + " is not a " + getType());
         }
         this.object = mcrObject;
+        this.derivates = new ArrayList<>();
+        for (MCRMetaLinkID derivateLink : this.object.getStructure().getDerivates()) {
+            this.derivates.add(new JPDerivateComponent(derivateLink.getXLinkHref()));
+        }
     }
 
     @Override
@@ -66,8 +76,48 @@ public abstract class JPBaseComponent implements JPComponent {
     }
 
     @Override
-    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
         MCRMetadataManager.update(object);
+        for (JPDerivateComponent derivate : this.derivates) {
+            derivate.store();
+        }
+    }
+
+    /**
+     * Returns an unmodifiable list of derivates.
+     * 
+     * @return list of derivates
+     */
+    public List<JPDerivateComponent> getDerivates() {
+        return Collections.unmodifiableList(derivates);
+    }
+
+    /**
+     * Adds a new derivate to this component.
+     * 
+     * @param derivateComponent the derivate to add
+     */
+    public void addDerivate(JPDerivateComponent derivateComponent) {
+        // add to list
+        derivates.add(derivateComponent);
+
+        // link them
+        MCRMetaLinkID linkId = new MCRMetaLinkID();
+        linkId.setSubTag("linkmeta");
+        linkId.setReference(getObject().getId(), null, null);
+        derivateComponent.getObject().getDerivate().setLinkMeta(linkId);
+    }
+
+    /**
+     * Returns the first derivate or null if there is none.
+     * 
+     * @return the first derivate component
+     */
+    public JPDerivateComponent getFirstDerivate() {
+        if (derivates.size() > 0) {
+            return derivates.get(0);
+        }
+        return null;
     }
 
     /**

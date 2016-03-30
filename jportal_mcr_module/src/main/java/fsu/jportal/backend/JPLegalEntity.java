@@ -10,7 +10,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Matthias Eichner
  */
-public abstract class JPLegalEntity extends JPBaseComponent {
+public abstract class JPLegalEntity extends JPObjectComponent {
 
     public JPLegalEntity() {
         super();

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * 
  * @author Matthias Eichner
  */
-public abstract class JPPeriodicalComponent extends JPBaseComponent {
+public abstract class JPPeriodicalComponent extends JPObjectComponent {
 
     static Logger LOGGER = LogManager.getLogger(JPPeriodicalComponent.class);
 

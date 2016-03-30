@@ -8,6 +8,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,11 +21,11 @@ import java.util.Map;
  */
 public abstract class JPContainer extends JPPeriodicalComponent {
 
-    protected Map<MCRObjectID, JPComponent> childrenMap;
+    protected Map<MCRObjectID, JPObjectComponent> childrenMap;
 
     public JPContainer() {
         super();
-        childrenMap = new HashMap<MCRObjectID, JPComponent>();
+        childrenMap = new HashMap<MCRObjectID, JPObjectComponent>();
     }
 
     public JPContainer(String mcrId) {
@@ -37,7 +38,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
 
     public JPContainer(MCRObject mcrObject) {
         super(mcrObject);
-        childrenMap = new HashMap<MCRObjectID, JPComponent>();
+        childrenMap = new HashMap<MCRObjectID, JPObjectComponent>();
     }
 
     /**
@@ -45,7 +46,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      * 
      * @param child the child to add
      */
-    public void addChild(JPComponent child) {
+    public void addChild(JPObjectComponent child) {
         MCRMetaLinkID link = new MCRMetaLinkID("parent", getObject().getId(), null, getTitle());
         child.getObject().getStructure().setParent(link);
         childrenMap.put(child.getObject().getId(), child);
@@ -58,7 +59,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      * @param id
      */
     public void removeChild(MCRObjectID id) {
-        JPComponent component = childrenMap.remove(id);
+        JPObjectComponent component = childrenMap.remove(id);
         if (component != null) {
             component.getObject().getStructure().setParent((MCRMetaLinkID) null);
         }
@@ -74,7 +75,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     }
 
     @Override
-    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
         super.store();
         for (JPComponent component : childrenMap.values()) {
             component.store();
