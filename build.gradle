@@ -310,7 +310,7 @@ project(':jportal_webapp') {
 
     dependencies {
         jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
-        printer "de.uni-jena.thulb:urmel-printer:1.0-SNAPSHOT@war"
+        // printer "de.uni-jena.thulb:urmel-printer:1.0-SNAPSHOT@war"
         jettyStart "org.eclipse.jetty:jetty-start:$jettyVersion"
         h2db "com.h2database:h2:1.4.191"
         solrWar "org.mycore.solr:solr:$solrVersion@war"
@@ -433,7 +433,7 @@ project(':jportal_webapp') {
             args '--stop-port', jettyStopPort
             args '--stop-key', jettyStopKey
             args '--path', '/jportal', war.archivePath
-            args '--path', '/mets-printer', configurations.printer.singleFile
+            //args '--path', '/mets-printer', configurations.printer.singleFile
         }
     }
 
