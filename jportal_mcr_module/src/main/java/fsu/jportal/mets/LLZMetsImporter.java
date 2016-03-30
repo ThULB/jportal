@@ -28,6 +28,7 @@ import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.SmLink;
 
 import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPObjectComponent;
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.backend.JPVolume;
 
@@ -107,7 +108,7 @@ public class LLZMetsImporter {
         List<LogicalDiv> children = parentDiv.getChildren();
         for (LogicalDiv div : children) {
             String type = div.getType();
-            JPComponent jpComponent = null;
+            JPObjectComponent jpComponent = null;
             if (type.equals("issue")) {
                 jpComponent = new JPVolume();
                 jpComponent.getObject().setImportMode(true);
