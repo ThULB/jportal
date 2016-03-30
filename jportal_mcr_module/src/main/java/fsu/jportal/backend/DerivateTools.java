@@ -1,14 +1,22 @@
 package fsu.jportal.backend;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import fsu.jportal.gson.DerivateTypeAdapter;
-import fsu.jportal.gson.FileNodeWrapper;
-import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
-import fsu.jportal.mets.MetsTools;
-import fsu.jportal.urn.URNTools;
-import fsu.jportal.util.DerivateLinkUtil;
-import fsu.jportal.util.DerivatePath;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -20,7 +28,11 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.*;
+import org.mycore.common.MCRJSONManager;
+import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRUsageException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -29,6 +41,7 @@ import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectDerivate;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
@@ -40,13 +53,16 @@ import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
 import org.xml.sax.SAXException;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import fsu.jportal.gson.DerivateTypeAdapter;
+import fsu.jportal.gson.FileNodeWrapper;
+import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
+import fsu.jportal.mets.MetsTools;
+import fsu.jportal.urn.URNTools;
+import fsu.jportal.util.DerivateLinkUtil;
+import fsu.jportal.util.DerivatePath;
 
 public class DerivateTools {
     static Logger LOGGER = LogManager.getLogger(DerivateTools.class);
@@ -596,5 +612,59 @@ public class DerivateTools {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Updates the main file for the given derivate.
+     * <br /><b>
+     * This code is copied from {@link MCRUploadHandlerIFS}</b>
+     */
+    public static void updateMainFile(MCRDerivate derivate) throws IOException {
+        String mainFile = derivate.getDerivate().getInternals().getMainDoc();
+        MCRObjectDerivate der = derivate.getDerivate();
+        boolean hasNoMainFile = ((der.getInternals().getMainDoc() == null)
+            || (der.getInternals().getMainDoc().trim().isEmpty()));
+        if ((mainFile == null) || mainFile.trim().isEmpty() && hasNoMainFile) {
+            mainFile = getPathOfMainFile(MCRPath.getPath(derivate.getId().toString(), "/"));
+            LOGGER.debug("Setting main file to " + mainFile);
+            derivate.getDerivate().getInternals().setMainDoc(mainFile);
+            MCRMetadataManager.updateMCRDerivateXML(derivate);
+        }
+    }
+
+    private static String getPathOfMainFile(Path rootDir) throws IOException {
+        MainFileFinder mainFileFinder = new MainFileFinder();
+        Files.walkFileTree(rootDir, mainFileFinder);
+        Path mainFile = mainFileFinder.getMainFile();
+        return mainFile == null ? "" : mainFile.subpath(0, mainFile.getNameCount()).toString();
+    }
+
+    private static class MainFileFinder extends SimpleFileVisitor<Path> {
+        private Path mainFile;
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            if (mainFile != null) {
+                if (mainFile.getFileName().compareTo(file.getFileName()) > 0) {
+                    mainFile = file;
+                }
+            } else {
+                mainFile = file;
+            }
+            return super.visitFile(file, attrs);
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            FileVisitResult result = super.postVisitDirectory(dir, exc);
+            if (mainFile != null) {
+                return FileVisitResult.TERMINATE;
+            }
+            return result;
+        }
+
+        public Path getMainFile() {
+            return mainFile;
+        }
     }
 }
