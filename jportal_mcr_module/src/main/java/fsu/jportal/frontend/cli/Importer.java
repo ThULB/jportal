@@ -12,12 +12,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,7 +55,7 @@ import fsu.jportal.frontend.cli.io.LocalSystemSink;
 public class Importer {
 
     static Logger LOGGER = LogManager.getLogger(Importer.class);
-    
+
     static Map<Integer, String> MONTH_NAMES = ImmutableMap.<Integer, String> builder().put(1, "Januar")
         .put(2, "Februar").put(3, "März").put(4, "April").put(5, "Mai").put(6, "Juni").put(7, "Juli").put(8, "August")
         .put(9, "September").put(10, "Oktober").put(11, "November").put(12, "Dezember").build();
@@ -69,43 +71,49 @@ public class Importer {
      * Does the jvb import for a year.
      *
      * <pre>
-     * importJVB jportal_jpvolume_00000075 /data/temp/ThULB_TIFF.xml /data/temp/mnt/images
-     * {!join from=derivateID to=id}(+({!join from=id to=returnId}parent:jportal_jpvolume_00000004))
+     * importJVB jportal_jpvolume_00000001 /data/temp/ThULB_TIFF.xml /data/temp/mnt/images 175,178
      * </pre>
      * 
      * @param targetID the target volume
      * @param thulbTiffXmlPath path to the xml file
      * @param contentPath path on the file system to the images and the alto files
+     * @param missingNumbers comma separated list of numbers which are missing. those missing number
+     *        are created as volumes but have no content. If no numbers are missing use the 0 value.
      * 
      * @throws Exception darn! something went wrong
      */
-    @MCRCommand(syntax = "importJVB {0} {1} {2}", help = "importJVB {targetID} {path to ThULB_TIFF.xml} {path to the images and alto files}")
-    public static List<String> importJVB(String targetID, String thulbTiffXmlPath, String contentPath) throws Exception {
+    @MCRCommand(syntax = "importJVB {0} {1} {2} {3}", help = "importJVB {targetID} {path to ThULB_TIFF.xml} {path to the images and alto files} {missing numbers}")
+    public static List<String> importJVB(String targetID, String thulbTiffXmlPath, String contentPath,
+        String missingNumbers) throws Exception {
         MCRObjectID target = MCRObjectID.getInstance(targetID);
         if (!MCRMetadataManager.exists(target)) {
             throw new MCRException("Unable to find " + target);
         }
         LOGGER.info("Import JVB to " + targetID);
         Element yearElement = getYearElement(thulbTiffXmlPath);
-        
+
         AtomicInteger nr = new AtomicInteger();
         int month = 0;
         int day = 0;
 
+        List<Integer> missingNumberList = missingNumbers(missingNumbers);
         List<String> monthCommands = new ArrayList<>();
-        
-        XPathExpression<Element> issueXPath = XPathFactory.instance()
-            .compile("Issue", Filters.element());
+
+        XPathExpression<Element> issueXPath = XPathFactory.instance().compile("Issue", Filters.element());
         List<Element> issues = issueXPath.evaluate(yearElement);
-        for(Element issueElement : issues) {
+        for (Element issueElement : issues) {
+            while (missingNumberList.contains(nr.get())) {
+                nr.incrementAndGet();
+            }
             Integer issueMonth = Integer.valueOf(issueElement.getAttributeValue("month"));
             Integer issueDay = Integer.valueOf(issueElement.getAttributeValue("day"));
-            if(month != issueMonth) {
+            if (month != issueMonth) {
                 month = issueMonth;
                 day = issueDay;
-                String command = "importJVBMonth " + targetID + " " + thulbTiffXmlPath + " " + contentPath + " " + month + " " + nr.incrementAndGet();
+                String command = "importJVBMonth " + targetID + " " + thulbTiffXmlPath + " " + contentPath + " "
+                    + missingNumbers + " " + month + " " + nr.incrementAndGet();
                 monthCommands.add(command);
-            } else if(day != issueDay) {
+            } else if (day != issueDay) {
                 day = issueDay;
                 nr.incrementAndGet();
             }
@@ -114,19 +122,21 @@ public class Importer {
     }
 
     /**
-     * importJVBMonth jportal_jpvolume_00000003 /data/temp/ThULB_TIFF.xml /data/temp/mnt/images 1 1
+     * importJVBMonth jportal_jpvolume_00000003 /data/temp/ThULB_TIFF.xml /data/temp/mnt/images 175,178 1 1
      * 
      * @param targetID
      * @param thulbTiffXmlPath
      * @param contentPath
+     * @param missingNumbers comma separated list of numbers which are missing. those missing number
+     *        are created as volumes but have no content. If no numbers are missing use the 0 value.
      * @param monthIndex
      * @param issueNumber
      * @return
      * @throws Exception
      */
-    @MCRCommand(syntax = "importJVBMonth {0} {1} {2} {3} {4}", help = "importJVBMonth {targetID} {path to ThULB_TIFF.xml} {path to the images and alto files} {number of month [1-12]} {nr. of issue}")
-    public static List<String> importJVBMonth(String targetID, String thulbTiffXmlPath, String contentPath, int monthIndex, int issueNumber)
-        throws Exception {
+    @MCRCommand(syntax = "importJVBMonth {0} {1} {2} {3} {4} {5}", help = "importJVBMonth {targetID} {path to ThULB_TIFF.xml} {path to the images and alto files} {missing numbers} {number of month [1-12]} {nr. of issue}")
+    public static List<String> importJVBMonth(String targetID, String thulbTiffXmlPath, String contentPath,
+        String missingNumbers, int monthIndex, int issueNumber) throws Exception {
         // create month
         MCRObjectID target = MCRObjectID.getInstance(targetID);
         if (!MCRMetadataManager.exists(target)) {
@@ -139,6 +149,7 @@ public class Importer {
         month.store();
 
         // create day commands
+        List<Integer> missingNumberList = missingNumbers(missingNumbers);
         List<String> dayCommands = new ArrayList<>();
         Element yearElement = getYearElement(thulbTiffXmlPath);
         XPathExpression<Attribute> daysXPath = XPathFactory.instance()
@@ -146,6 +157,9 @@ public class Importer {
         List<Attribute> days = daysXPath.evaluate(yearElement);
         AtomicInteger nr = new AtomicInteger(issueNumber);
         days.stream().filter(distinctByKey(a -> a.getValue())).forEach(dayAttr -> {
+            while (missingNumberList.contains(nr.get())) {
+                nr.incrementAndGet();
+            }
             String command = "importJVBDay " + month.getObject().getId() + " " + thulbTiffXmlPath + " " + contentPath
                 + " " + monthIndex + " " + dayAttr.getValue() + " " + nr.getAndIncrement();
             dayCommands.add(command);
@@ -165,8 +179,8 @@ public class Importer {
      * @throws Exception
      */
     @MCRCommand(syntax = "importJVBDay {0} {1} {2} {3} {4} {5}", help = "importJVBDay {targetID} {path to ThULB_TIFF.xml} {path to the images and alto files} {number of month [1-12]} {number of day [1-31]} {nr. of issue}")
-    public static void importJVBDay(String targetID, String thulbTiffXmlPath, String contentPath,
-        int monthIndex, int dayOfMonth, int issueNumber) throws Exception {
+    public static void importJVBDay(String targetID, String thulbTiffXmlPath, String contentPath, int monthIndex,
+        int dayOfMonth, int issueNumber) throws Exception {
         // get the first issue
         Element yearElement = getYearElement(thulbTiffXmlPath);
         XPathExpression<Element> issuesXPath = XPathFactory.instance()
@@ -193,7 +207,7 @@ public class Importer {
             .compile("Issue[@month='" + monthIndex + "' and @day='" + dayOfMonth + "']/Image", Filters.element());
         List<Element> images = imagesXPath.evaluate(yearElement);
         Path rootPath = Paths.get(contentPath);
-        for(Element imageElement : images) {
+        for (Element imageElement : images) {
             String imageName = imageElement.getAttributeValue("name").replace(".TIF", ".tif");
             String windowsImagePath = imageElement.getAttributeValue("path").replace(".TIF", ".tif");
             String imageFileSizeString = imageElement.getAttributeValue("size");
@@ -203,15 +217,16 @@ public class Importer {
             Path relativeImagePath = convertWindowsPath(windowsImagePath, 5);
             // OCRbearbInnsbruck_1915_2/1915/JVB_19150413_085_167758667/alto/JVB_19150413_085_167758667_B1_001.xml
             String altoName = imageName.replace(".tif", ".xml");
-            Path relativeAltoPath = Paths.get("OCRbearbInnsbruck_1915" ,String.valueOf(yearIndex), issueDayValue, "alto", altoName);
+            Path relativeAltoPath = Paths.get("OCRbearbInnsbruck_1915", String.valueOf(yearIndex), issueDayValue,
+                "alto", altoName);
 
             // add to derivate
             Path absoluteImagePath = rootPath.resolve(relativeImagePath);
             Path absoluteAltoPath = rootPath.resolve(relativeAltoPath);
-            if(!Files.exists(absoluteImagePath) || Files.isDirectory(absoluteImagePath)) {
+            if (!Files.exists(absoluteImagePath) || Files.isDirectory(absoluteImagePath)) {
                 throw new FileNotFoundException(absoluteImagePath.toString() + " not found");
             }
-            if(!Files.exists(absoluteAltoPath) || Files.isDirectory(absoluteAltoPath)) {
+            if (!Files.exists(absoluteAltoPath) || Files.isDirectory(absoluteAltoPath)) {
                 throw new FileNotFoundException(absoluteAltoPath.toString() + " not found");
             }
             derivate.add(absoluteImagePath.toUri().toURL(), imageName, imageFileSize);
@@ -239,7 +254,7 @@ public class Importer {
         String[] pathParts = windowsPath.split("\\\\");
         int startIndex = pathParts.length - lastNumParts;
         Path path = Paths.get(pathParts[startIndex]);
-        for(++startIndex; startIndex < pathParts.length; startIndex++) {
+        for (++startIndex; startIndex < pathParts.length; startIndex++) {
             path = path.resolve(pathParts[startIndex]);
         }
         return path;
@@ -265,8 +280,19 @@ public class Importer {
      * @return
      */
     private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+    /**
+     * Converts a string of comma separated numbers to a list of integers.
+     * 
+     * @param missingNumbersString comma separated numbers
+     * @return list of those numbers
+     */
+    private static List<Integer> missingNumbers(String missingNumbersString) {
+        return Arrays.asList(missingNumbersString.split(",")).stream().map(Integer::valueOf)
+            .collect(Collectors.toList());
     }
 
 }
