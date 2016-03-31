@@ -3,7 +3,8 @@ package fsu.jportal.backend;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.mycore.access.MCRAccessException;
@@ -21,7 +22,7 @@ public class JPDerivateComponent implements JPComponent {
 
     protected MCRDerivate derivate;
 
-    protected Map<String, ContentInfo> newContentMap;
+    protected LinkedHashMap<String, ContentInfo> newContentMap;
 
     /**
      * Creates a new <code>MCRDerivate</code>.
@@ -38,7 +39,7 @@ public class JPDerivateComponent implements JPComponent {
         ifs.setSourcePath(null);
         derivate.getDerivate().setInternals(ifs);
 
-        this.newContentMap = new HashMap<>();
+        this.newContentMap = new LinkedHashMap<>();
     }
 
     /**
@@ -66,7 +67,7 @@ public class JPDerivateComponent implements JPComponent {
      */
     public JPDerivateComponent(MCRDerivate mcrDerivate) {
         this.derivate = mcrDerivate;
-        this.newContentMap = new HashMap<>();
+        this.newContentMap = new LinkedHashMap<>();
     }
 
     @Override
@@ -105,7 +106,14 @@ public class JPDerivateComponent implements JPComponent {
 
     @Override
     public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
+        // set main doc
+        Iterator<String> it = this.newContentMap.keySet().iterator();
+        if (it.hasNext()) {
+            this.derivate.getDerivate().getInternals().setMainDoc(it.next());
+        }
+        // update derivate
         MCRMetadataManager.update(this.derivate);
+        // upload files
         Uploader uploader = new Uploader(this.derivate);
         for (Map.Entry<String, ContentInfo> entry : this.newContentMap.entrySet()) {
             String path = entry.getKey();
@@ -114,7 +122,6 @@ public class JPDerivateComponent implements JPComponent {
                 uploader.upload(in, path, contentInfo.contentSize);
             }
         }
-        DerivateTools.updateMainFile(this.derivate);
     }
 
     private static class ContentInfo {
