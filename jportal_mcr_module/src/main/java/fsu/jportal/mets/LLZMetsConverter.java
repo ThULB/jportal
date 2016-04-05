@@ -2,7 +2,9 @@ package fsu.jportal.mets;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.Document;
 import org.jdom2.Element;
+import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 
 /**
@@ -15,6 +17,12 @@ public class LLZMetsConverter extends ENMAPConverter {
     private static Logger LOGGER = LogManager.getLogger(LLZMetsConverter.class);
     
     private String lastBibLabel;
+
+    @Override
+    public Mets convert(Document enmap) throws ConvertException {
+        ABBYYtoALTOConverter.convert(enmap);
+        return super.convert(enmap);
+    }
 
     @Override
     protected LogicalDiv getLogicalDiv(Element enmap, Element enmapDiv) {
