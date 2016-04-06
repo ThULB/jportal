@@ -1,5 +1,7 @@
 package fsu.jportal.backend;
 
+import java.util.Optional;
+
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -36,6 +38,24 @@ public class JPJournal extends JPContainer {
     @Override
     public String getNameOfTemplate() {
         return getText("hidden_templates", null).orElse(null);
+    }
+
+    /**
+     * Sets the note for this volume.
+     * 
+     * @param note note text
+     */
+    public void setNote(String note) {
+        setText("notes", "note", note, null, false, true);
+    }
+
+    /**
+     * Returns the note.
+     * 
+     * @return optional note
+     */
+    public Optional<String> getNote() {
+        return getText("notes", null);
     }
 
 }
