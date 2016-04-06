@@ -13,6 +13,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -28,6 +29,10 @@ public class JPPerson extends JPLegalEntity {
 
     public static enum Sex {
         male, female, unknown
+    }
+
+    public static enum NoteType {
+        visible, hidden
     }
 
     public JPPerson() {
@@ -351,6 +356,31 @@ public class JPPerson extends JPLegalEntity {
      */
     public Optional<MCRMetaISO8601Date> getDateOfDeath() {
         return metadataStreamNotInherited("def.dateOfDeath", MCRMetaISO8601Date.class).findFirst();
+    }
+
+    /**
+     * Sets a note for this person. To remove the note use null values.
+     * 
+     * @param note the note text
+     * @param type type of the note
+     */
+    public void setNote(String note, NoteType type) {
+        if (note == null) {
+            object.getMetadata().removeMetadataElement("def.note");
+            return;
+        }
+        MCRMetaElement metaElement = new MCRMetaElement(MCRMetaLangText.class, "def.note", false, true, null);
+        metaElement.addMetaObject(new MCRMetaLangText("note", null, type.name(), 0, "plain", note));
+        object.getMetadata().setMetadataElement(metaElement);
+    }
+
+    /**
+     * Returns the note.
+     * 
+     * @return optional of the note.
+     */
+    public Optional<MCRMetaLangText> getNote() {
+        return metadataStreamNotInherited("def.note", MCRMetaLangText.class).findFirst();
     }
 
     @Override
