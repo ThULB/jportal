@@ -119,7 +119,7 @@ project(':jportal_mcr_module') {
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
         compile 'org.mycore.mets:mets-model:0.9-SNAPSHOT'
         compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
-        compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
+        compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-20160405.093819-1751'
 
         // extern libs
         compile 'javax.servlet:javax.servlet-api:3.1.0'
