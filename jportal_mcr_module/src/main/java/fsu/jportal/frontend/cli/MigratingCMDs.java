@@ -15,16 +15,10 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
-import fsu.jportal.pref.JournalConfig;
-import fsu.jportal.resolver.JournalFilesResolver;
-import fsu.jportal.util.ImprintUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -37,8 +31,6 @@ import org.jdom2.transform.JDOMSource;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.backend.hibernate.MCRHIBConnection;
-import org.mycore.backend.hibernate.tables.MCRLINKHREF;
-import org.mycore.backend.hibernate.tables.MCRLINKHREFPK;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXSLTransformation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -46,12 +38,15 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
+import fsu.jportal.pref.JournalConfig;
+import fsu.jportal.resolver.JournalFilesResolver;
+
 @MCRCommandGroup(name = "JP Migrating Commands")
 public class MigratingCMDs {
     private static Logger LOGGER = LogManager.getLogger(MigratingCMDs.class);
 
     @MCRCommand(helpKey = "Set intro xml in journal properties.", syntax = "set intro prop")
-    public static void setIntroProp() throws JDOMException, IOException {
+    public static void setIntroProp() {
         List<String> jpjournalIDs = MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
         for (String jpjournalID : jpjournalIDs) {
             JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
@@ -69,7 +64,7 @@ public class MigratingCMDs {
     }
 
     @MCRCommand(helpKey = "Move intro xml from webapp into data folder.", syntax = "migrate intro xml")
-    public static void migrateIntroXML() throws JDOMException, IOException {
+    public static void migrateIntroXML() throws IOException {
         List<String> journalIDs = (List<String>) MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
         XPathExpression<Element> hiddenWebContextXpath =
                 XPathFactory.instance().compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext",
@@ -175,7 +170,7 @@ public class MigratingCMDs {
     }
 
     @MCRCommand(help = "Replace ':' in categID with '_'", syntax = "fix colone in categID")
-    public static void fixCategID() throws JDOMException, TransformerException {
+    public static void fixCategID() throws TransformerException {
         Session dbSession = MCRHIBConnection.instance().getSession();
         dbSession.createSQLQuery("update MCRCATEGORY set CATEGID=replace(categid,':','-') where CATEGID like '%:%'")
                  .executeUpdate();
@@ -219,20 +214,4 @@ public class MigratingCMDs {
         }
     }
 
-    @MCRCommand(help = "move imprint link out of DB", syntax = "migrate imprint")
-    public static void migrateImprint() {
-        Criteria criteria = MCRHIBConnection.instance().getSession().createCriteria(MCRLINKHREF.class);
-        List<MCRLINKHREFPK> resultList = criteria.add(Restrictions.eq("key.mcrtype", "imprint"))
-                                                 .setProjection(Projections.id()).list();
-        for (MCRLINKHREFPK mcrlinkhrefpk : resultList) {
-            String objectID = mcrlinkhrefpk.getMcrfrom();
-            String imprintName = mcrlinkhrefpk.getMcrto();
-            getJournalConf(objectID).setKey("imprint", imprintName);
-            LOGGER.info("Successfully migrating " + objectID + " with imprint " + imprintName);
-        }
-
-        if (resultList.size() == 0) {
-            LOGGER.info("No Imprint found in database.");
-        }
-    }
 }
