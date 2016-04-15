@@ -4,7 +4,6 @@ import mockit.Mock;
 import mockit.MockUp;
 import mockit.integration.junit4.JMockit;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mycore.common.config.MCRConfiguration;
@@ -13,23 +12,21 @@ import org.mycore.urn.services.MCRURN;
 
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by chi on 27.11.15.
  * @author Huu Chi Vu
  */
 @RunWith(JMockit.class)
-@Ignore
 public class URNProviderTest {
-
-    public static final String[] NS_IDENT = new String[] { "nbn", "de" };
 
     public static final String NISS = "urmel";
 
     MCRIURNProvider urmelURNProvider;
 
-    private String NS_SPEC;
+    private String urnUUID;
 
     @Before
     public void init() {
@@ -41,9 +38,9 @@ public class URNProviderTest {
         };
 
         urmelURNProvider = new UrmelURNProvider();
-        NS_SPEC = NISS + "-" + UUID.randomUUID().toString();
+        urnUUID = UUID.randomUUID().toString();
     }
-/*
+
     @Test
     public void testGenerateURN() throws Exception {
         MCRURN urmelurn = urmelURNProvider.generateURN();
@@ -63,29 +60,28 @@ public class URNProviderTest {
 
     }
 
-
     @Test
     public void testGenerateURNAmountBase() throws Exception {
-        MCRURN base = new MCRURN(NS_IDENT, NS_SPEC);
+        MCRURN base = MCRURN.create(NISS, urnUUID);
         MCRURN[] mcrurns = urmelURNProvider.generateURN(10, base);
         assertTrue(mcrurns.length == 10);
 
         int counter = 1;
         for (MCRURN mcrurn : mcrurns) {
-            assertURN(mcrurn, counter++, base.getNamespaceIdentfiersSpecificPart());
+            assertURN(mcrurn, counter++, base.getSubNamespaces());
         }
     }
 
     @Test
     public void testGenerateURNAmountBaseSetId() throws Exception {
-        MCRURN base = new MCRURN(NS_IDENT, NS_SPEC);
+        MCRURN base = MCRURN.create(NISS, urnUUID);
         String setId = "0004";
         MCRURN[] mcrurns = urmelURNProvider.generateURN(10, base, setId);
         assertTrue(mcrurns.length == 10);
 
         int counter = 1;
         for (MCRURN mcrurn : mcrurns) {
-            assertURN(mcrurn, counter++, base.getNamespaceIdentfiersSpecificPart(), setId);
+            assertURN(mcrurn, counter++, base.getSubNamespaces(), setId);
         }
     }
 
@@ -103,23 +99,22 @@ public class URNProviderTest {
 
     private void assertURN(MCRURN urmelurn, int counter, String baseNSIdSpec, String setId) {
         String urn = urmelurn.toString();
-        assertEquals("Wrong Schema for urn \"" + urn + "\": ", "urn", urmelurn.getSchema());
-        assertArrayEquals("Wrong name space identifiers for urn \" " + urn + " \": ", NS_IDENT, urmelurn.getNamespaceIdentfiers());
-        String namespaceIdentfiersSpecificPart = urmelurn.getNamespaceIdentfiersSpecificPart();
+        String subNamespaces = urmelurn.getSubNamespaces();
 
+        String namespaceSpecificString = urmelurn.getNamespaceSpecificString();
         if (baseNSIdSpec != null) {
-            String errMsg = errMsgShouldStart(baseNSIdSpec, namespaceIdentfiersSpecificPart);
-            assertTrue(errMsg, namespaceIdentfiersSpecificPart.startsWith(baseNSIdSpec));
+            String errMsg = errMsgShouldStart(baseNSIdSpec, subNamespaces);
+            assertTrue(errMsg, subNamespaces.equals(baseNSIdSpec));
         } else {
             assertTrue("Specific part for urn \"" + urn + "\" should start with '" + NISS + "': ",
-                    namespaceIdentfiersSpecificPart.startsWith(NISS));
-            String uuid = namespaceIdentfiersSpecificPart.substring(6, 42);
+                       NISS.equals(subNamespaces));
+            String uuid = namespaceSpecificString.substring(0, 36);
             UUID.fromString(uuid);
         }
 
-        if (namespaceIdentfiersSpecificPart.length() >= 43) {
-            String remainder = namespaceIdentfiersSpecificPart.substring(43);
-            if(setId != null){
+        if (namespaceSpecificString.length() >= 37) {
+            String remainder = namespaceSpecificString.substring(37);
+            if (setId != null) {
                 assertTrue(errMsgShouldStart(setId, remainder), remainder.startsWith(setId));
                 remainder = remainder.replaceAll(setId + "-", "");
             }
@@ -133,6 +128,5 @@ public class URNProviderTest {
         return "Specific part should start with '" + expected + "' but was: '"
                 + actual + "'";
     }
-*/
 
 }
