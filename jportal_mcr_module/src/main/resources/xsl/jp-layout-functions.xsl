@@ -3,11 +3,13 @@
   Contains jportal specific layout functions.
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:math="xalan://java.lang.Math" exclude-result-prefixes="xalan math">
+  xmlns:math="xalan://java.lang.Math" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xalan math jpxml">
 
   <xsl:param name="MCR.Piwik.baseurl" />
   <xsl:param name="MCR.Piwik.enable" />
   <xsl:param name="MCR.Piwik.id" select="'1'" />
+
+  <xsl:variable name="languages" select="jpxml:getLanguages()/languages" />
 
   <xsl:template mode="jp.printListEntry" match="*">
     <li>
@@ -28,16 +30,14 @@
 
   <xsl:template name="jp.printClass">
     <xsl:param name="nodes" />
-    <xsl:param name="languages" />
     <xsl:param name="lang" />
-    
+
     <xsl:for-each select="$nodes">
       <xsl:variable name="label" select="./label[lang($lang)]/@text" />
       <xsl:choose>
         <xsl:when test="string-length($label) = 0">
           <xsl:call-template name="jp.printClass.fallback">
             <xsl:with-param name="node" select="." />
-            <xsl:with-param name="languages" select="$languages" />
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -50,7 +50,7 @@
   <xsl:template name="jp.printClass.fallback">
     <xsl:param name="node" />
     <xsl:param name="pos" select="1" />
-    <xsl:param name="languages" />
+
     <xsl:variable name="classlabel" select="$node/label[lang($languages/lang[$pos]/text())]/@text" />
  	<xsl:choose>
       <xsl:when test="string-length($classlabel) != 0">
@@ -60,7 +60,6 @@
         <xsl:call-template name="jp.printClass.fallback">
           <xsl:with-param name="node" select="$node" />
           <xsl:with-param name="pos" select="$pos + 1" />
-          <xsl:with-param name="languages" select="$languages" />
         </xsl:call-template>
       </xsl:when>
     </xsl:choose>
