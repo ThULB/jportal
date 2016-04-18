@@ -65,7 +65,7 @@
     <xsl:variable name="q" select="encoder:encode(concat('+parent:', $parentID, ' +objectType:jparticle'))" />
     <xsl:variable name="fq">
       <xsl:choose>
-        <xsl:when test="$rubric = 'nicht zugewiesen'">
+        <xsl:when test="$rubric = 'Artikel'">
           <xsl:value-of select="encoder:encode('-rubricText:*')"/>
         </xsl:when>
         <xsl:otherwise>
@@ -242,21 +242,17 @@
                     </xsl:choose>
                   </xsl:if>
                 </xsl:for-each>
-                <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
                   <xsl:variable name="noCat" select="document(concat('solr:q=', $q, '&amp;rows=99999&amp;fq=', '-rubricText', ':*'))" />
                   <xsl:if test="$noCat/response/result/@numFound &gt; 0">
                     <xsl:call-template name="jp.printContentList.noCat">
                       <xsl:with-param name="id" select="$id"/>
                     </xsl:call-template>
-                  </xsl:if>
                 </xsl:if>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
                   <xsl:call-template name="jp.printContentList.noCat">
                     <xsl:with-param name="id" select="$id"/>
                   </xsl:call-template>
-                </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
           </div>
@@ -268,14 +264,14 @@
   <xsl:template name="jp.printContentList.noCat">
     <xsl:param name="id"/>
     <xsl:choose>
-      <xsl:when test="$rubric = 'nicht zugewiesen'">
-        <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=nicht zugewiesen">
-          <xsl:value-of select="'nicht zugewiesen'" />
+      <xsl:when test="$rubric = 'Artikel'">
+        <a class="list-group-item active-list-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=Artikel">
+          <xsl:value-of select="'Artikel'" />
         </a>
       </xsl:when>
       <xsl:otherwise>
-        <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=nicht zugewiesen">
-          <xsl:value-of select="'nicht zugewiesen'" />
+        <a class="list-group-item" href="{$WebApplicationBaseURL}receive/{$id}?XSL.rubric=Artikel">
+          <xsl:value-of select="'Artikel'" />
         </a>
       </xsl:otherwise>
     </xsl:choose>
