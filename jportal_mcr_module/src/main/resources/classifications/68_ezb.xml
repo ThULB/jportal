@@ -84,61 +84,49 @@
         </category>
         <category ID="BUCHWESEN">
             <label xml:lang="de" text="Informations-, Buch- und Bibliothekswesen, Schrift- und Handschriftenkunde" />
-            <label xml:lang="de" text="Informations-, Buch- und Bibliothekswesen, Schrift- und Handschriftenkunde" />
             <label xml:lang="pl" text="Nauka o informacji, księgoznawstwo, bibliotekarstwo, grafologia" />
         </category>
         <category ID="PHILO">
-            <label xml:lang="de" text="Klassische Philologie. Byzantinistik. Mittellateinische und neugriechische Philologie. Neulatein" />
             <label xml:lang="de" text="Klassische Philologie. Byzantinistik. Mittellateinische und neugriechische Philologie. Neulatein" />
             <label xml:lang="pl" text="Filologia klasyczna. Bizantynistyka. Filologia średniołacińska i nowogrecka. Łacina nowożytna" />
         </category>
         <category ID="KUNST">
             <label xml:lang="de" text="Kunstgeschichte" />
-            <label xml:lang="de" text="Kunstgeschichte" />
             <label xml:lang="pl" text="Historia sztuki" />
         </category>
         <category ID="LANDWIRT">
-            <label xml:lang="de" text="Land- und Forstwirtschaft. Gartenbau. Fischereiwirtschaft. Hauswirtschaft. Ernährung" />
             <label xml:lang="de" text="Land- und Forstwirtschaft. Gartenbau. Fischereiwirtschaft. Hauswirtschaft. Ernährung" />
             <label xml:lang="pl" text="Rolnictwo, Leśnictwo, Ogrodnictwo, Rybołówictwo, Gospodarstwo domowe, Dietetyka" />
         </category>
         <category ID="MASCHINEN">
             <label xml:lang="de" text="Maschinenwesen, Werkstoffwissenschaften, Fertigungstechnik, Bergbau u. Hüttenwesen, Verkehrstechnik, Feinwerktechnik" />
-            <label xml:lang="de" text="Maschinenwesen, Werkstoffwissenschaften, Fertigungstechnik, Bergbau u. Hüttenwesen, Verkehrstechnik, Feinwerktechnik" />
             <label xml:lang="pl" text="Budowa maszyn, Nauka o materiałach, Technika produkcyjna, Górnictwo, Inżynierstwo ruchu drogowego" />
         </category>
         <category ID="MATHE">
-            <label xml:lang="de" text="Mathematik" />
             <label xml:lang="de" text="Mathematik" />
             <label xml:lang="pl" text="Matematyka" />
         </category>
         <category ID="MEDIEN">
             <label xml:lang="de" text="Medien- und Kommunikationswissenschaften, Publizistik" />
-            <label xml:lang="de" text="Medien- und Kommunikationswissenschaften, Publizistik" />
             <label xml:lang="pl" text="Medioznawstwo, nauka o komunikowaniu się, publicystyka" />
         </category>
         <category ID="MED">
-            <label xml:lang="de" text="Medizin" />
             <label xml:lang="de" text="Medizin" />
             <label xml:lang="pl" text="Medycyna" />
         </category>
         <category ID="MUSIK">
             <label xml:lang="de" text="Musikwissenschaft" />
-            <label xml:lang="de" text="Musikwissenschaft" />
             <label xml:lang="pl" text="Muzykologia" />
         </category>
         <category ID="NATUR">
-            <label xml:lang="de" text="Naturwissenschaft allgemein" />
             <label xml:lang="de" text="Naturwissenschaft allgemein" />
             <label xml:lang="pl" text="Nauki przyrodnicze" />
         </category>
         <category ID="PÄD">
             <label xml:lang="de" text="Pädagogik" />
-            <label xml:lang="de" text="Pädagogik" />
             <label xml:lang="pl" text="Pedagogika" />
         </category>
         <category ID="PHI">
-            <label xml:lang="de" text="Philosophie" />
             <label xml:lang="de" text="Philosophie" />
             <label xml:lang="pl" text="Filozofia" />
         </category>
@@ -149,61 +137,50 @@
         </category>
         <category ID="POLIT">
             <label xml:lang="de" text="Politologie" />
-            <label xml:lang="de" text="Politologie" />
-            <label xml:lang="de" text="Politologia" />
+            <label xml:lang="pl" text="Politologia" />
         </category>
         <category ID="PSYCH">
-            <label xml:lang="de" text="Psychologie" />
             <label xml:lang="de" text="Psychologie" />
             <label xml:lang="pl" text="Psychologia" />
         </category>
         <category ID="RECHT">
             <label xml:lang="de" text="Rechtswissenschaft" />
-            <label xml:lang="de" text="Rechtswissenschaft" />
             <label xml:lang="pl" text="Prawoznawstwo" />
         </category>
         <category ID="ROMAN">
-            <label xml:lang="de" text="Romanistik" />
             <label xml:lang="de" text="Romanistik" />
             <label xml:lang="pl" text="Romanistyka" />
         </category>
         <category ID="SLAV">
             <label xml:lang="de" text="Slavistik" />
-            <label xml:lang="de" text="Slavistik" />
             <label xml:lang="pl" text="Slawistyka" />
         </category>
         <category ID="SOZIO">
-            <label xml:lang="de" text="Soziologie" />
             <label xml:lang="de" text="Soziologie" />
             <label xml:lang="pl" text="Socjologia" />
         </category>
         <category ID="SPORT">
             <label xml:lang="de" text="Sport" />
-            <label xml:lang="de" text="Sport" />
             <label xml:lang="pl" text="Wychowanie fizyczne" />
         </category>
         <category ID="TECH">
             <label xml:lang="de" text="Technik allgemein" />
-            <label xml:lang="de" text="Technology in general" />
+            <label xml:lang="en" text="Technology in general" />
             <label xml:lang="pl" text="Technika ogólnie" />
         </category>
         <category ID="THEO">
-            <label xml:lang="de" text="Theologie und Religionswissenschaft" />
             <label xml:lang="de" text="Theologie und Religionswissenschaft" />
             <label xml:lang="pl" text="Teologia i religioznawstwo" />
         </category>
         <category ID="VERF">
             <label xml:lang="de" text="Verfahrenstechnik, Biotechnologie, Lebensmitteltechnologie" />
-            <label xml:lang="de" text="Verfahrenstechnik, Biotechnologie, Lebensmitteltechnologie" />
             <label xml:lang="pl" text="Technika procesów przetwórczych, biotechnologia, technologia żywności" />
         </category>
         <category ID="WIWI">
             <label xml:lang="de" text="Wirtschaftswissenschaften" />
-            <label xml:lang="de" text="Wirtschaftswissenschaften" />
             <label xml:lang="pl" text="Nauki ekonomiczne" />
         </category>
         <category ID="WIKUNDE">
-            <label xml:lang="de" text="Wissenschaftskunde, Forschung, Hochschul-. Museumswesen" />
             <label xml:lang="de" text="Wissenschaftskunde, Forschung, Hochschul-. Museumswesen" />
             <label xml:lang="pl" text="Ekonomia, Badania naukowe, Szkolnictwo wyższe, Muzealnictwo" />
         </category>

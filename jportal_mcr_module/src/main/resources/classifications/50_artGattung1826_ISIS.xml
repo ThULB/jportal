@@ -86,8 +86,8 @@
         </category>
         <category ID="00017000">
             <label xml:lang="de" text="II.s) Gewerbe, Ökonomie und Technologie"/>
-            <label xml:lang="de" text="II.s) industrial business, economy and technology"/>
-            <label xml:lang="de" text="II.s) działalność gospodarcza, ekonomia i technologia"/>
+            <label xml:lang="en" text="II.s) industrial business, economy and technology"/>
+            <label xml:lang="pl" text="II.s) działalność gospodarcza, ekonomia i technologia"/>
         </category>
     </categories>
 </mycoreclass>
