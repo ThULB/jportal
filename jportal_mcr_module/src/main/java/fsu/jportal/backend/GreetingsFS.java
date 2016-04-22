@@ -35,10 +35,10 @@ public class GreetingsFS {
         this.journalID = journalID;
         JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
         GREETINGS_DIR = journalFilesResolver.getJournalFileFolder(journalID).toPath();
-        if(!Files.exists(GREETINGS_DIR)) {
+        if (!Files.exists(GREETINGS_DIR)) {
             try {
                 Files.createDirectories(GREETINGS_DIR);
-            } catch(Exception exc) {
+            } catch (Exception exc) {
                 LOGGER.error("while creating import directory " + GREETINGS_DIR, exc);
             }
         }
@@ -49,7 +49,6 @@ public class GreetingsFS {
         try (BufferedWriter writer = Files.newBufferedWriter(GREETINGS_FILEPATH, Charsets.UTF_8)) {
             writer.write(content.asString());
         }
-        
     }
 
     public boolean exists() {
@@ -78,7 +77,7 @@ public class GreetingsFS {
     }
 
     public void delete() throws IOException {
-        if (exists()){
+        if (exists()) {
             Files.delete(GREETINGS_FILEPATH);
         }
     }
