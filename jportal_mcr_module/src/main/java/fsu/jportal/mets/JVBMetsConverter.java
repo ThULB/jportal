@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -140,8 +142,8 @@ public class JVBMetsConverter extends ENMAPConverter {
             ArrayList<Block> blockList = new ArrayList<>(entry.getValue());
             blockList.sort(new Comparator<Block>() {
                 public int compare(Block block1, Block block2) {
-                    String num1 = block1.id.replace(altoBlockNumberRegex(), "");
-                    String num2 = block2.id.replace(altoBlockNumberRegex(), "");
+                    String num1 = block1.id.replaceAll(altoBlockNumberRegex(), "");
+                    String num2 = block2.id.replaceAll(altoBlockNumberRegex(), "");
                     return Integer.compare(Integer.valueOf(num1), Integer.valueOf(num2));
                 }
             });
@@ -176,13 +178,21 @@ public class JVBMetsConverter extends ENMAPConverter {
      * @return true if its consecutive
      */
     protected boolean isConsecutive(Block base, Block next) {
-        String baseNum = base.id.replace(altoBlockNumberRegex(), "");
-        String nextNum = next.id.replace(altoBlockNumberRegex(), "");
-        return Integer.valueOf(nextNum) - Integer.valueOf(baseNum) == 1;
+        Pattern pattern = Pattern.compile("(.*?)_(\\d*)");
+        Matcher baseMatcher = pattern.matcher(base.id);
+        Matcher nextMatcher = pattern.matcher(next.id);
+        if (baseMatcher.find() && nextMatcher.find()) {
+            String basePrefix = baseMatcher.group(1);
+            String baseNumber = baseMatcher.group(2);
+            String nextPrefix = nextMatcher.group(1);
+            String nextNumber = nextMatcher.group(2);
+            return basePrefix.equals(nextPrefix) && Integer.valueOf(nextNumber) - Integer.valueOf(baseNumber) == 1;
+        }
+        return false;
     }
 
     protected String altoBlockNumberRegex() {
-        return "Page1_Block";
+        return "\\w*_";
     }
 
     /**
@@ -200,8 +210,8 @@ public class JVBMetsConverter extends ENMAPConverter {
             Map<String, Set<Block>> altoBlockMap = new HashMap<>();
             for (AreaAltoBlockRef ref : refs) {
                 if (ref.blocks.isEmpty()) {
-                    throw new RuntimeException(
-                        "Unable to find a block references for area " + ref.areaRectangle.toMetsCoordinates());
+                    throw new RuntimeException("Unable to find block references for area "
+                        + ref.areaRectangle.toMetsCoordinates() + " in " + ref.alto.getId());
                 }
                 Set<Block> blockSet = altoBlockMap.get(ref.alto.getId());
                 if (blockSet == null) {
@@ -232,11 +242,19 @@ public class JVBMetsConverter extends ENMAPConverter {
             return refs;
         }
 
+        /**
+         * Maps the alto blocks to their corresponding mets area.
+         * 
+         * @param refs the area-alto-block reference which will be updated
+         */
         protected void mapFittingBlocks(List<AreaAltoBlockRef> refs) {
             refs.stream().filter(ref -> ref.blocks.isEmpty()).forEach(ref -> {
-                Block bestFittingBlock = ref.alto.getBestFittingBlock(ref.areaRectangle);
-                if (bestFittingBlock != null) {
-                    ref.blocks.add(bestFittingBlock);
+                // by default a bunch of blocks lies within the area rectangle
+                ref.blocks = ref.alto.liesWithin(ref.areaRectangle);
+                if (ref.blocks.isEmpty()) {
+                    // it looks like there are no blocks within the area.
+                    // so we find the blocks which cuts the area
+                    ref.blocks = ref.alto.touch(ref.areaRectangle);
                 }
             });
         }
@@ -274,8 +292,8 @@ public class JVBMetsConverter extends ENMAPConverter {
         private List<Block> buildBlocks(Document alto) {
             //"alto:Layout/alto:Page//*[name()='TextBlock' or name()='Illustration']",
             XPathExpression<Element> blockExpression = XPathFactory.instance().compile(
-                "alto:Layout/alto:Page//*[name()='TextBlock' or name()='Illustration' or name()='ComposedBlock']",
-                Filters.element(), null, Namespace.getNamespace("alto", "http://www.loc.gov/standards/alto/ns-v2#"));
+                "alto:Layout/alto:Page//*[name()='TextBlock' or name()='Illustration']", Filters.element(), null,
+                Namespace.getNamespace("alto", "http://www.loc.gov/standards/alto/ns-v2#"));
             List<Element> blockElements = blockExpression.evaluate(alto.getRootElement());
             return blockElements.stream().map(be -> {
                 Block block = new Block();
@@ -294,25 +312,28 @@ public class JVBMetsConverter extends ENMAPConverter {
         }
 
         /**
-         * Returns a block that fits best for the given rectangle. 
-         *
-         * <ol>
-         *   <li>The rectangle has to be inside of the block.</li>
-         *   <li>The block with the most equal area is chosen</li>
-         * </ol>
+         * Returns a list of blocks which lie's within the bounds of the rectangle.
+         * A block has to be fully covered by the rectangle.
          * 
-         * @param r the rectangle which should fit
-         * @return the block that surround the given rectangle the most
+         * @param rectangle
+         * @return list of blocks
          */
-        public Block getBestFittingBlock(Rectangle r) {
-            return blocks.stream().filter(b -> b.rect.contains(r)).sorted(new Comparator<Block>() {
-                @Override
-                public int compare(Block b1, Block b2) {
-                    int diff1 = Math.abs(b1.rect.area() - r.area());
-                    int diff2 = Math.abs(b2.rect.area() - r.area());
-                    return Integer.compare(diff1, diff2);
-                }
-            }).findFirst().orElse(null);
+        public List<Block> liesWithin(Rectangle rectangle) {
+            return blocks.stream().filter(block -> {
+                return rectangle.contains(block.rect);
+            }).collect(Collectors.toList());
+        }
+
+        /**
+         * Returns a list of blocks which touches the bounds of the rectangle.
+        
+         * @param rectangle
+         * @return list of blocks
+         */
+        public List<Block> touch(Rectangle rectangle) {
+            return blocks.stream().filter(block -> {
+                return rectangle.touch(block.rect);
+            }).collect(Collectors.toList());
         }
 
     }
@@ -402,6 +423,30 @@ public class JVBMetsConverter extends ENMAPConverter {
         public boolean contains(Rectangle other) {
             return (other.x >= x) && (other.y >= y) && (other.x + other.width <= x + width)
                 && (other.y + other.height <= y + height);
+        }
+
+        /**
+         * Checks if this rectangle contains the point at x,y.
+         * 
+         * @param pointX x position of the point
+         * @param pointY y position of the point
+         * @return true if the point lies within this rectangle
+         */
+        public boolean contains(int pointX, int pointY) {
+            return this.x <= pointX && (this.x + this.width >= pointX) && this.y <= pointY
+                && (this.y + this.height >= pointY);
+        }
+
+        /**
+         * Checks if the other rectangle touches this one.
+         * 
+         * @param other the other rectangle
+         * @return true of the other touches this one
+         */
+        public boolean touch(Rectangle other) {
+            return this.contains(other.x, other.y) || this.contains(other.x, other.y + other.height)
+                || this.contains(other.x + other.width, other.y)
+                || this.contains(other.x + other.width, other.y + other.height);
         }
 
         /**
