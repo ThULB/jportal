@@ -77,7 +77,7 @@
         <ul>
           <xsl:if test="$isAdmin">
             <li>
-              <a href="{$WebApplicationBaseURL}servlets/MCRSessionListingServlet">Aktive Sitzungen</a>
+              <a href="{$WebApplicationBaseURL}modules/session-listing/sessionListing.xml">Aktive Sitzungen</a>
             </li>
           </xsl:if>
           <li>
