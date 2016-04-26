@@ -55,6 +55,8 @@ import fsu.jportal.frontend.cli.io.LocalSystemSink;
 @MCRCommandGroup(name = "Jportal Importer")
 public class Importer {
 
+    private static final String ALTO_FOLDER = "mcralto";
+
     static Logger LOGGER = LogManager.getLogger(Importer.class);
 
     static BiMap<Integer, String> MONTH_NAMES = ImmutableBiMap.<Integer, String> builder().put(1, "Januar")
@@ -72,7 +74,7 @@ public class Importer {
      * Does the jvb import for a year.
      *
      * <pre>
-     * importJVB jportal_jpvolume_00000403 /data/temp/mnt/images/Jenaer_Volksblatt_1915_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915
+     * importJVB jportal_jpvolume_00000002 /data/temp/mnt/images/Jenaer_Volksblatt_1914_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_2/1914
      * </pre>
      * 
      * @param targetID the target volume
@@ -200,7 +202,7 @@ public class Importer {
                 Path absoluteImagePath = metsFolderPath.resolve(imageFile);
                 String volumeFolder = String.join("_", Arrays.copyOf(imageFile.split("_"), 4));
                 String altoFile = imageFile.replace(".tif", ".xml");
-                Path absoluteAltoPath = altoFolderPath.resolve(volumeFolder).resolve("alto").resolve(altoFile);
+                Path absoluteAltoPath = altoFolderPath.resolve(volumeFolder).resolve(ALTO_FOLDER).resolve(altoFile);
 
                 if (!Files.exists(absoluteImagePath) || Files.isDirectory(absoluteImagePath)) {
                     throw new FileNotFoundException(absoluteImagePath.toString() + " not found");
