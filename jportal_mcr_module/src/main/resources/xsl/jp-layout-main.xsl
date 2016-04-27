@@ -18,7 +18,8 @@
 
   <xsl:include href="jp-layout-searchbar.xsl" />
 
-  <xsl:include href="xslInclude:modules" />
+  <xsl:include href="xslInclude:jportal" />
+  <xsl:include href="xslInclude:components" />
   <xsl:include href="xslInclude:class.templates" />
 
   <xsl:param name="JP.Site.label" />
