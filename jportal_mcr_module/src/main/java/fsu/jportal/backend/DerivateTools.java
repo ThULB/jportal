@@ -403,7 +403,7 @@ public class DerivateTools {
             String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
         }
-        MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
+        MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID);
         try {
             handler.startUpload(1);
             handler.receiveFile(filePath, inputStream, filesize, null);
