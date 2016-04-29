@@ -401,10 +401,16 @@ $(document).ready(function() {
 	var closeButton = $("#importMetsDialogClose");
 
 	dialog.on("show.bs.modal", function(e) {
-		$.get(jp.baseURL + "rsc/mets/llz/check/" + dialog.attr("data-id")).done(function(e) {
-			if(e.check) {
-				importable();
-			} else {
+		$.get(jp.baseURL + "rsc/mets/import/check/" + dialog.attr("data-id")).done(function(e) {
+		  if(e.type == "unknown") {
+		    failed({
+		      msg: "Unbekanntes mets.xml Dokument. Bitte wenden Sie sich an den Administrator."
+		    });
+		  } else if(e.error) {
+		    failed(e);
+		  } else if(e.type == "llz" || e.type == 'jvb') {
+		    importable();
+		  } else {
 				failed(e);
 			}
 		}).fail(function(e) {
@@ -422,7 +428,9 @@ $(document).ready(function() {
 
 	function failed(e) {
 		dialogIcon.html("<i class='fa fa-3x fa-ban' />");
-		if(e.status == "401") {
+		if(e.msg) {
+		  dialogContent.html(e.msg);
+		} else if(e.status == "401") {
 			dialogContent.html("Sie haben nicht die notwendige Berechtigung um den Importvorgang zu starten!");
 		} else {
 			dialogContent.html("Dieses Derivat kann nicht importiert werden!" +
@@ -434,9 +442,9 @@ $(document).ready(function() {
 		dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin'></i>");
 		dialogContent.html("Importiere. Bitte warten...");
 		startImportButton.remove();
-		$.post(jp.baseURL + "rsc/mets/llz/convert/" + dialog.attr("data-id")).done(function(data) {
+		$.post(jp.baseURL + "rsc/mets/import/import/" + dialog.attr("data-id")).done(function(data) {
 			dialogIcon.html("<i class='fa fa-3x fa-check' />");
-			dialogContent.html("Import erfolgreich! Sie können die mets.xml jetzt konvertieren.");
+			dialogContent.html("Import erfolgreich!");
 			console.log(data);
 			closeButton.on("click", function() {
 				location.reload();

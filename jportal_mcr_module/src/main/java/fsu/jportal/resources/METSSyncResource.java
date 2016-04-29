@@ -3,6 +3,7 @@ package fsu.jportal.resources;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,8 +32,8 @@ import org.mycore.mets.model.struct.StructLink;
 import com.google.gson.JsonObject;
 
 import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.mets.LLZMetsUtils;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.MetsUtil;
 
 /**
  * The mets sync resource tries to synchronize the mets.xml of a derivate with the
@@ -126,7 +127,7 @@ public class METSSyncResource {
      */
     private Mets getMets(String derivateId) {
         try {
-            Document metsXML = LLZMetsUtils.getMetsXMLasDocument(derivateId);
+            Document metsXML = MetsUtil.getMetsXMLasDocument(derivateId);
             Mets mets = new Mets(metsXML);
             return mets;
         } catch (Exception exc) {
@@ -155,7 +156,7 @@ public class METSSyncResource {
             json.addProperty("errorMsg", "The logical struct map of the mets.xml does not contain any logical div.");
             throw new WebApplicationException(Response.ok().entity(json.toString()).build());
         }
-        return MCRStreamUtils.flatten(divContainer, LogicalDiv::getChildren, true).collect(Collectors.toList());
+        return MCRStreamUtils.flatten(divContainer, LogicalDiv::getChildren, Collection::parallelStream).collect(Collectors.toList());
     }
 
     /**

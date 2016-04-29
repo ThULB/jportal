@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
@@ -30,15 +28,14 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.MCRURL;
-import org.mycore.mets.validator.validators.ValidationException;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.mets.LLZMetsUtils;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.MetsUtil;
 import fsu.jportal.util.ResolverUtil;
 
 public class JPXMLFunctions {
@@ -57,7 +54,7 @@ public class JPXMLFunctions {
         }
     };
 
-    public static String formatISODate(String isoDate, String iso639Language) throws ParseException {
+    public static String formatISODate(String isoDate, String iso639Language) {
         if (LOGGER.isDebugEnabled()) {
             StringBuffer sb = new StringBuffer("isoDate=");
             sb.append(isoDate).append(", iso649Language=").append(iso639Language);
@@ -184,37 +181,21 @@ public class JPXMLFunctions {
      * @return
      */
     public static boolean isMetsImportable(String derivateId) {
-        boolean uibkMets = isUIBKMets(derivateId);
+        boolean enmapMets = isENMAPMets(derivateId);
         boolean children = hasChildren(derivateId);
-        return uibkMets && !children;
+        return enmapMets && !children;
     }
 
     /**
-     * Checks if the given derivate contains an uibk mets file
-     * and the corresponding mycore object has children.
+     * Checks if the given derivate contains a ENMAP mets file.
      * 
-     * @param derivateId
-     * @return
+     * @param derivateId the derivate to check for the mets.xml
+     * @return true if its a ENMAP mets.xml
      */
-    public static boolean isMetsConvertable(String derivateId) {
-        boolean uibkMets = isUIBKMets(derivateId);
-        boolean children = hasChildren(derivateId);
-        return uibkMets && children;
-    }
-
-    /**
-     * Checks if the given derivate contains a uibk mets file.
-     * 
-     * @param derivateId
-     * @return
-     */
-    private static boolean isUIBKMets(String derivateId) {
+    private static boolean isENMAPMets(String derivateId) {
         try {
-            org.jdom2.Document mets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
-            LLZMetsUtils.fastCheck(mets);
-            return true;
-        } catch (ValidationException ve) {
-            return false;
+            org.jdom2.Document mets = MetsUtil.getMetsXMLasDocument(derivateId);
+            return MetsUtil.isENMAP(mets);
         } catch (Exception e) {
             LOGGER.error(e);
             return false;
@@ -317,7 +298,7 @@ public class JPXMLFunctions {
                 return formatDate(published.getISOString());
             }
             return null;
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             LOGGER.error("Unable to retrieve published date of " + id, exc);
             return null;
         }

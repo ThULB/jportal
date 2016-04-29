@@ -37,7 +37,7 @@ import fsu.jportal.backend.JPVolume;
  *
  * @author Matthias Eichner
  */
-public class LLZMetsImporter {
+public class LLZMetsImporter implements MetsImporter {
 
     private static Logger LOGGER = LogManager.getLogger(LLZMetsImporter.class);
 
@@ -73,11 +73,11 @@ public class LLZMetsImporter {
      *
      * @param mets METS Object
      * @param derivateId MCR derivate ID
-     * @throws ConvertException something went so wrong that the import process has to be stopped
+     * @throws MetsImportException something went so wrong that the import process has to be stopped
      * 
      * @return a map where each logical div is assigned to its imported <code>JPComponent</code>
      */
-    public Map<LogicalDiv, JPComponent> importMets(Mets mets, MCRObjectID derivateId) throws ConvertException {
+    public Map<LogicalDiv, JPComponent> importMets(Mets mets, MCRObjectID derivateId) throws MetsImportException {
         // reset values
         this.mets = mets;
         this.lastHeading = null;
@@ -98,7 +98,7 @@ public class LLZMetsImporter {
             volume.store();
             return divMap;
         } catch (Exception exc) {
-            throw new ConvertException("Unable to import component", exc);
+            throw new MetsImportException("Unable to import component", exc);
         }
     }
 

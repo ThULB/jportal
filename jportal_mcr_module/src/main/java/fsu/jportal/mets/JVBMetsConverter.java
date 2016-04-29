@@ -19,9 +19,9 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.content.MCRPathContent;
 import org.mycore.mets.model.IMetsElement;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FileGrp;
@@ -45,6 +45,10 @@ public class JVBMetsConverter extends ENMAPConverter {
 
     @Override
     public Mets convert(Document enmap) throws ConvertException {
+        if (this.metsRootPath == null) {
+            throw new ConvertException(
+                "Unable to convert mets document because 'metsRootPath' is not set. Please call setPath(rootPath) before calling convert.");
+        }
         lastSerialNovel = null;
         ABBYYtoALTOConverter.convert(enmap);
         altoReferences = loadAltoReferences(enmap);
@@ -62,7 +66,6 @@ public class JVBMetsConverter extends ENMAPConverter {
     }
 
     protected List<ALTO> loadAltoReferences(Document enmap) {
-        SAXBuilder saxBuilder = new SAXBuilder();
         XPathExpression<Element> fileExpression = XPathFactory.instance().compile(
             "mets:fileSec/mets:fileGrp[@ID='TextGroup']/mets:fileGrp/mets:file", Filters.element(), null,
             IMetsElement.METS, IMetsElement.XLINK);
@@ -72,8 +75,8 @@ public class JVBMetsConverter extends ENMAPConverter {
                 String path = altoFile.getChild("FLocat", IMetsElement.METS).getAttributeValue("href",
                     IMetsElement.XLINK);
                 path = new AltoHrefStrategy().get(path);
-                Path resolve = metsRootPath.resolve(path);
-                Document altoDocument = saxBuilder.build(resolve.toFile());
+                Path altoPath = metsRootPath.resolve(path);
+                Document altoDocument = new MCRPathContent(altoPath).asXML();
                 return new ALTO(altoFile.getAttributeValue("ID"), altoDocument);
             } catch (Exception exc) {
                 throw new RuntimeException(

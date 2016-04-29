@@ -20,9 +20,14 @@ import javax.xml.transform.TransformerException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -39,23 +44,33 @@ import com.google.gson.JsonObject;
 
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.mets.ConvertException;
+import fsu.jportal.mets.ENMAPConverter;
+import fsu.jportal.mets.JVBMetsConverter;
+import fsu.jportal.mets.JVBMetsImporter;
 import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.LLZMetsImporter;
-import fsu.jportal.mets.LLZMetsUtils;
+import fsu.jportal.mets.MetsImportException;
+import fsu.jportal.mets.MetsImporter;
+import fsu.jportal.util.MetsUtil;
 
-@Path("mets/llz")
+@Path("mets/import")
 public class METSImportResource {
 
     private static Logger LOGGER = LogManager.getLogger(METSImportResource.class);
 
+    private static enum METS_TYPE {
+        unknown, llz, jvb
+    }
+
     /**
      * Checks if the given derivate has a mets.xml which is importable.
+     * Also checks if the mets.xml is valid.
      * 
      * @param derivateId the derivate to check
      * @return a json object in the form of
      * {
-     *   check: true|false,
-     *   error: "When check == false, the cause is given here"
+     *   type: llz|jvb|unknown,
+     *   error: if some validation error occur
      * }
      */
     @GET
@@ -64,52 +79,50 @@ public class METSImportResource {
     public String check(@PathParam("id") String derivateId) {
         checkPermission(derivateId);
         JsonObject returnObject = new JsonObject();
+        Document doc;
         try {
-            Document doc = LLZMetsUtils.getMetsXMLasDocument(derivateId);
-            LLZMetsUtils.deepCheck(doc);
-        } catch (ValidationException ve) {
-            returnObject.addProperty("error", ve.getMessage());
+            doc = MetsUtil.getMetsXMLasDocument(derivateId);
         } catch (Exception exc) {
             LOGGER.error("Unable to check mets.xml for derivate " + derivateId);
             throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
         }
-        returnObject.addProperty("check", !returnObject.has("error"));
+        METS_TYPE type = getType(doc);
+        if (!type.equals(METS_TYPE.unknown)) {
+            try {
+                Mets mets = convert(derivateId, doc);
+                validate(derivateId, mets);
+            } catch (Exception exc) {
+                returnObject.addProperty("error", exc.getMessage());
+            }
+        }
+        returnObject.addProperty("type", type.name());
         return returnObject.toString();
     }
 
-//    @POST
-//    @Path("import/{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String importMets(@PathParam("id") String derivateId) throws FileNotFoundException, IOException,
-//        JDOMException, ConvertException {
-////        checkPermission(derivateId);
-////        // load mets
-////        Document uibkMets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
-////        // import
-////        LLZMetsImporter importer = new LLZMetsImporter();
-//////        importer.importMets(uibkMets, MCRObjectID.getInstance(derivateId));
-//        Gson gson = MCRJSONManager.instance().createGson();
-////        return gson.toJson(importer.getErrorList()).toString();
-//        return gson.toString();
-//    }
-
     @POST
-    @Path("convert/{id}")
-    public void convertAndImport(@PathParam("id") String derivateId) throws TransformerException, IOException, JDOMException,
-        ConvertException, ValidationException {
-        Mets mcrMets = convertMets(derivateId);
-        // validate
-        METSValidator validator = new METSValidator(mcrMets.asDocument());
-        List<ValidationException> exceptionList = validator.validate();
-        if (!exceptionList.isEmpty()) {
-            for(Exception exc : exceptionList) {
-                LOGGER.error("while validating mets.xml of derivate " + derivateId, exc);
-            }
-            throw exceptionList.get(0);
-        }
+    @Path("import/{id}")
+    public void convertAndImport(@PathParam("id") String derivateId)
+        throws IOException, JDOMException, ConvertException, MetsImportException {
+        // check permissions
+        checkPermission(derivateId);
+
+        // build document stuff
+        Document enmapMetsXML = MetsUtil.getMetsXMLasDocument(derivateId);
+        Mets mcrMets = convert(derivateId, enmapMetsXML);
+        METS_TYPE type = getType(enmapMetsXML);
+
         // import mets
-        LLZMetsImporter importer = new LLZMetsImporter();
-        Map<LogicalDiv, JPComponent> logicalComponentMap = importer.importMets(mcrMets, MCRObjectID.getInstance(derivateId));
+        MetsImporter importer = null;
+        if (type.equals(METS_TYPE.jvb)) {
+            importer = new JVBMetsImporter();
+        } else if (type.equals(METS_TYPE.llz)) {
+            importer = new LLZMetsImporter();
+        } else {
+            throw new MetsImportException("Unable to get importer class due type is not supported: " + type);
+        }
+        Map<LogicalDiv, JPComponent> logicalComponentMap = importer.importMets(mcrMets,
+            MCRObjectID.getInstance(derivateId));
+
         // update logical id's
         updateLogicalIds(mcrMets, logicalComponentMap);
         // write mets.xml
@@ -117,6 +130,44 @@ public class METSImportResource {
         byte[] bytes = new MCRJDOMContent(mcrDoc).asByteArray();
         MCRPath path = MCRPath.getPath(derivateId, "/mets.xml");
         Files.write(path, bytes);
+    }
+
+    /**
+     * Converts the given mets.xml and prints it. This method is for testing purpose only.
+     * 
+     * @param derivateId the derivate where the mets.xml is stored
+     * @return mets.xml in mycore format
+     *  
+     * @throws IOException
+     * @throws JDOMException
+     * @throws ConvertException the converting process went wrong
+     */
+    @GET
+    @Path("print/{id}")
+    @Produces(MediaType.APPLICATION_XML)
+    public String print(@PathParam("id") String derivateId) throws IOException, JDOMException, ConvertException {
+        checkPermission(derivateId);
+        Document metsXML = MetsUtil.getMetsXMLasDocument(derivateId);
+        Mets mets = convert(derivateId, metsXML);
+        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+        StringWriter writer = new StringWriter();
+        out.output(mets.asDocument(), writer);
+        return writer.toString();
+    }
+
+    /**
+     * Converts the given enmap mets to an mcr one.
+     * 
+     * @param derivateId
+     * @param enmapMetsXML
+     * @return
+     * @throws IOException
+     * @throws JDOMException
+     * @throws ConvertException
+     */
+    private Mets convert(String derivateId, Document enmapMetsXML) throws IOException, JDOMException, ConvertException {
+        ENMAPConverter converter = getConverter(enmapMetsXML, derivateId);
+        return converter.convert(enmapMetsXML);
     }
 
     /**
@@ -136,32 +187,84 @@ public class METSImportResource {
             logicalDiv.setId(mycoreId);
             // update logical struct map
             List<SmLink> links = mets.getStructLink().getSmLinkByFrom(oldId);
-            for(SmLink link : links) {
+            for (SmLink link : links) {
                 link.setFrom(mycoreId);
             }
         }
     }
 
-    @GET
-    @Path("print/{id}")
-    @Produces(MediaType.APPLICATION_XML)
-    public String print(@PathParam("id") String derivateId) throws IOException, JDOMException, ConvertException {
-        Document mcrMets = convertMets(derivateId).asDocument();
-        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-        StringWriter writer = new StringWriter();
-        out.output(mcrMets, writer);
-        return writer.toString();
+    /**
+     * Returns the appropriate converter for the given derivate.
+     * 
+     * @param type of the mets.xml jvb|llz
+     * @param derivateId the derivate where the mets.xml
+     * @return instance of java mets
+     * 
+     * @throws IOException
+     * @throws JDOMException
+     * @throws ConvertException
+     */
+    private ENMAPConverter getConverter(Document metsXML, String derivateId)
+        throws IOException, JDOMException, ConvertException {
+        // load mets
+        METS_TYPE type = getType(metsXML);
+        // convert
+        ENMAPConverter converter = null;
+        if (type.equals(METS_TYPE.llz)) {
+            converter = new LLZMetsConverter();
+        } else if (type.equals(METS_TYPE.jvb)) {
+            converter = new JVBMetsConverter();
+            ((JVBMetsConverter) converter).setPath(MCRPath.getPath(derivateId, "/"));
+        } else {
+            throw new ConvertException("Unknown type. It should be either 'llz' or 'jvb'.");
+        }
+        return converter;
     }
 
-    private Mets convertMets(String derivateId) throws IOException, JDOMException,
-        ConvertException {
-        checkPermission(derivateId);
-        MCRJerseyUtil.checkPermission(derivateId, "writedb");
-        // load mets
-        Document uibkMets = LLZMetsUtils.getMetsXMLasDocument(derivateId);
-        // convert
-        LLZMetsConverter converter = new LLZMetsConverter();
-        return converter.convert(uibkMets);
+    /**
+     * Validates the given mets document.
+     * 
+     * @param derivateId
+     * @param mets
+     * @throws JDOMException
+     * @throws IOException
+     * @throws TransformerException
+     * @throws ValidationException
+     */
+    private void validate(String derivateId, Mets mets)
+        throws JDOMException, IOException, TransformerException, ValidationException {
+        METSValidator validator = new METSValidator(mets.asDocument());
+        List<ValidationException> exceptionList = validator.validate();
+        if (!exceptionList.isEmpty()) {
+            for (Exception exc : exceptionList) {
+                LOGGER.error("while validating mets.xml of derivate " + derivateId, exc);
+            }
+            throw exceptionList.get(0);
+        }
+    }
+
+    /**
+     * Returns the type of the document.
+     * 
+     * @param doc mets.xml document
+     * @return 'llz' | 'jvb' | 'unknown' 
+     */
+    private METS_TYPE getType(Document doc) {
+        METS_TYPE type = METS_TYPE.unknown;
+        if (MetsUtil.isENMAP(doc)) {
+            // only difference between llz and jvb is the dmd title
+            Element mets = doc.getRootElement();
+            XPathExpression<Text> titleExp = XPathFactory.instance().compile(
+                "mets:dmdSec/mets:mdWrap/mets:xmlData/mods:mods/mods:titleInfo/mods:title/text()", Filters.text(), null,
+                MetsUtil.METS_NS_LIST);
+            Text title = titleExp.evaluateFirst(mets);
+            if (title != null && title.getText().equals("Jenaer Volksblatt")) {
+                type = METS_TYPE.jvb;
+            } else {
+                type = METS_TYPE.llz;
+            }
+        }
+        return type;
     }
 
     /**

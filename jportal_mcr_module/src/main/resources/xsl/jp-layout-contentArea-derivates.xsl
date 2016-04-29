@@ -177,34 +177,6 @@
                 </div>
               </div>
             </xsl:if>
-            <xsl:if test="jpxml:isMetsConvertable(@xlink:href)">
-              <li>
-                <a href="javascript:;" data-toggle="modal" data-target="#convertMetsDialog">METS konvertieren</a>
-              </li>
-              <div class="modal fade" id="convertMetsDialog" tabindex="-1" role="dialog" data-backdrop="static" data-id="{@xlink:href}">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">METS Import</h4>
-                    </div>
-                    <div class="modal-body">
-                      <div class="row">
-                        <div class="col-md-2" id="convertMetsDialogIcon">
-                          <i class='fa fa-3x fa-question'></i>
-                        </div>
-                        <div class="col-md-10" id="convertMetsDialogContent">
-                          Wollen Sie die mets.xml konvertieren? Bitte beachten Sie das ein nachträglicher Import nicht mehr möglich ist.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" id="convertMetsDialogClose" data-dismiss="modal">Schließen</button>
-                      <button type="button" class="btn btn-primary" id="convertMetsDialogStart">Konvertierung starten</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </xsl:if>
           </ul>
         </xsl:if>
       </div>

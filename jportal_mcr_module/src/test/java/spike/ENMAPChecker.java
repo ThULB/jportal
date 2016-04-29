@@ -91,7 +91,7 @@ public class ENMAPChecker {
     }
 
     public static void main(String[] args) throws Exception {
-        ENMAPChecker llzChecker = new ENMAPChecker();
+        ENMAPChecker enmapChecker = new ENMAPChecker();
         // check
         //        List<Path> listAbgleich = llzChecker.listAbgleich(Paths.get("/data/Dokumente/OCR/innsbruck/2015-09-29/"), "_mets_Abgleich.xml");
         //        for (Path p : listAbgleich) {
@@ -110,15 +110,15 @@ public class ENMAPChecker {
 
         // convert
         Path metsFile = Paths.get(
-            "/data/Dokumente/OCR/innsbruck/JVB/1914/JVB_19140101_001_167758667/JVB_19140101_001_167758667_wfs1_mets_corrected.xml");
+            "/data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915/JVB_19150101_001_167758667/JVB_19150101_001_167758667_wfs1_mets_corrected.xml");
         JVBMetsConverter converter = new JVBMetsConverter();
         converter.setPath(metsFile.getParent());
-        Document doc = llzChecker.convert(metsFile, converter);
+        Document doc = enmapChecker.convert(metsFile, converter);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         out.output(doc, new FileOutputStream(new File("/data/temp/mets.xml")));
 
         ByteArrayInputStream in = toByteStream(doc);
-        List<ValidationException> excs = llzChecker.validate(in);
+        List<ValidationException> excs = enmapChecker.validate(in);
         for (ValidationException e : excs) {
             System.out.println(e.toJSON());
         }
