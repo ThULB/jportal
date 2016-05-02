@@ -65,7 +65,7 @@ module mycore.viewer.components {
 
         private _linkImage() {
             this._derivateLinkButton.active = true;
-            var servletPath = this._settings.webApplicationBaseURL + "rsc/derivate/link/bookmark/"
+            var servletPath = this._settings.webApplicationBaseURL + "/rsc/derivate/link/bookmark/"
                 + this._settings.derivate + "?image=" + encodeURIComponent(this._currentImage);
             jQuery.post(servletPath).fail(function(error) {
                 alert(error.responseText);
