@@ -133,6 +133,7 @@ project(':jportal_mcr_module') {
         compile 'xmlunit:xmlunit:1.3'
         compile 'javax.xml.bind:jaxb-api:2.2.1'
         compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
+        compile "net.bull.javamelody:javamelody-core:1.59.0"
 
         // webjars
         compile 'org.webjars.bower:jquery:2.1.4'
@@ -267,7 +268,7 @@ project(':jportal_webapp') {
 		runtime "com.zaxxer:HikariCP:2.4.5"
 		runtime "org.hibernate:hibernate-hikaricp:$hibernateVersion"
         runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
-        
+
         runtime project(':jportal_laws')
         runtime project(':jportal_derivate_browser')
         runtime project(':jportal_doublet_finder_module')
