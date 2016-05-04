@@ -1,35 +1,22 @@
 package fsu.jportal.mets;
 
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdom2.Attribute;
-import org.jdom2.Element;
-import org.jdom2.Namespace;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.files.File;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
-import org.mycore.mets.model.struct.SmLink;
 
 import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPObjectComponent;
 import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPObjectComponent;
 import fsu.jportal.backend.JPVolume;
 
 /**
@@ -37,36 +24,15 @@ import fsu.jportal.backend.JPVolume;
  *
  * @author Matthias Eichner
  */
-public class LLZMetsImporter implements MetsImporter {
+public class LLZMetsImporter extends MetsImporter {
 
     private static Logger LOGGER = LogManager.getLogger(LLZMetsImporter.class);
-
-    private static final ArrayList<Namespace> NS_LIST;
-
-    private static final XPathExpression<Attribute> FILEID_EXPRESSION;
-
-    static {
-        NS_LIST = new ArrayList<Namespace>();
-        NS_LIST.add(MCRConstants.METS_NAMESPACE);
-        NS_LIST.add(MCRConstants.MODS_NAMESPACE);
-        NS_LIST.add(MCRConstants.XLINK_NAMESPACE);
-        Map<String, Object> vars = new HashMap<String, Object>();
-        vars.put("id", null);
-        FILEID_EXPRESSION = XPathFactory.instance().compile(
-            "mets:div[@TYPE='physSequence']//mets:div[@ID=$id]/mets:fptr/@FILEID", Filters.attribute(), vars, NS_LIST);
-    }
 
     private Mets mets;
 
     private MCRDerivate derivate;
 
     private String lastHeading;
-
-    /**
-     * List of errors which are not important enough to break the import process but
-     * should be handled by the editor.
-     */
-    private List<String> errorList;
 
     /**
      * Imports the dmd section of the given mets document.
@@ -81,7 +47,6 @@ public class LLZMetsImporter implements MetsImporter {
         // reset values
         this.mets = mets;
         this.lastHeading = null;
-        this.errorList = new ArrayList<String>();
 
         try {
             // get corresponding mycore objects
@@ -126,7 +91,7 @@ public class LLZMetsImporter implements MetsImporter {
                     : type.equals("preface") ? "Vorwort" : "Register";
                 article.setTitle(title);
                 handleArticleOrder(div, article);
-                handleDerivateLink(div, article);
+                handleDerivateLink(mets, derivate, div, article);
                 jpComponent = article;
             }
             if (jpComponent != null) {
@@ -248,7 +213,7 @@ public class LLZMetsImporter implements MetsImporter {
         //            }
         //        }
         // derivate link
-        handleDerivateLink(logicalDiv, article);
+        handleDerivateLink(mets, derivate, logicalDiv, article);
         return article;
     }
 
@@ -262,43 +227,6 @@ public class LLZMetsImporter implements MetsImporter {
             LOGGER.warn(msg);
             getErrorList().add(msg);
         }
-    }
-
-    public void handleDerivateLink(LogicalDiv logicalDiv, JPArticle article) {
-        String logicalId = logicalDiv.getId();
-        MCRObjectID articleId = article.getObject().getId();
-        List<SmLink> links = mets.getStructLink().getSmLinkByFrom(logicalId);
-        for (SmLink link : links) {
-            Element structPhys = mets.getStructMap("PHYSICAL").asElement();
-            FILEID_EXPRESSION.setVariable("id", link.getTo());
-            List<Attribute> physIDs = FILEID_EXPRESSION.evaluate(structPhys);
-            for (Attribute physID : physIDs) {
-                if (physID.getValue().endsWith("MASTER")) {
-                    File file = mets.getFileSec().getFileGroup("MASTER").getFileById(physID.getValue());
-                    String newHref = file.getFLocat().getHref();
-                    try {
-                        MCRPath path = MCRPath.getPath(derivate.getId().toString(), file.getFLocat().getHref());
-                        if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
-                            article.setDerivateLink(derivate, newHref);
-                            return;
-                        } else {
-                            String msg = articleId + ": There is no image " + newHref + " in this derivate.";
-                            getErrorList().add(msg);
-                            LOGGER.warn(msg);
-                        }
-                    } catch (Exception exc) {
-                        String msg = articleId + ": Unable to add derivate link " + newHref + " of logical div "
-                            + logicalId;
-                        getErrorList().add(msg);
-                        LOGGER.error(msg, exc);
-                    }
-                }
-            }
-        }
-    }
-
-    public List<String> getErrorList() {
-        return errorList;
     }
 
 }
