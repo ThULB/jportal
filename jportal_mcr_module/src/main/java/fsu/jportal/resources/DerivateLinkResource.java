@@ -10,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 
 @Path("derivate/link")
@@ -20,28 +21,29 @@ public class DerivateLinkResource {
     public void set(@PathParam("id") String id) throws MCRActiveLinkException {
         String bookmarkedImage = DerivateLinkUtil.getBookmarkedImage();
         if (bookmarkedImage == null) {
-            throw new WebApplicationException(Response.status(Status.CONFLICT).entity("bookmark an image first")
-                .build());
+            throw new WebApplicationException(
+                Response.status(Status.CONFLICT).entity("bookmark an image first").build());
         }
         try {
             DerivateLinkUtil.setLink(getMyCoReID(id), bookmarkedImage);
         } catch (MCRAccessException e) {
-            throw new WebApplicationException(Response.status(Status.UNAUTHORIZED).entity("No Access")
-                                                      .build());
+            throw new WebApplicationException(Response.status(Status.UNAUTHORIZED).entity("No Access").build());
         }
     }
 
     @POST
     @Path("remove/{id}")
-    public void remove(@PathParam("id") String id, @QueryParam("image") String image) throws MCRActiveLinkException,
-        UnsupportedEncodingException {
+    public void remove(@PathParam("id") String id, @QueryParam("image") String image)
+        throws MCRActiveLinkException, UnsupportedEncodingException {
         if (image == null) {
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("image param not set").build());
+            throw new WebApplicationException(
+                Response.status(Status.BAD_REQUEST).entity("image param not set").build());
         }
         try {
             DerivateLinkUtil.removeLink(getMyCoReID(id), URLDecoder.decode(image, "UTF-8"));
         } catch (MCRAccessException e) {
-            throw new WebApplicationException(Response.status(Status.UNAUTHORIZED).entity("image param not set").build());
+            throw new WebApplicationException(
+                Response.status(Status.UNAUTHORIZED).entity("image param not set").build());
         }
     }
 
@@ -50,10 +52,16 @@ public class DerivateLinkResource {
     public void bookmark(@PathParam("derivate") String derivate, @QueryParam("image") String image)
         throws UnsupportedEncodingException {
         if (image == null) {
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("image param not set").build());
+            throw new WebApplicationException(
+                Response.status(Status.BAD_REQUEST).entity("image param not set").build());
         }
         MCRJerseyUtil.checkPermission(derivate, "writedb");
-        DerivateLinkUtil.bookmarkImage(derivate, URLDecoder.decode(image, "UTF-8"));
+        try {
+            DerivateLinkUtil.bookmarkImage(derivate, URLDecoder.decode(image, "UTF-8"));
+        } catch (URISyntaxException uriExc) {
+            throw new WebApplicationException(uriExc,
+                Response.status(Status.BAD_REQUEST).entity("the image couldn't be URI encoded").build());
+        }
     }
 
     protected MCRObjectID getMyCoReID(String id) {

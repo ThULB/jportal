@@ -1,6 +1,7 @@
 package fsu.jportal.util;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -22,6 +23,7 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
@@ -54,11 +56,12 @@ public abstract class DerivateLinkUtil {
      * Bookmarks the derivate and image in the user session.
      *
      * @param derivateId derivate to bookmark
-     * @param image image to bookmark
+     * @param imagePath image to bookmark. Be aware that the image path should be URI decoded.
+     * @throws URISyntaxException when the imagePath couldn't be URI encoded
      */
-    public static void bookmarkImage(String derivateId, String image) {
+    public static void bookmarkImage(String derivateId, String imagePath) throws URISyntaxException {
         MCRSession session = MCRSessionMgr.getCurrentSession();
-        session.put(IMAGE_BOOKMARK_FILE, image);
+        session.put(IMAGE_BOOKMARK_FILE, MCRXMLFunctions.encodeURIPath(imagePath));
         session.put(IMAGE_BOOKMARK_DERIVATE_ID, derivateId);
     }
 

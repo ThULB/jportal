@@ -97,7 +97,7 @@
           <xsl:when test="$iviewFile != ''">
             <xsl:call-template name="iview2Entry">
               <xsl:with-param name="derivID" select="@xlink:href" />
-              <xsl:with-param name="file" select="$iviewFile" />
+              <xsl:with-param name="file" select="mcrxml:encodeURIPath($iviewFile)" />
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
@@ -206,9 +206,9 @@
   <xsl:template name="iview2Entry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-    <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}/{mcrxml:encodeURIPath($file)}" class="thumbnail">
+    <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}/{$file}" class="thumbnail">
       <div class="jp-layout-hidden-Button"></div>
-      <img src="{$WebApplicationBaseURL}servlets/MCRTileCombineServlet/MIN/{$derivID}/{mcrxml:encodeURIPath($file)}?centerThumb=no" />
+      <img src="{$WebApplicationBaseURL}servlets/MCRTileCombineServlet/MIN/{$derivID}/{$file}?centerThumb=no" />
     </a>
   </xsl:template>
 
