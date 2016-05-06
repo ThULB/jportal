@@ -3,6 +3,7 @@ package fsu.jportal.mets;
 import static fsu.jportal.frontend.SolrToc.buildQuery;
 import static fsu.jportal.frontend.SolrToc.getSort;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +14,6 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
@@ -40,30 +40,25 @@ public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
         return "no title for " + obj.getId().toString();
     }
 
-    protected List<MCRMetaLinkID> getChildren(MCRObject parentObject) {
+    protected List<MCRObjectID> getChildren(MCRObject parentObject) {
         if (parentObject.getId().getTypeId().equals("jparticle")) {
             return Collections.emptyList();
         }
-
-        List<MCRMetaLinkID> metaLinkIDs = getMcrMetaLinkIDs(parentObject, "jpvolume");
-        metaLinkIDs.addAll(getMcrMetaLinkIDs(parentObject, "jparticle"));
-        return metaLinkIDs;
+        List<MCRObjectID> childrenIds = new ArrayList<MCRObjectID>();
+        childrenIds.addAll(getChildren(parentObject, "jpvolume"));
+        childrenIds.addAll(getChildren(parentObject, "jparticle"));
+        return childrenIds;
     }
 
-    private List<MCRMetaLinkID> getMcrMetaLinkIDs(MCRObject parentObject, String objectType) {
+    private List<MCRObjectID> getChildren(MCRObject parentObject, String objectType) {
         String parentID = parentObject.getId().toString();
         String sort = getSort(parentID, objectType);
         ModifiableSolrParams solrParams = buildQuery(parentID, objectType, sort);
         solrParams.set("fl", "id objectType");
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
-
         return MCRSolrSearchUtils.stream(solrClient, solrParams).map(doc -> {
             String id = (String) doc.getFieldValue("id");
-            String label = parentObject.getLabel();
-            if (label == null || label.equals("")) {
-                label = id;
-            }
-            return new MCRMetaLinkID("child", MCRObjectID.getInstance(id), label, id);
+            return MCRObjectID.getInstance(id);
         }).collect(Collectors.toList());
     }
 
