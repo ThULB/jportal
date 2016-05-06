@@ -1824,7 +1824,7 @@
   <requestHandler name="/subselect" class="solr.SearchHandler">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
-      <str name="qf">heading^10 dates^10 alternatives^5 heading_de^5 alternatives_de^3 allMeta^1</str>
+      <str name="qf">heading^25 alternatives^5 heading_de^5 alternatives_de^3 dateOfBirth dateOfDeath allMeta</str>
       <int name="rows">6</int>
       <str name="qry">*:*</str>
       <str name="XSL.subselect.type">person</str>
@@ -1842,7 +1842,7 @@
   <requestHandler name="/laws" class="solr.SearchHandler">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
-      <str name="qf">heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 content^3 allMeta^1
+      <str name="qf">titles^25 participants^10 participants_de^5 dates^5 titles_de^5 content allMeta
       </str>
       <int name="rows">10</int>
       <str name="qry">*:*</str>
