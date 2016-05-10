@@ -25,14 +25,14 @@ public class LLZMetsConverter extends ENMAPConverter {
     }
 
     @Override
-    protected LogicalDiv getLogicalDiv(Element enmap, Element enmapDiv) {
-        LogicalDiv logicalDiv = super.getLogicalDiv(enmap, enmapDiv);
+    protected LogicalDiv getLogicalDiv(Element enmap, Element enmapDiv, Mets mcrMets) {
+        LogicalDiv logicalDiv = super.getLogicalDiv(enmap, enmapDiv, mcrMets);
         logicalDiv.setType("volume");
         return logicalDiv;
     }
 
     @Override
-    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv) {
+    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets) {
         LogicalDiv logicalSubDiv = this.buildLogicalSubDiv(enmapDiv);
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
         String dmdID = LLZMetsUtils.getDmDId(enmapDiv);
@@ -41,7 +41,7 @@ public class LLZMetsConverter extends ENMAPConverter {
                 LOGGER.warn("Issue or volumepart has no content! " + logicalSubDiv.getId());
                 return null;
             }
-            handleLogicalDivs(enmap, enmapDiv, logicalSubDiv);
+            handleLogicalDivs(enmap, enmapDiv, logicalSubDiv, mcrMets);
             return logicalSubDiv;
         }
         if (type.equals("rezension") && enmapDiv.getChildren().size() > 0) {
@@ -58,7 +58,7 @@ public class LLZMetsConverter extends ENMAPConverter {
         } else {
             return null;
         }
-        handleLogicalFilePointer(enmapDiv, logicalSubDiv);
+        handleLogicalFilePointer(enmapDiv, logicalSubDiv, mcrMets);
         return logicalSubDiv;
     }
 

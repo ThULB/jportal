@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -28,6 +29,9 @@ import org.mycore.mets.model.files.FileGrp;
 import org.mycore.mets.model.struct.Area;
 import org.mycore.mets.model.struct.Fptr;
 import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.Seq;
 
 import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
@@ -95,7 +99,7 @@ public class JVBMetsConverter extends ENMAPConverter {
     }
 
     @Override
-    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv) {
+    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets) {
         LogicalDiv logicalSubDiv = this.buildLogicalSubDiv(enmapDiv);
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
         if (type.equals("issue")) {
@@ -103,7 +107,7 @@ public class JVBMetsConverter extends ENMAPConverter {
                 LOGGER.warn("Issue has no content! " + logicalSubDiv.getId());
                 return null;
             }
-            handleLogicalDivs(enmap, enmapDiv, logicalSubDiv);
+            handleLogicalDivs(enmap, enmapDiv, logicalSubDiv, mcrMets);
             return logicalSubDiv;
         }
         if (type.equals("article") || type.equals("serialnovel")) {
@@ -119,17 +123,21 @@ public class JVBMetsConverter extends ENMAPConverter {
         } else {
             return null;
         }
-        handleLogicalFilePointer(enmapDiv, logicalSubDiv);
+        handleLogicalFilePointer(enmapDiv, logicalSubDiv, mcrMets);
         return logicalSubDiv;
     }
 
-    protected void handleLogicalFilePointer(Element enmapDiv, LogicalDiv mcrDiv) {
+    protected void handleLogicalFilePointer(Element enmapDiv, LogicalDiv mcrDiv, Mets mcrMets) {
         XPathExpression<Element> areaExp = XPathFactory.instance().compile(
             "mets:div/mets:fptr/mets:area[contains(@FILEID, 'ALTO')]", Filters.element(), null, IMetsElement.METS);
         List<Element> areas = areaExp.evaluate(enmapDiv);
         if (areas.isEmpty()) {
             return;
         }
+
+        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mcrMets.getStructMap(PhysicalStructMap.TYPE);
+        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
+//        divContainer.getChildren().stream().filter(predicate)
 
         Map<String, Set<Block>> altoBlockMap = new CoordinatesToIdMapper().map(altoReferences, areas);
 
@@ -138,9 +146,16 @@ public class JVBMetsConverter extends ENMAPConverter {
         Seq seq = new Seq();
         fptr.getSeqList().add(seq);
 
-        Block lastBlock = null;
-        Area area = null;
-        for (Map.Entry<String, Set<Block>> entry : altoBlockMap.entrySet()) {
+        AtomicReference<Block> lastBlockRef = new AtomicReference<>();;
+        AtomicReference<Area> areaRef = new AtomicReference<>();
+
+        altoBlockMap.entrySet().stream().sorted((entry1, entry2) -> {
+            String fileId1 = entry1.getKey();
+            String fileId2 = entry2.getKey();
+            PhysicalSubDiv div1 = divContainer.byFileId(fileId1);
+            PhysicalSubDiv div2 = divContainer.byFileId(fileId2);
+            return div1.getOrder() - div2.getOrder();
+        }).forEachOrdered(entry -> {
             String altoID = entry.getKey();
             ArrayList<Block> blockList = new ArrayList<>(entry.getValue());
             blockList.sort(new Comparator<Block>() {
@@ -150,25 +165,31 @@ public class JVBMetsConverter extends ENMAPConverter {
                     return Integer.compare(Integer.valueOf(num1), Integer.valueOf(num2));
                 }
             });
+            Area area = areaRef.get();
+            Block lastBlock = lastBlockRef.get();
             for (Block block : blockList) {
                 if (area != null && !isConsecutive(lastBlock, block)) {
                     area.setEnd(lastBlock.id);
                     seq.getAreaList().add(area);
-                    area = null;
+                    areaRef.set(area = null);
                 }
                 if (area == null) {
-                    area = new Area();
+                    areaRef.set(area = new Area());
                     area.setBegin(block.id);
                     area.setBetype("IDREF");
                     area.setFileId(altoID);
                 }
-                lastBlock = block;
+                lastBlockRef.set(lastBlock = block);
             }
             if (area != null && area.getEnd() == null) {
                 area.setEnd(lastBlock.id);
                 seq.getAreaList().add(area);
-                mcrDiv.getFptrList().add(fptr);
+                areaRef.set(null);
+                lastBlockRef.set(null);
             }
+        });
+        if(!fptr.getSeqList().isEmpty()) {
+            mcrDiv.getFptrList().add(fptr);
         }
     }
 

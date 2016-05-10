@@ -14,12 +14,15 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfigurationLoaderFactory;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
@@ -108,9 +111,14 @@ public class ENMAPChecker {
         //            }
         //        }
 
+        System.setProperty("MCR.Home", "/data/mcrHome");
+        System.setProperty("MCR.AppName", "jportal");
+        Map<String, String> properties = MCRConfigurationLoaderFactory.getConfigurationLoader().load();
+        MCRConfiguration.instance().initialize(properties, true);
+
         // convert
         Path metsFile = Paths.get(
-            "/data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915/JVB_19150101_001_167758667/JVB_19150101_001_167758667_wfs1_mets_corrected.xml");
+            "/data/temp/JVB_19150101_001_167758667_wfs1_mets_corrected.xml");
         JVBMetsConverter converter = new JVBMetsConverter();
         converter.setPath(metsFile.getParent());
         Document doc = enmapChecker.convert(metsFile, converter);
