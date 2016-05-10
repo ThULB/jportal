@@ -1,6 +1,7 @@
 package fsu.jportal.mets;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -8,12 +9,11 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.struct.Area;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
-import org.mycore.mets.model.struct.PhysicalSubDiv;
+import org.mycore.mets.model.struct.SmLink;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent;
@@ -80,20 +80,17 @@ public class JVBMetsImporter extends MetsImporter {
      * @return
      */
     private int getPageNumber(Mets mets, LogicalDiv div) {
-        // get the file id
-        String fileId = div.getFptrList().stream().flatMap(fptr -> fptr.getSeqList().stream())
-            .flatMap(seq -> seq.getAreaList().stream()).map(Area::getFileId).findFirst().orElse(null);
-
-        // resolve physical div
-        PhysicalStructMap physMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
-        PhysicalDiv divContainer = physMap.getDivContainer();
-
-        // get the order
-        return divContainer.getChildren().stream().filter(physDiv -> {
-            return physDiv.getChildren().stream().filter(fptr -> {
-                return fileId.equals(fptr.getFileId());
-            }).findAny().isPresent();
-        }).map(PhysicalSubDiv::getOrder).findFirst().orElse(0);
+        // get physical container
+        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
+        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
+        // get logical id
+        String logicalId = div.getId();
+        List<SmLink> links = mets.getStructLink().getSmLinkByFrom(logicalId);
+        // map phyisical div's and get the lowest by order
+        return links.stream()
+            .map(link -> divContainer.get(link.getTo()).getOrder())
+            .min(Integer::compareTo)
+            .orElse(0);
     }
 
 }

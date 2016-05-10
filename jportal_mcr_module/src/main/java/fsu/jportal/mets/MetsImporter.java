@@ -19,6 +19,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.SmLink;
 
 import fsu.jportal.backend.JPArticle;
@@ -73,14 +75,19 @@ public abstract class MetsImporter {
         String logicalId = logicalDiv.getId();
         MCRObjectID articleId = article.getObject().getId();
         List<SmLink> links = mets.getStructLink().getSmLinkByFrom(logicalId);
-        for (SmLink link : links) {
+
+        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
+        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
+        links.stream().sorted((link1, link2) -> {
+            return divContainer.get(link1.getTo()).getOrder() - divContainer.get(link2.getTo()).getOrder();
+        }).findFirst().ifPresent(link -> {
             Element structPhys = mets.getStructMap("PHYSICAL").asElement();
             FILEID_EXPRESSION.setVariable("id", link.getTo());
             List<Attribute> physIDs = FILEID_EXPRESSION.evaluate(structPhys);
 
             physIDs.stream().map(Attribute::getValue).filter(physId -> physId.endsWith("MASTER")).map(physId -> {
                 return mets.getFileSec().getFileGroup("MASTER").getFileById(physId).getFLocat().getHref();
-            }).forEach(href -> {
+            }).findFirst().ifPresent(href -> {
                 try {
                     MCRPath path = MCRPath.getPath(derivate.getId().toString(), href);
                     if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
@@ -96,7 +103,7 @@ public abstract class MetsImporter {
                     LOGGER.error(msg, exc);
                 }
             });
-        }
+        });
     }
 
     /**
