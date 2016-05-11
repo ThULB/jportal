@@ -111,6 +111,17 @@
       </mods:part>
     </xsl:if>
 
+    <!-- Keywords -->
+    <xsl:if test="./metadata/keywords/keyword">
+      <mods:subject>
+        <xsl:for-each select="./metadata/keywords/keyword">
+          <mods:topic>
+            <xsl:value-of select="text()" />
+          </mods:topic>
+        </xsl:for-each>
+      </mods:subject>
+    </xsl:if>
+
     <!-- physical location -->
     <xsl:if test="./metadata/contentClassis3/contentClassi3">
       <mods:location>
@@ -137,7 +148,6 @@
         </xsl:for-each>
       </mods:relatedItem>
     </xsl:if>
-
     <xsl:apply-templates select="metadata/participants/participant" mode="personal" />
     <xsl:apply-templates select="." mode="recordIdentifier" />
   </xsl:template>
