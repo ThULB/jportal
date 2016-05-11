@@ -1,6 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xalan="http://xml.apache.org/xalan" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
-  exclude-result-prefixes="xsi xalan layoutTools" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" version="1.0">
+  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+  exclude-result-prefixes="xsi xalan layoutTools jpxml" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" version="1.0">
   <xsl:output method="xml" encoding="utf-8" />
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="MCR.OPAC.CATALOG" />
@@ -56,7 +57,7 @@
 
     <!-- Origin Info -->
     <xsl:if test="./metadata/dates/date">
-      <mods:originInfo>
+      <mods:originInfo eventType="publication">
         <xsl:for-each select="./metadata/dates/date[@inherited=0]">
             <mods:dateIssued>
               <xsl:if test="@type='published_from'">
@@ -68,9 +69,14 @@
               <xsl:value-of select="text()" />
             </mods:dateIssued>
         </xsl:for-each>
+        <xsl:if test="not(./metadata/dates/date[@inherited=0])">
+          <mods:dateIssued>
+            <xsl:value-of select="jpxml:getPublishedISODate(@ID)" />
+          </mods:dateIssued>
+        </xsl:if>
       </mods:originInfo>
     </xsl:if>
-    
+
     <!-- journal type extension -->
     <xsl:if test="./metadata/contentClassis1/contentClassi1">
       <mods:extension>

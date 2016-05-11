@@ -124,19 +124,6 @@ public class JPXMLFunctions {
         }
     }
 
-    public String resolveText(String text, String varList) {
-        String[] vars = varList.split(",");
-        Map<String, String> varMap = new HashMap<String, String>();
-        for (String var : vars) {
-            String[] split = var.split("=");
-            if (split.length == 2) {
-                varMap.put(split[0], split[1]);
-            }
-        }
-        MCRTextResolver r = new MCRTextResolver(varMap);
-        return r.resolve(text);
-    }
-
     public static int getCentury(String date) {
         try {
             return (Integer.valueOf(date.substring(0, 2)) + 1);
@@ -152,7 +139,7 @@ public class JPXMLFunctions {
      * date could not be formatted an empty string is returned.
      * 
      * @param date date to format
-     * @return
+     * @return date in solr format (YYYY-MM-DDThh:mm:ssZ)
      */
     public static String formatDate(String date) {
         try {
@@ -170,6 +157,7 @@ public class JPXMLFunctions {
             SimpleDateFormat solrDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
             return solrDateFormat.format(solrDate);
         } catch (Exception exc) {
+            LOGGER.warn("Unable to formate date " + date);
             return null;
         }
     }
@@ -276,11 +264,24 @@ public class JPXMLFunctions {
     /**
      * Returns the best published date of a dates container. The type of the date has
      * to be equals 'published' or 'published_from' and has the lowest inherited value.
-     * 
+     * <p>
+     * This date comes in UTC and is YYYY-MM-DDThh:mm:ssZ formated. Its Solr compatible.
+     * </p>
      * @param id mycore object identifier
      * @return the published date or null
      */
     public static String getPublishedDate(String id) {
+        return formatDate(getPublishedISODate(id));
+    }
+
+    /**
+     * Returns the best published date of a dates container. The type of the date has
+     * to be equals 'published' or 'published_from' and has the lowest inherited value.
+     * 
+     * @param id mycore object identifier
+     * @return  a ISO 8601 conform String using the current set format.
+     */
+    public static String getPublishedISODate(String id) {
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
             MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
@@ -295,7 +296,7 @@ public class JPXMLFunctions {
                 if (published == null) {
                     continue;
                 }
-                return formatDate(published.getISOString());
+                return published.getISOString();
             }
             return null;
         } catch (Exception exc) {
