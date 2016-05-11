@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000210">
+  <label xml:lang="de" text="Zeitschriftentyp" />
+  <label xml:lang="en" text="Type of journal" />
+  <categories>
+    <category ID="legalDeposit">
+      <label xml:lang="de" text="Pflichtexemplar" />
+      <label xml:lang="en" text="Legal deposit" />
+    </category>
+    <category ID="onlineJournal">
+      <label xml:lang="de" text="Online-Zeitschrift" />
+      <label xml:lang="en" text="Online journal" />
+    </category>
+  </categories>
+</mycoreclass>

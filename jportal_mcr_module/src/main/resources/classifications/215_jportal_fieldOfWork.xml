@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000215">
+  <label xml:lang="de" text="Fachgebiet" />
+  <label xml:lang="en" text="fieldOfWork" />
+  <categories>
+    <category ID="historyAndArchaeology">
+      <label xml:lang="de" text="Geschichte/Archäologie" />
+      <label xml:lang="en" text="History/Archaeology" />
+    </category>
+    <category ID="hochschule">
+      <label xml:lang="de" text="Hochschule" />
+      <label xml:lang="en" text="Hochschule" />
+    </category>
+    <category ID="engineering">
+      <label xml:lang="de" text="Ingenieurwissenschaften" />
+      <label xml:lang="en" text="Engineering" />
+    </category>
+    <category ID="literatureAndArt">
+      <label xml:lang="de" text="Literatur/Kunst" />
+      <label xml:lang="en" text="Literature/Art" />
+    </category>
+    <category ID="medicine">
+      <label xml:lang="de" text="Medizin" />
+      <label xml:lang="en" text="Medicine" />
+    </category>
+    <category ID="naturalScience">
+      <label xml:lang="de" text="Naturwissenschaften" />
+      <label xml:lang="en" text="Natural science" />
+    </category>
+    <category ID="philosophy">
+      <label xml:lang="de" text="Philosophie" />
+      <label xml:lang="en" text="Philosophy" />
+    </category>
+    <category ID="religion">
+      <label xml:lang="de" text="Religion" />
+      <label xml:lang="en" text="Religion" />
+    </category>
+    <category ID="socialScience">
+      <label xml:lang="de" text="Sozialwissenschaften" />
+      <label xml:lang="en" text="Social science" />
+    </category>
+  </categories>
+</mycoreclass>

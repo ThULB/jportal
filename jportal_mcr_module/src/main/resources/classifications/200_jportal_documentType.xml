@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000200">
+  <label xml:lang="de" text="Dokumenttyp" />
+  <label xml:lang="en" text="document type" />
+  <categories>
+    <category ID="newspapers">
+      <label xml:lang="de" text="Zeitungen" />
+      <label xml:lang="en" text="Newspapers" />
+      <label xml:lang="pl" text="Gazeta" />
+    </category>
+    <category ID="magazines">
+      <label xml:lang="de" text="Zeitschriften" />
+      <label xml:lang="en" text="Magazines" />
+      <label xml:lang="pl" text="Czasopismo" />
+    </category>
+    <category ID="addressBooks">
+      <label xml:lang="de" text="Addressbücher" />
+      <label xml:lang="en" text="Address books" />
+    </category>
+    <category ID="parliamentDocuments">
+      <label xml:lang="de" text="Parlamentsschriften" />
+      <label xml:lang="en" text="Parliament documents" />
+    </category>
+    <category ID="calendars">
+      <label xml:lang="de" text="Kalendarien" />
+      <label xml:lang="en" text="Calendars" />
+    </category>
+  </categories>
+</mycoreclass>

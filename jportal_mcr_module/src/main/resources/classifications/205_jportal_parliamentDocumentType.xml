@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000205">
+  <label xml:lang="de" text="Parlamentsschriftentyp" />
+  <label xml:lang="en" text="parliament document type" />
+  <categories>
+    <category ID="governmentGazettes">
+      <label xml:lang="de" text="Gesetzesblätter" />
+      <label xml:lang="en" text="Law gazettes" />
+    </category>
+    <category ID="others">
+      <label xml:lang="de" text="Regierungs-, Amts- oder Nachrichtenblätter" />
+      <label xml:lang="en" text="Goverment gazettes, official gazettes or newsletters" />
+    </category>
+    <category ID="verordnungsblaetter">
+      <label xml:lang="de" text="Verordnungsblätter" />
+      <label xml:lang="en" text="Verordnungsblätter" />
+    </category>
+    <category ID="landtagsverhandlungen">
+      <label xml:lang="de" text="Landtagsverhandlungen" />
+      <label xml:lang="en" text="Landtagsverhandlungen" />
+    </category>
+    <category ID="staatshandbuecher">
+      <label xml:lang="de" text="Staatshandbücher" />
+      <label xml:lang="en" text="Staatshandbücher" />
+    </category>
+    <category ID="statisticalPublications">
+      <label xml:lang="de" text="Statistische Veröffentlichungen" />
+      <label xml:lang="en" text="Statistical publications" />
+    </category>
+  </categories>
+</mycoreclass>
