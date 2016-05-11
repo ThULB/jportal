@@ -68,8 +68,6 @@
   <i18n tag="predece">editormask.labels.predecessor</i18n>
   <i18n tag="successor">editormask.labels.successor</i18n>
 
-  <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neuer Band">jpvolume</newObj>
-  <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>
   <numPerPage for="volume">10</numPerPage>
   <numPerPage for="article">5</numPerPage>
   <title allowHTML="false" />
@@ -77,4 +75,14 @@
   <facet name="objectType" translate="true" />
   <facet name="participant.partner" mcrid="true" />
   <facet name="contentClassi1" translate="true" />
+
+  <journalSettings>
+    <types>
+      <type class="jportal_class_00000200" hidden="false" />
+      <type class="jportal_class_00000205" hidden="true" on="jportal_class_00000200:parliamentDocuments" />
+      <type class="jportal_class_00000210" hidden="true" on="jportal_class_00000200:magazines" />
+      <type class="jportal_class_00000215" hidden="true" on="jportal_class_00000200:magazines" />
+    </types>
+  </journalSettings>
+
 </layoutSettings>
