@@ -407,6 +407,7 @@ project(':jportal_webapp') {
             systemProperties.put("solr.solr.home", "$appPath/solr-home")
             classpath configurations.jetty
             main "org.eclipse.jetty.runner.Runner"
+            args '--config', "$project.projectDir/config/jetty/jetty-solr-config.xml"
             args '--port', solrPort
             args '--stop-port', stopSolrPort
             args '--stop-key', stopSolrKey

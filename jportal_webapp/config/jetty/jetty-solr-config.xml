@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
-<Configure id="JPortal" class="org.eclipse.jetty.server.Server">
+<Configure id="Solr" class="org.eclipse.jetty.server.Server">
 
 <!--   <Call name="addBean"> -->
 <!--     <Arg> -->
@@ -17,9 +17,9 @@
       <Item>
         <New class="org.eclipse.jetty.server.ServerConnector">
           <Arg>
-            <Ref refid="JPortal" />
+            <Ref refid="Solr" />
           </Arg>
-          <Set name="port">8294</Set>
+          <Set name="port">8391</Set>
         </New>
       </Item>
     </Array>
