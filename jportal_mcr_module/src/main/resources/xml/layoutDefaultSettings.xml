@@ -81,7 +81,7 @@
       <type class="jportal_class_00000200" hidden="false" />
       <type class="jportal_class_00000205" hidden="true" on="jportal_class_00000200:parliamentDocuments" />
       <type class="jportal_class_00000210" hidden="true" on="jportal_class_00000200:magazines" />
-      <type class="jportal_class_00000215" hidden="true" on="jportal_class_00000200:magazines" />
+      <type class="jportal_class_00000215" hidden="true" on="jportal_class_00000200:magazines" repeatable="true" />
     </types>
   </journalSettings>
 

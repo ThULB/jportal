@@ -405,6 +405,24 @@
           <xsd:attribute use="optional" type="xsd:boolean" name="notinherit" />
         </xsd:complexType>
       </xsd:element>
+      <xsd:element maxOccurs="1" minOccurs="0" name="journalTypes">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="journalType">
+              <xsd:complexType>
+                <xsd:attribute type="mcrobjectid" use="required" name="classid" />
+                <xsd:attribute type="mcrcategory" use="required" name="categid" />
+                <xsd:attribute type="mcrdefaulttype" use="optional" name="type" />
+                <xsd:attribute type="xsd:integer" use="optional" name="inherited" />
+                <xsd:attribute use="optional" ref="xml:lang" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute fixed="MCRMetaClassification" use="required" type="xsd:string" name="class" />
+          <xsd:attribute use="optional" type="xsd:boolean" name="heritable" fixed="false" />
+          <xsd:attribute use="optional" type="xsd:boolean" name="notinherit" />
+        </xsd:complexType>
+      </xsd:element>
       <xsd:element maxOccurs="1" minOccurs="0" name="contentClassis1">
         <xsd:complexType>
           <xsd:sequence>

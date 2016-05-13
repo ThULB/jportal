@@ -61,6 +61,11 @@
 			<xsl:if test="@small">
 				<xsl:attribute name="class"></xsl:attribute>
 			</xsl:if>
+  		<xsl:if test="@parentClass">
+    		<xsl:attribute name="class">
+      			<xsl:value-of select="@parentClass" />
+    		</xsl:attribute>
+  		</xsl:if>
 
 			<!-- 1. part: title -->
 			<div class="col-md-2 text-right">
@@ -84,6 +89,7 @@
 				</xsl:if>
 				<xed:bind xpath="{@xpath}">
 					<xsl:apply-templates select="jp:template[@name='textInput']" />
+          			<xsl:apply-templates select="jp:template[@name='selectInput']" />
 					<xsl:if test="@name!='textInputSm' and @name!='date_select'">
 						<div>
 							<xsl:attribute name="class">form-group {$xed-validation-marker}</xsl:attribute>
@@ -128,6 +134,11 @@
 					<xed:output i18n="{@i18n}" />
 				</span>
 			</xsl:when>
+  		<xsl:when test="@on" >
+    		<span>
+      			<xsl:value-of select="document(concat('classification:metadata:1:children:', @classification))/mycoreclass/label/@text" />
+    		</span>
+  		</xsl:when>
 			<xsl:when test="@loadLabel">
 				<xed:include cacheable="false" uri="{@loadLabel}" />
 			</xsl:when>
@@ -251,11 +262,22 @@
 	<xsl:template match="jp:template[@classification]" mode="input_select">
 		<!-- load classification -->
 		<select class="form-control" id="type" tabindex="1" size="1">
-      <xsl:if test="not(@noPleaseSelect) or @noPleaseSelect = 'false'">
-    		<option value="" selected="">
-    			<xed:output i18n="editor.common.select" />
-    		</option>
-      </xsl:if>
+  	  <xsl:copy-of select="@on" />
+    	<xsl:if test="contains(@selectClass, 'journalTyp')">
+      	<xsl:attribute name="data-classid">
+        		<xsl:value-of select="@classification" />
+      	</xsl:attribute>
+    	</xsl:if>
+    	<xsl:if test="@selectClass">
+      	<xsl:attribute name="class">
+        		<xsl:value-of select="@selectClass" />
+      	</xsl:attribute>
+    	</xsl:if>
+    	<xsl:if test="not(@noPleaseSelect) or @noPleaseSelect = 'false'">
+  		<option value="" selected="">
+  			<xed:output i18n="editor.common.select" />
+  		</option>
+    	</xsl:if>
 			<xsl:variable name="classID">
 				<xsl:choose>
 					<xsl:when test="@classification = '{xedIncParam}'">
@@ -274,7 +296,150 @@
 			</xed:include>
 		</select>
 	</xsl:template>
-
+  
+<!--   <xsl:template match="jp:template[@classification='journalTyp']" mode="input_select"> -->
+<!--     <xsl:variable name="docSettings" select="document('../xml/layoutDefaultSettings.xml')" /> -->
+    
+<!--     <xsl:for-each select="$docSettings/layoutSettings/journalSettings/types/type"> -->
+<!--       <xsl:choose> -->
+<!--         <xsl:when test="@repeatable = 'true'" > -->
+<!--           <xed:repeat xpath="journalType[@inherited='0']" min="0" max="10"> -->
+<!--             <xsl:if test="not(position() = 1)"> -->
+<!--               <xsl:attribute name="xpath"> -->
+<!--                 <xsl:value-of select="concat('journalType[',position(),']')" /> -->
+<!--               </xsl:attribute> -->
+<!--               <xed:bind xpath="@inherited" set="0" /> -->
+<!--             </xsl:if> -->
+<!--             <xed:bind xpath="@classid" set="{@class}" /> -->
+<!--             <xed:bind xpath="@categid" > -->
+<!--               <div class="form-group"> -->
+<!--                 <xsl:attribute name="style"> -->
+<!--                   <xsl:if test="not(position() = 1)"> -->
+<!--                     <xsl:text>margin-top: 15px</xsl:text> -->
+<!--                   </xsl:if> -->
+<!--                 </xsl:attribute> -->
+<!--                 <xsl:if test="@hidden = 'true'"> -->
+<!--                   <xsl:attribute name="class">row collapse</xsl:attribute> -->
+<!--                 </xsl:if> -->
+<!--                 <xsl:if test="not(position() = 1)"> -->
+<!--                   <div class="col-md-2 text-center"> -->
+<!--                     <span> -->
+<!--                       <xsl:value-of select="document(concat('classification:metadata:1:children:', @class))/mycoreclass/label/@text" /> -->
+<!--                     </span> -->
+<!--                   </div> -->
+<!--                 </xsl:if> -->
+<!--                 <div class="col-md-7"> -->
+<!--                   <xsl:if test="position() = 1"> -->
+<!--                     <xsl:attribute name="class"></xsl:attribute> -->
+<!--                   </xsl:if> -->
+<!--                   <select class="form-control" id="type" tabindex="1" size="1"> -->
+<!--                     <xsl:copy-of select="@on" /> -->
+<!--                     <xsl:if test="position() = 1"> -->
+<!--                       <xsl:attribute name="class">form-control journalTyp</xsl:attribute> -->
+<!--                       <xsl:attribute name="data-classid"> -->
+<!--                         <xsl:value-of select="@class" /> -->
+<!--                       </xsl:attribute> -->
+<!--                     </xsl:if> -->
+<!--                     <option value="" selected=""> -->
+<!--                       <xed:output i18n="editor.common.select" /> -->
+<!--                     </option> -->
+<!--                     <xsl:variable name="classID"> -->
+<!--                       <xsl:choose> -->
+<!--                         <xsl:when test="@class = '{xedIncParam}'"> -->
+<!--                           <xsl:value-of select="$xedIncParam" /> -->
+<!--                         </xsl:when> -->
+<!--                         <xsl:otherwise> -->
+<!--                           <xsl:value-of select="@class" /> -->
+<!--                         </xsl:otherwise> -->
+<!--                       </xsl:choose> -->
+<!--                     </xsl:variable> -->
+<!--                     <xed:include> -->
+<!--                       <xsl:attribute name="uri"> -->
+<!--                         <xsl:value-of select="concat('xslStyle:items2options:classification:editor:-1:children:', $classID)" /> -->
+<!--                       </xsl:attribute> -->
+<!--                     </xed:include> -->
+<!--                   </select> -->
+<!--                 </div> -->
+<!--                 <xsl:if test="@repeatable = 'true'"> -->
+<!--                   <div class="col-md-3"> -->
+<!--                    <xed:controls>insert remove up down</xed:controls> -->
+<!--                  </div>   -->
+<!--                 </xsl:if> -->
+<!--               </div> -->
+<!--             </xed:bind> -->
+<!--           </xed:repeat> -->
+<!--         </xsl:when> -->
+<!--         <xsl:otherwise> -->
+<!--           <xed:bind xpath="journalType[@inherited='0']" > -->
+<!--             <xsl:if test="not(position() = 1)"> -->
+<!--               <xsl:attribute name="xpath"> -->
+<!--                 <xsl:value-of select="concat('journalType[',position(),']')" /> -->
+<!--               </xsl:attribute> -->
+<!--               <xed:bind xpath="@inherited" set="0" /> -->
+<!--             </xsl:if> -->
+<!--             <xed:bind xpath="@classid" set="{@class}" /> -->
+<!--             <xed:bind xpath="@categid" > -->
+<!--               <div class="form-group"> -->
+<!--                 <xsl:attribute name="style"> -->
+<!--                   <xsl:if test="not(position() = 1)"> -->
+<!--                     <xsl:text>margin-top: 15px</xsl:text> -->
+<!--                   </xsl:if> -->
+<!--                 </xsl:attribute> -->
+<!--                 <xsl:if test="@hidden = 'true'"> -->
+<!--                   <xsl:attribute name="class">row collapse</xsl:attribute> -->
+<!--                 </xsl:if> -->
+<!--                 <xsl:if test="not(position() = 1)"> -->
+<!--                   <div class="col-md-2 text-center"> -->
+<!--                     <span> -->
+<!--                       <xsl:value-of select="document(concat('classification:metadata:1:children:', @class))/mycoreclass/label/@text" /> -->
+<!--                     </span> -->
+<!--                   </div> -->
+<!--                 </xsl:if> -->
+<!--                 <div class="col-md-7"> -->
+<!--                   <xsl:if test="position() = 1"> -->
+<!--                     <xsl:attribute name="class"></xsl:attribute> -->
+<!--                   </xsl:if> -->
+<!--                   <select class="form-control" id="type" tabindex="1" size="1"> -->
+<!--                     <xsl:copy-of select="@on" /> -->
+<!--                     <xsl:if test="position() = 1"> -->
+<!--                       <xsl:attribute name="class">form-control journalTyp</xsl:attribute> -->
+<!--                       <xsl:attribute name="data-classid"> -->
+<!--                         <xsl:value-of select="@class" /> -->
+<!--                       </xsl:attribute> -->
+<!--                     </xsl:if> -->
+<!--                     <option value="" selected=""> -->
+<!--                       <xed:output i18n="editor.common.select" /> -->
+<!--                     </option> -->
+<!--                     <xsl:variable name="classID"> -->
+<!--                       <xsl:choose> -->
+<!--                         <xsl:when test="@class = '{xedIncParam}'"> -->
+<!--                           <xsl:value-of select="$xedIncParam" /> -->
+<!--                         </xsl:when> -->
+<!--                         <xsl:otherwise> -->
+<!--                           <xsl:value-of select="@class" /> -->
+<!--                         </xsl:otherwise> -->
+<!--                       </xsl:choose> -->
+<!--                     </xsl:variable> -->
+<!--                     <xed:include> -->
+<!--                       <xsl:attribute name="uri"> -->
+<!--                         <xsl:value-of select="concat('xslStyle:items2options:classification:editor:-1:children:', $classID)" /> -->
+<!--                       </xsl:attribute> -->
+<!--                     </xed:include> -->
+<!--                   </select> -->
+<!--                 </div> -->
+<!--                 <xsl:if test="@repeatable = 'true'"> -->
+<!--                   <div class="col-md-3"> -->
+<!--                    <xed:controls>insert remove up down</xed:controls> -->
+<!--                  </div>   -->
+<!--                 </xsl:if> -->
+<!--               </div> -->
+<!--             </xed:bind> -->
+<!--           </xed:bind> -->
+<!--         </xsl:otherwise> -->
+<!--       </xsl:choose> -->
+<!--     </xsl:for-each> -->
+<!--   </xsl:template> -->
+  
 	<xsl:template match="jp:template[@list]" mode="input_select">
 		<select class="form-control" id="type" tabindex="1" size="1">
 			<option value="" selected="">
