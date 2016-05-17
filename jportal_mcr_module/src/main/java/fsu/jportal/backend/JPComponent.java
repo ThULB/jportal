@@ -41,4 +41,12 @@ public interface JPComponent {
      */
     public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException;
 
+    /**
+     * Returns the type of the component. One of person, jpinst, jpjournal, jpvolume,
+     * jparticle or derivate is returned here.
+     * 
+     * @return the tpye of the component
+     */
+    public abstract String getType();
+   
 }

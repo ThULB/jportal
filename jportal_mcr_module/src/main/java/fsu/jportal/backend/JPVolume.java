@@ -86,4 +86,20 @@ public class JPVolume extends JPContainer {
         return getText("notes", null);
     }
 
+    /**
+     * Returns the hidden position of this volume.
+     * 
+     * @return position in parent
+     */
+    public Integer getHiddenPosition() {
+        String posAsString = getText("hidden_positions", null).orElse("0");
+        try {
+            return Integer.valueOf(posAsString);
+        } catch (Exception exc) {
+            LOGGER.warn("Unable to parse the hidden position (" + posAsString + ") of " + getObject().getId()
+                + " to an integer value.");
+            return 0;
+        }
+    }
+
 }

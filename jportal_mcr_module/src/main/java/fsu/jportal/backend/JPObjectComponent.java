@@ -121,13 +121,6 @@ public abstract class JPObjectComponent implements JPComponent {
     }
 
     /**
-     * Returns the type of the component. One of person, jpinst, jpjournal, jpvolume or jparticle is returned here.
-     * 
-     * @return the tpye of the component
-     */
-    public abstract String getType();
-
-    /**
      * Returns an optional of an metadata element.
      * 
      * @param metadataName name of the metadata element

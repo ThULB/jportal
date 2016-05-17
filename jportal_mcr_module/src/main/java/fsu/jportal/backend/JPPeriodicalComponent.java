@@ -1,16 +1,27 @@
 package fsu.jportal.backend;
 
-import fsu.jportal.util.DerivateLinkUtil;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.common.MCRISO8601Date;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import fsu.jportal.util.DerivateLinkUtil;
 
 /**
  * Base class for jparticle, jpvolume and jpjournal.
@@ -173,6 +184,20 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
+     * Returns the published date of this periodical component.
+     * 
+     * @return optional of the published date
+     */
+    public Optional<LocalDate> getPublishedDate() {
+        Optional<MCRMetaISO8601Date> published = getDate(DateType.published.name());
+        Optional<MCRMetaISO8601Date> publishedFrom = getDate(DateType.published_from.name());
+        return Optional.of(published.orElse(publishedFrom.orElse(null)))
+                       .map(MCRMetaISO8601Date::getMCRISO8601Date)
+                       .map(MCRISO8601Date::getDt)
+                       .map(LocalDate::from);
+    }
+
+    /**
      * Adds a new participant to this object.
      * 
      * @param id the object identifier of the participant
@@ -223,8 +248,9 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * @return the journal id
      */
     public String getJournalId() {
-        return metadataStream("hidden_jpjournalsID", MCRMetaLangText.class).map(MCRMetaLangText::getText).findFirst()
-            .orElse(null);
+        return metadataStream("hidden_jpjournalsID", MCRMetaLangText.class).map(MCRMetaLangText::getText)
+                                                                           .findFirst()
+                                                                           .orElse(null);
     }
 
 }

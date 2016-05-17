@@ -1,8 +1,11 @@
 package fsu.jportal.backend;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.mycore.datamodel.common.MCRISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -155,7 +158,14 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
      */
     public List<String> getKeywords() {
         return metadataStream("keywords", MCRMetaLangText.class).map(MCRMetaLangText::getText)
-            .collect(Collectors.toList());
+                                                                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<LocalDate> getPublishedDate() {
+        return getDate(DateType.published.name()).map(MCRMetaISO8601Date::getMCRISO8601Date)
+                                                 .map(MCRISO8601Date::getDt)
+                                                 .map(LocalDate::from);
     }
 
     /**

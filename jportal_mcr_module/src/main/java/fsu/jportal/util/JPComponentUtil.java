@@ -11,6 +11,7 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.jportal.backend.JPArticle;
@@ -119,9 +120,7 @@ public abstract class JPComponentUtil {
      * @return main title
      */
     public static Optional<String> getMaintitle(String mcrID) {
-        JPInfoProvider infoProvider = new JPInfoProvider(mcrID,
-            "/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()");
-        return infoProvider.get(new JPSimpleText());
+        return get(mcrID).map(JPComponent::getTitle);
     }
 
     public static Optional<String> getListType(String mcrID) {
@@ -148,7 +147,7 @@ public abstract class JPComponentUtil {
      */
     public static Optional<? extends JPComponent> get(MCRObjectID id) {
         Optional<JPPeriodicalComponent> periodical = getPeriodical(id);
-        if(periodical.isPresent()) {
+        if (periodical.isPresent()) {
             return periodical;
         } else {
             return getLegalEntity(id);
@@ -196,6 +195,25 @@ public abstract class JPComponentUtil {
     }
 
     /**
+     * Returns a periodical component for the given mycore object.
+     * 
+     * @param mcrObject the mycore object
+     * @return periodical component
+     */
+    public static JPPeriodicalComponent getPeriodical(MCRObject mcrObject) {
+        String type = mcrObject.getId().getTypeId();
+        if (type.equals(JPArticle.TYPE)) {
+            return new JPArticle(mcrObject);
+        } else if (type.equals(JPVolume.TYPE)) {
+            return new JPVolume(mcrObject);
+        } else if (type.equals(JPJournal.TYPE)) {
+            return new JPJournal(mcrObject);
+        } else {
+            throw new IllegalArgumentException("MCRObject is not a periodical component " + mcrObject.getId());
+        }
+    }
+
+    /**
      * Returns a legal entity object for the given id.
      * 
      * @param id mycore identifier
@@ -209,6 +227,17 @@ public abstract class JPComponentUtil {
             return Optional.of(new JPInstitution(id));
         }
         return Optional.empty();
+    }
+
+    /**
+     * Checks if the given component is of the type.
+     * 
+     * @param component
+     * @param type something like jparticle or jpvolume 
+     * @return true if it is
+     */
+    public static boolean is(JPComponent component, String type) {
+        return component.getType().equals(type);
     }
 
 }

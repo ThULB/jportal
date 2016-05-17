@@ -30,8 +30,9 @@ public class JPDerivateComponent implements JPComponent {
     public JPDerivateComponent() {
         derivate = new MCRDerivate();
         derivate.setId(MCRObjectID.getNextFreeId("jportal_derivate"));
-        String schema = MCRConfiguration.instance().getString("MCR.Metadata.Config.derivate", "datamodel-derivate.xml")
-            .replaceAll(".xml", ".xsd");
+        String schema = MCRConfiguration.instance()
+                                        .getString("MCR.Metadata.Config.derivate", "datamodel-derivate.xml")
+                                        .replaceAll(".xml", ".xsd");
         derivate.setSchema(schema);
 
         MCRMetaIFS ifs = new MCRMetaIFS();
@@ -78,6 +79,11 @@ public class JPDerivateComponent implements JPComponent {
     @Override
     public String getTitle() {
         return this.derivate.getLabel();
+    }
+
+    @Override
+    public String getType() {
+        return "derivate";
     }
 
     /**
