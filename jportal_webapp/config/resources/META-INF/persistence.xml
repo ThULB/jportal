@@ -18,6 +18,10 @@
       <property name="javax.persistence.jdbc.password" value="" />
       <property name="hibernate.cache.use_second_level_cache" value="false" />
       <property name="hibernate.hbm2ddl.auto" value="update" />
+      
+      <!-- debug properties -->
+      <!-- <property name="hibernate.show_sql" value="true" />
+      <property name="hibernate.format_sql" value="true" /> -->
 
       <!-- Connection-Pool -->
       <!-- JDBC Properties (see above) are automatically configured by hibernate -->
