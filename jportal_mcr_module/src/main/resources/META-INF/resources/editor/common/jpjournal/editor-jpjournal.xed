@@ -56,8 +56,13 @@
       
       <jp:template name="textArea" xpath="notes[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain']" i18n="editormask.labels.note" />
       
-<!--       <jp:template name="selectInput" xpath="journalTypes[@class='MCRMetaClassification']" i18n="jp.editor.journal.journalTyp" classification="journalTyp" /> -->
-      
+      <!-- 
+      <jp:template name="selectInput" xpath="journalTypes[@class='MCRMetaClassification']" i18n="jp.editor.journal.journalTyp" classification="journalTyp" />
+       -->
+
+      <jp:template name="dynamicBinding" type="jpjournal" />
+
+<!-- 
      <xed:bind xpath="journalTypes[@class='MCRMetaClassification']">
        <jp:template name="selectInput" xpath="journalType[@inherited='0'][@classid='jportal_class_00000200']/@categid" i18n="jp.editor.journal.journalTyp" classification="jportal_class_00000200" selectClass="form-control journalTyp" />
        <jp:template name="textInputSm" xpath="journalType[@inherited='0'][@classid='jportal_class_00000205']" parentClass="row collapse">
@@ -72,7 +77,8 @@
          </jp:template>
        </xed:repeat>
      </xed:bind>
-      
+ -->
+
      <xed:repeat xpath="contentClassis1[@class='MCRMetaClassification']/contentClassi1[@inherited='0'][@classid='jportal_class_00000061']" min="0" max="10">
        <jp:template name="selectInput" xpath="@categid" i18n="jp.editor.journal.journalTyp.old" buttons="true" classification="jportal_class_00000061" />
      </xed:repeat>

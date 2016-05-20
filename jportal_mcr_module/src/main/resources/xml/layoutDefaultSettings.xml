@@ -76,13 +76,15 @@
   <facet name="participant.partner" mcrid="true" />
   <facet name="contentClassi1" translate="true" />
 
-  <journalSettings>
-    <types>
-      <type class="jportal_class_00000200" hidden="false" />
-      <type class="jportal_class_00000205" hidden="true" on="jportal_class_00000200:parliamentDocuments" />
-      <type class="jportal_class_00000210" hidden="true" on="jportal_class_00000200:magazines" />
-      <type class="jportal_class_00000215" hidden="true" on="jportal_class_00000200:magazines" repeatable="true" />
-    </types>
-  </journalSettings>
+  <editor>
+    <jpjournal>
+      <bind xpath="journalTypes[@class='MCRMetaClassification']">
+        <row xpath="journalType" class="jportal_class_00000200" />
+        <row xpath="journalType" class="jportal_class_00000205" on="jportal_class_00000200:parliamentDocuments" />
+        <row xpath="journalType" class="jportal_class_00000210" on="jportal_class_00000200:magazines" />
+        <row xpath="journalType" class="jportal_class_00000215" on="jportal_class_00000200:magazines" repeatable="true" />
+      </bind>
+    </jpjournal>
+  </editor>
 
 </layoutSettings>

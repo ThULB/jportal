@@ -2,28 +2,29 @@ $(document).ready(function() {
 	// create date fields
 	createDate();
 	
-	// collapse journalTyp select boxes in jpjournal
-//	$("select.journalTyp").change(function() {
-//		$(this).parent().parent().nextAll().find("select").val("");
-//		$(this).parent().parent().nextAll().collapse("hide");
-//		$(this).parent().parent().nextAll().find("select[on='" + $(this).data("classid") + ":" + $(this).val() + "']").parent().parent().collapse("toggle");
-//	});
-//	
-//	$("select.journalTyp").each(function() {
-//		$(this).parent().parent().nextAll().collapse("hide");
-//		$(this).parent().parent().nextAll().find("select[on='" + $(this).data("classid") + ":" + $(this).val() + "']").parent().parent().collapse("toggle");
-//	})
-	
-	$("select.journalTyp").change(function() {
-		$(this).closest(".row").nextAll("div.collapse").find("select").val("");
-		$(this).closest(".row").nextAll("div.collapse").collapse("hide");
-		$(this).closest(".row").nextAll("div.collapse").find("select[on='" + $(this).data("classid") + ":" + $(this).val() + "']").closest(".row").collapse("toggle");
+	$("select.dynamicBinding").change(function() {
+	  updateBindings();
 	});
-	
-	$("select.journalTyp").each(function() {
-		$(this).closest(".row").nextAll("div.collapse").collapse("hide");
-		$(this).closest(".row").nextAll("div.collapse").find("select[on='" + $(this).data("classid") + ":" + $(this).val() + "']").closest(".row").collapse("toggle");
-	})
+
+	function updateBindings() {
+	  $("select.dynamicBinding").each(function() {
+	    var on = $(this).attr("on");
+	    if(on == null) {
+	      return;
+	    }
+	    var row = $(this).closest(".row");
+	    var classid = on.split(":")[0];
+	    var categid = on.split(":")[1];
+	    var dependentBinding = $("select.dynamicBinding[data-classid='" + classid + "']");
+	    var display = (categid == dependentBinding.val()) ? "block" : "none";
+      if(display == "none") {
+        $(this).val("");
+      }
+	    row.css("display", display);
+	  });
+	}
+	updateBindings();
+
 });
 
 function createDate() {
