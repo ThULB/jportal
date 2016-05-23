@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jp="http://www.mycore.de/components/jp"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xed xlink xalan jp i18n encoder">
+  xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jp="http://www.mycore.de/components/jp" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xed xlink xalan jp i18n encoder">
 
   <xsl:include href="copynodes.xsl" />
+  <xsl:include href="coreFunctions.xsl" />
+  <xsl:include href="jp-layout-functions.xsl" />
+
   <xsl:param name="xedIncParam" select="''" />
+  <xsl:param name="CurrentLang" />
 
   <xsl:template match="jp:journalID">
     <xsl:choose>
@@ -132,7 +135,10 @@
       </xsl:when>
       <xsl:when test="@classification">
         <span>
-          <xsl:value-of select="document(concat('classification:metadata:1:children:', @classification))/mycoreclass/label/@text" />
+          <xsl:call-template name="jp.printClass">
+            <xsl:with-param name="nodes" select="document(concat('classification:metadata:1:children:', @classification))/mycoreclass" />
+            <xsl:with-param name="lang" select="$CurrentLang" />
+          </xsl:call-template>
         </span>
       </xsl:when>
       <xsl:when test="@loadLabel">
@@ -289,63 +295,6 @@
     </select>
   </xsl:template>
 
-  <!-- DYNAMIC CLASSIFICATION'S -->
-  <xsl:template match="jp:template[@name='dynamicBinding']">
-    <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
-    <xsl:variable name="type" select="@type" />
-    <xsl:apply-templates select="$settings/editor/*[name() = $type]/bind" mode="dynamicBinding" />
-  </xsl:template>
-
-  <xsl:template match="bind" mode="dynamicBinding">
-    <xed:bind xpath="{@xpath}">
-      <xsl:apply-templates select="row" mode="dynamicBinding" />
-    </xed:bind>
-  </xsl:template>
-
-  <xsl:template match="row" mode="dynamicBinding">
-    <xsl:variable name="templateXML">
-      <jp:template name="selectInput" selectClass="form-control dynamicBinding">
-        <xsl:attribute name="xpath">
-          <xsl:value-of select="concat(@xpath, '[@inherited=&quot;0&quot;][@classid=&quot;', @class, '&quot;]/@categid')" />
-        </xsl:attribute>
-        <xsl:attribute name="classification">
-          <xsl:value-of select="@class" />
-        </xsl:attribute>
-        <xsl:if test="@on">
-          <xsl:attribute name="on">
-            <xsl:value-of select="@on" />
-          </xsl:attribute>
-        </xsl:if>
-      </jp:template>
-    </xsl:variable>
-    <xsl:apply-templates select="xalan:nodeset($templateXML)/jp:template" />
-  </xsl:template>
-
-  <xsl:template match="row[@repeatable]" mode="dynamicBinding">
-    <xed:repeat min="0" max="99">
-      <xsl:attribute name="xpath">
-        <xsl:value-of select="concat(@xpath, '[@inherited=&quot;0&quot;][@classid=&quot;', @class, '&quot;]')" />
-      </xsl:attribute>
-      <xsl:variable name="templateXML">
-        <jp:template name="selectInput" selectClass="form-control dynamicBinding" buttons="true" >
-          <xsl:attribute name="xpath">
-            <xsl:value-of select="'@categid'" />
-          </xsl:attribute>
-          <xsl:attribute name="classification">
-            <xsl:value-of select="@class" />
-          </xsl:attribute>
-          <xsl:if test="@on">
-            <xsl:attribute name="on">
-              <xsl:value-of select="@on" />
-            </xsl:attribute>
-          </xsl:if>
-        </jp:template>
-      </xsl:variable>
-      <xsl:apply-templates select="xalan:nodeset($templateXML)/jp:template" />
-    </xed:repeat>
-  </xsl:template>
-
-  <!-- LIST -->
   <xsl:template match="jp:template[@list]" mode="input_select">
     <select class="form-control" id="type" tabindex="1" size="1">
       <option value="" selected="">
@@ -429,11 +378,11 @@
   <xsl:template match="jp:template[@type='date']" mode="date_select">
     <div>
       <xsl:attribute name="id">
-				<xsl:value-of select="@id_container" />
-			</xsl:attribute>
+        <xsl:value-of select="@id_container" />
+      </xsl:attribute>
       <xsl:attribute name="class">
-				<xsl:value-of select="@class" />
-			</xsl:attribute>
+        <xsl:value-of select="@class" />
+      </xsl:attribute>
       <xsl:if test="@span_date = 'before'">
         <span class="input-group-addon btn btn-default jp-layout-white">
           <span class="glyphicon-calendar glyphicon"></span>
@@ -442,12 +391,12 @@
       <xed:bind xpath="{@xpath}">
         <input class="form-control date-field" type="text" placeholder="yyyy-MM-dd" maxlength="10">
           <xsl:attribute name="id">
-						<xsl:value-of select="@id_input" />
-					</xsl:attribute>
+            <xsl:value-of select="@id_input" />
+          </xsl:attribute>
           <xsl:if test="@class_input">
             <xsl:attribute name="class">
-							<xsl:value-of select="@class_input" />
-						</xsl:attribute>
+              <xsl:value-of select="@class_input" />
+            </xsl:attribute>
           </xsl:if>
         </input>
       </xed:bind>
@@ -461,4 +410,61 @@
       </xsl:if>
     </div>
   </xsl:template>
+
+ <!-- DYNAMIC CLASSIFICATION'S -->
+  <xsl:template match="jp:template[@name='dynamicBinding']">
+    <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
+    <xsl:variable name="type" select="@type" />
+    <xsl:apply-templates select="$settings/editor/*[name() = $type]/bind" mode="dynamicBinding" />
+  </xsl:template>
+
+  <xsl:template match="bind" mode="dynamicBinding">
+    <xed:bind xpath="{@xpath}">
+      <xsl:apply-templates select="row" mode="dynamicBinding" />
+    </xed:bind>
+  </xsl:template>
+
+  <xsl:template match="row" mode="dynamicBinding">
+    <xsl:variable name="templateXML">
+      <jp:template name="selectInput" selectClass="form-control dynamicBinding">
+        <xsl:attribute name="xpath">
+          <xsl:value-of select="concat(@xpath, '[@inherited=&quot;0&quot;][@classid=&quot;', @class, '&quot;]/@categid')" />
+        </xsl:attribute>
+        <xsl:attribute name="classification">
+          <xsl:value-of select="@class" />
+        </xsl:attribute>
+        <xsl:if test="@on">
+          <xsl:attribute name="on">
+            <xsl:value-of select="@on" />
+          </xsl:attribute>
+        </xsl:if>
+      </jp:template>
+    </xsl:variable>
+    <xsl:apply-templates select="xalan:nodeset($templateXML)/jp:template" />
+  </xsl:template>
+
+  <xsl:template match="row[@repeatable]" mode="dynamicBinding">
+    <xed:repeat min="0" max="99">
+      <xsl:attribute name="xpath">
+        <xsl:value-of select="concat(@xpath, '[@inherited=&quot;0&quot;][@classid=&quot;', @class, '&quot;]')" />
+      </xsl:attribute>
+      <xsl:variable name="templateXML">
+        <jp:template name="selectInput" selectClass="form-control dynamicBinding" buttons="true">
+          <xsl:attribute name="xpath">
+            <xsl:value-of select="'@categid'" />
+          </xsl:attribute>
+          <xsl:attribute name="classification">
+            <xsl:value-of select="@class" />
+          </xsl:attribute>
+          <xsl:if test="@on">
+            <xsl:attribute name="on">
+              <xsl:value-of select="@on" />
+            </xsl:attribute>
+          </xsl:if>
+        </jp:template>
+      </xsl:variable>
+      <xsl:apply-templates select="xalan:nodeset($templateXML)/jp:template" />
+    </xed:repeat>
+  </xsl:template>
+
 </xsl:stylesheet>

@@ -5,6 +5,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:math="xalan://java.lang.Math" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xalan math jpxml">
 
+  <xsl:param name="RequestURL" />
   <xsl:param name="MCR.Piwik.baseurl" />
   <xsl:param name="MCR.Piwik.enable" />
   <xsl:param name="MCR.Piwik.id" select="'1'" />

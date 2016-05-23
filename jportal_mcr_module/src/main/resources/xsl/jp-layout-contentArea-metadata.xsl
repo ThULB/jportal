@@ -195,7 +195,6 @@
     <xsl:call-template name="jp.printClass">
       <xsl:with-param name="nodes" select="document($classlink)/mycoreclass/categories/category" />
       <xsl:with-param name="lang" select="$CurrentLang" />
-      <xsl:with-param name="languages" select="$languages" />
     </xsl:call-template>
     <xsl:if test="position() != last()">
       <xsl:value-of select="'; '" />
