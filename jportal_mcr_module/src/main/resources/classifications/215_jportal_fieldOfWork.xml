@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000215">
   <label xml:lang="de" text="Fachgebiet" />
-  <label xml:lang="en" text="fieldOfWork" />
+  <label xml:lang="en" text="Field of work" />
   <categories>
     <category ID="historyAndArchaeology">
       <label xml:lang="de" text="Geschichte/Archäologie" />
