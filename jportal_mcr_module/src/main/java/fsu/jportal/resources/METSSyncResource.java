@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jdom2.Document;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRStreamUtils;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -53,7 +54,7 @@ public class METSSyncResource {
 
     /**
      * Syncs the mets.xml with the object structure.
-     * Returns a json object containg the number of changed logical div's.
+     * Returns a json object containing the number of changed logical div's.
      * 
      * @param derivateId the derivate
      * @return json object
@@ -63,7 +64,7 @@ public class METSSyncResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response sync(@PathParam("id") String derivateId) {
         // check write permission on derivate
-        MCRJerseyUtil.checkPermission(MCRObjectID.getInstance(derivateId), "write");
+        MCRJerseyUtil.checkPermission(MCRObjectID.getInstance(derivateId), MCRAccessManager.PERMISSION_WRITE);
         // get mets
         Mets mets = getMets(derivateId);
 
