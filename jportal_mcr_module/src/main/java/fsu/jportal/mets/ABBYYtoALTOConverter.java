@@ -17,7 +17,7 @@ import org.mycore.mets.model.IMetsElement;
 public class ABBYYtoALTOConverter {
 
     /**
-     * Does the convertion on the given document. Be aware that the document
+     * Does the conversion on the given document. Be aware that the document
      * is changed!
      * 
      * @param abbyENMAPMets an enmap mets with ABBYY file references

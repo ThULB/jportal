@@ -1,5 +1,8 @@
 package fsu.jportal.mets;
 
+import java.nio.file.Path;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -15,33 +18,38 @@ import org.mycore.mets.model.struct.LogicalDiv;
 public class LLZMetsConverter extends ENMAPConverter {
 
     private static Logger LOGGER = LogManager.getLogger(LLZMetsConverter.class);
-    
+
     private String lastBibLabel;
 
     @Override
-    public Mets convert(Document enmap) throws ConvertException {
-        ABBYYtoALTOConverter.convert(enmap);
-        return super.convert(enmap);
+    public Mets convert(Document enmap, Path basePath) throws ConvertException {
+        this.lastBibLabel = null;
+        return super.convert(enmap, basePath);
     }
 
     @Override
-    protected LogicalDiv getLogicalDiv(Element enmap, Element enmapDiv, Mets mcrMets) {
-        LogicalDiv logicalDiv = super.getLogicalDiv(enmap, enmapDiv, mcrMets);
+    protected String getALTOFileXPath() {
+        return "mets:fileSec/mets:fileGrp/mets:fileGrp[@ID='ALTOFiles']/mets:file";
+    }
+
+    @Override
+    protected LogicalDiv getLogicalDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
+        LogicalDiv logicalDiv = super.getLogicalDiv(enmap, enmapDiv, mcrMets, altoReferences);
         logicalDiv.setType("volume");
         return logicalDiv;
     }
 
     @Override
-    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets) {
+    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv logicalSubDiv = this.buildLogicalSubDiv(enmapDiv);
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
         String dmdID = LLZMetsUtils.getDmDId(enmapDiv);
         if (type.equals("issue") || type.equals("volumeparts")) {
-            if(enmapDiv.getChildren().isEmpty()) {
+            if (enmapDiv.getChildren().isEmpty()) {
                 LOGGER.warn("Issue or volumepart has no content! " + logicalSubDiv.getId());
                 return null;
             }
-            handleLogicalDivs(enmap, enmapDiv, logicalSubDiv, mcrMets);
+            handleLogicalDivs(enmap, enmapDiv, logicalSubDiv, mcrMets, altoReferences);
             return logicalSubDiv;
         }
         if (type.equals("rezension") && enmapDiv.getChildren().size() > 0) {
@@ -58,7 +66,7 @@ public class LLZMetsConverter extends ENMAPConverter {
         } else {
             return null;
         }
-        handleLogicalFilePointer(enmapDiv, logicalSubDiv, mcrMets);
+        handleLogicalFilePointer(enmapDiv, logicalSubDiv, mcrMets, altoReferences);
         return logicalSubDiv;
     }
 

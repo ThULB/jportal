@@ -167,7 +167,7 @@ public class METSImportResource {
      */
     private Mets convert(String derivateId, Document enmapMetsXML) throws IOException, JDOMException, ConvertException {
         ENMAPConverter converter = getConverter(enmapMetsXML, derivateId);
-        return converter.convert(enmapMetsXML);
+        return converter.convert(enmapMetsXML, MCRPath.getPath(derivateId, "/"));
     }
 
     /**
@@ -214,7 +214,6 @@ public class METSImportResource {
             converter = new LLZMetsConverter();
         } else if (type.equals(METS_TYPE.jvb)) {
             converter = new JVBMetsConverter();
-            ((JVBMetsConverter) converter).setPath(MCRPath.getPath(derivateId, "/"));
         } else {
             throw new ConvertException("Unknown type. It should be either 'llz' or 'jvb'.");
         }

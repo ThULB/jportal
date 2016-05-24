@@ -29,7 +29,7 @@ import org.mycore.mets.validator.validators.ValidationException;
 
 import fsu.jportal.mets.ConvertException;
 import fsu.jportal.mets.ENMAPConverter;
-import fsu.jportal.mets.JVBMetsConverter;
+import fsu.jportal.mets.LLZMetsConverter;
 
 public class ENMAPChecker {
 
@@ -43,7 +43,7 @@ public class ENMAPChecker {
         throws JDOMException, IOException, ConvertException {
         SAXBuilder b = new SAXBuilder();
         Document document = b.build(metsFile.toFile());
-        Mets mets = converter.convert(document);
+        Mets mets = converter.convert(document, metsFile.getParent());
         return mets.asDocument();
     }
 
@@ -117,10 +117,8 @@ public class ENMAPChecker {
         MCRConfiguration.instance().initialize(properties, true);
 
         // convert
-        Path metsFile = Paths.get(
-            "/data/temp/JVB_19150101_001_167758667_wfs1_mets_corrected.xml");
-        JVBMetsConverter converter = new JVBMetsConverter();
-        converter.setPath(metsFile.getParent());
+        Path metsFile = Paths.get("/data/Dokumente/OCR/innsbruck/LLZ/2015-09-29/THULB_00024/1812/THULB_00024_1812_wfs2_mets_Abgleich_fixed.xml");
+        LLZMetsConverter converter = new LLZMetsConverter();
         Document doc = enmapChecker.convert(metsFile, converter);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         out.output(doc, new FileOutputStream(new File("/data/temp/mets.xml")));

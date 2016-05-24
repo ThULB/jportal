@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -418,8 +419,8 @@ public class LLZMetsImporterTest {
         Document mets_wfs2_XML = new SAXBuilder().build(mets_wfs2_Stream);
         InputStream metsStream = getClass().getResourceAsStream("/mets/mets.xml");
         Document metsXML = new SAXBuilder().build(metsStream);
-        Mets mets_wfs2 = llzMetsConverter.convert(mets_wfs2_XML);
-        Mets mets = llzMetsConverter.convert(metsXML);
+        Mets mets_wfs2 = llzMetsConverter.convert(mets_wfs2_XML, Paths.get("/mets"));
+        Mets mets = llzMetsConverter.convert(metsXML, Paths.get("/mets"));
 
         System.out.println("size: " + mets_wfs2.getFileSec().getFileGroup("MASTER").getFileList().size());
         System.out.println("size: " + mets.getFileSec().getFileGroup("MASTER").getFileList().size());
