@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
                 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
-                exclude-result-prefixes="xalan xlink jpxml" xmlns:math="http://exslt.org/math">
+                xmlns:math="http://exslt.org/math" exclude-result-prefixes="xalan xlink jpxml math">
 
   <xsl:include href="coreFunctions.xsl"/>
   <xsl:include href="jp-layout-functions.xsl"/>
