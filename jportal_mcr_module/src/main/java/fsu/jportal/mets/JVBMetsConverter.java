@@ -27,11 +27,6 @@ public class JVBMetsConverter extends ENMAPConverter {
         return super.convert(enmap, basePath);
     }
 
-    @Override
-    protected String getALTOFileXPath() {
-        return "mets:fileSec/mets:fileGrp[@ID='TextGroup']/mets:fileGrp/mets:file";
-    }
-
     protected void handleFileSection(Element enmap, Mets mcr) throws URISyntaxException {
         FileGrp masterGroup = handleFileGroup(enmap, "MASTER",
             "mets:fileSec//mets:fileGrp[@ID='OCRMasterFiles']/mets:file", "image/tiff", new TiffHrefStrategy());

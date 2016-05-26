@@ -28,11 +28,6 @@ public class LLZMetsConverter extends ENMAPConverter {
     }
 
     @Override
-    protected String getALTOFileXPath() {
-        return "mets:fileSec/mets:fileGrp/mets:fileGrp[@ID='ALTOFiles']/mets:file";
-    }
-
-    @Override
     protected LogicalDiv getLogicalDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv logicalDiv = super.getLogicalDiv(enmap, enmapDiv, mcrMets, altoReferences);
         logicalDiv.setType("volume");

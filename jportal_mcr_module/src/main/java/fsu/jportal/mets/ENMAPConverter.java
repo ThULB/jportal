@@ -71,14 +71,16 @@ public abstract class ENMAPConverter {
             // convert abbyy stuff to alto
             ABBYYtoALTOConverter.convert(enmap);
 
-            // load alto references
-            List<ALTO> altoReferences = loadAltoReferences(enmap, basePath);
-
-            // build mets
+            // handle fileSec and physical structure
             Mets mets = new Mets();
             Element enmapRootElement = enmap.getRootElement();
             handleFileSection(enmapRootElement, mets);
             handlePhysicalStructure(enmapRootElement, mets);
+
+            // load alto references
+            List<ALTO> altoReferences = loadAltoReferences(mets, basePath);
+
+            // handle logical structure and struct link
             handleLogicalStructure(enmapRootElement, mets, altoReferences);
             StructLink structLink = new StructLinkGenerator().generate(mets);
             mets.setStructLink(structLink);
@@ -92,30 +94,20 @@ public abstract class ENMAPConverter {
      * Returns a list of all {@link ALTO} references. This method iterates over the
      * file section and loads each ALTO file. 
      * 
-     * @param enmap the enmap document
+     * @param mets the mycore mets document
      * @param basePath the path where the ALTO files lies within
      * @return list of ALTO objects
      */
-    protected List<ALTO> loadAltoReferences(Document enmap, Path basePath) {
-        XPathExpression<Element> fileExpression = XPathFactory.instance().compile(getALTOFileXPath(), Filters.element(),
-            null, IMetsElement.METS, IMetsElement.XLINK);
-        List<Element> altoFiles = fileExpression.evaluate(enmap.getRootElement());
-        return altoFiles.stream().map(altoFile -> {
+    protected List<ALTO> loadAltoReferences(Mets mets, Path basePath) {
+        FileGrp altoGroup = mets.getFileSec().getFileGroup("ALTO");
+        return altoGroup.getFileList().stream().map(altoFile -> {
             try {
                 return loadAlto(basePath, altoFile);
             } catch (Exception exc) {
-                throw new RuntimeException(
-                    "Unable to build alto file reference for " + altoFile.getAttributeValue("ID"), exc);
+                throw new RuntimeException("Unable to build alto file reference for " + altoFile.getId(), exc);
             }
         }).collect(Collectors.toList());
     }
-
-    /**
-     * Returns the xpath expression to all ALTO mets:file's. 
-     * 
-     * @return xpath as string
-     */
-    protected abstract String getALTOFileXPath();
 
     /**
      * Loads a single ALTO reference based on the given mets:file.
@@ -125,17 +117,17 @@ public abstract class ENMAPConverter {
      * 
      * @return a single ALTO reference
      * @throws URISyntaxException
-     * @throws JDOMException
+     * @throws JDOMException 
      * @throws IOException
      * @throws SAXException
      */
-    protected ALTO loadAlto(Path basePath, Element metsFile)
+    protected ALTO loadAlto(Path basePath, File metsFile)
         throws URISyntaxException, JDOMException, IOException, SAXException {
-        String path = metsFile.getChild("FLocat", IMetsElement.METS).getAttributeValue("href", IMetsElement.XLINK);
+        String path = metsFile.getFLocat().getHref();
         path = new AltoHrefStrategy().get(path);
         Path altoPath = basePath.resolve(path);
         Document altoDocument = new MCRPathContent(altoPath).asXML();
-        return new ALTO(metsFile.getAttributeValue("ID"), altoDocument);
+        return new ALTO(metsFile.getId(), altoDocument);
     }
 
     protected void handleFileSection(Element enmap, Mets mcr) throws URISyntaxException {
