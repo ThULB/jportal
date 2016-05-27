@@ -99,7 +99,7 @@ public class ImprintResource {
         else {
             section = ImprintUtil.getImprintContent(imprintID, getImprintFS(), MCRTranslation.getCurrentLocale().getLanguage());
         }
-        XMLOutputter xout = new XMLOutputter(Format.getCompactFormat());
+        XMLOutputter xout = new XMLOutputter(Format.getRawFormat());
         return Response.ok(xout.outputString(section.getContent())).build(); 
     }
 
