@@ -149,6 +149,9 @@
             <li>
               <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{$derivate/derivate/linkmetas/linkmeta/@xlink:role}');">Derivat Kontext</a>
             </li>
+            <li>
+              <a href="javascript:;" onclick="startProcessTIFF('{@xlink:href}');">TIFF konvertieren</a>
+            </li>
             <xsl:if test="jpxml:isMetsImportable(@xlink:href)">
               <li>
                 <a href="javascript:;" data-toggle="modal" data-target="#importMetsDialog">METS Import</a>
