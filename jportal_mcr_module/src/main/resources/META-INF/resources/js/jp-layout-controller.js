@@ -140,7 +140,7 @@ function selectDerivateContext(/*dom*/ e, /*String*/ id, /*String*/ roleURI) {
 }
 
 function startProcessTIFF(/*String*/ derivateId) {
-	$.post(jp.baseURL + "rsc/convertTIFF/" + derivateId + "/",function() {
+	$.post(jp.baseURL + "rsc/tiff/convert/" + derivateId + "/",function() {
 		console.log("Erfolgreich");
 	});
 }

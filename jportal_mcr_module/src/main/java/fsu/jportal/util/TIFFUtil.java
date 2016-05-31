@@ -27,8 +27,13 @@ import org.mycore.iview2.services.MCRIView2Tools;
 
 import fsu.jportal.backend.DerivateTools;
 
-public class MCRConvertTIFF {
-    private static final Logger LOGGER = LogManager.getLogger(MCRConvertTIFF.class);
+/**
+ * Utility class to transform tiff files. 
+ * 
+ * @author Alexander
+ */
+public class TIFFUtil {
+    private static final Logger LOGGER = LogManager.getLogger(TIFFUtil.class);
 
     private static List<String> com = new ArrayList<String>(Arrays.asList("tiffcp", "-c", "none", "-p", "contig", "-t", "-L",
             "-f", "msb2lsb", "-w", "256", "-l", "256"));
