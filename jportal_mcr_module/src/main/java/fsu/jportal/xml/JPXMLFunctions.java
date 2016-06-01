@@ -6,10 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -18,11 +16,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRTextResolver;
+import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -291,8 +290,8 @@ public class JPXMLFunctions {
                 if (!periodical.isPresent()) {
                     continue;
                 }
-                MCRMetaISO8601Date published = periodical.get().getDate("published")
-                    .orElse(periodical.get().getDate("published_from").orElse(null));
+                MCRMetaISO8601Date published = periodical.get().getDate("published").orElse(
+                    periodical.get().getDate("published_from").orElse(null));
                 if (published == null) {
                     continue;
                 }
@@ -303,6 +302,33 @@ public class JPXMLFunctions {
             LOGGER.error("Unable to retrieve published date of " + id, exc);
             return null;
         }
+    }
+
+    /**
+     * Return the position in parent for the given id.
+     * 
+     * @param id the object identifier
+     * @return the order
+     */
+    public static Integer getOrder(String id) {
+        try {
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+            MCRObjectID parentId = mcrObj.getStructure().getParentID();
+            if (parentId == null) {
+                throw new MCRException("No parent id for object " + id);
+            }
+            MCRObject parentObj = MCRMetadataManager.retrieveMCRObject(parentId);
+            List<MCRMetaLinkID> children = parentObj.getStructure().getChildren();
+            for (int i = 0; i < children.size(); i++) {
+                if (children.get(i).getXLinkHrefID().equals(mcrId)) {
+                    return i;
+                }
+            }
+        } catch (Exception exc) {
+            LOGGER.error("Unable to retrieve the order of " + id, exc);
+        }
+        return 0;
     }
 
 }

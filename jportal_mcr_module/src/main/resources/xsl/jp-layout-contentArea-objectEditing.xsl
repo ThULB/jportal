@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:derivateLinkUtil="xalan://fsu.jportal.util.DerivateLinkUtil" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" exclude-result-prefixes="i18n derivateLinkUtil xlink acl mcrxml xalan xsi solrxml">
+  xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" exclude-result-prefixes="derivateLinkUtil xlink acl mcrxml xalan xsi solrxml">
 
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
   <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
@@ -45,6 +45,11 @@
         <item>
           <restriction name="hasGND" value="true" />
           <label name="Mit Katalogdaten anreichern" gnd="{/mycoreobject/metadata/def.identifier/identifier[@type='gnd']/text()}" mcrid="{/mycoreobject/@ID}" id="updateSRU" />
+        </item>
+        <item>
+          <restriction name="hasChildren" value="true" />
+          <restriction name="updatePerm" value="true" />
+          <label name="Kinder sortieren" id="sortButton" mcrid="{$currentObjID}" />
         </item>
         <item>
           <restriction name="hasChildren" value="true" />
@@ -174,21 +179,23 @@
     </script>
   </xsl:template>
 
-  <xsl:template name="initImprint">
-    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-imprint.js" />
-    <script type="text/javascript" >
-      currentLang = '<xsl:value-of select="i18n:getCurrentLocale()" />'
-    </script>
-  </xsl:template>
 
   <xsl:template name="jp.object.editing.items">
     <xsl:apply-templates mode="menuItem" select="$menu/item" />
     <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
       <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/ckeditor/4.5.3/standard/ckeditor.js" />
       <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/ckeditor/4.5.3/standard/adapters/jquery.js" />
+      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-imprint.js" />
       <xsl:call-template name="classificationEditorDiag" />
       <xsl:call-template name="introEditorDiag" />
-      <xsl:call-template name="initImprint" />
+    </xsl:if>
+    <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_') or contains(@ID,'_jpvolume_')]">
+      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-sort.js" />
+      <script type="text/javascript">
+        <xsl:for-each select="$settings/sorter/sort">
+          jp.sort.addSorter('<xsl:value-of select="@class" />');
+        </xsl:for-each>
+      </script>
     </xsl:if>
   </xsl:template>
 

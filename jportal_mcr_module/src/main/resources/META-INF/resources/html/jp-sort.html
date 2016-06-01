@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sort</title>
+</head>
+<body style="background-color: white">
+	<div id="GUI">
+		<div id="sortGUIMain">
+			<div class="modal fade" id="sort-modal" tabindex="-1" role="dialog"
+				data-backdrop="static" aria-hidden="true" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 id="sort-title" class="modal-title i18n"
+								i18n="jp.sort.editor.title" i18n-def="Kinddokumente sortieren"></h4>
+							<button type="button" class="close jp-sort-editor-close"
+								data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body" id="jp-sort-body">
+							<div class="jp-sort-editor-darken" id="jp-sort-body-darken"
+								style="display: none;"></div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="list-group" id="autoSortContainer">
+										<strong> <a href="#" type="button"
+											class="jp-sort-editor-sorter list-group-item i18n jp-sort-editor-sorter-no-sorter active"
+											i18n="jp.sort.editor.manualSort"
+											onclick="jp.sort.selectSorter()"></a>
+										</strong>
+										<div class="form-group jp-sort-editor-sort-container">
+											<div class="col-md-6 jp-sort-editor-autosort-container">
+												<div class="i18n jp-sort-editor-autosort"
+													i18n="jp.sort.editor.autoSort"></div>
+											</div>
+											<div class="col-md-6 jp-sort-editor-order-select-container">
+												<select class="form-control" id="jp-sort-order-select">
+													<option class="i18n" i18n="jp.sort.editor.ascending"
+														value="ascending"></option>
+													<option class="i18n" i18n="jp.sort.editor.descending"
+														value="descending"></option>
+												</select>
+											</div>
+										</div>
+										<h4></h4>
+									</div>
+								</div>
+								<!-- <div class="col-md-6"></div> -->
+							</div>
+						</div>
+						<div class="modal-footer">
+							<div id="jp-sort-footer-default">
+								<button id="sort-editor-cancel" class="btn btn-default i18n"
+									i18n="jp.sort.editor.button.cancel" i18n-def="Abbrechen"
+									type="button" data-dismiss="modal"></button>
+								<button id="sort-editor-save" class="btn btn-primary i18n"
+									i18n="jp.sort.editor.button.save" i18n-def="Speichern"
+									type="button" onclick="jp.sort.save()"></button>
+							</div>
+							<div id="jp-sort-footer-saving" style="display: none;">
+								<i class='fa fa-circle-o-notch fa-spin'></i> <span class="i18n"
+									i18n="jp.sort.editor.saving"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

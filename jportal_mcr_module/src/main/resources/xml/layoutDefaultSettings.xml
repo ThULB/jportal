@@ -87,4 +87,11 @@
     </jpjournal>
   </editor>
 
+  <sorter>
+    <sort class="fsu.jportal.backend.sort.JPArticleSizeSorter" />
+    <sort class="fsu.jportal.backend.sort.JPHiddenPositionSorter" />
+    <sort class="fsu.jportal.backend.sort.JPMaintitleSorter" />
+    <sort class="fsu.jportal.backend.sort.JPPublishedSorter" />
+  </sorter>
+
 </layoutSettings>

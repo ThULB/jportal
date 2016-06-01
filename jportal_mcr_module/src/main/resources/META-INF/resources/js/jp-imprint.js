@@ -29,7 +29,7 @@ var ImprintEditor = function (objID, type) {
 			});
 
 			//noinspection JSUnresolvedVariable
-			loadI18nKeys(currentLang);
+			loadI18nKeys();
 			if (currentType != "greeting") {
 				loadImprintList();
 			}
@@ -143,7 +143,7 @@ var ImprintEditor = function (objID, type) {
 				$("#imprint-new-btn").parent().removeClass("hidden");
 			}
 			//noinspection JSUnresolvedVariable
-			loadI18nKeys(currentLang);
+			loadI18nKeys();
 			if (currentType != "greeting") {
 				loadImprintList();
 			}
@@ -512,8 +512,8 @@ var ImprintEditor = function (objID, type) {
 		}
 	}
 
-	function loadI18nKeys(lang) {
-		jQuery.getJSON(jp.baseURL + "servlets/MCRLocaleServlet/" + lang + "/jp.imprintEditor.*", function(data) {
+	function loadI18nKeys() {
+		jQuery.getJSON(jp.baseURL + "rsc/locale/translate/" + jp.lang + "/jp.imprintEditor.*", function(data) {
 			i18nKeys = data;
 			updateI18n($("body"));
 		});
@@ -562,7 +562,7 @@ $(document).ready(function() {
 				statusCode: {
 					200: function(data) {
 						var html = $("<div></div>").append(data).find("#imprintGUIMain");
-						$("head").append('<link href="'+ jp.baseURL + '/css/jp-imprint.css" rel="stylesheet" type="text/css">');
+						$("head").append('<link href="'+ jp.baseURL + 'css/jp-imprint.css" rel="stylesheet" type="text/css">');
 						$("body").append(html);
 						imprintEditorInstance = new ImprintEditor(objID, type);
 						imprintEditorInstance.init();

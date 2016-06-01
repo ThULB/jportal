@@ -88,26 +88,25 @@
                 <xsl:if test="not(structure/derobjects or metadata/derivateLinks)">
                   <xsl:attribute name="class">col-sm-10 col-sm-offset-1 jp-layout-metadataList</xsl:attribute>
                 </xsl:if>
-                <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
-
-								<xsl:variable name="elements">
-	                <xsl:choose>
-	                	<xsl:when test="$currentType = 'jpinst'">
-	                		names|alternatives|addresses|phones|urls|emails|notes|identifiers|logo|def.doubletOf
-	                	</xsl:when>
-	                	<xsl:when test="$currentType = 'person'">
-	                		def.heading|def.alternative|def.peerage|def.gender|def.contact|def.role|def.placeOfActivity|def.dateOfBirth|def.placeOfBirth|def.dateOfDeath|def.placeOfDeath|def.note|def.link|def.identifier|def.doubletOf
-	                	</xsl:when>
-	                	<xsl:when test="$currentType = 'jpjournal'">
-	                		maintitles|subtitles|participants|dates|traditions|identis|languages|rights|predeces|successors|ddcs|abstracts|notes|contentClassis1|contentClassis2|contentClassis3|contentClassis4|contentClassis5|contentClassis6|contentClassis7|maintitlesForSorting
-	                	</xsl:when>
-	                	<xsl:when test="$currentType = 'jpvolume'">
-	                		maintitles|subtitles|participants|dates|traditions|identis|collationNotes|volContentClassis1|volContentClassis2|volContentClassis3|volContentClassis4|volContentClassis5|volContentClassis6|abstracts|notes|people|publicationNotes|normedPubLocations|footNotes|bibEvidences|indexFields
-	                	</xsl:when>
-	                	<xsl:when test="$currentType = 'jparticle'">
-	                		maintitles|subtitles|participants|dates|refs|identis|sizes|keywords|abstracts|notes|types|rubrics|classispub|classispub2|classispub3|classispub4
-	                	</xsl:when>
-	                </xsl:choose>
+                <xsl:variable name="ignore" select="'maintitles def.heading names logo autosort'" />
+                  <xsl:variable name="elements">
+                    <xsl:choose>
+                      <xsl:when test="$currentType = 'jpinst'">
+                      	names|alternatives|addresses|phones|urls|emails|notes|identifiers|logo|def.doubletOf
+                      </xsl:when>
+                      <xsl:when test="$currentType = 'person'">
+                      	def.heading|def.alternative|def.peerage|def.gender|def.contact|def.role|def.placeOfActivity|def.dateOfBirth|def.placeOfBirth|def.dateOfDeath|def.placeOfDeath|def.note|def.link|def.identifier|def.doubletOf
+                      </xsl:when>
+                      <xsl:when test="$currentType = 'jpjournal'">
+                      	maintitles|subtitles|participants|dates|traditions|identis|languages|rights|predeces|successors|ddcs|abstracts|notes|contentClassis1|contentClassis2|contentClassis3|contentClassis4|contentClassis5|contentClassis6|contentClassis7|maintitlesForSorting|autosort
+                      </xsl:when>
+                      <xsl:when test="$currentType = 'jpvolume'">
+                      	maintitles|subtitles|participants|dates|traditions|identis|collationNotes|volContentClassis1|volContentClassis2|volContentClassis3|volContentClassis4|volContentClassis5|volContentClassis6|abstracts|notes|people|publicationNotes|normedPubLocations|footNotes|bibEvidences|indexFields|autosort
+                      </xsl:when>
+                      <xsl:when test="$currentType = 'jparticle'">
+                      	maintitles|subtitles|participants|dates|refs|identis|sizes|keywords|abstracts|notes|types|rubrics|classispub|classispub2|classispub3|classispub4
+                      </xsl:when>
+                  </xsl:choose>
                 </xsl:variable>
 														
                 <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" >

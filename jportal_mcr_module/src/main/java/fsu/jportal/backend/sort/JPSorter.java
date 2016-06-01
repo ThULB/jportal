@@ -1,6 +1,6 @@
 package fsu.jportal.backend.sort;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -33,22 +33,18 @@ public interface JPSorter {
      */
     default public void sort(JPContainer component, Order order) {
         MCRObject mcrObject = component.getObject();
-        MCRObjectID mcrObjectId = mcrObject.getId();
         MCRObjectStructure structure = mcrObject.getStructure();
-        List<MCRMetaLinkID> children = Collections.unmodifiableList(structure.getChildren());
+        List<MCRMetaLinkID> children = new ArrayList<>(structure.getChildren());
         structure.clearChildren();
-
         children.stream()
-                .map(MCRMetaLinkID::getXLinkFromID)
+                .map(MCRMetaLinkID::getXLinkHrefID)
                 .map(MCRMetadataManager::retrieveMCRObject)
                 .map(JPComponentUtil::getPeriodical)
                 .sorted(getSortComparator(order))
                 .map(JPPeriodicalComponent::getObject)
                 .map(MCRObject::getId)
                 .map(id -> {
-                    MCRMetaLinkID link = new MCRMetaLinkID();
-                    link.setBiLink(id, mcrObjectId, null);
-                    return link;
+                    return new MCRMetaLinkID("child", id, null, null);
                 })
                 .forEachOrdered(structure::addChild);
     }

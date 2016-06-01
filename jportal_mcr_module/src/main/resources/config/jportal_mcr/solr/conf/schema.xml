@@ -218,6 +218,8 @@
     <!-- ******************************************** -->
     <!-- * SORT -->
     <!-- ******************************************** -->
+    <field name="order" type="long" />
+
     <field name="maintitle_sort" type="sort" stored="false" />
     <field name="heading_sort" type="sort" stored="false" />
     <field name="alphabetic_sort" type="sort" stored="false" />

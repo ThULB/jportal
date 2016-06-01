@@ -16,6 +16,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPInstitution;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPLegalEntity;
@@ -187,6 +188,22 @@ public abstract class JPComponentUtil {
         if (type.equals(JPArticle.TYPE)) {
             return Optional.of(new JPArticle(id));
         } else if (type.equals(JPVolume.TYPE)) {
+            return Optional.of(new JPVolume(id));
+        } else if (type.equals(JPJournal.TYPE)) {
+            return Optional.of(new JPJournal(id));
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Returns a container object for the given id.
+     * 
+     * @param id mycore identifier
+     * @return container optional
+     */
+    public static Optional<JPContainer> getContainer(MCRObjectID id) {
+        String type = id.getTypeId();
+        if (type.equals(JPVolume.TYPE)) {
             return Optional.of(new JPVolume(id));
         } else if (type.equals(JPJournal.TYPE)) {
             return Optional.of(new JPJournal(id));

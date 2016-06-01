@@ -2,8 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities" xmlns:websiteWriteProtection="xalan://org.mycore.frontend.MCRWebsiteWriteProtection"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xsi mcr mcrxml acl xalan layoutUtils websiteWriteProtection jpxml">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xsi mcr mcrxml acl xalan layoutUtils websiteWriteProtection jpxml i18n">
 
   <xsl:include href="jp-layout-tools.xsl" />
   <xsl:include href="jp-layout-functions.xsl" />
@@ -119,6 +119,7 @@
           jp.baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
           jp.journalID = '<xsl:value-of select="$journalID" />';
           jp.journalID = jp.journalID != '' ? jp.journalID : null;
+          jp.lang = '<xsl:value-of select="i18n:getCurrentLocale()" />';
         </script>
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/jquery/2.1.4/dist/jquery.min.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/js/bootstrap.min.js" />

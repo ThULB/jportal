@@ -23,6 +23,12 @@
   <!-- * Journal, Article, Volume -->
   <!-- *************************************************** -->
 
+  <!-- parent & order -->
+  <xsl:template match="parents/parent" mode="structure" priority="1">
+    <field name="parent"><xsl:value-of select="@xlink:href" /></field>
+    <field name="order"><xsl:value-of select="jpxml:getOrder(../../../@ID)" /></field>
+  </xsl:template>
+
   <!-- journalID -->
   <xsl:template match="hidden_jpjournalsID/hidden_jpjournalID[position() = 1]" mode="jportal.metadata">
     <xsl:variable name="objectID" select="../../../@ID"/>

@@ -14,8 +14,9 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaElementXML;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -102,26 +103,43 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      * @return a pair of JPSorter and Order
      */
     public Optional<Pair<JPSorter, Order>> getSortBy() {
-        Stream<MCRMetaXML> stream = metadataStream("sorters", MCRMetaXML.class);
-        return stream.flatMap(metaXML -> metaXML.getContent().stream())
-                     .filter(c -> c instanceof Element)
-                     .map(Element.class::cast)
-                     .map(sorterElement -> {
-                         try {
-                             Order order = Order.valueOf(sorterElement.getAttributeValue("order"));
-                             Class<?> forName = Class.forName(sorterElement.getText());
-                             if (JPSorter.class.isAssignableFrom(forName)) {
-                                 return new Pair<JPSorter, Order>((JPSorter) forName.newInstance(), order);
-                             } else {
-                                 throw new MCRException(
-                                     "The sorter class " + forName.getName() + " is not a subclass of JPSorter.");
-                             }
+        Stream<MCRMetaElementXML> stream = metadataStream("autosort", MCRMetaElementXML.class);
+        return stream.map(metaXML -> metaXML.createXML()).map(sortByElement -> {
+            try {
+                Order order = Order.valueOf(sortByElement.getAttributeValue("order").toUpperCase());
+                Class<?> forName = Class.forName(sortByElement.getText());
+                if (JPSorter.class.isAssignableFrom(forName)) {
+                    return new Pair<JPSorter, Order>((JPSorter) forName.newInstance(), order);
+                } else {
+                    throw new MCRException("The sorter class " + forName.getName() + " is not a subclass of JPSorter.");
+                }
 
-                         } catch (Exception exc) {
-                             throw new MCRException("Unable to retrieve sorter for object " + getObject().getId(), exc);
-                         }
-                     })
-                     .findFirst();
+            } catch (Exception exc) {
+                throw new MCRException("Unable to retrieve sorter for object " + getObject().getId(), exc);
+            }
+        }).findFirst();
+    }
+
+    /**
+     * Sets the autosort for this container. If the sorter or the order is null,
+     * the autosort is removed. 
+     * 
+     * @param sorter the JPSorter
+     * @param order ascending or descending
+     */
+    public void setSortBy(JPSorter sorter, Order order) {
+        object.getMetadata().removeMetadataElement("autosort");
+        if (sorter == null || order == null) {
+            return;
+        }
+        MCRMetaElement autosort = new MCRMetaElement(MCRMetaElementXML.class, "autosort", false, true, null);
+        object.getMetadata().setMetadataElement(autosort);
+        MCRMetaElementXML metaXML = new MCRMetaElementXML();
+        Element sortby = new Element("sortby");
+        sortby.setAttribute("order", order.name().toLowerCase());
+        sortby.setText(sorter.getClass().getName());
+        metaXML.setFromDOM(sortby);
+        autosort.addMetaObject(metaXML);
     }
 
     /**
