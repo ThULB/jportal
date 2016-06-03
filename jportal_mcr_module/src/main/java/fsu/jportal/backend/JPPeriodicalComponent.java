@@ -2,11 +2,7 @@ package fsu.jportal.backend;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
-import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.TemporalField;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,8 +22,6 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
-
-import com.ibm.icu.util.LocaleData;
 
 import fsu.jportal.util.DerivateLinkUtil;
 
@@ -195,23 +189,33 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
-     * Returns the published date of this periodical component.
+     * Returns the {@link TemporalAccessor} for the published date.
      * 
-     * @return optional of the published date
+     * @return optional of the temporal accessor
      */
-    public Optional<LocalDate> getPublishedDate() {
+    public Optional<TemporalAccessor> getPublishedTemporalAccessor() {
         Optional<MCRMetaISO8601Date> published = getDate(DateType.published.name());
         Optional<MCRMetaISO8601Date> publishedFrom = getDate(DateType.published_from.name());
         return Optional.ofNullable(published.orElse(publishedFrom.orElse(null)))
                        .map(MCRMetaISO8601Date::getMCRISO8601Date)
-                       .map(MCRISO8601Date::getDt)
-                       .map(dt -> {
-                           try {
-                               return LocalDate.from(dt);
-                           } catch (Exception exc) {
-                               return buildLocalDate(dt);
-                           }
-                       });
+                       .map(MCRISO8601Date::getDt);
+    }
+
+    /**
+     * Returns the published date of this periodical component. Be aware that this local date
+     * is not necessarily the original published temporal accessor.
+     * See {@link #buildLocalDate(TemporalAccessor)} for more information.
+     * 
+     * @return optional of the published date
+     */
+    public Optional<LocalDate> getPublishedDate() {
+        return getPublishedTemporalAccessor().map(dt -> {
+            try {
+                return LocalDate.from(dt);
+            } catch (Exception exc) {
+                return buildLocalDate(dt);
+            }
+        });
     }
 
     /**
