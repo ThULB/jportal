@@ -1,6 +1,12 @@
 package fsu.jportal.backend;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalField;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +26,8 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
+
+import com.ibm.icu.util.LocaleData;
 
 import fsu.jportal.util.DerivateLinkUtil;
 
@@ -133,7 +141,10 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      */
     public String getDerivateLink() {
         return metadataStreamNotInherited("derivateLinks", MCRMetaDerivateLink.class)
-            .map(MCRMetaDerivateLink::getXLinkHref).findFirst().orElse(null);
+                                                                                     .map(
+                                                                                         MCRMetaDerivateLink::getXLinkHref)
+                                                                                     .findFirst()
+                                                                                     .orElse(null);
     }
 
     /**
@@ -175,7 +186,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      */
     public Optional<MCRMetaISO8601Date> getDate(String type) {
         return metadataStreamNotInherited("dates", MCRMetaISO8601Date.class).filter(d -> {
-            if(d.getType() == null) {
+            if (d.getType() == null) {
                 LOGGER.error("Invalid dates/date metadata at '" + getObject().getId() + "'. Missing type attribute.");
                 return false;
             }
@@ -194,7 +205,30 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
         return Optional.ofNullable(published.orElse(publishedFrom.orElse(null)))
                        .map(MCRMetaISO8601Date::getMCRISO8601Date)
                        .map(MCRISO8601Date::getDt)
-                       .map(LocalDate::from);
+                       .map(dt -> {
+                           try {
+                               return LocalDate.from(dt);
+                           } catch (Exception exc) {
+                               return buildLocalDate(dt);
+                           }
+                       });
+    }
+
+    /**
+     * Helper method to build a {@link LocalDate} out of a {@link TemporalAccessor}.
+     * If the month or day are not present, they are set to 1.
+     * 
+     * @param dt the temporal accessor
+     * @return a local date
+     */
+    private LocalDate buildLocalDate(TemporalAccessor dt) {
+        if (!dt.isSupported(ChronoField.YEAR)) {
+            return null;
+        }
+        int year = dt.get(ChronoField.YEAR);
+        int month = dt.isSupported(ChronoField.MONTH_OF_YEAR) ? dt.get(ChronoField.MONTH_OF_YEAR) : 1;
+        int day = dt.isSupported(ChronoField.DAY_OF_MONTH) ? dt.get(ChronoField.DAY_OF_MONTH) : 1;
+        return LocalDate.of(year, month, day);
     }
 
     /**
