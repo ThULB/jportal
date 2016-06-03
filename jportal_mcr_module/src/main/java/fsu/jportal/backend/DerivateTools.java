@@ -1,22 +1,13 @@
 package fsu.jportal.backend;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import fsu.jportal.gson.DerivateTypeAdapter;
+import fsu.jportal.gson.FileNodeWrapper;
+import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
+import fsu.jportal.mets.MetsTools;
+import fsu.jportal.urn.URNTools;
+import fsu.jportal.util.DerivateLinkUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -28,11 +19,7 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRJSONManager;
-import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRSession;
-import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.MCRUsageException;
+import org.mycore.common.*;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -52,16 +39,13 @@ import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
 import org.xml.sax.SAXException;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import fsu.jportal.gson.DerivateTypeAdapter;
-import fsu.jportal.gson.FileNodeWrapper;
-import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
-import fsu.jportal.mets.MetsTools;
-import fsu.jportal.urn.URNTools;
-import fsu.jportal.util.DerivateLinkUtil;
-import fsu.jportal.util.DerivatePath;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class DerivateTools {
     static Logger LOGGER = LogManager.getLogger(DerivateTools.class);
@@ -149,7 +133,8 @@ public class DerivateTools {
             Map<MCRPath, MCRPath> copyHistory = new HashMap<MCRPath, MCRPath>();
             if (cp(sourceNode, targetNode, newFileName, copyHistory)) {
                 if (delAfterCopy) {
-                    Derivate derivate = new Derivate(sourceNode.getOwner());
+                    String derivID = sourceNode.getOwner();
+                    JPDerivateComponent derivate = new JPDerivateComponent(derivID);
                     moveAttachedData(derivate, copyHistory);
                     delete(sourceNode);
                 }
@@ -165,9 +150,13 @@ public class DerivateTools {
         return false;
     }
 
-    private static void moveAttachedData(Derivate srcDerivate, Map<MCRPath, MCRPath> copyHistory)
+    public static String getMaindoc(JPDerivateComponent derivate){
+        return derivate.getObject().getDerivate().getInternals().getMainDoc();
+    }
+
+    private static void moveAttachedData(JPDerivateComponent srcDerivate, Map<MCRPath, MCRPath> copyHistory)
             throws MCRAccessException {
-        String maindoc = srcDerivate.getMaindoc();
+        String maindoc = getMaindoc(srcDerivate);
         for (MCRPath sourceNode : copyHistory.keySet()) {
             MCRPath target = copyHistory.get(sourceNode);
             String sourcePath = getPathNoLeadingRoot(sourceNode);
@@ -183,8 +172,7 @@ public class DerivateTools {
                 e.printStackTrace();
             }
             if (sourcePath.equals(maindoc)) {
-                Derivate targetDerivate = new Derivate(target.getOwner());
-                targetDerivate.setMaindoc(getPathNoLeadingRoot(target));
+                setAsMain(target.getOwner(), getPathNoLeadingRoot(target));
             }
             URNTools.updateURN(sourceNode, target);
             MetsTools.updateFileEntry(sourceNode, target);
@@ -197,24 +185,6 @@ public class DerivateTools {
             nodePath = nodePath.substring(1);
         }
         return nodePath;
-    }
-
-    public static MCRDirectory getTargetDir(DerivatePath derivPath) {
-        MCRFilesystemNode fileNode = derivPath.toFileNode();
-        if (fileNode == null) {
-            String parentPath = derivPath.getParentPath();
-            if (parentPath != null) {
-                MCRFilesystemNode parentNode = derivPath.getParent().toFileNode();
-
-                if (parentNode instanceof MCRDirectory) {
-                    return (MCRDirectory) parentNode;
-                }
-            }
-        } else {
-            return (MCRDirectory) fileNode;
-        }
-
-        return null;
     }
 
     public static void rename(String filePath, String newName) throws IOException, MCRAccessException {
@@ -415,18 +385,26 @@ public class DerivateTools {
     }
 
     public static void setAsMain(String derivateID, String path) {
-        Derivate derivate = new Derivate(derivateID);
-        derivate.setMaindoc(path);
+        JPDerivateComponent derivateComponent = new JPDerivateComponent(derivateID);
+        MCRDerivate mcrDerivate = derivateComponent.getObject();
+        mcrDerivate.getDerivate().getInternals().setMainDoc(path);
+        MCRMetadataManager.updateMCRDerivateXML(mcrDerivate);
     }
 
     public static JsonObject getChildAsJson(String derivateID, String path, String file) {
-        Derivate derivate = new Derivate(derivateID);
-        MCRDirectory node;
-        if (path != null && !"".equals(path.trim())) {
-            node = (MCRDirectory) derivate.getChildByPath(path);
-        } else {
-            node = derivate.getRootDir();
+        MCRDirectory node = getRootDir(derivateID);
+        if(node == null){
+            return null;
         }
+
+        if (path != null && !"".equals(path.trim())) {
+            getDirByPath(derivateID, path);
+            node = (MCRDirectory) node.getChildByPath(path);
+            if(node == null){
+                return null;
+            }
+        }
+
         MCRFilesystemNode child = node.getChild(file);
         if (child != null) {
             JsonObject childJson = new JsonObject();
@@ -440,9 +418,21 @@ public class DerivateTools {
         }
     }
 
+    private static MCRFilesystemNode getDirByPath(String derivateID, String path) {
+        MCRDirectory rootDir = getRootDir(derivateID);
+        if(rootDir == null){
+            return null;
+        }
+
+        return rootDir.getChildByPath(path);
+    }
+
+    private static MCRDirectory getRootDir(String derivateID) {
+        return MCRDirectory.getRootDirectory(derivateID);
+    }
+
     public static JsonObject getDerivateFolderAsJson(String derivateID) {
-        Derivate derivate = new Derivate(derivateID);
-        MCRDirectory node = derivate.getRootDir();
+        MCRDirectory node = getRootDir(derivateID);
 
         JsonObject jsonObject = new JsonObject();
 
@@ -524,18 +514,16 @@ public class DerivateTools {
         MCRJSONManager gsonManager = MCRJSONManager.instance();
         gsonManager.registerAdapter(new DerivateTypeAdapter());
         gsonManager.registerAdapter(new MCRFilesystemNodeTypeAdapter());
-        Derivate derivate = new Derivate(derivateID);
-        MCRFilesystemNode node;
-        MCRPath mcrPath = MCRPath.getPath(derivateID, path);
-        if (path != null && !"".equals(path.trim())) {
-            node = derivate.getChildByPath(path);
-        } else {
-            node = derivate.getRootDir();
+
+        MCRDirectory root = getRootDir(derivateID);
+        MCRFilesystemNode node = root;
+        if (root != null && path != null && !path.equals("")){
+            node = root.getChildByPath(path);
         }
-        if (!Files.exists(mcrPath)) {
-            return null;
-        }
-        String maindoc = derivate.getMaindoc();
+
+        JPDerivateComponent derivateComponent = new JPDerivateComponent(derivateID);
+        String maindoc = getMaindoc(derivateComponent);
+
         FileNodeWrapper wrapper = new FileNodeWrapper(node, maindoc);
         JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
 
@@ -592,8 +580,14 @@ public class DerivateTools {
     }
 
     public static String getMD5forFile(String derivateID, String path) {
-        Derivate derivate = new Derivate(derivateID);
-        MCRFile mcrFile = (MCRFile) derivate.getChildByPath(path);
+        MCRDirectory rootDir = getRootDir(derivateID);
+
+        if(rootDir == null){
+            return "";
+        }
+
+
+        MCRFile mcrFile = (MCRFile) rootDir.getChildByPath(path);
         if (mcrFile != null) {
             return mcrFile.getMD5();
         }
