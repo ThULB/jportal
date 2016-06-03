@@ -1,7 +1,11 @@
 package fsu.jportal.backend;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -56,6 +60,29 @@ public class JPJournal extends JPContainer {
      */
     public Optional<String> getNote() {
         return getText("notes", null);
+    }
+
+    /**
+     * Returns a list of journal types this journal is labeled as.
+     * 
+     * @return list of journal types
+     */
+    public List<MCRCategoryID> getJournalTypes() {
+        return metadataStream("journalTypes", MCRMetaClassification.class).map(mc -> {
+            return new MCRCategoryID(mc.getClassId(), mc.getCategId());
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * Gets the contentClassisX content.
+     * 
+     * @param number the number of the content classis.
+     * @return list of categories
+     */
+    public List<MCRCategoryID> getContentClassis(int number) {
+        return metadataStream("contentClassis" + number, MCRMetaClassification.class).map(mc -> {
+            return new MCRCategoryID(mc.getClassId(), mc.getCategId());
+        }).collect(Collectors.toList());
     }
 
 }

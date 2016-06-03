@@ -251,10 +251,21 @@ public abstract class JPComponentUtil {
      * 
      * @param component
      * @param type something like jparticle or jpvolume 
-     * @return true if it is
+     * @return true if its the same type
      */
     public static boolean is(JPComponent component, String type) {
         return component.getType().equals(type);
+    }
+
+    /**
+     * Checks if the given id is of the type.
+     * 
+     * @param id the id to check
+     * @param type the type
+     * @return true if its the same type
+     */
+    public static boolean is(MCRObjectID id, String type) {
+        return id.getTypeId().equals(type);
     }
 
 }

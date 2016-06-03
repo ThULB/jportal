@@ -191,7 +191,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     public Optional<LocalDate> getPublishedDate() {
         Optional<MCRMetaISO8601Date> published = getDate(DateType.published.name());
         Optional<MCRMetaISO8601Date> publishedFrom = getDate(DateType.published_from.name());
-        return Optional.of(published.orElse(publishedFrom.orElse(null)))
+        return Optional.ofNullable(published.orElse(publishedFrom.orElse(null)))
                        .map(MCRMetaISO8601Date::getMCRISO8601Date)
                        .map(MCRISO8601Date::getDt)
                        .map(LocalDate::from);

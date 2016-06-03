@@ -485,6 +485,7 @@
                         </xsd:restriction>
                       </xsd:simpleType>
                     </xsd:attribute>
+                    <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
                   </xsd:extension>
                 </xsd:simpleContent>
               </xsd:complexType>

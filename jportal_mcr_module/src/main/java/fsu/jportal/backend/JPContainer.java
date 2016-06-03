@@ -3,9 +3,10 @@ package fsu.jportal.backend;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.solr.common.util.Pair;
@@ -32,11 +33,11 @@ import fsu.jportal.backend.sort.JPSorter.Order;
  */
 public abstract class JPContainer extends JPPeriodicalComponent {
 
-    protected Map<MCRObjectID, JPObjectComponent> childrenMap;
+    protected LinkedHashMap<MCRObjectID, JPObjectComponent> childrenMap;
 
     public JPContainer() {
         super();
-        childrenMap = new HashMap<MCRObjectID, JPObjectComponent>();
+        childrenMap = new LinkedHashMap<MCRObjectID, JPObjectComponent>();
     }
 
     public JPContainer(String mcrId) {
@@ -49,7 +50,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
 
     public JPContainer(MCRObject mcrObject) {
         super(mcrObject);
-        childrenMap = new HashMap<MCRObjectID, JPObjectComponent>();
+        childrenMap = new LinkedHashMap<MCRObjectID, JPObjectComponent>();
     }
 
     /**
@@ -69,7 +70,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      * 
      * @param id
      */
-    public void removeChild(MCRObjectID id) {
+    public void removeAddedChild(MCRObjectID id) {
         JPObjectComponent component = childrenMap.remove(id);
         if (component != null) {
             component.getObject().getStructure().setParent((MCRMetaLinkID) null);
@@ -77,12 +78,28 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     }
 
     /**
-     * Returns a unmodifiable collection of all children.
+     * Returns a unmodifiable collection of all children which are added
+     * (due the {@link #addChild(JPObjectComponent)} method) and most
+     * likely (not 100% safe) not stored to the system yet.
      * 
-     * @return collection of children
+     * @return collection of added children
      */
-    public Collection<JPComponent> getChildren() {
+    public Collection<JPComponent> getAddedChildren() {
         return Collections.unmodifiableCollection(childrenMap.values());
+    }
+
+    /**
+     * Returns a list of the children of this container. Changes to this
+     * list are not reflected to the mycore object.
+     * 
+     * @return list of mycore object identifiers
+     */
+    public List<MCRObjectID> getChildren() {
+        return getObject().getStructure()
+                          .getChildren()
+                          .stream()
+                          .map(MCRMetaLinkID::getXLinkHrefID)
+                          .collect(Collectors.toList());
     }
 
     @Override
@@ -91,6 +108,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
         for (JPComponent component : childrenMap.values()) {
             component.store();
         }
+        childrenMap.clear();
     }
 
     /**
