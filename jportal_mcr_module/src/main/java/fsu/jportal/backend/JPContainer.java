@@ -145,9 +145,9 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      * @param sorter the JPSorter
      * @param order ascending or descending
      */
-    public void setSortBy(JPSorter sorter, Order order) {
+    public void setSortBy(Class<? extends JPSorter> sorterClass, Order order) {
         object.getMetadata().removeMetadataElement("autosort");
-        if (sorter == null || order == null) {
+        if (sorterClass == null || order == null) {
             return;
         }
         MCRMetaElement autosort = new MCRMetaElement(MCRMetaElementXML.class, "autosort", false, true, null);
@@ -155,7 +155,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
         MCRMetaElementXML metaXML = new MCRMetaElementXML();
         Element sortby = new Element("sortby");
         sortby.setAttribute("order", order.name().toLowerCase());
-        sortby.setText(sorter.getClass().getName());
+        sortby.setText(sorterClass.getName());
         metaXML.setFromDOM(sortby);
         autosort.addMetaObject(metaXML);
     }

@@ -31,7 +31,7 @@ public class SorterResource {
         @QueryParam("order") String orderString) {
         JPContainer jpContainer = get(id);
         try {
-            JPSorter sorter = Class.forName(sorterClass).asSubclass(JPSorter.class).newInstance();
+            Class<? extends JPSorter> sorter = Class.forName(sorterClass).asSubclass(JPSorter.class);
             Order order = Order.valueOf(orderString.toUpperCase());
             jpContainer.setSortBy(sorter, order);
             jpContainer.store();
