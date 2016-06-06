@@ -1,9 +1,7 @@
 package fsu.jportal.frontend.cli;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.laws.common.xml.LawsXMLFunctions;
+import java.io.InputStream;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -20,7 +18,9 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
-import java.io.InputStream;
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.laws.common.xml.LawsXMLFunctions;
 
 @MCRCommandGroup(name = "Law Commands")
 public class LawCommands {
@@ -93,8 +93,6 @@ public class LawCommands {
         // size
         if (seiteVon != null) {
             try {
-                seiteVon = JPComponent.FOUR_DIGIT_FORMAT.format(Integer.valueOf(seiteVon));
-                seiteBis = seiteBis != null ? JPComponent.FOUR_DIGIT_FORMAT.format(Integer.valueOf(seiteBis)) : null;
                 String size = seiteVon + ((seiteBis != null && !seiteBis.equals(seiteVon)) ? (" - " + seiteBis) : "");
                 article.setSize(size);
             } catch(Exception exc) {
