@@ -85,6 +85,8 @@ public abstract class ENMAPConverter {
             StructLink structLink = new StructLinkGenerator().generate(mets);
             mets.setStructLink(structLink);
             return mets;
+        } catch (ConvertException exc) {
+            throw exc;
         } catch (Exception exc) {
             throw new ConvertException("Unable to convert mets document", exc);
         }
@@ -308,7 +310,6 @@ public abstract class ENMAPConverter {
         fptr.getSeqList().add(seq);
 
         AtomicReference<Block> lastBlockRef = new AtomicReference<>();
-        ;
         AtomicReference<Area> areaRef = new AtomicReference<>();
 
         altoBlockMap.entrySet().stream().sorted((entry1, entry2) -> {
@@ -388,6 +389,8 @@ public abstract class ENMAPConverter {
     static class CoordinatesToIdMapper {
 
         public Map<String, Set<Block>> map(List<ALTO> altoReferences, List<Element> metsAreaElements) {
+            BlockReferenceException blockReferenceException = new BlockReferenceException(
+                "Error while referencing logical div coordinates to alto blocks.");
             // build references
             List<AreaAltoBlockRef> refs = buildRef(altoReferences, metsAreaElements);
             // do the area to block mapping
@@ -396,8 +399,7 @@ public abstract class ENMAPConverter {
             Map<String, Set<Block>> altoBlockMap = new HashMap<>();
             for (AreaAltoBlockRef ref : refs) {
                 if (ref.blocks.isEmpty()) {
-                    throw new RuntimeException("Unable to find block references for area "
-                        + ref.areaRectangle.toMetsCoordinates() + " in " + ref.alto.getId());
+                    blockReferenceException.addDiv(ref.logicalDivId);
                 }
                 Set<Block> blockSet = altoBlockMap.get(ref.alto.getId());
                 if (blockSet == null) {
@@ -407,6 +409,9 @@ public abstract class ENMAPConverter {
                 for (Block block : ref.blocks) {
                     blockSet.add(block);
                 }
+            }
+            if (!blockReferenceException.getDivIds().isEmpty()) {
+                throw blockReferenceException;
             }
             return altoBlockMap;
         }
@@ -418,6 +423,7 @@ public abstract class ENMAPConverter {
                 ALTO alto = altoReferences.stream().filter(ref -> ref.getId().equals(fileID)).findFirst().orElse(null);
                 if (alto != null) {
                     AreaAltoBlockRef ref = new AreaAltoBlockRef();
+                    ref.logicalDivId = areaElement.getParentElement().getParentElement().getAttributeValue("ID");
                     ref.areaRectangle = getRectangleForArea(areaElement);
                     ref.alto = alto;
                     refs.add(ref);
@@ -456,6 +462,8 @@ public abstract class ENMAPConverter {
         }
 
         static class AreaAltoBlockRef {
+            public String logicalDivId;
+
             public Rectangle areaRectangle;
 
             public ALTO alto;

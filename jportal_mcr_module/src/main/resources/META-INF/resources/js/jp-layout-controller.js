@@ -434,8 +434,22 @@ $(document).ready(function() {
 
 	function failed(e) {
 		dialogIcon.html("<i class='fa fa-3x fa-ban' />");
-		if(e.msg) {
-		  dialogContent.html(e.msg);
+		if(typeof e.error === 'string') {
+		  dialogContent.html(e.message);
+		} else if(e.error != null && typeof e.error === 'object') {
+		  if(e.error.appearance == null) {
+		    dialogContent.html(e.error.message);
+		    return;
+		  }
+		  var html = "<div><p>Es ist ein Fehler bei der Paragraphen Referenzierung aufgetreten. Die folgenden" +
+		  		" Fehler müssen im Structify behoben werden:</p><ul style='margin: 8px 0 16px; font-weight: bold;'>";
+		  for(var error of e.error.appearance) {
+		    html += "<li>Seite: " + error.image + "; Artikel; '" + error.label + "'; Paragraph Nummer: " + error.paragraph + "</li>";
+		  }
+		  html += "</ul><p>Dieser Fehler tritt auf, wenn ein Paragraph keinem ALTO-Block (show paragraph) zugeordnet werden konnte." +
+		  		" Um den Fehler zu beheben muss entweder der Paragraph gelöscht, oder das umschließende Rechteck vergrößert" +
+		  		" werden.</div>";
+		  dialogContent.html(html);
 		} else if(e.status == "401") {
 			dialogContent.html("Sie haben nicht die notwendige Berechtigung um den Importvorgang zu starten!");
 		} else {

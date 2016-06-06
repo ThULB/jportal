@@ -5,7 +5,7 @@ package fsu.jportal.mets;
  * 
  * @author Matthias Eichner
  */
-public class ConvertException extends Exception {
+public class ConvertException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
