@@ -41,7 +41,7 @@ public class JPVolume extends JPContainer {
     }
 
     public void setHiddenPosition(int position) {
-        setHiddenPosition(EIGHT_DIGIT_FORMAT.format(Integer.valueOf(position)));
+        setHiddenPosition(String.valueOf(position));
     }
 
     public void addSubTitle(String title, String type) {

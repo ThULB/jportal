@@ -113,7 +113,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     }
 
     public void setSize(int size) {
-        setSize(EIGHT_DIGIT_FORMAT.format(Integer.valueOf(size)));
+        setSize(String.valueOf(size));
     }
 
     public String getSize() {

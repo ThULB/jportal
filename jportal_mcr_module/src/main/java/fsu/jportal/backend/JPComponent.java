@@ -1,13 +1,12 @@
 package fsu.jportal.backend;
 
+import java.io.IOException;
+
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRObject;
-
-import java.io.IOException;
-import java.text.DecimalFormat;
 
 /**
  * Base jportal interface of components. This includes persons, institutions, articles,
@@ -16,9 +15,6 @@ import java.text.DecimalFormat;
  * @author Matthias Eichner
  */
 public interface JPComponent {
-
-    public static DecimalFormat EIGHT_DIGIT_FORMAT =  new DecimalFormat("00000000");
-    public static DecimalFormat FOUR_DIGIT_FORMAT =  new DecimalFormat("0000");
 
     /**
      * The corresponding mycore object.
