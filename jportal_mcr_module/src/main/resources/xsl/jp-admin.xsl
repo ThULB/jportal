@@ -47,7 +47,7 @@
         </div>
         <div class="panel-body">
           <input type="button" value="Start"
-                 onclick="window.open(jp.baseURL + 'modules/webcli/start.xml','','width=900,height=900,resizable,locationbar=false,menubar=false,personalbar=false,toolbar=false');"/>
+                 onclick="window.open(jp.baseURL + 'rsc/WebCLI/','','width=900,height=900,resizable,locationbar=false,menubar=false,personalbar=false,toolbar=false');"/>
         </div>
       </div>
     </xsl:if>
