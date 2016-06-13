@@ -88,7 +88,7 @@ public abstract class ENMAPConverter {
         } catch (ConvertException exc) {
             throw exc;
         } catch (Exception exc) {
-            throw new ConvertException("Unable to convert mets document", exc);
+            throw new ConvertException(exc.getMessage(), exc);
         }
     }
 
@@ -106,7 +106,7 @@ public abstract class ENMAPConverter {
             try {
                 return loadAlto(basePath, altoFile);
             } catch (Exception exc) {
-                throw new RuntimeException("Unable to build alto file reference for " + altoFile.getId(), exc);
+                throw new ConvertException("Unable to build alto file reference for " + altoFile.getId(), exc);
             }
         }).collect(Collectors.toList());
     }

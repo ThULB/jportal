@@ -435,7 +435,7 @@ $(document).ready(function() {
 	function failed(e) {
 		dialogIcon.html("<i class='fa fa-3x fa-ban' />");
 		if(typeof e.error === 'string') {
-		  dialogContent.html(e.message);
+		  dialogContent.html(e.error);
 		} else if(e.error != null && typeof e.error === 'object') {
 		  if(e.error.appearance == null) {
 		    dialogContent.html(e.error.message);

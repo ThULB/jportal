@@ -55,7 +55,7 @@ public class JVBMetsConverter extends ENMAPConverter {
             }
         } else if (type.equals("serialnovelcontinue")) {
             if (lastSerialNovel == null) {
-                throw new RuntimeException(
+                throw new ConvertException(
                     "There is no serial novel defined before SerialNovelContinue appears " + logicalSubDiv.getId());
             }
         } else {
