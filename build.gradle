@@ -107,7 +107,6 @@ project(':jportal_mcr_module') {
 
         compile "org.mycore:mycore-base:$mcrVersion"
         compile "org.mycore:mycore-solr:$mcrVersion"
-        compile "org.mycore:mycore-mets:$mcrVersion"
         compile "org.mycore:mycore-iview2:$mcrVersion"
         compile "org.mycore:mycore-user2:$mcrVersion"
         compile "org.mycore:mycore-classeditor:$mcrVersion"
@@ -321,7 +320,9 @@ project(':jportal_webapp') {
     }
 
     ext.appName = "jportal"
-    ext.mcrHome = System.getProperty("user.home") + "/.mycore"
+//    ext.mcrHome = System.getProperty("user.home") + "/.mycore"
+	ext.mcrHome = "/data/mcrHome"
+
     ext.appPath = "$mcrHome/$appName"
     ext.confDir = "$project.projectDir/config"
     ext.solrPort = '8391'
@@ -392,7 +393,7 @@ project(':jportal_webapp') {
 
             classpath configurations.h2db
             main "org.h2.tools.Server"
-            args "-tcp", "-baseDir", h2DBPath.toString()
+            args "-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", h2DBPath.toString()
         }
     }
 
@@ -438,6 +439,8 @@ project(':jportal_webapp') {
             args '--stop-port', jettyStopPort
             args '--stop-key', jettyStopKey
             args '--path', '/jportal', war.archivePath
+            args '--lib', "$project.projectDir/config/lib"
+
             //args '--path', '/mets-printer', configurations.printer.singleFile
         }
     }
