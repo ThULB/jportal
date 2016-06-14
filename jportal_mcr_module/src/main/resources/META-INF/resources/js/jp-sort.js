@@ -6,6 +6,14 @@ jp.sort = {
 
   object: null,
 
+  selectedChildId: null,
+
+  children: [],
+
+  childrenPage: 1,
+  
+  childrenPerPage: 10,
+
   selectedSorter: null,
 
   sorters: [],
@@ -25,6 +33,9 @@ jp.sort = {
         jp.sort.selectSorter(sortBy.$text);
         $("#jp-sort-order-select").val(sortBy._order);
       }
+    });
+    jp.sort.getChildren(id, function(data) {
+      jp.sort.reloadChildren(data.response);
     });
   },
 
@@ -49,11 +60,185 @@ jp.sort = {
     if(sorter == null) {
       $(".jp-sort-editor-sorter-no-sorter").addClass("active");
       jp.sort.selectedSorter = null;
+      jp.sort.updateChildrenToolbar();
       return;
     }
     jp.sort.selectedSorter = sorter;
     var className = sorter.substring(sorter.lastIndexOf(".") + 1, sorter.length);
     $("." + className).addClass("active");
+    jp.sort.updateChildrenToolbar();
+  },
+
+  reloadChildren: function(solrResponse) {
+    var docs = solrResponse.docs;
+    jp.sort.children = [];
+    for(var doc of docs) {
+      jp.sort.children.push(doc);
+    }
+    jp.sort.childrenPage = 1;
+    jp.sort.renderChildren();
+  },
+
+  renderChildren: function() {
+    var container = $("#childrenContainer");
+    var paginator = $("#childrenPaginator");
+    container.empty();
+    paginator.empty();
+
+    var children = jp.sort.children;
+    if(children.length == 0) {
+      container.html("Keine Kinder gefunden.");
+      return;
+    }
+
+    var currentPage = jp.sort.childrenPage;
+
+    updateChildren(container, children, currentPage);
+    updatePaginator(paginator, children, currentPage);
+    updateToolbar();
+
+    function updateChildren(container, children, currentPage) {
+      var start = (jp.sort.childrenPerPage * (currentPage - 1));
+      var end = Math.min(start + jp.sort.childrenPerPage, children.length);
+      // add children
+      for(var i = start; i < end; i++) {
+        addChild(container, children[i]);
+      }
+    }
+
+    function updatePaginator(paginator, children, currentPage) {
+      var numPages = Math.ceil(children.length / jp.sort.childrenPerPage);
+      var startPage = Math.max(currentPage - (Math.max(currentPage - numPages + 3, 1)), 2);
+      var endPage = Math.min(currentPage + (Math.max(4 - currentPage, 1)), numPages - 1);
+      
+      addPaginatorPage(paginator, 1, currentPage);
+      if(currentPage >= 4) {
+        paginator.append("<li class='plain'><span>...</span></li>");
+      }
+      for(var pageNumber = startPage; pageNumber <= endPage; pageNumber++) {
+        addPaginatorPage(paginator, pageNumber, currentPage);
+      }
+      if(numPages - currentPage >= 3) {
+        paginator.append("<li class='plain'><span>...</span></li>");
+      }
+      addPaginatorPage(paginator, numPages, currentPage);
+    }
+
+    function updateToolbar() {
+      var child = jp.sort.getChild(jp.sort.selectedChildId);
+      var value = child != null ? jp.sort.children.indexOf(child) : null;
+      $("#childOrderPosition").val(value);
+    }
+
+    function addChild(container, child) {
+      var activeClass = "class='jp-sort-editor-child list-group-item ";
+      activeClass += child.id;
+      var selected = jp.sort.selectedChildId;
+      activeClass += (selected == child.id) ? " active" : "";
+      activeClass += "'";
+      var onclick = "onclick='jp.sort.selectChild(`" + child.id + "`)'";
+      container.append("<a href='#' " + activeClass + " " + onclick + ">" + child.maintitle + "</div>");
+    }
+
+    function addPaginatorPage(paginator, page, currentPage) {
+      var activeClass = (page == currentPage ? "class='active'" : "");
+      var onclick = "onclick='jp.sort.changePage(" + page + ")'";
+      paginator.append("<li " + activeClass + "><a href='#' " + onclick + ">" + page + "</a></li>");
+    }
+  },
+
+  selectChild: function(id) {
+    $(".jp-sort-editor-child").removeClass("active");
+    $("." + id).addClass("active");
+    var child = jp.sort.getChild(id);
+    jp.sort.selectedChildId = null;
+    $("#childOrderPosition").val(jp.sort.children.indexOf(child));
+    jp.sort.selectedChildId = id;
+  },
+
+  getChild: function(id) {
+    if(id == null) {
+      return null;
+    }
+    for(child of jp.sort.children) {
+      if(child.id == id) {
+        return child;
+      }
+    }
+    return null;
+  },
+
+  updateChildrenToolbar: function() {
+    var disabled = jp.sort.selectedSorter != null ? "disabled" : null;
+    $("#childrenToolbar button").attr("disabled", disabled);
+    $("#childrenToolbar input").attr("disabled", disabled);
+  },
+
+  changePage: function(page) {
+    jp.sort.childrenPage = page;
+    jp.sort.renderChildren();
+  },
+
+  decrementChildOrder: function() {
+    var pos = jp.sort.getPositionOfSelectedChild();
+    jp.sort.changeChildOrder(pos, pos - 1);
+    jp.sort.jumpToChild(pos - 1);
+  },
+
+  incrementChildOrder: function() {
+    var pos = jp.sort.getPositionOfSelectedChild();
+    jp.sort.changeChildOrder(pos, pos + 1);
+    jp.sort.jumpToChild(pos + 1);
+  },
+
+  onChildOrderChange: function() {
+    var pos = jp.sort.getPositionOfSelectedChild();
+    var newPos = jp.sort.getPositionOfInput();
+    jp.sort.changeChildOrder(pos, newPos);
+    jp.sort.jumpToChild(newPos);
+  },
+
+  jumpToChild: function(pos) {
+    var oldPage = jp.sort.childrenPage;
+    var newPage = Math.ceil((pos + 1) / jp.sort.childrenPerPage);
+    if(oldPage != newPage) {
+      jp.sort.changePage(newPage);
+    } else {
+      jp.sort.renderChildren();
+    }
+  },
+
+  changeChildOrder: function(pos1, pos2) {
+    if(pos1 == null || pos2 == null || (typeof pos1 != "number") || (typeof pos2 != "number")) {
+      return;
+    }
+    var size = jp.sort.children.length;
+    if(pos1 < 0 || pos1 >= size || pos2 < 0 || pos2 >= size) {
+      return;
+    }
+    jp.sort.swapArrayPosition(jp.sort.children, pos1, pos2);
+  },
+
+  getPositionOfSelectedChild: function() {
+    if(jp.sort.selectedChildId == null) {
+      return;
+    }
+    var child = jp.sort.getChild(jp.sort.selectedChildId);
+    return jp.sort.children.indexOf(child);
+  },
+
+  getPositionOfInput: function() {
+    var pos = $("#childOrderPosition").val();
+    if(pos == null) {
+      return;
+    }
+    return parseInt(pos);
+  },
+
+  swapArrayPosition: function(list, pos1, pos2) {
+    var temp = list[pos1];
+    list[pos1] = list[pos2];
+    list[pos2] = temp;
   },
 
   save: function() {
@@ -104,6 +289,19 @@ jp.sort = {
     }, function(error) {
       console.log(error);
       alert("Error while retrieving mycore object " + id);
+    });
+  },
+
+  getChildren: function(id, callback) {
+    var q = "parent:" + id;
+    var fl = "id,maintitle";
+    var sort = "order+asc";
+    var rows = "9999";
+    $.getJSON(jp.baseURL + "servlets/search?q=" + q + "&fl=" + fl + "&sort=" + sort + "&rows=" + rows + "&wt=json", function(response) {
+      callback(response);
+    }, function(error) {
+      console.log(error);
+      alert("Error while retrieving children of mycore object " + id);
     });
   },
 

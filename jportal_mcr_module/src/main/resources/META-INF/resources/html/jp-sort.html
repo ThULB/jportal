@@ -9,7 +9,7 @@
 		<div id="sortGUIMain">
 			<div class="modal fade" id="sort-modal" tabindex="-1" role="dialog"
 				data-backdrop="static" aria-hidden="true" data-keyboard="false">
-				<div class="modal-dialog">
+				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
 							<h4 id="sort-title" class="modal-title i18n"
@@ -23,7 +23,7 @@
 							<div class="jp-sort-editor-darken" id="jp-sort-body-darken"
 								style="display: none;"></div>
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-md-6">
 									<div class="list-group" id="autoSortContainer">
 										<strong> <a href="#" type="button"
 											class="jp-sort-editor-sorter list-group-item i18n jp-sort-editor-sorter-no-sorter active"
@@ -47,7 +47,33 @@
 										<h4></h4>
 									</div>
 								</div>
-								<!-- <div class="col-md-6"></div> -->
+								<div class="col-md-6">
+									<div class="list-group" id="childrenContainer" style="min-height: 358px;">
+										<div class="list-group-item" style="min-height: 358px;">Loading...</div>
+									</div>
+									<div class="row">
+										<div class="col-md-7">
+											<nav>
+											<ul id="childrenPaginator" class="pagination pagination-sm" style="margin: 0">
+											</ul>
+											</nav>
+										</div>
+										<div class="col-md-5" id="childrenToolbar">
+											<div class="input-group input-group-sm">
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" onclick="jp.sort.decrementChildOrder()">
+														<i class="fa fa-chevron-down" aria-hidden="true"></i>
+													</button>
+												</span> <input id="childOrderPosition" type="text" class="form-control" placeholder="Order" onchange="jp.sort.onChildOrderChange()">
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-default" onclick="jp.sort.incrementChildOrder()">
+														<i class="fa fa-chevron-up" aria-hidden="true"></i>
+													</button>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
