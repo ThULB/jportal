@@ -10,8 +10,10 @@ jp.sort = {
 
   children: [],
 
+  oldChildren: [],
+
   childrenPage: 1,
-  
+
   childrenPerPage: 10,
 
   selectedSorter: null,
@@ -72,7 +74,9 @@ jp.sort = {
   reloadChildren: function(solrResponse) {
     var docs = solrResponse.docs;
     jp.sort.children = [];
+    jp.sort.oldChildren = [];
     for(var doc of docs) {
+      jp.sort.oldChildren.push(doc);
       jp.sort.children.push(doc);
     }
     jp.sort.childrenPage = 1;
@@ -181,21 +185,24 @@ jp.sort = {
 
   decrementChildOrder: function() {
     var pos = jp.sort.getPositionOfSelectedChild();
-    jp.sort.changeChildOrder(pos, pos - 1);
-    jp.sort.jumpToChild(pos - 1);
+    if(jp.sort.swapChildren(pos, pos - 1)) {
+      jp.sort.jumpToChild(pos - 1);
+    }
   },
 
   incrementChildOrder: function() {
     var pos = jp.sort.getPositionOfSelectedChild();
-    jp.sort.changeChildOrder(pos, pos + 1);
-    jp.sort.jumpToChild(pos + 1);
+    if(jp.sort.swapChildren(pos, pos + 1)) {
+      jp.sort.jumpToChild(pos + 1);
+    }
   },
 
   onChildOrderChange: function() {
     var pos = jp.sort.getPositionOfSelectedChild();
     var newPos = jp.sort.getPositionOfInput();
-    jp.sort.changeChildOrder(pos, newPos);
-    jp.sort.jumpToChild(newPos);
+    if(jp.sort.swapChildren(pos, newPos)) {
+      jp.sort.jumpToChild(newPos);
+    }
   },
 
   jumpToChild: function(pos) {
@@ -208,15 +215,16 @@ jp.sort = {
     }
   },
 
-  changeChildOrder: function(pos1, pos2) {
+  swapChildren: function(pos1, pos2) {
     if(pos1 == null || pos2 == null || (typeof pos1 != "number") || (typeof pos2 != "number")) {
-      return;
+      return false;
     }
     var size = jp.sort.children.length;
     if(pos1 < 0 || pos1 >= size || pos2 < 0 || pos2 >= size) {
-      return;
+      return false;
     }
     jp.sort.swapArrayPosition(jp.sort.children, pos1, pos2);
+    return true;
   },
 
   getPositionOfSelectedChild: function() {
@@ -250,11 +258,21 @@ jp.sort = {
         .done(onSuccess)
         .fail(onFail);
     } else {
+      // first remove sorter
       $.ajax({
         method: 'DELETE',
         url: jp.baseURL + "rsc/sorter/" + jp.sort.id
-      }).done(onSuccess)
-        .fail(onFail);
+      }).done(function() {
+        // check if the child order has changed
+        if(childOrderChanged()) {
+          $.ajax({
+            method: 'POST',
+            url: jp.baseURL + "rsc/sorter/" + jp.sort.id + "/sort",
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify(jp.sort.children)
+          }).done(onSuccess).fail(onFail);
+        }
+      }).fail(onFail);
     }
 
     function before() {
@@ -269,6 +287,17 @@ jp.sort = {
       $("#jp-sort-body").css("pointer-events", "auto");
       $("#jp-sort-footer-default").css("display", "block");
       $("#jp-sort-footer-saving").css("display", "none");
+    }
+
+    function childOrderChanged() {
+      for(var i = 0; i < jp.sort.children.length; i++) {
+        var child = jp.sort.children[i];
+        var oldChild = jp.sort.oldChildren[i];
+        if(child.id != oldChild.id) {
+          return true;
+        }
+      }
+      return false;
     }
 
     function onSuccess() {
