@@ -250,6 +250,7 @@ project(':jportal_webapp') {
         applet
         runtime.exclude group: "org.slf4j", module: "slf4j-nop"
         runtime.exclude group: "com.zaxxer", module: "HikariCP-java6"
+        websocket
     }
 
     dependencies {
@@ -277,6 +278,9 @@ project(':jportal_webapp') {
         runtime project(':jportal_acl_ip_editor_module')
         runtime project(':jportal_mcr_module')
         applet "org.mycore.fileupload:fileupload-applet:1.3-SNAPSHOT"
+        websocket 'javax.websocket:javax.websocket-api:1.1'
+        websocket "org.eclipse.jetty.websocket:javax-websocket-client-impl:$jettyVersion"
+        websocket "org.eclipse.jetty.websocket:javax-websocket-server-impl:$jettyVersion"
     }
 
     war {
@@ -313,15 +317,13 @@ project(':jportal_webapp') {
 
     dependencies {
         jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
-        // printer "de.uni-jena.thulb:urmel-printer:1.0-SNAPSHOT@war"
         jettyStart "org.eclipse.jetty:jetty-start:$jettyVersion"
         h2db "com.h2database:h2:1.4.191"
         solrWar "org.mycore.solr:solr:$solrVersion@war"
     }
 
     ext.appName = "jportal"
-//    ext.mcrHome = System.getProperty("user.home") + "/.mycore"
-	ext.mcrHome = "/data/mcrHome"
+    ext.mcrHome = System.getProperty("user.home") + "/.mycore"
 
     ext.appPath = "$mcrHome/$appName"
     ext.confDir = "$project.projectDir/config"
@@ -429,7 +431,7 @@ project(':jportal_webapp') {
             systemProperties.put("MCR.Home", mcrHome)
             systemProperties.put("MCR.AppName", "jportal")
             systemProperties.put("URN.log", "$appPath/urnlog")
-            classpath configurations.jetty, configurations.h2db
+            classpath configurations.jetty, configurations.h2db, configurations.websocket
 
             jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
             jvmArgs '-Xmx2048m'
@@ -439,9 +441,6 @@ project(':jportal_webapp') {
             args '--stop-port', jettyStopPort
             args '--stop-key', jettyStopKey
             args '--path', '/jportal', war.archivePath
-            args '--lib', "$project.projectDir/config/lib"
-
-            //args '--path', '/mets-printer', configurations.printer.singleFile
         }
     }
 
