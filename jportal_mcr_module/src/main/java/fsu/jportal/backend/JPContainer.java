@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.solr.common.util.Pair;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
@@ -25,6 +24,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import fsu.jportal.backend.event.AutoSortHandler;
 import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
+import fsu.jportal.common.Pair;
 
 /**
  * Component that can contain other components as children.
