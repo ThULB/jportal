@@ -1,8 +1,10 @@
 package fsu.jportal.resolver;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -16,9 +18,12 @@ public class JournalFilesResolver implements URIResolver {
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {
-        href = href.substring(href.indexOf(":")+1);
+        href = href.substring(href.indexOf(":") + 1);
         try {
-            FileInputStream fis = getJournalFile(href);
+            FileInputStream fis = stream(href);
+            if (fis == null) {
+                return null;
+            }
             return fis != null ? new StreamSource(fis) : null;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -26,22 +31,18 @@ public class JournalFilesResolver implements URIResolver {
         return null;
     }
 
-    public FileInputStream getJournalFile(String href) throws FileNotFoundException {
-        String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
-        if(journalFileFolderPath != null){
-            File journalFile = new File(journalFileFolderPath + File.separator + href);
-            if(journalFile.exists()){
-                return new FileInputStream(journalFile);
-            }
+    public static FileInputStream stream(String href) throws FileNotFoundException {
+        Path path = getPath(href);
+        if (path != null && Files.exists(path)) {
+            return new FileInputStream(path.toFile());
         }
         return null;
     }
-    
-    public File getJournalFileFolder(String href) {
+
+    public static Path getPath(String href) {
         String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
-        if(journalFileFolderPath != null){
-            File journalFile = new File(journalFileFolderPath + File.separator + href);
-            return journalFile;
+        if (journalFileFolderPath != null) {
+            return Paths.get(journalFileFolderPath, href);
         }
         return null;
     }

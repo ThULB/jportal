@@ -48,7 +48,7 @@ import fsu.jportal.backend.GreetingsFS;
 import fsu.jportal.backend.GreetingsManager;
 import fsu.jportal.backend.ImprintFS;
 import fsu.jportal.backend.ImprintManager;
-import fsu.jportal.pref.JournalConfig;
+import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.util.ImprintUtil;
 import fsu.jportal.xml.MCRWebpage;
 import fsu.jportal.xml.XMLTools;
@@ -135,8 +135,8 @@ public class ImprintResource {
         String imprintID = getImprintID(objID, fsType);
         if (imprintID != null) {
             ltm.deleteReferenceLink(objID, imprintID, fsType);
-            JournalConfig journalConf = getJournalConf(objID);
-            journalConf.removeKey(fsType);
+            JPObjectConfiguration journalConf = getJournalConf(objID);
+            journalConf.remove(fsType);
         }
         return Response.ok().build();
     }
@@ -317,15 +317,20 @@ public class ImprintResource {
 //    }
 
     private void setLink(String objID, String imprintID) {
-        JournalConfig journalConf = getJournalConf(objID);
+        JPObjectConfiguration journalConf = getJournalConf(objID);
         String oldImprintID = getImprintID(objID, fsType);
         if (oldImprintID != null && oldImprintID.equals(imprintID)) {
             return;
         } else if (oldImprintID != null) {
-            journalConf.removeKey(fsType);
+            journalConf.remove(fsType);
         }
-        if(!imprintID.equals("null")) {
-            journalConf.setKey(fsType, imprintID);
+        if (!imprintID.equals("null")) {
+            try {
+                journalConf.set(fsType, imprintID);
+                journalConf.store();
+            } catch (Exception exc) {
+                LOGGER.error("Unable to store " + fsType + "=" + imprintID + " to journal config", exc);
+            }
         }
         MCRLinkTableManager ltm = MCRLinkTableManager.instance();
         ltm.addReferenceLink(objID, imprintID, fsType, null);
@@ -342,10 +347,10 @@ public class ImprintResource {
         Collection<String> references = ltm.getSourceOf(imprintID);
         for(String reference : references) {
             ltm.deleteReferenceLink(reference, imprintID, fsType);
-            JournalConfig journalConf = getJournalConf(reference);
+            JPObjectConfiguration journalConf = getJournalConf(reference);
             String oldImprintID = getImprintID(reference, fsType);
             if (oldImprintID != null) {
-                journalConf.removeKey(fsType);
+                journalConf.remove(fsType);
             }
         }
     }
@@ -374,20 +379,20 @@ public class ImprintResource {
             LOGGER.error("unable to store link content, ObjectID is null");
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
         }
-        JournalConfig journalConf = getJournalConf(objID);
+        JPObjectConfiguration journalConf = getJournalConf(objID);
         Map<String, String> newMap = getPropAsMap(objID);
         if (newMap == null) {
             newMap = new HashMap<>();
             newMap.put(imprintID, content);
         }
         else {
-            journalConf.removeKey(fsType);
+            journalConf.remove(fsType);
             if (oldImprintID != null && !oldImprintID.equals("") && !oldImprintID.equals(imprintID)) {
                 newMap.remove(oldImprintID);
             }
             newMap.put(imprintID, content);
         }
-        journalConf.setKey(fsType, mapToProp(newMap));
+        storeToObjectConfig(journalConf, newMap);
     }
 
     private void deleteLink(String objID, String imprintID) {
@@ -395,14 +400,24 @@ public class ImprintResource {
             LOGGER.error("unable to store link content, ObjectID is null");
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
         }
-        JournalConfig journalConf = getJournalConf(objID);
+        JPObjectConfiguration journalConf = getJournalConf(objID);
         Map<String, String> newMap = getPropAsMap(objID);
         if (newMap != null) {
-            journalConf.removeKey(fsType);
+            journalConf.remove(fsType);
             newMap.remove(imprintID);
         }
         if (newMap.size() > 0) {
-            journalConf.setKey(fsType, mapToProp(newMap));
+            storeToObjectConfig(journalConf, newMap);
+        }
+    }
+
+    private void storeToObjectConfig(JPObjectConfiguration objectConfig, Map<String, String> newMap) {
+        String value = mapToProp(newMap);
+        try {
+            objectConfig.set(fsType, value);
+            objectConfig.store();
+        } catch (Exception exc) {
+            LOGGER.error("Unable to set " + fsType + "=" + value + " on journal configuration", exc);
         }
     }
 

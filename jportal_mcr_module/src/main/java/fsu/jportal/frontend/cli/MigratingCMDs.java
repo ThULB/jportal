@@ -38,7 +38,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
-import fsu.jportal.pref.JournalConfig;
+import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.resolver.JournalFilesResolver;
 
 @MCRCommandGroup(name = "JP Migrating Commands")
@@ -53,11 +53,12 @@ public class MigratingCMDs {
             try {
                 Source resolve = journalFilesResolver.resolve("journalFile:" + jpjournalID + "/intro.xml+", null);
                 if (resolve != null) {
-                    JournalConfig journalConf = getJournalConf(jpjournalID);
-                    journalConf.setKey("greeting", "intro");
+                    JPObjectConfiguration journalConf = getJournalConf(jpjournalID);
+                    journalConf.set("greeting", "intro");
+                    journalConf.store();
                     LOGGER.info("Set intro for " + jpjournalID);
                 }
-            } catch (TransformerException e) {
+            } catch (TransformerException | IOException e) {
                 e.printStackTrace();
             }
         }

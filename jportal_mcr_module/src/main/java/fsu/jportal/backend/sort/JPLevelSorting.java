@@ -51,4 +51,13 @@ public class JPLevelSorting {
         return this.levelList.get(level);
     }
 
+    /**
+     * Returns a live list of the levels.
+     * 
+     * @return the level list
+     */
+    public List<Pair<String, JPSorter>> getLevelList() {
+        return levelList;
+    }
+
 }

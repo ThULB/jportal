@@ -33,8 +33,7 @@ public class GreetingsFS {
 
     public GreetingsFS(String journalID) {
         this.journalID = journalID;
-        JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
-        GREETINGS_DIR = journalFilesResolver.getJournalFileFolder(journalID).toPath();
+        GREETINGS_DIR = JournalFilesResolver.getPath(journalID);
         if (!Files.exists(GREETINGS_DIR)) {
             try {
                 Files.createDirectories(GREETINGS_DIR);

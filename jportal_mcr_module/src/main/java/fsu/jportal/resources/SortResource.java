@@ -37,13 +37,24 @@ import fsu.jportal.backend.sort.JPSorter.Order;
 import fsu.jportal.util.JPComponentUtil;
 
 /**
- * Simple resource to set the autsort {@link JPSorter} for mycore objects
- * and do manual sorts.
+ * Resource to handle jportal sorting. 
+ * 
+ * The following endpoints are available:
+ * <ul>
+ * <li>the auto or manual sorting of objects
+ *  <ul>
+ *      <li>POST sortby/{id} -> sets the sortBy for the given object</li>
+ *      <li>DELETE sortby/{id} -> removes the sortBy for the given object </li>
+ *      <li>POST resort/{id} -> manual resorting with json data</li>
+ *  </ul>
+ * </li>
+ * <li>the level sorting of journals</li>
+ * </ul>
  * 
  * @author Matthias Eichner
  */
-@Path("sorter/{id}")
-public class SorterResource {
+@Path("sort")
+public class SortResource {
 
     /**
      * Sets a new sort by for the given object.
@@ -53,7 +64,8 @@ public class SorterResource {
      * @param orderString the order ascending|descending
      */
     @POST
-    public void update(@PathParam("id") String id, @QueryParam("sorter") String sorterClass,
+    @Path("sortby/{id}")
+    public void sortByUpdate(@PathParam("id") String id, @QueryParam("sorter") String sorterClass,
         @QueryParam("order") String orderString) {
         JPContainer jpContainer = get(id);
         try {
@@ -75,7 +87,8 @@ public class SorterResource {
      * @param id the object identifier
      */
     @DELETE
-    public void delete(@PathParam("id") String id) {
+    @Path("sortby/{id}")
+    public void sortByDelete(@PathParam("id") String id) {
         JPContainer jpContainer = get(id);
         try {
             jpContainer.setSortBy(null, null);
@@ -98,7 +111,7 @@ public class SorterResource {
      * </pre>
      */
     @POST
-    @Path("sort")
+    @Path("resort/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void sort(@PathParam("id") String id, String data) {
         JPContainer container = get(id);

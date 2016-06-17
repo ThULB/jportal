@@ -1,17 +1,19 @@
 package fsu.jportal.util;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.backend.sort.JPSorter;
+import fsu.jportal.common.Pair;
 import fsu.jportal.common.Triple;
 import fsu.jportal.common.Unthrow;
-import fsu.jportal.pref.JournalConfig;
 
 /**
  * Helper class to support level sorting on journals.
@@ -30,7 +32,7 @@ public abstract class JPLevelSortingUtil {
      * @throws IOException journal configuration couldn't be loaded
      */
     public JPLevelSorting load(MCRObjectID objectID) throws IOException {
-        JournalConfig config = new JournalConfig(objectID.toString(), LEVEL_SORTING);
+        JPObjectConfiguration config = getConfig(objectID);
         JPLevelSorting levelSorting = new JPLevelSorting();
         Map<String, String> levels = config.keyFilter("level.");
         levels.entrySet().stream().collect(Collectors.groupingBy(entry -> {
@@ -65,9 +67,24 @@ public abstract class JPLevelSortingUtil {
      * 
      * @param objectID the journal id
      * @param levelSorting the level sorting object to store
+     * 
+     * @throws IOException loading or storing the journal configuration failed
      */
-    public void store(MCRObjectID objectID, JPLevelSorting levelSorting) {
-
+    public void store(MCRObjectID objectID, JPLevelSorting levelSorting) throws IOException {
+        JPObjectConfiguration config = getConfig(objectID);
+        // remove all level stuff
+        config.removeByKeyFilter("level.");
+        // add from the level sorting object
+        for (Pair<String, JPSorter> pair : levelSorting.getLevelList()) {
+            int level = levelSorting.getLevelList().indexOf(pair);
+            String baseKey = "level." + level;
+            config.set(baseKey + ".name", pair.getKey());
+            config.set(baseKey + ".sorter", pair.getValue().getClass().getName());
+        }
+        config.store();
     }
 
+    private JPObjectConfiguration getConfig(MCRObjectID objectID) throws IOException {
+        return new JPObjectConfiguration(objectID.toString(), LEVEL_SORTING);
+    }
 }

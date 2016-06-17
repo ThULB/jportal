@@ -32,7 +32,7 @@ import fsu.jportal.backend.GreetingsFS;
 import fsu.jportal.backend.GreetingsManager;
 import fsu.jportal.backend.ImprintFS;
 import fsu.jportal.backend.ImprintManager;
-import fsu.jportal.pref.JournalConfig;
+import fsu.jportal.backend.JPObjectConfiguration;
 
 public abstract class ImprintUtil {
 
@@ -46,7 +46,7 @@ public abstract class ImprintUtil {
      * @return id of imprint
      */
     public static String getImprintID(String objID, String fsType) {
-        return getJournalConf(objID).getKey(fsType);
+        return getJournalConf(objID).get(fsType);
     }
 
     /**
@@ -60,9 +60,9 @@ public abstract class ImprintUtil {
         return imprintID != null && !imprintID.equals("");
     }
 
-    public static JournalConfig getJournalConf(String objID) {
+    public static JPObjectConfiguration getJournalConf(String objID) {
         try {
-            return new JournalConfig(objID, "imprint.partner");
+            return new JPObjectConfiguration(objID, "imprint.partner");
         } catch(Exception exc) {
             LOGGER.error("Unable ot load imprint config for " + objID);
             return null;
@@ -70,7 +70,7 @@ public abstract class ImprintUtil {
     }
 
     public static XNodeSet getLinks(ExpressionContext context, String objID) {
-        String prop = getJournalConf(objID).getKey("link");
+        String prop = getJournalConf(objID).get("link");
         Gson gson = new Gson();
         Map<String, String> map = new HashMap<>();
         map = gson.fromJson(prop, map.getClass());

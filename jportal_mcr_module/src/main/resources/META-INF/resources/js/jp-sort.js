@@ -252,20 +252,20 @@ jp.sort.object = {
     if(jp.sort.object.selectedSorter != null) {
       var sorterClass = jp.sort.object.selectedSorter;
       var order = $("#jp-sort-order-select").val();
-      $.post(jp.baseURL + "rsc/sorter/" + jp.sort.object.id + "?sorter=" + sorterClass + "&order=" + order)
+      $.post(jp.baseURL + "rsc/sort/sortby/" + jp.sort.object.id + "?sorter=" + sorterClass + "&order=" + order)
         .done(onSuccess)
         .fail(onFail);
     } else {
       // first remove sorter
       $.ajax({
         method: 'DELETE',
-        url: jp.baseURL + "rsc/sorter/" + jp.sort.object.id
+        url: jp.baseURL + "rsc/sort/sortby/" + jp.sort.object.id
       }).done(function() {
         // check if the child order has changed
         if(childOrderChanged()) {
           $.ajax({
             method: 'POST',
-            url: jp.baseURL + "rsc/sorter/" + jp.sort.object.id + "/sort",
+            url: jp.baseURL + "rsc/sort/resort/" + jp.sort.object.id,
             contentType: "application/json; charset=UTF-8",
             data: JSON.stringify(jp.sort.object.children)
           }).done(onSuccess).fail(onFail);
@@ -300,7 +300,7 @@ jp.sort.object = {
 
     function onSuccess() {
       after();
-      $("#jp-sort-level-dialog").modal("hide");
+      $("#jp-sort-object-dialog").modal("hide");
     }
 
     function onFail(error) {

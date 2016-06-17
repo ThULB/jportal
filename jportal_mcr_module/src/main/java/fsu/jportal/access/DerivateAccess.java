@@ -13,7 +13,7 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.solr.MCRSolrClientFactory;
 
-import fsu.jportal.pref.JournalConfig;
+import fsu.jportal.backend.JPObjectConfiguration;
 
 public class DerivateAccess {
 
@@ -22,8 +22,8 @@ public class DerivateAccess {
     public static boolean checkPermission(String id, String journalID, String date) {
         String accessClassName = null;
         try {
-            JournalConfig journalConfig = new JournalConfig(journalID, "fsu.jportal.derivate.access");
-            accessClassName = journalConfig.getKey("accessClass");
+            JPObjectConfiguration journalConfig = new JPObjectConfiguration(journalID, "fsu.jportal.derivate.access");
+            accessClassName = journalConfig.get("accessClass");
         } catch (Exception exc) {
             LOGGER.error("Unable to check permission of " + id + " and journal " + journalID
                 + " because the journal config couldn't be loaded.", exc);
