@@ -28,6 +28,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.http.HttpStatus;
 import fsu.jportal.jersey.access.IPRuleAccess;
 import fsu.jportal.parser.IPAddress;
@@ -36,7 +37,6 @@ import fsu.jportal.parser.IPJsonArray;
 import fsu.jportal.parser.IPMap;
 import fsu.jportal.parser.IPRuleParser;
 import fsu.jportal.parser.IPRuleParser.IPRuleParseException;
-import fsu.jportal.pref.JournalConfig;
 
 @Path("IPRule/{objID}")
 @MCRRestrictedAccess(IPRuleAccess.class)
@@ -53,14 +53,14 @@ public class IPRuleResource {
 
     @PathParam("objID") String objID;
 
-    JournalConfig journalConf = null;
+    JPObjectConfiguration journalConf = null;
 
     private String ruleStr;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String listJSON() {
-        String ruleid = getJournalConfKeys().getKey("ruleId");
+        String ruleid = getJournalConfKeys().get("ruleId");
         MCRRuleStore ruleStore = MCRRuleStore.getInstance();
         MCRAccessRule rule = ruleStore.getRule(ruleid);
         String ruleString = rule.getRuleString();
@@ -81,10 +81,10 @@ public class IPRuleResource {
         return ruleStore.getRule(ruleid);
     }
 
-    private JournalConfig getJournalConfKeys() {
+    private JPObjectConfiguration getJournalConfKeys() {
         if (journalConf == null) {
             try {
-                journalConf = new JournalConfig(objID, "jportal_acl_ip_editor_module");
+                journalConf = new JPObjectConfiguration(objID, "jportal_acl_ip_editor_module");
             } catch(Exception exc) {
                 LOGGER.error("Unable to load journal config for acl editor for id " + objID, exc);
             }
@@ -165,7 +165,7 @@ public class IPRuleResource {
     }
 
     private Map<String, IPAddress> getIpRules() throws IPRuleParseException {
-        String ruleId = getJournalConfKeys().getKey("ruleId");
+        String ruleId = getJournalConfKeys().get("ruleId");
         MCRRuleStore ruleStore = MCRRuleStore.getInstance();
         MCRAccessRule rule = ruleStore.getRule(ruleId);
         String ruleStr = rule.getRuleString();
@@ -173,13 +173,13 @@ public class IPRuleResource {
     }
 
     private void saveIpRules(Map<String, IPAddress> ipRules) {
-        String defRule = getJournalConfKeys().getKey("defRule");
+        String defRule = getJournalConfKeys().get("defRule");
     }
 
     public Map<String, IPAddress> getIpAddressMap() throws IPRuleParseException {
         if(ipAddressMap == null){
-            String ruleId = getJournalConfKeys().getKey("ruleId");
-            defRule = getJournalConfKeys().getKey("defRule");
+            String ruleId = getJournalConfKeys().get("ruleId");
+            defRule = getJournalConfKeys().get("defRule");
             ruleStore = MCRRuleStore.getInstance();
             rule = ruleStore.getRule(ruleId);
             ruleStr = rule.getRuleString();

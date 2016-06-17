@@ -10,7 +10,7 @@ import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 
-import fsu.jportal.pref.JournalConfig;
+import fsu.jportal.backend.JPObjectConfiguration;
 
 public class IPRuleAccess implements MCRResourceAccessChecker {
 
@@ -21,9 +21,9 @@ public class IPRuleAccess implements MCRResourceAccessChecker {
         String path = request.getPath();
         String id = extractId(path);
         try {
-            JournalConfig journalConfig = new JournalConfig(id, "jportal_acl_ip_editor_module");
-            String aclObjId = journalConfig.getKey("aclObjId");
-            String aclPerm = journalConfig.getKey("aclPerm");
+            JPObjectConfiguration journalConfig = new JPObjectConfiguration(id, "jportal_acl_ip_editor_module");
+            String aclObjId = journalConfig.get("aclObjId");
+            String aclPerm = journalConfig.get("aclPerm");
             if (aclObjId == null || aclPerm == null) {
                 return false;
             }
