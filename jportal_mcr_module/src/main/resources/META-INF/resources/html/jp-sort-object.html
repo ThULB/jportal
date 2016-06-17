@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sort</title>
+</head>
+<body style="background-color: white">
+	<div id="jp-sort-object-dialog" class="modal fade" tabindex="-1"
+		role="dialog" data-backdrop="static" aria-hidden="true"
+		data-keyboard="false">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 id="sort-title" class="modal-title i18n"
+						i18n="jp.sort.object.title" i18n-def="Kinddokumente sortieren"></h4>
+					<button type="button" class="close jp-sort-close"
+						data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="jp-sort-body">
+					<div class="jp-sort-body-darken" style="display: none;"></div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="list-group" id="autoSortContainer">
+								<strong> <a href="#" type="button"
+									class="jp-sort-object-sorter list-group-item i18n jp-sort-object-sorter-no-sorter active"
+									i18n="jp.sort.object.manualSort"
+									onclick="jp.sort.object.selectSorter()"></a>
+								</strong>
+								<div class="form-group jp-sort-object-sort-container">
+									<div class="col-md-6 jp-sort-object-autosort-container">
+										<div class="i18n jp-sort-object-autosort"
+											i18n="jp.sort.object.autoSort"></div>
+									</div>
+									<div class="col-md-6 jp-sort-object-order-select-container">
+										<select class="form-control" id="jp-sort-order-select">
+											<option class="i18n" i18n="jp.sort.object.ascending"
+												value="ascending"></option>
+											<option class="i18n" i18n="jp.sort.object.descending"
+												value="descending"></option>
+										</select>
+									</div>
+								</div>
+								<h4></h4>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="list-group" id="childrenContainer"
+								style="min-height: 358px;">
+								<div class="list-group-item" style="min-height: 358px;">Loading...</div>
+							</div>
+							<div class="row">
+								<div class="col-md-7">
+									<nav>
+									<ul id="childrenPaginator" class="pagination pagination-sm"
+										style="margin: 0">
+									</ul>
+									</nav>
+								</div>
+								<div class="col-md-5" id="childrenToolbar">
+									<div class="input-group input-group-sm">
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default"
+												onclick="jp.sort.object.decrementChildOrder()">
+												<i class="fa fa-chevron-down" aria-hidden="true"></i>
+											</button>
+										</span> <input id="childOrderPosition" type="text"
+											class="form-control" placeholder="Order"
+											onchange="jp.sort.object.onChildOrderChange()"> <span
+											class="input-group-btn">
+											<button type="button" class="btn btn-default"
+												onclick="jp.sort.object.incrementChildOrder()">
+												<i class="fa fa-chevron-up" aria-hidden="true"></i>
+											</button>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div id="jp-sort-footer-default">
+						<button id="sort-object-cancel" class="btn btn-default i18n"
+							i18n="jp.sort.object.button.cancel" i18n-def="Abbrechen"
+							type="button" data-dismiss="modal"></button>
+						<button id="sort-object-save" class="btn btn-primary i18n"
+							i18n="jp.sort.object.button.save" i18n-def="Speichern"
+							type="button" onclick="jp.sort.object.save()"></button>
+					</div>
+					<div id="jp-sort-footer-saving" style="display: none;">
+						<i class='fa fa-circle-o-notch fa-spin'></i> <span class="i18n"
+							i18n="jp.sort.object.saving"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

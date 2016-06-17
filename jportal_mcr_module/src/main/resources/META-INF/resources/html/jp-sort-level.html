@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sort</title>
+</head>
+<body style="background-color: white">
+	<div id="jp-sort-level-dialog" class="modal fade" id="sort-modal"
+		tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true"
+		data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 id="sort-title" class="modal-title i18n"
+						i18n="jp.sort.level.title" i18n-def="Ebenen sortieren"></h4>
+					<button type="button" class="close jp-sort-close"
+						data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body jp-sort-body">
+					<div class="jp-sort-body-darken" style="display: none;"></div>
+				</div>
+				<div class="modal-footer">
+					<div class="jp-sort-footer-default">
+						<button id="sort-level-cancel" class="btn btn-default i18n"
+							i18n="jp.sort.level.button.cancel" i18n-def="Abbrechen"
+							type="button" data-dismiss="modal"></button>
+						<button id="sort-level-save" class="btn btn-primary i18n"
+							i18n="jp.sort.level.button.save" i18n-def="Speichern"
+							type="button" onclick="jp.sort.level.save()"></button>
+					</div>
+					<div class="jp-sort-footer-saving" style="display: none;">
+						<i class='fa fa-circle-o-notch fa-spin'></i> <span class="i18n"
+							i18n="jp.sort.level.saving"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

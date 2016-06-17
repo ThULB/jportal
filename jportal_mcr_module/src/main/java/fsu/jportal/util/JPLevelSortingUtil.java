@@ -1,0 +1,73 @@
+package fsu.jportal.util;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.backend.sort.JPSorter;
+import fsu.jportal.common.Triple;
+import fsu.jportal.common.Unthrow;
+import fsu.jportal.pref.JournalConfig;
+
+/**
+ * Helper class to support level sorting on journals.
+ * 
+ * @author Matthias Eichner
+ */
+public abstract class JPLevelSortingUtil {
+
+    public static final String LEVEL_SORTING = "jportal_level_sorting";
+
+    /**
+     * Loads the level sorting of the given journal id.
+     * 
+     * @param objectID the journal identifier
+     * @return a level sorting object
+     * @throws IOException journal configuration couldn't be loaded
+     */
+    public JPLevelSorting load(MCRObjectID objectID) throws IOException {
+        JournalConfig config = new JournalConfig(objectID.toString(), LEVEL_SORTING);
+        JPLevelSorting levelSorting = new JPLevelSorting();
+        Map<String, String> levels = config.keyFilter("level.");
+        levels.entrySet().stream().collect(Collectors.groupingBy(entry -> {
+            String key = entry.getKey();
+            Integer level = Integer.valueOf(key.substring(5, key.indexOf(".", 6)));
+            return level;
+        })).entrySet().stream().map(entry -> {
+            Integer level = entry.getKey();
+            String name = entry.getValue().stream().filter(e -> {
+                return e.getKey().endsWith(".name");
+            }).map(Entry::getValue).findAny().orElse("unknown");
+            String sorter = entry.getValue().stream().filter(e -> {
+                return e.getKey().endsWith(".sorter");
+            }).map(Entry::getValue).findAny().orElse(null);
+            return new Triple<Integer, String, String>(level, name, sorter);
+        }).forEach(triple -> {
+            Unthrow.wrapProc(() -> {
+                String sorterAsString = triple.getRight();
+                JPSorter sorter = null;
+                if (sorterAsString != null && sorterAsString.length() > 0) {
+                    Class<? extends JPSorter> sorterClass = Class.forName(sorterAsString).asSubclass(JPSorter.class);
+                    sorter = sorterClass.newInstance();
+                }
+                levelSorting.set(triple.getLeft(), triple.getMiddle(), sorter);
+            });
+        });
+        return levelSorting;
+    }
+
+    /**
+     * Saves the level sorting for the given journal on the file store.
+     * 
+     * @param objectID the journal id
+     * @param levelSorting the level sorting object to store
+     */
+    public void store(MCRObjectID objectID, JPLevelSorting levelSorting) {
+
+    }
+
+}

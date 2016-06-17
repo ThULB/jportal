@@ -48,14 +48,21 @@
         </item>
         <item>
           <restriction name="hasChildren" value="true" />
+          <restriction name="createJournal" value="true" />
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
+          <label name="Ebenen sortieren" id="jp-sort-level-show-button" mcrid="{$currentObjID}" dialog="level" />
+        </item>
+        <item>
+          <restriction name="hasChildren" value="true" />
           <restriction name="updatePerm" value="true" />
-          <label name="Kinder sortieren" id="sortButton" mcrid="{$currentObjID}" />
+          <label name="Kinder sortieren" id="jp-sort-object-show-button" mcrid="{$currentObjID}" dialog="object" />
         </item>
         <item>
           <restriction name="hasChildren" value="true" />
           <restriction name="createJournal" value="true" />
           <label name="Kinder verschieben" ref="moveObjResource" path="start?objId={$currentObjID}" />
         </item>
+        
         <!--<item>-->
           <!--<restriction name="dataModel" value="datamodel-jpjournal.xsd" />-->
           <!--<label name="Beschreibung bearbeiten" id="ckeditorButton" />-->
@@ -193,7 +200,7 @@
       <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-sort.js" />
       <script type="text/javascript">
         <xsl:for-each select="$settings/sorter/sort">
-          jp.sort.addSorter('<xsl:value-of select="@class" />');
+          jp.sort.object.addSorter('<xsl:value-of select="@class" />');
         </xsl:for-each>
       </script>
     </xsl:if>
