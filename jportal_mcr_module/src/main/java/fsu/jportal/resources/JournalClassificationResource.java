@@ -47,7 +47,11 @@ public class JournalClassificationResource extends MCRClassificationEditorResour
             labels.add(label);
             newRubricClassi.setLabels(labels);
             CATEGORY_DAO.addCategory(newRubricClassi.getParentID(), newRubricClassi.asMCRImpl());
-            objConnector.addRubric(newRubricID);
+            try {
+                objConnector.addRubric(newRubricID);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
             Gson gson = MCRJSONManager.instance().createGson();
             return gson.toJson(newRubricClassi);
         } else {

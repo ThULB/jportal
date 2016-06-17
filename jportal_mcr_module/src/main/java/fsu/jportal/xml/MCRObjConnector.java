@@ -6,42 +6,22 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.*;
 
+import fsu.jportal.backend.JPComponent;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO: move some of this code to {@link JPComponent} API.
+ * 
+ * @author Chi
+ */
 public class MCRObjConnector {
+
     private MCRObject mcrObject;
 
-    private DataManager dataManager;
-
     public MCRObjConnector(String journalID) {
-        this(journalID, new DataManager() {
-            @Override
-            public MCRObject getObj(String id) {
-                return MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
-            }
-
-            @Override
-            public void update(MCRObject obj) {
-                try {
-                    MCRMetadataManager.update(obj);
-                } catch (MCRPersistenceException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (MCRActiveLinkException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (MCRAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public MCRObjConnector(String journalID, DataManager dataManager) {
-        this.dataManager = dataManager;
-        mcrObject = dataManager.getObj(journalID);
-
+        mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalID));
     }
 
     public String getRubric() {
@@ -89,16 +69,18 @@ public class MCRObjConnector {
                 return metaLangText.getText();
             }
         }
-
         return null;
     }
 
-    public void addRubric(MCRCategoryID newRubricID) {
+    public void addRubric(MCRCategoryID newRubricID)
+        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         List<MCRMetaInterface> children = new ArrayList<MCRMetaInterface>();
         MCRMetaLangText elem = new MCRMetaLangText("hidden_rubricID", null, null, 0, null, newRubricID.getRootID());
         children.add(elem);
-        MCRMetaElement mcrMetaElement = new MCRMetaElement(MCRMetaLangText.class, "hidden_rubricsID", false, false, children);
+        MCRMetaElement mcrMetaElement = new MCRMetaElement(MCRMetaLangText.class, "hidden_rubricsID", false, false,
+            children);
         mcrObject.getMetadata().setMetadataElement(mcrMetaElement);
-        dataManager.update(mcrObject);
+        MCRMetadataManager.update(mcrObject);
     }
+
 }
