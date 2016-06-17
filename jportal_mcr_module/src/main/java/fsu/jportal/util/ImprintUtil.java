@@ -61,7 +61,12 @@ public abstract class ImprintUtil {
     }
 
     public static JournalConfig getJournalConf(String objID) {
-        return new JournalConfig(objID, "imprint.partner");
+        try {
+            return new JournalConfig(objID, "imprint.partner");
+        } catch(Exception exc) {
+            LOGGER.error("Unable ot load imprint config for " + objID);
+            return null;
+        }
     }
 
     public static XNodeSet getLinks(ExpressionContext context, String objID) {

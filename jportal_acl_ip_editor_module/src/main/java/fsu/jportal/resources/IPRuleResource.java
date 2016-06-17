@@ -83,9 +83,12 @@ public class IPRuleResource {
 
     private JournalConfig getJournalConfKeys() {
         if (journalConf == null) {
-            journalConf = new JournalConfig(objID, "jportal_acl_ip_editor_module");
+            try {
+                journalConf = new JournalConfig(objID, "jportal_acl_ip_editor_module");
+            } catch(Exception exc) {
+                LOGGER.error("Unable to load journal config for acl editor for id " + objID, exc);
+            }
         }
-
         return journalConf;
     }
 
