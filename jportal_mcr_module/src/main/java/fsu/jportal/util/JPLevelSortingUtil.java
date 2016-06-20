@@ -1,7 +1,6 @@
 package fsu.jportal.util;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -31,7 +30,7 @@ public abstract class JPLevelSortingUtil {
      * @return a level sorting object
      * @throws IOException journal configuration couldn't be loaded
      */
-    public JPLevelSorting load(MCRObjectID objectID) throws IOException {
+    public static JPLevelSorting load(MCRObjectID objectID) throws IOException {
         JPObjectConfiguration config = getConfig(objectID);
         JPLevelSorting levelSorting = new JPLevelSorting();
         Map<String, String> levels = config.keyFilter("level.");
@@ -51,12 +50,11 @@ public abstract class JPLevelSortingUtil {
         }).forEach(triple -> {
             Unthrow.wrapProc(() -> {
                 String sorterAsString = triple.getRight();
-                JPSorter sorter = null;
+                Class<? extends JPSorter> sorterClass = null;
                 if (sorterAsString != null && sorterAsString.length() > 0) {
-                    Class<? extends JPSorter> sorterClass = Class.forName(sorterAsString).asSubclass(JPSorter.class);
-                    sorter = sorterClass.newInstance();
+                    sorterClass = Class.forName(sorterAsString).asSubclass(JPSorter.class);
                 }
-                levelSorting.set(triple.getLeft(), triple.getMiddle(), sorter);
+                levelSorting.set(triple.getLeft(), triple.getMiddle(), sorterClass);
             });
         });
         return levelSorting;
@@ -70,21 +68,21 @@ public abstract class JPLevelSortingUtil {
      * 
      * @throws IOException loading or storing the journal configuration failed
      */
-    public void store(MCRObjectID objectID, JPLevelSorting levelSorting) throws IOException {
+    public static void store(MCRObjectID objectID, JPLevelSorting levelSorting) throws IOException {
         JPObjectConfiguration config = getConfig(objectID);
         // remove all level stuff
         config.removeByKeyFilter("level.");
         // add from the level sorting object
-        for (Pair<String, JPSorter> pair : levelSorting.getLevelList()) {
+        for (Pair<String, Class<? extends JPSorter>> pair : levelSorting.getLevelList()) {
             int level = levelSorting.getLevelList().indexOf(pair);
             String baseKey = "level." + level;
             config.set(baseKey + ".name", pair.getKey());
-            config.set(baseKey + ".sorter", pair.getValue().getClass().getName());
+            config.set(baseKey + ".sorter", pair.getValue().getName());
         }
         config.store();
     }
 
-    private JPObjectConfiguration getConfig(MCRObjectID objectID) throws IOException {
+    private static JPObjectConfiguration getConfig(MCRObjectID objectID) throws IOException {
         return new JPObjectConfiguration(objectID.toString(), LEVEL_SORTING);
     }
 }

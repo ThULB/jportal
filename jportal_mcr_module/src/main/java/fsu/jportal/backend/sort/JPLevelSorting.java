@@ -3,6 +3,9 @@ package fsu.jportal.backend.sort;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import fsu.jportal.common.Pair;
 
 /**
@@ -11,7 +14,7 @@ import fsu.jportal.common.Pair;
  */
 public class JPLevelSorting {
 
-    protected List<Pair<String, JPSorter>> levelList;
+    protected List<Pair<String, Class<? extends JPSorter>>> levelList;
 
     /**
      * Creates a new empty level sorting.
@@ -27,8 +30,8 @@ public class JPLevelSorting {
      * @param level the level to set the sorter to
      * @param sorter the sorter
      */
-    public void set(int level, String name, JPSorter sorter) {
-        this.levelList.add(level, new Pair<>(name, sorter));
+    public void set(int level, String name, Class<? extends JPSorter> sorterClass) {
+        this.levelList.add(level, new Pair<>(name, sorterClass));
     }
 
     /**
@@ -37,7 +40,7 @@ public class JPLevelSorting {
      * @param level the level to be removed
      * @return the pair<name, sorter> previously at the specified level
      */
-    public Pair<String, JPSorter> remove(int level) {
+    public Pair<String, Class<? extends JPSorter>> remove(int level) {
         return this.levelList.remove(level);
     }
 
@@ -47,7 +50,7 @@ public class JPLevelSorting {
      * @param level the level of the pair to return 
      * @return the name sorter pair or null
      */
-    public Pair<String, JPSorter> get(int level) {
+    public Pair<String, Class<? extends JPSorter>> get(int level) {
         return this.levelList.get(level);
     }
 
@@ -56,8 +59,32 @@ public class JPLevelSorting {
      * 
      * @return the level list
      */
-    public List<Pair<String, JPSorter>> getLevelList() {
+    public List<Pair<String, Class<? extends JPSorter>>> getLevelList() {
         return levelList;
+    }
+
+    /**
+     * <pre>
+     * {@code
+     *   [
+     *     {index: 0, name: 'Zeitschrift', sorter: 'fsu.jportal.sort.JPMagicSorter'},
+     *     ...
+     *   ]
+     * }
+     * </pre>
+     * 
+     * @return the level sorting as json array
+     */
+    public JsonArray toJSON() {
+        JsonArray array = new JsonArray();
+        levelList.forEach(pair -> {
+            JsonObject levelobject = new JsonObject();
+            levelobject.addProperty("index", levelList.indexOf(pair));
+            levelobject.addProperty("name", pair.getKey());
+            levelobject.addProperty("sorter", pair.getValue().getName());
+            array.add(levelobject);
+        });
+        return array;
     }
 
 }

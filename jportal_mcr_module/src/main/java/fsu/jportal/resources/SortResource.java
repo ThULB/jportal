@@ -1,5 +1,6 @@
 package fsu.jportal.resources;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,9 +8,11 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -32,9 +35,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPLevelSortingUtil;
 
 /**
  * Resource to handle jportal sorting. 
@@ -43,12 +48,16 @@ import fsu.jportal.util.JPComponentUtil;
  * <ul>
  * <li>the auto or manual sorting of objects
  *  <ul>
- *      <li>POST sortby/{id} -> sets the sortBy for the given object</li>
- *      <li>DELETE sortby/{id} -> removes the sortBy for the given object </li>
- *      <li>POST resort/{id} -> manual resorting with json data</li>
+ *   <li>POST sortby/{id} -> sets the sortBy for the given object</li>
+ *   <li>DELETE sortby/{id} -> removes the sortBy for the given object </li>
+ *   <li>POST resort/{id} -> manual resorting with json data</li>
  *  </ul>
  * </li>
- * <li>the level sorting of journals</li>
+ * <li>the level sorting of journals
+ *  <ul>
+ *   <li>GET level/{journal id}</li>
+ *  </ul>
+ * </li>
  * </ul>
  * 
  * @author Matthias Eichner
@@ -169,6 +178,23 @@ public class SortResource {
             throw new WebApplicationException(exc,
                 Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to store object " + id + ".").build());
         }
+    }
+
+    @GET
+    @Path("level/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLevel(String id) {
+        JPContainer container = get(id);
+        JPLevelSorting levelSorting;
+        try {
+            levelSorting = JPLevelSortingUtil.load(container.getObject().getId());
+        } catch (IOException exc) {
+            throw new WebApplicationException(exc,
+                Response.status(Status.INTERNAL_SERVER_ERROR)
+                        .entity("Unable get level configuration for journal " + id + ".")
+                        .build());
+        }
+        return Response.ok(levelSorting.toJSON().toString()).build();
     }
 
     private void throwUnprocessableEntity(String msg) {

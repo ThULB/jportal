@@ -359,11 +359,23 @@ jp.sort.level = {
 
   init: function(id) {
     jp.sort.level.id = id;
+    jp.sort.level.getLevelSorting(id, function(data) {
+      
+    })
   },
 
   show: function() {
     $("#jp-sort-level-dialog").modal("show");
-  }
+  },
+
+  getLevelSorting: function(id, callback) {
+    $.getJSON(jp.baseURL + "rsc/sort/level" + id, function(data) {
+      callback(data);
+    }, function(error) {
+      console.log(error);
+      alert("Error while loading level sorting object of " + id);
+    });
+  },
 
 }
 
