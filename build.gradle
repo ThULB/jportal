@@ -253,6 +253,13 @@ project(':jportal_webapp') {
         websocket
     }
 
+    configurations.all {
+      resolutionStrategy {
+          force "org.hibernate:hibernate-core:$hibernateCoreVersion"
+          force "org.mycore:mycore-viewer:$mcrViewerVersion"
+      }
+    }
+
     dependencies {
         testCompile 'junit:junit:4.12'
         testCompile "org.apache.logging.log4j:log4j-api:2.3"
