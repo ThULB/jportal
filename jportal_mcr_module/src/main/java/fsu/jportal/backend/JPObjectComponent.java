@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Base component for person, jpinst, jparticle, jpvolume and jpjournal.
@@ -121,16 +120,6 @@ public abstract class JPObjectComponent implements JPComponent {
     }
 
     /**
-     * Returns an optional of an metadata element.
-     * 
-     * @param metadataName name of the metadata element
-     * @return an optional of the metadata element
-     */
-    protected Optional<MCRMetaElement> metadataElement(String metadataName) {
-        return Optional.ofNullable(object.getMetadata()).map(m -> m.getMetadataElement(metadataName));
-    }
-
-    /**
      * Returns a mapped stream of all children of an element.
      * 
      * @param metadataName name of the metadata element
@@ -138,12 +127,7 @@ public abstract class JPObjectComponent implements JPComponent {
      * @return a stream of metadata children
      */
     protected <T extends MCRMetaInterface> Stream<T> metadataStream(String metadataName, Class<T> type) {
-        Optional<MCRMetaElement> metadata = metadataElement(metadataName);
-        // waiting for https://bugs.openjdk.java.net/browse/JDK-8050820
-        if (!metadata.isPresent()) {
-            return Stream.empty();
-        }
-        return StreamSupport.stream(metadata.get().spliterator(), false).map(m -> type.cast(m));
+        return object.getMetadata().stream(metadataName);
     }
 
     /**
@@ -192,8 +176,8 @@ public abstract class JPObjectComponent implements JPComponent {
      * @return an optional containing the text
      */
     protected Optional<String> getText(String enclosingTag, String type) {
-        return metadataStreamNotInherited(enclosingTag, MCRMetaLangText.class).filter(typeFilter(type))
-            .map(MCRMetaLangText::getText).findFirst();
+        Optional<MCRMetaLangText> text = getObject().getMetadata().findFirst(enclosingTag, type, 0);
+        return text.map(MCRMetaLangText::getText);
     }
 
     /**
