@@ -35,6 +35,17 @@ public class JPLevelSorting {
     }
 
     /**
+     * Appends a new level add the end of the level sorting list. If the sorter is null,
+     * manual sorting is assumed.
+     * 
+     * @param name
+     * @param sorterClass
+     */
+    public void add(String name, Class<? extends JPSorter> sorterClass) {
+        this.levelList.add(new Pair<>(name, sorterClass));
+    }
+
+    /**
      * Removes the sorter and name from the level.
      * 
      * @param level the level to be removed
@@ -61,6 +72,15 @@ public class JPLevelSorting {
      */
     public List<Pair<String, Class<? extends JPSorter>>> getLevelList() {
         return levelList;
+    }
+
+    /**
+     * Returns true if this level sorting is empty.
+     * 
+     * @return returns true if this level sorting is empty
+     */
+    public boolean isEmpty() {
+        return levelList.isEmpty();
     }
 
     /**

@@ -46,12 +46,12 @@
           <restriction name="hasGND" value="true" />
           <label name="Mit Katalogdaten anreichern" gnd="{/mycoreobject/metadata/def.identifier/identifier[@type='gnd']/text()}" mcrid="{/mycoreobject/@ID}" id="updateSRU" />
         </item>
-        <!-- <item>
+        <item>
           <restriction name="hasChildren" value="true" />
           <restriction name="createJournal" value="true" />
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Ebenen sortieren" id="jp-sort-level-show-button" mcrid="{$currentObjID}" dialog="level" />
-        </item> -->
+        </item>
         <item>
           <restriction name="hasChildren" value="true" />
           <restriction name="updatePerm" value="true" />

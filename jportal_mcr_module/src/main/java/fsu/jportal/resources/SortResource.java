@@ -180,21 +180,48 @@ public class SortResource {
         }
     }
 
+    /**
+     * Returns the level sorting structure for the given journal id.
+     * The isNew attribute defines if the level sorting was loaded by
+     * the configuration or if there was no configuration available.
+     * <p>
+     * When the isNew parameter is false, then the returning level
+     * sorting structure is auto generated. The journal structure
+     * was analyzed and a good sample starting point is returned.
+     * </p>
+     * 
+     * <pre>{@code
+     * {
+     *   "isNew": true|false,
+     *   "levels": [
+     *     {index: 0, name: 'Zeitschrift', sorter: 'fsu.jportal.sort.JPMagicSorter'},
+     *     ...
+     *   ]
+     * }
+     * </pre>
+     * 
+     * @return the level sorting as json array
+     */
     @GET
     @Path("level/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getLevel(String id) {
-        JPContainer container = get(id);
+    public Response getLevel(@PathParam("id") String id) {
         JPLevelSorting levelSorting;
+        MCRObjectID journalId = MCRObjectID.getInstance(id);
+        JsonObject returnObject = new JsonObject();
         try {
-            levelSorting = JPLevelSortingUtil.load(container.getObject().getId());
+            levelSorting = JPLevelSortingUtil.load(journalId);
         } catch (IOException exc) {
             throw new WebApplicationException(exc,
                 Response.status(Status.INTERNAL_SERVER_ERROR)
                         .entity("Unable get level configuration for journal " + id + ".")
                         .build());
         }
-        return Response.ok(levelSorting.toJSON().toString()).build();
+        boolean isNew = levelSorting.isEmpty();
+        levelSorting = isNew ? JPLevelSortingUtil.analyze(journalId) : levelSorting;
+        returnObject.addProperty("isNew", isNew);
+        returnObject.add("levels", levelSorting.toJSON());
+        return Response.ok(returnObject.toString()).build();
     }
 
     private void throwUnprocessableEntity(String msg) {

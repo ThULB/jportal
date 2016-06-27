@@ -1,5 +1,26 @@
 var jp = jp || {};
-jp.sort = jp.sort || {};
+jp.sort = jp.sort || {
+
+  loadI18nKeys: function(type) {
+    $.getJSON(jp.baseURL + "rsc/locale/translate/" + jp.lang + "/jp.sort." + type + ".*", function(data) {
+      i18nKeys = data;
+      jp.sort.updateI18n($("body"));
+    });
+  },
+
+  updateI18n: function(elm) {
+    $(elm).find(".i18n").each(function(i, node) {
+      var key = $(node).attr("i18n");
+      var i18nKey = i18nKeys[key];
+      if (i18nKey != undefined) {
+        $(node).html(i18nKey);
+      } else {
+        $(node).html($(node).attr("i18n-def"));
+      }
+    });
+  }
+  
+};
 
 jp.sort.object = {
 
@@ -26,7 +47,7 @@ jp.sort.object = {
   init: function(id) {
     jp.sort.object.id = id;
     jp.sort.object.loadSortContainer();
-    jp.sort.object.loadI18nKeys();
+    jp.sort.loadI18nKeys("object");
     jp.sort.object.getObject(id, function(object) {
       var sortBy = object.metadata.autosort != null ? object.metadata.autosort.data[0] : null;
       if(sortBy != null) {
@@ -334,25 +355,6 @@ jp.sort.object = {
     });
   },
 
-  loadI18nKeys: function() {
-    $.getJSON(jp.baseURL + "rsc/locale/translate/" + jp.lang + "/jp.sort.object.*", function(data) {
-      i18nKeys = data;
-      jp.sort.object.updateI18n($("body"));
-    });
-  },
-
-  updateI18n: function(elm) {
-    $(elm).find(".i18n").each(function(i, node) {
-      var key = $(node).attr("i18n");
-      var i18nKey = i18nKeys[key];
-      if (i18nKey != undefined) {
-        $(node).html(i18nKey);
-      } else {
-        $(node).html($(node).attr("i18n-def"));
-      }
-    });
-  }
-
 }
 
 jp.sort.level = {
@@ -361,8 +363,11 @@ jp.sort.level = {
 
   init: function(id) {
     jp.sort.level.id = id;
-    jp.sort.level.getLevelSorting(id, function(data) {
-      
+    jp.sort.loadI18nKeys("level");
+    jp.sort.level.getLevelSorting(id, function(rsp) {
+      if(rsp.isNew) {
+        $(".jp-sort-level-info").css("display", "block");
+      }
     })
   },
 
@@ -371,7 +376,7 @@ jp.sort.level = {
   },
 
   getLevelSorting: function(id, callback) {
-    $.getJSON(jp.baseURL + "rsc/sort/level" + id, function(data) {
+    $.getJSON(jp.baseURL + "rsc/sort/level/" + id, function(data) {
       callback(data);
     }, function(error) {
       console.log(error);
