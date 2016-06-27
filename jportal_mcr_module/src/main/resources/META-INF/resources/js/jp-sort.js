@@ -114,16 +114,18 @@ jp.sort.object = {
       var endPage = Math.min(currentPage + (Math.max(4 - currentPage, 1)), numPages - 1);
       
       addPaginatorPage(paginator, 1, currentPage);
-      if(currentPage >= 4) {
-        paginator.append("<li class='plain'><span>...</span></li>");
+      if(endPage > 1) {
+        if(currentPage >= 4) {
+          paginator.append("<li class='plain'><span>...</span></li>");
+        }
+        for(var pageNumber = startPage; pageNumber <= endPage; pageNumber++) {
+          addPaginatorPage(paginator, pageNumber, currentPage);
+        }
+        if(numPages - currentPage >= 3) {
+          paginator.append("<li class='plain'><span>...</span></li>");
+        }
+        addPaginatorPage(paginator, numPages, currentPage);
       }
-      for(var pageNumber = startPage; pageNumber <= endPage; pageNumber++) {
-        addPaginatorPage(paginator, pageNumber, currentPage);
-      }
-      if(numPages - currentPage >= 3) {
-        paginator.append("<li class='plain'><span>...</span></li>");
-      }
-      addPaginatorPage(paginator, numPages, currentPage);
     }
 
     function updateToolbar() {
