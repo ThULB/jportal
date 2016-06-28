@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectConfiguration;
@@ -106,7 +107,6 @@ public abstract class JPLevelSortingUtil {
         JPLevelSorting levelSorting = new JPLevelSorting();
         levelSorting.add("Zeitschrift", JPMagicSorter.class);
         analyzeNext(journal, levelSorting);
-        levelSorting.add("Artikel", JPMagicSorter.class);
         return levelSorting;
     }
 
@@ -120,6 +120,8 @@ public abstract class JPLevelSortingUtil {
                     JPVolume volume = (JPVolume) child;
                     analyzeVolume(volume, levelSorting);
                     analyzeNext(volume, levelSorting);
+                } else if (child.getType().equals(JPArticle.TYPE)) {
+                    levelSorting.add("Artikel", JPMagicSorter.class);
                 }
             });
         }
@@ -138,8 +140,12 @@ public abstract class JPLevelSortingUtil {
             }
         }
         String title = volume.getTitle();
+        if(title.matches("[0-9]{4}")) {
+            levelSorting.add("Jahrgang", JPPublishedSorter.class);
+            return;
+        }
         if (Arrays.asList(DateFormatSymbols.getInstance(Locale.GERMAN).getMonths()).stream().filter(month -> {
-            return title.toLowerCase().contains(month.toLowerCase());
+            return !month.isEmpty() && title.toLowerCase().contains(month.toLowerCase());
         }).findAny().isPresent()) {
             levelSorting.add("Monat", JPPublishedSorter.class);
             return;

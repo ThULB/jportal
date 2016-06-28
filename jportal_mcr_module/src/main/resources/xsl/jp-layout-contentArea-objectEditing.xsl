@@ -200,7 +200,7 @@
       <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-sort.js" />
       <script type="text/javascript">
         <xsl:for-each select="$settings/sorter/sort">
-          jp.sort.object.addSorter('<xsl:value-of select="@class" />');
+          jp.sort.addSorter('<xsl:value-of select="@class" />');
         </xsl:for-each>
       </script>
     </xsl:if>

@@ -1,8 +1,14 @@
 var jp = jp || {};
 jp.sort = jp.sort || {
 
-  loadI18nKeys: function(type) {
-    $.getJSON(jp.baseURL + "rsc/locale/translate/" + jp.lang + "/jp.sort." + type + ".*", function(data) {
+  sorters: [],
+
+  addSorter: function(sortClass) {
+    jp.sort.sorters.push(sortClass);
+  },
+
+  loadI18nKeys: function() {
+    $.getJSON(jp.baseURL + "rsc/locale/translate/" + jp.lang + "/jp.sort.*", function(data) {
       i18nKeys = data;
       jp.sort.updateI18n($("body"));
     });
@@ -38,16 +44,10 @@ jp.sort.object = {
 
   selectedSorter: null,
 
-  sorters: [],
-
-  addSorter: function(sortClass) {
-    jp.sort.object.sorters.push(sortClass);
-  },
-
   init: function(id) {
     jp.sort.object.id = id;
     jp.sort.object.loadSortContainer();
-    jp.sort.loadI18nKeys("object");
+    jp.sort.loadI18nKeys();
     jp.sort.object.getObject(id, function(object) {
       var sortBy = object.metadata.autosort != null ? object.metadata.autosort.data[0] : null;
       if(sortBy != null) {
@@ -66,11 +66,11 @@ jp.sort.object = {
 
   loadSortContainer: function() {
     var container = $("#autoSortContainer");
-    for(var sorter of jp.sort.object.sorters) {
+    for(var sorter of jp.sort.sorters) {
       var className = sorter.substring(sorter.lastIndexOf(".") + 1, sorter.length);
       var btn = "<a href='#' type='button' class='jp-sort-object-sorter list-group-item " + className + "' onclick='jp.sort.object.selectSorter(`" + sorter +"`)'>" +
-          "<div class='i18n' i18n='jp.sort.object." + className + "' style='font-weight: bold;'></div>" +
-          "<div class='i18n' i18n='jp.sort.object." + className + ".description'></div>" +
+          "<div class='i18n' i18n='jp.sort." + className + "' style='font-weight: bold;'></div>" +
+          "<div class='i18n' i18n='jp.sort." + className + ".description'></div>" +
       	"</a>";
       container.append(btn);
     }
@@ -360,15 +360,21 @@ jp.sort.object = {
 jp.sort.level = {
 
   id: null,
+  
+  levels: [],
+  
+  index: 0,
 
   init: function(id) {
     jp.sort.level.id = id;
-    jp.sort.loadI18nKeys("level");
+    jp.sort.loadI18nKeys();
     jp.sort.level.getLevelSorting(id, function(rsp) {
       if(rsp.isNew) {
         $(".jp-sort-level-info").css("display", "block");
       }
-    })
+      jp.sort.level.levels = rsp.levels;
+      jp.sort.level.loadTableBody();
+    });
   },
 
   show: function() {
@@ -383,6 +389,63 @@ jp.sort.level = {
       alert("Error while loading level sorting object of " + id);
     });
   },
+
+  loadTableBody: function() {
+    for(var level of jp.sort.level.levels) {
+      jp.sort.level.addLevel(level.name, level.sorter);
+    }
+  },
+
+  addLevel: function(name, sorter) {
+    var container = $("#jp-sort-level-table-body");
+    var tr = "<tr id='jp-sort-level-index-" + jp.sort.level.index + "' data-index='" + jp.sort.level.index + "'>";
+    tr += "<td><input class='form-control' type='text' value='" + name + "' id='jp-sort-level-name-input-" + jp.sort.level.index +"'></input></td>";
+    tr += "<td><select class='form-control' id='jp-sort-level-sorter-select-" + jp.sort.level.index + "'>";
+    tr += "<option class='i18n' i18n='jp.sort.object.manualSort' value=''></option>";
+    for(var avSorter of jp.sort.sorters) {
+      var className = avSorter.substring(avSorter.lastIndexOf(".") + 1, avSorter.length);
+      tr += "<option class='i18n' i18n='jp.sort." + className + "' value='" + sorter + "'";
+      tr += avSorter == sorter ? " selected='selected'" : "";
+      tr += "></option>";
+    }
+    tr += "</select></td>";
+    tr += "<td><button type='button' class='btn btn-default btn-sm' onclick='jp.sort.level.removeLevel(" + jp.sort.level.index + ")'>";
+    tr += "<i class='fa fa-minus' aria-hidden='true'></i>";
+    tr += "</button></td>";
+    tr += "</tr>";
+    jp.sort.level.index++;
+    container.append(tr);
+    jp.sort.updateI18n(container);
+  },
+
+  removeLevel: function(index) {
+    $("#jp-sort-level-index-" + index).remove();
+  },
+
+  buildLevels: function() {
+    var levels = [];
+    var container = $("#jp-sort-level-table-body");
+    container.children().each(function(arrayIndex, child) {
+      var index = $(child).data("index");
+      if(index == null) {
+        return;
+      }
+      var level = {};
+      level.index = arrayIndex;
+      level.name = $("#jp-sort-level-name-input-" + index).val();
+      var sorter = $("#jp-sort-level-sorter-select-" + index).val();
+      if(sorter != null && sorter != '') {
+        level.sorter = sorter;
+      }
+      levels.push(level);
+    });
+    return levels;
+  },
+
+  save: function() {
+    var levels = jp.sort.level.buildLevels();
+    console.log(levels);
+  }
 
 }
 
