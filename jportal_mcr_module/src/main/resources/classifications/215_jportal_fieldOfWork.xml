@@ -3,6 +3,14 @@
   <label xml:lang="de" text="Fachgebiet" />
   <label xml:lang="en" text="Field of work" />
   <categories>
+    <category ID="engineering">
+      <label xml:lang="de" text="Ingenieurwissenschaften" />
+      <label xml:lang="en" text="Engineering" />
+    </category>
+    <category ID="general">
+      <label xml:lang="de" text="Allgemeines" />
+      <label xml:lang="en" text="General" />
+    </category>
     <category ID="historyAndArchaeology">
       <label xml:lang="de" text="Geschichte/Archäologie" />
       <label xml:lang="en" text="History/Archaeology" />
@@ -11,9 +19,13 @@
       <label xml:lang="de" text="Hochschule" />
       <label xml:lang="en" text="Hochschule" />
     </category>
-    <category ID="engineering">
-      <label xml:lang="de" text="Ingenieurwissenschaften" />
-      <label xml:lang="en" text="Engineering" />
+    <category ID="jurisprudence">
+      <label xml:lang="de" text="Rechtswissenschaften" />
+      <label xml:lang="en" text="Jurisprudence" />
+    </category>
+    <category ID="linguistics">
+      <label xml:lang="de" text="Sprachwissenschaften" />
+      <label xml:lang="en" text="Linguistics" />
     </category>
     <category ID="literatureAndArt">
       <label xml:lang="de" text="Literatur/Kunst" />
