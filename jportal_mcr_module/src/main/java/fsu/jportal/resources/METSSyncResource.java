@@ -17,10 +17,13 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRStreamUtils;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
@@ -52,6 +55,8 @@ import fsu.jportal.util.MetsUtil;
 @Path("mets/sync")
 public class METSSyncResource {
 
+    private static final Logger LOGGER = LogManager.getLogger(METSSyncResource.class);
+
     /**
      * Syncs the mets.xml with the object structure.
      * Returns a json object containing the number of changed logical div's.
@@ -70,7 +75,7 @@ public class METSSyncResource {
 
         // do the sync
         List<LogicalDiv> labelUpdatedList = syncLabels(mets);
-        
+
         boolean structLinkSynced = syncStructLink(mets);
 
         // write mets
@@ -107,12 +112,12 @@ public class METSSyncResource {
         try {
             StructLink oldStructLink = mets.getStructLink();
             StructLink newStructLink = new StructLinkGenerator().generate(mets);
-            if(!oldStructLink.equals(newStructLink)) {
+            if (!oldStructLink.equals(newStructLink)) {
                 mets.setStructLink(newStructLink);
                 return true;
             }
             return false;
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             JsonObject json = new JsonObject();
             json.addProperty("errorMsg", "unable to generate struct link: " + exc.getMessage());
             throw new WebApplicationException(exc, Response.ok().entity(json.toString()).build());
@@ -157,7 +162,8 @@ public class METSSyncResource {
             json.addProperty("errorMsg", "The logical struct map of the mets.xml does not contain any logical div.");
             throw new WebApplicationException(Response.ok().entity(json.toString()).build());
         }
-        return MCRStreamUtils.flatten(divContainer, LogicalDiv::getChildren, Collection::parallelStream).collect(Collectors.toList());
+        return MCRStreamUtils.flatten(divContainer, LogicalDiv::getChildren, Collection::parallelStream)
+                             .collect(Collectors.toList());
     }
 
     /**
@@ -171,15 +177,23 @@ public class METSSyncResource {
     private List<LogicalDiv> updateMaintitlesOfLogicalDivs(List<LogicalDiv> logicalDivList) {
         List<LogicalDiv> updateList = new ArrayList<>();
         for (LogicalDiv div : logicalDivList) {
+            String divId = div.getId();
             try {
-                MCRObjectID mcrId = MCRObjectID.getInstance(div.getId());
+                if (!MCRObjectID.isValid(divId)) {
+                    continue;
+                }
+                MCRObjectID mcrId = MCRObjectID.getInstance(divId);
+                if (!MCRMetadataManager.exists(mcrId)) {
+                    LOGGER.warn("LogicalStructMap @ID '" + mcrId + "' does not exists on system.");
+                    continue;
+                }
                 Optional<String> maintitle = JPComponentUtil.getPeriodical(mcrId).map(JPPeriodicalComponent::getTitle);
                 if (maintitle.isPresent() && !Objects.equals(maintitle.get(), div.getLabel())) {
                     div.setLabel(maintitle.get());
                     updateList.add(div);
                 }
             } catch (Exception exc) {
-                continue;
+                LOGGER.error("Unable to get maintitle of " + divId, exc);
             }
         }
         return updateList;
