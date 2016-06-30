@@ -3,27 +3,46 @@ jp.sort = jp.sort || {
 
   sorters: [],
 
+  i18nKeys: null,
+
   addSorter: function(sortClass) {
     jp.sort.sorters.push(sortClass);
   },
 
   loadI18nKeys: function() {
     $.getJSON(jp.baseURL + "rsc/locale/translate/" + jp.lang + "/jp.sort.*", function(data) {
-      i18nKeys = data;
+      jp.sort.i18nKeys = data;
       jp.sort.updateI18n($("body"));
     });
   },
 
   updateI18n: function(elm) {
+    if(jp.sort.i18nKeys == null) {
+      return;
+    }
     $(elm).find(".i18n").each(function(i, node) {
       var key = $(node).attr("i18n");
-      var i18nKey = i18nKeys[key];
+      var i18nKey = jp.sort.i18nKeys[key];
       if (i18nKey != undefined) {
         $(node).html(i18nKey);
       } else {
         $(node).html($(node).attr("i18n-def"));
       }
     });
+  },
+
+  beforeSaving: function() {
+    $(".jp-sort-body-darken").css("display", "block");
+    $(".jp-sort-body").css("pointer-events", "none");
+    $(".jp-sort-footer-default").css("display", "none");
+    $(".jp-sort-footer-saving").css("display", "block");
+  },
+
+  afterSaving: function() {
+    $(".jp-sort-body-darken").css("display", "none");
+    $(".jp-sort-body").css("pointer-events", "auto");
+    $(".jp-sort-footer-default").css("display", "block");
+    $(".jp-sort-footer-saving").css("display", "none");
   }
   
 };
@@ -271,7 +290,7 @@ jp.sort.object = {
   },
 
   save: function() {
-    before();
+    jp.sort.beforeSaving();
     if(jp.sort.object.selectedSorter != null) {
       var sorterClass = jp.sort.object.selectedSorter;
       var order = $("#jp-sort-order-select").val();
@@ -296,20 +315,6 @@ jp.sort.object = {
       }).fail(onFail);
     }
 
-    function before() {
-      $(".jp-sort-body-darken").css("display", "block");
-      $(".jp-sort-body").css("pointer-events", "none");
-      $(".jp-sort-footer-default").css("display", "none");
-      $(".jp-sort-footer-saving").css("display", "block");
-    }
-
-    function after() {
-      $(".jp-sort-body-darken").css("display", "none");
-      $(".jp-sort-body").css("pointer-events", "auto");
-      $(".jp-sort-footer-default").css("display", "block");
-      $(".jp-sort-footer-saving").css("display", "none");
-    }
-
     function childOrderChanged() {
       for(var i = 0; i < jp.sort.object.children.length; i++) {
         var child = jp.sort.object.children[i];
@@ -322,12 +327,12 @@ jp.sort.object = {
     }
 
     function onSuccess() {
-      after();
+      jp.sort.afterSaving();
       $("#jp-sort-object-dialog").modal("hide");
     }
 
     function onFail(error) {
-      after();
+      jp.sort.afterSaving();
       console.log(error);
       alert("An error occur. Unable to save changes.");
     }
@@ -444,7 +449,20 @@ jp.sort.level = {
 
   save: function() {
     var levels = jp.sort.level.buildLevels();
-    console.log(levels);
+    jp.sort.beforeSaving();
+    $.ajax({
+      method: 'POST',
+      url: jp.baseURL + "rsc/sort/level/" + jp.sort.level.id,
+      contentType: "application/json; charset=UTF-8",
+      data: JSON.stringify(levels)
+    }).done(function() {
+      jp.sort.afterSaving();
+      $("#jp-sort-level-dialog").modal("hide");
+    }).fail(function(error) {
+      jp.sort.afterSaving();
+      console.log(error);
+      alert("An error occur. Unable to save changes.");
+    });
   }
 
 }

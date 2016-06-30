@@ -50,7 +50,7 @@ public abstract class JPLevelSortingUtil {
         Map<String, String> levels = config.keyFilter("level.");
         levels.entrySet().stream().collect(Collectors.groupingBy(entry -> {
             String key = entry.getKey();
-            Integer level = Integer.valueOf(key.substring(5, key.indexOf(".", 6)));
+            Integer level = Integer.valueOf(key.substring(6, key.indexOf(".", 6)));
             return level;
         })).entrySet().stream().map(entry -> {
             Integer level = entry.getKey();
@@ -63,15 +63,19 @@ public abstract class JPLevelSortingUtil {
             return new Triple<Integer, String, String>(level, name, sorter);
         }).forEach(triple -> {
             Unthrow.wrapProc(() -> {
-                String sorterAsString = triple.getRight();
-                Class<? extends JPSorter> sorterClass = null;
-                if (sorterAsString != null && sorterAsString.length() > 0) {
-                    sorterClass = Class.forName(sorterAsString).asSubclass(JPSorter.class);
-                }
+                Class<? extends JPSorter> sorterClass = getSorterClassByName(triple.getRight());
                 levelSorting.set(triple.getLeft(), triple.getMiddle(), sorterClass);
             });
         });
         return levelSorting;
+    }
+
+    public static Class<? extends JPSorter> getSorterClassByName(String className) throws ClassNotFoundException {
+        Class<? extends JPSorter> sorterClass = null;
+        if (className != null && className.length() > 0) {
+            sorterClass = Class.forName(className).asSubclass(JPSorter.class);
+        }
+        return sorterClass;
     }
 
     /**
@@ -91,7 +95,10 @@ public abstract class JPLevelSortingUtil {
             int level = levelSorting.getLevelList().indexOf(pair);
             String baseKey = "level." + level;
             config.set(baseKey + ".name", pair.getKey());
-            config.set(baseKey + ".sorter", pair.getValue().getName());
+            Class<? extends JPSorter> sorter = pair.getValue();
+            if(sorter != null) {
+                config.set(baseKey + ".sorter", sorter.getName());
+            }
         }
         config.store();
     }
@@ -105,7 +112,6 @@ public abstract class JPLevelSortingUtil {
     public static JPLevelSorting analyze(MCRObjectID journalID) {
         JPJournal journal = new JPJournal(journalID);
         JPLevelSorting levelSorting = new JPLevelSorting();
-        levelSorting.add("Zeitschrift", JPMagicSorter.class);
         analyzeNext(journal, levelSorting);
         return levelSorting;
     }
@@ -140,7 +146,7 @@ public abstract class JPLevelSortingUtil {
             }
         }
         String title = volume.getTitle();
-        if(title.matches("[0-9]{4}")) {
+        if (title.matches("[0-9]{4}")) {
             levelSorting.add("Jahrgang", JPPublishedSorter.class);
             return;
         }

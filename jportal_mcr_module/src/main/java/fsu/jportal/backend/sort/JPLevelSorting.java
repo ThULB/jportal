@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import fsu.jportal.common.Pair;
+import fsu.jportal.util.JPLevelSortingUtil;
 
 /**
  * 
@@ -84,10 +87,14 @@ public class JPLevelSorting {
     }
 
     /**
+     * Returns this level sorting as JSON. If the sorter parameter is empty,
+     * manual sorting is assumed.
+     * 
      * <pre>
      * {@code
      *   [
-     *     {index: 0, name: 'Zeitschrift', sorter: 'fsu.jportal.sort.JPMagicSorter'},
+     *     {index: 0, name: 'Jahrgang', sorter: 'fsu.jportal.sort.JPMagicSorter'},
+     *     {index: 1, name: 'Monat'},
      *     ...
      *   ]
      * }
@@ -101,10 +108,25 @@ public class JPLevelSorting {
             JsonObject levelobject = new JsonObject();
             levelobject.addProperty("index", levelList.indexOf(pair));
             levelobject.addProperty("name", pair.getKey());
-            levelobject.addProperty("sorter", pair.getValue().getName());
+            Class<? extends JPSorter> sorterClass = pair.getValue();
+            if(sorterClass != null) {
+                levelobject.addProperty("sorter", sorterClass.getName());
+            }
             array.add(levelobject);
         });
         return array;
+    }
+
+    public static JPLevelSorting fromJSON(JsonArray array) throws ClassNotFoundException {
+        JPLevelSorting sorting = new JPLevelSorting();
+        for (JsonElement element : array) {
+            JsonObject object = element.getAsJsonObject();
+            String name = object.getAsJsonPrimitive("name").getAsString();
+            JsonPrimitive sorterPrimitve = object.getAsJsonPrimitive("sorter");
+            String className = sorterPrimitve != null ? sorterPrimitve.getAsString() : null;
+            sorting.add(name, className != null ? JPLevelSortingUtil.getSorterClassByName(className) : null);
+        }
+        return sorting;
     }
 
 }

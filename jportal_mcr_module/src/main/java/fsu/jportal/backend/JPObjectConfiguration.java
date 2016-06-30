@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -85,7 +87,11 @@ public class JPObjectConfiguration {
      * @return a map of key value pairs
      */
     public Map<String, String> keyFilter(String filter) {
-        return filter(filter).collect(Collectors.toMap(Object::toString, Object::toString));
+        Map<String, String> map = new HashMap<>();
+        filter(filter).forEach(entry -> {
+            map.put(entry.getKey().toString(), entry.getValue().toString());
+        });
+        return map;
     }
 
     /**
@@ -94,8 +100,8 @@ public class JPObjectConfiguration {
      * @param filter the filter to apply
      */
     public void removeByKeyFilter(String filter) {
-        filter(filter).forEach(entry -> {
-            properties.remove(entry.getKey());
+        filter(filter).map(Entry::getKey).collect(Collectors.toList()).forEach(key -> {
+            properties.remove(key);
         });
     }
 

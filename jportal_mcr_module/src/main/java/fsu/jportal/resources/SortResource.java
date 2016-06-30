@@ -175,8 +175,7 @@ public class SortResource {
             MCRSolrIndexer.rebuildMetadataIndex(
                 changedPosition.stream().map(MCRObjectID::toString).collect(Collectors.toList()), true);
         } catch (Exception exc) {
-            throw new WebApplicationException(exc,
-                Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to store object " + id + ".").build());
+            throwInternalServerError(exc, "Unable to store object " + id + ".");
         }
     }
 
@@ -206,16 +205,13 @@ public class SortResource {
     @Path("level/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLevel(@PathParam("id") String id) {
-        JPLevelSorting levelSorting;
+        JPLevelSorting levelSorting = null;
         MCRObjectID journalId = MCRObjectID.getInstance(id);
         JsonObject returnObject = new JsonObject();
         try {
             levelSorting = JPLevelSortingUtil.load(journalId);
         } catch (IOException exc) {
-            throw new WebApplicationException(exc,
-                Response.status(Status.INTERNAL_SERVER_ERROR)
-                        .entity("Unable get level configuration for journal " + id + ".")
-                        .build());
+            throwInternalServerError(exc, "Unable get level configuration for journal " + id + ".");
         }
         boolean isNew = levelSorting.isEmpty();
         levelSorting = isNew ? JPLevelSortingUtil.analyze(journalId) : levelSorting;
@@ -224,8 +220,30 @@ public class SortResource {
         return Response.ok(returnObject.toString()).build();
     }
 
+    @POST
+    @Path("level/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void setLevel(@PathParam("id") String id, String data) {
+        MCRObjectID journalId = MCRObjectID.getInstance(id);
+        JsonArray array = new JsonParser().parse(data).getAsJsonArray();
+        JPLevelSorting levelSorting;
+        try {
+            levelSorting = JPLevelSorting.fromJSON(array);
+            JPLevelSortingUtil.store(journalId, levelSorting);
+        } catch (ClassNotFoundException exc) {
+            throwInternalServerError(exc, "Unable to store level sorting for " + id + ". One sorter is invalid.");
+        } catch (IOException exc) {
+            throwInternalServerError(exc,
+                "Unable to store level sorting for " + id + ". Couldn't store on filesystem.");
+        }
+    }
+
     private void throwUnprocessableEntity(String msg) {
         throw new WebApplicationException(Response.status(422).entity(msg).build());
+    }
+
+    private void throwInternalServerError(Exception cause, String msg) {
+        throw new WebApplicationException(cause, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
     }
 
     private JPContainer get(String id) {
