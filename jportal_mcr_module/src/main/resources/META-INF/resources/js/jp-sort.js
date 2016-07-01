@@ -409,7 +409,7 @@ jp.sort.level = {
     tr += "<option class='i18n' i18n='jp.sort.object.manualSort' value=''></option>";
     for(var avSorter of jp.sort.sorters) {
       var className = avSorter.substring(avSorter.lastIndexOf(".") + 1, avSorter.length);
-      tr += "<option class='i18n' i18n='jp.sort." + className + "' value='" + sorter + "'";
+      tr += "<option class='i18n' i18n='jp.sort." + className + "' value='" + avSorter + "'";
       tr += avSorter == sorter ? " selected='selected'" : "";
       tr += "></option>";
     }

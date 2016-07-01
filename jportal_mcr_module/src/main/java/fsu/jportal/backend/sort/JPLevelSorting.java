@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import fsu.jportal.common.Pair;
+import fsu.jportal.backend.sort.JPSorter.Order;
 import fsu.jportal.util.JPLevelSortingUtil;
 
 /**
@@ -17,7 +17,7 @@ import fsu.jportal.util.JPLevelSortingUtil;
  */
 public class JPLevelSorting {
 
-    protected List<Pair<String, Class<? extends JPSorter>>> levelList;
+    protected List<Level> levelList;
 
     /**
      * Creates a new empty level sorting.
@@ -32,9 +32,10 @@ public class JPLevelSorting {
      * 
      * @param level the level to set the sorter to
      * @param sorter the sorter
+     * @param order
      */
-    public void set(int level, String name, Class<? extends JPSorter> sorterClass) {
-        this.levelList.add(level, new Pair<>(name, sorterClass));
+    public void set(int level, String name, Class<? extends JPSorter> sorterClass, Order order) {
+        this.levelList.add(level, new Level(name, sorterClass, order));
     }
 
     /**
@@ -43,18 +44,19 @@ public class JPLevelSorting {
      * 
      * @param name
      * @param sorterClass
+     * @param order
      */
-    public void add(String name, Class<? extends JPSorter> sorterClass) {
-        this.levelList.add(new Pair<>(name, sorterClass));
+    public void add(String name, Class<? extends JPSorter> sorterClass, Order order) {
+        this.levelList.add(new Level(name, sorterClass, order));
     }
 
     /**
      * Removes the sorter and name from the level.
      * 
      * @param level the level to be removed
-     * @return the pair<name, sorter> previously at the specified level
+     * @return the level at the previously specified position
      */
-    public Pair<String, Class<? extends JPSorter>> remove(int level) {
+    public Level remove(int level) {
         return this.levelList.remove(level);
     }
 
@@ -62,9 +64,9 @@ public class JPLevelSorting {
      * Gets the name and sorter pair for the given level.
      * 
      * @param level the level of the pair to return 
-     * @return the name sorter pair or null
+     * @return the level
      */
-    public Pair<String, Class<? extends JPSorter>> get(int level) {
+    public Level get(int level) {
         return this.levelList.get(level);
     }
 
@@ -73,7 +75,7 @@ public class JPLevelSorting {
      * 
      * @return the level list
      */
-    public List<Pair<String, Class<? extends JPSorter>>> getLevelList() {
+    public List<Level> getLevelList() {
         return levelList;
     }
 
@@ -94,7 +96,7 @@ public class JPLevelSorting {
      * {@code
      *   [
      *     {index: 0, name: 'Jahrgang', sorter: 'fsu.jportal.sort.JPMagicSorter'},
-     *     {index: 1, name: 'Monat'},
+     *     {index: 1, name: 'Monat', sorter: 'fsu.jportal.sort.JPPublishedSorter', order: 'ascending'},
      *     ...
      *   ]
      * }
@@ -104,29 +106,75 @@ public class JPLevelSorting {
      */
     public JsonArray toJSON() {
         JsonArray array = new JsonArray();
-        levelList.forEach(pair -> {
+        levelList.forEach(level -> {
             JsonObject levelobject = new JsonObject();
-            levelobject.addProperty("index", levelList.indexOf(pair));
-            levelobject.addProperty("name", pair.getKey());
-            Class<? extends JPSorter> sorterClass = pair.getValue();
-            if(sorterClass != null) {
+            levelobject.addProperty("index", levelList.indexOf(level));
+            levelobject.addProperty("name", level.getName());
+            Class<? extends JPSorter> sorterClass = level.getSorterClass();
+            if (sorterClass != null) {
                 levelobject.addProperty("sorter", sorterClass.getName());
+            }
+            if (level.getOrder() != null) {
+                levelobject.addProperty("order", level.getOrder().name().toLowerCase());
             }
             array.add(levelobject);
         });
         return array;
     }
 
+    /**
+     * Creates a new level sorting object based on the give JSON array.
+     * 
+     * @see JPLevelSorting#toJSON()
+     * @param array the array containing the whole level sorting information
+     * @return an instance of <code>JPLevelSorting</code>
+     * @throws ClassNotFoundException one of the sorters couldn't be found
+     */
     public static JPLevelSorting fromJSON(JsonArray array) throws ClassNotFoundException {
         JPLevelSorting sorting = new JPLevelSorting();
         for (JsonElement element : array) {
             JsonObject object = element.getAsJsonObject();
+            // name
             String name = object.getAsJsonPrimitive("name").getAsString();
+            // sorter
             JsonPrimitive sorterPrimitve = object.getAsJsonPrimitive("sorter");
             String className = sorterPrimitve != null ? sorterPrimitve.getAsString() : null;
-            sorting.add(name, className != null ? JPLevelSortingUtil.getSorterClassByName(className) : null);
+            Class<? extends JPSorter> sorterClass = className != null
+                ? JPLevelSortingUtil.getSorterClassByName(className) : null;
+            // order
+            JsonPrimitive orderPrimitive = object.getAsJsonPrimitive("order");
+            Order order = orderPrimitive != null ? Order.valueOf(orderPrimitive.getAsString().toUpperCase()) : null;
+            // add new Level
+            sorting.add(name, sorterClass, order);
         }
         return sorting;
+    }
+
+    public static class Level {
+        private String name;
+
+        private Class<? extends JPSorter> sorterClass;
+
+        private Order order;
+
+        public Level(String name, Class<? extends JPSorter> sorterClass, Order order) {
+            this.name = name;
+            this.sorterClass = sorterClass;
+            this.order = order;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Order getOrder() {
+            return order;
+        }
+
+        public Class<? extends JPSorter> getSorterClass() {
+            return sorterClass;
+        }
+
     }
 
 }

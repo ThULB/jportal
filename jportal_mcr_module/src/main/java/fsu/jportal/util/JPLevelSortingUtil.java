@@ -21,11 +21,11 @@ import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
 import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.backend.sort.JPLevelSorting.Level;
 import fsu.jportal.backend.sort.JPMagicSorter;
 import fsu.jportal.backend.sort.JPPublishedSorter;
 import fsu.jportal.backend.sort.JPSorter;
-import fsu.jportal.common.Pair;
-import fsu.jportal.common.Triple;
+import fsu.jportal.backend.sort.JPSorter.Order;
 import fsu.jportal.common.Unthrow;
 
 /**
@@ -52,24 +52,36 @@ public abstract class JPLevelSortingUtil {
             String key = entry.getKey();
             Integer level = Integer.valueOf(key.substring(6, key.indexOf(".", 6)));
             return level;
-        })).entrySet().stream().map(entry -> {
+        })).entrySet().stream().forEach(entry -> {
+            // level
             Integer level = entry.getKey();
+            // name
             String name = entry.getValue().stream().filter(e -> {
                 return e.getKey().endsWith(".name");
             }).map(Entry::getValue).findAny().orElse("unknown");
+            // sorter
             String sorter = entry.getValue().stream().filter(e -> {
                 return e.getKey().endsWith(".sorter");
             }).map(Entry::getValue).findAny().orElse(null);
-            return new Triple<Integer, String, String>(level, name, sorter);
-        }).forEach(triple -> {
+            // order
+            Order order = entry.getValue().stream().filter(e -> {
+                return e.getKey().endsWith(".order");
+            }).map(Entry::getValue).map(Order::valueOf).findAny().orElse(null);
             Unthrow.wrapProc(() -> {
-                Class<? extends JPSorter> sorterClass = getSorterClassByName(triple.getRight());
-                levelSorting.set(triple.getLeft(), triple.getMiddle(), sorterClass);
+                Class<? extends JPSorter> sorterClass = getSorterClassByName(sorter);
+                levelSorting.set(level, name, sorterClass, order);
             });
         });
         return levelSorting;
     }
 
+    /**
+     * Returns the sorter class by its fully qualified class name.
+     * 
+     * @param className the fully qualified class name
+     * @return the class
+     * @throws ClassNotFoundException if the class could not be found
+     */
     public static Class<? extends JPSorter> getSorterClassByName(String className) throws ClassNotFoundException {
         Class<? extends JPSorter> sorterClass = null;
         if (className != null && className.length() > 0) {
@@ -91,16 +103,38 @@ public abstract class JPLevelSortingUtil {
         // remove all level stuff
         config.removeByKeyFilter("level.");
         // add from the level sorting object
-        for (Pair<String, Class<? extends JPSorter>> pair : levelSorting.getLevelList()) {
-            int level = levelSorting.getLevelList().indexOf(pair);
-            String baseKey = "level." + level;
-            config.set(baseKey + ".name", pair.getKey());
-            Class<? extends JPSorter> sorter = pair.getValue();
-            if(sorter != null) {
-                config.set(baseKey + ".sorter", sorter.getName());
+        for (Level level : levelSorting.getLevelList()) {
+            int index = levelSorting.getLevelList().indexOf(level);
+            String baseKey = "level." + index;
+            config.set(baseKey + ".name", level.getName());
+            if (level.getSorterClass() != null) {
+                config.set(baseKey + ".sorter", level.getSorterClass().getName());
+            }
+            if (level.getOrder() != null) {
+                config.set(baseKey + ".order", level.getOrder().name());
             }
         }
         config.store();
+    }
+
+    /**
+     * Runs through all descendants of the object and applies the sorters defined
+     * in the given level sorting object.
+     * 
+     * @param objectID the object to apply the level sorting at
+     * @param levelSorting the level sorting to apply
+     */
+    public static void apply(MCRObjectID objectID, JPLevelSorting levelSorting) {
+    }
+
+    public static void applySorter(List<MCRObjectID> objects, Class<? extends JPSorter> sorter) {
+        objects.stream()
+               .map(JPComponentUtil::getContainer)
+               .filter(Optional::isPresent)
+               .map(Optional::get)
+               .forEach(container -> {
+
+               });
     }
 
     /**
@@ -127,7 +161,7 @@ public abstract class JPLevelSortingUtil {
                     analyzeVolume(volume, levelSorting);
                     analyzeNext(volume, levelSorting);
                 } else if (child.getType().equals(JPArticle.TYPE)) {
-                    levelSorting.add("Artikel", JPMagicSorter.class);
+                    levelSorting.add("Artikel", JPMagicSorter.class, null);
                 }
             });
         }
@@ -138,7 +172,7 @@ public abstract class JPLevelSortingUtil {
         if (publishedAccessor.isPresent()) {
             try {
                 publishedAccessor.get().get(ChronoField.MONTH_OF_YEAR);
-                levelSorting.add("Jahrgang", JPPublishedSorter.class);
+                levelSorting.add("Jahrgang", JPPublishedSorter.class, Order.ASCENDING);
                 return;
             } catch (Exception exc) {
                 // the temporal accessor does not contain a month value
@@ -147,20 +181,20 @@ public abstract class JPLevelSortingUtil {
         }
         String title = volume.getTitle();
         if (title.matches("[0-9]{4}")) {
-            levelSorting.add("Jahrgang", JPPublishedSorter.class);
+            levelSorting.add("Jahrgang", JPPublishedSorter.class, Order.ASCENDING);
             return;
         }
         if (Arrays.asList(DateFormatSymbols.getInstance(Locale.GERMAN).getMonths()).stream().filter(month -> {
             return !month.isEmpty() && title.toLowerCase().contains(month.toLowerCase());
         }).findAny().isPresent()) {
-            levelSorting.add("Monat", JPPublishedSorter.class);
+            levelSorting.add("Monat", JPPublishedSorter.class, Order.ASCENDING);
             return;
         }
         if (title.contains("Nr.")) {
-            levelSorting.add("Nr.", JPMagicSorter.class);
+            levelSorting.add("Nr.", JPMagicSorter.class, null);
             return;
         }
-        levelSorting.add("Unknown", JPMagicSorter.class);
+        levelSorting.add("Unknown", JPMagicSorter.class, null);
     }
 
     private static JPObjectConfiguration getConfig(MCRObjectID objectID) throws IOException {
