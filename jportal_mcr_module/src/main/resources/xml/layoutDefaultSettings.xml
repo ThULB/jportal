@@ -88,11 +88,11 @@
   </editor>
 
   <sorter>
-    <sort class="fsu.jportal.backend.sort.JPMagicSorter" />
-    <sort class="fsu.jportal.backend.sort.JPArticleSizeSorter" />
-    <sort class="fsu.jportal.backend.sort.JPHiddenPositionSorter" />
-    <sort class="fsu.jportal.backend.sort.JPMaintitleSorter" />
-    <sort class="fsu.jportal.backend.sort.JPPublishedSorter" />
+    <sort class="fsu.jportal.backend.sort.JPMagicSorter" defaultOrder="none" />
+    <sort class="fsu.jportal.backend.sort.JPArticleSizeSorter" defaultOrder="ascending" />
+    <sort class="fsu.jportal.backend.sort.JPHiddenPositionSorter" defaultOrder="ascending" />
+    <sort class="fsu.jportal.backend.sort.JPMaintitleSorter" defaultOrder="ascending" />
+    <sort class="fsu.jportal.backend.sort.JPPublishedSorter" defaultOrder="ascending" />
   </sorter>
 
 </layoutSettings>

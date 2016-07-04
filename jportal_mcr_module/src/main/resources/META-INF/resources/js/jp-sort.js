@@ -1,12 +1,15 @@
 var jp = jp || {};
 jp.sort = jp.sort || {
 
-  sorters: [],
+  sorters: {},
 
   i18nKeys: null,
 
-  addSorter: function(sortClass) {
-    jp.sort.sorters.push(sortClass);
+  addSorter: function(sortClass, defaultOrder) {
+    jp.sort.sorters[sortClass] = {
+        className: sortClass,
+        defaultOrder: defaultOrder
+    };
   },
 
   loadI18nKeys: function() {
@@ -43,6 +46,16 @@ jp.sort = jp.sort || {
     $(".jp-sort-body").css("pointer-events", "auto");
     $(".jp-sort-footer-default").css("display", "block");
     $(".jp-sort-footer-saving").css("display", "none");
+  },
+
+  guid: function() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
   }
   
 };
@@ -85,9 +98,9 @@ jp.sort.object = {
 
   loadSortContainer: function() {
     var container = $("#autoSortContainer");
-    for(var sorter of jp.sort.sorters) {
-      var className = sorter.substring(sorter.lastIndexOf(".") + 1, sorter.length);
-      var btn = "<a href='#' type='button' class='jp-sort-object-sorter list-group-item " + className + "' onclick='jp.sort.object.selectSorter(`" + sorter +"`)'>" +
+    for(let key in jp.sort.sorters) {
+      var className = key.substring(key.lastIndexOf(".") + 1, key.length);
+      var btn = "<a href='#' type='button' class='jp-sort-object-sorter list-group-item " + className + "' onclick='jp.sort.object.selectSorter(`" + key + "`)'>" +
           "<div class='i18n' i18n='jp.sort." + className + "' style='font-weight: bold;'></div>" +
           "<div class='i18n' i18n='jp.sort." + className + ".description'></div>" +
       	"</a>";
@@ -95,16 +108,16 @@ jp.sort.object = {
     }
   },
 
-  selectSorter: function(sorter) {
+  selectSorter: function(sorterName) {
     $(".jp-sort-object-sorter").removeClass("active");
-    if(sorter == null) {
+    if(sorterName == null) {
       $(".jp-sort-object-sorter-no-sorter").addClass("active");
       jp.sort.object.selectedSorter = null;
       jp.sort.object.updateChildrenToolbar();
       return;
     }
-    jp.sort.object.selectedSorter = sorter;
-    var className = sorter.substring(sorter.lastIndexOf(".") + 1, sorter.length);
+    jp.sort.object.selectedSorter = sorterName;
+    var className = sorterName.substring(sorterName.lastIndexOf(".") + 1, sorterName.length);
     $("." + className).addClass("active");
     jp.sort.object.updateChildrenToolbar();
   },
@@ -366,7 +379,7 @@ jp.sort.level = {
 
   id: null,
   
-  levels: [],
+  model: [],
   
   index: 0,
 
@@ -377,9 +390,19 @@ jp.sort.level = {
       if(rsp.isNew) {
         $(".jp-sort-level-info").css("display", "block");
       }
-      jp.sort.level.levels = rsp.levels;
-      jp.sort.level.loadTableBody();
+      jp.sort.level.model = jp.sort.level.buildFromResponse(rsp);
+      jp.sort.level.render();
     });
+  },
+
+  buildFromResponse: function(rsp) {
+    var model = [];
+    for(var level of rsp.levels) {
+      model.push(level);
+      level.id = jp.sort.guid();
+      jp.sort.level.updateOrder(level);
+    }
+    return model;
   },
 
   show: function() {
@@ -394,53 +417,115 @@ jp.sort.level = {
       alert("Error while loading level sorting object of " + id);
     });
   },
+  
+  addRow: function(name) {
+    jp.sort.level.model.push({
+      id: jp.sort.guid(),
+      name: name
+    });
+    jp.sort.level.render();
+  },
 
-  loadTableBody: function() {
-    for(var level of jp.sort.level.levels) {
-      jp.sort.level.addLevel(level.name, level.sorter);
+  render: function() {
+    $(".jp-sort-level-row").remove();
+    for(var row of jp.sort.level.model) {
+      jp.sort.level.renderRow(row);
     }
   },
 
-  addLevel: function(name, sorter) {
+  renderRow: function(row) {
     var container = $("#jp-sort-level-table-body");
-    var tr = "<tr id='jp-sort-level-index-" + jp.sort.level.index + "' data-index='" + jp.sort.level.index + "'>";
-    tr += "<td><input class='form-control' type='text' value='" + name + "' id='jp-sort-level-name-input-" + jp.sort.level.index +"'></input></td>";
-    tr += "<td><select class='form-control' id='jp-sort-level-sorter-select-" + jp.sort.level.index + "'>";
+    var tr = "<tr class='jp-sort-level-row'>";
+    tr += "<td><input class='form-control' type='text' value='" + row.name + "'></input></td>";
+    tr += "<td><select class='form-control' id='jp-sort-level-classSelect-" + row.id + "'";
+    tr += "onchange='jp.sort.level.onChangeClass(`" + row.id + "`)'>";
     tr += "<option class='i18n' i18n='jp.sort.object.manualSort' value=''></option>";
-    for(var avSorter of jp.sort.sorters) {
-      var className = avSorter.substring(avSorter.lastIndexOf(".") + 1, avSorter.length);
-      tr += "<option class='i18n' i18n='jp.sort." + className + "' value='" + avSorter + "'";
-      tr += avSorter == sorter ? " selected='selected'" : "";
+    for(let sorter in jp.sort.sorters) {
+      var className = sorter.substring(sorter.lastIndexOf(".") + 1, sorter.length);
+      tr += "<option class='i18n' i18n='jp.sort." + className + "' value='" + sorter + "'";
+      tr += sorter == row.sorter ? " selected='selected'" : "";
       tr += "></option>";
     }
     tr += "</select></td>";
-    tr += "<td><button type='button' class='btn btn-default btn-sm' onclick='jp.sort.level.removeLevel(" + jp.sort.level.index + ")'>";
+    tr += "<td>";
+    if(row.order != null) {
+      tr += "<select class='form-control' id='jp-sort-level-orderSelect-" + row.id + "'";
+      tr += "onchange='jp.sort.level.onChangeOrder(`" + row.id + "`)'>";
+      for(var order of ["ascending", "descending"]) {
+        tr += "<option class='i18n' i18n='jp.sort." + order + "' value='" + order + "'";
+        tr += order == row.order ? " selected='selected'" : "";
+        tr += "></option>";
+      }
+    }
+    tr += "</td>";
+    tr += "<td><button type='button' class='btn btn-default btn-sm' onclick='jp.sort.level.removeRow(`" + row.id + "`)'>";
     tr += "<i class='fa fa-minus' aria-hidden='true'></i>";
     tr += "</button></td>";
     tr += "</tr>";
-    jp.sort.level.index++;
     container.append(tr);
     jp.sort.updateI18n(container);
   },
 
-  removeLevel: function(index) {
-    $("#jp-sort-level-index-" + index).remove();
+  getRow: function(id) {
+    for(var row of jp.sort.level.model) {
+      if(row.id == id) {
+        return row;
+      }
+    }
+    return null;
+  },
+
+  removeRow: function(id) {
+    var row = jp.sort.level.getRow(id);
+    var index = jp.sort.level.model.indexOf(row);
+    jp.sort.level.model.splice(index, 1);
+    jp.sort.level.render();
+  },
+
+  onChangeClass: function(id) {
+    var row = jp.sort.level.getRow(id);
+    var value = $("#jp-sort-level-classSelect-" + id).val();
+    row.sorter = value;
+    jp.sort.level.updateOrder(row);
+    jp.sort.level.render();
+  },
+
+  onChangeOrder: function(id) {
+    var row = jp.sort.level.getRow(id);
+    var value = $("#jp-sort-level-orderSelect-" + id).val();
+    row.order = value;
+    jp.sort.level.render();
+  },
+
+  updateOrder: function(row) {
+    var sorterClass = row.sorter;
+    if(sorterClass == null) {
+      row.order = null;
+      return;
+    }
+    var sorter = jp.sort.sorters[sorterClass];
+    var defaultOrder = sorter.defaultOrder;
+    if(defaultOrder == null || defaultOrder == "none") {
+      row.order = null;
+      return;
+    }
+    if(row.order == null) {
+      row.order = defaultOrder;
+    }
   },
 
   buildLevels: function() {
     var levels = [];
-    var container = $("#jp-sort-level-table-body");
-    container.children().each(function(arrayIndex, child) {
-      var index = $(child).data("index");
-      if(index == null) {
-        return;
+    jp.sort.level.model.forEach(function(row, arrayIndex) {
+      var level = {
+        index: arrayIndex,
+        name: row.name
+      };
+      if(row.sorter && row.sorter != '') {
+        level.sorter = row.sorter;
       }
-      var level = {};
-      level.index = arrayIndex;
-      level.name = $("#jp-sort-level-name-input-" + index).val();
-      var sorter = $("#jp-sort-level-sorter-select-" + index).val();
-      if(sorter != null && sorter != '') {
-        level.sorter = sorter;
+      if(row.order && row.order != '') {
+        level.order = row.order;
       }
       levels.push(level);
     });

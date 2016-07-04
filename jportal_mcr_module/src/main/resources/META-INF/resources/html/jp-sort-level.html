@@ -8,7 +8,7 @@
 	<div id="jp-sort-level-dialog" class="modal fade" id="sort-modal"
 		tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true"
 		data-keyboard="false">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h4 id="sort-title" class="modal-title i18n"
@@ -23,13 +23,15 @@
 					<div class="jp-sort-level-info i18n alert alert-info"
 						style="display: none;" i18n="jp.sort.level.info"></div>
 					<table class="table table-hover">
-						<col style="width: 35%; text-align: left;">
-						<col style="width: 55%; text-align: left;">
-						<col style="width: 10%; text-align: right;">
+						<col style="width: 26%; text-align: left;">
+						<col style="width: 40%; text-align: left;">
+						<col style="width: 26; text-align: left;">
+						<col style="width: 8%; text-align: right;">
 						<thead>
 							<tr>
 								<th class="i18n" i18n="jp.sort.level"></th>
 								<th class="i18n" i18n="jp.sort.sortBy"></th>
+								<th class="i18n" i18n="jp.sort.order"></th>
 								<th />
 							</tr>
 						</thead>
@@ -37,9 +39,9 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="2" />
+								<td colspan="3" />
 								<td>
-									<button type="button" class="btn btn-default btn-sm" onclick="jp.sort.level.addLevel('Neuer Eintrag')">
+									<button type="button" class="btn btn-default btn-sm" onclick="jp.sort.level.addRow('Neuer Eintrag')">
 										<i class="fa fa-plus" aria-hidden="true"></i>
 									</button>
 								</td>
