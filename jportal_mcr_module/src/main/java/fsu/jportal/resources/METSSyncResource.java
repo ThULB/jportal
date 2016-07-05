@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +35,7 @@ import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.StructLink;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fsu.jportal.backend.JPPeriodicalComponent;
@@ -58,7 +61,7 @@ public class METSSyncResource {
     private static final Logger LOGGER = LogManager.getLogger(METSSyncResource.class);
 
     /**
-     * Syncs the mets.xml with the object structure.
+     * Synchronizes the mets.xml with the object structure.
      * Returns a json object containing the number of changed logical div's.
      * 
      * @param derivateId the derivate
@@ -74,32 +77,33 @@ public class METSSyncResource {
         Mets mets = getMets(derivateId);
 
         // do the sync
-        List<LogicalDiv> labelUpdatedList = syncLabels(mets);
+        List<LogicalDiv> logicalDivList = getLogicalDivs(mets);
+        List<LogicalDiv> updatedList = new ArrayList<>();
+        Map<LogicalDiv, String> errorMap = new HashMap<>();
+        updateMaintitlesOfLogicalDivs(logicalDivList, updatedList, errorMap);
 
         boolean structLinkSynced = syncStructLink(mets);
 
         // write mets
-        if (structLinkSynced || !labelUpdatedList.isEmpty()) {
+        if (structLinkSynced || !updatedList.isEmpty()) {
             write(mets.asDocument(), derivateId);
         }
 
         // return json object
         JsonObject json = new JsonObject();
-        json.addProperty("labelsUpdated", labelUpdatedList.size());
+        json.addProperty("labelsUpdated", updatedList.size());
         json.addProperty("structLinkSynced", structLinkSynced);
+        if (!errorMap.isEmpty()) {
+            JsonArray errors = new JsonArray();
+            json.add("errors", errors);
+            errorMap.forEach((div, reason) -> {
+                JsonObject error = new JsonObject();
+                error.addProperty("id", div.getId());
+                error.addProperty("reason", reason);
+                errors.add(error);
+            });
+        }
         return Response.ok().entity(json.toString()).build();
-    }
-
-    /**
-     * Synchronizes the labels of the logical div section with the title of the
-     * corresponding mycore objects.
-     * 
-     * @param mets the mets to sync
-     * @return a list of logicial divs where the labels has changed
-     */
-    private List<LogicalDiv> syncLabels(Mets mets) {
-        List<LogicalDiv> logicalDivList = getLogicalDivs(mets);
-        return updateMaintitlesOfLogicalDivs(logicalDivList);
     }
 
     /**
@@ -172,10 +176,11 @@ public class METSSyncResource {
      * of this mycore object will be written into the LABEL attribute of the logical div.
      * 
      * @param logicalDivList a list of logical divs
-     * @return a list of all logical divs which have an updated maintitle
+     * @param updateList an empty list where the updated divs are stored
+     * @param errorMap an empty map where the errors are stored (div, reason)
      */
-    private List<LogicalDiv> updateMaintitlesOfLogicalDivs(List<LogicalDiv> logicalDivList) {
-        List<LogicalDiv> updateList = new ArrayList<>();
+    private void updateMaintitlesOfLogicalDivs(List<LogicalDiv> logicalDivList, List<LogicalDiv> updateList,
+        Map<LogicalDiv, String> errorMap) {
         for (LogicalDiv div : logicalDivList) {
             String divId = div.getId();
             try {
@@ -184,6 +189,7 @@ public class METSSyncResource {
                 }
                 MCRObjectID mcrId = MCRObjectID.getInstance(divId);
                 if (!MCRMetadataManager.exists(mcrId)) {
+                    errorMap.put(div, "MyCoRe object does not exist " + divId);
                     LOGGER.warn("LogicalStructMap @ID '" + mcrId + "' does not exists on system.");
                     continue;
                 }
@@ -193,10 +199,10 @@ public class METSSyncResource {
                     updateList.add(div);
                 }
             } catch (Exception exc) {
+                errorMap.put(div, "Unknown error for " + divId);
                 LOGGER.error("Unable to get maintitle of " + divId, exc);
             }
         }
-        return updateList;
     }
 
     /**
