@@ -34,6 +34,9 @@ public interface JPSorter {
         MCRObject mcrObject = component.getObject();
         MCRObjectStructure structure = mcrObject.getStructure();
         List<MCRMetaLinkID> children = new ArrayList<>(structure.getChildren());
+        if(children.isEmpty()) {
+            return;
+        }
         structure.clearChildren();
         children.stream()
                 .map(MCRMetaLinkID::getXLinkHrefID)

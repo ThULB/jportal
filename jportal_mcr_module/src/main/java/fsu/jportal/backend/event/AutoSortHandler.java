@@ -8,12 +8,16 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.backend.sort.JPLevelSorting.Level;
 import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPLevelSortingUtil;
 
 /**
  * Each journal or volume can have a {@link JPSorter} which enables
@@ -31,7 +35,9 @@ public class AutoSortHandler extends MCREventHandlerBase {
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
         getContainer(obj).ifPresent(container -> {
             if (!container.getSortBy().isPresent()) {
-                addDefaultSorter(container);
+                if (!addLevelSortingSorter(container)) {
+                    addDefaultSorter(container);
+                }
             }
             container.sort();
         });
@@ -46,7 +52,7 @@ public class AutoSortHandler extends MCREventHandlerBase {
 
     /**
      * Returns an optional container if the given object is an instance of
-     * jpvolume or jpjournal 
+     * jpvolume or jpjournal.
      * 
      * @param obj the object
      * @return optional container
@@ -60,6 +66,35 @@ public class AutoSortHandler extends MCREventHandlerBase {
             return Optional.empty();
         }
         return Optional.of((JPContainer) periodical);
+    }
+
+    /**
+     * Adds the level sorting sorter defined by the journal.
+     * Returns true if the level sorting was applied, otherwise false.
+     * 
+     * @param container the container
+     * @return true if the level sorting was applied
+     */
+    private boolean addLevelSortingSorter(JPContainer container) {
+        try {
+            Optional<MCRObjectID> optionalJournalId = container.getJournalId();
+            if (optionalJournalId.isPresent()) {
+                JPLevelSorting levelSorting = JPLevelSortingUtil.load(optionalJournalId.get());
+                if (levelSorting.isEmpty()) {
+                    return false;
+                }
+                int pos = JPLevelSortingUtil.getLevelOfObject(container.getObject());
+                Level level = levelSorting.get(pos);
+                if (level == null) {
+                    return false;
+                }
+                container.setSortBy(level.getSorterClass(), level.getOrder());
+                return true;
+            }
+        } catch (Exception exc) {
+            LOGGER.error("Unable to add level sorting to object " + container.getObject().getId(), exc);
+        }
+        return false;
     }
 
     /**

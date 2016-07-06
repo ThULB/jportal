@@ -412,7 +412,7 @@
               <xsd:complexType>
                 <xsd:simpleContent>
                   <xsd:extension base="xsd:string">
-                    <xsd:attribute use="required" name="order">
+                    <xsd:attribute use="optional" name="order">
                       <xsd:simpleType>
                         <xsd:restriction base="xsd:string">
                           <xsd:enumeration value="ascending" />

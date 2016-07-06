@@ -12,7 +12,13 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPContainer;
@@ -34,6 +40,8 @@ import fsu.jportal.common.Unthrow;
  * @author Matthias Eichner
  */
 public abstract class JPLevelSortingUtil {
+
+    static Logger LOGGER = LogManager.getLogger(JPLevelSortingUtil.class);
 
     public static final String LEVEL_SORTING = "jportal_level_sorting";
 
@@ -118,6 +126,16 @@ public abstract class JPLevelSortingUtil {
     }
 
     /**
+     * Returns the level of the object. The journal is level zero.
+     * 
+     * @param object the object
+     * @return level as number
+     */
+    public static int getLevelOfObject(MCRObject object) {
+        return MCRObjectUtils.getAncestors(object).size();
+    }
+
+    /**
      * Runs through all descendants of the object and applies the sorters defined
      * in the given level sorting object.
      * 
@@ -125,16 +143,45 @@ public abstract class JPLevelSortingUtil {
      * @param levelSorting the level sorting to apply
      */
     public static void apply(MCRObjectID objectID, JPLevelSorting levelSorting) {
+        apply(objectID, levelSorting, 0);
     }
 
-    public static void applySorter(List<MCRObjectID> objects, Class<? extends JPSorter> sorter) {
-        objects.stream()
-               .map(JPComponentUtil::getContainer)
-               .filter(Optional::isPresent)
-               .map(Optional::get)
-               .forEach(container -> {
+    protected static void apply(MCRObjectID objectID, JPLevelSorting levelSorting, int levelPosition) {
+        Level level = levelSorting.get(levelPosition);
+        if(level != null) {
+            applySorter(objectID, level.getSorterClass(), level.getOrder());
+        }
+        MCRObject object = MCRMetadataManager.retrieveMCRObject(objectID);
+        List<MCRMetaLinkID> children = object.getStructure().getChildren();
+        if(children.isEmpty()) {
+            return;
+        }
+        children.stream()
+            .map(MCRMetaLinkID::getXLinkHref)
+            .map(MCRObjectID::getInstance)
+            .forEach(id -> {
+                apply(id, levelSorting, levelPosition + 1);
+            });
+    }
 
-               });
+    /**
+     * Helper method to apply a sorter and an order to the given object.
+     * 
+     * @param objectID the object
+     * @param sorter the sorter
+     * @param order the order
+     */
+    protected static void applySorter(MCRObjectID objectID, Class<? extends JPSorter> sorter, Order order) {
+        JPComponentUtil.getContainer(objectID).ifPresent(container -> {
+            container.setSortBy(sorter, order);
+            try {
+                container.store();
+            } catch (Exception exc) {
+                LOGGER.error(
+                    "Unable to store " + container.getObject().getId() + " while applying sorter " + sorter.getName(),
+                    exc);
+            }
+        });
     }
 
     /**

@@ -64,10 +64,14 @@ public class JPLevelSorting {
      * Gets the name and sorter pair for the given level.
      * 
      * @param level the level of the pair to return 
-     * @return the level
+     * @return the level or null if there is nothing defined
      */
     public Level get(int level) {
-        return this.levelList.get(level);
+        try {
+            return this.levelList.get(level);
+        } catch(Exception exc) {
+            return null;
+        }
     }
 
     /**

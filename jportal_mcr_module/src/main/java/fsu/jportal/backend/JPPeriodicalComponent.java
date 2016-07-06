@@ -6,6 +6,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -283,12 +284,25 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * By default the journal id is stored in the metadata field 'hidden_jpjournalsID'
      * and this field is inherited through the whole journal. 
      * 
-     * @return the journal id
+     * @return the journal id or null
      */
-    public String getJournalId() {
-        return metadataStream("hidden_jpjournalsID", MCRMetaLangText.class).map(MCRMetaLangText::getText)
-                                                                           .findFirst()
-                                                                           .orElse(null);
+    public String getJournalIdAsString() {
+        Stream<MCRMetaLangText> stream = metadataStream("hidden_jpjournalsID", MCRMetaLangText.class);
+        return stream.map(MCRMetaLangText::getText)
+                   .findFirst()
+                   .orElse(null);
+    }
+
+    /**
+     * Returns the journal id for this component. Each component is either a journal or
+     * should have a journal as ancestor. This method returns the id of this journal.
+     * By default the journal id is stored in the metadata field 'hidden_jpjournalsID'
+     * and this field is inherited through the whole journal. 
+     * 
+     * @return optional of the journalId
+     */
+    public Optional<MCRObjectID> getJournalId() {
+        return Optional.ofNullable(getJournalIdAsString()).map(MCRObjectID::getInstance);
     }
 
 }

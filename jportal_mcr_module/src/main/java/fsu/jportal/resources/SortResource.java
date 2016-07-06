@@ -56,6 +56,7 @@ import fsu.jportal.util.JPLevelSortingUtil;
  * <li>the level sorting of journals
  *  <ul>
  *   <li>GET level/{journal id}</li>
+ *   <li>POST level/{journal id}</li>
  *  </ul>
  * </li>
  * </ul>
@@ -223,13 +224,17 @@ public class SortResource {
     @POST
     @Path("level/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void setLevel(@PathParam("id") String id, String data) {
+    public void setLevel(@PathParam("id") String id, @QueryParam("apply") Boolean apply, String data) {
+        apply = apply == null ? false : apply;
         MCRObjectID journalId = MCRObjectID.getInstance(id);
         JsonArray array = new JsonParser().parse(data).getAsJsonArray();
         JPLevelSorting levelSorting;
         try {
             levelSorting = JPLevelSorting.fromJSON(array);
             JPLevelSortingUtil.store(journalId, levelSorting);
+            if(apply) {
+                JPLevelSortingUtil.apply(journalId, levelSorting);
+            }
         } catch (ClassNotFoundException exc) {
             throwInternalServerError(exc, "Unable to store level sorting for " + id + ". One sorter is invalid.");
         } catch (IOException exc) {

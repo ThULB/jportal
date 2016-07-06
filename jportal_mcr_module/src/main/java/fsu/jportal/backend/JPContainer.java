@@ -124,8 +124,9 @@ public abstract class JPContainer extends JPPeriodicalComponent {
         Stream<MCRMetaElementXML> stream = metadataStream("autosort", MCRMetaElementXML.class);
         return stream.map(metaXML -> metaXML.createXML()).map(sortByElement -> {
             try {
-                Order order = Order.valueOf(sortByElement.getAttributeValue("order").toUpperCase());
                 Class<?> forName = Class.forName(sortByElement.getText());
+                String orderAttribute = sortByElement.getAttributeValue("order");
+                Order order = orderAttribute != null ? Order.valueOf(orderAttribute.toUpperCase()) : null;
                 if (JPSorter.class.isAssignableFrom(forName)) {
                     return new Pair<JPSorter, Order>((JPSorter) forName.newInstance(), order);
                 } else {
@@ -139,22 +140,24 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     }
 
     /**
-     * Sets the autosort for this container. If the sorter or the order is null,
-     * the autosort is removed. 
+     * Sets the autosort for this container. If the sorter is null,
+     * the autosort is removed.
      * 
      * @param sorter the JPSorter
      * @param order ascending or descending
      */
     public void setSortBy(Class<? extends JPSorter> sorterClass, Order order) {
         object.getMetadata().removeMetadataElement("autosort");
-        if (sorterClass == null || order == null) {
+        if (sorterClass == null) {
             return;
         }
         MCRMetaElement autosort = new MCRMetaElement(MCRMetaElementXML.class, "autosort", false, true, null);
         object.getMetadata().setMetadataElement(autosort);
         MCRMetaElementXML metaXML = new MCRMetaElementXML();
         Element sortby = new Element("sortby");
-        sortby.setAttribute("order", order.name().toLowerCase());
+        if(order != null) {
+            sortby.setAttribute("order", order.name().toLowerCase());
+        }
         sortby.setText(sorterClass.getName());
         metaXML.setFromDOM(sortby);
         autosort.addMetaObject(metaXML);
