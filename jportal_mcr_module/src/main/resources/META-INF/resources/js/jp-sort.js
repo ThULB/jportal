@@ -485,7 +485,7 @@ jp.sort.level = {
   onChangeClass: function(id) {
     var row = jp.sort.level.getRow(id);
     var value = $("#jp-sort-level-classSelect-" + id).val();
-    row.sorter = value;
+    row.sorter = value != "" ? value : null;
     jp.sort.level.updateOrder(row);
     jp.sort.level.render();
   },
@@ -532,12 +532,12 @@ jp.sort.level = {
     return levels;
   },
 
-  save: function() {
+  save: function(apply) {
     var levels = jp.sort.level.buildLevels();
     jp.sort.beforeSaving();
     $.ajax({
       method: 'POST',
-      url: jp.baseURL + "rsc/sort/level/" + jp.sort.level.id,
+      url: jp.baseURL + "rsc/sort/level/" + jp.sort.level.id + "?apply=" + apply,
       contentType: "application/json; charset=UTF-8",
       data: JSON.stringify(levels)
     }).done(function() {
@@ -548,6 +548,31 @@ jp.sort.level = {
       console.log(error);
       alert("An error occur. Unable to save changes.");
     });
+  },
+
+  saveAndApply: function() {
+    var title = jp.sort.i18nKeys["jp.sort.level.reviewDialog.title"];
+    var message = jp.sort.i18nKeys["jp.sort.level.reviewDialog.message"];
+    var yes = jp.sort.i18nKeys["jp.sort.button.yes"];
+    var no = jp.sort.i18nKeys["jp.sort.button.no"];
+
+    new BootstrapDialog({
+      title: title,
+      message: message,
+      buttons: [{
+        label: no,
+        action: function(dialog) {
+          dialog.close();
+        }
+      }, {
+        label: yes,
+        cssClass: 'btn-warning',
+        action: function(dialog) {
+          dialog.close();
+          jp.sort.level.save(true);
+        }
+      }]
+    }).open();
   }
 
 }
