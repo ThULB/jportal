@@ -7,9 +7,32 @@
 <xsl:stylesheet
   version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:decoder="xalan://java.net.URLDecoder"
+  exclude-result-prefixes="xsl decoder"
 >
 
-<xsl:param name="UploadID"/>
+<xsl:variable name="uploadId">
+  <xsl:call-template name="UrlGetParam">
+    <xsl:with-param name="url" select="$RequestURL" />
+    <xsl:with-param name="par" select="'uploadId'" />
+  </xsl:call-template>
+</xsl:variable>
+<xsl:variable name="parentObjectID">
+  <xsl:call-template name="UrlGetParam">
+    <xsl:with-param name="url" select="$RequestURL" />
+    <xsl:with-param name="par" select="'parentObjectID'" />
+  </xsl:call-template>
+</xsl:variable>
+<xsl:variable name="cancelUrl">
+  <xsl:variable name="paramValue">
+    <xsl:call-template name="UrlGetParam">
+      <xsl:with-param name="url" select="$RequestURL" />
+      <xsl:with-param name="par" select="'cancelUrl'" />
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:value-of select="decoder:decode(string($paramValue),'UTF-8')" />
+</xsl:variable>
+
 <xsl:param name="MCR.UploadApplet.BackgroundColor" select="'#CAD9E0'"/>
 <xsl:param name="MCR.UploadApplet.Width" select="'380'"/>
 <xsl:param name="MCR.UploadApplet.Height" select="'130'"/>
@@ -38,7 +61,7 @@
 <xsl:template match="fileupload">
 
   <xsl:variable name="url">  <!-- when applet ends this is shown -->
-    <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRUploadServlet',$HttpSession,'?method=redirecturl&amp;uploadId=',$UploadID)"/>
+    <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRUploadServlet',$HttpSession,'?method=redirecturl&amp;uploadId=',$uploadId)"/>
   </xsl:variable>
   <xsl:variable name="httpSession">  <!-- httpSession ID -->
     <xsl:value-of select="substring-after($JSessionID,'=')"/>
@@ -50,7 +73,7 @@
     codebase = "{$applet.microsoft.plugin}"
     width    = "{$applet.width}"
     height   = "{$applet.height}" >
-    <param name="uploadId" value="{$UploadID}"/>
+    <param name="uploadId" value="{$uploadId}"/>
 
     <param name="codebase"         value="{$applet.codebase}" />
     <param name="code"             value="{$applet.class}"    />
@@ -82,7 +105,7 @@
         <xsl:attribute name="progressbar">      <xsl:value-of select="$applet.progressbar"/>     </xsl:attribute>
         <xsl:attribute name="progresscolor">    <xsl:value-of select="$applet.progresscolor"/>   </xsl:attribute>
         <xsl:attribute name="background-color"> <xsl:value-of select="$applet.background-color"/></xsl:attribute>
-        <xsl:attribute name="uploadId">         <xsl:value-of select="$UploadID"/>               </xsl:attribute>
+        <xsl:attribute name="uploadId">         <xsl:value-of select="$uploadId"/>               </xsl:attribute>
         <xsl:attribute name="url">              <xsl:value-of select="$url"/>                    </xsl:attribute>
         <xsl:attribute name="httpSession">      <xsl:value-of select="$httpSession"/>            </xsl:attribute>
         <xsl:attribute name="ServletsBase">     <xsl:value-of select="$ServletsBaseURL"/>        </xsl:attribute>
