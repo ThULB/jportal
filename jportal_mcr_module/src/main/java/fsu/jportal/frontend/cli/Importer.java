@@ -1,7 +1,6 @@
 package fsu.jportal.frontend.cli;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,12 +40,14 @@ import org.mycore.mets.model.struct.SmLink;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 
+import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPVolume;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.RecursiveImporter;
 import fsu.jportal.frontend.cli.io.HttpImportSource;
 import fsu.jportal.frontend.cli.io.LocalSystemSink;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * Created by chi on 22.04.15.
@@ -71,10 +72,10 @@ public class Importer {
     }
 
     /**
-     * Does the jvb import for a year.
+     * Does a mets import for a year.
      *
      * <pre>
-     * importJVB jportal_jpvolume_00000002 /data/temp/mnt/images/Jenaer_Volksblatt_1914_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_2/1914
+     * importMets jportal_jpvolume_00000002 /data/temp/mnt/images/Jenaer_Volksblatt_1914_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_2/1914
      * </pre>
      * 
      * @param targetID the target volume
@@ -85,20 +86,20 @@ public class Importer {
      * 
      * @throws Exception darn! something went wrong
      */
-    @MCRCommand(syntax = "importJVB {0} {1} {2}", help = "importJVB {targetID} {path to mets.xml} {path to ocr folder}")
-    public static List<String> importJVB(String targetID, String metsPath, String contentPath) throws Exception {
+    @MCRCommand(syntax = "importMets {0} {1} {2}", help = "importMets {targetID} {path to mets.xml} {path to ocr folder}")
+    public static List<String> importMets(String targetID, String metsPath, String contentPath) throws Exception {
         MCRObjectID target = MCRObjectID.getInstance(targetID);
         if (!MCRMetadataManager.exists(target)) {
             throw new MCRException("Unable to find " + target);
         }
-        LOGGER.info("Import JVB to " + targetID);
+        LOGGER.info("Import mets to " + targetID);
         Mets mets = getMets(metsPath);
         LogicalDiv rootDiv = getLogicalRootDiv(mets);
 
         List<String> monthCommands = new ArrayList<>();
 
         for (LogicalDiv monthDiv : rootDiv.getChildren()) {
-            String command = "importJVBMonth " + targetID + " " + metsPath + " " + contentPath + " "
+            String command = "importMetsMonth " + targetID + " " + metsPath + " " + contentPath + " "
                 + monthDiv.getOrder();
             monthCommands.add(command);
         }
@@ -106,25 +107,32 @@ public class Importer {
     }
 
     /**
-     * importJVBMonth jportal_jpvolume_00000374 /data/temp/mnt/images/Jenaer_Volksblatt_1915_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915 1
+     * importMetsMonth jportal_jpvolume_00000374 /data/temp/mnt/images/Jenaer_Volksblatt_1915_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915 1
      * 
      * @param targetID
      * @param metsPath
      * @param contentPath
      * @param monthIndex
      */
-    @MCRCommand(syntax = "importJVBMonth {0} {1} {2} {3}", help = "importJVBMonth {targetID} {path to mets.xml} {path to ocr folder} {number of month [1-12]}")
-    public static List<String> importJVBMonth(String targetID, String metsPath, String contentPath, int monthIndex)
+    @MCRCommand(syntax = "importMetsMonth {0} {1} {2} {3}", help = "importMetsMonth {targetID} {path to mets.xml} {path to ocr folder} {number of month [1-12]}")
+    public static List<String> importMetsMonth(String targetID, String metsPath, String contentPath, int monthIndex)
         throws Exception {
         // create month
         MCRObjectID target = MCRObjectID.getInstance(targetID);
         if (!MCRMetadataManager.exists(target)) {
             throw new MCRException("Unable to find " + target);
         }
+        Optional<JPContainer> parentOptional = JPComponentUtil.getContainer(target);
+        
         JPVolume month = new JPVolume();
         month.setTitle(MONTH_NAMES.get(monthIndex));
         month.setParent(target);
         month.setHiddenPosition(monthIndex);
+        parentOptional.ifPresent(parent -> {
+            parent.getPublishedDate().ifPresent(date -> {
+                month.setDate(date.getYear() + "-" + String.format("%02d", monthIndex), null);
+            });
+        });
         month.store();
 
         // create day commands
@@ -133,7 +141,7 @@ public class Importer {
         LogicalDiv rootDiv = getLogicalRootDiv(mets);
         Optional<LogicalDiv> monthDiv = getMonth(rootDiv, monthIndex);
         optionalToStream(monthDiv).flatMap(div -> div.getChildren().stream()).forEach(day -> {
-            String command = "importJVBDay " + month.getObject().getId() + " " + metsPath + " " + contentPath + " "
+            String command = "importMetsDay " + month.getObject().getId() + " " + metsPath + " " + contentPath + " "
                 + monthIndex + " " + day.getOrder();
             dayCommands.add(command);
         });
@@ -141,7 +149,7 @@ public class Importer {
     }
 
     /**
-     * importJVBDay jportal_jpvolume_00000374 /data/temp/mnt/images/Jenaer_Volksblatt_1915_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915 1 1
+     * importMetsDay jportal_jpvolume_00000374 /data/temp/mnt/images/Jenaer_Volksblatt_1915_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915 1 1
      * 
      * @param targetID
      * @param metsPath
@@ -149,8 +157,8 @@ public class Importer {
      * @param monthIndex
      * @param dayOrder
      */
-    @MCRCommand(syntax = "importJVBDay {0} {1} {2} {3} {4}", help = "importJVBDay {targetID} {path to mets.xml} {path to ocr folder} {number of month [1-12]} {order number of day}")
-    public static void importJVBDay(String targetID, String metsPath, String contentPath, int monthIndex, int dayOrder)
+    @MCRCommand(syntax = "importMetsDay {0} {1} {2} {3} {4}", help = "importMetsDay {targetID} {path to mets.xml} {path to ocr folder} {number of month [1-12]} {order number of day}")
+    public static void importMetsDay(String targetID, String metsPath, String contentPath, int monthIndex, int dayOrder)
         throws Exception {
 
         Mets mets = getMets(metsPath);
@@ -204,14 +212,16 @@ public class Importer {
                 String altoFile = imageFile.replace(".tif", ".xml");
                 Path absoluteAltoPath = altoFolderPath.resolve(volumeFolder).resolve(ALTO_FOLDER).resolve(altoFile);
 
-                if (!Files.exists(absoluteImagePath) || Files.isDirectory(absoluteImagePath)) {
-                    throw new FileNotFoundException(absoluteImagePath.toString() + " not found");
+                if (Files.exists(absoluteImagePath) && !Files.isDirectory(absoluteImagePath)) {
+                    derivate.add(absoluteImagePath.toUri().toURL(), imageFile);
+                } else {
+                    LOGGER.warn("Image not found " + absoluteImagePath.toString());
                 }
-                if (!Files.exists(absoluteAltoPath) || Files.isDirectory(absoluteAltoPath)) {
-                    throw new FileNotFoundException(absoluteAltoPath.toString() + " not found");
+                if (Files.exists(absoluteAltoPath) && !Files.isDirectory(absoluteAltoPath)) {
+                    derivate.add(absoluteAltoPath.toUri().toURL(), "alto/" + altoFile);                    
+                } else {
+                    LOGGER.warn("ALTO not found " + absoluteAltoPath.toString());
                 }
-                derivate.add(absoluteImagePath.toUri().toURL(), imageFile);
-                derivate.add(absoluteAltoPath.toUri().toURL(), "alto/" + altoFile);
             } catch (Exception exc) {
                 LOGGER.error("Unable to add image to derivate", exc);
             }
