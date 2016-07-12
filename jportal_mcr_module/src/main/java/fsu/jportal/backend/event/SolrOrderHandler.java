@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
+import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -27,6 +28,9 @@ public class SolrOrderHandler extends MCREventHandlerBase {
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         MCRObject oldObject = (MCRObject) evt.get(MCREvent.OBJECT_OLD_KEY);
+        if (MCRMarkManager.instance().isMarkedForDeletion(obj.getId())) {
+            return;
+        }
         handleOrder(oldObject, obj);
     }
 

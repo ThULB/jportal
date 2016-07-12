@@ -45,6 +45,7 @@
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields1" mode="jportal.hiddenGenFields"/>
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields2" mode="jportal.hiddenGenFields"/>
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields3" mode="jportal.hiddenGenFields"/>
+      <xsl:apply-templates select="$journal/metadata/journalTypes" mode="jportal.metadata"/>
     </xsl:if>
   </xsl:template>
 
@@ -92,6 +93,13 @@
   <xsl:template match="subtitles/subtitle[@inherited='0']" mode="jportal.metadata">
     <field name="titles">
       <xsl:value-of select="text()"/>
+    </field>
+  </xsl:template>
+
+  <!-- journal types -->
+  <xsl:template match="journalTypes/journalType" mode="jportal.metadata">
+    <field name="journalType">
+      <xsl:value-of select="concat(@classid, ':', @categid)"/>
     </field>
   </xsl:template>
 

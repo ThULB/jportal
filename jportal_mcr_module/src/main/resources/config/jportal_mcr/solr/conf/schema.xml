@@ -145,6 +145,7 @@
     <!-- journal, volume, article -->
     <field name="journalID" type="string" />
     <field name="journalTitle" type="string" />
+    <field name="journalType" type="string" multiValued="true" />
     <field name="maintitle" type="string" />
     <field name="roles" type="string" multiValued="true" />
     <field name="rubric" type="string" indexed="false" multiValued="true" />

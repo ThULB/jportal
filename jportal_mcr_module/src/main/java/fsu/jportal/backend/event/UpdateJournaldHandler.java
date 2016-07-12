@@ -2,31 +2,66 @@ package fsu.jportal.backend.event;
 
 import static fsu.jportal.util.ImprintUtil.getImprintID;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.common.MCRLinkTableManager;
+import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.index.MCRSolrIndexer;
+import org.mycore.solr.search.MCRSolrSearchUtils;
 
 public class UpdateJournaldHandler extends MCREventHandlerBase {
+
+    static Logger LOGGER = LogManager.getLogger(UpdateJournaldHandler.class);
+
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         MCRObjectID mcrId = obj.getId();
-        String mcrIdString = mcrId.toString();
-        if ("jpjournal".equals(mcrId.getTypeId())) {
-            MCRLinkTableManager ltm = MCRLinkTableManager.instance();
-            String imprintID = getImprintID(mcrIdString, "imprint");
-            if (imprintID != null && !imprintID.trim().isEmpty()) {
-                ltm.addReferenceLink(mcrIdString, imprintID, "imprint", null);
-            }
-            String partnerID = getImprintID(mcrIdString, "partner");
-            if (partnerID != null && !partnerID.trim().isEmpty()) {
-                ltm.addReferenceLink(mcrIdString, partnerID, "partner", null);
-            }
-            String greetingID = getImprintID(mcrIdString, "greeting");
-            if (greetingID != null && !greetingID.trim().isEmpty()) {
-                ltm.addReferenceLink(mcrIdString, greetingID, "greeting", null);
-            }
+        if (MCRMarkManager.instance().isMarkedForDeletion(mcrId)) {
+            return;
+        }
+        if (!"jpjournal".equals(mcrId.getTypeId())) {
+            return;
+        }
+        updateImprintPartnerGreeting(mcrId.toString());
+        try {
+            updateDescendents(obj);
+        } catch (Exception exc) {
+            LOGGER.error("Unable to reindex descendents of " + mcrId, exc);
         }
     }
+
+    private void updateImprintPartnerGreeting(String mcrIdString) {
+        MCRLinkTableManager ltm = MCRLinkTableManager.instance();
+        String imprintID = getImprintID(mcrIdString, "imprint");
+        if (imprintID != null && !imprintID.trim().isEmpty()) {
+            ltm.addReferenceLink(mcrIdString, imprintID, "imprint", null);
+        }
+        String partnerID = getImprintID(mcrIdString, "partner");
+        if (partnerID != null && !partnerID.trim().isEmpty()) {
+            ltm.addReferenceLink(mcrIdString, partnerID, "partner", null);
+        }
+        String greetingID = getImprintID(mcrIdString, "greeting");
+        if (greetingID != null && !greetingID.trim().isEmpty()) {
+            ltm.addReferenceLink(mcrIdString, greetingID, "greeting", null);
+        }
+    }
+
+    private void updateDescendents(MCRObject journal) throws SolrServerException {
+        String journalID = journal.getId().toString();
+        SolrClient client = MCRSolrClientFactory.getConcurrentSolrClient();
+        List<String> descendents = MCRSolrSearchUtils.listIDs(client, "journalID:" + journalID);
+        descendents = descendents.stream().filter(id -> !id.equals(journalID)).collect(Collectors.toList());
+        MCRSolrIndexer.rebuildMetadataIndex(descendents, true);
+    }
+
 }

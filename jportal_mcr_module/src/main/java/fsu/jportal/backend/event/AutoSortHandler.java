@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
+import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -45,6 +46,9 @@ public class AutoSortHandler extends MCREventHandlerBase {
 
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
+        if (MCRMarkManager.instance().isMarkedForDeletion(obj.getId())) {
+            return;
+        }
         getContainer(obj).ifPresent(container -> {
             container.sort();
         });
