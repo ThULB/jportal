@@ -55,6 +55,7 @@ import fsu.jportal.mets.JVBMetsImporter;
 import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.LLZMetsImporter;
 import fsu.jportal.mets.MetsImportException;
+import fsu.jportal.mets.MetsImportUtils;
 import fsu.jportal.mets.MetsImporter;
 import fsu.jportal.util.MetsUtil;
 
@@ -82,7 +83,7 @@ public class METSImportResource {
     @Path("check/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String check(@PathParam("id") String derivateId) {
-        checkPermission(derivateId);
+        MetsImportUtils.checkPermission(derivateId);
         JsonObject returnObject = new JsonObject();
         Document doc;
         try {
@@ -158,7 +159,7 @@ public class METSImportResource {
     public void convertAndImport(@PathParam("id") String derivateId)
         throws IOException, JDOMException, ConvertException, MetsImportException {
         // check permissions
-        checkPermission(derivateId);
+        MetsImportUtils.checkPermission(derivateId);
 
         // build document stuff
         Document enmapMetsXML = MetsUtil.getMetsXMLasDocument(derivateId);
@@ -174,16 +175,7 @@ public class METSImportResource {
         } else {
             throw new MetsImportException("Unable to get importer class due type is not supported: " + type);
         }
-        Map<LogicalDiv, JPComponent> logicalComponentMap = importer.importMets(mcrMets,
-            MCRObjectID.getInstance(derivateId));
-
-        // update logical id's
-        updateLogicalIds(mcrMets, logicalComponentMap);
-        // write mets.xml
-        Document mcrDoc = mcrMets.asDocument();
-        byte[] bytes = new MCRJDOMContent(mcrDoc).asByteArray();
-        MCRPath path = MCRPath.getPath(derivateId, "/mets.xml");
-        Files.write(path, bytes);
+        MetsImportUtils.importMets(derivateId, mcrMets, importer);
     }
 
     /**
@@ -200,7 +192,7 @@ public class METSImportResource {
     @Path("print/{id}")
     @Produces(MediaType.APPLICATION_XML)
     public String print(@PathParam("id") String derivateId) throws IOException, JDOMException, ConvertException {
-        checkPermission(derivateId);
+        MetsImportUtils.checkPermission(derivateId);
         Document metsXML = MetsUtil.getMetsXMLasDocument(derivateId);
         Mets mets = convert(derivateId, metsXML);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
@@ -222,29 +214,6 @@ public class METSImportResource {
     private Mets convert(String derivateId, Document enmapMetsXML) throws IOException, JDOMException, ConvertException {
         ENMAPConverter converter = getConverter(enmapMetsXML, derivateId);
         return converter.convert(enmapMetsXML, MCRPath.getPath(derivateId, "/"));
-    }
-
-    /**
-     * This method updates the divs of the logical struct map and the struct link section with mycore ids.
-     * This is important because then we know which logical div is assigned to which mycore object.
-     * 
-     * @param mets the mets to update
-     * @param logicalComponentMap a map of logical divs and their corresponding <code>JPComponent's<code>
-     */
-    private void updateLogicalIds(Mets mets, Map<LogicalDiv, JPComponent> logicalComponentMap) {
-        // the import is done -> now update the mets document with the mycore id's
-        for (Entry<LogicalDiv, JPComponent> entry : logicalComponentMap.entrySet()) {
-            LogicalDiv logicalDiv = entry.getKey();
-            String mycoreId = entry.getValue().getObject().getId().toString();
-            String oldId = logicalDiv.getId();
-            // update logical div
-            logicalDiv.setId(mycoreId);
-            // update logical struct map
-            List<SmLink> links = mets.getStructLink().getSmLinkByFrom(oldId);
-            for (SmLink link : links) {
-                link.setFrom(mycoreId);
-            }
-        }
     }
 
     /**
@@ -318,19 +287,6 @@ public class METSImportResource {
             }
         }
         return type;
-    }
-
-    /**
-     * Checks if the user has the permissions to perform the task.
-     * 
-     * @param derivateId
-     */
-    protected void checkPermission(String derivateId) {
-        MCRJerseyUtil.checkPermission(derivateId, "readdb");
-        MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
-        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(mcrDerivateId);
-        MCRObjectID ownerID = derivate.getOwnerID();
-        MCRJerseyUtil.checkPermission(ownerID, "writedb");
     }
 
 }

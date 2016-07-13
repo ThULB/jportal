@@ -120,7 +120,8 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
-     * Sets a derivate link for this object
+     * Sets a derivate link for this object. The link should look like
+     * <b>jportal_derivate_xxxxxxxx/path_to_image</b>.
      * 
      * @param link the link, this should include the derivate and the path to the file
      * @throws MCRActiveLinkException
@@ -135,11 +136,8 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * @return derivate link as string
      */
     public String getDerivateLink() {
-        return metadataStreamNotInherited("derivateLinks", MCRMetaDerivateLink.class)
-                                                                                     .map(
-                                                                                         MCRMetaDerivateLink::getXLinkHref)
-                                                                                     .findFirst()
-                                                                                     .orElse(null);
+        Stream<MCRMetaDerivateLink> stream = metadataStreamNotInherited("derivateLinks", MCRMetaDerivateLink.class);
+        return stream.map(MCRMetaDerivateLink::getXLinkHref).findFirst().orElse(null);
     }
 
     /**

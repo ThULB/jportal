@@ -37,9 +37,6 @@ import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.SmLink;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
-
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPVolume;
@@ -47,22 +44,21 @@ import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.RecursiveImporter;
 import fsu.jportal.frontend.cli.io.HttpImportSource;
 import fsu.jportal.frontend.cli.io.LocalSystemSink;
+import fsu.jportal.mets.MetsImportUtils;
+import fsu.jportal.mets.MetsImporter;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.MetsUtil;
 
 /**
  * Created by chi on 22.04.15.
  * @author Huu Chi Vu
  */
-@MCRCommandGroup(name = "Jportal Importer")
+@MCRCommandGroup(name = "JPortal Importer")
 public class Importer {
 
     private static final String ALTO_FOLDER = "mcralto";
 
     static Logger LOGGER = LogManager.getLogger(Importer.class);
-
-    static BiMap<Integer, String> MONTH_NAMES = ImmutableBiMap.<Integer, String> builder().put(1, "Januar")
-        .put(2, "Februar").put(3, "März").put(4, "April").put(5, "Mai").put(6, "Juni").put(7, "Juli").put(8, "August")
-        .put(9, "September").put(10, "Oktober").put(11, "November").put(12, "Dezember").build();
 
     @MCRCommand(syntax = "importObj {0} {1}", help = "importObj webappURL id")
     public static void importObj(String urlStr, String id) {
@@ -72,10 +68,32 @@ public class Importer {
     }
 
     /**
+     * Does a mets.xml import.
+     * 
+     * @param derivateId the derivate requires a mets.xml inside
+     * @param importerClassName the mets importer class
+     * @throws Exception something went wrong
+     */
+    @MCRCommand(syntax = "importMets {0} {1}", help = "importMets {derivateId} {fully qualified classname of the importer}")
+    public static void importMets(String derivateId, String importerClassName) throws Exception {
+        MetsImportUtils.checkPermission(derivateId);
+
+        // get mets
+        Document metsXML = MetsUtil.getMetsXMLasDocument(derivateId);
+        Mets mets = new Mets(metsXML);
+
+        // get importer
+        Class<? extends MetsImporter> importerClass = Class.forName(importerClassName).asSubclass(MetsImporter.class);
+        MetsImporter importer = importerClass.newInstance();
+
+        MetsImportUtils.importMets(derivateId, mets, importer);
+    }
+
+    /**
      * Does a mets import for a year.
      *
      * <pre>
-     * importMets jportal_jpvolume_00000002 /data/temp/mnt/images/Jenaer_Volksblatt_1914_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_2/1914
+     * importMetsYear jportal_jpvolume_00000002 /data/temp/mnt/images/Jenaer_Volksblatt_1914_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_2/1914
      * </pre>
      * 
      * @param targetID the target volume
@@ -86,8 +104,8 @@ public class Importer {
      * 
      * @throws Exception darn! something went wrong
      */
-    @MCRCommand(syntax = "importMets {0} {1} {2}", help = "importMets {targetID} {path to mets.xml} {path to ocr folder}")
-    public static List<String> importMets(String targetID, String metsPath, String contentPath) throws Exception {
+    @MCRCommand(syntax = "importMetsYear {0} {1} {2}", help = "importMetsYear {targetID} {path to mets.xml} {path to ocr folder}")
+    public static List<String> importMetsYear(String targetID, String metsPath, String contentPath) throws Exception {
         MCRObjectID target = MCRObjectID.getInstance(targetID);
         if (!MCRMetadataManager.exists(target)) {
             throw new MCRException("Unable to find " + target);
@@ -123,9 +141,9 @@ public class Importer {
             throw new MCRException("Unable to find " + target);
         }
         Optional<JPContainer> parentOptional = JPComponentUtil.getContainer(target);
-        
+
         JPVolume month = new JPVolume();
-        month.setTitle(MONTH_NAMES.get(monthIndex));
+        month.setTitle(MetsImportUtils.MONTH_NAMES.get(monthIndex));
         month.setParent(target);
         month.setHiddenPosition(monthIndex);
         parentOptional.ifPresent(parent -> {
@@ -173,7 +191,7 @@ public class Importer {
         String[] labels = dayDiv.getLabel().split(" ");
         Integer nr = Integer.valueOf(labels[1].substring(0, labels[1].length() - 1));
         Integer year = Integer.valueOf(labels[4]);
-        Integer month = MONTH_NAMES.inverse().get(labels[3]);
+        Integer month = MetsImportUtils.MONTH_NAMES.inverse().get(labels[3]);
         Integer dayOfMonth = Integer.valueOf(labels[2].substring(0, labels[2].length() - 1));
 
         // create day
@@ -186,25 +204,42 @@ public class Importer {
         day.setParent(MCRObjectID.getInstance(targetID));
 
         // derivate
-        JPDerivateComponent derivate = new JPDerivateComponent();
-        day.addDerivate(derivate);
-
-        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
-        FileSec fileSec = mets.getFileSec();
-        FileGrp masterGroup = fileSec.getFileGroup("MASTER");
-
-        // get stream of images for the logical day
-        Stream<String> images = dayDiv.getChildren().stream().map(LogicalDiv::getId).flatMap(logId -> {
-            return mets.getStructLink().getSmLinkByFrom(logId).stream().map(SmLink::getTo);
-        }).distinct().flatMap(physId -> {
-            PhysicalSubDiv physDiv = physicalStructMap.getDivContainer().get(physId);
-            return physDiv.getChildren().stream().map(Fptr::getFileId);
-        }).distinct().map(fileId -> {
-            return masterGroup.getFileById(fileId).getFLocat().getHref();
-        }).distinct();
-
         Path metsFolderPath = Paths.get(metsPath).getParent();
         Path altoFolderPath = Paths.get(contentPath);
+
+        JPDerivateComponent derivate = buildDerivate(mets, dayDiv, metsFolderPath, altoFolderPath);
+        day.addDerivate(derivate);
+
+        // store the day and its derivate
+        day.store();
+    }
+
+//    private static void addDerivateLink(JPPeriodicalComponent target, Mets mets, LogicalDiv logicalDiv,
+//        Path metsFolderPath) {
+//        Stream<String> images = getImagesOfLogicalDiv(mets, logicalDiv);
+//        Optional<String> firstImage = images.findFirst();
+//        if (firstImage.isPresent()) {
+//            String imageFile = firstImage.get();
+//            Path absoluteImagePath = metsFolderPath.resolve(imageFile);
+//            if (Files.exists(absoluteImagePath) && !Files.isDirectory(absoluteImagePath)) {
+//                try {
+//                    target.setDerivateLink(imageFile);
+//                } catch (Exception exc) {
+//                    LOGGER.error("Unable to set derivate link for " + target.getObject().getId(), exc);
+//                }
+//            } else {
+//                LOGGER.warn("Image not found " + absoluteImagePath.toString());
+//            }
+//        }
+//    }
+
+    private static JPDerivateComponent buildDerivate(Mets mets, LogicalDiv logicalDiv, Path metsFolderPath,
+        Path altoFolderPath) {
+        JPDerivateComponent derivate = new JPDerivateComponent();
+
+        // get stream of images for the logical day
+        Stream<String> images = getImagesOfLogicalDiv(mets, logicalDiv);
+
         images.forEach(imageFile -> {
             try {
                 Path absoluteImagePath = metsFolderPath.resolve(imageFile);
@@ -218,7 +253,7 @@ public class Importer {
                     LOGGER.warn("Image not found " + absoluteImagePath.toString());
                 }
                 if (Files.exists(absoluteAltoPath) && !Files.isDirectory(absoluteAltoPath)) {
-                    derivate.add(absoluteAltoPath.toUri().toURL(), "alto/" + altoFile);                    
+                    derivate.add(absoluteAltoPath.toUri().toURL(), "alto/" + altoFile);
                 } else {
                     LOGGER.warn("ALTO not found " + absoluteAltoPath.toString());
                 }
@@ -226,9 +261,23 @@ public class Importer {
                 LOGGER.error("Unable to add image to derivate", exc);
             }
         });
+        return derivate;
+    }
 
-        // store the day and its derivate
-        day.store();
+    private static Stream<String> getImagesOfLogicalDiv(Mets mets, LogicalDiv dayDiv) {
+        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
+        FileSec fileSec = mets.getFileSec();
+        FileGrp masterGroup = fileSec.getFileGroup("MASTER");
+
+        Stream<String> images = dayDiv.getChildren().stream().map(LogicalDiv::getId).flatMap(logId -> {
+            return mets.getStructLink().getSmLinkByFrom(logId).stream().map(SmLink::getTo);
+        }).distinct().flatMap(physId -> {
+            PhysicalSubDiv physDiv = physicalStructMap.getDivContainer().get(physId);
+            return physDiv.getChildren().stream().map(Fptr::getFileId);
+        }).distinct().map(fileId -> {
+            return masterGroup.getFileById(fileId).getFLocat().getHref();
+        }).distinct();
+        return images;
     }
 
     private static Mets getMets(String metsPath) throws JDOMException, IOException {
@@ -248,7 +297,8 @@ public class Importer {
 
     private static Optional<LogicalDiv> getDay(LogicalDiv rootDiv, int monthOrder, int dayOrder) {
         return optionalToStream(getMonth(rootDiv, monthOrder)).flatMap(div -> div.getChildren().stream())
-            .filter(day -> day.getOrder() == dayOrder).findFirst();
+                                                              .filter(day -> day.getOrder() == dayOrder)
+                                                              .findFirst();
     }
 
     /**

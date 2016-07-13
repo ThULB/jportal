@@ -1,0 +1,111 @@
+package fsu.jportal.mets;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.jdom2.Document;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.frontend.jersey.MCRJerseyUtil;
+import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.SmLink;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
+
+import fsu.jportal.backend.JPComponent;
+
+/**
+ * Some utility methods for the mets import.
+ * 
+ * @author Matthias Eichner
+ */
+public class MetsImportUtils {
+
+    public static BiMap<Integer, String> MONTH_NAMES;
+
+    static {
+        MONTH_NAMES = ImmutableBiMap.<Integer, String> builder()
+                                    .put(1, "Januar")
+                                    .put(2, "Februar")
+                                    .put(3, "März")
+                                    .put(4, "April")
+                                    .put(5, "Mai")
+                                    .put(6, "Juni")
+                                    .put(7, "Juli")
+                                    .put(8, "August")
+                                    .put(9, "September")
+                                    .put(10, "Oktober")
+                                    .put(11, "November")
+                                    .put(12, "Dezember")
+                                    .build();
+    }
+
+    /**
+     * Does a mets import for the derivate containing the mets.xml with the
+     * given importer.
+     * 
+     * @param derivateId the derivate to import
+     * @param mets the java mets representation which should be a part of the derivate
+     * @param importer the mets importer
+     * @throws MetsImportException the import went wrong
+     * @throws IOException the mets.xml update went wrong
+     */
+    public static void importMets(String derivateId, Mets mets, MetsImporter importer)
+        throws MetsImportException, IOException {
+        Map<LogicalDiv, JPComponent> logicalComponentMap = importer.importMets(mets,
+            MCRObjectID.getInstance(derivateId));
+
+        // update logical id's
+        updateLogicalIds(mets, logicalComponentMap);
+        // write mets.xml
+        Document mcrDoc = mets.asDocument();
+        byte[] bytes = new MCRJDOMContent(mcrDoc).asByteArray();
+        MCRPath path = MCRPath.getPath(derivateId, "/mets.xml");
+        Files.write(path, bytes);
+    }
+
+    /**
+     * This method updates the divs of the logical struct map and the struct link section with mycore ids.
+     * This is important because then we know which logical div is assigned to which mycore object.
+     * 
+     * @param mets the mets to update
+     * @param logicalComponentMap a map of logical divs and their corresponding <code>JPComponent's<code>
+     */
+    private static void updateLogicalIds(Mets mets, Map<LogicalDiv, JPComponent> logicalComponentMap) {
+        // the import is done -> now update the mets document with the mycore id's
+        for (Entry<LogicalDiv, JPComponent> entry : logicalComponentMap.entrySet()) {
+            LogicalDiv logicalDiv = entry.getKey();
+            String mycoreId = entry.getValue().getObject().getId().toString();
+            String oldId = logicalDiv.getId();
+            // update logical div
+            logicalDiv.setId(mycoreId);
+            // update logical struct map
+            List<SmLink> links = mets.getStructLink().getSmLinkByFrom(oldId);
+            for (SmLink link : links) {
+                link.setFrom(mycoreId);
+            }
+        }
+    }
+
+    /**
+     * Checks if the user has the permissions to perform the task.
+     * 
+     * @param derivateId
+     */
+    public static void checkPermission(String derivateId) {
+        MCRJerseyUtil.checkPermission(derivateId, "readdb");
+        MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
+        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(mcrDerivateId);
+        MCRObjectID ownerID = derivate.getOwnerID();
+        MCRJerseyUtil.checkPermission(ownerID, "writedb");
+    }
+
+}
