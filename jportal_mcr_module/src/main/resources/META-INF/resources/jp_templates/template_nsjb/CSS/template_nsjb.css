@@ -24,6 +24,7 @@
 /*#searchBar {
     background-color: #464646;
 }*/
+
 #pixelLeft {
     height: 162px;
     background-repeat: repeat;
@@ -34,7 +35,11 @@
     width: 50%;
 }
 
-#pixelRight{
+.jp-navigation-topHeader-UlRightWraper {
+    background-color: rgb(56, 152, 195);
+}
+
+#pixelRight {
     height: 162px;
     background-repeat: repeat;
     background-size: 100% 100%;
@@ -60,11 +65,5 @@
 }
 
 #navbar-collapse-globalHeader>ul>li>a {
-    color: #151515;
-    width: 59px;
-    line-height: 14px;
-    font-size: 12px;
-    font-weight: 400;
-    font-family: OpenSans, Helvetica, Arial, sans-serif;
-    height: 10px;
+    color: black;
 }

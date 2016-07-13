@@ -68,7 +68,7 @@
         updateSearchbar();
       });
     </script>
-    <div id="searchBar">
+    <div id="searchBar" class="container">
       <xsl:if test="$showSearchBar = 'true'">
         <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find">
           <div class="row">
@@ -82,7 +82,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <div class="col-sm-8 col-sm-offset-2 {$mobileCol}">
+            <div class="col-sm-6 col-sm-offset-3 {$mobileCol} searchbarMain" >
               <div class="input-group">
 		            
                 <div class="input-group-btn">

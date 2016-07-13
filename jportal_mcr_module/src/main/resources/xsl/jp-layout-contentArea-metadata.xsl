@@ -91,10 +91,10 @@
 
   <xsl:template name="metadataField">
     <xsl:param name="fields" />
-    <dt class="col-sm-4">
+    <dt class="col-sm-4 col-xs-7 jp-layout-metadataList-{name()}">
       <xsl:apply-templates mode="metadataFieldLabel" select="$fields[1]" />
     </dt>
-    <dd class="col-sm-8">
+    <dd class="col-sm-8 col-xs-5 jp-layout-metadataList-{name()}">
       <xsl:apply-templates mode="metadataFieldValue" select="$fields">
         <xsl:sort select="text()" />
         <xsl:sort select="@xlink:title" />

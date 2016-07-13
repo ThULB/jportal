@@ -18,22 +18,23 @@
       </div>
       <div id="gwlb-layout-index-list">
         <h2>Zeitschriften</h2>
-        <div>
-          <xsl:variable name="journalList" select="document('solr:q=+objectType:jpjournal&amp;rows=99999&amp;sort=maintitle_sort%20asc')" />
-          <xsl:if test="$journalList/response/result/@numFound &gt; 0">
-            <xsl:for-each select="$journalList/response/result/doc">
-              <div class="col-sm-4 pull-left gwlb-layout-index-list-elm">
-                <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
-                  <img src="{$WebApplicationBaseURL}images/gwlb/{str[@name='id']}/cover.png"></img>
-                  <h3>
-                    <xsl:value-of select="str[@name='maintitle']"/>
-                  </h3>
-                </a>
-              </div>
-            </xsl:for-each>
-          </xsl:if>
-        </div>
+
       </div>
+    </div>
+    <div>
+      <xsl:variable name="journalList" select="document('solr:q=+objectType:jpjournal&amp;rows=99999&amp;sort=maintitle_sort%20asc')" />
+      <xsl:if test="$journalList/response/result/@numFound &gt; 0">
+        <xsl:for-each select="$journalList/response/result/doc">
+          <div class="col-sm-4 pull-left gwlb-layout-index-list-elm">
+            <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
+              <img src="{$WebApplicationBaseURL}images/gwlb/{str[@name='id']}/cover.png"></img>
+              <p>
+                <xsl:value-of select="str[@name='maintitle']"/>
+              </p>
+            </a>
+          </div>
+        </xsl:for-each>
+      </xsl:if>
     </div>
   </xsl:template>
 </xsl:stylesheet>

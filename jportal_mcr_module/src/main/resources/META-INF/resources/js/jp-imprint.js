@@ -50,7 +50,7 @@ var ImprintEditor = function (objID, type) {
 				fillEmptyBlocks: false,
 				height: '265px',
 				toolbar : [ ['Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-',
-					'Link', 'Unlink', 'Source' ] ]
+					'Link', 'Unlink', 'Source', 'FontSize' ] ]
 			});
 
 			$("#imprintGUIMain").on("click", ".imprint-list-link", function () {

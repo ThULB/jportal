@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+
+    <section xml:lang="all">
+        <div id="jp-journal-content" class="col-sm-8 col-sm-offset-1 col-xs-6">
+        <p>Um eine einheitliche Gestaltung der Beiträge zu gewährleisten, werden die Autoren gebeten,
+            folgende Konventionen zu beachten:</p><br /><br />
+
+        <h2>Gestaltung des Manuskripts</h2><br />
+
+        <p>Das Manuskript soll in Dateiform als E-Mail-Anhang (doc- und pdf-Format)
+            eingereicht werden.</p><br />
+
+
+        <p>Bei postalischer Zusendung ist der Beitrag sowohl in Dateiform
+            auf einem Datenträger als auch in Papierform zuzuschicken.</p><br />
+
+        <p>Für die Herstellung des Manuskripts gelten folgende Regeln:</p><br />
+
+
+        <p>1. Die Autoren sollten aktuelle Versionen des Textverarbeitungsprogramms Word für Windows
+            oder für Macintosh verwenden oder Dateiformate benutzen, die ohne Schwierigkeiten konvertiert
+            und mit dem Textverarbeitungsprogramm Word weiter bearbeitet werden können.</p><br />
+
+        <p>2. Der Text ist im Blocksatz zu setzen.</p><br />
+
+        <p>3. Der Text darf aber keine Silbentrennung enthalten.</p><br />
+
+        <p>4. Formatvorlagen, etwa Überschriften- und Absatzformate (Ausnahmen: Rand und
+            Absatzende), sind zu vermeiden.</p><br />
+
+        <p>5. Als lateinische Schrifttype soll "Times (New Roman)" gewählt werden; griechischer
+            Text ist in einer unicodefähigen Schriftart (z.B. "Alkaios") zu schreiben.
+            Die Schriftgröße sollte im Text 12 Punkt, in den Anmerkungen 10 Punkt betragen.
+            Werden griechische Schriftzeichen oder andere Sonderzeichen verwendet, ist neben
+            dem word-dokument auch ein pdf-Dokument einzureichen. Alternativ zum pdf-Dokument
+            kann auch ein Ausdruck an die Redaktionsadresse geschickt werden.</p><br />
+
+        <p>6. Absätze werden von uns durch Leerzeilen voneinander getrennt.</p><br />
+
+        <p>Das Quellen- und Literaturverzeichnis wird in Grundschrift (12 Punkt) dem Text angefügt.</p><br />
+
+        <p>Am Ende des Manuskripts steht die vollständige Adresse des Autors.</p><br /><br />
+
+        <h2>Zitierweise</h2><br />
+
+        <p>Zitate werden in Anführungszeichen gesetzt.</p><br />
+
+        <p>Die Ziffer steht als hochgestellte Ziffer hinter dem Textteil, auf den sie sich bezieht, am Ende
+            eines Teilsatzes hinter dem Komma. Eine Ziffer, die sich auf den ganzen Satz bezieht, steht
+            hinter dem Punkt.</p><br />
+
+        <p>Es wird empfohlen, in Text und Anmerkungen Literaturtitel in Kurzform zu zitieren, etwa nach
+            folgendem Muster: Name, Erscheinungsjahr in Klammern, Seitenzahl, z.B.: Meyer (1925) 362
+            oder Meyer [1925] 362.</p><br />
+
+        <p>Die zitierten Kurztitel werden in den Quellen- und Literaturhinweisen aufgelöst. Die Titel
+            werden alphabetisch nach Autoren aufgelistet.</p><br />
+
+
+        <p>Es werden die allgemein gültigen Abkürzungen verwendet. Für archäologische Beiträge gelten
+            die Abkürzungen und Richtlinien des Deutschen Archäologischen Instituts (DAI).</p>
+</div>
+    </section>
+
+
+</MyCoReWebPage>

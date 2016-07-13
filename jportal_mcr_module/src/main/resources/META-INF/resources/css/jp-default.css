@@ -228,7 +228,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	background-color: #fff;
 }
 
-@media(min-width: 768){
+@media(min-width: 768px){
 	.jp-layout-hit-breadcrumb{
 		display: inline;
 	}

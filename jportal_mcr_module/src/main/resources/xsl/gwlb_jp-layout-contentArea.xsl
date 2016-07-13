@@ -7,8 +7,9 @@
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
   <xsl:param name="rubric" />
+  <xsl:param name="JP.GWLB.Author.Portal.GFA.Journal.Ids"/>
+  <xsl:param name="JP.GWLB.Author.Portal.CMA.Journal.Ids"/>
 
-  <xsl:include href="gwlb_jp-layout-contentArea-breadcrumb.xsl" />
   <xsl:include href="gwlb_jp-layout-contentArea-tableOfContent.xsl" />
   <xsl:include href="jp-layout-contentArea-derivates.xsl" />
   <xsl:include href="jp-layout-contentArea-metadata.xsl" />
@@ -33,45 +34,18 @@
 
   <xsl:template priority="9" match="/mycoreobject">
 
-    <!-- breadcrumb -->
-    <xsl:if test="not($currentType='person' or $currentType='jpinst')">
-      <xsl:call-template name="breadcrumb" />
-    </xsl:if>
+
     <div class="jp-content container-fluid col-sm-12">
       <!-- left side -->
-      <xsl:if test="$currentType != 'jparticle'">
-        <div id="jp-journal-childs" class="col-sm-3">
-          <xsl:if test="$currentType = 'jpvolume'">
-            <xsl:call-template name="jp.backToJournal" />
-          </xsl:if>
-          <!-- children -->
-          <xsl:if test="structure/children">
-            <xsl:if test="$currentType = 'jpvolume'">
-              <xsl:call-template name="jp.toc.buildVolumeSelect">
-                <xsl:with-param name="parentID" select="structure/parents/parent/@xlink:href" />
-              </xsl:call-template>
-            </xsl:if>
-            <xsl:call-template name="tableOfContent">
-              <xsl:with-param name="id" select="./@ID" />
-            </xsl:call-template>
-            <xsl:if test="$currentType = 'jpvolume'">
-              <xsl:call-template name="jp.printContentList">
-                <xsl:with-param name="id" select="./@ID" />
-              </xsl:call-template>
-            </xsl:if>
-            <xsl:if test="$currentType = 'jpjournal'">
-              <xsl:call-template name="jp.volumeLinks">
-                <xsl:with-param name="id" select="./@ID" />
-              </xsl:call-template>
-            </xsl:if>
-          </xsl:if>
-        </div>
-      </xsl:if>
 
-      <!-- right side -->
+      <xsl:call-template name="leftSide">
+        <xsl:with-param name="id" select="@ID"/>
+      </xsl:call-template>
+
+      <!-- right side-->
       <xsl:choose>
       <xsl:when test="$currentType != 'jparticle' and $currentType != 'person'  and $currentType !='jpinst'">
-        <div id="jp-journal-content" class="col-sm-9">
+        <div id="jp-journal-content" class="col-sm-8 col-sm-offset-1 col-xs-6">
           <xsl:call-template name="jp.journal.content" />
         </div>
       </xsl:when>
@@ -84,6 +58,92 @@
     </div>
   </xsl:template>
 
+  <xsl:template name="leftSide">
+    <xsl:param name="id"/>
+
+    <xsl:variable name="currentType" select="substring-before(substring-after($id,'_'),'_')"/>
+    <xsl:variable name="obj" select="document(concat('mcrobject:',$id))/mycoreobject"/>
+
+    <xsl:if test="$currentType != 'jparticle'">
+      <div id="jp-journal-childs" class="col-sm-2 col-xs-6">
+        <xsl:message><xsl:value-of select="$currentType"/></xsl:message>
+
+        <xsl:if test="$currentType = 'jpvolume'">
+          <xsl:call-template name="jp.backToJournal"/>
+        </xsl:if>
+        <!-- children -->
+        <xsl:if test="$obj/structure/children">
+          <xsl:if test="$currentType = 'jpvolume'">
+            <xsl:call-template name="jp.toc.buildVolumeSelect">
+              <xsl:with-param name="parentID" select="$obj/structure/parents/parent/@xlink:href"/>
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:call-template name="tableOfContent">
+            <xsl:with-param name="id" select="$id"/>
+          </xsl:call-template>
+          <xsl:if test="$currentType = 'jpvolume'">
+            <xsl:call-template name="jp.printContentList">
+              <xsl:with-param name="id" select="$id"/>
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:if test="$currentType = 'jpjournal'">
+            <xsl:call-template name="jp.volumeLinks">
+              <xsl:with-param name="id" select="$id"/>
+            </xsl:call-template>
+          </xsl:if>
+        </xsl:if>
+
+        <div class="dropdown rightdown">
+          <xsl:if test="contains($JP.GWLB.Author.Portal.Enabled.Journal.Ids,$id)">
+            <xsl:if test="contains($JP.GWLB.Author.Portal.GFA.Journal.Ids,$id)">
+              <button class="btn btn-primary dropdown-toggle writerportal" type="button" data-toggle="dropdown">
+                Autorenportal
+                <i class="fa fa-sort-desc" id="portal"></i>
+              </button>
+              <ul class="dropdown-menu scale">
+                <li>
+                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/becomeAutor.xml?journalID=', $id)}">
+                    Wie werde
+                    ich Autor
+                  </a>
+                </li>
+                <li>
+                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/guideline.xml?journalID=', $id)}">
+                    Richtlinien
+                  </a>
+                </li>
+                <li>
+                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/recessionOffer.xml?journalID=', $id)}">
+                    Rezensionsangebote
+                  </a>
+                </li>
+              </ul>
+            </xsl:if>
+            <xsl:if test="contains($JP.GWLB.Author.Portal.CMA.Journal.Ids,$id)">
+              <button class="btn btn-primary dropdown-toggle writerportal" type="button" data-toggle="dropdown">
+                Autorenportal
+                <i class="fa fa-sort-desc" id="portal"></i>
+              </button>
+              <ul class="dropdown-menu scale">
+                <li>
+                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/becomeAutor.xml?journalID=', $id)}">
+                    Wie werde
+                    ich Autor
+                  </a>
+                </li>
+                <li>
+                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/guideline.xml?journalID=', $id)}">
+                    Richtlinien
+                  </a>
+                </li>
+              </ul>
+            </xsl:if>
+          </xsl:if>
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="/" mode="template">
     <xsl:param name="mcrObj" />
     <xsl:apply-templates mode="template" select="*">
@@ -91,7 +151,22 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template mode="renderIntroTxt" match="section[@xml:lang='de']">
+  <xsl:template match="section" mode="webpage">
+
+    <xsl:if test="$journalID and $journalID != ''">
+      <xsl:call-template name="leftSide">
+        <xsl:with-param name="id" select="$journalID"/>
+      </xsl:call-template>
+    </xsl:if>
+
+    <span class="section">
+      <xsl:for-each select="node()">
+        <xsl:apply-templates select="."/>
+      </xsl:for-each>
+    </span>
+  </xsl:template>
+
+  <xsl:template mode="renderIntroTxt" match="section[@xml:lang]">
     <xsl:attribute name="class">
       <xsl:value-of select="'jp-layout-intro jp-content-block'" />
     </xsl:attribute>
@@ -120,7 +195,21 @@
 
   <xsl:template name="jp.journal.content">
     <!-- title -->
-    <div id="jp-maintitle" class="jp-layout-maintitle jp-layout-border">
+
+    <div id="jp-maintitle">
+      <xsl:choose>
+        <xsl:when test="contains(@ID,'journal') or contains(/mycoreobject/@ID,'_jpvolume_')">
+          <xsl:attribute name="class">
+            <xsl:value-of select="'jp-layout-maintitle-big jp-layout-border'"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="class">
+            <xsl:value-of select="'jp-layout-maintitle jp-layout-border'"/>
+          </xsl:attribute>
+        </xsl:otherwise>
+
+      </xsl:choose>
       <xsl:apply-templates mode="printTitle"
                            select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading|metadata/names[@class='MCRMetaInstitutionName']/name">
         <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />
@@ -133,7 +222,20 @@
     <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
       <div id="intro">
         <xsl:if test="imprint:has($journalID, 'greeting')">
-          <xsl:apply-templates mode="renderIntroTxt" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
+          <xsl:variable name="journalIntro"
+                        select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']"/>
+          <xsl:comment>
+            <xsl:value-of select="$journalIntro"/>
+          </xsl:comment>
+          <xsl:choose>
+            <xsl:when test="$journalIntro = not('')">
+              <xsl:apply-templates mode="renderIntroTxt" select="$journalIntro"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates mode="renderIntroTxt"
+                                   select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='all']"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
       </div>
     </xsl:if>
@@ -141,7 +243,7 @@
     <!-- metadata & derivate -->
     <xsl:if test="$showMetadataAndDerivate and ($currentType = 'jpvolume' and $rubric = '') or not($currentType = 'jpvolume') ">
       <div class="jp-content-block">
-        <div class="row">
+        <!--<div class="row">-->
           <xsl:if test="structure/derobjects or metadata/derivateLinks">
             <div class="col-sm-4 jp-content-thumbnail">
               <xsl:call-template name="derivateDisplay">
@@ -165,7 +267,7 @@
                     def.heading|def.alternative|def.peerage|def.gender|def.contact|def.role|def.placeOfActivity|def.dateOfBirth|def.placeOfBirth|def.dateOfDeath|def.placeOfDeath|def.note|def.link|def.identifier|def.doubletOf
                   </xsl:when>
                   <xsl:when test="$currentType = 'jpjournal'">
-                    maintitles|subtitles|participants|dates|traditions|identis|languages|rights|predeces|successors|ddcs|abstracts|notes|contentClassis1|contentClassis2|contentClassis3|contentClassis4|contentClassis5|contentClassis6|contentClassis7|maintitlesForSorting
+                    maintitles|participants|traditions|identis|subtitles|dates|languages|rights|predeces|successors|ddcs|abstracts|notes|contentClassis1|contentClassis2|contentClassis3|contentClassis4|contentClassis5|contentClassis6|contentClassis7|maintitlesForSorting
                   </xsl:when>
                   <xsl:when test="$currentType = 'jpvolume'">
                     maintitles|subtitles|participants|dates|traditions|identis|collationNotes|volContentClassis1|volContentClassis2|volContentClassis3|volContentClassis4|volContentClassis5|volContentClassis6|abstracts|notes|people|publicationNotes|normedPubLocations|footNotes|bibEvidences|indexFields
@@ -192,7 +294,7 @@
               </xsl:choose>
             </dl>
           </xsl:if>
-        </div>
+        <!--</div>-->
       </div>
     </xsl:if>
 

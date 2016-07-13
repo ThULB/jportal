@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
-	xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="i18n">
+				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+				xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+				exclude-result-prefixes="i18n">
 
 	<xsl:param name="rubric" />
+	<xsl:param name="JP.GWLB.Author.Portal.Enabled.Journal.Ids"/>
+	<xsl:param name="JP.GWLB.Author.Portal.GFA.Journal.Ids"/>
+	<xsl:param name="JP.GWLB.Author.Portal.CMA.Journal.Ids"/>
+
 	<xsl:template name="breadcrumb">
-		<div id="jp-breadcrumb-container" class="col-sm-10">
+
+
+		<div id="jp-breadcrumb-container" class="col-sm-12">
 			<ol class="col-sm-10 breadcrumb jp-layout-mcbreadcrumb">
-				<xsl:if
-					test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
-					<xsl:variable name="hash">
-						<xsl:variable name="char"
-							select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
-						<xsl:if test="contains(concat($lcletters, $ucletters), $char)">
-							<xsl:value-of select="$char" />
-						</xsl:if>
-					</xsl:variable>
-					<xsl:variable name="azList">
-						<xsl:variable name="listType"
-							select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
-						<xsl:choose>
-							<xsl:when test="$listType = 'calendar'">
-								<xsl:value-of select="'calendar'" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="'journal'" />
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
+				<li>
+					<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
+						<i class="fa fa-reply" aria-hidden="true"></i>
+						Zeitschriftenserver des GBV
+					</a>
+				</li>
+				<xsl:variable name="journalID">
+					<xsl:call-template name="jp.getJournalID"/>
+				</xsl:variable>
+
+				<xsl:if test="$journalID">
 					<li>
 						<a
-							href="{$WebApplicationBaseURL}content/main/{$azList}ListGWLB.xml#*">
+								href="{$WebApplicationBaseURL}content/main/journalListGWLB.xml#*">
 							<xsl:value-of select="'A-Z'" />
 						</a>
 					</li>
 				</xsl:if>
-				<xsl:variable name="parents"
-					select="document(concat('parents:',/mycoreobject/@ID))/parents" />
 				<xsl:choose>
-					<!--<xsl:when test="($rubric = 'essays') or ($rubric = 'recension')">-->
-					<xsl:when test="$rubric = not('')">
-						<xsl:apply-templates mode="jp.printListEntry"
-											 select="$parents/parent" />
-						<xsl:call-template name="jp.printListEntryWithRubric">
-							<xsl:with-param name="title" select="metadata/maintitles/maintitle[@inherited='0']" />
-							<xsl:with-param name="href" select="/mycoreobject/@ID" />
-						</xsl:call-template>
+					<xsl:when test="/mycoreobject">
+						<xsl:variable name="parents"
+									  select="document(concat('parents:',/mycoreobject/@ID))/parents"/>
+						<xsl:choose>
+							<!--<xsl:when test="($rubric = 'essays') or ($rubric = 'recension')">-->
+							<xsl:when test="$rubric = not('')">
+								<xsl:apply-templates mode="jp.printListEntry"
+													 select="$parents/parent"/>
+								<xsl:call-template name="jp.printListEntryWithRubric">
+									<xsl:with-param name="title"
+													select="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']"/>
+									<xsl:with-param name="href" select="/mycoreobject/@ID"/>
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:apply-templates mode="jp.printListEntry"
+													 select="$parents/parent | /mycoreobject/metadata/maintitles/maintitle[@inherited='0'] | /mycoreobject/metadata/def.heading/heading"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:apply-templates mode="jp.printListEntry"
-											 select="$parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
+						<xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject"/>
+						<xsl:call-template name="jp.printListEntryWithRubric">
+							<xsl:with-param name="title"
+											select="$journal/metadata/maintitles/maintitle[@inherited='0'] | $journal/metadata/def.heading/heading"/>
+							<xsl:with-param name="href" select="$journalID"/>
+						</xsl:call-template>
 					</xsl:otherwise>
 				</xsl:choose>
-
 			</ol>
 			<!--<xsl:call-template name="jp-layout-breadcrumb-scroller" />-->
 		</div>
@@ -82,23 +91,8 @@
 							</xsl:if>
 					</xsl:if>
 				</xsl:variable>
-				<xsl:variable name="azList">
-					<xsl:variable name="listType">
-						<xsl:if test="not($objID = '')">
-							 <xsl:value-of select="layoutTools:getListType(document(concat('mcrobject:',$objID))/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
-						</xsl:if>
-					</xsl:variable>
-					<xsl:choose>
-						<xsl:when test="$listType = 'calendar'">
-							<xsl:value-of select="'calendar'" />
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="'journal'" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
 				<li>
-					<a href="{$WebApplicationBaseURL}content/main/{$azList}ListGWLB.xml#{$hash}">
+					<a href="{$WebApplicationBaseURL}content/main/journalListGWLB.xml#{$hash}">
 						<xsl:value-of select="'A-Z'" />
 					</a>
 				</li>

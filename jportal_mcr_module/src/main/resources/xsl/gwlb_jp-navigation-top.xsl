@@ -79,7 +79,8 @@
       <li id="languageMenu" class="dropdown-toggle"> 
         <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
           <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush" />-->
-          <p class="jp-navigation-topHeader-ImgPush"><xsl:value-of select="$CurrentLang"></xsl:value-of></p>
+          <p class="jp-navigation-topHeader-ImgPush"><xsl:value-of select="translate($CurrentLang, 'abcdefghijklmnopqrstuvwxyz',
+                                'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"></xsl:value-of></p>
           <span class="caret"></span>
         </a>
 

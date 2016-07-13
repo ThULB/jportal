@@ -13,7 +13,8 @@
   <xsl:include href="gwlb_jp-layout-contentArea.xsl" />
   <xsl:include href="gwlb_jp-layout-contentArea-objectEditing.xsl" />
   <xsl:include href="jp-layout-contentArea-advancedsearch.xsl" />
-  <xsl:include href="jp-layout-footer.xsl" />
+  <xsl:include href="gwlb_jp-layout-footer.xsl" />
+  <xsl:include href="gwlb_jp-layout-contentArea-breadcrumb.xsl" />
 
   <xsl:include href="gwlb_jp-navigation-top.xsl" />
   <xsl:include href="jp-globalmessage.xsl" />
@@ -68,7 +69,7 @@
     <xsl:call-template name="jp.getSearchMode" />
   </xsl:variable>
 
-  <xsl:variable name="templateResourcePath" select="concat('jp_templates/', $template, '/')" />
+  <xsl:variable name="templateResourcePath" select="concat('jp_templates/',$template, '/')" />
   <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'jp_templates/', $template, '/')" />
 
   <!-- TODO: remove this -->
@@ -119,6 +120,22 @@
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'CSS/', $template, '.css'))">
             <link href="{$templateWebURL}CSS/{$template}.css" rel="stylesheet" type="text/css" />
           </xsl:if>
+
+          <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/Pixel_Left.png'))">
+            <style type="text/css">
+              #pixelLeft {
+              background-image: url(<xsl:value-of select="concat($templateWebURL, 'IMAGES/Pixel_Left.png')" />);
+              }
+            </style>
+          </xsl:if>
+
+          <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/Pixel_Right.png'))">
+            <style type="text/css">
+              #pixelRight {
+              background-image: url(<xsl:value-of select="concat($templateWebURL, 'IMAGES/Pixel_Right.png')" />);
+              }
+            </style>
+          </xsl:if>
         </xsl:if>
         <script type="text/javascript">
           var jp = jp || {};
@@ -143,6 +160,14 @@
         <xsl:copy-of select="/MyCoReWebPage/head/bottom/*" />
       </head>
       <body>
+        <xsl:if test="not($template = 'template_gwlb')">
+            <div id="pixelLeft"></div>
+            <div id="pixelRight"></div>
+        </xsl:if>
+        <div id="border">
+        <div id="mainWrapper">
+        <xsl:choose>
+            <xsl:when test="$template = 'template_gwlb'">
         <div id="globalHeader">
           <div class="row">
             <div class="col-md-6 navbar-header">
@@ -152,7 +177,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-            
+              <img class="GBV" src="{concat($templateWebURL, 'IMAGES/GBV.png')}"></img>
               <ul class="list-inline jp-layout-mainHeader-UlLeft">
                 <!--<li class="jp-layout-mainHeader-SeperatorRight">-->
                   <!--<xsl:variable name="imprintHref">-->
@@ -181,28 +206,67 @@
                     <!--Kontakt-->
                   <!--</a>-->
                 <!--</li>-->
+
                 <li class="jp-layout-mainHeader-LiPaPushleft">
                   <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
-                    Zeitschriftenserver der GWLB
+                    Zeitschriftenserver
                   </a>
                 </li>
+               <!-- <li class="jp-layout-mainheader-LiPaPushright">Digitale Bibliothek
+                </li> -->
               </ul>
             </div>
             <div id="navbar-collapse-globalHeader" class="col-md-6 collapse navbar-collapse navbar-right">
               <!-- <ul class="list-inline" style="padding: 10px"> </ul> -->
               <xsl:call-template name="jp.navigation.top" />
+              <p class="jp-layout-mainheader-LiPaPushright">Digitale Bibliothek</p>
             </div>
           </div>
         </div>
 
         <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage" />
-        <div id="logo"></div>
+        <div id="logo">
+        </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <div id="globalHeader">
+                <div id="logo">
+                <div class="col-md-6 navbar-header">
+                  <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-globalHeader">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                </div>
+                <div id="navbar-collapse-globalHeader" class="col-md-6 collapse navbar-collapse navbar-right">
+                  <!-- <ul class="list-inline" style="padding: 10px"> </ul> -->
+                  <xsl:call-template name="jp.navigation.top" />
+                </div>
+              </div>
+            </div>
+            <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage" />
+
+          <!-- breadcrumb -->
+          <xsl:if test="not($currentType='person' or $currentType='jpinst')">
+            <xsl:call-template name="breadcrumb" />
+          </xsl:if>
+          </xsl:otherwise>
+          </xsl:choose>
 
         <!-- searchbar -->
         <xsl:call-template name="jp.layout.searchbar" />
 
         <div id="main">
-          <xsl:apply-templates />
+          <xsl:choose>
+            <xsl:when test="MyCoReWebPage">
+              <xsl:apply-templates mode="webpage" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates />
+            </xsl:otherwise>
+          </xsl:choose>
+
           <!-- call dynamic template_*.xsl -->
           <xsl:if test="$template != ''">
             <xsl:variable name="templateXML">
@@ -212,16 +276,21 @@
               <!-- mcrObj is node mycoreobject root -->
               <xsl:with-param name="mcrObj" select="/mycoreobject" />
             </xsl:apply-templates>
+            <xsl:apply-templates select="xalan:nodeset($templateXML)" mode="template">
+              <!-- mcrObj is node mycoreobject root -->
+              <xsl:with-param name="mcrObj" select="/mycoreobject" />
+            </xsl:apply-templates>
           </xsl:if>
 
         </div>
-        <!-- footer -->
-        <xsl:call-template name="jp.layout.footer" />
-
+        </div>
         <!-- delete -->
         <xsl:call-template name="jp.object.editing.delete.dialog" />
         <!-- add html stuff to end of body for MyCoReWebPage -->
         <xsl:copy-of select="/MyCoReWebPage/body/*" />
+        </div>
+        <!-- footer -->
+        <xsl:call-template name="gwlb_jp.layout.footer" />
       </body>
     </html>
   </xsl:template>

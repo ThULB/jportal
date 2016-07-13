@@ -1,5 +1,5 @@
 @charset "UTF-8";
-
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
 /*******************************************************
 * Overwrite Bootstrap Stuff
 ********************************************************/
@@ -11,6 +11,7 @@
 	border-top: 1px solid transparent;
 	border-bottom: 1px solid transparent;
 	color: inherit;
+	background-color: transparent;
 }
 .pagination > .plain:hover > a, .pagination > .plain:hover > span {
 	background: none;
@@ -20,6 +21,11 @@
 .pagination .input-group-sm .form-control, .pagination .input-group-sm .btn {
 	height: 33px;
 	border-color: #DDD;
+	background-color: transparent;
+	background-color: #337ab7;
+}
+ul.pagination>li>a{
+	background-color: transparent;
 }
 
 .thumbnail {
@@ -44,15 +50,17 @@
 }
 
 #navbar-collapse-globalHeader {
-	margin-right: 0;
+	margin-right: 50px;
+	text-align: right;
 }
 
 /*******************************************************
 *
 ********************************************************/
 html, body {
-	background-color: #F7F7F7;
-	font-family: Verdane,Arial,sans-serif;
+	background:linear-gradient(to bottom, rgba(85,127,187,1) 0%,
+	rgba(85,127,187,1) 162px, rgba(238,238,238,1) 162px, rgba(238,238,238,1) 100%);
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
 	font-size: 0.9rem;
 	font-weight: 400;
 	padding-bottom: 5px;
@@ -68,7 +76,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 h1 {
-	font-family: "Source Sans Pro",Calibri,Candara,Arial,sans-serif;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
 }
 
 p {
@@ -82,8 +90,7 @@ p {
 	cursor: pointer;
 }
 .jp-layout-index{
-	border-top: 1px solid #B2B2B2;
-	margin-top: 90px;
+	margin-top: 29px;
 	padding: 0;
 }
 .jp-layout-index h1 {
@@ -208,15 +215,127 @@ p {
 	border-color: #fff;
 }
 .jp-layout-footer {
-	text-align: center;
-	margin-top: 15px;
+	height: 133px;
+	background-color: #ffffff;
+	width: 100%;
+	bottom: 0;
 }
+
+@media (min-width: 768px) {
+	a.DFG {
+		margin-top: 36px;
+		float: right;
+		margin-right: 90px;
+		text-decoration: none;
+		color: black;
+		font-size: 7px;
+	}
+}
+
+@media (max-width: 767px) {
+	a.DFG {
+		margin-top: 36px;
+		float: right;
+		text-decoration: none;
+		color: black;
+		font-size: 7px;
+	}
+}
+
+@media (max-width: 400px) {
+	a.VZG {
+		margin-top: 60px;
+		display: inline-flex;
+	}
+}
+@media (min-width: 768px) {
+	a.VZG {
+		display: inline-block;
+		margin-top: 48px;
+		margin-left: 60px;
+	}
+}
+@media (min-width: 401px) and (max-width: 767px) {
+	a.VZG {
+		display: inline-block;
+		margin-top: 48px;
+		margin-left: 0px;
+	}
+}
+@media (min-width: 1280px) {
+	.mainWrapperFooter {
+		width: 1280px;
+		margin: 0px auto;
+	}
+}
+
+div a p {  /* only for main -> journal.text */
+	font-size: 15px;
+	color: black;
+	margin-top: 34px;
+	margin-bottom: 60px;
+}
+
+button.btn.btn-primary.dropdown-toggle.writerportal {
+
+	/*background-color: transparent;
+	border-color: transparent;
+	color: #27568F;
+	padding: 0px;
+	border: 0px;
+	font-size: 12px;*/
+
+	background-color: transparent;
+	border-color: transparent;
+	color: #26558e;
+	padding: 0px;
+	padding-right: 4.5em;
+	border: 0px;
+	font-size: 16px;
+	line-height: 29px;
+	font-weight: 700;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+
+}
+#portal {
+	padding-left: 4.0em;
+}
+
+@media (max-width: 505px) {
+	#portal {
+		padding-left: 0px;
+	}
+	button.btn.btn-primary.dropdown-toggle.writerportal {
+		padding-right: 0px;
+		font-size: 14px;
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+
+}
+
+ul.dropdown-menu.scale {
+	font-size: 12px;
+	padding: 1px 0;
+}
+.dropdown.rightdown {
+	position: relative;
+	float: inherit;
+	margin-top: 12px;
+}
+
 .jp-layout-footer .logo {
-	height: 30px;
     background-position: center center;
     background-repeat: no-repeat;
     display: inline-block;
     text-align: center;
+
+}
+
+@media (max-width: 400px) {
+	.jp-layout-footer .logo {
+		height:20px;
+	}
 }
 .jp-layout-footer ul {
 	list-style: none;
@@ -254,10 +373,10 @@ p {
 	display: inline;
 	padding: 0;
 	margin: 0;
-	background-color: #fff;
+	background-color: transparent;
 }
 
-@media(min-width: 768){
+@media(min-width: 768px){
 	.jp-layout-hit-breadcrumb{
 		display: inline;
 	}
@@ -289,9 +408,9 @@ p {
 	clear: both;
 	font-size: 13pt;
 	padding: 0 0 15px 0;
-	border-bottom: 2px solid #F0F0F0;
+	/*border-bottom: 2px solid #F0F0F0;*/
 	font-weight: bold;
-	margin-bottom: 22px;
+	margin-bottom: 33px;
 }
 
 #jp-journal-content.col-sm-9 {
@@ -320,6 +439,25 @@ p {
 .jp-layout-metadataList dt {
 	clear: left;
 	margin-bottom: 10px;
+	font-weight: normal;
+	padding: 0px;
+}
+
+dt.col-sm-4.col-xs-7.jp-layout-metadataList-participant {
+	width: 100%;
+	margin-bottom: 0px;
+	padding: 0px;
+}
+
+dd.col-sm-8.col-xs-5.jp-layout-metadataList-identi {
+	padding-top: 14px;
+}
+
+dt.col-sm-4.col-xs-7.jp-layout-metadataList-identi {
+	padding: 0px;
+	margin-bottom: 73px;
+	width: 4%;
+	padding-top: 14px;
 }
 
 .jp-layout-metadataList dd > a:not(:last-child):after{
@@ -328,12 +466,13 @@ p {
 
 .jp-layout-metadataList > dd > p {
 	margin-bottom: 0;
+	font-size: 13px;
 }
 
 .jp-layout-metadataList dd {
 	float: left;
 	margin-bottom: 10px;
-	padding-left: 10px;
+	padding-left: 0px;
 }
 .jp-layout-metadataList .address dt {
 	width: 90px;
@@ -379,6 +518,7 @@ p.jp-layout-metadata-list {
 	clear: both;
 	max-height: 380px;
 	overflow-y: auto;
+	font-weight: 400;
 }
 
 .jp-layout-hidden-Button {
@@ -428,14 +568,16 @@ p.jp-layout-metadata-list {
 
 #resultPaginator {
 	clear: both;
-	text-align: center;
+	/*text-align: center;*/
 }
 #resultPaginator input.form-control {
 	width: 60px;
+	background-color: #ffffff;
 }
 
 #resultPaginator .pagination {
 	margin-bottom: 0;
+
 }
 
 #resultPaginator .pagination-jumper {
@@ -531,38 +673,55 @@ p.jp-layout-metadata-list {
 }
 
 #globalHeader {
-	background-color: #F7F7F7;
+	background-color: #557fbb;
+	background-image: linear-gradient(180deg, #7ea0c8 0%, #557fbb 98%, #557fbb 100%);
+	height: 75px;
 }
 
 #globalHeader a {
 	/*font-weight: bold;*/
 	font-size: 10px;
 }
+#globalHeader li.jp-layout-mainHeader-LiPaPushleft a {
+	/* color: black; */
+	width: 200px;
+	height: 19px;
+	color: white;
+	font-family: Calibri;
+	font-size: 25px;
+	font-weight: 300;
+	line-height: 25px;
+	vertical-align: middle;
+	display: table-cell;
+}
 
 #logo {
-	background-image: url("../GWLB/template_gwlb/IMAGES/logo.png");
+	background-image: url("../GWLB/template_gwlb/IMAGES/Zeitschriftenserver.png");
 	background-position: left top;
 	background-repeat: no-repeat;
+	background-size: 100% 100%;
 	clear: both;
-	height: 157px;
+	height: 87px;
 	background-color: #3685D4;
-	background-size: contain;
 }
 
 #logo .logoTitle {
     color: white;
     display: table-cell;
-    height: 115px;
+    height: 87px;
     padding: 0 30px;
     vertical-align: middle;
 }
 
 #searchBar {
-	background-color: #3685D4;
-	padding: 5px 29px 5px;
+	background-color: transparent;
+	/*padding: 5px 29px 5px;*/
 	min-height: 3.3em;
 	position: relative;
+	margin-top: 77px;
+	margin-bottom: 69px;
 }
+
 
 #searchBar .dropdown-menu .fa-fw {
 	margin-left: -6px;
@@ -582,11 +741,11 @@ p.jp-layout-metadata-list {
 }
 
 #searchBar .input-group-addon > span {
-	padding: 7px 7px;
+	padding: 9px 9px;
 	/*background: #7390c4 linear-gradient(to right, #7390c4 0%, #5781bd 100%);*/
-	border-radius: 4px;
+	/*border-radius: 4px;*/
 	top: 0;
-	right: 1px;
+	right: -1px;
 	border-color: #fff;
 }
 
@@ -595,19 +754,46 @@ p.jp-layout-metadata-list {
 	box-shadow: none;
 }
 
+.searchbarMain {
+
+}
+
+#main h1 {
+	color: #686868;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	font-size: 4.6em;
+	font-weight: 300;
+	line-height: 84px;
+	margin-bottom: 50px;
+}
+
 .glyphSearchBar{
 	cursor: pointer;
 }
 
 #main {
-	background-color: white;
+	background-color: transparent;
 	overflow: hidden;
-	padding: 1px 36px 49px;
+	padding: 1px 20px 0px; /* padding von jahrgang noch entfernen */
+	margin-top: 0px;
+}
+
+@media (max-width: 767px) {
+	#main h1 {
+		font-size: 3.6em;
+	}
+}
+
+@media (max-width: 436px) {
+	#main h1 {
+		font-size: 1.6em;
+		font-weight: bold;
+	}
 }
 
 @media(min-width: 768px) {
 	#main {
-		min-height: 580px;
+		min-height: 645px;
 	}
 	.jp-layout-hits {
 		min-height: 480px;
@@ -674,13 +860,19 @@ p.jp-layout-metadata-list {
 }
 
 .jp-content {
-	padding: 30px 0 10px;
+	padding: 30px 15px 10px;
 	border-bottom: 1px solid #F0F0F0;
 	border-top: 1px solid #F0F0F0;
 }
 
 .jp-content .dt-collapse{
-	width: 100%;
+	width: 112px;
+	height: 605px;
+	color: #26558e;
+	line-height: 29px;
+	font-weight: 700;
+	font-size: 16px;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
 	padding-left: 0.1em;
 	cursor: pointer;
 }
@@ -690,7 +882,7 @@ p.jp-layout-metadata-list {
 }
 
 #jp-journal-childs {
-	padding-left: 0;
+	padding-left: 0px;
 	padding-right: 0;
 	border-right: 1px solid #F0F0F0;
 }
@@ -823,9 +1015,21 @@ ul.ckeditorButtons li:last-child {
 }
 
 .jp-layout-maintitle, .jp-layout-object-editing > li {
-	border-color: #F7F7F7 !important;
+	/*border-color: #F7F7F7 !important;*/
+	color: #b8b8b8;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+
 }
 
+.jp-layout-maintitle-big {
+	width: 931px;
+	color: #b8b8b8;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	font-size: 88px;
+	font-weight: 400;
+	line-height: 98px;
+	margin-bottom: 48px;
+}
 
 .user-login fieldset {
 	border: none;
@@ -956,6 +1160,17 @@ ul.ckeditorButtons li:last-child {
 .jp-layout-mainHeader-UlLeft{
 	padding: 10px;
 	margin-bottom: 0;
+	margin-top: 23px;
+	margin-left: 158px;
+	width: 100%;
+	/* vertical-align: bottom; */
+}
+
+.GBV{
+	float: left;
+	margin: 7px;
+	margin-left: 32px;
+	margin-top: 20px;
 }
 
 .jp-layout-mainHeader-UlLeft > li{
@@ -968,6 +1183,15 @@ ul.ckeditorButtons li:last-child {
 
 .jp-layout-mainHeader-LiPaPushleft{
 	/*padding-left: 7px !important;*/
+}
+
+.jp-layout-mainheader-LiPaPushright{
+	height: 22px;
+	color: white;
+	font-family: Calibri;
+	font-size: 25px;
+	line-height: 25px;
+	margin-top: 1.3em;
 }
 
 .jp-layout-mainHeader-SeperatorRight{
@@ -1033,9 +1257,11 @@ textarea {
 }
 
 .dt-collapse .fa-sort-asc{
+	display: inline-block;
 	float: right;
-	padding-right: 0.7em;	
-	padding-top: 7px;
+	line-height: 29px;
+	font-weight: 700;
+	font-size: 16px;
 }
 
 @media (min-width: 768px) and (max-width: 792px){
@@ -1045,13 +1271,16 @@ textarea {
 }
 
 .dt-collapse.collapsed .fa-sort-asc, .dt-collapse .fa-sort-desc{
-	display: none;	
+	display: none;
+
 }
 
 .dt-collapse.collapsed .fa-sort-desc{
 	display: inline-block;
-	float: right; 
-	padding-right: 0.7em;
+	float: right;
+	line-height: 29px;
+	font-weight: 700;
+	font-size: 16px;
 }
 
 .jp-layout-searchResult-style{
@@ -1080,6 +1309,7 @@ textarea {
 	border-right: none;
 	padding-left: 0.2em;
 	padding-right: 0.8em;
+	background-color: transparent;
 }
 
 .jp-list-group-special .list-group-item:last-child{
@@ -1095,6 +1325,7 @@ textarea {
 	color: #27568F;
 	border: none;
 	margin-bottom: 0;
+	background-color: transparent;
 }
 
 
@@ -1259,18 +1490,37 @@ textarea {
 	}
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
 	body {
-		margin: 0 auto;
-		width: 1024px;
+
+		background: linear-gradient(to bottom, rgba(85,127,187,1) 0%, rgba(85,127,187,1) 162px, rgba(238,238,238,1) 162px, rgba(238,238,238,1) 100%);
+
 	}
+
+	#mainWrapper {
+		width: 1280px;
+		margin: 0 auto;
+
+
+	}
+}
+
+i.fa.fa-reply {
+	padding-right: 0.5em;
+}
+
+#mainWrapper {
+	height: auto;
+	/*min-height: 967px;*/
+	position: relative;
 }
 
 /* Small devices Tablets (≥768px) */
 @media (min-width: 768px) {	
 	.jp-layout-metadataList > dt:not(:first-child),.jp-layout-metadataList > dd:not(:nth-child(2)) {
 		/*border-top: 1px solid #F7F7F7;*/
-		padding-top: 5px;
+		padding: 0px;
+		font-weight: normal;
 	}
 	
 	.jp-layout-searchResult-style{
@@ -1278,7 +1528,7 @@ textarea {
 	}
 	
 	.jp-navigation-topHeader-DropdownBorder:hover, .jp-navigation-topHeader-DropdownBorder:focus, .jp-navigation-topHeader-DropdownBorder:active, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
-		background-color: #fff !important;
+		background-color: transparent !important;
 	}
 		
 	.jp-navigation-topHeader-DropdownMenu{
@@ -1286,7 +1536,9 @@ textarea {
 		margin-top: 0.3em !important;
 		margin-right: -0.3em;
 		padding-bottom: 0;
+		/*background-color: #557fbb;*/
 	}
+
 
 	.jp-navigation-topHeader-DropdownMenu > li > a{
 		padding-left: 0; 
@@ -1294,7 +1546,7 @@ textarea {
 	}
 	
 	.jp-navigation-topHeader-UlRightWraper{
-		padding: 10px; 
+		padding: 5px;
 		margin-bottom: 0;
 		float: right;
 	}
@@ -1312,12 +1564,13 @@ textarea {
 	}
 	
 	.jp-navigation-topHeader-UlRightWraper > li:last-child > a{
-		padding: 0 5px;
+		padding-right: 0px;
+		padding-left: 13px;
 	}
 	
 	.jp-navigation-topHeader-UlRightWraper > li > a:focus, .jp-navigation-topHeader-UlRightWraper > li > a:hover{
-		text-decoration: underline;
-		background-color: #F7F7F7;
+		text-decoration: none;
+		background-color: transparent;
 	}
 	
 	.jp-layout-triangle:before {
@@ -1370,9 +1623,9 @@ textarea {
 .jp-layout-mcbreadcrumb{
 	margin: 0;
 	padding-left: 0;
-	background-color: #fff;
-	padding-top: 12px;
-	padding-bottom: 6px;
+	background-color: transparent;
+	padding-top: 33px;
+	padding-bottom: 0px;
 }
 
 .jp-layout-maintitle .jp-layout-triangle:before {
@@ -1423,13 +1676,27 @@ textarea {
 	margin-bottom: 0;
 }
 
+p.jp-navigation-topHeader-ImgPush {
+	color: #ffffff;
+}
+
 #languageMenu p{
-	font-size: 10px;
+	font-size: 12px;
+	/*color: white;*/
 }
 
 #languageMenu > a.jp-navigation-topHeader-DropdownBorder{
-	background-color: #F7F7F7;
+	background-color: transparent;
 	text-decoration: none;
+	color: #ffffff;
+}
+#navbar-collapse-globalHeader>ul>li>a {
+	height: 10px;
+	color: white;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 14px;
 }
 
 .jp-volume-sidebar-group {
@@ -1437,8 +1704,10 @@ textarea {
 }
 
 .jp-volume-sidebar-group > h2 {
-	font-size: 14px;
+	font-size: 16px;
 	margin-top: 0;
+	color: #26558e;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
 }
 
 #jp-volume-select {
@@ -1522,15 +1791,23 @@ textarea {
 }
 
 #gwlb-layout-index-list {
-	border-top: 1px solid #B2B2B2;
 	padding-bottom: 20px;
 }
 
+#border {
+	border-bottom: 1px solid #557fbb;
+}
+
 #gwlb-layout-index-list h2 {
-	font-size: 16px;
+	font-size: 20px;
 	text-align: center;
-	font-weight: bold;
-	margin-bottom: 30px;
+	margin-bottom: 73px;
+	margin-top: 119px;
+	font-weight: 600;
+	line-height: 24px;
+	color: #2c2c2c;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	height: 17px;
 }
 
 #gwlb-layout-index-list h3 {
@@ -1544,7 +1821,16 @@ textarea {
 
 .gwlb-layout-index-list-elm {
 	text-align: center;
-	border-right: 1px solid #B2B2B2;
+	border-right: 1px solid #557fbb;
+	margin-bottom: 55px;
+}
+
+@media (max-width: 767px) {
+	.gwlb-layout-index-list-elm {
+		text-align: center;
+		border-right: 1px solid transparent;
+		margin-bottom: 55px;
+	}
 }
 
 .gwlb-layout-index-list-elm:nth-child(3){
