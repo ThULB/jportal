@@ -69,6 +69,12 @@ public class UrmelURNProvider implements MCRIURNProvider {
      *         is null or amount &lt;1 or the setID &lt;0
      */
     public MCRURN[] generateURN(int amount, MCRURN base, String setId) {
+        String nsIdentfiersSpecPart = base.getNamespaceSpecificString();
+        if(setId.contains("-")) {
+            MCRURN[] urns = new MCRURN[1];
+            urns[0] = MCRURN.create(NISS, nsIdentfiersSpecPart + "-" + setId);
+            return urns;
+        }
         if (Integer.parseInt(setId) < 0) {
             throw new IllegalArgumentException(
                     "setId must represent an integer >= 0, e.g. 1, 001 or 00004, but was " + setId);
@@ -78,7 +84,6 @@ public class UrmelURNProvider implements MCRIURNProvider {
             return null;
         }
 
-        String nsIdentfiersSpecPart = base.getNamespaceSpecificString();
         String format = leadingZeros(amount);
 
         IntFunction<String> pattern = i -> nsIdentfiersSpecPart + "-" + setId + "-" + String.format(format, i);
