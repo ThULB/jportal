@@ -446,7 +446,7 @@ $(document).ready(function() {
 		  for(var error of e.error.appearance) {
 		    html += "<li>Seite: " + error.image + "; Artikel; '" + error.label + "'; Paragraph Nummer: " + error.paragraph + "</li>";
 		  }
-		  html += "</ul><p>Dieser Fehler tritt auf, wenn ein Paragraph keinem ALTO-Block (show paragraph) zugeordnet werden konnte." +
+		  html += "</ul><p>Dieser Fehler tritt auf, wenn einem Paragraph kein ALTO-Block (show paragraph) zugeordnet werden konnte." +
 		  		" Um den Fehler zu beheben muss entweder der Paragraph gelöscht, oder das umschließende Rechteck vergrößert" +
 		  		" werden.</div>";
 		  dialogContent.html(html);
