@@ -147,9 +147,7 @@ public class Importer {
         month.setParent(target);
         month.setHiddenPosition(monthIndex);
         parentOptional.ifPresent(parent -> {
-            parent.getPublishedDate().ifPresent(date -> {
-                month.setDate(date.getYear() + "-" + String.format("%02d", monthIndex), null);
-            });
+            MetsImportUtils.setPublishedDate(monthIndex, month, parent);
         });
         month.store();
 

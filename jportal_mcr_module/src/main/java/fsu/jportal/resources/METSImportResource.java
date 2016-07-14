@@ -2,11 +2,9 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.ws.rs.GET;
@@ -31,22 +29,14 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
-import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.struct.LogicalDiv;
-import org.mycore.mets.model.struct.SmLink;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import fsu.jportal.backend.JPComponent;
 import fsu.jportal.mets.BlockReferenceException;
 import fsu.jportal.mets.ConvertException;
 import fsu.jportal.mets.ENMAPConverter;

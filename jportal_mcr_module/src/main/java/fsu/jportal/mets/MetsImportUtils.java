@@ -21,6 +21,8 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 
 import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPVolume;
 
 /**
  * Some utility methods for the mets import.
@@ -93,6 +95,12 @@ public class MetsImportUtils {
                 link.setFrom(mycoreId);
             }
         }
+    }
+
+    public static void setPublishedDate(int monthIndex, JPVolume volume, JPContainer parent) {
+        parent.getPublishedDate().ifPresent(date -> {
+            volume.setDate(date.getYear() + "-" + String.format("%02d", monthIndex), null);
+        });
     }
 
     /**

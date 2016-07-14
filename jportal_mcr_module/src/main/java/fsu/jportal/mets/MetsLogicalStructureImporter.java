@@ -48,7 +48,7 @@ public class MetsLogicalStructureImporter extends MetsImporter {
 
             LogicalDiv divContainer = structMap.getDivContainer();
             divContainer.getChildren().forEach(div -> {
-                JPPeriodicalComponent child = handle(mets, derivate, div, divMap);
+                JPPeriodicalComponent child = handle(mets, derivate, div, container, divMap);
                 if (child != null) {
                     container.addChild(child);
                 }
@@ -62,13 +62,13 @@ public class MetsLogicalStructureImporter extends MetsImporter {
         }
     }
 
-    private JPPeriodicalComponent handle(Mets mets, MCRDerivate derivate, LogicalDiv div,
+    private JPPeriodicalComponent handle(Mets mets, MCRDerivate derivate, LogicalDiv div, JPContainer parent,
         Map<LogicalDiv, JPComponent> divMap) {
         String type = div.getType();
         if (type.toLowerCase().equals("volume")) {
-            return createVolume(mets, derivate, div, divMap);
+            return createVolume(mets, derivate, div, parent, divMap);
         } else if (type.toLowerCase().equals("article")) {
-            return createArticle(mets, derivate, div, divMap);
+            return createArticle(mets, derivate, div, parent, divMap);
         } else {
             LOGGER.warn("Unable to import " + div.getId() + " because its type (" + type
                 + ") does not match volume or article.");
@@ -76,7 +76,7 @@ public class MetsLogicalStructureImporter extends MetsImporter {
         return null;
     }
 
-    private JPArticle createArticle(Mets mets, MCRDerivate derivate, LogicalDiv div,
+    private JPArticle createArticle(Mets mets, MCRDerivate derivate, LogicalDiv div, JPContainer parent,
         Map<LogicalDiv, JPComponent> divMap) {
         JPArticle article = new JPArticle();
         article.setTitle(div.getLabel());
@@ -85,14 +85,20 @@ public class MetsLogicalStructureImporter extends MetsImporter {
         return article;
     }
 
-    private JPVolume createVolume(Mets mets, MCRDerivate derivate, LogicalDiv div,
+    private JPVolume createVolume(Mets mets, MCRDerivate derivate, LogicalDiv div, JPContainer parent,
         Map<LogicalDiv, JPComponent> divMap) {
         JPVolume volume = new JPVolume();
-        volume.setTitle(div.getLabel());
-        volume.setHiddenPosition(div.getOrder());
+        String label = div.getLabel();
+        volume.setTitle(label);
+        // add published date if possible
+        if (MetsImportUtils.MONTH_NAMES.containsValue(label)) {
+            Integer monthIndex = MetsImportUtils.MONTH_NAMES.inverse().get(label);
+            MetsImportUtils.setPublishedDate(monthIndex, volume, parent);
+        }
+        volume.setHiddenPosition(String.format("%04d", Integer.valueOf(div.getOrder())));
         divMap.put(div, volume);
         div.getChildren().forEach(childDiv -> {
-            JPPeriodicalComponent childComponent = handle(mets, derivate, childDiv, divMap);
+            JPPeriodicalComponent childComponent = handle(mets, derivate, childDiv, volume, divMap);
             if (childComponent != null) {
                 volume.addChild(childComponent);
             }
