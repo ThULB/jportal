@@ -30,11 +30,20 @@ public class ABBYYtoALTOConverter {
     }
 
     private static void handleFileSec(Element mets) {
-        // fileSec
-        XPathExpression<Element> fileSecXPath = XPathFactory.instance().compile(
-            "mets:fileSec/mets:fileGrp/mets:fileGrp/mets:file[ends-with(@ID, '-ABBYY')]", Filters.element(), null,
+        // fileGrp
+        Element fileSec = mets.getChild("fileSec", IMetsElement.METS);
+        XPathExpression<Element> abbyyFileGrpExp = XPathFactory.instance().compile(
+            "mets:fileGrp/mets:fileGrp[@ID='ABBYYFiles']", Filters.element(), null,
             IMetsElement.METS);
-        List<Element> files = fileSecXPath.evaluate(mets);
+        Element abbyyFileGrp = abbyyFileGrpExp.evaluateFirst(fileSec);
+        if(abbyyFileGrp != null) {
+            abbyyFileGrp.setAttribute("ID", "ALTOFiles");
+        }
+        // files
+        XPathExpression<Element> fileSecXPath = XPathFactory.instance().compile(
+            "mets:fileGrp/mets:fileGrp/mets:file[ends-with(@ID, '-ABBYY')]", Filters.element(), null,
+            IMetsElement.METS);
+        List<Element> files = fileSecXPath.evaluate(fileSec);
         for (Element file : files) {
             // fix id
             file.setAttribute("ID", file.getAttributeValue("ID").replace("-ABBYY", "-ALTO"));
