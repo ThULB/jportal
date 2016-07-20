@@ -28,7 +28,7 @@ public class PropertiesSpikes {
 
     private void printProps(Properties properties) throws IOException {
         StringWriter stringWriter = new StringWriter();
-        WriterOutputStream writerOutputStream = new WriterOutputStream(stringWriter);
+        WriterOutputStream writerOutputStream = new WriterOutputStream(stringWriter, "UTF-8");
         properties.store(writerOutputStream, "Print");
         System.out.println(stringWriter.toString());
     }
