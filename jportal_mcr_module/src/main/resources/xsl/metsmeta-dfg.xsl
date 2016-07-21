@@ -115,7 +115,7 @@
 
     <!-- genre -->
     <xsl:if test="contains(@ID,'_jpjournal_') or contains(@ID,'_jparticle_')">
-      <genre authority="marcgt">
+      <mods:genre authority="marcgt">
         <xsl:if test="contains(@ID,'_jpjournal_')">
           <xsl:apply-templates select="./metadata/journalTypes/journalType[@classid='jportal_class_00000200']/@categid" mode="marcgt" />
         </xsl:if>
@@ -123,7 +123,7 @@
           <xsl:value-of select="'article'" />
         </xsl:if>
         <!-- the genre for volumes is applied at the related item part -->
-      </genre>
+      </mods:genre>
     </xsl:if>
 
     <!-- related item -> parent journal id -->
@@ -147,9 +147,9 @@
 
       <!-- apply genre for volumes -->
       <xsl:if test="contains(@ID,'_jpvolume_')">
-        <genre authority="marcgt">
+        <mods:genre authority="marcgt">
           <xsl:apply-templates select="$journal/metadata/journalTypes/journalType[@classid='jportal_class_00000200']/@categid" mode="marcgt" />
-        </genre>
+        </mods:genre>
       </xsl:if>
     </xsl:if>
     <xsl:apply-templates select="metadata/participants/participant" mode="personal" />
