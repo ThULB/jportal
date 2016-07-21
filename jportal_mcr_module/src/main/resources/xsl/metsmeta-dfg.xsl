@@ -77,29 +77,6 @@
       </mods:originInfo>
     </xsl:if>
 
-    <!-- journal type extension -->
-    <xsl:if test="contains(@ID,'_jpjournal_')">
-      <mods:extension>
-        <jportal>
-          <xsl:for-each select="./metadata/*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]/*">
-            <xsl:element name="{name(.)}">
-              <xsl:attribute name="classid">
-                <xsl:value-of select="@classid" />
-              </xsl:attribute>
-              <xsl:attribute name="categid">
-                <xsl:value-of select="@categid" />
-              </xsl:attribute>
-            </xsl:element>
-          </xsl:for-each>
-          <xsl:for-each select="./metadata/*[contains(name(), 'hidden_genhiddenfields')]/*">
-            <xsl:element name="{name(.)}">
-              <xsl:value-of select="text()" />
-            </xsl:element>
-          </xsl:for-each>
-        </jportal>
-      </mods:extension>
-    </xsl:if>
-
     <!-- Note -->
     <xsl:for-each select="./metadata/notes/note[@type='annotation' and @inherited=0]">
       <mods:note>
@@ -136,11 +113,17 @@
       </mods:subject>
     </xsl:if>
 
-    <!-- physical location -->
-    <xsl:if test="./metadata/contentClassis3/contentClassi3">
-      <mods:location>
-        <mods:physicalLocation><xsl:value-of select="./metadata/contentClassis3/contentClassi3/@categid" /></mods:physicalLocation>
-      </mods:location>
+    <!-- genre -->
+    <xsl:if test="contains(@ID,'_jpjournal_') or contains(@ID,'_jparticle_')">
+      <genre authority="marcgt">
+        <xsl:if test="contains(@ID,'_jpjournal_')">
+          <xsl:apply-templates select="./metadata/journalTypes/journalType[@classid='jportal_class_00000200']/@categid" mode="marcgt" />
+        </xsl:if>
+        <xsl:if test="contains(@ID,'_jparticle_')">
+          <xsl:value-of select="'article'" />
+        </xsl:if>
+        <!-- the genre for volumes is applied at the related item part -->
+      </genre>
     </xsl:if>
 
     <!-- related item -> parent journal id -->
@@ -161,9 +144,46 @@
           </mods:part>
         </xsl:for-each>
       </mods:relatedItem>
+
+      <!-- apply genre for volumes -->
+      <xsl:if test="contains(@ID,'_jpvolume_')">
+        <genre authority="marcgt">
+          <xsl:apply-templates select="$journal/metadata/journalTypes/journalType[@classid='jportal_class_00000200']/@categid" mode="marcgt" />
+        </genre>
+      </xsl:if>
     </xsl:if>
     <xsl:apply-templates select="metadata/participants/participant" mode="personal" />
     <xsl:apply-templates select="." mode="recordIdentifier" />
+
+    <!-- physical location -->
+    <xsl:if test="./metadata/contentClassis3/contentClassi3">
+      <mods:location>
+        <mods:physicalLocation><xsl:value-of select="./metadata/contentClassis3/contentClassi3/@categid" /></mods:physicalLocation>
+      </mods:location>
+    </xsl:if>
+
+    <!-- journal type extension -->
+    <xsl:if test="contains(@ID,'_jpjournal_')">
+      <mods:extension>
+        <jportal>
+          <xsl:for-each select="./metadata/*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]/*">
+            <xsl:element name="{name(.)}">
+              <xsl:attribute name="classid">
+                <xsl:value-of select="@classid" />
+              </xsl:attribute>
+              <xsl:attribute name="categid">
+                <xsl:value-of select="@categid" />
+              </xsl:attribute>
+            </xsl:element>
+          </xsl:for-each>
+          <xsl:for-each select="./metadata/*[contains(name(), 'hidden_genhiddenfields')]/*">
+            <xsl:element name="{name(.)}">
+              <xsl:value-of select="text()" />
+            </xsl:element>
+          </xsl:for-each>
+        </jportal>
+      </mods:extension>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="mycoreobject" mode="recordIdentifier">
@@ -315,6 +335,26 @@
         </mods:namePart>
       </xsl:if>
     </mods:name>
+  </xsl:template>
+
+  <xsl:template match="journalType/@categid" mode="marcgt">
+    <xsl:choose>
+      <xsl:when test=". = 'newspapers'">
+        <xsl:value-of select="'newspaper'" />
+      </xsl:when>
+      <xsl:when test=". = 'addressBooks'">
+        <xsl:value-of select="'directory'" />
+      </xsl:when>
+      <xsl:when test=". = 'parliamentDocuments'">
+        <xsl:value-of select="'legislation'" />
+      </xsl:when>
+      <xsl:when test=". = 'calendars'">
+        <xsl:value-of select="'calendar'" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'journal'" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="participant/@type" mode="marcrelator">
