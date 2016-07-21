@@ -78,10 +78,24 @@
     </xsl:if>
 
     <!-- journal type extension -->
-    <xsl:if test="./metadata/contentClassis1/contentClassi1">
+    <xsl:if test="contains(@ID,'_jpjournal_')">
       <mods:extension>
         <jportal>
-          <journalType><xsl:value-of select="./metadata/contentClassis1/contentClassi1/@categid" /></journalType>
+          <xsl:for-each select="./metadata/*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]/*">
+            <xsl:element name="{name(.)}">
+              <xsl:attribute name="classid">
+                <xsl:value-of select="@classid" />
+              </xsl:attribute>
+              <xsl:attribute name="categid">
+                <xsl:value-of select="@categid" />
+              </xsl:attribute>
+            </xsl:element>
+          </xsl:for-each>
+          <xsl:for-each select="./metadata/*[contains(name(), 'hidden_genhiddenfields')]/*">
+            <xsl:element name="{name(.)}">
+              <xsl:value-of select="text()" />
+            </xsl:element>
+          </xsl:for-each>
         </jportal>
       </mods:extension>
     </xsl:if>
