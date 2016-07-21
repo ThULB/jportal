@@ -14,7 +14,7 @@
       <label xml:lang="pl" text="Czasopismo" />
     </category>
     <category ID="addressBooks">
-      <label xml:lang="de" text="Addressbücher" />
+      <label xml:lang="de" text="Adressbücher" />
       <label xml:lang="en" text="Address books" />
     </category>
     <category ID="parliamentDocuments">
