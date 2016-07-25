@@ -115,6 +115,7 @@ project(':jportal_mcr_module') {
         compile "org.mycore:mycore-session-listing:$mcrVersion"
         compile "org.mycore:mycore-swf:$mcrVersion"
         compile "org.mycore:mycore-urn:$mcrVersion"
+        compile "org.mycore:mycore-impex:$mcrVersion"
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
         compile 'org.mycore.mets:mets-model:0.10-SNAPSHOT'
         compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
