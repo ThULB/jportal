@@ -2,10 +2,7 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -28,13 +25,11 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fsu.jportal.mets.BlockReferenceException;
@@ -89,7 +84,8 @@ public class METSImportResource {
                 validate(derivateId, mets);
             } catch (BlockReferenceException bre) {
                 LOGGER.error("Unable to convert mets.xml", bre);
-                returnObject.add("error", buildBlockReferenceError(bre, doc));
+                returnObject.add("error",
+                    MetsImportUtils.buildBlockReferenceError(bre.getMessage(), bre.getDivIds(), doc));
             } catch (Exception exc) {
                 LOGGER.error("Unable to convert mets.xml", exc);
                 returnObject.addProperty("error", exc.getMessage());
@@ -97,51 +93,6 @@ public class METSImportResource {
         }
         returnObject.addProperty("type", type.name());
         return returnObject.toString();
-    }
-
-    /**
-     * Creates the json error object for a block reference exception (It was not
-     * possible to resolve the coordinates for one or more logical div's). 
-     * 
-     * @param bre the exception
-     * @param doc the mets.xml
-     * @return the error object as json
-     */
-    private JsonObject buildBlockReferenceError(BlockReferenceException bre, Document doc) {
-        Element rootElement = doc.getRootElement();
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("id", null);
-        XPathExpression<Element> logicalDivExp = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='logical_structmap']//mets:div[@ID=$id]", Filters.element(), variables,
-            MetsUtil.METS_NS_LIST);
-        XPathExpression<Element> metsFileExp = XPathFactory.instance().compile("mets:fileSec//mets:file[@ID=$id]",
-            Filters.element(), variables, MetsUtil.METS_NS_LIST);
-
-        JsonObject error = new JsonObject();
-        error.addProperty("message", bre.getMessage());
-        JsonArray refArray = new JsonArray();
-        error.add("appearance", refArray);
-        for (String id : bre.getDivIds()) {
-            logicalDivExp.setVariable("id", id);
-            JsonObject refError = new JsonObject();
-            // get label and order
-            Element logicalDiv = logicalDivExp.evaluateFirst(rootElement);
-            refError.addProperty("label", logicalDiv.getParentElement().getAttributeValue("LABEL"));
-            refError.addProperty("paragraph", Integer.valueOf(logicalDiv.getAttributeValue("ORDER")));
-            // get image number
-            String fileID = logicalDiv.getChild("fptr", MCRConstants.METS_NAMESPACE)
-                                      .getChild("area", MCRConstants.METS_NAMESPACE)
-                                      .getAttributeValue("FILEID");
-            metsFileExp.setVariable("id", fileID);
-            Element metsFile = metsFileExp.evaluateFirst(rootElement);
-            String imageNumber = Optional.ofNullable(metsFile.getAttributeValue("SEQ"))
-                                         .orElse(metsFile.getAttributeValue("ORDER"));
-            if (imageNumber != null) {
-                refError.addProperty("image", Integer.valueOf(imageNumber));
-            }
-            refArray.add(refError);
-        }
-        return error;
     }
 
     @POST

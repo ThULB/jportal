@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -12,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -23,14 +25,20 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRException;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.FileGrp;
 import org.mycore.mets.model.files.FileSec;
 import org.mycore.mets.model.struct.Fptr;
+import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.PhysicalStructMap;
@@ -44,6 +52,8 @@ import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.RecursiveImporter;
 import fsu.jportal.frontend.cli.io.HttpImportSource;
 import fsu.jportal.frontend.cli.io.LocalSystemSink;
+import fsu.jportal.mets.JPortalMetsGenerator;
+import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.MetsImportUtils;
 import fsu.jportal.mets.MetsImporter;
 import fsu.jportal.util.JPComponentUtil;
@@ -212,24 +222,120 @@ public class Importer {
         day.store();
     }
 
-//    private static void addDerivateLink(JPPeriodicalComponent target, Mets mets, LogicalDiv logicalDiv,
-//        Path metsFolderPath) {
-//        Stream<String> images = getImagesOfLogicalDiv(mets, logicalDiv);
-//        Optional<String> firstImage = images.findFirst();
-//        if (firstImage.isPresent()) {
-//            String imageFile = firstImage.get();
-//            Path absoluteImagePath = metsFolderPath.resolve(imageFile);
-//            if (Files.exists(absoluteImagePath) && !Files.isDirectory(absoluteImagePath)) {
-//                try {
-//                    target.setDerivateLink(imageFile);
-//                } catch (Exception exc) {
-//                    LOGGER.error("Unable to set derivate link for " + target.getObject().getId(), exc);
-//                }
-//            } else {
-//                LOGGER.warn("Image not found " + absoluteImagePath.toString());
-//            }
-//        }
-//    }
+    @MCRCommand(syntax = "fixLLZ {0} {1}", help = "fixLLZ {mycore object id} {path to the mets with the coordination}")
+    public static void fixLLZ(String targetID, String pathToCoordsMets) throws Exception {
+        // get object
+        MCRObjectID objId = MCRObjectID.getInstance(targetID);
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(objId);
+        // get derivate
+        MCRObjectID derId = mcrObj.getStructure().getDerivates().get(0).getXLinkHrefID();
+
+        // build mets from object structure
+        ImporterMetsGenerator metsGenerator = new ImporterMetsGenerator();
+        HashSet<MCRPath> ignoreNodes = new HashSet<MCRPath>();
+        Mets newMets = metsGenerator.getMETS(MCRPath.getPath(derId.toString(), "/"), ignoreNodes);
+
+        // add alto
+        FileGrp altoGrp = new FileGrp("ALTO");
+        newMets.getFileSec().addFileGrp(altoGrp);
+        newMets.getFileSec().getFileGroup("MASTER").getFileList().forEach(tifFile -> {
+            String id = tifFile.getId().replaceAll("master_", "alto_");
+            String href = "alto/" + tifFile.getFLocat().getHref().replaceAll(".tif", ".xml");
+            org.mycore.mets.model.files.File altoFile = new org.mycore.mets.model.files.File(id, "text/xml");
+            altoFile.setFLocat(new FLocat(LOCTYPE.URL, href));
+            altoGrp.addFile(altoFile);
+        });
+        PhysicalStructMap physicalStructMap = (PhysicalStructMap) newMets.getStructMap("PHYSICAL");
+        physicalStructMap.getDivContainer().getChildren().forEach(div -> {
+            Fptr tifFptr = div.getChildren().get(0);
+            div.add(new Fptr(tifFptr.getFileId().replaceAll("master_", "alto_")));
+        });
+
+        // build the llz
+        LLZMetsConverter llzConverter = new LLZMetsConverter();
+        llzConverter.setFailOnEmptyAreas(false);
+        SAXBuilder builder = new SAXBuilder();
+        Document llzDoc = builder.build(new File(pathToCoordsMets));
+        Mets llzMets = llzConverter.convert(llzDoc, Paths.get(pathToCoordsMets).getParent());
+        List<String> emptyAreas = llzConverter.getEmptyAreas();
+        if (!emptyAreas.isEmpty()) {
+            LOGGER.warn(
+                MetsImportUtils.buildBlockReferenceError("There are unresolved <mets:area>", emptyAreas, llzDoc));
+        }
+
+        // build the logical structure fptr's of the newMets
+        LogicalStructMap llZLogicalStructMap = (LogicalStructMap) llzMets.getStructMap(LogicalStructMap.TYPE);
+        buildLogicalFptr(llZLogicalStructMap.getDivContainer(), llzMets, newMets);
+
+        // save the old mets.xml
+        MCRPath metsPath = MCRPath.getPath(derId.toString(), "mets.xml");
+        Path saveDirectoryPath = Paths.get(System.getProperty("user.home")).resolve("jportal");
+        Files.createDirectories(saveDirectoryPath);
+        Path savePath = saveDirectoryPath.resolve(derId.toString() + "_mets.xml");
+        LOGGER.info("Saving old mets.xml to " + savePath.toAbsolutePath().toString());
+        Files.copy(metsPath, savePath, StandardCopyOption.REPLACE_EXISTING);
+
+        // replace
+        LOGGER.info("replacing mets.xml...");
+        MCRJDOMContent newMetsContent = new MCRJDOMContent(newMets.asDocument());
+        Files.copy(newMetsContent.getInputStream(), metsPath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static void buildLogicalFptr(LogicalDiv llzDiv, Mets llzMets, Mets newMets) {
+        LogicalStructMap newLogicalStructMap = (LogicalStructMap) newMets.getStructMap(LogicalStructMap.TYPE);
+        List<Fptr> fptrList = llzDiv.getFptrList();
+        if (!fptrList.isEmpty()) {
+            List<Integer> hierarchy = new ArrayList<>();
+            buildDivHierarchy(llzDiv, hierarchy);
+            try {
+                LogicalDiv newDiv = getDivFromHierarchy(newLogicalStructMap.getDivContainer(), hierarchy);
+                fptrList.stream()
+                        .flatMap(fptr -> fptr.getSeqList().stream())
+                        .flatMap(seq -> seq.getAreaList().stream())
+                        .forEach(area -> {
+                            String oldId = area.getFileId();
+                            String href = llzMets.getFileSec()
+                                                 .getFileGroup("ALTO")
+                                                 .getFileById(oldId)
+                                                 .getFLocat()
+                                                 .getHref();
+                            String newId = newMets.getFileSec().getFileGroup("ALTO").getFileByHref(href).getId();
+                            area.setFileId(newId);
+                        });
+                newDiv.getFptrList().addAll(fptrList);
+            } catch (Exception exc) {
+                LOGGER.warn("Unable to get corresponding 'new div' for 'llz div id' " + llzDiv.getId(), exc);
+            }
+            return;
+        }
+        for (LogicalDiv subDiv : llzDiv.getChildren()) {
+            buildLogicalFptr(subDiv, llzMets, newMets);
+        }
+    }
+
+    /**
+     * Builds the hierarchy for the given fromDiv. The hierarchy list contains
+     * the index position for each level. The list starts with the root element
+     * index. 
+     * 
+     * @param fromDiv
+     * @param hierarchy
+     */
+    private static void buildDivHierarchy(LogicalDiv fromDiv, List<Integer> hierarchy) {
+        LogicalDiv parent = fromDiv.getParent();
+        if (parent != null) {
+            int indexOf = parent.getChildren().indexOf(fromDiv);
+            buildDivHierarchy(parent, hierarchy);
+            hierarchy.add(indexOf);
+        }
+    }
+
+    private static LogicalDiv getDivFromHierarchy(LogicalDiv div, List<Integer> hierarchy) {
+        for (Integer indexOf : hierarchy) {
+            div = div.getChildren().get(indexOf);
+        }
+        return div;
+    }
 
     private static JPDerivateComponent buildDerivate(Mets mets, LogicalDiv logicalDiv, Path metsFolderPath,
         Path altoFolderPath) {
@@ -322,6 +428,17 @@ public class Importer {
         title.append(dayAsString).append(", den ");
         title.append(dayOfMonth).append(". ").append(monthAsString).append(" ").append(year);
         return title.toString();
+    }
+
+    private static class ImporterMetsGenerator extends JPortalMetsGenerator {
+
+        @Override
+        protected List<MCRObject> getChildren(MCRObject parentObject) {
+            List<MCRObject> children = MCRObjectUtils.getChildren(parentObject);
+            children.sort((o1, o2) -> o1.getId().toString().compareTo(o2.getId().toString()));
+            return children;
+        }
+
     }
 
 }

@@ -117,7 +117,7 @@ public class ENMAPChecker {
         MCRConfiguration.instance().initialize(properties, true);
 
         // convert
-        Path metsFile = Paths.get("/data/Dokumente/OCR/innsbruck/LLZ/2015-09-29/THULB_00034/1822/THULB_00034_1822_wfs2_mets_Abgleich_fixed.xml");
+        Path metsFile = Paths.get("/data/temp/test/test2.xml");
         LLZMetsConverter converter = new LLZMetsConverter();
         Document doc = enmapChecker.convert(metsFile, converter);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());

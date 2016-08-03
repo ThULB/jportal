@@ -37,8 +37,7 @@ public class JVBMetsConverter extends ENMAPConverter {
     }
 
     @Override
-    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences,
-        List<String> emptyBlocks) {
+    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv logicalSubDiv = this.buildLogicalSubDiv(enmapDiv);
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
         if (type.equals("issue")) {
@@ -46,7 +45,7 @@ public class JVBMetsConverter extends ENMAPConverter {
                 LOGGER.warn("Issue has no content! " + logicalSubDiv.getId());
                 return null;
             }
-            handleLogicalDivs(enmap, enmapDiv, logicalSubDiv, mcrMets, altoReferences, emptyBlocks);
+            handleLogicalDivs(enmap, enmapDiv, logicalSubDiv, mcrMets, altoReferences);
             return logicalSubDiv;
         }
         if (type.equals("article") || type.equals("serialnovel")) {
@@ -62,7 +61,7 @@ public class JVBMetsConverter extends ENMAPConverter {
         } else {
             return null;
         }
-        handleLogicalFilePointer(enmapDiv, logicalSubDiv, mcrMets, altoReferences, emptyBlocks);
+        handleLogicalFilePointer(enmapDiv, logicalSubDiv, mcrMets, altoReferences);
         return logicalSubDiv;
     }
 

@@ -3,6 +3,8 @@ package fsu.jportal.backend;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,14 +17,13 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaIFS;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import fsu.jportal.backend.upload.Uploader;
+import org.mycore.datamodel.niofs.MCRPath;
 
 public class JPDerivateComponent implements JPComponent {
 
     protected MCRDerivate derivate;
 
-    protected LinkedHashMap<String, ContentInfo> newContentMap;
+    protected LinkedHashMap<String, URL> newContentMap;
 
     /**
      * Creates a new <code>MCRDerivate</code>.
@@ -104,10 +105,7 @@ public class JPDerivateComponent implements JPComponent {
      * @param contentSize size of the content in bytes, can be null
      */
     public void add(URL content, String targetPath, Integer contentSize) {
-        ContentInfo ci = new ContentInfo();
-        ci.contentURL = content;
-        ci.contentSize = contentSize;
-        this.newContentMap.put(targetPath, ci);
+        this.newContentMap.put(targetPath, content);
     }
 
     @Override
@@ -120,20 +118,14 @@ public class JPDerivateComponent implements JPComponent {
         // update derivate
         MCRMetadataManager.update(this.derivate);
         // upload files
-        Uploader uploader = new Uploader(this.derivate);
-        for (Map.Entry<String, ContentInfo> entry : this.newContentMap.entrySet()) {
+        for (Map.Entry<String, URL> entry : this.newContentMap.entrySet()) {
             String path = entry.getKey();
-            ContentInfo contentInfo = entry.getValue();
-            try (InputStream in = contentInfo.contentURL.openStream()) {
-                uploader.upload(in, path, contentInfo.contentSize);
+            URL url = entry.getValue();
+            try (InputStream in = url.openStream()) {
+                Files.copy(in, MCRPath.getPath(this.derivate.getId().toString(), path),
+                    StandardCopyOption.REPLACE_EXISTING);
             }
         }
-    }
-
-    private static class ContentInfo {
-        private URL contentURL;
-
-        private Integer contentSize;
     }
 
 }

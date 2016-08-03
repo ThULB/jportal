@@ -59,6 +59,23 @@ public abstract class ENMAPConverter {
     private static Logger LOGGER = LogManager.getLogger(ENMAPConverter.class);
 
     /**
+     * If failOnEmptyAreas is true and if some coordinates of some <mets:area /> couldn't
+     * be assigned to an alto block, a {@link BlockReferenceException} is thrown. To build the
+     * mets document anyway, set this to false.
+     */
+    private boolean failOnEmptyAreas = true;
+
+    private List<String> emptyAreas;
+
+    public void setFailOnEmptyAreas(boolean failOnEmptyAreas) {
+        this.failOnEmptyAreas = failOnEmptyAreas;
+    }
+
+    public List<String> getEmptyAreas() {
+        return emptyAreas;
+    }
+
+    /**
      * Do the conversation.
      * 
      * @param enmap jdom document to convert
@@ -67,6 +84,7 @@ public abstract class ENMAPConverter {
      * @throws ConvertException
      */
     public Mets convert(Document enmap, Path basePath) throws ConvertException {
+        this.emptyAreas = new ArrayList<>();
         try {
             // convert abbyy stuff to alto
             ABBYYtoALTOConverter.convert(enmap);
@@ -81,12 +99,11 @@ public abstract class ENMAPConverter {
             List<ALTO> altoReferences = loadAltoReferences(mets, basePath);
 
             // handle logical structure and struct link
-            List<String> emptyBlocks = new ArrayList<>();
-            handleLogicalStructure(enmapRootElement, mets, altoReferences, emptyBlocks);
-            if (!emptyBlocks.isEmpty()) {
+            handleLogicalStructure(enmapRootElement, mets, altoReferences);
+            if (failOnEmptyAreas && !emptyAreas.isEmpty()) {
                 BlockReferenceException blockReferenceException = new BlockReferenceException(
                     "Error while referencing logical div coordinates to alto blocks.");
-                emptyBlocks.forEach(blockReferenceException::addDiv);
+                emptyAreas.forEach(blockReferenceException::addDiv);
                 throw blockReferenceException;
             }
 
@@ -225,12 +242,12 @@ public abstract class ENMAPConverter {
         mcrPhysicalDiv.setId(id);
     }
 
-    protected void handleLogicalStructure(Element enmap, Mets mcrMets, List<ALTO> altoReferences, List<String> emptyBlocks) {
+    protected void handleLogicalStructure(Element enmap, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalStructMap structMap = (LogicalStructMap) mcrMets.getStructMap(LogicalStructMap.TYPE);
         XPathExpression<Element> xpathExp = XPathFactory.instance().compile(
             "mets:structMap[@TYPE='logical_structmap']/mets:div", Filters.element(), null, IMetsElement.METS);
         Element enmapRootDiv = xpathExp.evaluateFirst(enmap);
-        LogicalDiv mcrDiv = getLogicalDiv(enmap, enmapRootDiv, mcrMets, altoReferences, emptyBlocks);
+        LogicalDiv mcrDiv = getLogicalDiv(enmap, enmapRootDiv, mcrMets, altoReferences);
         structMap.setDivContainer(mcrDiv);
     }
 
@@ -246,10 +263,10 @@ public abstract class ENMAPConverter {
      * @param mcrDiv
      */
     protected void handleLogicalDivs(Element enmap, Element enmapDiv, LogicalDiv mcrDiv, Mets mcrMets,
-        List<ALTO> altoReferences, List<String> emptyBlocks) {
+        List<ALTO> altoReferences) {
         List<Element> children = enmapDiv.getChildren("div", IMetsElement.METS);
         for (Element enmapSubDiv : children) {
-            LogicalDiv mcrSubdDiv = getLogicalSubDiv(enmap, enmapSubDiv, mcrMets, altoReferences, emptyBlocks);
+            LogicalDiv mcrSubdDiv = getLogicalSubDiv(enmap, enmapSubDiv, mcrMets, altoReferences);
             if (mcrSubdDiv != null) {
                 mcrDiv.add(mcrSubdDiv);
             }
@@ -263,12 +280,12 @@ public abstract class ENMAPConverter {
      * @param enmapDiv
      * @return
      */
-    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences, List<String> emptyBlocks) {
+    protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv mcrDiv = buildLogicalSubDiv(enmapDiv);
         // handle children
-        handleLogicalDivs(enmap, enmapDiv, mcrDiv, mcrMets, altoReferences, emptyBlocks);
+        handleLogicalDivs(enmap, enmapDiv, mcrDiv, mcrMets, altoReferences);
         // handle fptr
-        handleLogicalFilePointer(enmapDiv, mcrDiv, mcrMets, altoReferences, emptyBlocks);
+        handleLogicalFilePointer(enmapDiv, mcrDiv, mcrMets, altoReferences);
         return mcrDiv;
     }
 
@@ -288,38 +305,48 @@ public abstract class ENMAPConverter {
      * @param enmapDiv
      * @return new logical div
      */
-    protected LogicalDiv getLogicalDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences, List<String> emptyBlocks) {
+    protected LogicalDiv getLogicalDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         String id = enmapDiv.getAttributeValue("ID");
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
         String label = enmapDiv.getAttributeValue("LABEL");
         LogicalDiv mcrDiv = new LogicalDiv(id, type, (label == null || label.equals("")) ? type : label);
         // handle children
-        handleLogicalDivs(enmap, enmapDiv, mcrDiv, mcrMets, altoReferences, emptyBlocks);
+        handleLogicalDivs(enmap, enmapDiv, mcrDiv, mcrMets, altoReferences);
         return mcrDiv;
     }
 
     protected void handleLogicalFilePointer(Element enmapDiv, LogicalDiv mcrDiv, Mets mcrMets,
-        List<ALTO> altoReferences, List<String> emptyBlocks) {
+        List<ALTO> altoReferences) {
         XPathExpression<Element> areaExp = XPathFactory.instance().compile(
             "mets:div/mets:fptr/mets:area[contains(@FILEID, 'ALTO')]", Filters.element(), null, IMetsElement.METS);
         List<Element> areas = areaExp.evaluate(enmapDiv);
         if (areas.isEmpty()) {
             return;
         }
-
-        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mcrMets.getStructMap(PhysicalStructMap.TYPE);
-        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
-
-        Map<String, Set<Block>> altoBlockMap = new CoordinatesToIdMapper().map(altoReferences, areas, emptyBlocks);
-        if (!emptyBlocks.isEmpty()) {
+        Map<String, Set<Block>> altoBlockMap = new CoordinatesToIdMapper().map(altoReferences, areas, emptyAreas);
+        if (failOnEmptyAreas && !emptyAreas.isEmpty()) {
             // there are empty block -> no need to continue;
             return;
         }
-
         // try to combine blocks
         Fptr fptr = new Fptr();
+        fptr.getSeqList().add(buildSequence(mcrMets, altoBlockMap));
+        if (!fptr.getSeqList().isEmpty()) {
+            mcrDiv.getFptrList().add(fptr);
+        }
+    }
+
+    /**
+     * Builds the Seq for the given altoBlockMap.
+     * 
+     * @param mcrMets
+     * @param altoBlockMap
+     * @return
+     */
+    private Seq buildSequence(Mets mcrMets, Map<String, Set<Block>> altoBlockMap) {
         Seq seq = new Seq();
-        fptr.getSeqList().add(seq);
+        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mcrMets.getStructMap(PhysicalStructMap.TYPE);
+        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
 
         AtomicReference<Block> lastBlockRef = new AtomicReference<>();
         AtomicReference<Area> areaRef = new AtomicReference<>();
@@ -363,9 +390,7 @@ public abstract class ENMAPConverter {
                 lastBlockRef.set(null);
             }
         });
-        if (!fptr.getSeqList().isEmpty()) {
-            mcrDiv.getFptrList().add(fptr);
-        }
+        return seq;
     }
 
     /**
@@ -401,7 +426,7 @@ public abstract class ENMAPConverter {
     static class CoordinatesToIdMapper {
 
         public Map<String, Set<Block>> map(List<ALTO> altoReferences, List<Element> metsAreaElements,
-            List<String> emptyBlocks) {
+            List<String> emptyAreas) {
             // build references
             List<AreaAltoBlockRef> refs = buildRef(altoReferences, metsAreaElements);
             // do the area to block mapping
@@ -410,7 +435,7 @@ public abstract class ENMAPConverter {
             Map<String, Set<Block>> altoBlockMap = new HashMap<>();
             for (AreaAltoBlockRef ref : refs) {
                 if (ref.blocks.isEmpty()) {
-                    emptyBlocks.add(ref.logicalDivId);
+                    emptyAreas.add(ref.logicalDivId);
                 }
                 Set<Block> blockSet = altoBlockMap.get(ref.alto.getId());
                 if (blockSet == null) {
