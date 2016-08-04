@@ -230,12 +230,22 @@ public class Importer {
         // get derivate
         MCRObjectID derId = mcrObj.getStructure().getDerivates().get(0).getXLinkHrefID();
 
+        // save the old mets.xml
+        MCRPath metsPath = MCRPath.getPath(derId.toString(), "mets.xml");
+        Path saveDirectoryPath = Paths.get(System.getProperty("user.home")).resolve("jportal");
+        Files.createDirectories(saveDirectoryPath);
+        Path savePath = saveDirectoryPath.resolve(derId.toString() + "_mets.xml");
+        LOGGER.info("Saving old mets.xml to " + savePath.toAbsolutePath().toString());
+        Files.copy(metsPath, savePath, StandardCopyOption.REPLACE_EXISTING);
+
         // build mets from object structure
+        LOGGER.info("build mets.xml from jportal volume/article structure...");
         ImporterMetsGenerator metsGenerator = new ImporterMetsGenerator();
         HashSet<MCRPath> ignoreNodes = new HashSet<MCRPath>();
         Mets newMets = metsGenerator.getMETS(MCRPath.getPath(derId.toString(), "/"), ignoreNodes);
 
         // add alto
+        LOGGER.info("add ALTO stuff to generated mets.xml...");
         FileGrp altoGrp = new FileGrp("ALTO");
         newMets.getFileSec().addFileGrp(altoGrp);
         newMets.getFileSec().getFileGroup("MASTER").getFileList().forEach(tifFile -> {
@@ -252,11 +262,12 @@ public class Importer {
         });
 
         // build the llz
+        LOGGER.info("load the llz mets.xml...");
         LLZMetsConverter llzConverter = new LLZMetsConverter();
         llzConverter.setFailOnEmptyAreas(false);
         SAXBuilder builder = new SAXBuilder();
         Document llzDoc = builder.build(new File(pathToCoordsMets));
-        Mets llzMets = llzConverter.convert(llzDoc, Paths.get(pathToCoordsMets).getParent());
+        Mets llzMets = llzConverter.convert(llzDoc, MCRPath.getPath(derId.toString(), "/"));
         List<String> emptyAreas = llzConverter.getEmptyAreas();
         if (!emptyAreas.isEmpty()) {
             LOGGER.warn(
@@ -264,16 +275,9 @@ public class Importer {
         }
 
         // build the logical structure fptr's of the newMets
+        LOGGER.info("combine generated mets.xml and llz mets.xml...");
         LogicalStructMap llZLogicalStructMap = (LogicalStructMap) llzMets.getStructMap(LogicalStructMap.TYPE);
         buildLogicalFptr(llZLogicalStructMap.getDivContainer(), llzMets, newMets);
-
-        // save the old mets.xml
-        MCRPath metsPath = MCRPath.getPath(derId.toString(), "mets.xml");
-        Path saveDirectoryPath = Paths.get(System.getProperty("user.home")).resolve("jportal");
-        Files.createDirectories(saveDirectoryPath);
-        Path savePath = saveDirectoryPath.resolve(derId.toString() + "_mets.xml");
-        LOGGER.info("Saving old mets.xml to " + savePath.toAbsolutePath().toString());
-        Files.copy(metsPath, savePath, StandardCopyOption.REPLACE_EXISTING);
 
         // replace
         LOGGER.info("replacing mets.xml...");
