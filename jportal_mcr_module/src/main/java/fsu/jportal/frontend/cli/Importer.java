@@ -232,11 +232,13 @@ public class Importer {
 
         // save the old mets.xml
         MCRPath metsPath = MCRPath.getPath(derId.toString(), "mets.xml");
-        Path saveDirectoryPath = Paths.get(System.getProperty("user.home")).resolve("jportal");
-        Files.createDirectories(saveDirectoryPath);
-        Path savePath = saveDirectoryPath.resolve(derId.toString() + "_mets.xml");
-        LOGGER.info("Saving old mets.xml to " + savePath.toAbsolutePath().toString());
-        Files.copy(metsPath, savePath, StandardCopyOption.REPLACE_EXISTING);
+        if(Files.exists(metsPath)) {
+            Path saveDirectoryPath = Paths.get(System.getProperty("user.home")).resolve("jportal");
+            Files.createDirectories(saveDirectoryPath);
+            Path savePath = saveDirectoryPath.resolve(derId.toString() + "_mets.xml");
+            LOGGER.info("Saving old mets.xml to " + savePath.toAbsolutePath().toString());
+            Files.copy(metsPath, savePath, StandardCopyOption.REPLACE_EXISTING);
+        }
 
         // build mets from object structure
         LOGGER.info("build mets.xml from jportal volume/article structure...");
