@@ -1,13 +1,13 @@
 package fsu.jportal.mets;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Map.Entry;
-
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.util.MetsUtil;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
@@ -24,15 +24,13 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.SmLink;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.util.MetsUtil;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 
 /**
  * Some utility methods for the mets import.
@@ -58,6 +56,25 @@ public class MetsImportUtils {
                                     .put(11, "November")
                                     .put(12, "Dezember")
                                     .build();
+    }
+
+    static enum MONTH {
+        Januar,
+        Februar,
+        März,
+        April,
+        Mai,
+        Juni,
+        Juli,
+        August,
+        September,
+        Oktober,
+        November,
+        Dezember;
+
+        MONTH(){
+
+        }
     }
 
     /**
