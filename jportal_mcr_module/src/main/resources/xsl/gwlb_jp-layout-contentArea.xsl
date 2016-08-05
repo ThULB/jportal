@@ -43,7 +43,7 @@
       </xsl:call-template>
 
       <!-- right side-->
-      <xsl:choose>
+    <xsl:choose>
       <xsl:when test="$currentType != 'jparticle' and $currentType != 'person'  and $currentType !='jpinst'">
         <div id="jp-journal-content" class="col-sm-8 col-sm-offset-1 col-xs-6">
           <xsl:call-template name="jp.journal.content" />
@@ -66,8 +66,6 @@
 
     <xsl:if test="$currentType != 'jparticle'">
       <div id="jp-journal-childs" class="col-sm-2 col-xs-6">
-        <xsl:message><xsl:value-of select="$currentType"/></xsl:message>
-
         <xsl:if test="$currentType = 'jpvolume'">
           <xsl:call-template name="jp.backToJournal"/>
         </xsl:if>
@@ -93,53 +91,51 @@
           </xsl:if>
         </xsl:if>
 
-        <div class="dropdown rightdown">
-          <xsl:if test="contains($JP.GWLB.Author.Portal.Enabled.Journal.Ids,$id)">
-            <xsl:if test="contains($JP.GWLB.Author.Portal.GFA.Journal.Ids,$id)">
-              <button class="btn btn-primary dropdown-toggle writerportal" type="button" data-toggle="dropdown">
+
+        <xsl:if test="$journalID !=''">
+          <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
+          <xsl:variable name="template" select="$journal/metadata/hidden_templates/hidden_template/text()" />
+        </xsl:if>
+         <!-- <xsl:if test="contains($template, 'template_gfa' or 'template_cma')">-->
+            <xsl:if test="$template ='template_gfa'">
+              <div class="selectbox">
                 Autorenportal
-                <i class="fa fa-sort-desc" id="portal"></i>
-              </button>
-              <ul class="dropdown-menu scale">
-                <li>
-                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/becomeAutor.xml?journalID=', $id)}">
+              </div>
+              <select class="form-control input-sm" onchange="location = this.options[this.selectedIndex].value;">
+                <option value="" hidden="">Wie werde ich Autor </option>
+                  <option value="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/becomeAutor.xml?journalID=', $id)}">
                     Wie werde
                     ich Autor
-                  </a>
-                </li>
-                <li>
-                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/guideline.xml?journalID=', $id)}">
+                  </option>
+                  <option value="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/guideline.xml?journalID=', $id)}">
                     Richtlinien
-                  </a>
-                </li>
-                <li>
-                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/recessionOffer.xml?journalID=', $id)}">
+                  </option>
+                <option value="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/recessionOffer.xml?journalID=', $id)}">
                     Rezensionsangebote
-                  </a>
-                </li>
-              </ul>
+                </option>
+              </select>
             </xsl:if>
-            <xsl:if test="contains($JP.GWLB.Author.Portal.CMA.Journal.Ids,$id)">
-              <button class="btn btn-primary dropdown-toggle writerportal" type="button" data-toggle="dropdown">
+            <xsl:if test="$template = 'template_cma'">
+              <div class="selectbox">
                 Autorenportal
-                <i class="fa fa-sort-desc" id="portal"></i>
-              </button>
-              <ul class="dropdown-menu scale">
-                <li>
-                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/becomeAutor.xml?journalID=', $id)}">
+              </div>
+              <select class="form-control input-sm" onchange="location = this.options[this.selectedIndex].value;">
+                <option value="" hidden="">Wie werde ich Autor </option>
+                <option value="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/becomeAutor.xml?journalID=', $id)}">
                     Wie werde
                     ich Autor
-                  </a>
-                </li>
-                <li>
-                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/guideline.xml?journalID=', $id)}">
+                  </option>
+                <option value="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/guideline.xml?journalID=', $id)}">
                     Richtlinien
-                  </a>
-                </li>
-              </ul>
+                  </option>
+              </select>
             </xsl:if>
+          <xsl:if test="$template != 'template_gwlb'">
+            <div class="imprint">
+              <xsl:call-template name="imprint"/>
+            </div>
           </xsl:if>
-        </div>
+          <!--</xsl:if>-->
       </div>
     </xsl:if>
   </xsl:template>
@@ -161,7 +157,16 @@
 
     <span class="section">
       <xsl:for-each select="node()">
-        <xsl:apply-templates select="."/>
+        <xsl:choose>
+          <xsl:when test="$journalID != ''">
+            <div id="jp-journal-content" class="col-sm-8 col-sm-offset-1 col-xs-6">
+              <xsl:apply-templates select="."/>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="."/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </span>
   </xsl:template>
@@ -214,7 +219,7 @@
                            select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading|metadata/names[@class='MCRMetaInstitutionName']/name">
         <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />
       </xsl:apply-templates>
-      <div class="jp-layout-triangle"></div>
+     <div class="jp-layout-triangle"></div>
       <div class="jp-layout-triangle"></div>
     </div>
 
@@ -338,4 +343,28 @@
       </div>
     </xsl:if>
   </xsl:template>
+
+  <xsl:template name="imprint">
+    <xsl:variable name="imprintHref">
+      <xsl:choose>
+        <xsl:when test="$journalID != '' and imprint:has($journalID, 'imprint')">
+          <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/', $journalID)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:choose>
+            <xsl:when test="imprint:has('index', 'imprint')">
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/index')" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <a href="{$imprintHref}">
+      <xsl:value-of select="i18n:translate('jp.site.imprint')" />
+    </a>
+  </xsl:template>
+
 </xsl:stylesheet>

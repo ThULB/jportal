@@ -82,11 +82,11 @@
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Links bearbeiten" id="linkButton" class="jp-infoFiles-button" type="link" journalid="{$currentObjID}" containerid="main"/>
         </item>
-        <item>
+        <!--<item>
           <restriction name="dataModel" contains="datamodel-" />
-          <!-- <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" /> -->
+           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" />
           <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}" />
-        </item>
+        </item>-->
         <item>
           <restriction name="createJournal" value="true"/>
           <label name="Objectbrowser" href="{$WebApplicationBaseURL}rsc/derivatebrowser/start?lang=de#/{$currentObjID}"/>

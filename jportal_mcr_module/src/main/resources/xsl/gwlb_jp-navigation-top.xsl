@@ -31,6 +31,7 @@
             </a>
           </li>
         </xsl:if>
+        <xsl:if test="$journalID = ''">
         <li>
           <xsl:variable name="imprintHref">
             <xsl:choose>
@@ -53,6 +54,7 @@
             <xsl:value-of select="i18n:translate('jp.site.imprint')" />
           </a>
         </li>
+        </xsl:if>
         <li>
           <a>
             <xsl:attribute name="href">
@@ -71,12 +73,12 @@
             </xsl:if>
           </a>
         </li>
-    <xsl:call-template name="jp.navigation.top.language" />
+   <!-- <xsl:call-template name="jp.navigation.top.language" />-->
     </ul>
   </xsl:template>
 
   <xsl:template name="jp.navigation.top.language">
-      <li id="languageMenu" class="dropdown-toggle"> 
+      <li id="languageMenu" class="dropdown-toggle">
         <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
           <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush" />-->
           <p class="jp-navigation-topHeader-ImgPush"><xsl:value-of select="translate($CurrentLang, 'abcdefghijklmnopqrstuvwxyz',

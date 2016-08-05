@@ -58,14 +58,14 @@ ul.pagination>li>a{
 *
 ********************************************************/
 html, body {
-	background:linear-gradient(to bottom, rgba(85,127,187,1) 0%,
-	rgba(85,127,187,1) 162px, rgba(238,238,238,1) 162px, rgba(238,238,238,1) 100%);
 	font-family: OpenSans, Helvetica, Arial, sans-serif;
 	font-size: 0.9rem;
 	font-weight: 400;
 	padding-bottom: 5px;
 	color: #464646;
 	overflow-x: hidden;
+	background: white linear-gradient(to bottom, rgba(85, 127, 187, 1) 0%,
+	rgba(85, 127, 187, 1) 162px, rgba(238, 238, 238, 1) 162px, rgba(238, 238, 238, 1) 100%) no-repeat;
 }
 html a {
 	color: #27568F;
@@ -297,6 +297,18 @@ button.btn.btn-primary.dropdown-toggle.writerportal {
 	font-family: OpenSans, Helvetica, Arial, sans-serif;
 
 }
+.selectbox {
+	background-color: transparent;
+	border-color: transparent;
+	color: #26558e;
+	padding: 0px;
+	padding-right: 4.5em;
+	border: 0px;
+	font-size: 16px;
+	line-height: 29px;
+	font-weight: 700;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+}
 #portal {
 	padding-left: 4.0em;
 }
@@ -361,12 +373,25 @@ ul.dropdown-menu.scale {
 	color: #27568F;
 }
 
+select.form-control.input-sm {
+	padding: 0px;
+	font-size: 13px;
+	height: 20px;
+}
+
 #jp-breadcrumb-container .jp-layout-scroller {
 	text-align: right;
 	clear: right;
 	background-color: transparent;
 	margin: 0;
 	padding-right: 0;
+}
+
+.imprint {
+	margin-top: 20px;
+	font-size: 16px;
+	line-height: 29px;
+	font-weight: 700;
 }
 
 .jp-layout-hit-breadcrumb{
@@ -456,7 +481,7 @@ dd.col-sm-8.col-xs-5.jp-layout-metadataList-identi {
 dt.col-sm-4.col-xs-7.jp-layout-metadataList-identi {
 	padding: 0px;
 	margin-bottom: 73px;
-	width: 4%;
+	/*width: 4%;*/
 	padding-top: 14px;
 }
 
@@ -1022,7 +1047,6 @@ ul.ckeditorButtons li:last-child {
 }
 
 .jp-layout-maintitle-big {
-	width: 931px;
 	color: #b8b8b8;
 	font-family: OpenSans, Helvetica, Arial, sans-serif;
 	font-size: 88px;
@@ -1493,8 +1517,7 @@ textarea {
 @media (min-width: 1280px) {
 	body {
 
-		background: linear-gradient(to bottom, rgba(85,127,187,1) 0%, rgba(85,127,187,1) 162px, rgba(238,238,238,1) 162px, rgba(238,238,238,1) 100%);
-
+		background-image: linear-gradient(to bottom, rgba(85,127,187,1) 0%, rgba(85,127,187,1) 162px, rgba(238,238,238,1) 162px, rgba(238,238,238,1) 100%);
 	}
 
 	#mainWrapper {

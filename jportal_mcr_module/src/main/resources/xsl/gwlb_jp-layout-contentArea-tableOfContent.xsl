@@ -362,7 +362,7 @@
       <h2 class="jp-volume-selectCaption">
         <xsl:value-of select="$catText"/>
       </h2>
-      <select id="jp-volume-select" onchange="location = this.options[this.selectedIndex].value;">
+      <select class="form-control input-sm" onchange="location = this.options[this.selectedIndex].value;">
         <xsl:apply-templates mode="jp.toc.printVolume" select="$volumes/doc" />
       </select>
     </div>

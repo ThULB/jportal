@@ -177,7 +177,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <img class="GBV" src="{concat($templateWebURL, 'IMAGES/GBV.png')}"></img>
+              <img class="GBV" src="{concat($templateWebURL, 'IMAGES/VZG.png')}"></img>
               <ul class="list-inline jp-layout-mainHeader-UlLeft">
                 <!--<li class="jp-layout-mainHeader-SeperatorRight">-->
                   <!--<xsl:variable name="imprintHref">-->
