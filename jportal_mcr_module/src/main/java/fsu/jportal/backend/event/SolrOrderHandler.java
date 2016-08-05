@@ -28,7 +28,8 @@ public class SolrOrderHandler extends MCREventHandlerBase {
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         MCRObject oldObject = (MCRObject) evt.get(MCREvent.OBJECT_OLD_KEY);
-        if (MCRMarkManager.instance().isMarkedForDeletion(obj.getId())) {
+        MCRMarkManager mm = MCRMarkManager.instance();
+        if (mm.isMarkedForDeletion(obj.getId()) || mm.isMarkedForImport(obj.getId())) {
             return;
         }
         handleOrder(oldObject, obj);
