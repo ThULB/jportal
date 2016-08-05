@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
 /*******************************************************
 * Overwrite Bootstrap Stuff
 ********************************************************/
@@ -58,7 +58,7 @@ ul.pagination>li>a{
 *
 ********************************************************/
 html, body {
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-size: 0.9rem;
   font-weight: 400;
   padding-bottom: 5px;
@@ -76,7 +76,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 h1 {
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
 
 p {
@@ -110,6 +110,7 @@ p {
 }
 .jp-layout-index-intro > span.section p {
   font-size: 14px;
+  line-height: 26px;
 }
 .jp-layout-index-list {
   margin-bottom: 35px;
@@ -294,7 +295,7 @@ button.btn.btn-primary.dropdown-toggle.writerportal {
   font-size: 16px;
   line-height: 29px;
   font-weight: 700;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 
 }
 .selectbox {
@@ -307,7 +308,7 @@ button.btn.btn-primary.dropdown-toggle.writerportal {
   font-size: 16px;
   line-height: 29px;
   font-weight: 700;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
 #portal {
   padding-left: 4.0em;
@@ -786,7 +787,7 @@ p.jp-layout-metadata-list {
 
 #main h1 {
   color: #686868;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-size: 4.6em;
   font-weight: 300;
   line-height: 84px;
@@ -898,7 +899,7 @@ p.jp-layout-metadata-list {
   line-height: 29px;
   font-weight: 700;
   font-size: 16px;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   padding-left: 0.1em;
   cursor: pointer;
 }
@@ -1043,13 +1044,13 @@ ul.ckeditorButtons li:last-child {
 .jp-layout-maintitle, .jp-layout-object-editing > li {
   /*border-color: #F7F7F7 !important;*/
   color: #b8b8b8;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 
 }
 
 .jp-layout-maintitle-big {
   color: #b8b8b8;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-size: 88px;
   font-weight: 400;
   line-height: 98px;
@@ -1717,7 +1718,7 @@ p.jp-navigation-topHeader-ImgPush {
 #navbar-collapse-globalHeader>ul>li>a {
   height: 10px;
   color: white;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-size: 12px;
   font-weight: 400;
   line-height: 14px;
@@ -1731,7 +1732,7 @@ p.jp-navigation-topHeader-ImgPush {
   font-size: 16px;
   margin-top: 0;
   color: #26558e;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
 
 #jp-volume-select {
@@ -1830,7 +1831,7 @@ p.jp-navigation-topHeader-ImgPush {
   font-weight: 600;
   line-height: 24px;
   color: #2c2c2c;
-  font-family: OpenSans, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   height: 17px;
 }
 
