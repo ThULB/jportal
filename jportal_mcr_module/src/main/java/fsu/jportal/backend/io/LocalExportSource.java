@@ -1,13 +1,11 @@
-package fsu.jportal.frontend.cli.io;
-
-import java.util.ArrayList;
-import java.util.List;
+package fsu.jportal.backend.io;
 
 import org.jdom2.Document;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.jportal.backend.io.ImportSource;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocalExportSource implements ImportSource {
     private List<Document> objs;

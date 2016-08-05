@@ -1,4 +1,8 @@
-package fsu.jportal.frontend.cli.io;
+package fsu.jportal.backend.io;
+
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,12 +10,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-
-import fsu.jportal.backend.io.ImportSource;
 
 /**
  * Created by chi on 24.04.15.

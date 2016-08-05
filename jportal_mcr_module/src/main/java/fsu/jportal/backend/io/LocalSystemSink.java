@@ -1,9 +1,8 @@
-package fsu.jportal.frontend.cli.io;
+package fsu.jportal.backend.io;
 
 import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.backend.ImportDerivateObject;
 import fsu.jportal.backend.ImportFileObject;
-import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.frontend.cli.Importer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
