@@ -32,6 +32,16 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>OAIJPortalDFGProvider</servlet-name>
+    <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>OAIJPortalDFGProvider</servlet-name>
+    <url-pattern>/oaidfg</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>MCRDFGServlet</servlet-name>
     <servlet-class>org.mycore.iview2.frontend.MCRTileCombineServlet</servlet-class>
     <init-param>
