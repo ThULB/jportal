@@ -15,10 +15,10 @@
 }
 
 @media (max-width: 767px) {
-	#logo .logoTitle {
-    	font-size: 1.3em;
-    	word-break: break-all;
-	}
+  #logo .logoTitle {
+      font-size: 1.3em;
+      word-break: break-all;
+  }
 }
 
 /*#searchBar {
@@ -48,7 +48,7 @@
     top: 0px;
     width: 50%;
 }
-#searchBar .input-group-addon > span {
+#searchBar .input-group-addon {
     background-color: #686868;
     color: #FFF;
 }
