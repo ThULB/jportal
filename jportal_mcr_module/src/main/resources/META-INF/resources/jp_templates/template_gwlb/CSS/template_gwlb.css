@@ -9,16 +9,9 @@
 }
 
 @media (max-width: 767px) {
-	#logo .logoTitle {
-    	font-size: 1.3em;
-    	word-break: break-all;
-	}
+  #logo .logoTitle {
+      font-size: 1.3em;
+      word-break: break-all;
+  }
 }
 
-#searchBar {
-
-}
-
-#searchBar .input-group-addon > span {
-    background: #7390c4 linear-gradient(to right, #7390c4 0%, #5781bd 100%);
-}

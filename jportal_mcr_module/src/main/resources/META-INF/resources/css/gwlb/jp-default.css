@@ -90,19 +90,24 @@ p {
   cursor: pointer;
 }
 .jp-layout-index{
-  margin-top: 29px;
   padding: 0;
 }
 .jp-layout-index h1 {
   font-size: 35px;
   text-align: center;
-  padding-bottom: 30px;
-  margin-top: 30px;
+  padding-top: 44px;
+  margin-top: 0px;
+  margin-bottom: 77px;
   font-weight: bold;
+  border-top: 1px solid #fff;
+  -webkit-box-shadow: 0px -1px 0px 0px #ccc;
+  -moz-box-shadow: 0px -1px 0px 0px #ccc;
+  box-shadow: 0px -1px 0px 0px #ccc;
 }
 .jp-layout-index-intro {
-  margin: 30px 60px;
   text-align: center;
+  padding: 0px 30px;
+  margin-bottom: 70px;
 }
 .jp-layout-index-intro > span.section {
   margin-bottom: 30px;
@@ -742,11 +747,9 @@ p.jp-layout-metadata-list {
 
 #searchBar {
   background-color: transparent;
-  /*padding: 5px 29px 5px;*/
-  min-height: 3.3em;
   position: relative;
   margin-top: 77px;
-  margin-bottom: 69px;
+  margin-bottom: 43px;
 }
 
 
@@ -762,18 +765,19 @@ p.jp-layout-metadata-list {
 }
 
 #searchBar .input-group-addon {
-  background-color: #ffffff;
-  color: #ffffff;
-  padding: 0;
+    background-color: #005595;
+    color: #ffffff;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 0px;
 }
 
 #searchBar .input-group-addon > span {
   padding: 9px 9px;
-  /*background: #7390c4 linear-gradient(to right, #7390c4 0%, #5781bd 100%);*/
-  /*border-radius: 4px;*/
-  top: 0;
-  right: -1px;
-  border-color: #fff;
+}
+
+#searchBar .btn {
+  border-radius: 0px;
 }
 
 #searchBar #inputField {
@@ -791,7 +795,6 @@ p.jp-layout-metadata-list {
   font-size: 4.6em;
   font-weight: 300;
   line-height: 84px;
-  margin-bottom: 50px;
 }
 
 .glyphSearchBar{
@@ -1816,7 +1819,12 @@ p.jp-navigation-topHeader-ImgPush {
 }
 
 #gwlb-layout-index-list {
-  padding-bottom: 20px;
+  margin-bottom: 66px;
+  padding-top: 22px;
+  border-top: 1px solid #fff;
+  -webkit-box-shadow: 0px -1px 0px 0px #ccc;
+  -moz-box-shadow: 0px -1px 0px 0px #ccc;
+  box-shadow: 0px -1px 0px 0px #ccc;
 }
 
 #border {
@@ -1826,13 +1834,9 @@ p.jp-navigation-topHeader-ImgPush {
 #gwlb-layout-index-list h2 {
   font-size: 20px;
   text-align: center;
-  margin-bottom: 73px;
-  margin-top: 119px;
   font-weight: 600;
-  line-height: 24px;
   color: #2c2c2c;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  height: 17px;
 }
 
 #gwlb-layout-index-list h3 {
