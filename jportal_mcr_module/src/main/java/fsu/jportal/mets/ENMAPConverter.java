@@ -2,7 +2,9 @@ package fsu.jportal.mets;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,6 +28,7 @@ import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.mets.misc.StructLinkGenerator;
 import org.mycore.mets.model.IMetsElement;
@@ -65,6 +68,8 @@ public abstract class ENMAPConverter {
      */
     private boolean failOnEmptyAreas = true;
 
+    private boolean failEasyOnStructLinkGeneration = true;
+
     private List<String> emptyAreas;
 
     public void setFailOnEmptyAreas(boolean failOnEmptyAreas) {
@@ -73,6 +78,10 @@ public abstract class ENMAPConverter {
 
     public List<String> getEmptyAreas() {
         return emptyAreas;
+    }
+
+    public void setFailEasyOnStructLinkGeneration(boolean failEasyOnStructLinkGeneration) {
+        this.failEasyOnStructLinkGeneration = failEasyOnStructLinkGeneration;
     }
 
     /**
@@ -100,15 +109,8 @@ public abstract class ENMAPConverter {
 
             // handle logical structure and struct link
             handleLogicalStructure(enmapRootElement, mets, altoReferences);
-            if (failOnEmptyAreas && !emptyAreas.isEmpty()) {
-                BlockReferenceException blockReferenceException = new BlockReferenceException(
-                    "Error while referencing logical div coordinates to alto blocks.");
-                emptyAreas.forEach(blockReferenceException::addDiv);
-                throw blockReferenceException;
-            }
 
-            StructLink structLink = new StructLinkGenerator().generate(mets);
-            mets.setStructLink(structLink);
+            handleStructLink(enmapRootElement, mets, failEasyOnStructLinkGeneration);
             return mets;
         } catch (ConvertException exc) {
             throw exc;
@@ -249,6 +251,33 @@ public abstract class ENMAPConverter {
         Element enmapRootDiv = xpathExp.evaluateFirst(enmap);
         LogicalDiv mcrDiv = getLogicalDiv(enmap, enmapRootDiv, mcrMets, altoReferences);
         structMap.setDivContainer(mcrDiv);
+
+        if (!emptyAreas.isEmpty()) {
+            if (failOnEmptyAreas) {
+                BlockReferenceException blockReferenceException = new BlockReferenceException(
+                    "Error while referencing logical div coordinates to alto blocks.");
+                emptyAreas.forEach(blockReferenceException::addDiv);
+                throw blockReferenceException;
+            } else {
+                LOGGER.warn(MetsImportUtils.buildBlockReferenceError("There are unresolved <mets:area>", emptyAreas,
+                    enmap.getDocument()));
+            }
+        }
+    }
+
+    protected void handleStructLink(Element enmap, Mets mets, boolean failEasy) throws IOException, Exception {
+        try {
+            StructLinkGenerator structLinkGenerator = new StructLinkGenerator();
+            structLinkGenerator.setFailEasy(failEasy);
+            StructLink structLink = structLinkGenerator.generate(mets);
+            mets.setStructLink(structLink);
+        } catch (Exception exc) {
+            Path tempFile = Files.createTempFile("mets", ".xml");
+            LOGGER.warn("Unable to create struct link section. For debugging purposes store mets.xml here: "
+                + tempFile.toAbsolutePath().toString());
+            Files.write(tempFile, new MCRJDOMContent(mets.asDocument()).asByteArray(), StandardOpenOption.CREATE);
+            throw exc;
+        }
     }
 
     /**

@@ -255,14 +255,10 @@ public class Importer {
         LOGGER.info("load the llz mets.xml...");
         LLZMetsConverter llzConverter = new LLZMetsConverter();
         llzConverter.setFailOnEmptyAreas(false);
+        llzConverter.setFailEasyOnStructLinkGeneration(false);
         SAXBuilder builder = new SAXBuilder();
         Document llzDoc = builder.build(new File(pathToCoordsMets));
         Mets llzMets = llzConverter.convert(llzDoc, MCRPath.getPath(derId.toString(), "/"));
-        List<String> emptyAreas = llzConverter.getEmptyAreas();
-        if (!emptyAreas.isEmpty()) {
-            LOGGER.warn(
-                MetsImportUtils.buildBlockReferenceError("There are unresolved <mets:area>", emptyAreas, llzDoc));
-        }
 
         // build the logical structure fptr's of the newMets
         LOGGER.info("combine generated mets.xml and llz mets.xml...");
