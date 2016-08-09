@@ -1,9 +1,20 @@
 package fsu.jportal.frontend.cli;
 
-import fsu.jportal.backend.io.*;
-import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSink;
-import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSource;
-import fsu.jportal.util.DerivateLinkUtil;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -17,16 +28,26 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.iview2.frontend.MCRIView2Commands;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Paths;
-import java.util.*;
+import fsu.jportal.backend.io.ImportSink;
+import fsu.jportal.backend.io.ImportSource;
+import fsu.jportal.backend.io.LocalExportSink;
+import fsu.jportal.backend.io.LocalExportSource;
+import fsu.jportal.backend.io.RecursiveImporter;
+import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSink;
+import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSource;
+import fsu.jportal.util.DerivateLinkUtil;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {

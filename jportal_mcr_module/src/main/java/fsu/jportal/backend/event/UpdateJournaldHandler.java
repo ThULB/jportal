@@ -26,10 +26,11 @@ public class UpdateJournaldHandler extends MCREventHandlerBase {
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         MCRObjectID mcrId = obj.getId();
-        if (MCRMarkManager.instance().isMarkedForDeletion(mcrId)) {
+        if (!"jpjournal".equals(mcrId.getTypeId())) {
             return;
         }
-        if (!"jpjournal".equals(mcrId.getTypeId())) {
+        MCRMarkManager mm = MCRMarkManager.instance();
+        if (mm.isMarkedForDeletion(mcrId) || mm.isMarkedForImport(mcrId)) {
             return;
         }
         updateImprintPartnerGreeting(mcrId.toString());

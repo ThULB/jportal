@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -33,13 +34,21 @@ import org.jdom2.xpath.XPathFactory;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXSLTransformation;
+import org.mycore.datamodel.common.MCRMarkManager;
+import org.mycore.datamodel.common.MCRMarkManager.Operation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.index.MCRSolrIndexer;
+import org.mycore.solr.search.MCRSolrSearchUtils;
 
+import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectConfiguration;
+import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.resolver.JournalFilesResolver;
+import fsu.jportal.util.JPLevelSortingUtil;
 
 @MCRCommandGroup(name = "JP Migrating Commands")
 public class MigratingCMDs {
@@ -67,9 +76,8 @@ public class MigratingCMDs {
     @MCRCommand(helpKey = "Move intro xml from webapp into data folder.", syntax = "migrate intro xml")
     public static void migrateIntroXML() throws IOException {
         List<String> journalIDs = (List<String>) MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
-        XPathExpression<Element> hiddenWebContextXpath =
-                XPathFactory.instance().compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext",
-                                                Filters.element());
+        XPathExpression<Element> hiddenWebContextXpath = XPathFactory.instance().compile(
+            "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext", Filters.element());
 
         String mcrBaseDir = MCRConfiguration.instance().getString("MCR.basedir");
         String webappDir = mcrBaseDir + "/build/webapps";
@@ -114,10 +122,8 @@ public class MigratingCMDs {
     @MCRCommand(helpKey = "Migrate template name from navigation.xml", syntax = "migrate template")
     public static void migrateTemplate() throws JDOMException, IOException {
         List<String> journalIDs = (List<String>) MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
-        XPathExpression<Text> hiddenWebContextXpath =
-                XPathFactory.instance()
-                            .compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()",
-                                     Filters.text());
+        XPathExpression<Text> hiddenWebContextXpath = XPathFactory.instance().compile(
+            "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()", Filters.text());
         //load navigation.xml
         String mcrBaseDir = MCRConfiguration.instance().getString("MCR.basedir");
         String navigationDir = mcrBaseDir + "/build/webapps/config/navigation.xml";
@@ -137,10 +143,11 @@ public class MigratingCMDs {
 
             if (journalContextPath != null && !journalContextPath.equals("")) {
                 LOGGER.info("Add Termplate a Template  to " + journalContextPath);
-                XPathExpression<Attribute> templateXpath =
-                        XPathFactory.instance().compile(
-                                "/navigation/navi-main/item[@href='/content/main/journalList.xml']/item[@href='"
-                                        + journalContextPath + "']/@template", Filters.attribute());
+                XPathExpression<Attribute> templateXpath = XPathFactory.instance()
+                                                                       .compile(
+                                                                           "/navigation/navi-main/item[@href='/content/main/journalList.xml']/item[@href='"
+                                                                               + journalContextPath + "']/@template",
+                                                                           Filters.attribute());
                 String journalTemplate = templateXpath.evaluateFirst(navigationXML).getValue();
                 if (journalTemplate != null && !journalTemplate.equals("")) {
                     LOGGER.info("Template: " + journalTemplate);
@@ -183,10 +190,8 @@ public class MigratingCMDs {
         Source stylesheet = new StreamSource(resourceAsStream);
         Transformer xsltTransformer = MCRXSLTransformation.getInstance().getStylesheet(stylesheet).newTransformer();
 
-        XPathExpression<Element> xlinkLabel =
-                XPathFactory.instance().compile(
-                        "/mycoreobject/metadata/*[@class='MCRMetaClassification']/*[contains(@categid,':')]",
-                        Filters.element());
+        XPathExpression<Element> xlinkLabel = XPathFactory.instance().compile(
+            "/mycoreobject/metadata/*[@class='MCRMetaClassification']/*[contains(@categid,':')]", Filters.element());
 
         for (String ID : listIDs) {
             MCRObjectID mcrid = MCRObjectID.getInstance(ID);
@@ -212,6 +217,58 @@ public class MigratingCMDs {
             } else {
                 LOGGER.info("Nothing to replace for " + mcrid);
             }
+        }
+    }
+
+    @MCRCommand(help = "apply level sorting on all journals", syntax = "apply level sorting")
+    public static List<String> applyLevelSorting() throws Exception {
+        List<String> journalIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
+            "objectType:jpjournal");
+        return journalIds.stream().map(id -> {
+            return "add level sorting for journal " + id;
+        }).collect(Collectors.toList());
+    }
+
+    @MCRCommand(help = "apply level sorting for {journal}", syntax = "add level sorting for journal {0}")
+    public static void applyLevelSortingForJournal(String id) throws Exception {
+        LOGGER.info("apply level sorting for journal " + id);
+        MCRObjectID journalId = MCRObjectID.getInstance(id);
+
+        JPJournal journal = new JPJournal(journalId);
+        JPLevelSorting levelSorting = JPLevelSortingUtil.analyze(journalId);
+
+        boolean isCalendar = journal.isJournalType("jportal_class_00000200", "calendars");
+        boolean isJVB = journalId.toString().equals("jportal_jpjournal_00000109");
+        boolean isLLZ = journalId.toString().equals("jportal_jpjournal_00001219");
+        boolean isManualSorting = isCalendar || isJVB || isLLZ;
+
+        if (isManualSorting) {
+            LOGGER.info("journal is either calendar, jvb or llz -> do manual sort");
+            // do manual sort for all children
+            levelSorting.getLevels().values().forEach(level -> {
+                level.setSorterClass(null);
+                level.setOrder(null);
+            });
+        }
+        LOGGER.info("use level sorting: " + levelSorting.toJSON().toString());
+        LOGGER.info("store level sorting...");
+        JPLevelSortingUtil.store(journalId, levelSorting);
+
+        if (!isManualSorting) {
+            LOGGER.info("get all descendants and mark them as IMPORTED.");
+            List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
+                "journalID:" + id);
+            descendantAndSelfIds.forEach(childId -> {
+                MCRMarkManager.instance().mark(MCRObjectID.getInstance(childId), Operation.IMPORT);
+            });
+            LOGGER.info("apply level sorting...");
+            JPLevelSortingUtil.apply(journalId, levelSorting);
+            LOGGER.info("unmark all children...");
+            descendantAndSelfIds.forEach(childId -> {
+                MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId));
+            });
+            LOGGER.info("reindex all children...");
+            MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds, true);
         }
     }
 

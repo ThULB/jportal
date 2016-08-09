@@ -74,6 +74,21 @@ public class JPJournal extends JPContainer {
     }
 
     /**
+     * Checks if this journal is type of the given classification and category.
+     * For example: isJournalType("jportal_class_00000200", "calendars");
+     * 
+     * @param classId the classification to check
+     * @param categId the category to check
+     * @return true if this journal is one of the type
+     */
+    public boolean isJournalType(String classId, String categId) {
+        return getJournalTypes().stream().filter(id -> {
+            MCRCategoryID cmp = new MCRCategoryID(classId, categId);
+            return cmp.equals(id);
+        }).findAny().isPresent();
+    }
+
+    /**
      * Gets the contentClassisX content.
      * 
      * @param number the number of the content classis.

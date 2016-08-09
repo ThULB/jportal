@@ -1,7 +1,7 @@
 package fsu.jportal.backend.sort;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,13 +17,13 @@ import fsu.jportal.util.JPLevelSortingUtil;
  */
 public class JPLevelSorting {
 
-    protected List<Level> levelList;
+    protected Map<Integer, Level> levels;
 
     /**
      * Creates a new empty level sorting.
      */
     public JPLevelSorting() {
-        this.levelList = new ArrayList<>();
+        this.levels = new HashMap<>();
     }
 
     /**
@@ -35,7 +35,7 @@ public class JPLevelSorting {
      * @param order
      */
     public void set(int level, String name, Class<? extends JPSorter> sorterClass, Order order) {
-        this.levelList.add(level, new Level(name, sorterClass, order));
+        this.levels.put(level, new Level(name, sorterClass, order));
     }
 
     /**
@@ -47,7 +47,8 @@ public class JPLevelSorting {
      * @param order
      */
     public void add(String name, Class<? extends JPSorter> sorterClass, Order order) {
-        this.levelList.add(new Level(name, sorterClass, order));
+        Integer curMaxLevel = this.levels.keySet().stream().reduce(Integer::max).orElse(-1);
+        this.levels.put(curMaxLevel + 1, new Level(name, sorterClass, order));
     }
 
     /**
@@ -57,7 +58,7 @@ public class JPLevelSorting {
      * @return the level at the previously specified position
      */
     public Level remove(int level) {
-        return this.levelList.remove(level);
+        return this.levels.remove(level);
     }
 
     /**
@@ -67,20 +68,16 @@ public class JPLevelSorting {
      * @return the level or null if there is nothing defined
      */
     public Level get(int level) {
-        try {
-            return this.levelList.get(level);
-        } catch(Exception exc) {
-            return null;
-        }
+        return this.levels.get(level);
     }
 
     /**
-     * Returns a live list of the levels.
+     * Returns a live map of the levels.
      * 
-     * @return the level list
+     * @return the level map
      */
-    public List<Level> getLevelList() {
-        return levelList;
+    public Map<Integer, Level> getLevels() {
+        return this.levels;
     }
 
     /**
@@ -89,7 +86,7 @@ public class JPLevelSorting {
      * @return returns true if this level sorting is empty
      */
     public boolean isEmpty() {
-        return levelList.isEmpty();
+        return this.levels.isEmpty();
     }
 
     /**
@@ -110,9 +107,9 @@ public class JPLevelSorting {
      */
     public JsonArray toJSON() {
         JsonArray array = new JsonArray();
-        levelList.forEach(level -> {
+        levels.forEach((index, level) -> {
             JsonObject levelobject = new JsonObject();
-            levelobject.addProperty("index", levelList.indexOf(level));
+            levelobject.addProperty("index", index);
             levelobject.addProperty("name", level.getName());
             Class<? extends JPSorter> sorterClass = level.getSorterClass();
             if (sorterClass != null) {
@@ -177,6 +174,18 @@ public class JPLevelSorting {
 
         public Class<? extends JPSorter> getSorterClass() {
             return sorterClass;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setOrder(Order order) {
+            this.order = order;
+        }
+
+        public void setSorterClass(Class<? extends JPSorter> sorterClass) {
+            this.sorterClass = sorterClass;
         }
 
     }

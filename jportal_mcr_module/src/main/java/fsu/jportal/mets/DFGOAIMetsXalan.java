@@ -1,5 +1,9 @@
 package fsu.jportal.mets;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashSet;
+
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -10,10 +14,6 @@ import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.HashSet;
 
 /**
  * Created by chi on 26.07.16.

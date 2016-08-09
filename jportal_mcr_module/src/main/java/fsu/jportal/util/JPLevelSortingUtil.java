@@ -26,6 +26,7 @@ import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.backend.sort.JPLevelSorting.Level;
 import fsu.jportal.backend.sort.JPMagicSorter;
@@ -76,7 +77,7 @@ public abstract class JPLevelSortingUtil {
                 return e.getKey().endsWith(".order");
             }).map(Entry::getValue).map(Order::valueOf).findAny().orElse(null);
             Unthrow.wrapProc(() -> {
-                Class<? extends JPSorter> sorterClass = getSorterClassByName(sorter);
+                Class<? extends JPSorter> sorterClass = sorter != null ? getSorterClassByName(sorter) : null;
                 levelSorting.set(level, name, sorterClass, order);
             });
         });
@@ -111,8 +112,7 @@ public abstract class JPLevelSortingUtil {
         // remove all level stuff
         config.removeByKeyFilter("level.");
         // add from the level sorting object
-        for (Level level : levelSorting.getLevelList()) {
-            int index = levelSorting.getLevelList().indexOf(level);
+        levelSorting.getLevels().forEach((index, level) -> {
             String baseKey = "level." + index;
             config.set(baseKey + ".name", level.getName());
             if (level.getSorterClass() != null) {
@@ -121,7 +121,7 @@ public abstract class JPLevelSortingUtil {
             if (level.getOrder() != null) {
                 config.set(baseKey + ".order", level.getOrder().name());
             }
-        }
+        });
         config.store();
     }
 
@@ -175,7 +175,7 @@ public abstract class JPLevelSortingUtil {
         JPComponentUtil.getContainer(objectID).ifPresent(container -> {
             container.setSortBy(sorter, order);
             try {
-                container.store();
+                container.store(StoreOption.metadata);
             } catch (Exception exc) {
                 LOGGER.error(
                     "Unable to store " + container.getObject().getId() + " while applying sorter " + sorter.getName(),

@@ -1,21 +1,22 @@
 package fsu.jportal.frontend.cli;
 
-import fsu.jportal.backend.ImportDerivateObject;
-import fsu.jportal.backend.io.HttpImportSource;
-import fsu.jportal.backend.io.ImportSink;
-import fsu.jportal.backend.io.RecursiveImporter;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import fsu.jportal.backend.ImportDerivateObject;
+import fsu.jportal.backend.io.HttpImportSource;
+import fsu.jportal.backend.io.ImportSink;
+import fsu.jportal.backend.io.RecursiveImporter;
 
 /**
  * Created by chi on 23.04.15.

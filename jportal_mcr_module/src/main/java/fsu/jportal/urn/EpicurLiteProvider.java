@@ -1,5 +1,7 @@
 package fsu.jportal.urn;
 
+import java.net.URL;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.ifs.MCRFile;
@@ -13,8 +15,6 @@ import org.mycore.iview2.services.MCRIView2Tools;
 import org.mycore.urn.epicurlite.EpicurLite;
 import org.mycore.urn.epicurlite.IEpicurLiteProvider;
 import org.mycore.urn.hibernate.MCRURN;
-
-import java.net.URL;
 
 public class EpicurLiteProvider implements IEpicurLiteProvider {
     static final Logger LOGGER = LogManager.getLogger(EpicurLiteProvider.class);

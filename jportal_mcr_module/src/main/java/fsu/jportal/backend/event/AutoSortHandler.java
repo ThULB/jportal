@@ -46,8 +46,7 @@ public class AutoSortHandler extends MCREventHandlerBase {
 
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        MCRMarkManager mm = MCRMarkManager.instance();
-        if (mm.isMarkedForDeletion(obj.getId()) || mm.isMarkedForImport(obj.getId())) {
+        if (MCRMarkManager.instance().isMarkedForDeletion(obj.getId())) {
             return;
         }
         getContainer(obj).ifPresent(container -> {

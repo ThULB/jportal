@@ -1,6 +1,10 @@
 package fsu.jportal.frontend;
 
-import fsu.jportal.util.JPComponentUtil;
+import java.io.IOException;
+import java.util.List;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -16,10 +20,7 @@ import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrURL;
 import org.xml.sax.SAXException;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import java.io.IOException;
-import java.util.List;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * Created by chi on 03.09.15.

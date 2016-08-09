@@ -1,8 +1,10 @@
 package fsu.jportal.urn;
 
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.integration.junit4.JMockit;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.UUID;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +12,9 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.urn.services.MCRIURNProvider;
 import org.mycore.urn.services.MCRURN;
 
-import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import mockit.Mock;
+import mockit.MockUp;
+import mockit.integration.junit4.JMockit;
 
 /**
  * Created by chi on 27.11.15.

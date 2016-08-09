@@ -4,8 +4,6 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRXMLHelper;
-import org.mycore.datamodel.metadata.MCRMetaDefault;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
 
 import com.google.gson.JsonObject;
 

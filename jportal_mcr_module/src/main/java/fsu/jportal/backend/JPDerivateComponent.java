@@ -5,8 +5,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mycore.access.MCRAccessException;
@@ -109,21 +111,28 @@ public class JPDerivateComponent implements JPComponent {
     }
 
     @Override
-    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
-        // set main doc
-        Iterator<String> it = this.newContentMap.keySet().iterator();
-        if (it.hasNext()) {
-            this.derivate.getDerivate().getInternals().setMainDoc(it.next());
+    public void store(StoreOption... options)
+        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
+        List<StoreOption> optionList = Arrays.asList(options);
+
+        if (optionList.contains(StoreOption.metadata)) {
+            // set main doc
+            Iterator<String> it = this.newContentMap.keySet().iterator();
+            if (it.hasNext()) {
+                this.derivate.getDerivate().getInternals().setMainDoc(it.next());
+            }
+            // update derivate
+            MCRMetadataManager.update(this.derivate);
         }
-        // update derivate
-        MCRMetadataManager.update(this.derivate);
-        // upload files
-        for (Map.Entry<String, URL> entry : this.newContentMap.entrySet()) {
-            String path = entry.getKey();
-            URL url = entry.getValue();
-            try (InputStream in = url.openStream()) {
-                Files.copy(in, MCRPath.getPath(this.derivate.getId().toString(), path),
-                    StandardCopyOption.REPLACE_EXISTING);
+        if (optionList.contains(StoreOption.content)) {
+            // upload files
+            for (Map.Entry<String, URL> entry : this.newContentMap.entrySet()) {
+                String path = entry.getKey();
+                URL url = entry.getValue();
+                try (InputStream in = url.openStream()) {
+                    Files.copy(in, MCRPath.getPath(this.derivate.getId().toString(), path),
+                        StandardCopyOption.REPLACE_EXISTING);
+                }
             }
         }
     }

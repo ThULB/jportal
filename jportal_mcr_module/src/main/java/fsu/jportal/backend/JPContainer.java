@@ -1,6 +1,7 @@
 package fsu.jportal.backend;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -103,12 +104,15 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     }
 
     @Override
-    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
-        super.store();
-        for (JPComponent component : childrenMap.values()) {
-            component.store();
+    public void store(StoreOption... options)
+        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
+        super.store(options);
+        if (Arrays.asList(options).contains(StoreOption.children)) {
+            for (JPComponent component : childrenMap.values()) {
+                component.store();
+            }
+            childrenMap.clear();
         }
-        childrenMap.clear();
     }
 
     /**
@@ -155,7 +159,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
         object.getMetadata().setMetadataElement(autosort);
         MCRMetaElementXML metaXML = new MCRMetaElementXML();
         Element sortby = new Element("sortby");
-        if(order != null) {
+        if (order != null) {
             sortby.setAttribute("order", order.name().toLowerCase());
         }
         sortby.setText(sorterClass.getName());

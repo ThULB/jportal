@@ -1,5 +1,14 @@
 package fsu.jportal.mets;
 
+import static fsu.jportal.frontend.SolrToc.buildQuery;
+import static fsu.jportal.frontend.SolrToc.getSort;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -9,15 +18,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static fsu.jportal.frontend.SolrToc.buildQuery;
-import static fsu.jportal.frontend.SolrToc.getSort;
 
 public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
 

@@ -1,13 +1,22 @@
 package fsu.jportal.backend;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import fsu.jportal.gson.DerivateTypeAdapter;
-import fsu.jportal.gson.FileNodeWrapper;
-import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
-import fsu.jportal.mets.MetsTools;
-import fsu.jportal.urn.URNTools;
-import fsu.jportal.util.DerivateLinkUtil;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -19,7 +28,11 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.*;
+import org.mycore.common.MCRJSONManager;
+import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRUsageException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -39,13 +52,15 @@ import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
 import org.xml.sax.SAXException;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import fsu.jportal.gson.DerivateTypeAdapter;
+import fsu.jportal.gson.FileNodeWrapper;
+import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
+import fsu.jportal.mets.MetsTools;
+import fsu.jportal.urn.URNTools;
+import fsu.jportal.util.DerivateLinkUtil;
 
 public class DerivateTools {
     static Logger LOGGER = LogManager.getLogger(DerivateTools.class);

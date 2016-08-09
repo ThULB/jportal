@@ -35,6 +35,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
@@ -82,7 +83,7 @@ public class SortResource {
             Class<? extends JPSorter> sorter = Class.forName(sorterClass).asSubclass(JPSorter.class);
             Order order = Order.valueOf(orderString.toUpperCase());
             jpContainer.setSortBy(sorter, order);
-            jpContainer.store();
+            jpContainer.store(StoreOption.metadata);
         } catch (Exception exc) {
             throw new WebApplicationException(exc,
                 Response.status(Status.INTERNAL_SERVER_ERROR)
@@ -102,7 +103,7 @@ public class SortResource {
         JPContainer jpContainer = get(id);
         try {
             jpContainer.setSortBy(null, null);
-            jpContainer.store();
+            jpContainer.store(StoreOption.metadata);
         } catch (Exception exc) {
             throw new WebApplicationException(exc,
                 Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to remove sorter for " + id).build());

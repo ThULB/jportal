@@ -1,18 +1,26 @@
 package fsu.jportal.backend;
 
-import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRPersistenceException;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Base component for person, jpinst, jparticle, jpvolume and jpjournal.
@@ -75,10 +83,16 @@ public abstract class JPObjectComponent implements JPComponent {
     }
 
     @Override
-    public void store() throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
-        MCRMetadataManager.update(object);
-        for (JPDerivateComponent derivate : this.derivates) {
-            derivate.store();
+    public void store(StoreOption... options)
+        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
+        List<StoreOption> optionList = Arrays.asList(options);
+        if (optionList.contains(StoreOption.metadata)) {
+            MCRMetadataManager.update(object);
+        }
+        if (optionList.contains(StoreOption.derivate)) {
+            for (JPDerivateComponent derivate : this.derivates) {
+                derivate.store();
+            }
         }
     }
 
@@ -214,7 +228,8 @@ public abstract class JPObjectComponent implements JPComponent {
      */
     protected List<String> listText(String enclosingTag, String type) {
         return metadataStreamNotInherited(enclosingTag, MCRMetaLangText.class).filter(typeFilter(type))
-            .map(MCRMetaLangText::getText).collect(Collectors.toList());
+                                                                              .map(MCRMetaLangText::getText)
+                                                                              .collect(Collectors.toList());
     }
 
     /**
