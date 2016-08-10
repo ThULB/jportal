@@ -91,25 +91,15 @@
   </xsl:template>
 
   <xsl:template match="mets:dmdSec">
-    <xsl:variable name="dmdID">
-      <xsl:choose>
-        <xsl:when test="@ID">
-          <xsl:value-of select="@ID"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="concat('dmd_',$derivateID)"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <mets:dmdSec ID="{$dmdID}">
+    <mets:dmdSec ID="dmd_{$derivateID}">
       <mets:mdWrap MDTYPE="MODS">
         <mets:xmlData>
           <mods:mods>
-            <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject"/>
+            <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject" />
             <mods:extension>
               <urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
-                <xsl:call-template name="ownerEntity"/>
-                <xsl:apply-templates mode="entities" select="$sourcedoc/mycoreobject"/>
+                <xsl:call-template name="ownerEntity" />
+                <xsl:apply-templates mode="entities" select="$sourcedoc/mycoreobject" />
               </urmel:entities>
             </mods:extension>
           </mods:mods>
