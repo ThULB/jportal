@@ -439,23 +439,12 @@
   </xsl:template>
 
   <xsl:template match="mets:dmdSec" priority="1">
-    <xsl:variable name="dmdID">
-      <xsl:choose>
-        <xsl:when test="@ID">
-          <xsl:value-of select="@ID"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="concat('dmd_',$derivateID)"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="mcrObj" select="document(concat('mcrobject:',substring($dmdID, 5)))"/>
-    <mets:dmdSec ID="{$dmdID}">
+    <mets:dmdSec ID="dmd_{$derivateID}">
       <mets:mdWrap MDTYPE="MODS">
         <mets:xmlData>
           <mods:mods>
-            <xsl:apply-templates mode="metsmeta" select="$mcrObj/mycoreobject" />
-            <xsl:apply-templates mode="jp.mods.extension" select="$mcrObj/mycoreobject" />
+            <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject" />
+            <xsl:apply-templates mode="jp.mods.extension" select="$sourcedoc/mycoreobject" />
           </mods:mods>
         </mets:xmlData>
       </mets:mdWrap>
