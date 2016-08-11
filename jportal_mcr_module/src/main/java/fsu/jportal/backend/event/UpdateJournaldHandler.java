@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.common.MCRLinkTableManager;
@@ -35,7 +36,7 @@ public class UpdateJournaldHandler extends MCREventHandlerBase {
         }
         updateImprintPartnerGreeting(mcrId.toString());
         try {
-            updateDescendents(obj);
+            MCRSessionMgr.getCurrentSession().onCommit(new UpdateDescendantsThread(obj.getId()));
         } catch (Exception exc) {
             LOGGER.error("Unable to reindex descendents of " + mcrId, exc);
         }
@@ -57,12 +58,27 @@ public class UpdateJournaldHandler extends MCREventHandlerBase {
         }
     }
 
-    private void updateDescendents(MCRObject journal) throws SolrServerException {
-        String journalID = journal.getId().toString();
-        SolrClient client = MCRSolrClientFactory.getConcurrentSolrClient();
-        List<String> descendents = MCRSolrSearchUtils.listIDs(client, "journalID:" + journalID);
-        descendents = descendents.stream().filter(id -> !id.equals(journalID)).collect(Collectors.toList());
-        MCRSolrIndexer.rebuildMetadataIndex(descendents, true);
+    private static class UpdateDescendantsThread implements Runnable {
+
+        private MCRObjectID journalId;
+
+        public UpdateDescendantsThread(MCRObjectID journalId) {
+            this.journalId = journalId;
+        }
+
+        @Override
+        public void run() {
+            try {
+                SolrClient client = MCRSolrClientFactory.getConcurrentSolrClient();
+                List<String> descendants = MCRSolrSearchUtils.listIDs(client, "journalID:" + journalId.toString());
+                descendants = descendants.stream()
+                                         .filter(id -> !id.equals(journalId.toString()))
+                                         .collect(Collectors.toList());
+                MCRSolrIndexer.rebuildMetadataIndex(descendants, true);
+            } catch (Exception exc) {
+                LOGGER.error("Unable to update descedants for " + journalId.toString(), exc);
+            }
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.common.MCRMarkManager;
@@ -54,10 +55,22 @@ public class SolrOrderHandler extends MCREventHandlerBase {
                 reindexList.add(id.toString());
             }
         }
-
-        // solr reindex
         if (!reindexList.isEmpty()) {
-            MCRSolrIndexer.rebuildMetadataIndex(reindexList, true);
+            MCRSessionMgr.getCurrentSession().onCommit(new ReindexThread(reindexList));
+        }
+    }
+
+    private static class ReindexThread implements Runnable {
+
+        private List<String> ids;
+
+        public ReindexThread(List<String> ids) {
+            this.ids = ids;
+        }
+
+        @Override
+        public void run() {
+            MCRSolrIndexer.rebuildMetadataIndex(ids, true);
         }
     }
 
