@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -147,21 +148,25 @@ public abstract class JPLevelSortingUtil {
     }
 
     protected static void apply(MCRObjectID objectID, JPLevelSorting levelSorting, int levelPosition) {
-        Level level = levelSorting.get(levelPosition);
-        if(level != null) {
-            applySorter(objectID, level.getSorterClass(), level.getOrder());
+        try {
+            Level level = levelSorting.get(levelPosition);
+            if(level != null) {
+                applySorter(objectID, level.getSorterClass(), level.getOrder());
+            }
+            MCRObject object = MCRMetadataManager.retrieveMCRObject(objectID);
+            List<MCRMetaLinkID> children = object.getStructure().getChildren();
+            if(children.isEmpty()) {
+                return;
+            }
+            children.stream()
+                .map(MCRMetaLinkID::getXLinkHref)
+                .map(MCRObjectID::getInstance)
+                .forEach(id -> {
+                    apply(id, levelSorting, levelPosition + 1);
+                });
+        } catch(Exception exc) {
+            throw new MCRException("Unable to apply level sorting for " + objectID.toString(), exc);
         }
-        MCRObject object = MCRMetadataManager.retrieveMCRObject(objectID);
-        List<MCRMetaLinkID> children = object.getStructure().getChildren();
-        if(children.isEmpty()) {
-            return;
-        }
-        children.stream()
-            .map(MCRMetaLinkID::getXLinkHref)
-            .map(MCRObjectID::getInstance)
-            .forEach(id -> {
-                apply(id, levelSorting, levelPosition + 1);
-            });
     }
 
     /**
