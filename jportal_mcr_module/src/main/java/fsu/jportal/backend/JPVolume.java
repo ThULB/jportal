@@ -92,11 +92,12 @@ public class JPVolume extends JPContainer {
      * @return position in parent
      */
     public Integer getHiddenPosition() {
-        String posAsString = getText("hidden_positions", null).orElse("0");
+        String hiddenPosition = getText("hidden_positions", null).orElse("0");
         try {
-            return Integer.valueOf(posAsString);
+            String replaced = hiddenPosition.replaceAll("[^0-9]", "");
+            return Integer.valueOf(replaced);
         } catch (Exception exc) {
-            LOGGER.warn("Unable to parse the hidden position (" + posAsString + ") of " + getObject().getId()
+            LOGGER.warn("Unable to parse the hidden position (" + hiddenPosition + ") of " + getObject().getId()
                 + " to an integer value.");
             return 0;
         }
