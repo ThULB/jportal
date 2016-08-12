@@ -37,15 +37,15 @@
 
     <div class="jp-content container-fluid col-sm-12">
       <!-- left side -->
-
+      <div class="row">
       <xsl:call-template name="leftSide">
         <xsl:with-param name="id" select="@ID"/>
       </xsl:call-template>
 
       <!-- right side-->
     <xsl:choose>
-      <xsl:when test="$currentType != 'jparticle' and $currentType != 'person'  and $currentType !='jpinst'">
-        <div id="jp-journal-content" class="col-sm-8 col-sm-offset-1 col-xs-6">
+      <xsl:when test="$currentType != 'jparticle' and not(contains($currentType,'person'))  and $currentType !='jpinst'">
+        <div id="jp-journal-content" class="col-md-9 col-xs-6">
           <xsl:call-template name="jp.journal.content" />
         </div>
       </xsl:when>
@@ -56,6 +56,7 @@
       </xsl:otherwise>
       </xsl:choose>
     </div>
+    </div>
   </xsl:template>
 
   <xsl:template name="leftSide">
@@ -65,7 +66,7 @@
     <xsl:variable name="obj" select="document(concat('mcrobject:',$id))/mycoreobject"/>
 
     <xsl:if test="$currentType != 'jparticle'">
-      <div id="jp-journal-childs" class="col-sm-2 col-xs-6">
+      <div id="jp-journal-childs" class="col-md-3 col-xs-4">
         <xsl:if test="$currentType = 'jpvolume'">
           <xsl:call-template name="jp.backToJournal"/>
         </xsl:if>
@@ -97,38 +98,58 @@
           <xsl:variable name="template" select="$journal/metadata/hidden_templates/hidden_template/text()" />
         </xsl:if>
          <!-- <xsl:if test="contains($template, 'template_gfa' or 'template_cma')">-->
-            <xsl:if test="$template ='template_gfa'">
-              <div class="selectbox">
+            <xsl:if test="$template ='template_gfa'or $template = 'template_nsjb'">
+              <div class="template-collapse">
+              <a class="dt-collapse collapsed" data-toggle="collapse" data-target="#collapse1" >
+                <span class="jp-layout-facet-group-head" id="portal">
                 Autorenportal
-              </div>
-              <select class="form-control input-sm" onchange="location = this.options[this.selectedIndex].value;">
-                <option value="" hidden="">Wie werde ich Autor </option>
-                  <option value="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/becomeAutor.xml?journalID=', $id)}">
+                <i class="fa fa-sort-asc" />
+                <i class="fa fa-sort-desc" />
+                </span>
+              </a>
+              <div id="collapse1" class="collapse">
+               <p id="portal">
+                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/becomeAutor.xml?journalID=', $id)}">
                     Wie werde
                     ich Autor
-                  </option>
-                  <option value="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/guideline.xml?journalID=', $id)}">
+                  </a>
+              </p>
+                <p id="portal">
+                  <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/guideline.xml?journalID=', $id)}">
                     Richtlinien
-                  </option>
-                <option value="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/recessionOffer.xml?journalID=', $id)}">
+                  </a>
+                </p>
+                <p id="portal">
+                <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/recessionOffer.xml?journalID=', $id)}">
                     Rezensionsangebote
-                </option>
-              </select>
+                </a>
+                </p>
+              </div>
+              </div>
             </xsl:if>
             <xsl:if test="$template = 'template_cma'">
-              <div class="selectbox">
-                Autorenportal
-              </div>
-              <select class="form-control input-sm" onchange="location = this.options[this.selectedIndex].value;">
-                <option value="" hidden="">Wie werde ich Autor </option>
-                <option value="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/becomeAutor.xml?journalID=', $id)}">
+              <div class="template-collapse">
+              <a class="dt-collapse collapsed" data-toggle="collapse" data-target="#collapse1">
+                <span class="jp-layout-facet-group-head" id="portal">
+                  Autorenportal
+                  <i class="fa fa-sort-asc" />
+                  <i class="fa fa-sort-desc" />
+                </span>
+              </a>
+              <div id="collapse1" class="collapse">
+                <p id="portal">
+                <a href="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/becomeAutor.xml?journalID=', $id)}">
                     Wie werde
                     ich Autor
-                  </option>
-                <option value="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/guideline.xml?journalID=', $id)}">
+                  </a>
+                </p>
+                <p id="portal">
+                <a href="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/guideline.xml?journalID=', $id)}">
                     Richtlinien
-                  </option>
-              </select>
+                  </a>
+                </p>
+              </div>
+              </div>
             </xsl:if>
           <xsl:if test="$template != 'template_gwlb'">
             <div class="imprint">
@@ -159,7 +180,7 @@
       <xsl:for-each select="node()">
         <xsl:choose>
           <xsl:when test="$journalID != ''">
-            <div id="jp-journal-content" class="col-sm-8 col-sm-offset-1 col-xs-6">
+            <div id="jp-journal-content" class="col-md-9 col-xs-6">
               <xsl:apply-templates select="."/>
             </div>
           </xsl:when>
@@ -323,7 +344,7 @@
   <xsl:template name="jp.volumeLinks">
     <xsl:param name="id" />
     <xsl:if test="imprint:has($id, 'link')">
-      <div class="list-group">
+      <div class="list-group" id="vintage">
         <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-link-list">
           <span class="jp-layout-facet-group-head">
             Links
@@ -363,7 +384,7 @@
       </xsl:choose>
     </xsl:variable>
     <a href="{$imprintHref}">
-      <xsl:value-of select="i18n:translate('jp.site.imprint')" />
+      <xsl:value-of select="i18n:translate('jp.site.imprint.gwlb')" />
     </a>
   </xsl:template>
 

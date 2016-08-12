@@ -177,7 +177,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <img class="GBV" src="{concat($templateWebURL, 'IMAGES/GBV.png')}"></img>
+              <img class="GBV" src="{concat($templateWebURL, 'IMAGES/VZG.png')}"></img>
               <ul class="list-inline jp-layout-mainHeader-UlLeft">
                 <!--<li class="jp-layout-mainHeader-SeperatorRight">-->
                   <!--<xsl:variable name="imprintHref">-->
@@ -209,7 +209,7 @@
 
                 <li class="jp-layout-mainHeader-LiPaPushleft">
                   <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
-                    Zeitschriftenserver
+                    Zeitschriftenserver der VZG
                   </a>
                 </li>
                <!-- <li class="jp-layout-mainheader-LiPaPushright">Digitale Bibliothek

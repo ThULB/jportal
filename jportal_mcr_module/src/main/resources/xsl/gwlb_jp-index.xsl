@@ -4,8 +4,8 @@
 
   <xsl:template match="jpindex">
 
-    <div class="jp-layout-index col-sm-10 col-sm-offset-1">
-      <div class="jp-layout-index-intro">
+    <div class="jp-layout-index col-lg-12">
+      <div class="jp-layout-index-intro col-md-10 col-md-offset-1">
         <xsl:variable name="currentLang" select="i18n:getCurrentLocale()" />
         <xsl:choose>
           <xsl:when test="imprint:has('index', 'greeting')">
@@ -15,11 +15,12 @@
             <xsl:apply-templates select="imprint:getDefaultGreetingXSL('index', $currentLang)" />
           </xsl:otherwise>
         </xsl:choose>
-      </div>
-      <div id="gwlb-layout-index-list">
-        <h2>Zeitschriften</h2>
+        <div id="gwlb-layout-index-list">
+          <h2>Zeitschriften</h2>
 
+        </div>
       </div>
+
     </div>
     <div>
       <xsl:variable name="journalList" select="document('solr:q=+objectType:jpjournal&amp;rows=99999&amp;sort=maintitle_sort%20asc')" />

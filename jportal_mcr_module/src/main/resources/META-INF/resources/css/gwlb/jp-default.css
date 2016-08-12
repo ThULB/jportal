@@ -61,7 +61,6 @@ html, body {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-size: 0.9rem;
   font-weight: 400;
-  padding-bottom: 5px;
   color: #464646;
   overflow-x: hidden;
   background: white linear-gradient(to bottom, rgba(85, 127, 187, 1) 0%,
@@ -73,6 +72,11 @@ html a {
 }
 html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-layout-intro a {
   color: #27568F;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
 }
 
 h1 {
@@ -99,10 +103,6 @@ p {
   margin-top: 0px;
   margin-bottom: 77px;
   font-weight: bold;
-  border-top: 1px solid #fff;
-  -webkit-box-shadow: 0px -1px 0px 0px #ccc;
-  -moz-box-shadow: 0px -1px 0px 0px #ccc;
-  box-shadow: 0px -1px 0px 0px #ccc;
 }
 .jp-layout-index-intro {
   text-align: center;
@@ -225,6 +225,8 @@ p {
   background-color: #ffffff;
   width: 100%;
   bottom: 0;
+  position: absolute;
+  border-top: 1px solid #557fbb;
 }
 
 @media (min-width: 768px) {
@@ -275,6 +277,13 @@ p {
   }
 }
 
+#footer {
+  padding-bottom: 48px;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  box-shadow: -1px 0px 0px 0px #ccc, 1px 0px 0px 0px #ccc;
+}
+
 div a p {  /* only for main -> journal.text */
   font-size: 15px;
   color: black;
@@ -316,7 +325,33 @@ button.btn.btn-primary.dropdown-toggle.writerportal {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
 #portal {
-  padding-left: 4.0em;
+ /* padding-left: 1em;
+  padding-right: 1em;*/
+}
+
+#bread {
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  box-shadow: -1px 0px 0px 0px #ccc, 1px 0px 0px 0px #ccc;
+  padding-left: 30px;
+}
+
+#vintage {
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
+@media(max-width: 767px) {
+  #bread {
+    padding-left: 0px;
+  }
+}
+
+.template-collapse {
+  padding-left: 2em;
+  border-top: 1px solid white;
+  padding-right: 2em;
+  box-shadow: 0px -1px 0px 0px #ccc;
 }
 
 @media (max-width: 505px) {
@@ -393,11 +428,23 @@ select.form-control.input-sm {
   padding-right: 0;
 }
 
+#jp-journal-content {
+  border-left: 1px solid white;
+  box-shadow: -1px 0px 0px 0px #ccc;
+  padding-left: 3em;
+  padding-top: 1em;
+}
+
 .imprint {
+  padding-left: 1.5em;
+  padding-bottom: 1em;
   margin-top: 20px;
   font-size: 16px;
   line-height: 29px;
   font-weight: 700;
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
+  box-shadow: 0px 1px 0px 0px #ccc, 0px -1px 0px 0px #ccc;
 }
 
 .jp-layout-hit-breadcrumb{
@@ -434,6 +481,7 @@ select.form-control.input-sm {
 .jp-layout-intro {
   padding: 0;
 }
+
 
 .jp-layout-maintitle {
   clear: both;
@@ -482,13 +530,18 @@ dt.col-sm-4.col-xs-7.jp-layout-metadataList-participant {
 
 dd.col-sm-8.col-xs-5.jp-layout-metadataList-identi {
   padding-top: 14px;
+  border-bottom: 1px solid white;
+  box-shadow: 0px 1px 0px 0px #ccc;
+  padding-bottom: 30px;
 }
 
 dt.col-sm-4.col-xs-7.jp-layout-metadataList-identi {
-  padding: 0px;
-  margin-bottom: 73px;
-  /*width: 4%;*/
+  margin-bottom: 35px;
+  /* width: 4%; */
   padding-top: 14px;
+  border-bottom: 1px solid white;
+  box-shadow: 0px 1px 0px 0px #ccc;
+  padding-bottom: 30px;
 }
 
 .jp-layout-metadataList dd > a:not(:last-child):after{
@@ -715,7 +768,7 @@ p.jp-layout-metadata-list {
 }
 #globalHeader li.jp-layout-mainHeader-LiPaPushleft a {
   /* color: black; */
-  width: 200px;
+  width: 300px;
   height: 19px;
   color: white;
   font-family: Calibri;
@@ -748,8 +801,12 @@ p.jp-layout-metadata-list {
 #searchBar {
   background-color: transparent;
   position: relative;
-  margin-top: 77px;
-  margin-bottom: 43px;
+  padding-top: 30px;
+  margin: 0px;
+  padding-bottom: 43px;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  box-shadow: -1px 0px 0px 0px #ccc, 1px 0px 0px 0px #ccc;
 }
 
 
@@ -764,16 +821,17 @@ p.jp-layout-metadata-list {
   margin-right: 2px;
 }
 
+@media (min-width: 1200px){
+  .container {
+    width: 1280px;
+  }
+
 #searchBar .input-group-addon {
     background-color: #005595;
     color: #ffffff;
     padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 0px;
-}
-
-#searchBar .input-group-addon > span {
-  padding: 9px 9px;
 }
 
 #searchBar .btn {
@@ -804,14 +862,22 @@ p.jp-layout-metadata-list {
 #main {
   background-color: transparent;
   overflow: hidden;
-  padding: 1px 20px 0px; /* padding von jahrgang noch entfernen */
+  /*padding: 1px 20px 0px;*/ /* padding von jahrgang noch entfernen */
   margin-top: 0px;
+  border-top: 1px solid white;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  box-shadow: -1px 0px 0px 0px #ccc, 1px 0px 0px 0px #ccc, 0px -1px 0px 0px #ccc;
 }
 
 @media (max-width: 767px) {
   #main h1 {
     font-size: 3.6em;
   }
+}
+
+body {
+  margin-bottom: 133px;
 }
 
 @media (max-width: 436px) {
@@ -824,6 +890,7 @@ p.jp-layout-metadata-list {
 @media(min-width: 768px) {
   #main {
     min-height: 645px;
+    padding-left: 0px;
   }
   .jp-layout-hits {
     min-height: 480px;
@@ -890,7 +957,8 @@ p.jp-layout-metadata-list {
 }
 
 .jp-content {
-  padding: 30px 15px 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   border-bottom: 1px solid #F0F0F0;
   border-top: 1px solid #F0F0F0;
 }
@@ -913,6 +981,7 @@ p.jp-layout-metadata-list {
 
 #jp-journal-childs {
   padding-left: 0px;
+  margin-top: 1em;
   padding-right: 0;
   border-right: 1px solid #F0F0F0;
 }
@@ -1307,7 +1376,7 @@ textarea {
 .dt-collapse.collapsed .fa-sort-desc{
   display: inline-block;
   float: right;
-  line-height: 29px;
+  /*line-height: 29px;*/
   font-weight: 700;
   font-size: 16px;
 }
@@ -1743,11 +1812,11 @@ p.jp-navigation-topHeader-ImgPush {
 }
 
 #jp-journal-childs {
-  padding-right: 15px;
+  /*padding-right: 15px;*/
 }
 
 #jp-journal-childs > div:not(:first-child) {
-  border-top: 1px solid #F0F0F0;
+  /*border-top: 1px solid white;*/
   padding-top: 10px;
 }
 
@@ -1820,15 +1889,12 @@ p.jp-navigation-topHeader-ImgPush {
 
 #gwlb-layout-index-list {
   margin-bottom: 66px;
-  padding-top: 22px;
+  padding-top: 30px;
+  margin-top: 60px;
   border-top: 1px solid #fff;
   -webkit-box-shadow: 0px -1px 0px 0px #ccc;
   -moz-box-shadow: 0px -1px 0px 0px #ccc;
   box-shadow: 0px -1px 0px 0px #ccc;
-}
-
-#border {
-  border-bottom: 1px solid #557fbb;
 }
 
 #gwlb-layout-index-list h2 {

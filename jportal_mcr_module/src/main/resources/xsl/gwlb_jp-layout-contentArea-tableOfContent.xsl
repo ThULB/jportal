@@ -280,7 +280,7 @@
   <xsl:template name="jp.printVolumeListCat">
     <xsl:param name="volumes"/>
     <xsl:param name="catTxt"/>
-    <div class="list-group">
+    <div class="list-group" id="vintage">
       <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-volume-list">
         <span class="jp-layout-facet-group-head">
           <xsl:value-of select="$catTxt"/>

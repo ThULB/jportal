@@ -10,8 +10,8 @@
 	<xsl:param name="JP.GWLB.Author.Portal.CMA.Journal.Ids"/>
 
 	<xsl:template name="breadcrumb">
-
-
+	<div class="container" id="bread">
+	<div class="row">
 		<div id="jp-breadcrumb-container" class="col-sm-12">
 			<ol class="col-sm-10 breadcrumb jp-layout-mcbreadcrumb">
 				<li>
@@ -65,6 +65,8 @@
 			</ol>
 			<!--<xsl:call-template name="jp-layout-breadcrumb-scroller" />-->
 		</div>
+	</div>
+	</div>
 	</xsl:template>
 
 	<xsl:template name="resultListBreadcrumb">
@@ -81,6 +83,7 @@
 		<xsl:param name="returnHash" />
 		<xsl:param name="returnID" />
 		<xsl:param name="returnName" />
+		<div class="row">
 		<div id="jp-breadcrumb-container" class="col-sm-10">
 			<ol class="breadcrumb jp-layout-mcbreadcrumb">
 				<xsl:variable name="hash">
@@ -132,6 +135,7 @@
 					</xsl:choose>
 				</li>
 			</ol>
+		</div>
 		</div>
 	</xsl:template>
 

@@ -9,6 +9,7 @@
 }
 #logo {
     height: 162px;
+    border-top: none;
 }
 #globalHeader {
     height:auto;
@@ -48,6 +49,16 @@
     top: 0px;
     width: 50%;
 }
+
+@media(max-width: 1199px){
+    #pixelLeft{
+        width: 0%;
+    }
+    #pixelRight{
+        width: 0%;
+    }
+}
+
 #searchBar .input-group-addon {
     background-color: #686868;
     color: #FFF;
