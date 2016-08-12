@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,13 +32,20 @@ import org.jdom2.transform.JDOMResult;
 import org.jdom2.transform.JDOMSource;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.access.MCRAccessException;
 import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXSLTransformation;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.common.MCRMarkManager.Operation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.solr.MCRSolrClientFactory;
@@ -217,6 +225,45 @@ public class MigratingCMDs {
             } else {
                 LOGGER.info("Nothing to replace for " + mcrid);
             }
+        }
+    }
+
+    @MCRCommand(help = "fixes child doublets and removes all object which doesn't exist", syntax = "fix children of journal {0}")
+    public static List<String> fixJournalChildren(String journalId) {
+        MCRObject journal = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalId));
+        return MCRObjectUtils.getDescendants(journal).stream().map(MCRObject::getId).filter(id -> {
+            return id.getTypeId().equals("jpvolume");
+        }).map(id -> {
+            return "fix children of volume " + id.toString();
+        }).collect(Collectors.toList());
+    }
+
+    @MCRCommand(help = "fixes child doublets and removes all object which doesn't exist", syntax = "fix children of volume {0}")
+    public static void fixVolumeChildren(String volumeId) throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        MCRObject volume = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(volumeId));
+        List<MCRMetaLinkID> toRemove = new ArrayList<>();
+        List<MCRMetaLinkID> children = volume.getStructure().getChildren();
+        int oldSize = children.size();
+        // remove invalid
+        for (MCRMetaLinkID id : children) {
+            if (!MCRMetadataManager.exists(id.getXLinkHrefID())) {
+                toRemove.add(id);
+                continue;
+            }
+        }
+        toRemove.forEach(children::remove);
+        // remove doublets
+        int index = 0;
+        while (index < children.size()) {
+            MCRMetaLinkID id = children.get(index);
+            if (children.stream().filter(id::equals).count() > 1) {
+                children.remove(id);
+            } else {
+                index++;
+            }
+        }
+        if(oldSize != children.size()) {
+            MCRMetadataManager.update(volume);
         }
     }
 
