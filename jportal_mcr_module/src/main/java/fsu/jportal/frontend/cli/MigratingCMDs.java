@@ -38,6 +38,7 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRXSLTransformation;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRMarkManager;
@@ -239,8 +240,9 @@ public class MigratingCMDs {
     }
 
     @MCRCommand(help = "fixes child doublets and removes all object which doesn't exist", syntax = "fix children of volume {0}")
-    public static void fixVolumeChildren(String volumeId) throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
-        MCRObject volume = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(volumeId));
+    public static void fixVolumeChildren(String volumeId) throws MCRPersistenceException, IOException {
+        MCRObjectID mcrVolumeId = MCRObjectID.getInstance(volumeId);
+        MCRObject volume = MCRMetadataManager.retrieveMCRObject(mcrVolumeId);
         List<MCRMetaLinkID> toRemove = new ArrayList<>();
         List<MCRMetaLinkID> children = volume.getStructure().getChildren();
         int oldSize = children.size();
@@ -262,8 +264,9 @@ public class MigratingCMDs {
                 index++;
             }
         }
-        if(oldSize != children.size()) {
-            MCRMetadataManager.update(volume);
+        if (oldSize != children.size()) {
+            Document xml = volume.createXML();
+            MCRXMLMetadataManager.instance().update(mcrVolumeId, new MCRJDOMContent(xml).asByteArray(), new Date());
         }
     }
 
