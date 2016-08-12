@@ -20,6 +20,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.hibernate.Session;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -45,7 +47,6 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.solr.MCRSolrClientFactory;
@@ -229,11 +230,10 @@ public class MigratingCMDs {
     }
 
     @MCRCommand(help = "fixes child doublets and removes all object which doesn't exist", syntax = "fix children of journal {0}")
-    public static List<String> fixJournalChildren(String journalId) {
-        MCRObject journal = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalId));
-        return MCRObjectUtils.getDescendants(journal).stream().map(MCRObject::getId).filter(id -> {
-            return id.getTypeId().equals("jpvolume");
-        }).map(id -> {
+    public static List<String> fixJournalChildren(String journalId) throws SolrServerException {
+        String query = "+journalID:" + journalId + " +objectType:jpvolume";
+        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        return MCRSolrSearchUtils.listIDs(solrClient, query).stream().map(id -> {
             return "fix children of volume " + id.toString();
         }).collect(Collectors.toList());
     }
