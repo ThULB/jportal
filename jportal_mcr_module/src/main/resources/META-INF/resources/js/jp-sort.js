@@ -436,7 +436,8 @@ jp.sort.level = {
   renderRow: function(row) {
     var container = $("#jp-sort-level-table-body");
     var tr = "<tr class='jp-sort-level-row'>";
-    tr += "<td><input class='form-control' type='text' value='" + row.name + "'></input></td>";
+    tr += "<td><input class='form-control' id='jp-sort-level-name-" + row.id + "' type='text' value='" + row.name + "' ";
+    tr += "onchange='jp.sort.level.onChangeName(`" + row.id + "`)'></input></td>";
     tr += "<td><select class='form-control' id='jp-sort-level-classSelect-" + row.id + "'";
     tr += "onchange='jp.sort.level.onChangeClass(`" + row.id + "`)'>";
     tr += "<option class='i18n' i18n='jp.sort.object.manualSort' value=''></option>";
@@ -482,6 +483,12 @@ jp.sort.level = {
     jp.sort.level.render();
   },
 
+  onChangeName: function(id) {
+    var row = jp.sort.level.getRow(id);
+    var value = $("#jp-sort-level-name-" + id).val();
+    row.name = value;
+  },
+
   onChangeClass: function(id) {
     var row = jp.sort.level.getRow(id);
     var value = $("#jp-sort-level-classSelect-" + id).val();
@@ -496,7 +503,7 @@ jp.sort.level = {
     row.order = value;
     jp.sort.level.render();
   },
-
+  
   updateOrder: function(row) {
     var sorterClass = row.sorter;
     if(sorterClass == null) {
