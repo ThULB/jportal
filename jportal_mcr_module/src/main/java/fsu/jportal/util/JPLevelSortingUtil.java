@@ -208,12 +208,16 @@ public abstract class JPLevelSortingUtil {
             MCRObjectID childID = children.get(0);
             Optional<JPPeriodicalComponent> optionalChild = JPComponentUtil.getPeriodical(childID);
             optionalChild.ifPresent(child -> {
-                if (child.getType().equals(JPVolume.TYPE)) {
-                    JPVolume volume = (JPVolume) child;
-                    analyzeVolume(volume, levelSorting);
-                    analyzeNext(volume, levelSorting);
-                } else if (child.getType().equals(JPArticle.TYPE)) {
-                    levelSorting.add("Artikel", JPMagicSorter.class, null);
+                try {
+                    if (child.getType().equals(JPVolume.TYPE)) {
+                        JPVolume volume = (JPVolume) child;
+                        analyzeVolume(volume, levelSorting);
+                        analyzeNext(volume, levelSorting);
+                    } else if (child.getType().equals(JPArticle.TYPE)) {
+                        levelSorting.add("Artikel", JPMagicSorter.class, null);
+                    }
+                } catch(Exception exc) {
+                    throw new MCRException("Unable to analyze " + child.getId().toString(), exc);
                 }
             });
         }
