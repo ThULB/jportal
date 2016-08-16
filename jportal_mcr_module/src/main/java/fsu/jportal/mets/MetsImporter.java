@@ -79,7 +79,8 @@ public abstract class MetsImporter {
         PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
         PhysicalDiv divContainer = physicalStructMap.getDivContainer();
         links.stream().sorted((link1, link2) -> {
-            return divContainer.get(link1.getTo()).getOrder() - divContainer.get(link2.getTo()).getOrder();
+            return divContainer.get(link1.getTo()).getPositionInParent().orElse(0)
+                - divContainer.get(link2.getTo()).getPositionInParent().orElse(0);
         }).findFirst().ifPresent(link -> {
             Element structPhys = mets.getStructMap("PHYSICAL").asElement();
             FILEID_EXPRESSION.setVariable("id", link.getTo());

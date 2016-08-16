@@ -126,9 +126,8 @@ public class Importer {
 
         List<String> monthCommands = new ArrayList<>();
 
-        for (LogicalDiv monthDiv : rootDiv.getChildren()) {
-            String command = "importMetsMonth " + targetID + " " + metsPath + " " + contentPath + " "
-                + monthDiv.getOrder();
+        for (int order = 1; order < rootDiv.getChildren().size(); order++) {
+            String command = "importMetsMonth " + targetID + " " + metsPath + " " + contentPath + " " + order;
             monthCommands.add(command);
         }
         return monthCommands;
@@ -168,7 +167,7 @@ public class Importer {
         Optional<LogicalDiv> monthDiv = getMonth(rootDiv, monthIndex);
         optionalToStream(monthDiv).flatMap(div -> div.getChildren().stream()).forEach(day -> {
             String command = "importMetsDay " + month.getObject().getId() + " " + metsPath + " " + contentPath + " "
-                + monthIndex + " " + day.getOrder();
+                + monthIndex + " " + day.getPositionInParent().orElse(0) + 1;
             dayCommands.add(command);
         });
         return dayCommands;
@@ -181,17 +180,17 @@ public class Importer {
      * @param metsPath
      * @param contentPath
      * @param monthIndex
-     * @param dayOrder
+     * @param dayIndex
      */
     @MCRCommand(syntax = "importMetsDay {0} {1} {2} {3} {4}", help = "importMetsDay {targetID} {path to mets.xml} {path to ocr folder} {number of month [1-12]} {order number of day}")
-    public static void importMetsDay(String targetID, String metsPath, String contentPath, int monthIndex, int dayOrder)
+    public static void importMetsDay(String targetID, String metsPath, String contentPath, int monthIndex, int dayIndex)
         throws Exception {
 
         Mets mets = getMets(metsPath);
         LogicalDiv rootDiv = getLogicalRootDiv(mets);
-        LogicalDiv dayDiv = getDay(rootDiv, monthIndex, dayOrder).orElse(null);
+        LogicalDiv dayDiv = getDay(rootDiv, monthIndex, dayIndex).orElse(null);
         if (dayDiv == null) {
-            LOGGER.warn("Unable to get day (order) " + dayOrder + " of month (order) " + monthIndex);
+            LOGGER.warn("Unable to get day (position) " + dayIndex + " of month (position) " + monthIndex);
             return;
         }
 
@@ -232,7 +231,7 @@ public class Importer {
 
         // save the old mets.xml
         MCRPath metsPath = MCRPath.getPath(derId.toString(), "mets.xml");
-        if(Files.exists(metsPath)) {
+        if (Files.exists(metsPath)) {
             Path saveDirectoryPath = Paths.get(System.getProperty("user.home")).resolve("jportal");
             Files.createDirectories(saveDirectoryPath);
             Path savePath = saveDirectoryPath.resolve(derId.toString() + "_mets.xml");
@@ -397,14 +396,18 @@ public class Importer {
         return logicalStructMap.getDivContainer();
     }
 
-    private static Optional<LogicalDiv> getMonth(LogicalDiv rootDiv, int orderNumber) {
-        return rootDiv.getChildren().stream().filter(div -> div.getOrder() == orderNumber).findAny();
+    private static Optional<LogicalDiv> getMonth(LogicalDiv rootDiv, int monthIndex) {
+        return rootDiv.getChildren()
+                      .stream()
+                      .filter(div -> (div.getPositionInParent().orElse(0) + 1) == monthIndex)
+                      .findAny();
     }
 
-    private static Optional<LogicalDiv> getDay(LogicalDiv rootDiv, int monthOrder, int dayOrder) {
-        return optionalToStream(getMonth(rootDiv, monthOrder)).flatMap(div -> div.getChildren().stream())
-                                                              .filter(day -> day.getOrder() == dayOrder)
-                                                              .findFirst();
+    private static Optional<LogicalDiv> getDay(LogicalDiv rootDiv, int monthOrder, int dayIndex) {
+        return optionalToStream(
+            getMonth(rootDiv, monthOrder)).flatMap(div -> div.getChildren().stream())
+                                          .filter(day -> (day.getPositionInParent().orElse(0) + 1) == dayIndex)
+                                          .findFirst();
     }
 
     /**

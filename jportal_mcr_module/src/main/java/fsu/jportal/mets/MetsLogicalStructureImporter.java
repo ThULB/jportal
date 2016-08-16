@@ -95,7 +95,7 @@ public class MetsLogicalStructureImporter extends MetsImporter {
             Integer monthIndex = MetsImportUtils.MONTH_NAMES.inverse().get(label);
             MetsImportUtils.setPublishedDate(monthIndex, volume, parent);
         }
-        volume.setHiddenPosition(String.format("%04d", Integer.valueOf(div.getOrder())));
+        volume.setHiddenPosition(String.format("%04d", Integer.valueOf(div.getPositionInParent().orElse(0))));
         divMap.put(div, volume);
         div.getChildren().forEach(childDiv -> {
             JPPeriodicalComponent childComponent = handle(mets, derivate, childDiv, volume, divMap);
@@ -121,6 +121,10 @@ public class MetsLogicalStructureImporter extends MetsImporter {
         String logicalId = div.getId();
         List<SmLink> links = mets.getStructLink().getSmLinkByFrom(logicalId);
         // map phyisical div's and get the lowest by order
-        return links.stream().map(link -> divContainer.get(link.getTo()).getOrder()).min(Integer::compareTo).orElse(0);
+        return links.stream()
+                    .map(link -> divContainer.get(link.getTo()).getPositionInParent().orElse(0))
+                    .min(Integer::compareTo)
+                    .orElse(0);
     }
+
 }

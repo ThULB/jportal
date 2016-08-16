@@ -142,7 +142,7 @@ public abstract class ENMAPConverter {
      * Loads a single ALTO reference based on the given mets:file.
      * 
      * @param basePath 
-     * @param metsFile the mets:file element in the mets:fileSec
+     * @param altoFile the mets:file element in the mets:fileSec
      * 
      * @return a single ALTO reference
      * @throws URISyntaxException
@@ -150,13 +150,13 @@ public abstract class ENMAPConverter {
      * @throws IOException
      * @throws SAXException
      */
-    protected ALTO loadAlto(Path basePath, File metsFile)
+    protected ALTO loadAlto(Path basePath, File altoFile)
         throws URISyntaxException, JDOMException, IOException, SAXException {
-        String path = metsFile.getFLocat().getHref();
+        String path = altoFile.getFLocat().getHref();
         path = new AltoHrefStrategy().get(path);
         Path altoPath = basePath.resolve(path);
         Document altoDocument = new MCRPathContent(altoPath).asXML();
-        return new ALTO(metsFile.getId(), altoDocument);
+        return new ALTO(altoFile.getId(), altoDocument);
     }
 
     protected void handleFileSection(Element enmap, Mets mcr) throws URISyntaxException {
@@ -215,9 +215,8 @@ public abstract class ENMAPConverter {
                 return Integer.compare(o1, o2);
             }
         });
-        for (int i = 0; i < divs.size(); i++) {
-            Element divElement = divs.get(i);
-            PhysicalSubDiv div = new PhysicalSubDiv(divElement.getAttributeValue("ID"), "page", i + 1);
+        for (Element divElement : divs) {
+            PhysicalSubDiv div = new PhysicalSubDiv(divElement.getAttributeValue("ID"), "page");
             List<Element> fptrs = divElement.getChildren("fptr", IMetsElement.METS);
             for (Element ftpr : fptrs) {
                 String fileID = ftpr.getAttributeValue("FILEID");
@@ -322,8 +321,7 @@ public abstract class ENMAPConverter {
         String id = enmapDiv.getAttributeValue("ID");
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
         String label = enmapDiv.getAttributeValue("LABEL");
-        String order = enmapDiv.getAttributeValue("ORDER");
-        return new LogicalDiv(id, type, (label == null || label.equals("")) ? type : label, Integer.valueOf(order));
+        return new LogicalDiv(id, type, (label == null || label.equals("")) ? type : label);
     }
 
     /**
@@ -385,7 +383,7 @@ public abstract class ENMAPConverter {
             String fileId2 = entry2.getKey();
             PhysicalSubDiv div1 = divContainer.byFileId(fileId1);
             PhysicalSubDiv div2 = divContainer.byFileId(fileId2);
-            return div1.getOrder() - div2.getOrder();
+            return div1.getPositionInParent().orElse(0) - div2.getPositionInParent().orElse(0);
         }).forEachOrdered(entry -> {
             String altoID = entry.getKey();
             ArrayList<Block> blockList = new ArrayList<>(entry.getValue());
@@ -454,6 +452,14 @@ public abstract class ENMAPConverter {
      */
     static class CoordinatesToIdMapper {
 
+        /**
+         * 
+         * @param altoReferences
+         * @param metsAreaElements
+         * @param emptyAreas
+         * 
+         * @return map where key = ALTO FILEID; value = set of alto blocks
+         */
         public Map<String, Set<Block>> map(List<ALTO> altoReferences, List<Element> metsAreaElements,
             List<String> emptyAreas) {
             // build references

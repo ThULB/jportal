@@ -53,7 +53,7 @@ public class JVBMetsImporter extends MetsImporter {
         logicalVolume.getChildren().forEach(logicalIssue -> {
             JPVolume issue = new JPVolume();
             issue.setTitle(logicalIssue.getLabel());
-            issue.setHiddenPosition(logicalIssue.getOrder());
+            issue.setHiddenPosition(logicalIssue.getPositionInParent().orElse(0));
             volume.addChild(issue);
             divMap.put(logicalIssue, issue);
             handleArticles(mets, derivate, logicalIssue, issue, divMap);
@@ -88,9 +88,9 @@ public class JVBMetsImporter extends MetsImporter {
         List<SmLink> links = mets.getStructLink().getSmLinkByFrom(logicalId);
         // map phyisical div's and get the lowest by order
         return links.stream()
-            .map(link -> divContainer.get(link.getTo()).getOrder())
-            .min(Integer::compareTo)
-            .orElse(0);
+                    .map(link -> divContainer.get(link.getTo()).getPositionInParent().orElse(0))
+                    .min(Integer::compareTo)
+                    .orElse(0);
     }
 
 }
