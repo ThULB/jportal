@@ -60,7 +60,6 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
 
         LogicalIdProvider idProvider = new LogicalIdProvider("log_", 6);
         LogicalDiv logDiv = null;
-        int logicalOrder = 0;
 
         Path[] nodes = files.toArray(new Path[files.size()]);
 
@@ -73,13 +72,13 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
             // add the file to the filesection and filegrp
             File file = addFileToFileSection(filename, mets);
             // add file to the physical struct map
-            PhysicalSubDiv physIdv = addFileToPhysicalStructMap(physicalStructMap, file, i + 1);
+            PhysicalSubDiv physIdv = addFileToPhysicalStructMap(physicalStructMap, file);
             // now the tricky part, add file to logical struct map
             String[] filenameParts = filename.split("_");
 
             if (logDiv == null) {
                 logDiv = new LogicalDiv(idProvider.getNextId(), DFGTypeProvider.getDFGType(filenameParts[3]),
-                    LabelProvider.getLabel(filenameParts[3]), ++logicalOrder);
+                    LabelProvider.getLabel(filenameParts[3]));
                 logicalStructMap.getDivContainer().add(logDiv);
             }
             // add file to smlink
@@ -107,9 +106,8 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
      *            the order of the file
      * @return the {@link PhysicalSubDiv} created
      */
-    private PhysicalSubDiv addFileToPhysicalStructMap(PhysicalStructMap physicalStructMap, File file, int order) {
-        PhysicalSubDiv div = new PhysicalSubDiv(PhysicalSubDiv.ID_PREFIX + file.getId(), PhysicalSubDiv.TYPE_PAGE,
-            order);
+    private PhysicalSubDiv addFileToPhysicalStructMap(PhysicalStructMap physicalStructMap, File file) {
+        PhysicalSubDiv div = new PhysicalSubDiv(PhysicalSubDiv.ID_PREFIX + file.getId(), PhysicalSubDiv.TYPE_PAGE);
         div.add(new Fptr(file.getId()));
         physicalStructMap.getDivContainer().add(div);
         return div;
@@ -170,9 +168,8 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
         String authority = LabelProvider.getLabel(fNameParts[1]);
         String year = fNameParts[2];
         String label = authority + " - " + year;
-        LogicalDiv logDivContainer = new LogicalDiv("log_" + derivateId, "monograph", label, 1, amdSec.getId(),
+        LogicalDiv logDivContainer = new LogicalDiv("log_" + derivateId, "monograph", label, amdSec.getId(),
             dmdSec.getId());
-        logDivContainer.setOrder(1);
         logicalStructMp.setDivContainer(logDivContainer);
 
         /* init physical structure map */
