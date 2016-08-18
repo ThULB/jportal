@@ -147,8 +147,21 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="jp:template[@name='textInput']" mode="input">
-    <input type="text" class="form-control" maxlength="{@maxlength}" tabindex="1">
+  <xsl:template match="jp:template[@name='textInput' and @maxlength]" mode="input">
+    <xsl:call-template name="jp-editor-textInput">
+      <xsl:with-param name="maxlength" select="@maxlength" />
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="jp:template[@name='textInput' and not(@maxlength)]" mode="input">
+    <xsl:call-template name="jp-editor-textInput">
+      <xsl:with-param name="maxlength" select="'256'" />
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="jp-editor-textInput">
+    <xsl:param name="maxlength" />
+    <input type="text" class="form-control" maxlength="{$maxlength}" tabindex="1">
       <xsl:if test="@placeholder">
         <xsl:attribute name="placeholder">
           <xsl:value-of select="concat('{i18n:', @placeholder, '}')" />
@@ -171,6 +184,7 @@
       </xsl:if>
     </input>
   </xsl:template>
+
 
   <xsl:template match="jp:template" mode="buttons">
     <xsl:if test="@buttons">

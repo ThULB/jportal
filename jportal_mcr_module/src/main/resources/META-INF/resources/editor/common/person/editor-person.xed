@@ -6,19 +6,19 @@
 
       <xed:bind xpath="def.heading[@class='MCRMetaXML']/heading[@inherited='0']">
         <jp:template name="textInputSm" xpath="lastName" i18n="editormask.person.Lheading" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" maxlength="128" validate="requiredPersonName" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" validate="requiredPersonName" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="firstName" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.firstName" maxlength="128" validate="requiredPersonName" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.firstName" validate="requiredPersonName" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="collocation" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.collocation" maxlength="128" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.collocation" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="nameAffix" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" maxlength="128" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="name" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.single" maxlength="128" validate="requiredPersonName" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.single" validate="requiredPersonName" small="true" />
         </jp:template>
       </xed:bind>
     </jp:section>
@@ -28,28 +28,28 @@
       <xed:bind xpath="def.alternative[@class='MCRMetaXML']">
         <xed:repeat xpath="alternative[@type='complete'][@inherited='0']" min="0" max="1024">
         	<jp:template name="textInputSm" xpath="lastName" i18n="jp.editor.inst.alternativeName" >
-            <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" maxlength="128" small="true" />
+            <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" small="true" />
           </jp:template>
           <jp:template name="textInputSm" xpath="firstName" >
-            <jp:template name="textInput" xpath="." i18n="jp.editor.person.firstName" maxlength="128" small="true" />
+            <jp:template name="textInput" xpath="." i18n="jp.editor.person.firstName" small="true" />
           </jp:template>
           <jp:template name="textInputSm" xpath="collocation" buttons="true" >
-            <jp:template name="textInput" xpath="." i18n="jp.editor.person.collocation" maxlength="128" small="true" />
+            <jp:template name="textInput" xpath="." i18n="jp.editor.person.collocation" small="true" />
           </jp:template>
           <jp:template name="textInputSm" xpath="nameAffix" >
-            <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" maxlength="128" small="true" />
+            <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" small="true" />
           </jp:template>
           <xed:cleanup-rule xpath="//alternative[@type='complete']" relevant-if="(string-length(lastName/text()) > 0) or (string-length(firstName/text()) > 0) or (string-length(collocation/text()) > 0) or (string-length(nameAffix/text()) > 0)" />
         </xed:repeat>
         <xed:repeat xpath="alternative[@type='single'][@inherited='0']" min="0" max="1024">
           <jp:template name="textInputSm" xpath="name" >
-            <jp:template name="textInput" xpath="." i18n="jp.editor.person.single" maxlength="128" small="true" />
+            <jp:template name="textInput" xpath="." i18n="jp.editor.person.single" small="true" />
           </jp:template>
           <jp:template name="textInputSm" xpath="collocation" buttons="true" >
-            <jp:template name="textInput" xpath="." i18n="jp.editor.person.collocation" maxlength="128" small="true" />
+            <jp:template name="textInput" xpath="." i18n="jp.editor.person.collocation" small="true" />
           </jp:template>
           <jp:template name="textInputSm" xpath="nameAffix" >
-            <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" maxlength="128" small="true" />
+            <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" small="true" />
           </jp:template>
           <xed:cleanup-rule xpath="//alternative[@type='single']" relevant-if="(string-length(name/text()) > 0) or  (string-length(collocation/text()) > 0) or (string-length(nameAffix/text()) > 0)" />
         </xed:repeat>
@@ -60,7 +60,7 @@
 
       <jp:template name="textInput"
         xpath="def.peerage[@class='MCRMetaLangText']/peerage[@inherited='0'][@form='plain']" i18n="editormask.person.Lpeerage"
-        maxlength="128" />
+        />
 
       <xed:bind
         xpath="def.gender[@class='MCRMetaClassification']/gender[@inherited='0'][@classid='urmel_class_00000001']">
@@ -79,7 +79,7 @@
 
       <xed:repeat
         xpath="def.placeOfActivity[@class='MCRMetaLangText']/placeOfActivity[@inherited='0'][@form='plain']" min="0" max="10">
-        <jp:template name="textInput" xpath="." i18n="editormask.person.LplaceOfActivity" maxlength="128"
+        <jp:template name="textInput" xpath="." i18n="editormask.person.LplaceOfActivity"
           buttons="true" />
       </xed:repeat>
 
@@ -88,13 +88,13 @@
         maxlength="10" inputClass="form-control date-field" containerId="dateOfBirthCon" />
       <jp:template name="textInput"
         xpath="def.placeOfBirth[@class='MCRMetaLangText']/placeOfBirth[@inherited='0'][@form='plain']"
-        i18n="editormask.person.LplaceOfBirth" maxlength="128" />
+        i18n="editormask.person.LplaceOfBirth" />
       <jp:template name="textInput"
         xpath="def.dateOfDeath[@class='MCRMetaISO8601Date']/dateOfDeath[@inherited='0']" i18n="editormask.person.LdateOfDeath"
         maxlength="10" inputClass="form-control date-field" containerId="dateOfDeathCon" />
       <jp:template name="textInput"
         xpath="def.placeOfDeath[@class='MCRMetaLangText']/placeOfDeath[@inherited='0'][@form='plain']"
-        i18n="editormask.person.LplaceOfDeath" maxlength="128" />
+        i18n="editormask.person.LplaceOfDeath" />
 
       <xed:bind
         xpath="def.note[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain']">
@@ -106,7 +106,7 @@
       </xed:bind>
 
       <xed:repeat xpath="def.link[@class='MCRMetaLink']/link[@inherited='0'][@xlink:type='locator']" min="0" max="10">
-        <jp:template name="textInput" xpath="@xlink:href" i18n="jp.editor.person.link" maxlength="128" buttons="true" />
+        <jp:template name="textInput" xpath="@xlink:href" i18n="jp.editor.person.link" buttons="true" />
       </xed:repeat>
 
       <xed:repeat
@@ -117,12 +117,12 @@
           <option i18n="metaData.person.pnd" value="pnd" />
           <option i18n="metaData.person.ppn" value="ppn" />
         </jp:template>
-        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
+        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:repeat>
       
       <xed:bind xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']">
         <jp:template name="textInput" xpath="."
-          i18n="editormask.labels.LdoubletOf" validate="display-validation-message" maxlength="128" />
+          i18n="editormask.labels.LdoubletOf" validate="display-validation-message" />
         <xed:validate display="local" matches=".+_person_\d{8}">
           <div class="alert alert-danger" role="alert">
             <xed:output i18n="jp.editor.personIDCheck" />

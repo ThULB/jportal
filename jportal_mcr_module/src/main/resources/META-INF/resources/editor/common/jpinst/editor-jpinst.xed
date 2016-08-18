@@ -6,14 +6,14 @@
       <jp:template name="title" i18n="metaData.headlines.jpinst.names" />
 
       <xed:bind xpath="names[@class='MCRMetaInstitutionName']/name[@inherited='0']">
-        <jp:template name="textInput" xpath="fullname" i18n="editormask.labels.AINameName" maxlength="128"
+        <jp:template name="textInput" xpath="fullname" i18n="editormask.labels.AINameName"
           validate="required" />
-        <jp:template name="textInput" xpath="nickname" i18n="editormask.labels.AINameNick" maxlength="32" />
-        <jp:template name="textInput" xpath="property" i18n="editormask.labels.AINameProp" maxlength="32" />
+        <jp:template name="textInput" xpath="nickname" i18n="editormask.labels.AINameNick" />
+        <jp:template name="textInput" xpath="property" i18n="editormask.labels.AINameProp" />
       </xed:bind>
 
       <xed:repeat xpath="alternatives[@class='MCRMetaXML']/alternative[@inherited='0']" min="0" max="1024">
-        <jp:template name="textInput" xpath="name" i18n="editormask.person.Lalternative" maxlength="128"
+        <jp:template name="textInput" xpath="name" i18n="editormask.person.Lalternative"
           buttons="true" />
           <xed:cleanup-rule xpath="//alternative" relevant-if="(string-length(name/text()) > 0)" />
       </xed:repeat>
@@ -23,11 +23,11 @@
       <jp:template name="title" i18n="metaData.headlines.jpinst.address" />
 
       <xed:bind xpath="addresses[@class='MCRMetaAddress']/address[@inherited='0']">
-        <jp:template name="textInput" xpath="country" i18n="editormask.labels.AAddressCountry" maxlength="128" />
-        <jp:template name="textInput" xpath="zipcode" i18n="editormask.labels.AAddressZIP" maxlength="10" />
-        <jp:template name="textInput" xpath="city" i18n="editormask.labels.AAddressCity" maxlength="128" />
-        <jp:template name="textInput" xpath="street" i18n="editormask.labels.AAddressStreet" maxlength="128" />
-        <jp:template name="textInput" xpath="number" i18n="editormask.labels.AAddressNumber" maxlength="10" />
+        <jp:template name="textInput" xpath="country" i18n="editormask.labels.AAddressCountry" />
+        <jp:template name="textInput" xpath="zipcode" i18n="editormask.labels.AAddressZIP" />
+        <jp:template name="textInput" xpath="city" i18n="editormask.labels.AAddressCity" />
+        <jp:template name="textInput" xpath="street" i18n="editormask.labels.AAddressStreet" />
+        <jp:template name="textInput" xpath="number" i18n="editormask.labels.AAddressNumber" />
       </xed:bind>
     </jp:section>
 
@@ -38,23 +38,23 @@
         xpath="phones[@class='MCRMetaLangText']/phone[@xml:lang='de'][@inherited='0'][@form='plain']"
         min="1" max="5">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.LPhone" buttons="true"
-          maxlength="128"  option="true" validate="interdependentSelect">
+           option="true" validate="interdependentSelect">
           <option i18n="editormask.labels.SphoneTelefon" value="Telefon" />
           <option i18n="editormask.labels.SphoneFax" value="Fax" />
           <option i18n="editormask.labels.SphoneMobil" value="Mobil" />
         </jp:template>
-        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
+        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:repeat>
 
       <xed:bind xpath="urls[@class='MCRMetaLink']/url[@inherited='0'][@xlink:type='locator']">
-        <jp:template name="textInput" xpath="@xlink:title" i18n="editormask.labels.LURL" maxlength="128"
+        <jp:template name="textInput" xpath="@xlink:title" i18n="editormask.labels.LURL"
            placeholder="editormask.labels.AURLTitle" bottom="littleSpace" />
-        <jp:template name="textInput" xpath="@xlink:href" placeholder="editormask.labels.AURLReference" maxlength="128" />
+        <jp:template name="textInput" xpath="@xlink:href" placeholder="editormask.labels.AURLReference" />
       </xed:bind>
 
       <jp:template name="textInput"
         xpath="emails[@class='MCRMetaLangText']/email[@inherited='0'][@form='plain']" i18n="editormask.labels.LEmail"
-        maxlength="128" />
+        />
     </jp:section>
 
     <jp:section title="{i18n:metaData.headlines.misc}">
@@ -71,7 +71,7 @@
           <option i18n="metaData.person.pnd" value="pnd" />
           <option i18n="metaData.person.ppn" value="ppn" />
         </jp:template>
-        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
+        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:repeat>
     
     	<jp:template name="logoThumbnail" i18n="editormask.labels.LLogos" xpath="logo[@class='MCRMetaLangText']" 
@@ -80,7 +80,7 @@
     
       <xed:bind xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']">
         <jp:template name="textInput" xpath="."
-          i18n="editormask.labels.LdoubletOf" validate="display-validation-message" maxlength="128" />
+          i18n="editormask.labels.LdoubletOf" validate="display-validation-message" />
         <xed:validate display="local" matches=".+_jpinst_\d{8}">
           <div class="alert alert-danger" role="alert">
             <xed:output i18n="jp.editor.instIDCheck" />

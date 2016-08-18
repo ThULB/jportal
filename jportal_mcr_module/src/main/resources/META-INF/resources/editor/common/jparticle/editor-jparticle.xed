@@ -26,23 +26,22 @@
 			</jp:template>
 
       <xed:repeat xpath="refs[@class='MCRMetaLangText']/ref[@inherited='0'][@form='plain']" min="0" max="10">
-        <jp:template name="textInput" xpath="." i18n="editormask.labels.pub_reference" maxlength="128" />
+        <jp:template name="textInput" xpath="." i18n="editormask.labels.pub_reference" />
       </xed:repeat>
 
       <xed:repeat xpath="identis[@class='MCRMetaLangText']/identi[@inherited='0'][@form='plain']" min="0" max="10">
         <jp:template name="selectInput" xpath="@type" i18n="metaData.jpjournal.identi.issn" buttons="true" classification="jportal_class_00000010" validate="interdependentSelect" />
-        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="64" />
+        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:repeat>
 
-      <jp:template name="textInput" xpath="sizes[@class='MCRMetaLangText']/size[@inherited='0'][@form='plain']" i18n="editormask.labels.size"
-        maxlength="48" />
+      <jp:template name="textInput" xpath="sizes[@class='MCRMetaLangText']/size[@inherited='0'][@form='plain']" i18n="editormask.labels.size" />
     </jp:section>
 
     <jp:section title="{i18n:metaData.headlines.contantdiscr}">
       <jp:template name="title" i18n="metaData.headlines.contantdiscr" />
 
       <xed:repeat xpath="keywords[@class='MCRMetaLangText']/keyword[@inherited='0'][@form='plain']" min="0" max="60">
-        <jp:template name="textInput" xpath="." i18n="editormask.labels.keyword" maxlength="64" buttons="true" />
+        <jp:template name="textInput" xpath="." i18n="editormask.labels.keyword" buttons="true" />
       </xed:repeat>
 
       <xed:repeat xpath="abstracts[@class='MCRMetaLangText']/abstract[@inherited='0'][@form='plain']" min="0" max="3">
