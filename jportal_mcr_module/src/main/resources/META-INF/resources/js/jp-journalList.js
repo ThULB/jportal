@@ -143,7 +143,8 @@ jp.az = {
 	    var title = $('<h3 class="journal-title"/>').append(titleLink);
 	    resultListEntry.append(title);
 	    jp.az.printPublished(resultListEntry, metadata);
-	    jp.az.printPublisher(resultListEntry, metadata);
+	    jp.az.printPublisher(resultListEntry, metadata, "participant.mainPublisher", "Herausgeber");
+	    jp.az.printPublisher(resultListEntry, metadata, "participant.author", "Autor");
 	},
 
 	printPublished: function(node, journal) {
@@ -160,27 +161,27 @@ jp.az = {
 	    }
 	},
 
-	printPublisher: function(node, journal) {
-		var publisherList = journal["participant.mainPublisher"];
-		if(publisherList) {
-			var pusblisherStr = '<div class="publisher">Herausgeber: ';
-	    	for(var i = 0; i < publisherList.length; i++) {
-	    		var publisher = publisherList[i];
-	    		var indexOfHash = publisher.indexOf('#');
-	    		if(indexOfHash == -1) {
-	    			console.log("Invalid publisher format for '" + publisher + "'.");
-	    			continue;
-	    		}
-	    		var publisherID = publisher.substring(0, indexOfHash);
-	    		var publisherText = publisher.substring(indexOfHash + 1);
-	            var publisherLink = "<a href='" + jp.baseURL + 'receive/' + publisherID + "'>" + publisherText + "</a>";
-	            pusblisherStr += publisherLink;
-	            if(i + 1 < publisherList.length) {
-	            	pusblisherStr += "; ";
-	            }
-	    	}
-	    	node.append(pusblisherStr + "</div>");
-		}
+	printPublisher: function(node, journal, solrKey, caption) {
+	   var publisherList = journal[solrKey];
+	    if(publisherList) {
+	      var pusblisherStr = '<div class="publisher">' + caption + ': ';
+	        for(var i = 0; i < publisherList.length; i++) {
+	          var publisher = publisherList[i];
+	          var indexOfHash = publisher.indexOf('#');
+	          if(indexOfHash == -1) {
+	            console.log("Invalid publisher format for '" + publisher + "'.");
+	            continue;
+	          }
+	          var publisherID = publisher.substring(0, indexOfHash);
+	          var publisherText = publisher.substring(indexOfHash + 1);
+	              var publisherLink = "<a href='" + jp.baseURL + 'receive/' + publisherID + "'>" + publisherText + "</a>";
+	              pusblisherStr += publisherLink;
+	              if(i + 1 < publisherList.length) {
+	                pusblisherStr += "; ";
+	              }
+	        }
+	        node.append(pusblisherStr + "</div>");
+	    }
 	},
 
 	updateFilter: function(){
