@@ -49,8 +49,7 @@ public class SolrToc {
     }
 
     public static Source getToc(String parentID, String objectType, int start, int rows) {
-        String sort = getSort(parentID, objectType);
-        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, sort, rows, start);
+        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, "order asc", rows, start);
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         MCRSolrURL solrURL = new MCRSolrURL((HttpSolrClient) solrClient, solrParams.toString());
         try {
@@ -62,15 +61,6 @@ public class SolrToc {
         }
 
         return null;
-    }
-
-    public static String getSort(String parentID, String objectType) {
-        if(objectType.equals("jparticle")){
-            return "size asc,maintitle asc";
-        }
-
-        String datePublOrder = isPartOfOnlineJournal(parentID) ? "desc" : "asc";
-        return "indexPosition asc,date.published " + datePublOrder + ",maintitle asc";
     }
 
     public static boolean isPartOfOnlineJournal(String parentID) {
@@ -86,8 +76,7 @@ public class SolrToc {
     }
 
     public static int getRefererStart(String parentID, String objectType, String referer, int rows) throws TransformerException {
-        String sort = getSort(parentID, objectType);
-        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, sort, 99999, 0).set("fl", "id");
+        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, "order asc", 99999, 0).set("fl", "id");
 
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         MCRSolrURL solrURL = new MCRSolrURL((HttpSolrClient) solrClient, solrParams.toString());

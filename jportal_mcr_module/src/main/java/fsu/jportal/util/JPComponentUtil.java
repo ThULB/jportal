@@ -10,6 +10,7 @@ import org.jdom2.Text;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRException;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -266,6 +267,28 @@ public abstract class JPComponentUtil {
      */
     public static boolean is(MCRObjectID id, String type) {
         return id.getTypeId().equals(type);
+    }
+
+    /**
+     * Returns the order for the given mycore object identifier.
+     * 
+     * @param id the mycore id
+     * @return the order of the given child
+     */
+    public static Integer getOrder(MCRObjectID id) {
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(id);
+        MCRObjectID parentId = mcrObj.getStructure().getParentID();
+        if (parentId == null) {
+            return null;
+        }
+        MCRObject parentObj = MCRMetadataManager.retrieveMCRObject(parentId);
+        List<MCRMetaLinkID> children = parentObj.getStructure().getChildren();
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i).getXLinkHrefID().equals(id)) {
+                return i;
+            }
+        }
+        return null;
     }
 
 }

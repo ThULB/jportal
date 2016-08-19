@@ -1,7 +1,6 @@
 package fsu.jportal.mets;
 
 import static fsu.jportal.frontend.SolrToc.buildQuery;
-import static fsu.jportal.frontend.SolrToc.getSort;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,8 +45,7 @@ public class JPortalMetsGenerator extends MCRMETSHierarchyGenerator {
 
     protected List<MCRObjectID> getChildren(MCRObject parentObject, String objectType) {
         String parentID = parentObject.getId().toString();
-        String sort = getSort(parentID, objectType);
-        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, sort);
+        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, "order asc");
         solrParams.set("fl", "id objectType");
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         return MCRSolrSearchUtils.stream(solrClient, solrParams).map(doc -> {

@@ -16,12 +16,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -313,22 +311,16 @@ public class JPXMLFunctions {
     public static Integer getOrder(String id) {
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
-            MCRObjectID parentId = mcrObj.getStructure().getParentID();
-            if (parentId == null) {
-                throw new MCRException("No parent id for object " + id);
+            Integer order = JPComponentUtil.getOrder(mcrId);
+            if(order == null) {
+                LOGGER.warn("Unable to retrieve the order of " + id);
+                return 0;
             }
-            MCRObject parentObj = MCRMetadataManager.retrieveMCRObject(parentId);
-            List<MCRMetaLinkID> children = parentObj.getStructure().getChildren();
-            for (int i = 0; i < children.size(); i++) {
-                if (children.get(i).getXLinkHrefID().equals(mcrId)) {
-                    return i;
-                }
-            }
+            return order;
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve the order of " + id, exc);
+            LOGGER.warn("Unable to retrieve the order of " + id, exc);
+            return 0;
         }
-        return 0;
     }
 
 }
