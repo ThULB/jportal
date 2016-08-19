@@ -1,7 +1,3 @@
-plugins {
-    id "com.moowork.node" version "0.10"
-}
-
 import java.nio.file.Paths
 
 def resourcePaths = new HashSet<File>();
@@ -98,7 +94,6 @@ subprojects {
 }
 
 project(':jportal_mcr_module') {
-    apply plugin: 'com.moowork.node'
 
     mcrModule()
 
@@ -108,6 +103,7 @@ project(':jportal_mcr_module') {
         compile "org.mycore:mycore-base:$mcrVersion"
         compile "org.mycore:mycore-solr:$mcrVersion"
         compile "org.mycore:mycore-iview2:$mcrVersion"
+        compile "org.mycore:mycore-viewer:$mcrVersion"
         compile "org.mycore:mycore-user2:$mcrVersion"
         compile "org.mycore:mycore-classeditor:$mcrVersion"
         compile "org.mycore:mycore-mets:$mcrVersion"
@@ -151,54 +147,6 @@ project(':jportal_mcr_module') {
         compile 'org.webjars:highstock:2.0.4'
     }
 
-    def nodeBuildDir = "$project.buildDir/node"
-
-    node {
-        // Version of node to use.
-        version = '0.11.10'
-
-        // Version of npm to use.
-        npmVersion = '2.1.5'
-
-        // If true, it will download node using above parameters.
-        // If false, it will try to use globally installed node.
-        download = true
-
-        // Set the work directory where node_modules should be located
-        nodeModulesDir = file(nodeBuildDir)
-    }
-
-    task npmSetupDir(type: Copy) {
-        from 'node'
-        include '**/*'
-        into nodeBuildDir
-
-        configurations {
-            iview
-        }
-        dependencies {
-            iview "org.mycore:mycore-viewer:$mcrVersion"
-        }
-
-        into("iview-client") {
-            from zipTree(configurations.iview.singleFile)
-            include '**/iview-client-base.d.ts', '**/iview-client-mets.d.ts', '**/jquery.d.ts'
-            includeEmptyDirs = false
-        }
-    }
-    npmSetup.dependsOn npmSetupDir
-
-    task compileIviewPlugin(type: NodeTask, dependsOn: npmInstall) {
-        script = file("$nodeBuildDir/node_modules/grunt-cli/bin/grunt")
-        args = ["--gruntfile=$nodeBuildDir/GruntFile.js"]
-    }
-
-    task buildIviewPlugin(type: Copy, dependsOn: compileIviewPlugin) {
-        from "$nodeBuildDir/classes/META-INF"
-        into "$project.buildDir/resources/main/META-INF"
-    }
-
-    jar.dependsOn buildIviewPlugin
 }
 
 project(':jportal_acl_ip_editor_module') {
