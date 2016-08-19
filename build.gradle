@@ -177,7 +177,7 @@ project(':jportal_mcr_module') {
             iview
         }
         dependencies {
-            iview "org.mycore:mycore-viewer:$mcrViewerVersion"
+            iview "org.mycore:mycore-viewer:$mcrVersion"
         }
 
         into("iview-client") {
@@ -257,7 +257,7 @@ project(':jportal_webapp') {
     configurations.all {
       resolutionStrategy {
           force "org.hibernate:hibernate-core:$hibernateCoreVersion"
-          force "org.mycore:mycore-viewer:$mcrViewerVersion"
+          force "org.mycore:mycore-viewer:$mcrVersion"
       }
     }
 
@@ -267,7 +267,7 @@ project(':jportal_webapp') {
         testCompile "org.apache.logging.log4j:log4j-core:2.3"
         testCompile "org.hamcrest:hamcrest-library:1.3"
         testCompile 'org.seleniumhq.selenium:selenium-java:2.53.0'
-        testCompile "org.mycore:mycore-viewer:$mcrViewerVersion:tests"
+        testCompile "org.mycore:mycore-viewer:$mcrVersion:tests"
         testCompile "org.mycore:selenium-utils:$seleniumUtilsVersion"
 
         runtime "org.apache.logging.log4j:log4j-web:2.3"
