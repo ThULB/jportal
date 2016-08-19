@@ -84,7 +84,9 @@ jp.sort.object = {
       var sortBy = object.metadata.autosort != null ? object.metadata.autosort.data[0] : null;
       if(sortBy != null) {
         jp.sort.object.selectSorter(sortBy.$text);
-        $("#jp-sort-order-select").val(sortBy._order);
+        if(sortBy._order != null) {
+          $("#jp-sort-order-select").val(sortBy._order);
+        }
       }
     });
     jp.sort.object.getChildren(id, function(data) {

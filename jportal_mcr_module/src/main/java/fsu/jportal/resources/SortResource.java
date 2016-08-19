@@ -79,9 +79,14 @@ public class SortResource {
     public void sortByUpdate(@PathParam("id") String id, @QueryParam("sorter") String sorterClass,
         @QueryParam("order") String orderString) {
         JPContainer jpContainer = get(id);
+        Order order = null;
+        try {
+            order = Order.valueOf(orderString.toUpperCase());
+        } catch(Exception exc) {
+            order = Order.ASCENDING;
+        }
         try {
             Class<? extends JPSorter> sorter = Class.forName(sorterClass).asSubclass(JPSorter.class);
-            Order order = Order.valueOf(orderString.toUpperCase());
             jpContainer.setSortBy(sorter, order);
             jpContainer.store(StoreOption.metadata);
         } catch (Exception exc) {
@@ -233,7 +238,7 @@ public class SortResource {
         try {
             levelSorting = JPLevelSorting.fromJSON(array);
             JPLevelSortingUtil.store(journalId, levelSorting);
-            if(apply) {
+            if (apply) {
                 JPLevelSortingUtil.apply(journalId, levelSorting);
             }
         } catch (ClassNotFoundException exc) {
