@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.iview2.frontend.configuration.MCRViewerConfiguration;
-import org.mycore.iview2.frontend.configuration.MCRViewerDefaultConfigurationStrategy;
+import org.mycore.viewer.configuration.MCRViewerConfiguration;
+import org.mycore.viewer.configuration.MCRViewerDefaultConfigurationStrategy;
 
 public class JPortalIViewConfigurationStrategy extends MCRViewerDefaultConfigurationStrategy {
 
