@@ -2,9 +2,11 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,6 +32,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.mets.misc.StructLinkGenerator;
+import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
@@ -39,26 +42,68 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.mets.MetsVersionStore;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.MetsUtil;
 
 /**
- * The mets sync resource tries to synchronize the mets.xml of a derivate with the
- * jportal object structure.
+ * <p>
+ * <b>Generate</b><br />
+ * Generates the mets.xml for the given derivate.
+ * This will overwrite the existing mets.xml.
+ * </p>
  * 
- * This class does two things:
+ * <p>
+ * <b>Synchronize:</b><br />
+ * Synchronize the mets.xml of a derivate with the jportal object structure.
+ * 
  * <ul>
  *  <li>Syncs the label's of the logical divs with the corresponding mycore object titles.
  *  (this does only work when the identifier of an logical div is an mycore object id)</li>
  *  <li>Updates the structLink section if necessary.</li>
  * </ul>
- * 
+ * </p>
  * @author Matthias Eichner
  */
-@Path("mets/sync")
-public class METSSyncResource {
+@Path("mets/base")
+public class METSBaseResource {
 
-    private static final Logger LOGGER = LogManager.getLogger(METSSyncResource.class);
+    private static final Logger LOGGER = LogManager.getLogger(METSBaseResource.class);
+
+    /**
+     * Generates the mets.xml for the given derivate. This will overwrite the existing mets.xml.
+     * 
+     * @param derivateId
+     * @return
+     */
+    @Path("generate/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response generate(@PathParam("id") String derivateId) {
+        // check write permission on derivate
+        MCRJerseyUtil.checkPermission(MCRObjectID.getInstance(derivateId), MCRAccessManager.PERMISSION_WRITE);
+        try {
+            // generate
+            Mets newMets = MCRMETSGenerator.getGenerator().getMETS(MCRPath.getPath(derivateId, "/"),
+                new HashSet<MCRPath>());
+            // as mcr content
+            MCRJDOMContent newMetsContent = new MCRJDOMContent(newMets.asDocument());
+            // store old mets
+            storeOldMets(derivateId);
+            // path to mets.xml
+            MCRPath metsPath = MCRPath.getPath(derivateId, "mets.xml");
+            // store in derivate
+            Files.copy(newMetsContent.getInputStream(), metsPath, StandardCopyOption.REPLACE_EXISTING);
+            // send response
+            JsonObject response = new JsonObject();
+            response.addProperty("status", "ok");
+            return Response.ok().entity(response.toString()).build();
+        } catch (WebApplicationException webExc) {
+            throw webExc;
+        } catch (Exception exc) {
+            throw new WebApplicationException(exc, Response.serverError().build());
+        }
+    }
 
     /**
      * Synchronizes the mets.xml with the object structure.
@@ -67,7 +112,7 @@ public class METSSyncResource {
      * @param derivateId the derivate
      * @return json object
      */
-    @Path("{id}")
+    @Path("sync/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response sync(@PathParam("id") String derivateId) {
@@ -84,8 +129,10 @@ public class METSSyncResource {
 
         boolean structLinkSynced = syncStructLink(mets);
 
-        // write mets
         if (structLinkSynced || !updatedList.isEmpty()) {
+            // store old mets
+            storeOldMets(derivateId);
+            // replace mets
             write(mets.asDocument(), derivateId);
         }
 
@@ -104,6 +151,21 @@ public class METSSyncResource {
             });
         }
         return Response.ok().entity(json.toString()).build();
+    }
+
+    /**
+     * Stores the old mets.xml using the {@link MetsVersionStore}.
+     * 
+     * @param derivateId the derivate
+     */
+    private void storeOldMets(String derivateId) {
+        try {
+            MetsVersionStore.store(derivateId);
+        } catch (Exception exc) {
+            JsonObject json = new JsonObject();
+            json.addProperty("errorMsg", "unable to store old mets.xml: " + exc.getMessage());
+            throw new WebApplicationException(exc, Response.ok().entity(json.toString()).build());
+        }
     }
 
     /**

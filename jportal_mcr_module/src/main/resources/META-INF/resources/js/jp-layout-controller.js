@@ -355,6 +355,45 @@ $(document).ready(function() {
 	}
 });
 
+//METS GENERATE
+$(document).ready(function() {
+  var dialog = $("#generateMetsDialog");
+  var generateButton = $("#generateMetsDialogStart");
+  var dialogIcon = $("#generateMetsDialogIcon");
+  var dialogContent = $("#generateMetsDialogContent");
+
+  generateButton.click(function() {
+    dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
+    dialogContent.html("mets.xml wird generiert. Bitte warten...");
+    generateButton.attr("disabled", "disabled");
+    $.get(jp.baseURL + "rsc/mets/base/generate/" + dialog.attr("data-id")).done(function(e) {
+      if(e.error) {
+        failed(e);
+        return;
+      }
+      success();
+    }).fail(function(e) {
+      console.log(e);
+      failed(e);
+    });
+  });
+
+  function failed(e) {
+    dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+    if(e.status == "401") {
+      dialogContent.html("Sie haben nicht die notwendige Berechtigung um die mets.xml neu zu generieren!");
+    } else {
+      dialogContent.html("Es ist ein Fehler bei der Generierung aufgetreten. Bitte wenden Sie sich an den Administrator.");
+    }
+  }
+
+  function success() {
+    dialogIcon.html("<i class='fa fa-3x fa-check' />");
+    dialogContent.html("Die mets.xml wurde erfolgreich generiert!");
+  }
+
+});
+
 // METS IMPORT & CONVERT
 $(document).ready(function() {
 

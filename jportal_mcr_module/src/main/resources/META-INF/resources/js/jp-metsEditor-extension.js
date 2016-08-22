@@ -42,7 +42,7 @@ $(document).ready(function() {
       		"</div>"
       	);
         $.ajax({
-    			url: baseURL + "rsc/mets/sync/" + derivateID,
+    			url: baseURL + "rsc/mets/base/sync/" + derivateID,
     			dataType: "json"
     		}).done(function(data) {
     			if(data.labelsUpdated == 0 && data.structLinkSynced == false) {

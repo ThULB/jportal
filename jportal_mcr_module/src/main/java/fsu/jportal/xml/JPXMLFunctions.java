@@ -1,5 +1,6 @@
 package fsu.jportal.xml;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -160,6 +161,30 @@ public class JPXMLFunctions {
     }
 
     /**
+     * Checks if the mets.xml can be generated.
+     * 
+     * @param derivateId
+     * @return
+     */
+    public static boolean isMetsGeneratable(String derivateId) {
+        try {
+            MCRObjectID id = MCRObjectID.getInstance(derivateId);
+            if (!MCRMetadataManager.exists(id)) {
+                return false;
+            }
+            try {
+                MetsUtil.getMetsXMLasDocument(derivateId);
+            } catch (FileNotFoundException fnfe) {
+                return false;
+            }
+            return true;
+        } catch (Exception exc) {
+            LOGGER.error("Unable to check if mets.xml of " + derivateId + " is generatable.", exc);
+            return false;
+        }
+    }
+
+    /**
      * Checks if the given derivate contains an uibk mets file
      * and the corresponding mycore object has no children. 
      * 
@@ -312,7 +337,7 @@ public class JPXMLFunctions {
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
             Integer order = JPComponentUtil.getOrder(mcrId);
-            if(order == null) {
+            if (order == null) {
                 LOGGER.warn("Unable to retrieve the order of " + id);
                 return 0;
             }

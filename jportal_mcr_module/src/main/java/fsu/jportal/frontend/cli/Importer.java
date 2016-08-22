@@ -56,6 +56,7 @@ import fsu.jportal.mets.JPortalMetsGenerator;
 import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.MetsImportUtils;
 import fsu.jportal.mets.MetsImporter;
+import fsu.jportal.mets.MetsVersionStore;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.MetsUtil;
 
@@ -232,11 +233,7 @@ public class Importer {
         // save the old mets.xml
         MCRPath metsPath = MCRPath.getPath(derId.toString(), "mets.xml");
         if (Files.exists(metsPath)) {
-            Path saveDirectoryPath = Paths.get(System.getProperty("user.home")).resolve("jportal");
-            Files.createDirectories(saveDirectoryPath);
-            Path savePath = saveDirectoryPath.resolve(derId.toString() + "_mets.xml");
-            LOGGER.info("Saving old mets.xml to " + savePath.toAbsolutePath().toString());
-            Files.copy(metsPath, savePath, StandardCopyOption.REPLACE_EXISTING);
+            MetsVersionStore.store(derId.toString());
         }
 
         // build mets from object structure

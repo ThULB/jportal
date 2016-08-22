@@ -143,12 +143,41 @@
                 </a>
               </li>
               <li>
-                <a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a>
+                <a href='javascript:void(0)' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a>
               </li>
+            </xsl:if>
+            <xsl:if test="jpxml:isMetsGeneratable(@xlink:href)">
+              <li>
+                <a href="#" data-toggle="modal" data-target="#generateMetsDialog">METS generieren</a>
+              </li>
+              <div class="modal fade" id="generateMetsDialog" tabindex="-1" role="dialog" data-backdrop="static" data-id="{@xlink:href}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">METS generieren</h4>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="col-md-2" id="generateMetsDialogIcon" style="text-align: center;">
+                          <i class='fa fa-3x fa-question-circle'></i>
+                        </div>
+                        <div class="col-md-10" id="generateMetsDialogContent">
+                          Sind Sie sich sicher das Sie die aktuelle mets.xml überschreiben wollen? Alle manuellen Änderungen und alle
+                          ALTO Referenzen (JVB und LLZ) gehen verloren!
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                      <button type="button" class="btn btn-primary" id="generateMetsDialogStart">Generieren</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </xsl:if>
             <xsl:if test="jpxml:isMetsImportable(@xlink:href)">
               <li>
-                <a href="javascript:;" data-toggle="modal" data-target="#importMetsDialog">METS Import</a>
+                <a href="#" data-toggle="modal" data-target="#importMetsDialog">METS Import</a>
               </li>
               <div class="modal fade" id="importMetsDialog" tabindex="-1" role="dialog" data-backdrop="static" data-id="{@xlink:href}">
                 <div class="modal-dialog">
