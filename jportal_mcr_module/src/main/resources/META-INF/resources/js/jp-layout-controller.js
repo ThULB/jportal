@@ -115,41 +115,6 @@ function showDeleteDerivateDialog(/*String*/ id) {
 	}).open();
 }
 
-// DERIVATE CONTEXT
-function selectDerivateContext(/*dom*/ e, /*String*/ id, /*String*/ roleURI) {
-	var link = $(e);
-	jQuery.ajax({
-		type : 'GET',
-		url : jp.baseURL + 'rsc/derivate/context/list'
-	}).done(function(json) {
-		var selectBox = "<select id='derivateContextSelector' data-derivate-id='" + id + "'><option value=''>Kein Kontext</option>";
-		var children = json.children;
-		for(var i = 0; i < children.length; i++) {
-			selectBox += "<option value='" + children[i].uri + "'";
-			if(roleURI == children[i].uri) {
-				selectBox += " selected='selected'";
-			}
-			selectBox += ">" + children[i].labels[0].text + "</option>";
-		}
-		selectBox += "</select>";
-		link.parent().html(selectBox);
-		$("#derivateContextSelector").on("change", updateDerivateContext);
-	}).fail(function(error) {
-		console.log(error);
-	});
-}
-
-function updateDerivateContext() {
-	var derivateId = $(this).attr("data-derivate-id");
-	var contextURI = $(this).val();
-	jQuery.ajax({
-		type : 'POST',
-		url : jp.baseURL + 'rsc/derivate/context/update/' + derivateId + "?context=" + contextURI
-	}).fail(function(error) {
-		alert(error);
-	});
-}
-
 $(document).ready(function() {
 	function supportHTML5() {
 		return !!document.createElement('canvas').getContext;

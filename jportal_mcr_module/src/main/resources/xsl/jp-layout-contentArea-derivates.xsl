@@ -146,9 +146,6 @@
                 <a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a>
               </li>
             </xsl:if>
-            <li>
-              <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{$derivate/derivate/linkmetas/linkmeta/@xlink:role}');">Derivat Kontext</a>
-            </li>
             <xsl:if test="jpxml:isMetsImportable(@xlink:href)">
               <li>
                 <a href="javascript:;" data-toggle="modal" data-target="#importMetsDialog">METS Import</a>
