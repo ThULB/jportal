@@ -139,12 +139,6 @@ function selectDerivateContext(/*dom*/ e, /*String*/ id, /*String*/ roleURI) {
 	});
 }
 
-function startProcessTIFF(/*String*/ derivateId) {
-	$.post(jp.baseURL + "rsc/tiff/convert/" + derivateId + "/",function() {
-		console.log("Erfolgreich");
-	});
-}
-
 function updateDerivateContext() {
 	var derivateId = $(this).attr("data-derivate-id");
 	var contextURI = $(this).val();
