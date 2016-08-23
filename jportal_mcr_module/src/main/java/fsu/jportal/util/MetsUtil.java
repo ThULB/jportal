@@ -86,7 +86,7 @@ public abstract class MetsUtil {
         }
         // check profile
         String profile = rootElement.getAttributeValue("PROFILE");
-        return profile.equals("ENMAP");
+        return profile != null && profile.equals("ENMAP");
     }
 
 }
