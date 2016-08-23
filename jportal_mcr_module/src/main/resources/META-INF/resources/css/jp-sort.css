@@ -38,3 +38,11 @@
 .jp-sort-object-order-select-container {
 	padding-right: 0px;
 }
+
+.jp-sort-object-child-maintitle {
+	margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1rem;
+}

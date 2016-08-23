@@ -196,7 +196,14 @@ jp.sort.object = {
       activeClass += (selected == child.id) ? " active" : "";
       activeClass += "'";
       var onclick = "onclick='jp.sort.object.selectChild(`" + child.id + "`)'";
-      container.append("<a href='#' " + activeClass + " " + onclick + ">" + child.maintitle + "</div>");
+      var html = "<div class='jp-sort-object-child-maintitle'>" + child.maintitle + "</div>";
+      if(child.size) {
+        html += "<div>Seitenbereich: <b>" + child.size + "</b></div>";
+      }
+      if(child["date.published"]) {
+        html += "<div>Publikationsdatum: <b>" + child["date.published"] + "</b></div>";
+      }
+      container.append("<a href='#' " + activeClass + " " + onclick + " title='" + child.maintitle + "'>" + html + "</div>");
     }
 
     function addPaginatorPage(paginator, page, currentPage) {
@@ -364,7 +371,7 @@ jp.sort.object = {
 
   getChildren: function(id, callback) {
     var q = "parent:" + id;
-    var fl = "id,maintitle";
+    var fl = "id,maintitle,size,date.published";
     var sort = "order+asc";
     var rows = "9999";
     $.getJSON(jp.baseURL + "servlets/search?q=" + q + "&fl=" + fl + "&sort=" + sort + "&rows=" + rows + "&wt=json", function(response) {
