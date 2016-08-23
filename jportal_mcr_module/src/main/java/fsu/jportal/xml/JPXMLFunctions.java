@@ -46,56 +46,75 @@ public class JPXMLFunctions {
             try {
                 return DocumentBuilderFactory.newInstance().newDocumentBuilder();
             } catch (ParserConfigurationException pce) {
-                LOGGER.error("Unable to create document builder", pce);
+                LOGGER.error("Unable to create document builder.", pce);
                 return null;
             }
         }
     };
 
     public static String formatISODate(String isoDate, String iso639Language) {
-        if (LOGGER.isDebugEnabled()) {
-            StringBuffer sb = new StringBuffer("isoDate=");
-            sb.append(isoDate).append(", iso649Language=").append(iso639Language);
-            LOGGER.debug(sb.toString());
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                StringBuffer sb = new StringBuffer("isoDate=");
+                sb.append(isoDate).append(", iso649Language=").append(iso639Language);
+                LOGGER.debug(sb.toString());
+            }
+            Locale locale = new Locale(iso639Language);
+            SimpleDateFormat df = new SimpleDateFormat(getFormat(isoDate), locale);
+            MCRMetaISO8601Date mcrdate = new MCRMetaISO8601Date();
+            mcrdate.setDate(isoDate);
+            Date date = mcrdate.getDate();
+            return (date == null) ? "?" + isoDate + "?" : df.format(date);
+        } catch (Exception exc) {
+            LOGGER.error("While formating date " + isoDate + " with language " + iso639Language + ".", exc);
+            return "?" + isoDate + "?";
         }
-        Locale locale = new Locale(iso639Language);
-        SimpleDateFormat df = new SimpleDateFormat(getFormat(isoDate), locale);
-        MCRMetaISO8601Date mcrdate = new MCRMetaISO8601Date();
-        mcrdate.setDate(isoDate);
-        Date date = mcrdate.getDate();
-        return (date == null) ? "?" + isoDate + "?" : df.format(date);
     }
 
     public static String getUserID() {
-        return MCRUserManager.getCurrentUser().getUserID();
+        try {
+            return MCRUserManager.getCurrentUser().getUserID();
+        } catch (Exception exc) {
+            LOGGER.error("Unable to get user id of current session.", exc);
+            return "";
+        }
     }
 
     public static String getFormat(String date) {
-        if (date != null && !date.equals("")) {
-            String split[] = date.split("-");
-            switch (split.length) {
-                case 1:
-                    return MCRTranslation.translate("metaData.dateYear");
-                case 2:
-                    return MCRTranslation.translate("metaData.dateYearMonth");
-                case 3:
-                    return MCRTranslation.translate("metaData.dateYearMonthDay");
+        try {
+            if (date != null && !date.equals("")) {
+                String split[] = date.split("-");
+                switch (split.length) {
+                    case 1:
+                        return MCRTranslation.translate("metaData.dateYear");
+                    case 2:
+                        return MCRTranslation.translate("metaData.dateYearMonth");
+                    case 3:
+                        return MCRTranslation.translate("metaData.dateYearMonthDay");
+                }
             }
+            return MCRTranslation.translate("metaData.date");
+        } catch (Exception exc) {
+            LOGGER.error("Unable to format date " + date + ".", exc);
+            return "";
         }
-        return MCRTranslation.translate("metaData.date");
     }
 
     public static Document getLanguages() {
-        String languagesString = MCRConfiguration.instance().getString("MCR.Metadata.Languages");
-        String[] languagesArray = languagesString.split(",");
-        LOGGER.debug(languagesArray);
         Document document = BUILDER_LOCAL.get().newDocument();
-        Element languages = document.createElement("languages");
-        document.appendChild(languages);
-        for (String lang : languagesArray) {
-            Element langElement = document.createElement("lang");
-            langElement.setTextContent(lang);
-            languages.appendChild(langElement);
+        try {
+            String languagesString = MCRConfiguration.instance().getString("MCR.Metadata.Languages");
+            String[] languagesArray = languagesString.split(",");
+            LOGGER.debug(languagesArray);
+            Element languages = document.createElement("languages");
+            document.appendChild(languages);
+            for (String lang : languagesArray) {
+                Element langElement = document.createElement("lang");
+                langElement.setTextContent(lang);
+                languages.appendChild(langElement);
+            }
+        } catch (Exception exc) {
+            LOGGER.error("Unable to get languages. @check MCR.Metadata.Languages property.", exc);
         }
         return document;
     }
@@ -107,19 +126,22 @@ public class JPXMLFunctions {
      * @return
      */
     public static boolean resourceExist(String webResource) {
-        InputStream resource = JPXMLFunctions.class.getResourceAsStream("/META-INF/resources/" + webResource);
-
-        if (resource == null) {
-            return false;
-        } else {
-            try {
-                resource.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+        try {
+            InputStream resource = JPXMLFunctions.class.getResourceAsStream("/META-INF/resources/" + webResource);
+            if (resource == null) {
+                return false;
+            } else {
+                try {
+                    resource.close();
+                } catch (IOException ioExc) {
+                    LOGGER.warn("Unable to close resource " + webResource + ".", ioExc);
+                }
+                return true;
             }
-            return true;
+        } catch (Exception exc) {
+            LOGGER.error("Unable to check if resource " + webResource + " does exists.", exc);
         }
+        return false;
     }
 
     public static int getCentury(String date) {
@@ -140,6 +162,9 @@ public class JPXMLFunctions {
      * @return date in solr format (YYYY-MM-DDThh:mm:ssZ)
      */
     public static String formatDate(String date) {
+        if (date == null) {
+            return "";
+        }
         try {
             SimpleDateFormat format = null;
             if (date.length() == 4) {
@@ -156,7 +181,7 @@ public class JPXMLFunctions {
             return solrDateFormat.format(solrDate);
         } catch (Exception exc) {
             LOGGER.warn("Unable to formate date " + date);
-            return null;
+            return "";
         }
     }
 
@@ -206,8 +231,8 @@ public class JPXMLFunctions {
         try {
             org.jdom2.Document mets = MetsUtil.getMetsXMLasDocument(derivateId);
             return MetsUtil.isENMAP(mets);
-        } catch (Exception e) {
-            LOGGER.error(e);
+        } catch (Exception exc) {
+            LOGGER.error("Unable to check if " + derivateId + " contains an ENMAP profile mets.xml.", exc);
             return false;
         }
     }
@@ -219,11 +244,16 @@ public class JPXMLFunctions {
      * @return true if there are children
      */
     private static boolean hasChildren(String derivateId) {
-        MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
-        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(mcrDerivateId);
-        MCRObjectID ownerID = derivate.getOwnerID();
-        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(ownerID);
-        return mcrObject.getStructure().getChildren().size() > 0;
+        try {
+            MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
+            MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(mcrDerivateId);
+            MCRObjectID ownerID = derivate.getOwnerID();
+            MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(ownerID);
+            return mcrObject.getStructure().getChildren().size() > 0;
+        } catch (Exception exc) {
+            LOGGER.error("Unable to check if the owner of the " + derivateId + " has any children.", exc);
+            return false;
+        }
     }
 
     /**
