@@ -30,6 +30,9 @@ public class JPArticleSizeSorter implements JPSorter {
                 return 0;
             }
 
+            size1 = getFirstNumIfRange(size1);
+            size2 = getFirstNumIfRange(size2);
+
             int specialCharCompareResult = compareSpecialChar(size1, size2);
             if (specialCharCompareResult != 0) {
                 return specialCharCompareResult * getOrderSign(order);
@@ -42,6 +45,10 @@ public class JPArticleSizeSorter implements JPSorter {
             return Integer.compare(intSize1, intSize2) * getOrderSign(order);
 
         };
+    }
+
+    private String getFirstNumIfRange(String range) {
+        return range.split("-")[0];
     }
 
     private int getOrderSign(Order order) {
