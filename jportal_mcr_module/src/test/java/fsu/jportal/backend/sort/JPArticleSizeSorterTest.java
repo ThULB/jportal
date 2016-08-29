@@ -17,6 +17,7 @@ public class JPArticleSizeSorterTest extends MCRTestCase {
         assertTrue(0 == sorter.compare(Order.ASCENDING, "1", "1"));
         assertTrue(0 > sorter.compare(Order.ASCENDING, "1", "2"));
         assertTrue(0 < sorter.compare(Order.ASCENDING, "2", "1"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "2", "11"));
         assertTrue(0 > sorter.compare(Order.ASCENDING, "0001", "0002"));
         assertTrue(0 < sorter.compare(Order.DESCENDING, "0001", "0002"));
 
@@ -29,6 +30,8 @@ public class JPArticleSizeSorterTest extends MCRTestCase {
         // Roman numeral (with asterisk)
         assertTrue(0 < sorter.compare(Order.ASCENDING, "0010", "*001"));
         assertTrue(0 > sorter.compare(Order.ASCENDING, "*001", "0010"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "*002", "*001"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "*110", "*005"));
 
         // map & asterisk
         assertTrue(0 > sorter.compare(Order.ASCENDING, "*001", "K 01"));
@@ -39,6 +42,15 @@ public class JPArticleSizeSorterTest extends MCRTestCase {
         assertTrue(0 > sorter.compare(Order.ASCENDING, "CCCI", "CMXCIX"));
         assertTrue(0 < sorter.compare(Order.ASCENDING, "0001", "IV"));
         assertTrue(0 > sorter.compare(Order.ASCENDING, "IV", "0100"));
+
+        // not the first article on a page
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "025 [1]", "025 [2]"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "025 [2]", "025 [1]"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "024", "025 [1]"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "025 [1]", "024"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "024 [1]", "025"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "025", "024 [1]"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "025 [2]", "025 [11]"));
     }
 
 }

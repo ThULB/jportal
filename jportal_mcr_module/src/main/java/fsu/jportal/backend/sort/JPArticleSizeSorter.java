@@ -47,25 +47,45 @@ public class JPArticleSizeSorter implements JPSorter {
         size1 = getFirstNumIfRange(size1);
         size2 = getFirstNumIfRange(size2);
 
-        // special characters
+        // special characters: *, [, K, T
         int specialCharCompareResult = compareSpecialChar(size1, size2);
         if (specialCharCompareResult != 0) {
             return specialCharCompareResult * getOrderSign(order);
         }
 
-        // Roman numerals
+        // Roman numerals: IV
         Integer result = compareRomanNumerals(size1, size2);
         if (result != null) {
             return result * getOrderSign(order);
         }
 
-        // all other stuff
+        // compare
+        return compareMulti(order, size1, size2);
+    }
+
+    private Integer compareMulti(Order order, String size1, String size2) {
+        if (!size1.contains("[") && !size2.contains("[")) {
+            return simpleCompare(order, size1, size2);
+        }
+        String page1 = size1.split("\\[")[0];
+        String page2 = size2.split("\\[")[0];
+        Integer result = simpleCompare(order, page1, page2);
+        if(result != 0) {
+            return result;
+        }
+        String posOnPage1 = size1.contains("[") ? size1.split("\\[")[1] : "0";
+        String posOnPage2 = size2.contains("[") ? size2.split("\\[")[1] : "0";
+        return simpleCompare(order, posOnPage1, posOnPage2);
+    }
+    
+    private int simpleCompare(Order order, String size1, String size2) {
         size1 = size1.replaceAll("[^0-9]", "");
         size2 = size2.replaceAll("[^0-9]", "");
         int intSize1 = getIntSize(size1);
         int intSize2 = getIntSize(size2);
         return Integer.compare(intSize1, intSize2) * getOrderSign(order);
     }
+
 
     private Integer compareRomanNumerals(String size1, String size2) {
         RomanNumeral roman1;
@@ -97,13 +117,10 @@ public class JPArticleSizeSorter implements JPSorter {
     public int compareSpecialChar(String size1, String size2) {
         List<String> pre = Arrays.asList("*");
         List<String> post = Arrays.asList("[", "K", "T");
-        return Stream.concat(pre.stream(), post.stream())
-                     .mapToInt(c -> getSign(c, pre) * Boolean.compare(size1.startsWith(c), size2.startsWith(c)))
-                     .sum();
-    }
-
-    private int getSign(String c, List<String> pre) {
-        return pre.contains(c) ? -1 : 1;
+        return Stream.concat(pre.stream(), post.stream()).mapToInt(c -> {
+            Integer order = pre.contains(c) ? -1 : 1;
+            return order * Boolean.compare(size1.startsWith(c), size2.startsWith(c));
+        }).sum();
     }
 
     private int getIntSize(String size) {
