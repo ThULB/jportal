@@ -5,13 +5,12 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRTestCase;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 
 public class JPArticleTest extends MCRTestCase {
 
     @Test
-    public void setKeyword() throws MCRPersistenceException, MCRActiveLinkException {
+    public void setKeyword() throws MCRPersistenceException {
         JPArticle a = new JPArticle();
         a.addKeyword("hallo");
         assertEquals(1, a.getKeywords().size());

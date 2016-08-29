@@ -2,12 +2,16 @@ package fsu.jportal.backend.sort;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.common.RomanNumeral;
 import fsu.jportal.util.JPComponentUtil;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Default implementation to sort jparticle's by their size.
@@ -26,25 +30,60 @@ public class JPArticleSizeSorter implements JPSorter {
             }
             String size1 = ((JPArticle) child1).getSize();
             String size2 = ((JPArticle) child2).getSize();
-            if (size1 == null || size2 == null) {
-                return 0;
+            try {
+                return compare(order, size1, size2);
+            } catch (Exception exc) {
+                LOGGER.warn("Unable to compare " + child1.getId() + " with " + child2.getId(), exc);
+                return Integer.MAX_VALUE;
             }
-
-            size1 = getFirstNumIfRange(size1);
-            size2 = getFirstNumIfRange(size2);
-
-            int specialCharCompareResult = compareSpecialChar(size1, size2);
-            if (specialCharCompareResult != 0) {
-                return specialCharCompareResult * getOrderSign(order);
-            }
-
-            size1 = size1.replaceAll("[^0-9]", "");
-            size2 = size2.replaceAll("[^0-9]", "");
-            int intSize1 = getIntSize(child1, size1);
-            int intSize2 = getIntSize(child2, size2);
-            return Integer.compare(intSize1, intSize2) * getOrderSign(order);
-
         };
+    }
+
+    public int compare(Order order, String size1, String size2) {
+        if (size1 == null || size2 == null) {
+            return 0;
+        }
+
+        size1 = getFirstNumIfRange(size1);
+        size2 = getFirstNumIfRange(size2);
+
+        // special characters
+        int specialCharCompareResult = compareSpecialChar(size1, size2);
+        if (specialCharCompareResult != 0) {
+            return specialCharCompareResult * getOrderSign(order);
+        }
+
+        // Roman numerals
+        Integer result = compareRomanNumerals(size1, size2);
+        if (result != null) {
+            return result * getOrderSign(order);
+        }
+
+        // all other stuff
+        size1 = size1.replaceAll("[^0-9]", "");
+        size2 = size2.replaceAll("[^0-9]", "");
+        int intSize1 = getIntSize(size1);
+        int intSize2 = getIntSize(size2);
+        return Integer.compare(intSize1, intSize2) * getOrderSign(order);
+    }
+
+    private Integer compareRomanNumerals(String size1, String size2) {
+        RomanNumeral roman1;
+        RomanNumeral roman2;
+        try {
+            roman1 = new RomanNumeral(size1);
+        } catch (NumberFormatException nfe) {
+            roman1 = null;
+        }
+        try {
+            roman2 = new RomanNumeral(size2);
+        } catch (NumberFormatException nfe) {
+            roman2 = null;
+        }
+        if (roman1 == null && roman2 == null) {
+            return null;
+        }
+        return roman1 == null ? 1 : (roman2 == null ? -1 : Integer.compare(roman1.toInt(), roman2.toInt()));
     }
 
     private String getFirstNumIfRange(String range) {
@@ -55,21 +94,23 @@ public class JPArticleSizeSorter implements JPSorter {
         return order.equals(Order.ASCENDING) ? 1 : -1;
     }
 
-    private int compareSpecialChar(String size1, String size2) {
-        return Arrays.stream(new String[] { "*", "[" })
-                        .mapToInt(c -> getSign(c) * Boolean.compare(size1.startsWith(c), size2.startsWith(c))).sum();
+    public int compareSpecialChar(String size1, String size2) {
+        List<String> pre = Arrays.asList("*");
+        List<String> post = Arrays.asList("[", "K", "T");
+        return Stream.concat(pre.stream(), post.stream())
+                     .mapToInt(c -> getSign(c, pre) * Boolean.compare(size1.startsWith(c), size2.startsWith(c)))
+                     .sum();
     }
 
-    private int getSign(String c) {
-        return "*".equals(c)? -1 : 1;
+    private int getSign(String c, List<String> pre) {
+        return pre.contains(c) ? -1 : 1;
     }
 
-    private int getIntSize(JPPeriodicalComponent child, String size) {
+    private int getIntSize(String size) {
         try {
             return Integer.valueOf(size);
         } catch (NumberFormatException nfe) {
-            LOGGER.warn("Unable to format size of " + child.getId().toString(), nfe);
-            return Integer.MAX_VALUE;
+            throw new NumberFormatException("Unable to format size " + size);
         }
     }
 
