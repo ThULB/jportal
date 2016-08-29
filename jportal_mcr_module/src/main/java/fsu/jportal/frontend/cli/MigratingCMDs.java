@@ -283,43 +283,26 @@ public class MigratingCMDs {
     public static void applyLevelSortingForJournal(String id) throws Exception {
         LOGGER.info("apply level sorting for journal " + id);
         MCRObjectID journalId = MCRObjectID.getInstance(id);
-
-        JPJournal journal = new JPJournal(journalId);
         JPLevelSorting levelSorting = JPLevelSortingUtil.analyze(journalId);
 
-        boolean isCalendar = journal.isJournalType("jportal_class_00000200", "calendars");
-        boolean isJVB = journalId.toString().equals("jportal_jpjournal_00000109");
-        boolean isLLZ = journalId.toString().equals("jportal_jpjournal_00001219");
-        boolean isManualSorting = isCalendar || isJVB || isLLZ;
-
-        if (isManualSorting) {
-            LOGGER.info("journal is either calendar, jvb or llz -> do manual sort");
-            // do manual sort for all children
-            levelSorting.getLevels().values().forEach(level -> {
-                level.setSorterClass(null);
-                level.setOrder(null);
-            });
-        }
         LOGGER.info("use level sorting: " + levelSorting.toJSON().toString());
         LOGGER.info("store level sorting...");
         JPLevelSortingUtil.store(journalId, levelSorting);
 
-        if (!isManualSorting) {
-            LOGGER.info("get all descendants and mark them as IMPORTED.");
-            List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
-                "journalID:" + id);
-            descendantAndSelfIds.forEach(childId -> {
-                MCRMarkManager.instance().mark(MCRObjectID.getInstance(childId), Operation.IMPORT);
-            });
-            LOGGER.info("apply level sorting...");
-            JPLevelSortingUtil.apply(journalId, levelSorting);
-            LOGGER.info("unmark all children...");
-            descendantAndSelfIds.forEach(childId -> {
-                MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId));
-            });
-            LOGGER.info("reindex all children...");
-            MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds, true);
-        }
+        LOGGER.info("get all descendants and mark them as IMPORTED.");
+        List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
+            "journalID:" + id);
+        descendantAndSelfIds.forEach(childId -> {
+            MCRMarkManager.instance().mark(MCRObjectID.getInstance(childId), Operation.IMPORT);
+        });
+        LOGGER.info("apply level sorting...");
+        JPLevelSortingUtil.apply(journalId, levelSorting);
+        LOGGER.info("unmark all children...");
+        descendantAndSelfIds.forEach(childId -> {
+            MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId));
+        });
+        LOGGER.info("reindex all children...");
+        MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds, true);
     }
 
 }
