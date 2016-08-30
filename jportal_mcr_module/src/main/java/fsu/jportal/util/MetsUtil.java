@@ -15,6 +15,7 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.mets.model.Mets;
 
 /**
  * Util class for mets.xml handling.
@@ -30,6 +31,19 @@ public abstract class MetsUtil {
         METS_NS_LIST.add(MCRConstants.METS_NAMESPACE);
         METS_NS_LIST.add(MCRConstants.MODS_NAMESPACE);
         METS_NS_LIST.add(MCRConstants.XLINK_NAMESPACE);
+    }
+
+    /**
+     * Returns the mets.xml as java object.
+     * 
+     * @param derivateId the derivate where to get the mets.xml
+     * @throws FileNotFoundException when there is no mets.xml
+     * @throws IOException when the mets.xml couldn't be read by the io
+     * @throws JDOMException when the file exists but couldn't be parsed with jdom
+     * @return the mets.xml as java object
+     */
+    public static Mets getMets(String derivateId) throws IOException, JDOMException {
+        return new Mets(getMetsXMLasDocument(derivateId));
     }
 
     /**
