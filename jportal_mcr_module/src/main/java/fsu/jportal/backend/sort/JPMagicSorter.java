@@ -1,8 +1,10 @@
 package fsu.jportal.backend.sort;
 
 import java.util.Comparator;
+import java.util.List;
 
 import org.mycore.common.MCRException;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.jportal.backend.JPArticle;
@@ -40,6 +42,16 @@ public class JPMagicSorter implements JPSorter {
      * @param journal the journal to order
      */
     protected void handleJournal(JPJournal journal, Order order) {
+        // use hidden position sorter?
+        List<MCRObjectID> children = journal.getChildren();
+        long count = children.stream().map(MCRMetadataManager::retrieveMCRObject).filter(volume -> {
+            return volume.getMetadata().findFirst("hidden_positions").isPresent();
+        }).count();
+        if (children.size() == count) {
+            JPSorter sorter = new JPHiddenPositionSorter();
+            sorter.sort(journal, order);
+            return;
+        }
         // the new way for an online journal
         boolean isOnlineJournal = journal.getJournalTypes().stream().filter(id -> {
             return "jportal_class_00000210".equals(id.getRootID()) && "onlineJournal".equals(id.getID());
