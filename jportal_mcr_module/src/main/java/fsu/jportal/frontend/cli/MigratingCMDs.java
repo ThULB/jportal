@@ -39,8 +39,6 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRXSLTransformation;
-import org.mycore.datamodel.common.MCRMarkManager;
-import org.mycore.datamodel.common.MCRMarkManager.Operation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -49,7 +47,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.solr.MCRSolrClientFactory;
-import org.mycore.solr.index.MCRSolrIndexer;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
 import fsu.jportal.backend.JPObjectConfiguration;
@@ -267,18 +264,17 @@ public class MigratingCMDs {
         }
     }
 
-    @MCRCommand(help = "apply level sorting on all journals", syntax = "apply level sorting")
-    public static List<String> applyLevelSorting() throws Exception {
+    @MCRCommand(help = "analyzes the structure of all journals and adds level sorting", syntax = "add level sorting")
+    public static List<String> addLevelSorting() throws Exception {
         List<String> journalIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
             "objectType:jpjournal");
         return journalIds.stream().map(id -> {
-            return "add level sorting for journal " + id;
+            return "_add level sorting for journal " + id;
         }).collect(Collectors.toList());
     }
 
-    @MCRCommand(help = "apply level sorting for {journal}", syntax = "add level sorting for journal {0}")
-    public static void applyLevelSortingForJournal(String id) throws Exception {
-        LOGGER.info("apply level sorting for journal " + id);
+    @MCRCommand(help = "analyzes the journal structure and adds a new level sorting for {journal}", syntax = "_add level sorting for journal {0}")
+    public static void addLevelSortingForJournal(String id) throws Exception {
         MCRObjectID journalId = MCRObjectID.getInstance(id);
         JPLevelSorting levelSorting = JPLevelSortingUtil.analyze(journalId);
 
@@ -286,20 +282,21 @@ public class MigratingCMDs {
         LOGGER.info("store level sorting...");
         JPLevelSortingUtil.store(journalId, levelSorting);
 
-        LOGGER.info("get all descendants and mark them as IMPORTED.");
-        List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
-            "journalID:" + id);
-        descendantAndSelfIds.forEach(childId -> {
-            MCRMarkManager.instance().mark(MCRObjectID.getInstance(childId), Operation.IMPORT);
-        });
-        LOGGER.info("apply level sorting...");
         JPLevelSortingUtil.apply(journalId, levelSorting);
-        LOGGER.info("unmark all children...");
-        descendantAndSelfIds.forEach(childId -> {
-            MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId));
-        });
-        LOGGER.info("reindex all children...");
-        MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds, true);
+    }
+
+    @MCRCommand(help = "apply level sorting on all journals", syntax = "apply level sorting")
+    public static List<String> applyLevelSorting() throws Exception {
+        List<String> journalIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
+            "objectType:jpjournal");
+        return journalIds.stream().map(id -> {
+            return "_apply level sorting for journal " + id;
+        }).collect(Collectors.toList());
+    }
+
+    @MCRCommand(help = "apply level sorting for {journal}", syntax = "_apply level sorting for journal {0}")
+    public static void applyLevelSortingForJournal(String id) throws Exception {
+        JPLevelSortingUtil.reapply(MCRObjectID.getInstance(id));
     }
 
 }

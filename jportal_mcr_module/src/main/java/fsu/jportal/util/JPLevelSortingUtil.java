@@ -14,12 +14,18 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.mycore.common.MCRException;
+import org.mycore.datamodel.common.MCRMarkManager;
+import org.mycore.datamodel.common.MCRMarkManager.Operation;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.index.MCRSolrIndexer;
+import org.mycore.solr.search.MCRSolrSearchUtils;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPContainer;
@@ -137,34 +143,61 @@ public abstract class JPLevelSortingUtil {
     }
 
     /**
+     * Reapply the level sorting for the given object. You can call this method if something
+     * on your sorting implementation has changed.
+     * 
+     * @param objectID the object to reapply the level sorting
+     * @throws IOException journal configuration couldn't be loaded
+     * @throws SolrServerException the descendants couldn't be selected
+     */
+    public static void reapply(MCRObjectID objectID) throws IOException, SolrServerException {
+        JPLevelSorting levelSorting = JPLevelSortingUtil.load(objectID);
+        JPLevelSortingUtil.apply(objectID, levelSorting);
+    }
+
+    /**
      * Runs through all descendants of the object and applies the sorters defined
      * in the given level sorting object.
      * 
      * @param objectID the object to apply the level sorting at
      * @param levelSorting the level sorting to apply
+     * 
+     * @throws SolrServerException the descendants couldn't be selected
      */
-    public static void apply(MCRObjectID objectID, JPLevelSorting levelSorting) {
-        apply(objectID, levelSorting, 0);
+    public static void apply(MCRObjectID objectID, JPLevelSorting levelSorting) throws SolrServerException {
+        LOGGER.info("apply level sorting for journal " + objectID + "...");
+        // mark all descendants as IMPORTED
+        List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
+            "journalID:" + objectID.toString());
+        descendantAndSelfIds.forEach(childId -> {
+            MCRMarkManager.instance().mark(MCRObjectID.getInstance(childId), Operation.IMPORT);
+        });
+        try {
+            apply(objectID, levelSorting, 0);
+        } finally {
+            // unmark all descendants
+            descendantAndSelfIds.forEach(childId -> {
+                MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId));
+            });
+            MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds, true);
+        }
     }
 
     protected static void apply(MCRObjectID objectID, JPLevelSorting levelSorting, int levelPosition) {
         try {
             Level level = levelSorting.get(levelPosition);
-            if(level != null) {
+            if (level != null) {
                 applySorter(objectID, level.getSorterClass(), level.getOrder());
             }
             MCRObject object = MCRMetadataManager.retrieveMCRObject(objectID);
             List<MCRMetaLinkID> children = object.getStructure().getChildren();
-            if(children.isEmpty()) {
+            if (children.isEmpty()) {
                 return;
             }
-            children.stream()
-                .map(MCRMetaLinkID::getXLinkHref)
-                .map(MCRObjectID::getInstance)
-                .forEach(id -> {
-                    apply(id, levelSorting, levelPosition + 1);
-                });
-        } catch(Exception exc) {
+            children.stream().map(MCRMetaLinkID::getXLinkHref).map(MCRObjectID::getInstance).forEach(id -> {
+                apply(id, levelSorting, levelPosition + 1);
+            });
+        } catch (Exception exc) {
             throw new MCRException("Unable to apply level sorting for " + objectID.toString(), exc);
         }
     }
@@ -216,7 +249,7 @@ public abstract class JPLevelSortingUtil {
                     } else if (child.getType().equals(JPArticle.TYPE)) {
                         levelSorting.add("Artikel", JPMagicSorter.class, null);
                     }
-                } catch(Exception exc) {
+                } catch (Exception exc) {
                     throw new MCRException("Unable to analyze " + child.getId().toString(), exc);
                 }
             });

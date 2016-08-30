@@ -34,8 +34,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPComponent.StoreOption;
+import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
@@ -82,7 +82,7 @@ public class SortResource {
         Order order = null;
         try {
             order = Order.valueOf(orderString.toUpperCase());
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             order = Order.ASCENDING;
         }
         try {
@@ -246,6 +246,8 @@ public class SortResource {
         } catch (IOException exc) {
             throwInternalServerError(exc,
                 "Unable to store level sorting for " + id + ". Couldn't store on filesystem.");
+        } catch (Exception exc) {
+            throwInternalServerError(exc, "Unable to store level sorting for " + id + ".");
         }
     }
 
