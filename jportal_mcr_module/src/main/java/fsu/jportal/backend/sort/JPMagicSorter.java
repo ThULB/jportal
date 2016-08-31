@@ -42,28 +42,26 @@ public class JPMagicSorter implements JPSorter {
      * @param journal the journal to order
      */
     protected void handleJournal(JPJournal journal, Order order) {
+        // fallback maintitle sorter
+        JPSorter sorter = new JPMaintitleSorter();
         // use hidden position sorter?
-        List<MCRObjectID> children = journal.getChildren();
-        long count = children.stream().map(MCRMetadataManager::retrieveMCRObject).filter(volume -> {
-            return volume.getMetadata().findFirst("hidden_positions").isPresent();
-        }).count();
-        if (children.size() == count) {
-            JPSorter sorter = new JPHiddenPositionSorter();
-            sorter.sort(journal, order);
-            return;
+        if (canSortedByHiddenPosition(journal)) {
+            sorter = new JPHiddenPositionSorter();
+        } else if (canSortedByPublishedDate(journal)) {
+            // the new way for an online journal
+            boolean isOnlineJournal = journal.getJournalTypes().stream().filter(id -> {
+                return "jportal_class_00000210".equals(id.getRootID()) && "onlineJournal".equals(id.getID());
+            }).findAny().isPresent();
+            // the old way
+            boolean isOldOnlineJournal = journal.getContentClassis(1).stream().filter(id -> {
+                return "jportal_class_00000061".equals(id.getRootID()) && "online".equals(id.getID());
+            }).findAny().isPresent();
+            // sort them
+            boolean descending = isOnlineJournal || isOldOnlineJournal;
+            order = descending ? Order.DESCENDING : Order.ASCENDING;
+            sorter = new JPPublishedSorter();
         }
-        // the new way for an online journal
-        boolean isOnlineJournal = journal.getJournalTypes().stream().filter(id -> {
-            return "jportal_class_00000210".equals(id.getRootID()) && "onlineJournal".equals(id.getID());
-        }).findAny().isPresent();
-        // the old way
-        boolean isOldOnlineJournal = journal.getContentClassis(1).stream().filter(id -> {
-            return "jportal_class_00000061".equals(id.getRootID()) && "online".equals(id.getID());
-        }).findAny().isPresent();
-        // sort them
-        boolean descending = isOnlineJournal || isOldOnlineJournal;
-        JPSorter sorter = new JPPublishedSorter();
-        sorter.sort(journal, descending ? Order.DESCENDING : Order.ASCENDING);
+        sorter.sort(journal, order);
     }
 
     /**
@@ -108,6 +106,38 @@ public class JPMagicSorter implements JPSorter {
         JPVolume child = new JPVolume(sampleVolumeID);
         JPSorter sorter = child.getHiddenPosition() != null ? new JPHiddenPositionSorter() : new JPMaintitleSorter();
         sorter.sort(volume, order != null ? order : Order.ASCENDING);
+    }
+
+    /**
+     * Checks if the children of the given container can be sorted by
+     * their hidden position. This returns true if ALL children have
+     * a hidden positions flag.
+     * 
+     * @param container the container to sort
+     * @return true if the children of container can be sorted by their hidden position
+     */
+    protected boolean canSortedByHiddenPosition(JPContainer container) {
+        List<MCRObjectID> children = container.getChildren();
+        long count = children.stream().map(MCRMetadataManager::retrieveMCRObject).filter(volume -> {
+            return volume.getMetadata().findFirst("hidden_positions").isPresent();
+        }).count();
+        return children.size() == count;
+    }
+
+    /**
+     * Checks if the children of the given container can be sorted by
+     * their published date. This returns true if ALL children have
+     * a published date.
+     * 
+     * @param container the container to sort
+     * @return true if the children of container can be sorted by their published date
+     */
+    protected boolean canSortedByPublishedDate(JPContainer container) {
+        List<MCRObjectID> children = container.getChildren();
+        long count = children.stream().map(MCRMetadataManager::retrieveMCRObject).filter(volume -> {
+            return volume.getMetadata().findFirst("dates", "published").isPresent();
+        }).count();
+        return children.size() == count;
     }
 
     /**
