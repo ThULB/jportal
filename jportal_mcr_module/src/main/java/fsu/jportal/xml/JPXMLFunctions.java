@@ -231,6 +231,8 @@ public class JPXMLFunctions {
         try {
             org.jdom2.Document mets = MetsUtil.getMetsXMLasDocument(derivateId);
             return MetsUtil.isENMAP(mets);
+        } catch(FileNotFoundException fnfe) {
+            return false;
         } catch (Exception exc) {
             LOGGER.error("Unable to check if " + derivateId + " contains an ENMAP profile mets.xml.", exc);
             return false;
