@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
-import org.mycore.mets.misc.StructLinkGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.File;
@@ -29,7 +28,6 @@ import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.Seq;
-import org.mycore.mets.model.struct.StructLink;
 
 /**
  * Uses the jportal mets generator and adds the support for ALTO files. This includes
