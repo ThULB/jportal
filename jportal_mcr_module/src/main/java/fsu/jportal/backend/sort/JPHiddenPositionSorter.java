@@ -21,6 +21,9 @@ public class JPHiddenPositionSorter implements JPSorter {
     @Override
     public Comparator<? super JPPeriodicalComponent> getSortComparator(Order order) {
         return (child1, child2) -> {
+            if(child1 == null || child2 == null) {
+                return 0;
+            }
             if (!JPComponentUtil.is(child1, JPVolume.TYPE) || !JPComponentUtil.is(child2, JPVolume.TYPE)) {
                 return 0;
             }
