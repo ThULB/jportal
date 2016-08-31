@@ -39,7 +39,7 @@ public class JPHiddenPositionSorter implements JPSorter {
             } catch (Exception exc) {
                 LOGGER.warn("Unable to get hidden position of " + child2.getId(), exc);
             }
-            return Integer.compare(pos1, pos2) * (order.equals(Order.ASCENDING) ? 1 : -1);
+            return Integer.compare(pos1, pos2) * getOrder(order);
         };
     }
 

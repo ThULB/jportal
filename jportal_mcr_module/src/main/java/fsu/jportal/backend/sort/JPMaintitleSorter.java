@@ -19,7 +19,7 @@ public class JPMaintitleSorter implements JPSorter {
             if(isOneNull(title1, title2)) {
                 return handleNull(title1, title2);
             }
-            return title1.compareTo(title2) * (order.equals(Order.ASCENDING) ? 1 : -1);
+            return title1.compareTo(title2) * getOrder(order);
         };
     }
 

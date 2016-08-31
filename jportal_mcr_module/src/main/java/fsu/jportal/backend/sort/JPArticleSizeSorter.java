@@ -52,13 +52,13 @@ public class JPArticleSizeSorter implements JPSorter {
         // special characters: *, [, K, T
         int specialCharCompareResult = compareSpecialChar(size1, size2);
         if (specialCharCompareResult != 0) {
-            return specialCharCompareResult * getOrderSign(order);
+            return specialCharCompareResult * getOrder(order);
         }
 
         // Roman numerals: IV
         Integer result = compareRomanNumerals(size1, size2);
         if (result != null) {
-            return result * getOrderSign(order);
+            return result * getOrder(order);
         }
 
         // compare
@@ -85,7 +85,7 @@ public class JPArticleSizeSorter implements JPSorter {
         size2 = size2.replaceAll("[^0-9]", "");
         int intSize1 = getIntSize(size1);
         int intSize2 = getIntSize(size2);
-        return Integer.compare(intSize1, intSize2) * getOrderSign(order);
+        return Integer.compare(intSize1, intSize2) * getOrder(order);
     }
 
     private Integer compareRomanNumerals(String size1, String size2) {
@@ -109,10 +109,6 @@ public class JPArticleSizeSorter implements JPSorter {
 
     private String getFirstNumIfRange(String range) {
         return range.split("-")[0];
-    }
-
-    private int getOrderSign(Order order) {
-        return order.equals(Order.ASCENDING) ? 1 : -1;
     }
 
     public int compareSpecialChar(String size1, String size2) {

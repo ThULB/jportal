@@ -20,7 +20,7 @@ public class JPCreateDateSorter implements JPSorter {
             if(isOneNull(date1, date2)) {
                 return handleNull(date1, date2);
             }
-            return date1.compareTo(date2) * (order.equals(Order.ASCENDING) ? 1 : -1);
+            return date1.compareTo(date2) * getOrder(order);
         };
     }
 

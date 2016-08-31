@@ -34,7 +34,7 @@ public interface JPSorter {
         MCRObject mcrObject = component.getObject();
         MCRObjectStructure structure = mcrObject.getStructure();
         List<MCRMetaLinkID> children = new ArrayList<>(structure.getChildren());
-        if(children.isEmpty()) {
+        if (children.isEmpty()) {
             return;
         }
         structure.clearChildren();
@@ -51,18 +51,22 @@ public interface JPSorter {
                 .forEachOrdered(structure::addChild);
     }
 
+    default public int getOrder(Order order) {
+        return Order.DESCENDING.equals(order) ? -1 : 1;
+    }
+
     default public boolean isOneNull(Object a, Object b) {
         return a == null || b == null;
     }
 
     default public Integer handleNull(Object a, Object b) {
-        if(a == null && b == null) {
+        if (a == null && b == null) {
             return 0;
         }
-        if(a == null) {
+        if (a == null) {
             return Integer.MIN_VALUE;
         }
-        if(b == null) {
+        if (b == null) {
             return Integer.MAX_VALUE;
         }
         return null;

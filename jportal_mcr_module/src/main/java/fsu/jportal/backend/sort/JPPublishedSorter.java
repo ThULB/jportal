@@ -20,7 +20,7 @@ public class JPPublishedSorter implements JPSorter {
             if (isOneNull(publishedDate1, publishedDate2)) {
                 return handleNull(publishedDate1, publishedDate2);
             }
-            return publishedDate1.compareTo(publishedDate2) * (order.equals(Order.ASCENDING) ? 1 : -1);
+            return publishedDate1.compareTo(publishedDate2) * getOrder(order);
         };
     }
 
