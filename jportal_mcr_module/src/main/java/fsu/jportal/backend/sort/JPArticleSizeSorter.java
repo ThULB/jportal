@@ -33,11 +33,8 @@ public class JPArticleSizeSorter implements JPSorter {
             }
             String size1 = ((JPArticle) child1).getSize();
             String size2 = ((JPArticle) child2).getSize();
-            if(size1 == null) {
-                return Integer.MIN_VALUE;
-            }
-            if(size2 == null) {
-                return Integer.MAX_VALUE;
+            if(isOneNull(size1, size2)) {
+                return handleNull(size1, size2);
             }
             try {
                 return compare(order, size1, size2);

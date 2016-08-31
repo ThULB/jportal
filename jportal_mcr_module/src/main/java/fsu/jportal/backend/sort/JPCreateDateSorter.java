@@ -17,11 +17,8 @@ public class JPCreateDateSorter implements JPSorter {
         return (child1, child2) -> {
             LocalDateTime date1 = child1.getCreateDate();
             LocalDateTime date2 = child2.getCreateDate();
-            if (date1 == null) {
-                return Integer.MIN_VALUE;
-            }
-            if (date2 == null) {
-                return Integer.MAX_VALUE;
+            if(isOneNull(date1, date2)) {
+                return handleNull(date1, date2);
             }
             return date1.compareTo(date2) * (order.equals(Order.ASCENDING) ? 1 : -1);
         };

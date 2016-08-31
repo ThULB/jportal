@@ -51,6 +51,23 @@ public interface JPSorter {
                 .forEachOrdered(structure::addChild);
     }
 
+    default public boolean isOneNull(Object a, Object b) {
+        return a == null || b == null;
+    }
+
+    default public Integer handleNull(Object a, Object b) {
+        if(a == null && b == null) {
+            return 0;
+        }
+        if(a == null) {
+            return Integer.MIN_VALUE;
+        }
+        if(b == null) {
+            return Integer.MAX_VALUE;
+        }
+        return null;
+    }
+
     /**
      * Returns a Comparator to sort {@link JPPeriodicalComponent}.
      * 
