@@ -1,5 +1,6 @@
 package fsu.jportal.resources;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -32,7 +33,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.mets.misc.StructLinkGenerator;
-import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
@@ -42,6 +42,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.mets.ALTOMETSHierarchyGenerator;
 import fsu.jportal.mets.MetsVersionStore;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.MetsUtil;
@@ -83,8 +84,15 @@ public class METSBaseResource {
         // check write permission on derivate
         MCRJerseyUtil.checkPermission(MCRObjectID.getInstance(derivateId), MCRAccessManager.PERMISSION_WRITE);
         try {
+            // get old mets
+            Mets oldMets;
+            try {
+                oldMets = MetsUtil.getMets(derivateId);
+            } catch(FileNotFoundException fnfe) {
+                oldMets = null;
+            }
             // generate
-            Mets newMets = MCRMETSGenerator.getGenerator().getMETS(MCRPath.getPath(derivateId, "/"),
+            Mets newMets = new ALTOMETSHierarchyGenerator(oldMets).getMETS(MCRPath.getPath(derivateId, "/"),
                 new HashSet<MCRPath>());
             // as mcr content
             MCRJDOMContent newMetsContent = new MCRJDOMContent(newMets.asDocument());
