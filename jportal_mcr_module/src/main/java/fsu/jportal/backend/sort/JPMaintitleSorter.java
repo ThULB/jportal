@@ -16,8 +16,11 @@ public class JPMaintitleSorter implements JPSorter {
         return (child1, child2) -> {
             String title1 = child1.getTitle();
             String title2 = child2.getTitle();
-            if (title1 == null || title2 == null) {
-                return 0;
+            if (title1 == null) {
+                return Integer.MIN_VALUE;
+            }
+            if (title2 == null) {
+                return Integer.MAX_VALUE;
             }
             return title1.compareTo(title2) * (order.equals(Order.ASCENDING) ? 1 : -1);
         };

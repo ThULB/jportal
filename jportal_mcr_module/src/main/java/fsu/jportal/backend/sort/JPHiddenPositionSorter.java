@@ -21,14 +21,14 @@ public class JPHiddenPositionSorter implements JPSorter {
     @Override
     public Comparator<? super JPPeriodicalComponent> getSortComparator(Order order) {
         return (child1, child2) -> {
-            if(child1 == null || child2 == null) {
-                return 0;
+            Integer pos1 = Integer.MIN_VALUE;
+            Integer pos2 = Integer.MAX_VALUE;
+            if (child1 == null || !JPComponentUtil.is(child1, JPVolume.TYPE)) {
+                return pos1;
             }
-            if (!JPComponentUtil.is(child1, JPVolume.TYPE) || !JPComponentUtil.is(child2, JPVolume.TYPE)) {
-                return 0;
+            if (child2 == null || !JPComponentUtil.is(child2, JPVolume.TYPE)) {
+                return pos2;
             }
-            Integer pos1 = 0;
-            Integer pos2 = 0;
             try {
                 pos1 = ((JPVolume) child1).getHiddenPosition();
             } catch (Exception exc) {

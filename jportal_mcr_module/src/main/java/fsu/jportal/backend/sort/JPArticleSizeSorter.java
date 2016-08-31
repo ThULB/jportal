@@ -1,17 +1,17 @@
 package fsu.jportal.backend.sort;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.common.RomanNumeral;
-import fsu.jportal.util.JPComponentUtil;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.common.RomanNumeral;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * Default implementation to sort jparticle's by their size.
@@ -25,11 +25,20 @@ public class JPArticleSizeSorter implements JPSorter {
     @Override
     public Comparator<? super JPPeriodicalComponent> getSortComparator(Order order) {
         return (child1, child2) -> {
-            if (!JPComponentUtil.is(child1, JPArticle.TYPE) || !JPComponentUtil.is(child2, JPArticle.TYPE)) {
-                return 0;
+            if (child1 == null || !JPComponentUtil.is(child1, JPArticle.TYPE)) {
+                return Integer.MIN_VALUE;
+            }
+            if (child2 == null || !JPComponentUtil.is(child2, JPArticle.TYPE)) {
+                return Integer.MAX_VALUE;
             }
             String size1 = ((JPArticle) child1).getSize();
             String size2 = ((JPArticle) child2).getSize();
+            if(size1 == null) {
+                return Integer.MIN_VALUE;
+            }
+            if(size2 == null) {
+                return Integer.MAX_VALUE;
+            }
             try {
                 return compare(order, size1, size2);
             } catch (Exception exc) {
@@ -40,10 +49,6 @@ public class JPArticleSizeSorter implements JPSorter {
     }
 
     public int compare(Order order, String size1, String size2) {
-        if (size1 == null || size2 == null) {
-            return 0;
-        }
-
         size1 = getFirstNumIfRange(size1);
         size2 = getFirstNumIfRange(size2);
 
@@ -70,14 +75,14 @@ public class JPArticleSizeSorter implements JPSorter {
         String page1 = size1.split("\\[")[0];
         String page2 = size2.split("\\[")[0];
         Integer result = simpleCompare(order, page1, page2);
-        if(result != 0) {
+        if (result != 0) {
             return result;
         }
         String posOnPage1 = size1.contains("[") ? size1.split("\\[")[1] : "0";
         String posOnPage2 = size2.contains("[") ? size2.split("\\[")[1] : "0";
         return simpleCompare(order, posOnPage1, posOnPage2);
     }
-    
+
     private int simpleCompare(Order order, String size1, String size2) {
         size1 = size1.replaceAll("[^0-9]", "");
         size2 = size2.replaceAll("[^0-9]", "");
@@ -85,7 +90,6 @@ public class JPArticleSizeSorter implements JPSorter {
         int intSize2 = getIntSize(size2);
         return Integer.compare(intSize1, intSize2) * getOrderSign(order);
     }
-
 
     private Integer compareRomanNumerals(String size1, String size2) {
         RomanNumeral roman1;
