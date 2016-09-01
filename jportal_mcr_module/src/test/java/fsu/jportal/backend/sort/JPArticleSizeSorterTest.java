@@ -27,6 +27,13 @@ public class JPArticleSizeSorterTest extends MCRTestCase {
         assertTrue(0 > sorter.compare(Order.ASCENDING, "0010", "T 01"));
         assertTrue(0 < sorter.compare(Order.ASCENDING, "T 02", "T 01"));
 
+        // [
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "[050]", "[060]"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "[20] - [40]", "[30]"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "[30]", "[20] - [40]"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "[Anfang] 50", "100"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "[Anfang] 50", "[Anfang] 40"));
+
         // Roman numeral (with asterisk)
         assertTrue(0 < sorter.compare(Order.ASCENDING, "0010", "*001"));
         assertTrue(0 > sorter.compare(Order.ASCENDING, "*001", "0010"));

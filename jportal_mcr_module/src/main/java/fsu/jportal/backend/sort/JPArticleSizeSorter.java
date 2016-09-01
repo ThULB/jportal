@@ -1,9 +1,9 @@
 package fsu.jportal.backend.sort;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +33,7 @@ public class JPArticleSizeSorter implements JPSorter {
             }
             String size1 = ((JPArticle) child1).getSize();
             String size2 = ((JPArticle) child2).getSize();
-            if(isOneNull(size1, size2)) {
+            if (isOneNull(size1, size2)) {
                 return handleNull(size1, size2);
             }
             try {
@@ -50,13 +50,15 @@ public class JPArticleSizeSorter implements JPSorter {
         size2 = getFirstNumIfRange(size2);
 
         // special characters: *, [, K, T
-        int specialCharCompareResult = compareSpecialChar(size1, size2);
-        if (specialCharCompareResult != 0) {
-            return specialCharCompareResult * getOrder(order);
+        Integer result = compareSpecialChar(size1, size2);
+        if (result != null && result == 0) {
+            return simpleCompare(order, size1, size2);
+        } else if (result != null) {
+            return result * getOrder(order);
         }
 
         // Roman numerals: IV
-        Integer result = compareRomanNumerals(size1, size2);
+        result = compareRomanNumerals(size1, size2);
         if (result != null) {
             return result * getOrder(order);
         }
@@ -88,6 +90,14 @@ public class JPArticleSizeSorter implements JPSorter {
         return Integer.compare(intSize1, intSize2) * getOrder(order);
     }
 
+    /**
+     * Compares two Roman numerals like III and IV. The comparison
+     * range is between 1 and 3999.
+     * 
+     * @param size1 the first size
+     * @param size2 the second size
+     * @return null if no Roman numeral is found
+     */
     private Integer compareRomanNumerals(String size1, String size2) {
         RomanNumeral roman1;
         RomanNumeral roman2;
@@ -111,10 +121,37 @@ public class JPArticleSizeSorter implements JPSorter {
         return range.split("-")[0];
     }
 
-    public int compareSpecialChar(String size1, String size2) {
+    /**
+     * Compares the special characters "*, [, K and T" at the start
+     * of the size. E.g.:
+     * <li>[Anfang] 50</li>
+     * <li>K 01</li>
+     * <li>T 01</li>
+     * <li>*30</li>
+     * <p>
+     * All sizes starting with "*" should appear at the start, all
+     * others at the end.
+     * </p>
+     * If null is returned, none of the special characters are occur
+     * either on size1 or size2. If zero is returned the special
+     * characters occurred, but this method does not know how to
+     * further process it. 
+     * 
+     * @param size1 the first size
+     * @param size2 the second size
+     * @return null if no special character is found
+     */
+    public Integer compareSpecialChar(String size1, String size2) {
         List<String> pre = Arrays.asList("*");
         List<String> post = Arrays.asList("[", "K", "T");
-        return Stream.concat(pre.stream(), post.stream()).mapToInt(c -> {
+        List<String> concat = new ArrayList<>(pre);
+        concat.addAll(post);
+        if (!concat.stream().filter(c -> {
+            return size1.startsWith(c) || size2.startsWith(c);
+        }).findAny().isPresent()) {
+            return null;
+        }
+        return concat.stream().mapToInt(c -> {
             Integer order = pre.contains(c) ? -1 : 1;
             return order * Boolean.compare(size1.startsWith(c), size2.startsWith(c));
         }).sum();
