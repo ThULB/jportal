@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
-  xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:imprint="xalan://fsu.jportal.util.ImprintUtil" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+                xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
+                xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:imprint="xalan://fsu.jportal.util.ImprintUtil"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
                 exclude-result-prefixes="layoutTools acl mcrxml mcr xlink imprint i18n">
 
   <xsl:param name="WebApplicationBaseURL" />
@@ -94,11 +99,12 @@
 
 
         <xsl:if test="$journalID !=''">
+
           <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
           <xsl:variable name="template" select="$journal/metadata/hidden_templates/hidden_template/text()" />
         </xsl:if>
          <!-- <xsl:if test="contains($template, 'template_gfa' or 'template_cma')">-->
-            <xsl:if test="$template ='template_gfa'or $template = 'template_nsjb'">
+            <xsl:if test="$template ='template_gfa' and not(contains($currentType, 'person'))">
               <div class="template-collapse">
               <a class="dt-collapse collapsed" data-toggle="collapse" data-target="#collapse1" >
                 <span class="jp-layout-facet-group-head" id="portal">
@@ -127,7 +133,7 @@
               </div>
               </div>
             </xsl:if>
-            <xsl:if test="$template = 'template_cma'">
+            <xsl:if test="$template = 'template_cma' and not(contains($currentType, 'person'))">
               <div class="template-collapse">
               <a class="dt-collapse collapsed" data-toggle="collapse" data-target="#collapse1">
                 <span class="jp-layout-facet-group-head" id="portal">
@@ -151,7 +157,7 @@
               </div>
               </div>
             </xsl:if>
-          <xsl:if test="$template != 'template_gwlb'">
+          <xsl:if test="$template != 'template_gwlb' and not(contains($currentType, 'person'))">
             <div class="imprint">
               <xsl:call-template name="imprint"/>
             </div>
@@ -168,28 +174,37 @@
     </xsl:apply-templates>
   </xsl:template>
 
+
+  <!--to match the journalID at the webpage otherwise it will show the ID under the main div -->
+  <xsl:template match="journalID" mode="webpage">
+  </xsl:template>
+
+  <!--structure for imprint and autorenportal -->
   <xsl:template match="section" mode="webpage">
-
-    <xsl:if test="$journalID and $journalID != ''">
-      <xsl:call-template name="leftSide">
-        <xsl:with-param name="id" select="$journalID"/>
-      </xsl:call-template>
-    </xsl:if>
-
-    <span class="section">
-      <xsl:for-each select="node()">
-        <xsl:choose>
-          <xsl:when test="$journalID != ''">
+    <xsl:choose>
+      <xsl:when test="$journalID and $journalID != ''">
+        <div class="jp-content container-fluid col-sm-12">
+          <!-- left side -->
+          <div class="row">
+            <xsl:call-template name="leftSide">
+              <xsl:with-param name="id" select="$journalID"/>
+            </xsl:call-template>
             <div id="jp-journal-content" class="col-md-9 col-xs-6">
-              <xsl:apply-templates select="."/>
+              <xsl:for-each select="node()">
+                <xsl:apply-templates select="."/>
+              </xsl:for-each>
             </div>
-          </xsl:when>
-          <xsl:otherwise>
+          </div>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <span class="section">
+          <xsl:for-each select="node()">
             <xsl:apply-templates select="."/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:for-each>
-    </span>
+          </xsl:for-each>
+        </span>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="renderIntroTxt" match="section[@xml:lang]">
@@ -224,9 +239,14 @@
 
     <div id="jp-maintitle">
       <xsl:choose>
-        <xsl:when test="contains(@ID,'journal') or contains(/mycoreobject/@ID,'_jpvolume_')">
+        <xsl:when test="contains(@ID,'journal')">
           <xsl:attribute name="class">
             <xsl:value-of select="'jp-layout-maintitle-big jp-layout-border'"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="contains(/mycoreobject/@ID,'_jpvolume_')">
+          <xsl:attribute name="class">
+            <xsl:value-of select="'jp-layout-maintitle-big jp-layout-border volume'"/>
           </xsl:attribute>
         </xsl:when>
         <xsl:otherwise>

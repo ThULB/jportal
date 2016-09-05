@@ -10,6 +10,10 @@
   <xsl:param name="referer" />
   <xsl:param name="rubric" />
 
+  <xsl:variable name="journalID">
+    <xsl:call-template name="jp.getJournalID" />
+  </xsl:variable>
+
   <xsl:template name="tableOfContent">
     <xsl:param name="id" />
     <xsl:call-template name="jp.toc.printVolumes">
@@ -168,7 +172,7 @@
 
   <xsl:template mode="artEntryFields" match="arr[@name='participant.author']/str">
     <span class="jp-layout-inList">
-      <a href="{$WebApplicationBaseURL}receive/{substring-before(., '#')}">
+      <a href="{concat($WebApplicationBaseURL,'receive/',substring-before(., '#'),'?journalID=', $journalID)}">
         <xsl:value-of select="substring-after(., '#')" />
       </a>
     </span>
@@ -212,7 +216,7 @@
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
       <xsl:variable name="rubricCat" select="$articles/response/result/doc/arr[@name='rubric']" />
       <xsl:variable name="classID" select="substring-before($rubricCat,'#')" />
-      <div>
+      <div class="content">
         <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-child-list">
           <span class="jp-layout-facet-group-head">
             Inhalt

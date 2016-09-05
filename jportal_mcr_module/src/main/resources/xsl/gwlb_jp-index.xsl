@@ -15,12 +15,11 @@
             <xsl:apply-templates select="imprint:getDefaultGreetingXSL('index', $currentLang)" />
           </xsl:otherwise>
         </xsl:choose>
-        <div id="gwlb-layout-index-list">
-          <h2>Zeitschriften</h2>
-
-        </div>
       </div>
-
+    </div>
+    <div class="container"></div>
+    <div id="gwlb-layout-index-list">
+      <h2>Zeitschriften</h2>
     </div>
     <div>
       <xsl:variable name="journalList" select="document('solr:q=+objectType:jpjournal&amp;rows=99999&amp;sort=maintitle_sort%20asc')" />

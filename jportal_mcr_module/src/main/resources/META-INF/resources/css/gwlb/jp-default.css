@@ -327,6 +327,8 @@ button.btn.btn-primary.dropdown-toggle.writerportal {
 #portal {
  /* padding-left: 1em;
   padding-right: 1em;*/
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
 }
 
 #bread {
@@ -417,7 +419,8 @@ ul.dropdown-menu.scale {
 select.form-control.input-sm {
   padding: 0px;
   font-size: 13px;
-  height: 20px;
+  height: 30px;
+  color: #27568F;
 }
 
 #jp-breadcrumb-container .jp-layout-scroller {
@@ -433,10 +436,13 @@ select.form-control.input-sm {
   box-shadow: -1px 0px 0px 0px #ccc;
   padding-left: 3em;
   padding-top: 1em;
+  min-height: 643px;
+
+
 }
 
 .imprint {
-  padding-left: 1.5em;
+  padding-left: 1.5em !important;
   padding-bottom: 1em;
   margin-top: 20px;
   font-size: 16px;
@@ -1120,10 +1126,15 @@ ul.ckeditorButtons li:last-child {
 
 }
 
+.volume {
+    border-bottom: 1px solid white;
+    box-shadow: 0px 1px 0px 0px #ccc;
+}
+
 .jp-layout-maintitle-big {
   color: #b8b8b8;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  font-size: 88px;
+  font-size: 80px;
   font-weight: 400;
   line-height: 98px;
   margin-bottom: 48px;
@@ -1233,6 +1244,13 @@ ul.ckeditorButtons li:last-child {
 
 #resultList h3{
   font-size: 13px;
+}
+
+.content {
+  padding-left: 2em;
+  padding-right: 2em;
+  border-top: 1px solid white;
+  box-shadow: 0px -1px 0px 0px #ccc;
 }
 
 .message-wrapper {
@@ -1437,6 +1455,11 @@ textarea {
 
 .jp-objectlist > .jp-objectlist-object > .jp-objectlist-metadata {
   /*margin-left: 105px;*/
+  border-bottom: 1px solid white;
+  box-shadow: 0px 1px 0px 0px #ccc;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  font-size: 16px;
 }
 
 #resultList .sortSelect {
@@ -1797,7 +1820,7 @@ p.jp-navigation-topHeader-ImgPush {
 }
 
 .jp-volume-sidebar-group {
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 
 .jp-volume-sidebar-group > h2 {
@@ -1817,12 +1840,21 @@ p.jp-navigation-topHeader-ImgPush {
 
 #jp-journal-childs > div:not(:first-child) {
   /*border-top: 1px solid white;*/
-  padding-top: 10px;
+  padding-top: 20px;
+  padding-left: 2em;
+  padding-right: 2em;
 }
+
 
 #jp-volume-back-link {
   color: #27568F;
   padding-bottom: 15px;
+  padding-left: 1.5em;
+  padding-right: 2em;
+  border-bottom: 1px solid white;
+  box-shadow: 0px 1px 0px 0px #ccc;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 #jp-volume-back-link > a {
@@ -1890,7 +1922,6 @@ p.jp-navigation-topHeader-ImgPush {
 #gwlb-layout-index-list {
   margin-bottom: 66px;
   padding-top: 30px;
-  margin-top: 60px;
   border-top: 1px solid #fff;
   -webkit-box-shadow: 0px -1px 0px 0px #ccc;
   -moz-box-shadow: 0px -1px 0px 0px #ccc;

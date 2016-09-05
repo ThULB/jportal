@@ -150,7 +150,7 @@
 			</xsl:if>
 			<xsl:call-template name="shortenString">
 				<xsl:with-param name="string" select="@xlink:title" />
-				<xsl:with-param name="length" select="50" />
+				<xsl:with-param name="length" select="100" />
 			</xsl:call-template>
 		</a>
 	</xsl:template>
@@ -165,7 +165,7 @@
 		<span>
 			<xsl:call-template name="shortenString">
 				<xsl:with-param name="string" select="." />
-				<xsl:with-param name="length" select="50" />
+				<xsl:with-param name="length" select="100" />
 			</xsl:call-template>
 		</span>
 	</xsl:template>
@@ -184,14 +184,14 @@
 			<a
 					href="{$WebApplicationBaseURL}receive/{$href}"
 					alt="{$title}">
-				<xsl:if test="string-length($title) &gt;= 50">
+				<xsl:if test="string-length($title) &gt;= 100">
 					<xsl:attribute name="title">
 						<xsl:value-of select="$title" />
 					</xsl:attribute>
 				</xsl:if>
 				<xsl:call-template name="shortenString">
 					<xsl:with-param name="string" select="$title" />
-					<xsl:with-param name="length" select="50" />
+					<xsl:with-param name="length" select="100" />
 				</xsl:call-template>
 			</a>
 		</li>
@@ -200,7 +200,7 @@
 			<span>
 				<xsl:call-template name="shortenString">
 					<xsl:with-param name="string" select="$rubric" />
-					<xsl:with-param name="length" select="50" />
+					<xsl:with-param name="length" select="100" />
 				</xsl:call-template>
 			</span>
 		</li>

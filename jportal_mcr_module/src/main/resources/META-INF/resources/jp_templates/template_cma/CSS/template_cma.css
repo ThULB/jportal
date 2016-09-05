@@ -9,7 +9,7 @@
 }
 #logo {
     height: 162px;
-    border-top: none;
+    border-top: none !important;
 }
 #globalHeader {
     height:auto;
