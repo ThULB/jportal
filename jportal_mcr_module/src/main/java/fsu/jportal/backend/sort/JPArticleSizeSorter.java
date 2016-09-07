@@ -46,8 +46,19 @@ public class JPArticleSizeSorter implements JPSorter {
     }
 
     public int compare(Order order, String size1, String size2) {
-        size1 = getFirstNumIfRange(size1);
-        size2 = getFirstNumIfRange(size2);
+        size1 = getFirstNumIfRange(size1).trim();
+        size2 = getFirstNumIfRange(size2).trim();
+
+        // column
+        List<String> columns = Arrays.asList("Sp.", "S.", "S", "sp.", "s.", "s");
+        for (String column : columns) {
+            if (size1.startsWith(column)) {
+                size1 = size1.replace(column, "").trim();
+            }
+            if (size2.startsWith(column)) {
+                size2 = size2.replace(column, "").trim();
+            }
+        }
 
         // special characters: *, [, K, T
         Integer result = compareSpecialChar(size1, size2);
