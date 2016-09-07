@@ -262,7 +262,7 @@ jp.sort.object = {
   onChildOrderChange: function() {
     var pos = jp.sort.object.getPositionOfSelectedChild();
     var newPos = jp.sort.object.getPositionOfInput();
-    if(jp.sort.object.swapChildren(pos, newPos)) {
+    if(jp.sort.object.moveTo(pos, newPos)) {
       jp.sort.object.jumpToChild(newPos);
     }
   },
@@ -289,6 +289,18 @@ jp.sort.object = {
     return true;
   },
 
+  moveTo: function(oldPos, newPos) {
+    if(oldPos == null || newPos == null || (typeof oldPos != "number") || (typeof newPos != "number")) {
+      return false;
+    }
+    var size = jp.sort.object.children.length;
+    if(oldPos < 0 || oldPos >= size || newPos < 0 || newPos >= size) {
+      return false;
+    }
+    jp.sort.object.moveArray(jp.sort.object.children, oldPos, newPos);
+    return true;
+  },
+
   getPositionOfSelectedChild: function() {
     if(jp.sort.object.selectedChildId == null) {
       return;
@@ -309,6 +321,10 @@ jp.sort.object = {
     var temp = list[pos1];
     list[pos1] = list[pos2];
     list[pos2] = temp;
+  },
+  
+  moveArray: function(list, from, to) {
+    list.splice(to, 0, list.splice(from, 1)[0]);
   },
 
   save: function() {
