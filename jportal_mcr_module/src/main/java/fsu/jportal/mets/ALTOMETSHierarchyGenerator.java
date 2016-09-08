@@ -68,9 +68,14 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
                 if (Files.isDirectory(imagePath)) {
                     continue;
                 }
+                String contentType = MCRContentTypes.probeContentType(imagePath);
+                if (!contentType.startsWith("image")) {
+                    continue;
+                }
                 FileRef ref = new FileRef();
                 ref.uuid = UUID.randomUUID().toString();
                 ref.imagePath = imagePath;
+                ref.imageContentType = contentType;
 
                 // check if alto exists
                 String imageFileName = imagePath.getFileName().toString();
@@ -78,14 +83,15 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
                 MCRPath altoPath = (MCRPath) imagePath.getParent().resolve("alto").resolve(altoFileName);
                 if (Files.exists(altoPath)) {
                     ref.altoPath = altoPath;
+                    ref.altoContentType = MCRContentTypes.probeContentType(altoPath);
                 }
                 this.files.add(ref);
             }
         }
         for (FileRef ref : this.files) {
-            addFile(ref.toImageId(), masterGroup, ref.imagePath);
+            addFile(ref.toImageId(), masterGroup, ref.imagePath, ref.imageContentType);
             if (ref.altoPath != null) {
-                addFile(ref.toAltoId(), altoGroup, ref.altoPath);
+                addFile(ref.toAltoId(), altoGroup, ref.altoPath, ref.altoContentType);
             }
         }
         if (!masterGroup.getFileList().isEmpty()) {
@@ -97,8 +103,7 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
         return fileSec;
     }
 
-    private File addFile(String id, FileGrp fileGroup, MCRPath imagePath) throws IOException {
-        final String mimeType = MCRContentTypes.probeContentType(imagePath);
+    private File addFile(String id, FileGrp fileGroup, MCRPath imagePath, String mimeType) {
         File imageFile = new File(id, mimeType);
         try {
             final String href = MCRXMLFunctions.encodeURIPath(imagePath.getOwnerRelativePath().substring(1), true);
@@ -171,6 +176,10 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
         public MCRPath imagePath;
 
         public MCRPath altoPath;
+
+        public String imageContentType;
+
+        public String altoContentType;
 
         public String toImageId() {
             return "master_" + uuid;
