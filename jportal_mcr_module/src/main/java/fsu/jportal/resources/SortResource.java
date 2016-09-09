@@ -2,9 +2,8 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,14 +19,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.mycore.access.MCRAccessManager;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
-import org.mycore.solr.index.MCRSolrIndexer;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -106,6 +102,9 @@ public class SortResource {
     @Path("sortby/{id}")
     public void sortByDelete(@PathParam("id") String id) {
         JPContainer jpContainer = get(id);
+        if (!jpContainer.getSortBy().isPresent()) {
+            return;
+        }
         try {
             jpContainer.setSortBy(null, null);
             jpContainer.store(StoreOption.metadata);
@@ -116,7 +115,9 @@ public class SortResource {
     }
 
     /**
-     * Does a resorting of the given object
+     * Does a resorting of the given object. This also removes the
+     * sortby element of the container (because manual sort have
+     * to be applied for resorting - same as {@link #sortByDelete(String)}).
      * 
      * @param id the object identifier
      * @param data the json array containing all children on a specific position
@@ -131,8 +132,30 @@ public class SortResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void sort(@PathParam("id") String id, String data) {
         JPContainer container = get(id);
+        try {
+            container.setSortBy(null, null);
+        } catch (Exception exc) {
+            throw new WebApplicationException(exc,
+                Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to remove sorter for " + id).build());
+        }
+        resort(container, new JsonParser().parse(data).getAsJsonArray());
+        try {
+            container.store();
+        } catch (Exception exc) {
+            throwInternalServerError(exc, "Unable to store object " + id + ".");
+        }
+    }
+
+    /**
+     * Resorts the given container with an array of children. The json array
+     * must have the same size as the current children of the container.
+     * And each object in the array has to be already a child of the container.
+     * 
+     * @param container the container to resort
+     * @param jsonArray array of children
+     */
+    private void resort(JPContainer container, JsonArray jsonArray) {
         List<MCRObjectID> mcrChildren = container.getChildren();
-        JsonArray jsonArray = new JsonParser().parse(data).getAsJsonArray();
 
         // check size
         if (jsonArray.size() != mcrChildren.size()) {
@@ -141,7 +164,6 @@ public class SortResource {
         }
         // check each object
         List<MCRObjectID> newChildren = new ArrayList<>();
-        List<MCRObjectID> changedPosition = new ArrayList<>();
         for (int jsonIndex = 0; jsonIndex < jsonArray.size(); jsonIndex++) {
             JsonElement e = jsonArray.get(jsonIndex);
             String errorMsg = "The json array contains an invalid object " + e + ".";
@@ -155,12 +177,9 @@ public class SortResource {
             String childId = jsonObject.get("id").getAsString();
             MCRObjectID mcrChildID = MCRObjectID.getInstance(childId);
             if (!mcrChildren.contains(mcrChildID)) {
-                throwUnprocessableEntity(errorMsg + ". The object is no child of " + id + ".");
+                throwUnprocessableEntity(errorMsg + ". The object is no child of " + container.getId() + ".");
             }
             newChildren.add(mcrChildID);
-            if (!mcrChildren.get(jsonIndex).equals(mcrChildID)) {
-                changedPosition.add(mcrChildID);
-            }
         }
 
         // set new children
@@ -169,21 +188,6 @@ public class SortResource {
         newChildren.stream().map(childId -> {
             return new MCRMetaLinkID("child", childId, null, null);
         }).forEachOrdered(structure::addChild);
-
-        try {
-            // TODO: cannot use MCRMetadataManager because it does not respect the children order
-            // container.store();
-
-            // store
-            MCRObject obj = container.getObject();
-            MCRXMLMetadataManager.instance().update(obj.getId(), obj.createXML(), new Date());
-            MCRMetadataManager.fireUpdateEvent(obj);
-            // solr events for position changed 
-            MCRSolrIndexer.rebuildMetadataIndex(
-                changedPosition.stream().map(MCRObjectID::toString).collect(Collectors.toList()), true);
-        } catch (Exception exc) {
-            throwInternalServerError(exc, "Unable to store object " + id + ".");
-        }
     }
 
     /**
@@ -262,7 +266,13 @@ public class SortResource {
     private JPContainer get(String id) {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         MCRJerseyUtil.checkPermission(mcrId, MCRAccessManager.PERMISSION_WRITE);
-        return JPComponentUtil.getContainer(mcrId).orElse(null);
+        // orElseThrow -> https://bugs.openjdk.java.net/browse/JDK-8054569
+        Optional<JPContainer> container = JPComponentUtil.getContainer(mcrId);
+        if(!container.isPresent()) {
+            throw new WebApplicationException(new MCRException("Invalid object " + id + ". It is not a JPContainer."),
+                Status.BAD_REQUEST);
+        }
+        return container.get();
     }
 
 }

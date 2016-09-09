@@ -2,6 +2,7 @@ package fsu.jportal.resources;
 
 import static org.mycore.access.MCRAccessManager.PERMISSION_DELETE;
 import static org.mycore.access.MCRAccessManager.PERMISSION_READ;
+import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
 
 import java.io.StringReader;
 import java.util.Collection;
@@ -28,11 +29,13 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRJSONManager;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 
 import com.google.gson.Gson;
@@ -130,6 +133,23 @@ public class ObjectResource {
             e.printStackTrace();
         }
         return Response.ok(obj.getId().toString()).build();
+    }
+
+    @GET
+    @Path("restore/{id}/{rev}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response restore(@PathParam("id") String id, @PathParam("rev") Long revision) {
+        MCRObjectID mcrId = MCRObjectID.getInstance(id);
+        MCRJerseyUtil.checkPermission(mcrId, PERMISSION_WRITE);
+        try {
+            MCRObjectUtils.restore(mcrId, revision);
+        } catch (MCRPersistenceException pExc) {
+            MCRJerseyUtil.throwException(Status.NOT_FOUND, "There is no mycore object with that revision.");
+        } catch (Exception exc) {
+            MCRJerseyUtil.throwException(Status.INTERNAL_SERVER_ERROR,
+                "Unable to revert mycore object to revision " + revision + ".");
+        }
+        return Response.ok().build();
     }
 
 }

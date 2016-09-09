@@ -336,21 +336,19 @@ jp.sort.object = {
         .done(onSuccess)
         .fail(onFail);
     } else {
-      // first remove sorter
-      $.ajax({
-        method: 'DELETE',
-        url: jp.baseURL + "rsc/sort/sortby/" + jp.sort.object.id
-      }).done(function() {
-        // check if the child order has changed
-        if(childOrderChanged()) {
-          $.ajax({
-            method: 'POST',
-            url: jp.baseURL + "rsc/sort/resort/" + jp.sort.object.id,
-            contentType: "application/json; charset=UTF-8",
-            data: JSON.stringify(jp.sort.object.children)
-          }).done(onSuccess).fail(onFail);
-        }
-      }).fail(onFail);
+      if(childOrderChanged()) {
+        $.ajax({
+          method: 'POST',
+          url: jp.baseURL + "rsc/sort/resort/" + jp.sort.object.id,
+          contentType: "application/json; charset=UTF-8",
+          data: JSON.stringify(jp.sort.object.children)
+        }).done(onSuccess).fail(onFail);
+      } else {
+        $.ajax({
+          method: 'DELETE',
+          url: jp.baseURL + "rsc/sort/sortby/" + jp.sort.object.id
+        }).done(onSuccess).fail(onFail);
+      }
     }
 
     function childOrderChanged() {
