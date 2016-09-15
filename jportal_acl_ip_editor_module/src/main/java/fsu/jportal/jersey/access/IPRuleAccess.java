@@ -3,12 +3,12 @@ package fsu.jportal.jersey.access;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.ws.rs.container.ContainerRequestContext;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
-
-import com.sun.jersey.spi.container.ContainerRequest;
 
 import fsu.jportal.backend.JPObjectConfiguration;
 
@@ -17,8 +17,8 @@ public class IPRuleAccess implements MCRResourceAccessChecker {
     private static final Logger LOGGER = LogManager.getLogger(IPRuleAccess.class);
 
     @Override
-    public boolean isPermitted(ContainerRequest request) {
-        String path = request.getPath();
+    public boolean isPermitted(ContainerRequestContext request) {
+        String path = request.getUriInfo().getPath();
         String id = extractId(path);
         try {
             JPObjectConfiguration journalConfig = new JPObjectConfiguration(id, "jportal_acl_ip_editor_module");

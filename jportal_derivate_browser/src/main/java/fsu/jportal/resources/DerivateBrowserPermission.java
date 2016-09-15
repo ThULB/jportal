@@ -1,20 +1,20 @@
 package fsu.jportal.resources;
 
-import org.apache.logging.log4j.Logger;
+import javax.ws.rs.container.ContainerRequestContext;
+
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
-
-import com.sun.jersey.spi.container.ContainerRequest;
 
 public class DerivateBrowserPermission implements MCRResourceAccessChecker {
 
     private static Logger LOGGER = LogManager.getLogger(DerivateBrowserPermission.class);
 
     @Override
-    public boolean isPermitted(ContainerRequest request) {
+    public boolean isPermitted(ContainerRequestContext request) {
         String method = request.getMethod();
-        String path = request.getPath();
+        String path = request.getUriInfo().getPath();
 
         if (method.equals("GET")) {
             //load derivate-browser
@@ -31,8 +31,8 @@ public class DerivateBrowserPermission implements MCRResourceAccessChecker {
                 return false;
             } else {
                 //delete derivate
-                if (path.contains("derivate") && !path.contains("multiple") && !checkDefaultPermission(
-                        "delete-derivate")) {
+                if (path.contains("derivate") && !path.contains("multiple")
+                    && !checkDefaultPermission("delete-derivate")) {
                     LOGGER.info("Permission denied to delete derivate");
                     return false;
                 }
@@ -81,9 +81,9 @@ public class DerivateBrowserPermission implements MCRResourceAccessChecker {
                 return false;
             }
             //create folder in derivate
-            if (path.contains("derivate") && !path.contains("rename") && !path.contains("moveDeriFiles") && !path
-                    .contains("exists") && !path.contains("upload") && !path.contains("addURN") && !MCRAccessManager
-                    .checkPermission("create-derivate")) {
+            if (path.contains("derivate") && !path.contains("rename") && !path.contains("moveDeriFiles")
+                && !path.contains("exists") && !path.contains("upload") && !path.contains("addURN")
+                && !MCRAccessManager.checkPermission("create-derivate")) {
                 LOGGER.info("Permission denied to create derivate folder");
                 return false;
             }
