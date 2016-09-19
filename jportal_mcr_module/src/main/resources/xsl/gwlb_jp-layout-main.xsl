@@ -143,6 +143,12 @@
           jp.journalID = '<xsl:value-of select="$journalID" />';
           jp.journalID = jp.journalID != '' ? jp.journalID : null;
           jp.lang = '<xsl:value-of select="i18n:getCurrentLocale()" />';
+
+          window.addEventListener("resize", function(){
+            var content= jQuery("#jp-journal-content");
+            content.css({"min-height":""});
+            content.css({"min-height": jQuery("#footer").offset().top-content.offset().top+"px" });
+          });
         </script>
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/jquery/2.1.4/dist/jquery.min.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />

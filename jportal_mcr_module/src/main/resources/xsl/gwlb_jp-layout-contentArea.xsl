@@ -70,7 +70,7 @@
     <xsl:variable name="currentType" select="substring-before(substring-after($id,'_'),'_')"/>
     <xsl:variable name="obj" select="document(concat('mcrobject:',$id))/mycoreobject"/>
 
-    <xsl:if test="$currentType != 'jparticle'">
+    <xsl:if test="$currentType != 'jparticle' and not(contains($currentType, 'person'))">
       <div id="jp-journal-childs" class="col-md-3 col-xs-4">
         <xsl:if test="$currentType = 'jpvolume'">
           <xsl:call-template name="jp.backToJournal"/>
