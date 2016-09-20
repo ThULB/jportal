@@ -1,0 +1,57 @@
+html,body{
+    height: inherit;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+body {
+    width: 1024px;
+}
+
+#file-view {
+    width: 100%;
+}
+
+#file-view-large {
+    width: 100%;
+}
+
+#main {
+    padding: 0;
+}
+
+#browser-table-wrapper {
+    margin-bottom: 50px;
+    min-height: 155px;
+    height: calc(100vh - 376px - 48px - 200px);
+}
+
+#browser-table-wrapper.small-table {
+    height: calc(100vh - 120px - 48px - 200px);
+    min-height: 410px;
+}
+
+#browser-table {
+    margin-bottom: 0;
+}
+
+#files {
+    padding: 0;
+}
+
+#file-view {
+    border: 0;
+}
+
+#derivate-browser-footer {
+    box-shadow: none;
+}
+
+#view-large-main {
+    min-height: 382px;
+    height: calc(100vh - 400px);
+}
+
+#derivat-panel {
+    box-shadow: 0 3px 10px 0 rgba(50, 50, 50, 0.5);
+}

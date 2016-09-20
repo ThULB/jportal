@@ -10,187 +10,202 @@ var derivateBrowserUpload = (function () {
         overwriteAll = false,
         skipAll = false,
         uploadRunning = false,
-        xhr;
+        xhr,
+        currentTarget,
+        derivateBaseURL;
 
     //binds
-    $("#lightbox-new-derivate").on("drop", "#lightbox-new-derivate-main", function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        if (!$("#lightbox-new-derivate-main").hasClass("new-derivate-noDrop")){
-            $("#lightbox-new-derivate-hint").addClass("hidden");
-            $("#lightbox-new-derivate-loading").removeClass("hidden");
-            createDerivate(event);
-        }
-    });
+    function bindActions() {
+        bindUIActions();
+        bindEventActions();
+    }
 
-    $("body").on("drop", "#files", function (event) {
-        event.preventDefault();
-        if (!$("#upload-overlay").hasClass("hidden")) {
-            if (!$("#derivate-browser").hasClass("hidden")){
-                addToDerivate(event);
+    function bindUIActions() {
+        $(currentTarget).on("drop", "#lightbox-new-derivate-main", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (!$("#lightbox-new-derivate-main").hasClass("new-derivate-noDrop")){
+                $("#lightbox-new-derivate-hint").addClass("hidden");
+                $("#lightbox-new-derivate-loading").removeClass("hidden");
+                createDerivate(event);
             }
-            else {
-                if (!$("#journal-info-text").hasClass("hidden")){
-                    if (!$("#lightbox-new-derivate-main").hasClass("new-derivate-noDrop")) {
-                        $("#lightbox-new-derivate-hint").addClass("hidden");
-                        $("#lightbox-new-derivate-loading").removeClass("hidden");
-                        $("#lightbox-new-derivate").modal("show");
-                        createDerivate(event);
+        });
+
+        $("body").on("drop", "#files", function (event) {
+            event.preventDefault();
+            if (!$("#upload-overlay").hasClass("hidden")) {
+                if (!$("#derivate-browser").hasClass("hidden")){
+                    addToDerivate(event);
+                }
+                else {
+                    if (!$("#journal-info-text").hasClass("hidden")){
+                        if (!$("#lightbox-new-derivate-main").hasClass("new-derivate-noDrop")) {
+                            $("#lightbox-new-derivate-hint").addClass("hidden");
+                            $("#lightbox-new-derivate-loading").removeClass("hidden");
+                            $(currentTarget).modal("show");
+                            createDerivate(event);
+                        }
                     }
                 }
             }
-        }
-        dragcounter = 0;
-        $("#upload-overlay").addClass("hidden");
-    });
-
-    $("body").on("drop", function (event) {
-        event.preventDefault();
-    });
-
-    $("body").on("dragenter", "#files", function () {
-        if (dragcounter == 0 && !$("#derivate-browser").hasClass("hidden")) {
-            $("#upload-overlay").removeClass("hidden");
-        }
-        if (dragcounter == 0 && !$("#journal-info").hasClass("hidden")) {
-            $("#upload-overlay-text-add").addClass("hidden");
-            $("#upload-overlay-text-new").removeClass("hidden");
-            $("#upload-overlay").removeClass("hidden");
-        }
-        dragcounter++;
-    });
-
-    $("body").on("dragleave", "#files", function () {
-        dragcounter--;
-        if (dragcounter == 0) {
+            dragcounter = 0;
             $("#upload-overlay").addClass("hidden");
-            $("#upload-overlay-text-add").removeClass("hidden");
-            $("#upload-overlay-text-new").addClass("hidden");
-        }
-    });
-
-    $("#lightbox-new-derivate").on("click", "#lightbox-new-derivate-confirm", function () {
-        if (currentUploadList.length > 0) {
-            uploadFile(currentUploadList[0], "new");
-            $("#lightbox-new-derivate-confirm").addClass("hidden");
-            $(".lightbox-new-derivate-cancel").addClass("hidden");
-            $("#lightbox-new-derivate-message").removeClass("hidden");
-            $("#lightbox-new-derivate-main").addClass("new-derivate-noDrop");
-        }
-        else {
-            $("#lightbox-new-derivate-hint").addClass("alert-danger-text");
-        }
-    });
-
-    $("body").on("click", "#lightbox-new-derivate-done", function () {
-        var deriID = $(this).data("deriID");
-        if (deriID != "" && deriID != undefined) {
-            derivateBrowserNavigation.addTempDoc(deriID, deriID, "derivate", $(this).data("docID"));
-            derivateBrowserTools.goTo(deriID, "");
-        }
-        resetUpload();
-        hideNewDeri();
-    });
-
-    $("body").on("click", ".lightbox-new-derivate-cancel", function () {
-        resetUpload();
-        hideNewDeri();
-    });
-
-    $("body").on("click", "#btn-upload-cancel", function () {
-        $('#lightbox-upload-overwrite').modal('hide');
-        cancelUpload();
-    });
-
-    $("body").on("click", "#btn-upload-skip", function () {
-        $('#lightbox-upload-overwrite').modal('hide');
-        if ($(".btn-upload-all").data("check") == true) {
-            skipAll = true;
-        }
-        skipFile(currentUploadList[currentUploadID]);
-    });
-
-    $("body").on("click", ".btn-upload-all", function () {
-        if ($(this).data("check") == true) {
-            $(this).removeData("check");
-            $(this).addClass("glyphicon-unchecked");
-            $(this).removeClass("glyphicon-check");
-        }
-        else {
-            $(this).data("check", true);
-            $(this).removeClass("glyphicon-unchecked");
-            $(this).addClass("glyphicon-check");
-        }
-    });
-
-    $("body").on("click", "#btn-upload-overwrite", function () {
-        var upload = currentUploadList[currentUploadID];
-        $('#lightbox-upload-overwrite').modal('hide');
-        if ($(".btn-upload-all").data("check") == true) {
-            overwriteAll = true;
-        }
-        uploadFile(upload);
-    });
-
-    $('#lightbox-upload-overwrite').on('hidden.bs.modal', function () {
-        $(this).data("open", false);
-        if ($(this).data("openagain") != undefined) {
-            $(this).removeData("openagain");
-            $('#lightbox-upload-overwrite').modal("show");
-        }
-    });
-
-    $('#lightbox-upload-overwrite').on('shown.bs.modal', function () {
-        $(this).data("open", true);
-    });
-
-    $("body").on("click", "#upload-status-bar-cancel", function () {
-        xhr.abort();
-        cancelUpload();
-    });
-
-    $("body").on("click", ".btn-close-usb", function () {
-        $("#upload-status-bar").animate({'height': '0px'}, 500, function () {
-            $("#upload-status-bar").addClass("hidden");
-            $("#upload-status-bar-table").html("");
-            $("#upload-status-bar-header-error").addClass("hidden");
-            $("#upload-status-bar-header-type").addClass("hidden");
-            $("#upload-complete-status-current-number").html(0);
-            $("#upload-complete-status-file-count").html(0);
-            $(".statusbar-complete-progress-status").attr("arial-now", 0);
-            $(".statusbar-complete-progress-status").css("width", 0 + "%");
-            $(".upload-statusbar-text").addClass("hidden");
-            $("#upload-complete-status-text").removeClass("hidden");
-            resetUpload();
         });
-    });
 
-    $("body").on("click", ".btn-mini-usb", function () {
-        if ($(this).data("status") == "maxi") {
-            $(this).data("status", "mini");
-            $("#upload-status-bar").animate({'height': '32px'}, 500, function () {
-                $("#upload-status-bar-table").addClass("hidden");
+        $("body").on("drop", function (event) {
+            event.preventDefault();
+        });
+
+        $("body").on("dragenter", "#files", function () {
+            if (dragcounter == 0 && !$("#derivate-browser").hasClass("hidden")) {
+                $("#upload-overlay").removeClass("hidden");
+            }
+            if (dragcounter == 0 && !$("#journal-info").hasClass("hidden")) {
+                $("#upload-overlay-text-add").addClass("hidden");
+                $("#upload-overlay-text-new").removeClass("hidden");
+                $("#upload-overlay").removeClass("hidden");
+            }
+            dragcounter++;
+        });
+
+        $("body").on("dragleave", "#files", function () {
+            dragcounter--;
+            if (dragcounter == 0) {
+                $("#upload-overlay").addClass("hidden");
+                $("#upload-overlay-text-add").removeClass("hidden");
+                $("#upload-overlay-text-new").addClass("hidden");
+            }
+        });
+
+        $(currentTarget).on("click", "#lightbox-new-derivate-confirm", function () {
+            if (currentUploadList.length > 0) {
+                uploadFile(currentUploadList[0], "new");
+                $("#lightbox-new-derivate-confirm").addClass("hidden");
+                $(".lightbox-new-derivate-cancel").addClass("hidden");
+                $("#lightbox-new-derivate-message").removeClass("hidden");
+                $("#lightbox-new-derivate-main").addClass("new-derivate-noDrop");
+            }
+            else {
+                $("#lightbox-new-derivate-hint").addClass("alert-danger-text");
+            }
+        });
+
+        $("body").on("click", "#lightbox-new-derivate-done", function () {
+            var deriID = $(this).data("deriID");
+            if (deriID != "" && deriID != undefined) {
+                $("body").trigger("addTempDoc", [deriID, deriID, "derivate", $(this).data("docID")]);
+                $("body").trigger("derivateCreated", deriID);
+                derivateBrowserTools.goTo(deriID, "");
+            }
+            resetUpload();
+            hideNewDeri();
+        });
+
+        $("body").on("click", ".lightbox-new-derivate-cancel", function () {
+            resetUpload();
+            hideNewDeri();
+        });
+
+        $("body").on("click", "#btn-upload-cancel", function () {
+            $('#lightbox-upload-overwrite').modal('hide');
+            cancelUpload();
+        });
+
+        $("body").on("click", "#btn-upload-skip", function () {
+            $('#lightbox-upload-overwrite').modal('hide');
+            if ($(".btn-upload-all").data("check") == true) {
+                skipAll = true;
+            }
+            skipFile(currentUploadList[currentUploadID]);
+        });
+
+        $("body").on("click", ".btn-upload-all", function () {
+            if ($(this).data("check") == true) {
+                $(this).removeData("check");
+                $(this).addClass("glyphicon-unchecked");
+                $(this).removeClass("glyphicon-check");
+            }
+            else {
+                $(this).data("check", true);
+                $(this).removeClass("glyphicon-unchecked");
+                $(this).addClass("glyphicon-check");
+            }
+        });
+
+        $("body").on("click", "#btn-upload-overwrite", function () {
+            var upload = currentUploadList[currentUploadID];
+            $('#lightbox-upload-overwrite').modal('hide');
+            if ($(".btn-upload-all").data("check") == true) {
+                overwriteAll = true;
+            }
+            uploadFile(upload);
+        });
+
+        $('#lightbox-upload-overwrite').on('hidden.bs.modal', function () {
+            $(this).data("open", false);
+            if ($(this).data("openagain") != undefined) {
+                $(this).removeData("openagain");
+                $('#lightbox-upload-overwrite').modal("show");
+            }
+        });
+
+        $('#lightbox-upload-overwrite').on('shown.bs.modal', function () {
+            $(this).data("open", true);
+        });
+
+        $("body").on("click", "#upload-status-bar-cancel", function () {
+            xhr.abort();
+            cancelUpload();
+        });
+
+        $("body").on("click", ".btn-close-usb", function () {
+            $("#upload-status-bar").animate({'height': '0px'}, 500, function () {
+                $("#upload-status-bar").addClass("hidden");
+                $("#upload-status-bar-table").html("");
+                $("#upload-status-bar-header-error").addClass("hidden");
+                $("#upload-status-bar-header-type").addClass("hidden");
+                $("#upload-complete-status-current-number").html(0);
+                $("#upload-complete-status-file-count").html(0);
+                $(".statusbar-complete-progress-status").attr("arial-now", 0);
+                $(".statusbar-complete-progress-status").css("width", 0 + "%");
+                $(".upload-statusbar-text").addClass("hidden");
+                $("#upload-complete-status-text").removeClass("hidden");
+                resetUpload();
             });
-        }
-        else {
-            $(this).data("status", "maxi");
-            $("#upload-status-bar-table").removeClass("hidden");
-            $("#upload-status-bar").animate({'height': '300px'}, 500);
-        }
-    });
+        });
 
-    $("body").on("click", "#folder-list-new-button-derivate", function () {
-        $("#lightbox-new-derivate").modal("show");
-        $("#folder-list-new-select-area").addClass("hidden");
-    });
+        $("body").on("click", ".btn-mini-usb", function () {
+            if ($(this).data("status") == "maxi") {
+                $(this).data("status", "mini");
+                $("#upload-status-bar").animate({'height': '32px'}, 500, function () {
+                    $("#upload-status-bar-table").addClass("hidden");
+                });
+            }
+            else {
+                $(this).data("status", "maxi");
+                $("#upload-status-bar-table").removeClass("hidden");
+                $("#upload-status-bar").animate({'height': '300px'}, 500);
+            }
+        });
 
-    $(window).on('beforeunload', function(){
-        if(uploadRunning) {
-            return 'If you leave this page, your upload will not complete! Continue?';
-        }
-    });
+        $("body").on("click", "#folder-list-new-button-derivate", function () {
+            $(currentTarget).modal("show");
+            $("#folder-list-new-select-area").addClass("hidden");
+        });
 
+        $(window).on('beforeunload', function(){
+            if(uploadRunning) {
+                return 'If you leave this page, your upload will not complete! Continue?';
+            }
+        });
+    }
 
+    function bindEventActions() {
+        $("body").on("openUploadModal", function () {
+            $(currentTarget).modal("show");
+        });
+    }
+    
     //private Methods
     /**
     * @property isFile
@@ -295,7 +310,7 @@ var derivateBrowserUpload = (function () {
     }
 
     function hideNewDeri() {
-        $("#lightbox-new-derivate").modal("hide");
+        $(currentTarget).modal("hide");
         $("#lightbox-new-derivate-hint").removeClass("hidden");
         $("#lightbox-new-derivate-hint").removeClass("alert-danger-text");
         $("#lightbox-new-derivate-status").html("");
@@ -494,7 +509,7 @@ var derivateBrowserUpload = (function () {
             $(upload.statusbar).find(".upload-preview-status-text").addClass("hidden");
         }
         $.ajax({
-            url: "upload",
+            url: derivateBaseURL + "upload",
             type: "POST",
             processData: false,
             contentType: false,
@@ -540,13 +555,13 @@ var derivateBrowserUpload = (function () {
                 currentUploadID++;
                 if (mode != "new") {
                     if (upload.exists == "1") {
-                        derivateBrowserFileView.removeFileWithPath(upload.getCompletePath());
+                        $("body").trigger("removeFileWithPath", upload.getCompletePath());
                     }
                     if (upload.type.endsWith("xml")){
-                        derivateBrowserFileView.addXML(upload.getaddToBrowserJson());
+                        $("body").trigger("addXML", upload.getaddToBrowserJson());
                     }
                     else{
-                        derivateBrowserFileView.addFile(upload.getaddToBrowserJson());
+                        $("body").trigger("addFile", upload.getaddToBrowserJson());
                     }
                     uploadFilesAndAsk();
                 }
@@ -631,7 +646,7 @@ var derivateBrowserUpload = (function () {
 
     function doExistsCheck(json) {
         $.ajax({
-            url: "exists",
+            url: derivateBaseURL + "exists",
             type: "POST",
             contentType: 'application/json',
             dataType: "json",
@@ -655,6 +670,27 @@ var derivateBrowserUpload = (function () {
     }
 
     return {
+        //public
+        init: function() {
+            currentTarget = $("#lightbox-new-derivate");
+            derivateBaseURL = "";
+            bindActions();
+        },
 
+        initStandalone: function(target, baseURL) {
+            $.get(baseURL + "rsc/derivatebrowser/gui/derivatebrowser.html", function (template) {
+                $(target).html($(template).filter("#lightbox-new-derivate").html());
+                derivateBrowserTools.updateI18nForElm($(target));
+                currentTarget = target;
+                var currentDocID = $(currentTarget).attr("data-docid");
+                var currentPath = $(currentTarget).attr("data-path") ? (currentTarget).attr("data-path") : "";
+                derivateBrowserTools.setDocID(currentDocID);
+                derivateBrowserTools.setPath(currentPath);
+                derivateBaseURL = baseURL + "rsc/derivatebrowser/";
+                if (currentDocID != undefined && currentDocID != "") {
+                    bindActions();
+                }
+            });
+        }
     };
 })();

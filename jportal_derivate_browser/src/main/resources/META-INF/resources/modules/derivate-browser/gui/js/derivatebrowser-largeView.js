@@ -6,168 +6,232 @@ var derivateBrowserLargeView = (function () {
         currentSliderIndex = 0;
 
     //binds
-    $("#file-view-large").on("click", "#view-large-link-list a", function (event) {
-        event.preventDefault();
-        derivateBrowserTools.goTo($(this).attr("data-id"), "");
-    });
+    function bindActions() {
+        bindUIActions();
+        bindEventActions();
+    }
 
-    $("#file-view-large").on("click", "#view-large-panel-collapse-btn", function () {
-        if ($(this).hasClass("glyphicon-chevron-down")) {
-            $("#view-large-main").addClass("expended-view");
-            $(this).removeClass("glyphicon-chevron-down");
-            $(this).addClass("glyphicon-chevron-up");
-        }
-        else {
-            $("#view-large-main").removeClass("expended-view");
-            $(this).removeClass("glyphicon-chevron-up");
-            $(this).addClass("glyphicon-chevron-down");
-        }
-    });
+    function bindUIActions() {
+        $("#file-view-large").on("click", "#view-large-link-list a", function (event) {
+            event.preventDefault();
+            derivateBrowserTools.goTo($(this).attr("data-id"), "");
+        });
 
-    $("#file-view-large").on("click", ".view-large-thump", function () {
-        setCurrentFileTo($(this).data("id"));
-    });
+        $("#file-view-large").on("click", "#view-large-panel-collapse-btn", function () {
+            if ($(this).hasClass("glyphicon-chevron-down")) {
+                $("#view-large-main").addClass("expended-view");
+                $(this).removeClass("glyphicon-chevron-down");
+                $(this).addClass("glyphicon-chevron-up");
+            }
+            else {
+                $("#view-large-main").removeClass("expended-view");
+                $(this).removeClass("glyphicon-chevron-up");
+                $(this).addClass("glyphicon-chevron-down");
+            }
+        });
 
-    $("#file-view-large").on("click", "#view-large-left", function () {
-        setPrevFile();
-    });
+        $("#file-view-large").on("click", ".view-large-thump", function () {
+            setCurrentFileTo($(this).data("id"));
+        });
 
-    $("#file-view-large").on("click", "#view-large-right", function () {
-        setNextFile();
-    });
+        $("#file-view-large").on("click", "#view-large-left", function () {
+            setPrevFile();
+        });
 
-    $("#file-view-large").on("click", "#view-large-slider-left", function () {
-        if (!$(this).hasClass("invisible")){
-            setPrevFileSlider();
-        }
-    });
+        $("#file-view-large").on("click", "#view-large-right", function () {
+            setNextFile();
+        });
 
-    $("#file-view-large").on("click", "#view-large-slider-right", function () {
-        if (!$(this).hasClass("invisible")){
-            setNextFileSlider();
-        }
-    });
+        $("#file-view-large").on("click", "#view-large-slider-left", function () {
+            if (!$(this).hasClass("invisible")){
+                setPrevFileSlider();
+            }
+        });
 
-    $("#file-view-large").on("click", ".view-large-resizeable", function (evt) {
-        var currentFile = currentFileList[currentFileIndex];
-        if (currentFile.name.endsWith("pdf")) {
-            window.location.href = jp.baseURL + "rsc/viewer/" + currentFile.getPath();
-        }
-        else {
-            enlargeorHideImage(currentFile, evt.pageX, evt.pageY);
-        }
-    });
+        $("#file-view-large").on("click", "#view-large-slider-right", function () {
+            if (!$(this).hasClass("invisible")){
+                setNextFileSlider();
+            }
+        });
 
-    $("body").on("click", "#view-large-overlay", function () {
-        $("#view-large-overlay").remove();
-    });
+        $("#file-view-large").on("click", ".view-large-resizeable", function (evt) {
+            var currentFile = currentFileList[currentFileIndex];
+            if (currentFile.name.endsWith("pdf")) {
+                window.location.href = jp.baseURL + "rsc/viewer/" + currentFile.getPath();
+            }
+            else {
+                enlargeorHideImage(currentFile, evt.pageX, evt.pageY);
+            }
+        });
 
-    $("body").on("mousemove","#view-large-overlay", function (evt) {
-        setLargePosition(evt.pageX, evt.pageY);
-    });
+        $("body").on("click", "#view-large-overlay", function () {
+            $("#view-large-overlay").remove();
+        });
 
-    $("body").on("click", "#button-view-large-close", function () {
-        hideLargeView();
-        $("#file-view").removeClass("hidden");
-        derivateBrowserTools.setFileName("");
-        //derivateBrowserTools.goTo(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
-    });
+        $("body").on("mousemove","#view-large-overlay", function (evt) {
+            setLargePosition(evt.pageX, evt.pageY);
+        });
 
-    $("#file-view-large").on("click", ".btn-check-large", function () {
-        var file = currentFileList[currentFileIndex];
-        var parent = derivateBrowserFileView.getFile(file.path);
-        if (!file.selected) {
-            $(".last-selected").removeClass("last-selected");
-            $(parent).addClass("last-selected");
-            $(parent).addClass("checked");
-            $(parent).data("checked", true);
-            $(parent).find(".btn-check").removeClass("glyphicon-unchecked");
-            $(parent).find(".btn-check").removeClass("invisible");
-            $(parent).find(".btn-check").addClass("glyphicon-check");
-            file.selected = true;
-            updatePanelData(currentFileList[currentFileIndex]);
-        }
-        else {
-            $(parent).removeClass("checked");
-            $(parent).removeData("checked");
-            $(parent).find(".btn-check").addClass("glyphicon-unchecked");
-            $(parent).find(".btn-check").addClass("invisible");
-            $(parent).find(".btn-check").removeClass("glyphicon-check");
-            file.selected = false;
-            updatePanelData(currentFileList[currentFileIndex]);
-        }
-        if ($(".browser-table-entry .glyphicon-check").length == 0) {
-            $(".btn-delete-all").addClass("faded");
-            $(".btn-move-all").addClass("faded");
-        }
-        else {
-            $(".btn-delete-all").removeClass("faded");
-            $(".btn-move-all").removeClass("faded");
-        }
-    });
+        $("body").on("click", "#button-view-large-close", function () {
+            hideLargeView();
+            $("#file-view").removeClass("hidden");
+            derivateBrowserTools.setFileName("");;
+        });
 
-    $("#file-view-large").on("click", ".btn-edit-large", function () {
-        if ($("#view-large-panel-input").hasClass("hidden")) {
-            $("#view-large-panel-input").val($("#view-large-panel-title").html());
-            $("#view-large-panel-title").addClass("hidden");
-            $("#view-large-panel-input").removeClass("hidden");
-        }
-        else {
-            hidePanelInput();
-        }
-    });
-
-    $("#file-view-large").on("click", ".btn-delete-large", function () {
-        var entry = derivateBrowserFileView.getFile(currentFileList[currentFileIndex].path);
-        var startfile = $("#derivat-panel-startfile").data("startfile");
-        if ($(entry).data("startfile") != true && startfile.indexOf($(entry).data("path")) != 0) {
-            entry.addClass("delete");
-            var fileList = [];
-            fileList.push($(entry).data("path"));
-            derivateBrowserTools.showDeleteAlert(fileList);
-        }
-        else {
-            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.startfile"), false);
-        }
-    });
-
-    $("#file-view-large").on("keydown", "#view-large-panel-input", function (key) {
-        if (key.which == 13) {
-            var newName = $("#view-large-panel-input").val();
+        $("#file-view-large").on("click", ".btn-check-large", function () {
             var file = currentFileList[currentFileIndex];
-            if (newName != file.name){
-                derivateBrowserFileView.renameFile(file.path,derivateBrowserTools.getCurrentDocID(), newName, file.start, changeName);
+            var parent = findFile(file.path);
+            if (!file.selected) {
+                $(".last-selected").removeClass("last-selected");
+                $(parent).addClass("last-selected");
+                $(parent).addClass("checked");
+                $(parent).data("checked", true);
+                $(parent).find(".btn-check").removeClass("glyphicon-unchecked");
+                $(parent).find(".btn-check").removeClass("invisible");
+                $(parent).find(".btn-check").addClass("glyphicon-check");
+                file.selected = true;
+                updatePanelData(currentFileList[currentFileIndex]);
+            }
+            else {
+                $(parent).removeClass("checked");
+                $(parent).removeData("checked");
+                $(parent).find(".btn-check").addClass("glyphicon-unchecked");
+                $(parent).find(".btn-check").addClass("invisible");
+                $(parent).find(".btn-check").removeClass("glyphicon-check");
+                file.selected = false;
+                updatePanelData(currentFileList[currentFileIndex]);
+            }
+            if ($(".browser-table-entry .glyphicon-check").length == 0) {
+                $(".btn-delete-all").addClass("faded");
+                $(".btn-move-all").addClass("faded");
+            }
+            else {
+                $(".btn-delete-all").removeClass("faded");
+                $(".btn-move-all").removeClass("faded");
+            }
+        });
+
+        $("#file-view-large").on("click", ".btn-edit-large", function () {
+            if ($("#view-large-panel-input").hasClass("hidden")) {
+                $("#view-large-panel-input").val($("#view-large-panel-title").html());
+                $("#view-large-panel-title").addClass("hidden");
+                $("#view-large-panel-input").removeClass("hidden");
             }
             else {
                 hidePanelInput();
             }
-        }
-        if (key.which == 27) {
-            hidePanelInput();
-        }
-    });
+        });
 
-    $("body").on("keydown", function (key) {
-        if (!$("#file-view-large").hasClass("hidden") && $("#view-large-panel-input").hasClass("hidden")) {
-            if (key.which == 37) {  // <-
-                setPrevFile();
+        $("#file-view-large").on("click", ".btn-delete-large", function () {
+            var entry = findFile(currentFileList[currentFileIndex].path);
+            var startfile = $("#derivat-panel-startfile").data("startfile");
+            if ($(entry).data("startfile") != true && startfile.indexOf($(entry).data("path")) != 0) {
+                entry.addClass("delete");
+                var fileList = [];
+                fileList.push($(entry).data("path"));
+                derivateBrowserTools.showDeleteAlert(fileList);
             }
-
-            if (key.which == 39) {  // ->
-                setNextFile();
+            else {
+                derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.delete.startfile"), false);
             }
+        });
 
-            if (key.which == 32) {  // LEER
-                var currentFile = currentFileList[currentFileIndex];
-                if (currentFile.name.endsWith("pdf")) {
-                    window.location.href = jp.baseURL + "rsc/viewer/" + currentFile.getPath();
+        $("#file-view-large").on("keydown", "#view-large-panel-input", function (key) {
+            if (key.which == 13) {
+                var newName = $("#view-large-panel-input").val();
+                var file = currentFileList[currentFileIndex];
+                if (newName != file.name){
+                    $("body").trigger("renameFile", [file.path,derivateBrowserTools.getCurrentDocID(), newName, file.start, changeName])
                 }
                 else {
-                    enlargeorHideImage(currentFile, $(window).width() / 2, $(window).height() / 2);
+                    hidePanelInput();
                 }
             }
-        }
-    });
+            if (key.which == 27) {
+                hidePanelInput();
+            }
+        });
+
+        $("body").on("keydown", function (key) {
+            if (!$("#file-view-large").hasClass("hidden") && $("#view-large-panel-input").hasClass("hidden")) {
+                if (key.which == 37) {  // <-
+                    setPrevFile();
+                }
+
+                if (key.which == 39) {  // ->
+                    setNextFile();
+                }
+
+                if (key.which == 32) {  // LEER
+                    var currentFile = currentFileList[currentFileIndex];
+                    if (currentFile.name.endsWith("pdf")) {
+                        window.location.href = jp.baseURL + "rsc/viewer/" + currentFile.getPath();
+                    }
+                    else {
+                        enlargeorHideImage(currentFile, $(window).width() / 2, $(window).height() / 2);
+                    }
+                }
+            }
+        });
+
+        $("body").on("click", "#btn-list-view", function () {
+            $(this).addClass("hidden");
+            $("#btn-large-view").removeClass("hidden");
+            $("#browser-table-head").removeClass("hidden");
+            $("#browser-table-wrapper").removeClass("hidden");
+            $("#derivate-browser-footer").removeClass("hidden");
+        });
+    }
+
+    function bindEventActions() {
+        $("body").on("loadViewer", function (event, id) {
+            initialize(id);
+        });
+        
+        $("body").on("sortList", function (event, dir) {
+            sortCurrentList(dir);
+        });
+        
+        $("body").on("resetList", function () {
+            resetList();
+        });
+        
+        $("body").on("addFileToList", function (event, largeFileEntry) {
+            currentFileList.push(largeFileEntry);
+        });
+        
+        $("body").on("setFileSelected", function (event, id, selected) {
+            getFile(id).selected = selected;
+        });
+        
+        $("body").on("filterList", function () {
+            filterList();
+        });
+        
+        $("body").on("addFileToFilteredList", function (fileEntry) {
+            currentFileList.push(fullFileList[fullFileList.map(function(x) {return x.getID();}).indexOf(fileEntry)]);
+        });
+        
+        $("body").on("resetFilteredList", function () {
+            resetFilteredList();
+        });
+        
+        $("body").on("updateName", function (event, id, newName) {
+            updateName(id, newName);
+        });
+        
+        $("body").on("removeFile", function (event, id) {
+            removeFromList(id);
+        });
+        
+        $("body").on("updateLinks", function (event, id) {
+            updateLinks(id);
+        });
+        
+        $("body").on("destroyLargeView", function () {
+            resetLargeView();
+        });
+    }
 
     //private Methods
     function initialize(id){
@@ -386,8 +450,6 @@ var derivateBrowserLargeView = (function () {
     }
 
     function getIndexFromID(id) {
-        //var index = currentFileList.map(function(x) {return x.getID();}).indexOf(id);
-        //if (index == -1) index = 0;
         return currentFileList.map(function(x) {return x.getID();}).indexOf(id);
     }
 
@@ -427,73 +489,59 @@ var derivateBrowserLargeView = (function () {
         }
     }
 
+    function findFile(path) {
+        return $(".browser-table-entry").filter(function() {
+            return ($(this).data("path") == path);
+        });
+    }
+
+    function getFile(id) {
+        var index = getIndexFromID(id);
+        if (index != -1) {
+            return currentFileList[index];
+        }
+    }
+
+    function filterList() {
+        if (currentFileList.length > fullFileList.length) {
+            fullFileList = currentFileList.slice();
+        }
+        currentFileList = [];
+    }
+
+    function updateName(id, newName) {
+        var index = getIndexFromID(id);
+        if (index != -1) {
+            currentFileList[index].changeName(newName);
+        }
+    }
+
+    function updateLinks(docID) {
+        currentFileList[currentFileIndex].linkedDocs.push({"id": docID, "name": docID });
+        updatePanelData(currentFileList[currentFileIndex]);
+    }
+    
+    function resetFilteredList() {
+        if (fullFileList.length > 0){
+            currentFileList = fullFileList.slice();
+            fullFileList = [];
+        }
+    }
+
+    function resetList() {
+        currentFileList = [];
+        fullFileList = [];
+        currentFileIndex = 0;
+        currentSliderIndex = 0;
+    }
+
     //ajax Methods
 
 
     return {
         //public
-        loadViewer: function(id) {
-            initialize(id);
-        },
-
-        addFileToList: function(largeFileEntry) {
-            currentFileList.push(largeFileEntry);
-        },
-
-        destroyLargeView: function() {
-            resetLargeView();
-        },
-
-        resetList: function() {
-            currentFileList = [];
-            fullFileList = [];
-            currentFileIndex = 0;
-            currentSliderIndex = 0;
-        },
-
-        sortList: function(dir) {
-            sortCurrentList(dir);
-        },
-
-        filterList: function() {
-            if (currentFileList.length > fullFileList.length) {
-                fullFileList = currentFileList.slice();
-            }
-            currentFileList = [];
-        },
-
-        addFileToFilteredList: function(fileEntry) {
-            currentFileList.push(fullFileList[fullFileList.map(function(x) {return x.getID();}).indexOf(fileEntry)]);
-        },
-
-        resetFilteredList: function() {
-            if (fullFileList.length > 0){
-                currentFileList = fullFileList.slice();
-                fullFileList = [];
-            }
-        },
-
-        getFile: function(id) {
-            var index = getIndexFromID(id);
-            if (index != -1) {
-                return currentFileList[index];
-            }
-        },
-
-        updateLinks: function(docID) {
-            currentFileList[currentFileIndex].linkedDocs.push({"id": docID, "name": docID });
-            updatePanelData(currentFileList[currentFileIndex]);
-        },
-
-        updateName: function(id, newName) {
-            var index = getIndexFromID(id);
-            if (index != -1) {
-                currentFileList[index].changeName(newName);
-            }
-        },
-
-        removeFile: function(id) {
-            removeFromList(id)
+        init: function() {
+            bindActions();
         }
     };
 })();

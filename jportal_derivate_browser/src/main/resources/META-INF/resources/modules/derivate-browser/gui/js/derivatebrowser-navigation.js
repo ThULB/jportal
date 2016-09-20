@@ -2,9 +2,116 @@
 var derivateBrowserNavigation = (function () {
 
     //private Properties
-    var    tempTree = [];
+    var tempTree = [];
 
+    function bindActions() {
+        bindUIActions();
+        bindEventActions();
+    }
 
+    function bindUIActions() {
+        $("body").on("keydown", "#folder-list-search-input", function (key) {
+            if (key.which == 13) {
+                searchJournals($(this).val());
+            }
+        });
+
+        $("body").on("click", "#folder-list-search-button", function () {
+            searchJournals($("#folder-list-search-input").val());
+        });
+
+        $("body").on("click", ".folder:not(.derivat) > .folder-name, .folder:not(.derivat) > span.icon", function (event) {
+            if (event.shiftKey || event.ctrlKey) {
+                window.getSelection().removeAllRanges();
+                var current = getCurrentNode();
+                var endNode = $(this).parent(".folder");
+                if (current.parent()[0] == endNode.parent()[0]) {
+                    if (event.ctrlKey) {
+                        if ($(".aktiv").length > 1){
+                            $(this).parent(".folder").toggleClass("aktiv");
+                        }
+                    }
+                    else {
+                        selectRange(getCurrentNode(), $(this).parent(".folder"));
+                    }
+                    $("body").trigger("showSelectedDocs");
+                }
+            }
+            else {
+                derivateBrowserTools.goTo($(this).parent().data("docID"), "");
+            }
+        });
+
+        $("body").on("click", ".button-expand", function () {
+            var docID = $(this).closest(".folder").data("docID");
+            findDoc(docID).find("ul.children").html("");
+            getDocPerID(docID, getDocChilds);
+        });
+
+        $("body").on("click", ".button-contract", function () {
+            $(this).siblings("ul.children").addClass("hide-folder");
+            $(this).siblings("ul.children").html("");
+            $(this).removeClass("button-contract glyphicon-minus");
+            $(this).addClass("button-expand glyphicon-plus");
+        });
+
+        $("body").on("click", ".derivat > .folder-name, .derivat > span.icon", function (event) {
+            if (!event.shiftKey) {
+                derivateBrowserTools.goTo($(this).parent().data("docID"), "");
+            }
+        });
+
+        $("body").on("click", ".derivat-folder > .folder-name, .derivat-folder > span.icon", function (event) {
+            if (!event.shiftKey) {
+                derivateBrowserTools.goTo($(this).parent().data("deriID"), $(this).parent().data("path"));
+            }
+        });
+    }
+
+    function bindEventActions() {
+        $("body").on("addDerivatFolder", function (e, name, filepath, deriID, absPath) {
+            addChildToDerivat(name, filepath, deriID, absPath);
+        });
+
+        $("body").on("renameDoc", function (event, docID, path, name) {
+            renameDoc(docID, path, name);
+        });
+
+        $("body").on("removeDocPerID", function (event, docID, path) {
+            removeDocPerID(docID, path);
+        });
+
+        $("body").on("addChildToDerivat", function (event, childName, childPath, deriID, path) {
+            addChildToDerivat(childName, childPath, deriID, path);
+        });
+
+        $("body").on("gotDerivateChilds", function (event, docID, callback, docs) {
+            gotDerivateChilds(docID, callback, docs);
+        });
+
+        $("body").on("addTempDoc", function (event, docID, name, type, parentID) {
+            drawTempDoc(docID, name, type, parentID);
+        });
+
+        $("body").on("fadeEntry", function (event, node) {
+            $(node).children().not(".children").addClass("faded");
+            $(node).data("faded", true);
+        });
+
+        $("body").on("unFadeEntry", function (event, node) {
+            $(node).children().not(".children").removeClass("faded");
+            $(node).removeData("faded");
+        });
+
+        $("body").on("addDoc", function (event, docID) {
+            getDocPerID(docID, addDocToParent);
+        });
+
+        $("body").on("goToDocument", function (event, docID, path) {
+            goToDocument(docID, path)
+        });
+    }
+    
     //private Methods
     function highlight (node) {
         $(".aktiv").removeClass("aktiv");
@@ -257,6 +364,69 @@ var derivateBrowserNavigation = (function () {
     	
 	}
 
+    function searchJournals(query) {
+        $("#folder-list-ul").html("");
+        $("#derivate-browser").addClass("hidden");
+        $("#derivat-panel").addClass("hidden");
+        if (query == "") query = "*";
+        getJournals(query,  0, drawDoc);
+    }
+
+    function getCurrentNode() {
+        return findDoc(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
+    }
+
+    function selectRange(startNode, endNode) {
+        if ($(startNode).index() < $(endNode).index()) {
+            highlightRange(startNode, endNode);
+        }
+        else {
+            highlightRange(endNode, startNode);
+        }
+    }
+
+    function addChildToDerivat(childName, childPath, deriID, path) {
+        var parent = findDoc(deriID, path);
+        drawDeriFolder(childName, childPath, deriID, parent);
+    }
+
+    function renameDoc(docID, path, name) {
+        var doc = findDoc(docID, path);
+        if (doc.length > 0) {
+            doc.children("div.folder-name").html(name);
+            if (doc.data("path") != undefined){
+                var oldPath = doc.data("path");
+                doc.data("path", oldPath.substring(0, oldPath.lastIndexOf("/") + 1) + name);
+                doc.data("id", doc.data("derID") + doc.data("path"));
+            }
+        }
+    }
+
+    function removeDoc(node) {
+        var parent = $(node).parent().closest(".folder");
+        node.remove();
+        checkForExpandButton(parent);
+    }
+
+    function removeDocPerID(docID, path) {
+        var node = findDoc(docID, path);
+        removeDoc(node);
+    }
+
+    function gotDerivateChilds(docID, callback, docs){
+        getDocPerID(docID, callback, docs);
+    }
+
+    function goToDocument(docID, path){
+        var node = findDoc(docID, path);
+        if (node.length > 0){
+            highlight(node);
+        }
+        else{
+            getDocPerID(docID, pushDocAndGetChilds);
+        }
+    }
+
     //ajax Methods
     function getDocPerID(docID, callback, docs, count) {
         var url = jp.baseURL + "servlets/solr/select?q=id%3A" + docID + "&start=0&rows=10&sort=maintitle+asc&wt=json&indent=true";
@@ -318,106 +488,7 @@ var derivateBrowserNavigation = (function () {
     return {
         //public
         init: function() {
-
-        },
-
-        goToDocument: function(docID, path){
-            var node = findDoc(docID, path);
-            if (node.length > 0){
-            	highlight(node);
-            }
-            else{
-            	 getDocPerID(docID, pushDocAndGetChilds);
-            }
-        },
-        
-        selectDocument: function(node){
-        	highlight(node);
-        },
-        
-        selectDocumentPerID: function(docID, path){
-        	this.selectDocument(findDoc(docID, path));
-        },
-        
-        addChildToDerivat: function(childName, childPath, deriID, path) {
-        	var parent = findDoc(deriID, path);
-        	drawDeriFolder(childName, childPath, deriID, parent);
-		},
-		
-		expandDoc: function(docID){
-			findDoc(docID).find("ul.children").html("");
-			getDocPerID(docID, getDocChilds);
-		},
-		
-		searchJournals: function(query) {
-			getJournals(query, 0, drawDoc);
-		},
-		
-		removeDocPerID: function(docID, path) {
-			var node = findDoc(docID, path);
-			this.removeDoc(node);
-		},
-		
-		removeDoc: function(node) {
-			var parent = $(node).parent().closest(".folder");
-			node.remove();
-			checkForExpandButton(parent);
-		},
-		
-		addDoc: function(docID) {
-			getDocPerID(docID, addDocToParent);
-		},
-		
-		getParentDocID: function(childDocID) {
-			var node = findDoc(childDocID, "");
-			return $(node).parent().closest('li.folder').data("docID");
-		},
-
-		gotDerivateChilds: function(docID, callback, docs){
-			return getDocPerID(docID, callback, docs);
-		},
-
-        addTempDoc: function(docID, name, type, parentID){
-            drawTempDoc(docID, name, type, parentID);
-        },
-
-        renameDoc: function(docID, path, name) {
-            var doc = findDoc(docID, path);
-            if (doc.length > 0) {
-                doc.children("div.folder-name").html(name);
-                if (doc.data("path") != undefined){
-                    var oldPath = doc.data("path");
-                    doc.data("path", oldPath.substring(0, oldPath.lastIndexOf("/") + 1) + name);
-                    doc.data("id", doc.data("derID") + doc.data("path"));
-                }
-            }
-        },
-
-        fadeEntry: function(node) {
-            $(node).children().not(".children").addClass("faded");
-            $(node).data("faded", true);
-        },
-
-        unFadeEntry: function(node) {
-            $(node).children().not(".children").removeClass("faded");
-            $(node).removeData("faded");
-        },
-
-        getCurrentNode: function () {
-            return findDoc(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
-        },
-
-        selectRange: function(startNode, endNode) {
-            if ($(startNode).index() < $(endNode).index()) {
-                highlightRange(startNode, endNode);
-            }
-            else {
-                highlightRange(endNode, startNode);
-            }
-        },
-
-        getDocName: function(docID) {
-            return findDoc(docID, "").find(".folder-name").html();
+            bindActions();
         }
     };
 })();

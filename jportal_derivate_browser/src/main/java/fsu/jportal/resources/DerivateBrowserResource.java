@@ -8,24 +8,26 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.jdom2.Document;
 import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.transformer.MCRContentTransformer;
+import org.mycore.common.content.transformer.MCRParameterizedTransformer;
+import org.mycore.common.xml.MCRLayoutService;
+import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 import org.xml.sax.SAXException;
@@ -41,6 +43,8 @@ import fsu.jportal.backend.DocumentTools;
 public class DerivateBrowserResource {
 
     private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
+
+    static Logger LOGGER = LogManager.getLogger(DerivateBrowserResource.class);
 
     @Context
     HttpServletRequest request;
@@ -66,11 +70,19 @@ public class DerivateBrowserResource {
     @Path("start")
     @Produces(MediaType.TEXT_HTML)
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response start(@PathParam("derivID") String derivID) {
+    public Response start() {
         InputStream mainGui = getClass().getResourceAsStream(
                 "/META-INF/resources/modules/derivate-browser/gui/derivatebrowser.html");
         return Response.ok(mainGui).build();
     }
+
+    @GET
+    @Path("compact")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    public byte[] startCompact() throws Exception {
+        return transform("/META-INF/resources/modules/derivate-browser/gui/derivatebrowserCompact.xml");
+    }
+
 
     @DELETE
     @Path("docs")
@@ -319,5 +331,25 @@ public class DerivateBrowserResource {
             return Response.ok().build();
         }
         return Response.serverError().build();
+    }
+
+    protected byte[] transform(String xmlFile) throws Exception {
+        InputStream is = getClass().getResourceAsStream(xmlFile);
+        if (is == null) {
+            LOGGER.error("Unable to locate xmlFile of move object resource");
+            throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).build());
+        }
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document webPage = saxBuilder.build(is);
+        MCRJDOMContent source = new MCRJDOMContent(webPage);
+        MCRParameterCollector parameter = new MCRParameterCollector(request);
+        MCRContentTransformer transformer = MCRLayoutService.getContentTransformer("MyCoReWebPage", parameter);
+        MCRContent result;
+        if (transformer instanceof MCRParameterizedTransformer) {
+            result = ((MCRParameterizedTransformer) transformer).transform(source, parameter);
+        } else {
+            result = transformer.transform(source);
+        }
+        return result.asByteArray();
     }
 }

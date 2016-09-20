@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+    <head>
+    <bottom>
+        <link href="gui/css/derivatebrowser.css" rel="stylesheet" type="text/css"/>
+        <link href="gui/css/derivatebrowserCompact.css" rel="stylesheet" type="text/css"/>
+    </bottom>
+    </head>
+    <body>
+        <script type="text/javascript">
+            var getUrl = window.location;
+            var jp = jp || {};
+            jp.baseURL = getUrl .protocol + "//" + getUrl.host + getUrl.pathname.split('rsc/')[0];
+        </script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-compact.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-uploadEntry.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-upload.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-derivateView.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-moveAndLink.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-tools.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-largeView.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-largeViewEntry.js"></script>
+        <script type="text/javascript" src="gui/js/stupidtable.js"></script>
+    </body>
+    <section xml:lang="all" title="Derivatebrowser Compact">
+        <noEditor>
+        </noEditor>
+    </section>
+</MyCoReWebPage>

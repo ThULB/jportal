@@ -51,6 +51,7 @@ html,body{
 #filebrowser{
 	width: 100%;
 	height: 100%;
+	position: relative;
 }
 
 #filebrowser-loading {
@@ -1414,6 +1415,13 @@ div.statusbar-progress-single-status.noAnimation {
 	position: absolute;
 	right: 10px;
 	top: 23px;
+	-webkit-animation: spinner 1500ms infinite linear;
+	animation: spinner 1500ms infinite linear;
+}
+
+.button-spinner {
+	left: 5px;
+	top: 2px;
 	-webkit-animation: spinner 1500ms infinite linear;
 	animation: spinner 1500ms infinite linear;
 }

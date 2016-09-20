@@ -114,10 +114,7 @@
         <xsl:if test="$mode = 'metadata' and $editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
           <ul class="edit">
             <li>
-              <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}/">Details</a>
-            </li>
-            <li>
-              <a href="{$WebApplicationBaseURL}servlets/derivate/update?id={@xlink:href}&amp;objectid={$objID}">Dateien hinzufügen</a>
+              <a href="{$WebApplicationBaseURL}rsc/derivatebrowser/compact#/{@xlink:href}/">Details</a>
             </li>
             <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
               <xsl:if test="not(mcrurn:hasURNDefined(@xlink:href))">
@@ -127,23 +124,6 @@
               </xsl:if>
               <li>
                 <a href="javascript:window.open(&quot;{$WebApplicationBaseURL}rsc/mets/editor/start/{@xlink:href}&quot;,&quot;Mets Editor&quot;,&quot;scrollbars=no,location=no&quot;);void(0);">Mets Editor</a>
-              </li>
-            </xsl:if>
-            <xsl:if test="$deleteDB">
-              <li>
-                <a href="{$WebApplicationBaseURL}servlets/MCRDisplayHideDerivateServlet?derivate={@xlink:href}">
-                  <xsl:choose>
-                    <xsl:when test="$showDerivate">
-                      Derivat verstecken
-                    </xsl:when>
-                    <xsl:otherwise>
-                      Derivat anzeigen
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </a>
-              </li>
-              <li>
-                <a href='javascript:void(0)' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a>
               </li>
             </xsl:if>
             <xsl:if test="jpxml:isMetsGeneratable(@xlink:href)">

@@ -86,7 +86,7 @@
         <item>
           <restriction name="dataModel" contains="datamodel-" />
           <!-- <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" /> -->
-          <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}" />
+          <label name="Datei hochladen" id="jp-upload-new-button" href="#" />
         </item>
         <item>
           <restriction name="createJournal" value="true"/>

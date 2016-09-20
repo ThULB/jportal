@@ -22,6 +22,12 @@ public class DerivateBrowserPermission implements MCRResourceAccessChecker {
                 LOGGER.info("Permission denied on Derivate Browser");
                 return false;
             }
+
+            //load derivate-browser-compact
+            if (path.equals("derivatebrowser/compact") && !MCRAccessManager.checkPermission("read-derivate")) {
+                LOGGER.info("Permission denied on Derivate Browser Compact");
+                return false;
+            }
         }
 
         if (method.equals("DELETE")) {
