@@ -30,7 +30,7 @@ public class JVBMetsConverter extends ENMAPConverter {
     protected void handleFileSection(Element enmap, Mets mcr) throws URISyntaxException {
         FileGrp masterGroup = handleFileGroup(enmap, "MASTER",
             "mets:fileSec//mets:fileGrp[@ID='OCRMasterFiles']/mets:file", "image/tiff", new TiffHrefStrategy());
-        FileGrp altoGroup = handleFileGroup(enmap, "ALTO", "mets:fileSec//mets:fileGrp[@ID='ABBYYFiles']/mets:file",
+        FileGrp altoGroup = handleFileGroup(enmap, "ALTO", "mets:fileSec//mets:fileGrp[@ID='ALTOFiles']/mets:file",
             "text/xml", new AltoHrefStrategy());
         mcr.getFileSec().addFileGrp(masterGroup);
         mcr.getFileSec().addFileGrp(altoGroup);
