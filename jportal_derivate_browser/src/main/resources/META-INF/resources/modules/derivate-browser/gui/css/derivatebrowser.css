@@ -1254,7 +1254,8 @@ div.statusbar-progress-single-status.noAnimation {
 #lightbox-new-derivate-error{
     float: left;
     display: inline-block;
-    width: 310px;
+    width: 300px;
+	text-align: left;
 }
 
 .derivate-browser-loading {

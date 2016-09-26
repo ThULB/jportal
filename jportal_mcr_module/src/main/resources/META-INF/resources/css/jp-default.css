@@ -1322,5 +1322,6 @@ textarea {
 #lightbox-new-derivate-error{
 	float: left;
 	display: inline-block;
-	width: 310px;
+	width: 300px;
+	text-align: left;
 }

@@ -491,6 +491,35 @@ var derivateBrowserUpload = (function () {
         }
     }
 
+    function showUploadAlert(upload, mode, error) {
+        $(upload.statusbar).find("lightbox-new-derivate-error").removeClass("hidden");
+        $(upload.statusbar).find(".upload-error").attr("title", derivateBrowserTools.getI18n("db.label.upload.error"));
+        $(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.label.upload.error"));
+        $(upload.statusbar).addClass("progress-bar-danger");
+        if (mode == "new") {
+            $("#lightbox-new-derivate-error").removeClass("hidden");
+            if (error == 401) {
+                $(".lightbox-new-derivate-error-permission").removeClass("hidden");
+            }
+            else {
+                $(".lightbox-new-derivate-error-default").removeClass("hidden");
+            }
+            $("#lightbox-new-derivate-done").removeClass("hidden");
+            $("#lightbox-new-derivate-message").addClass("hidden");
+            $("#lightbox-new-derivate-done").data("deriID", currentDeriID);
+            $("#lightbox-new-derivate-done").data("docID", "");
+            $(".statusbar-progress-single-status").addClass("progress-bar-danger");
+            $(".statusbar-progress-complete-status").addClass("progress-bar-danger");
+            $(".statusbar-progress-single-status").html(derivateBrowserTools.getI18n("db.label.upload.error"));
+            $(".statusbar-progress-complete-status").html(derivateBrowserTools.getI18n("db.label.upload.error"));
+        }
+        if (mode != "new") {
+            $("#upload-status-bar-header-type").addClass("hidden");
+            $("#upload-status-bar-header-error").removeClass("hidden");
+            cancelUpload(currentUploadID + 1);
+        }
+    }
+
     //ajax Methods
     /**
      * @property lengthComputable
@@ -590,15 +619,15 @@ var derivateBrowserUpload = (function () {
                         $(upload.statusbar).find(".upload-type").removeClass("hidden");
                         $(upload.statusbar).find(".upload-type").attr("title", derivateBrowserTools.getI18n("db.alert.filetype"));
                         $(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.alert.filetype"));
-                        $(upload.statusbar).addClass("alert-warning");
+                        $(upload.statusbar).addClass("progress-bar-warning");
                         if (mode == "new") {
                             $("#lightbox-new-derivate-error").removeClass("hidden");
                             $("#lightbox-new-derivate-done").removeClass("hidden");
                             $("#lightbox-new-derivate-message").addClass("hidden");
                             $("#lightbox-new-derivate-done").data("deriID", currentDeriID);
                             $("#lightbox-new-derivate-done").data("docID", "");
-                            $(".statusbar-progress-single-status").addClass("alert-warning");
-                            $(".statusbar-progress-complete-status").addClass("alert-warning");
+                            $(".statusbar-progress-single-status").addClass("progress-bar-warning");
+                            $(".statusbar-progress-complete-status").addClass("progress-bar-warning");
                             $(".statusbar-progress-single-status").html(derivateBrowserTools.getI18n("db.alert.filetype"));
                             $(".statusbar-progress-complete-status").html(derivateBrowserTools.getI18n("db.alert.filetype"));
                         }
@@ -614,29 +643,11 @@ var derivateBrowserUpload = (function () {
                     else {
                         if (error.status == 401) {
                             derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                            showUploadAlert(upload, mode, error.status);
                         }
                         else {
                             derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.upload.error"), false);
-                            $(upload.statusbar).find("lightbox-new-derivate-error").removeClass("hidden");
-                            $(upload.statusbar).find(".upload-error").attr("title", derivateBrowserTools.getI18n("db.label.upload.error"));
-                            $(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.label.upload.error"));
-                            $(upload.statusbar).addClass("alert-danger");
-                            if (mode == "new") {
-                                $("#lightbox-new-derivate-error").removeClass("hidden");
-                                $("#lightbox-new-derivate-done").removeClass("hidden");
-                                $("#lightbox-new-derivate-message").addClass("hidden");
-                                $("#lightbox-new-derivate-done").data("deriID", currentDeriID);
-                                $("#lightbox-new-derivate-done").data("docID", "");
-                                $(".statusbar-progress-single-status").addClass("alert-danger");
-                                $(".statusbar-progress-complete-status").addClass("alert-danger");
-                                $(".statusbar-progress-single-status").html(derivateBrowserTools.getI18n("db.label.upload.error"));
-                                $(".statusbar-progress-complete-status").html(derivateBrowserTools.getI18n("db.label.upload.error"));
-                            }
-                            if (mode != "new") {
-                                $("#upload-status-bar-header-type").addClass("hidden");
-                                $("#upload-status-bar-header-error").removeClass("hidden");
-                                cancelUpload(currentUploadID + 1);
-                            }
+                            showUploadAlert(upload, mode, error.status);
                         }
                     }
                 }
