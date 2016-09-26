@@ -56,7 +56,7 @@ update permission delete-jpinst for id default with rulefile xml/grant-editorsgr
 update permission delete-doublets for id default with rulefile xml/grant-supervisor.xml described by supervisor
 
 update permission read-derivate for id default with rulefile xml/grant-all.xml described by always allowed
-update permission create-derivate for id POOLPRIVILEGE with rulefile xml/grant-derivategroup.xml described by editorsgroup
+update permission create-derivate for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 update permission update-derivate for id default with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 update permission delete-derivate for id default with rulefile xml/grant-derivategroup.xml described by derivategroup
 
