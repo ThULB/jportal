@@ -26,17 +26,6 @@
     <xsl:copy>
       <xsl:copy-of select="@*" />
       <xsl:call-template name="generateIViewURLS">
-        <xsl:with-param name="use" select="'THUMBS'" />
-      </xsl:call-template>
-      <xsl:call-template name="generateIViewURLS">
-        <xsl:with-param name="use" select="'MIN'" />
-        <xsl:with-param name="zoom" select="'MIN'" />
-      </xsl:call-template>
-      <xsl:call-template name="generateIViewURLS">
-        <xsl:with-param name="use" select="'DEFAULT'" />
-        <xsl:with-param name="zoom" select="'MID'" />
-      </xsl:call-template>
-      <xsl:call-template name="generateIViewURLS">
         <xsl:with-param name="use" select="'MAX'" />
         <xsl:with-param name="zoom" select="'MAX'" />
       </xsl:call-template>
@@ -58,18 +47,9 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="$use='THUMBS'">
-            <mets:file ID="{concat($use,'_',$ncName)}" MIMETYPE="image/png">
-              <mets:FLocat LOCTYPE="URL" xlink:href="{concat($ThumbnailBaseURL,$derivateID,'/',mets:FLocat/@xlink:href)}" />
-            </mets:file>
-          </xsl:when>
-          <xsl:otherwise>
-            <mets:file ID="{concat($use,'_',$ncName)}" MIMETYPE="image/jpeg">
-              <mets:FLocat LOCTYPE="URL" xlink:href="{concat($ImageBaseURL,$zoom,'/',$derivateID,'/',mets:FLocat/@xlink:href)}" />
-            </mets:file>
-          </xsl:otherwise>
-        </xsl:choose>
+        <mets:file ID="{concat($use,'_',$ncName)}" MIMETYPE="image/jpeg">
+          <mets:FLocat LOCTYPE="URL" xlink:href="{concat($ImageBaseURL,$zoom,'/',$derivateID,'/',mets:FLocat/@xlink:href)}" />
+        </mets:file>
       </xsl:for-each>
     </mets:fileGrp>
   </xsl:template>
@@ -107,8 +87,6 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      <mets:fptr FILEID="{concat('MIN_',$ncName)}" />
-      <mets:fptr FILEID="{concat('DEFAULT_',$ncName)}" />
       <mets:fptr FILEID="{concat('MAX_',$ncName)}" />
     </xsl:copy>
   </xsl:template>
