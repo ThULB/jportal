@@ -8,7 +8,16 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -18,7 +27,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.jdom2.Document;
-import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.config.MCRConfiguration;
@@ -29,8 +37,8 @@ import org.mycore.common.content.transformer.MCRParameterizedTransformer;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
-import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -60,7 +68,7 @@ public class DerivateBrowserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response browsePath(@PathParam("derivID") String derivID, @PathParam("path") String path) {
         JsonObject derivateJson = DerivateTools.getDerivateAsJson(derivID, path);
-        if (derivateJson == null){
+        if (derivateJson == null) {
             Response.serverError().build();
         }
         return Response.ok(derivateJson.toString()).build();
@@ -72,7 +80,7 @@ public class DerivateBrowserResource {
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response start() {
         InputStream mainGui = getClass().getResourceAsStream(
-                "/META-INF/resources/modules/derivate-browser/gui/derivatebrowser.html");
+            "/META-INF/resources/modules/derivate-browser/gui/derivatebrowser.html");
         return Response.ok(mainGui).build();
     }
 
@@ -83,11 +91,10 @@ public class DerivateBrowserResource {
         return transform("/META-INF/resources/modules/derivate-browser/gui/derivatebrowserCompact.xml");
     }
 
-
     @DELETE
     @Path("docs")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response deleteDocs(String data) {  
+    public Response deleteDocs(String data) {
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonArray = jsonParser.parse(data).getAsJsonArray();
         for (int i = 0; i < jsonArray.size(); i++) {
@@ -111,7 +118,8 @@ public class DerivateBrowserResource {
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonO = jsonArray.get(i).getAsJsonObject();
             int status;
-            status = DerivateTools.delete(jsonO.get("deriID").getAsString(), jsonO.get("path").getAsString());
+            status = DerivateTools.delete(
+                MCRPath.getPath(jsonO.get("deriID").getAsString(), jsonO.get("path").getAsString()));
             jsonO.addProperty("status", status);
         }
         return Response.ok(jsonObject.toString()).build();
@@ -120,9 +128,10 @@ public class DerivateBrowserResource {
     @POST
     @Path("{derivID}{path:(/.*)*}")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response createFolder(@PathParam("derivID") String derivID, @PathParam("path") String path) throws Exception {
+    public Response createFolder(@PathParam("derivID") String derivID, @PathParam("path") String path)
+        throws Exception {
         if (!DerivateTools.mkdir(derivID + ":" + path)) {
-            return Response.status(Status.CONFLICT).build();
+            throw new WebApplicationException(derivID + ":" + path, Status.CONFLICT);
         }
         return Response.ok().build();
     }
@@ -131,20 +140,20 @@ public class DerivateBrowserResource {
     @Path("rename")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response rename(@QueryParam("file") String file, @QueryParam("name") String name,
-            @QueryParam("mainFile") Boolean start) {
+        @QueryParam("mainFile") Boolean start) {
         try {
             DerivateTools.rename(file, name);
         } catch (FileAlreadyExistsException e) {
-            return Response.status(Status.CONFLICT).build();
+            throw new WebApplicationException(file + " does already exists", e, Status.CONFLICT);
         } catch (IOException e) {
-            e.printStackTrace();
-            return Response.serverError().build();
+            throw new WebApplicationException("Unable to rename file " + file + " to " + name, e);
         } catch (MCRAccessException e) {
-            e.printStackTrace();
+            throw new WebApplicationException(Status.UNAUTHORIZED);
         }
         if (start) {
             String path = file.substring(0, file.lastIndexOf("/") + 1) + name;
-            DerivateTools.setAsMain(file.substring(0, file.lastIndexOf(":")), path.substring(path.lastIndexOf(":") + 1));
+            DerivateTools.setAsMain(file.substring(0, file.lastIndexOf(":")),
+                path.substring(path.lastIndexOf(":") + 1));
         }
         return Response.ok().build();
     }
@@ -174,7 +183,7 @@ public class DerivateBrowserResource {
     @PUT
     @Path("{derivID}{path:(/.*)*}/main")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response setMainDoc(@PathParam("derivID") String deriID, @PathParam("path") String path) throws IOException {
+    public Response setMainDoc(@PathParam("derivID") String deriID, @PathParam("path") String path) {
         DerivateTools.setAsMain(deriID, path);
         return Response.ok().build();
     }
@@ -182,7 +191,7 @@ public class DerivateBrowserResource {
     @GET
     @Path("folders/{derivID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFolders(@PathParam("derivID") String deriID) throws IOException, JDOMException, SAXException {
+    public Response getFolders(@PathParam("derivID") String deriID) {
         return Response.ok(DerivateTools.getDerivateFolderAsJson(deriID).toString()).build();
     }
 
@@ -215,27 +224,28 @@ public class DerivateBrowserResource {
     @Path("upload")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response getUpload(@FormDataParam("file") InputStream inputStream,
-            @FormDataParam("filename") String filename, @FormDataParam("size") long filesize,
-            @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID,
-            @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite,
-            @FormDataParam("type") String type) {
+        @FormDataParam("filename") String filename, @FormDataParam("size") long filesize,
+        @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID,
+        @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite,
+        @FormDataParam("type") String type) {
         List<String> fileTyps = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
-        if (fileTyps.contains(type)){
+        if (fileTyps.contains(type)) {
             if (overwrite) {
-                if (DerivateTools.delete(documentID, path + "/" + filename) != 1) {
-                    return Response.serverError().build();
+                MCRPath filePath = MCRPath.getPath(documentID, path + "/" + filename);
+                if (DerivateTools.delete(filePath) != 1) {
+                    throw new WebApplicationException(
+                        "Unable to delete/overwrite " + filePath + " while uploading " + filename);
                 }
             }
             if (derivateID.equals("")) {
                 derivateID = null;
             }
             String filePath = path + "/" + filename;
-            
+
             try {
                 derivateID = DerivateTools.uploadFile(inputStream, filesize, documentID, derivateID, filePath);
             } catch (Exception e) {
-                e.printStackTrace();
-                return Response.serverError().build();
+                throw new WebApplicationException("Error while uploading file " + filename, e);
             }
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("derivateID", derivateID);
@@ -243,7 +253,7 @@ public class DerivateBrowserResource {
 
             return Response.ok(jsonObject.toString()).build();
         }
-        return Response.status(Status.UNSUPPORTED_MEDIA_TYPE).build();
+        throw new WebApplicationException(Status.UNSUPPORTED_MEDIA_TYPE);
     }
 
     @POST
@@ -289,18 +299,18 @@ public class DerivateBrowserResource {
     @Path("link")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response setLink(@QueryParam("docID") String docID, @QueryParam("imgPath") String imgPath) {
-        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null && !imgPath.equals("")) {
+        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null
+            && !imgPath.equals("")) {
             try {
                 DerivateTools.setLink(docID, imgPath);
             } catch (MCRActiveLinkException e) {
-                e.printStackTrace();
-                return Response.serverError().build();
+                throw new WebApplicationException("Unable to set link " + imgPath + " from " + docID, e);
             } catch (MCRAccessException e) {
-                e.printStackTrace();
+                throw new WebApplicationException(Status.UNAUTHORIZED);
             }
             return Response.ok().build();
         } else {
-            return Response.serverError().build();
+            throw new WebApplicationException("Unable to set link " + imgPath + " from " + docID);
         }
     }
 
@@ -308,21 +318,21 @@ public class DerivateBrowserResource {
     @Path("link")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public Response removeLink(@QueryParam("docID") String docID, @QueryParam("imgPath") String imgPath) {
-        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null && !imgPath.equals("")) {
+        if (docID != null && !docID.equals("") && !docID.contains("derivate") && imgPath != null
+            && !imgPath.equals("")) {
             try {
                 DerivateTools.removeLink(docID, imgPath);
             } catch (MCRActiveLinkException e) {
-                e.printStackTrace();
-                return Response.serverError().build();
+                throw new WebApplicationException("Unable to remove link " + imgPath + " from " + docID, e);
             } catch (MCRAccessException e) {
-                e.printStackTrace();
+                throw new WebApplicationException(Status.UNAUTHORIZED);
             }
             return Response.ok().build();
         } else {
-            return Response.serverError().build();
+            throw new WebApplicationException("Unable to remove link " + imgPath + " from " + docID);
         }
     }
-    
+
     @POST
     @Path("tileDerivate")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)

@@ -305,10 +305,6 @@ public class DerivateTools {
         }
     }
 
-    public static int delete(String derivateID, String path) {
-        return delete(MCRPath.getPath(derivateID, path));
-    }
-
     public static int delete(MCRPath mcrPath) {
         if (!Files.exists(mcrPath)) {
             return 2; //NOT_FOUND
@@ -316,23 +312,27 @@ public class DerivateTools {
         if (!Files.isDirectory(mcrPath)) {
             try {
                 DerivateLinkUtil.deleteFileLink(mcrPath);
+            } catch(Exception exc) {
+                LOGGER.error("Unable to delete links of path " + mcrPath);
+                return 0;
+            }
+            try {
                 Files.delete(mcrPath);
-            } catch (IOException | SolrServerException | MCRAccessException e) {
-                e.printStackTrace();
+            } catch (Exception exc) {
+                LOGGER.error("Unable to delete file " + mcrPath);
                 return 0;
             }
             return 1; //OK
         }
         try {
             Files.walkFileTree(mcrPath, new SimpleFileVisitor<java.nio.file.Path>() {
-
                 @Override
                 public FileVisitResult visitFile(java.nio.file.Path file, BasicFileAttributes attrs)
                         throws IOException {
                     try {
                         DerivateLinkUtil.deleteFileLink(MCRPath.toMCRPath(file));
                     } catch (SolrServerException | MCRAccessException e) {
-                        e.printStackTrace();
+                        LOGGER.error("Unable to delete links of path " + mcrPath);
                     }
                     Files.delete(file);
                     return super.visitFile(file, attrs);
@@ -346,7 +346,7 @@ public class DerivateTools {
 
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Error while walking file tree of " + mcrPath, e);
             return 0;
         }
         return 1; //OK
