@@ -520,6 +520,10 @@ var derivateBrowserDerivateView = (function () {
         $("#browser-table-sort-click").find(".glyphicon").addClass("hidden");
         $("#browser-table-sort").stupidsort('asc');
         createBreadcrumb(deriID, data.absPath);
+        if (filename == undefined || filename == "" ) {
+            $("#file-view-large").addClass("hidden");
+            $("#file-view").removeClass("hidden");
+        }
         if (($("#file-view-large").hasClass("hidden") && filename != "" && filename != undefined) || !$("#file-view-large").hasClass("hidden")){
             $("#file-view").addClass("hidden");
             if (data.absPath != "/") filename = "/" + filename;

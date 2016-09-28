@@ -75,7 +75,8 @@ var derivateBrowserLargeView = (function () {
         $("body").on("click", "#button-view-large-close", function () {
             hideLargeView();
             $("#file-view").removeClass("hidden");
-            derivateBrowserTools.setFileName("");;
+            $("#btn-close").removeClass("hidden");
+            derivateBrowserTools.setFileName("");
         });
 
         $("#file-view-large").on("click", ".btn-check-large", function () {
@@ -248,6 +249,7 @@ var derivateBrowserLargeView = (function () {
                 setCurrentFileTo(0);
             }
         }
+        $("#btn-close").addClass("hidden");
         $("#file-view-large").removeClass("hidden");
     }
 

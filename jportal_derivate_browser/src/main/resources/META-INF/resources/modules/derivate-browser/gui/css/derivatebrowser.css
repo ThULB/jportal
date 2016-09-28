@@ -1883,3 +1883,12 @@ textarea {
     margin-bottom: 4px;
     margin-left: 22px;
 }
+
+#btn-close {
+	position: absolute;
+	z-index: 5000;
+	right: 5px;
+	top: 5px;
+	font-size: 24px;
+	cursor: pointer;
+}

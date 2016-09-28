@@ -41,6 +41,16 @@ var derivateBrowserTools = (function () {
         }
     });
 
+    $("body").on("click", "#btn-close", function () {
+        var docID = derivateBrowserTools.getCurrentDocID();
+        if (docID.contains("derivate")) {
+            getParentID(docID, redirectToParent);
+        }
+        else {
+            redirectToParent(docID);
+        }
+    });
+
     //private Methods   
 	function getPDFImg(img, deriID, path){
         clearTimeout(imgLoadingTimer);
@@ -79,6 +89,7 @@ var derivateBrowserTools = (function () {
 	function goToDocument(docID, path) {
         hideLoadScreen();
         $("#journal-info-linklist").addClass("hidden");
+        $("#btn-close").removeClass("hidden");
         $("#journal-info-text").addClass("journal-info-text-large");
 		if (docID == "" || docID == undefined || (currentDocID.contains("derivate") && !docID.contains("derivate")) || (!currentDocID.contains("derivate") && docID.contains("derivate"))){
 			$("#derivat-panel").addClass("hidden");
@@ -350,15 +361,21 @@ var derivateBrowserTools = (function () {
     function deleteDocAndGoToParent(parentID) {
         var json = [];
         json.push({"objId": derivateBrowserTools.getCurrentDocID()});
-        deleteDocument(json, redirectToParent, parentID);
+        deleteDocument(json, checkDeleteAndRedirect, parentID);
     }
 
-    function redirectToParent(json, parentID) {
+    function checkDeleteAndRedirect(json, parentID) {
         if (json[0].status == "0") {
             derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.delete.error"), false);
             return false;
         }
-        if (json[0].status == "1" && parentID != undefined && parentID != "") {
+        if (json[0].status == "1") {
+            redirectToParent(parentID);
+        }
+    }
+
+    function redirectToParent(parentID) {
+        if (parentID != undefined && parentID != "") {
             window.location.href = jp.baseURL + "receive/" + parentID;
             return false;
         }
@@ -367,7 +384,6 @@ var derivateBrowserTools = (function () {
             return false;
         }
         window.location.href = jp.baseURL;
-
     }
 
     function removeFromView(json){
