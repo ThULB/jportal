@@ -247,7 +247,7 @@ var derivateBrowserUpload = (function () {
             }
         }
         else {
-            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype"), false);
+            derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype.file"), false);
         }
     }
 
@@ -615,10 +615,11 @@ var derivateBrowserUpload = (function () {
                 }
                 else {
                     if (error.status == 415) {
-                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.filetype"), false);
+                        var msg = derivateBrowserTools.getI18n("db.alert.filetype.file");
+                        derivateBrowserTools.alert(msg, false);
                         $(upload.statusbar).find(".upload-type").removeClass("hidden");
-                        $(upload.statusbar).find(".upload-type").attr("title", derivateBrowserTools.getI18n("db.alert.filetype"));
-                        $(upload.statusbar).find(".upload-preview-status").html(derivateBrowserTools.getI18n("db.alert.filetype"));
+                        $(upload.statusbar).find(".upload-type").attr("title", msg);
+                        $(upload.statusbar).find(".upload-preview-status").html(msg);
                         $(upload.statusbar).addClass("progress-bar-warning");
                         if (mode == "new") {
                             $("#lightbox-new-derivate-error").removeClass("hidden");
@@ -628,8 +629,8 @@ var derivateBrowserUpload = (function () {
                             $("#lightbox-new-derivate-done").data("docID", "");
                             $(".statusbar-progress-single-status").addClass("progress-bar-warning");
                             $(".statusbar-progress-complete-status").addClass("progress-bar-warning");
-                            $(".statusbar-progress-single-status").html(derivateBrowserTools.getI18n("db.alert.filetype"));
-                            $(".statusbar-progress-complete-status").html(derivateBrowserTools.getI18n("db.alert.filetype"));
+                            $(".statusbar-progress-single-status").html(msg);
+                            $(".statusbar-progress-complete-status").html(msg);
                         }
                         if (mode != "new") {
                             if ($("#upload-status-bar-header-error").hasClass("hidden")) {
