@@ -29,6 +29,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -228,8 +229,9 @@ public class DerivateBrowserResource {
         @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID,
         @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite,
         @FormDataParam("type") String type) {
-        List<String> fileTyps = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
-        if (fileTyps.contains(type)) {
+        type = type.toLowerCase();
+        List<String> fileTypes = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
+        if (fileTypes.contains(type)) {
             if (overwrite) {
                 MCRPath filePath = MCRPath.getPath(documentID, path + "/" + filename);
                 if (DerivateTools.delete(filePath) != 1) {
@@ -253,7 +255,9 @@ public class DerivateBrowserResource {
 
             return Response.ok(jsonObject.toString()).build();
         }
-        throw new WebApplicationException(Status.UNSUPPORTED_MEDIA_TYPE);
+        throw new WebApplicationException(
+            new MCRException("Unsupported media type " + type + ". Only one of " + fileTypes + " is allowed."),
+            Status.UNSUPPORTED_MEDIA_TYPE);
     }
 
     @POST
