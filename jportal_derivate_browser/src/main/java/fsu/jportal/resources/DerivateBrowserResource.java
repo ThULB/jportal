@@ -230,8 +230,11 @@ public class DerivateBrowserResource {
         @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite,
         @FormDataParam("type") String type) {
         type = type.toLowerCase();
-        List<String> fileTypes = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
-        if (fileTypes.contains(type)) {
+        
+        // TODO: ignore supported files types because there are some issues with windows 7 and
+        // firefox V. 49.0.1. the type is octet stream and not pdf
+        // List<String> fileTypes = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
+        // if (fileTypes.contains(type)) {
             if (overwrite) {
                 MCRPath filePath = MCRPath.getPath(documentID, path + "/" + filename);
                 if (DerivateTools.delete(filePath) != 1) {
@@ -254,10 +257,10 @@ public class DerivateBrowserResource {
             jsonObject.addProperty("md5", DerivateTools.getMD5forFile(derivateID, filePath));
 
             return Response.ok(jsonObject.toString()).build();
-        }
-        throw new WebApplicationException(
-            new MCRException("Unsupported media type " + type + ". Only one of " + fileTypes + " is allowed."),
-            Status.UNSUPPORTED_MEDIA_TYPE);
+        // }
+        // throw new WebApplicationException(
+        //    new MCRException("Unsupported media type " + type + ". Only one of " + fileTypes + " is allowed."),
+        //    Status.UNSUPPORTED_MEDIA_TYPE);
     }
 
     @POST
