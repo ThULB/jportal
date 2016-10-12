@@ -1,3 +1,26 @@
+var jp = jp || {};
+
+jp.session = {
+
+    url: jp.baseURL + "rsc/locale/language",
+    minutes: 10,
+
+    init: function() {
+      var delay = (jp.session.minutes * 60000) - 30000;
+      window.setInterval(jp.session.exec, delay);
+    },
+
+    exec: function() {
+      $.get(jp.session.url).done(function() {
+        console.log("session update");
+      }).fail(function(err) {
+        console.log(err);
+      });
+    }
+
+};
+jp.session.init();
+
 // CKEDITOR
 function introEditor(journalID) {
 	var createdElem = null;

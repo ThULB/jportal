@@ -6,7 +6,7 @@
     <others/>
   </absolute-ordering>
   <session-config>
-    <session-timeout>60</session-timeout>
+    <session-timeout>10</session-timeout>
   </session-config>
   <filter>
     <filter-name>javamelody</filter-name>
