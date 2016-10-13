@@ -2,7 +2,7 @@ var jp = jp || {};
 
 jp.session = {
 
-    url: jp.baseURL + "rsc/locale/language",
+    url: jp.baseURL + "rsc/echo/ping",
     minutes: 10,
 
     init: function() {
