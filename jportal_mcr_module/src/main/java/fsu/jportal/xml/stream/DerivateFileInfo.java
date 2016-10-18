@@ -8,32 +8,32 @@ import java.util.UUID;
  */
 public class DerivateFileInfo {
 
-    private String mimeType;
+    private String contentType;
 
-    private String href;
+    private String uri;
 
     private String fileName;
 
     private String uuid;
 
-    public DerivateFileInfo(String mimeType, String fileName, String href) {
-        this.mimeType = mimeType;
+    public DerivateFileInfo(String contentType, String fileName, String uri) {
+        this.contentType = contentType;
         this.fileName = fileName;
-        this.href = href;
+        this.uri = uri;
         this.uuid = UUID.randomUUID()
                         .toString();
     }
 
-    public String getMimeType() {
-        return mimeType;
+    public String getContentType() {
+        return contentType;
     }
 
     public String getFileName() {
         return fileName;
     }
 
-    public String getHref() {
-        return href;
+    public String getUri() {
+        return uri;
     }
 
     public String getUuid() {

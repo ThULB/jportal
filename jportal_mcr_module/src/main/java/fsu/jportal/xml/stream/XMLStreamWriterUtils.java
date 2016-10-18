@@ -1,5 +1,6 @@
 package fsu.jportal.xml.stream;
 
+import javax.xml.XMLConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.Arrays;
@@ -17,6 +18,16 @@ public class XMLStreamWriterUtils {
                 writer.writeStartDocument();
                 fragment(xml).accept(writer);
                 writer.writeEndDocument();
+            } catch (XMLStreamException e) {
+                e.printStackTrace();
+            }
+        };
+    }
+
+    public static Consumer<XMLStreamWriter> defaultNamespace(String uri) {
+        return writer -> {
+            try {
+                writer.setDefaultNamespace(uri);
             } catch (XMLStreamException e) {
                 e.printStackTrace();
             }
@@ -62,6 +73,9 @@ public class XMLStreamWriterUtils {
                 getAttributePrefixes(xml)
                         .map(nameSpaceWriter)
                         .forEach(ns -> ns.accept(writer));
+                String defaultNSUri = writer.getNamespaceContext()
+                                            .getNamespaceURI(XMLConstants.DEFAULT_NS_PREFIX);
+                writer.writeDefaultNamespace(defaultNSUri);
                 fragment(xml).accept(writer);
                 writer.writeEndElement();
             } catch (XMLStreamException e) {

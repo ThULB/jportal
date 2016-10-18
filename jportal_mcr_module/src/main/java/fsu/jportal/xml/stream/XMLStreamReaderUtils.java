@@ -28,8 +28,7 @@ public class XMLStreamReaderUtils {
             @Override
             public boolean hasNext() {
                 try {
-                    boolean test = limit.test(reader);
-                    return reader.hasNext() && !test;
+                    return reader.hasNext() && !limit.test(reader);
                 } catch (XMLStreamException e) {
                     e.printStackTrace();
                 }

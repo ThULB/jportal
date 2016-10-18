@@ -45,8 +45,8 @@ public class DFGOAIMetXMLCreator {
         );
     }
 
-    public static Consumer<XMLStreamWriter> oaiRecord(String oaiIdentifier,
-                                                      String rootID,
+    public static Consumer<XMLStreamWriter> oaiRecord(String rootID,
+                                                      String oaiIdentifier,
                                                       Function<String, Optional<XMLStreamReader>> objSupplier,
                                                       Function<String, Stream<DerivateFileInfo>> derivateSupplier) {
 
@@ -69,6 +69,7 @@ public class DFGOAIMetXMLCreator {
                 .collect(toList());
 
         return document(
+                defaultNamespace("http://www.openarchives.org/OAI/2.0/"),
                 namespace("mets", "http://www.loc.gov/METS/"),
                 namespace("mods", "http://www.loc.gov/mods/v3"),
                 namespace("xlink", "http://www.w3.org/1999/xlink"),
@@ -87,18 +88,20 @@ public class DFGOAIMetXMLCreator {
 
                                 rootObj.element(servdate)
                                        .flatMap(ElementData::getText)
-                                       .map(t -> t.substring(0,9))
+                                       .map(t -> t.substring(0, 9))
                                        .map(date -> element("datestamp", text(date)))
                                        .reduce(Consumer::andThen)
                                        .orElse(noDatestamp -> {})
                         ),
                         element("metadata",
-                                dmdSecXMLFragment(rootObjectWithChildren, objSupplier),
-                                amdSecXMLFragment(rootObjectWithChildren),
-                                fileSecXMLFragment(fileInfos),
-                                structMapPhysXMLFragment(rootObj, fileInfos),
-                                structMapLogXMLFragment(rootObjectWithChildren),
-                                structLinkXMLFragment(rootObjectWithChildren, fileInfos)
+                                element("mets", "mets",
+                                        dmdSecXMLFragment(rootObjectWithChildren, objSupplier),
+                                        amdSecXMLFragment(rootObjectWithChildren),
+                                        fileSecXMLFragment(fileInfos),
+                                        structMapPhysXMLFragment(rootObj, fileInfos),
+                                        structMapLogXMLFragment(rootObjectWithChildren),
+                                        structLinkXMLFragment(rootObjectWithChildren, fileInfos)
+                                )
                         )
                 )
         );
@@ -120,10 +123,10 @@ public class DFGOAIMetXMLCreator {
                         .map(fileInfo ->
                                 element("mets", "file",
                                         attr("ID", "DEFAULT_" + fileInfo.getUuid()),
-                                        attr("MIMETYPE", fileInfo.getMimeType()),
+                                        attr("MIMETYPE", fileInfo.getContentType()),
                                         element("mets", "FLocat",
                                                 attr("LOCTYPE", "URL"),
-                                                attr("xlink", "href", fileInfo.getHref())
+                                                attr("xlink", "href", fileInfo.getUri())
                                         )
                                 )
                         ).reduce(Consumer::andThen)
