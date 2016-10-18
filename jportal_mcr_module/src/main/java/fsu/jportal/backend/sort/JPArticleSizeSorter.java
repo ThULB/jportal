@@ -112,6 +112,8 @@ public class JPArticleSizeSorter implements JPSorter {
     private Integer compareRomanNumerals(String size1, String size2) {
         RomanNumeral roman1;
         RomanNumeral roman2;
+        size1 = size1.replaceAll("[^IVXLCDM]", "");
+        size2 = size2.replaceAll("[^IVXLCDM]", "");
         try {
             roman1 = new RomanNumeral(size1);
         } catch (NumberFormatException nfe) {
