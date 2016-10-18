@@ -166,7 +166,8 @@
     <xsl:if test="contains(@ID,'_jpjournal_')">
       <mods:extension>
         <jportal>
-          <xsl:for-each select="./metadata/*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]/*">
+          <!-- vol content classis -->
+          <xsl:for-each select="./metadata/*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis') or name() = 'journalTypes']/*">
             <xsl:element name="{name(.)}">
               <xsl:attribute name="classid">
                 <xsl:value-of select="@classid" />
@@ -176,6 +177,7 @@
               </xsl:attribute>
             </xsl:element>
           </xsl:for-each>
+          <!-- hidden gen fields -->
           <xsl:for-each select="./metadata/*[contains(name(), 'hidden_genhiddenfields')]/*">
             <xsl:element name="{name(.)}">
               <xsl:value-of select="text()" />
