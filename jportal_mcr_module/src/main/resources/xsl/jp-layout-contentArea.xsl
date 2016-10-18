@@ -129,11 +129,13 @@
           </div>
         </div>
       </xsl:if>
-      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-upload.js" />
-      <script type="text/javascript" src="{$WebApplicationBaseURL}rsc/derivatebrowser/gui/js/derivatebrowser-tools.js" />
-      <script type="text/javascript" src="{$WebApplicationBaseURL}rsc/derivatebrowser/gui/js/derivatebrowser-upload.js" />
-      <script type="text/javascript" src="{$WebApplicationBaseURL}rsc/derivatebrowser/gui/js/derivatebrowser-uploadEntry.js" />
-      <div class="modal fade" id="lightbox-upload" role="dialog" aria-labelledby="lightbox-new-derivate-label" aria-hidden="true" data-backdrop="static" data-docid="{@ID}" />
+      <xsl:if test="$updatePerm = 'true'">
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-upload.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}rsc/derivatebrowser/gui/js/derivatebrowser-tools.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}rsc/derivatebrowser/gui/js/derivatebrowser-upload.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}rsc/derivatebrowser/gui/js/derivatebrowser-uploadEntry.js" />
+        <div class="modal fade" id="lightbox-upload" role="dialog" aria-labelledby="lightbox-new-derivate-label" aria-hidden="true" data-backdrop="static" data-docid="{@ID}" />
+      </xsl:if>
     </div>
   </xsl:template>
 
