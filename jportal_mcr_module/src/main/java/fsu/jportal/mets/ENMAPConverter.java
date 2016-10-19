@@ -521,11 +521,14 @@ public abstract class ENMAPConverter {
 
         protected Rectangle getRectangleForArea(Element area) {
             String COORDS = area.getAttributeValue("COORDS");
-            String[] areaCoordinates = COORDS.split(" ");
-            int areaX1 = Integer.valueOf(areaCoordinates[0]);
-            int areaY1 = Integer.valueOf(areaCoordinates[1]);
-            int areaX2 = Integer.valueOf(areaCoordinates[2]);
-            int areaY2 = Integer.valueOf(areaCoordinates[3]);
+            String[] areaCoordinates = COORDS.split(",");
+            if(areaCoordinates.length != 4) {
+                areaCoordinates = COORDS.split(" ");
+            }
+            int areaX1 = Integer.valueOf(areaCoordinates[0].trim());
+            int areaY1 = Integer.valueOf(areaCoordinates[1].trim());
+            int areaX2 = Integer.valueOf(areaCoordinates[2].trim());
+            int areaY2 = Integer.valueOf(areaCoordinates[3].trim());
             return new Rectangle().setBounds(areaX1, areaY1, areaX2, areaY2);
         }
 
