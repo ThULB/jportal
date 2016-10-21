@@ -47,7 +47,7 @@ public class DFGOAIMetsResolver implements URIResolver {
     }
 
     private static Source dfgMetsXSL(String href) {
-        String uriTmp = "xslStyle:jp2mets-dfg?identifier=OAIRepositoryIdentifier:mcrobject:";
+        String uriTmp = "xslStyle:jp2mets-dfg?identifier=" + MCRBackend.oaiId() + ":mcrobject:";
         return Optional.of(href)
                        .filter(uri -> uri.startsWith("dfgOai:"))
                        .map(uri -> uri.split(":")[1])
