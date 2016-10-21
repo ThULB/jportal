@@ -213,19 +213,17 @@ public class DFGOAIMetXMLCreator {
         }
 
         public Stream<UUIDMcrObj> stream() {
-            return uuidToMcrObjIDMap.entrySet()
-                                    .stream()
-                                    .map(entry -> new UUIDMcrObj() {
-                                        @Override
-                                        public String getUUID() {
-                                            return entry.getKey();
-                                        }
+            return uuidToMcrObjIDMap.entrySet().stream().<UUIDMcrObj> map(entry -> new UUIDMcrObj() {
+                @Override
+                public String getUUID() {
+                    return entry.getKey();
+                }
 
-                                        @Override
-                                        public String getObjID() {
-                                            return entry.getValue();
-                                        }
-                                    });
+                @Override
+                public String getObjID() {
+                    return entry.getValue();
+                }
+            });
         }
     }
 
