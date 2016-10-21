@@ -7,14 +7,8 @@ import fsu.jportal.xml.stream.ParserUtils;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -194,37 +188,90 @@ public class DFGOAIMetXMLCreator {
                           .orElse(noChildElements -> {});
     }
 
+    private interface UUIDMcrObj {
+        String getUUID();
+
+        String getObjID();
+    }
+
+    private static class UUIDToMcrObjIDMapper {
+        private Map<String, String> uuidToMcrObjIDMap;
+        private String currentMCRObjID;
+
+        public UUIDToMcrObjIDMapper(String currentMCRObjID) {
+            this.currentMCRObjID = currentMCRObjID;
+            uuidToMcrObjIDMap = new LinkedHashMap<>();
+        }
+
+        public String getCurrentMCRObjID() {
+            return currentMCRObjID;
+        }
+
+        public void add(String uuid, String objID) {
+            currentMCRObjID = objID;
+            uuidToMcrObjIDMap.put(uuid, objID);
+        }
+
+        public Stream<UUIDMcrObj> stream() {
+            return uuidToMcrObjIDMap.entrySet()
+                                    .stream()
+                                    .map(entry -> new UUIDMcrObj() {
+                                        @Override
+                                        public String getUUID() {
+                                            return entry.getKey();
+                                        }
+
+                                        @Override
+                                        public String getObjID() {
+                                            return entry.getValue();
+                                        }
+                                    });
+        }
+    }
+
     public static Consumer<XMLStreamWriter> structLinkXMLFragment(List<ParsedMCRObj> rootObjectWithChildren,
                                                                   List<DerivateFileInfo> fileInfos) {
-        Function<String, Stream<String>> linkToUUID = linkID -> fileInfos
-                .stream()
-                .filter(fileInfo -> linkID.contains(fileInfo.getFileName()))
-                .map(DerivateFileInfo::getUuid);
-
-        Function<ParsedMCRObj, Stream<Consumer<XMLStreamWriter>>> createSmLinkXML = obj -> obj
+        Function<String, Predicate<ParsedMCRObj>> objHasLinkToFile = fileName -> obj -> obj
                 .element(derivateLink)
                 .flatMap(o -> o.getAttr("xlink", "href"))
-                .flatMap(linkToUUID)
-                .map(uuid ->
-                        element("mets", "smLink",
-                                attr("xlink", "from", obj.getID()),
-                                attr("xlink", "to", "phys_master_" + uuid)
-                        )
-                );
-
-        Predicate<ParsedMCRObj> hasDerivateLink = obj -> obj
-                .element(derivateLink)
-                .flatMap(o -> o.getAttr("xlink", "href"))
-                .findAny()
+                .filter(link -> link.contains(fileName))
+                .findFirst()
                 .isPresent();
 
-        return rootObjectWithChildren.stream()
-                                     .filter(hasDerivateLink)
-                                     .flatMap(createSmLinkXML)
-                                     .reduce(Consumer::andThen)
-                                     .map(smLinks -> element("mets", "structLink",
-                                             smLinks
-                                     ))
-                                     .orElse(noStructLink -> {});
+
+        BiFunction<DerivateFileInfo, String, String> findObjID = (fileInfo, currentID) -> rootObjectWithChildren
+                .stream()
+                .filter(objHasLinkToFile.apply(fileInfo.getFileName()))
+                .map(ParsedMCRObj::getID)
+                .findFirst()
+                .orElse(currentID);
+
+        Supplier<UUIDToMcrObjIDMapper> sup = () -> rootObjectWithChildren
+                .stream()
+                .map(ParsedMCRObj::getID)
+                .map(UUIDToMcrObjIDMapper::new)
+                .findFirst()
+                .orElseGet(() -> new UUIDToMcrObjIDMapper("noRoot"));
+
+        BiConsumer<UUIDToMcrObjIDMapper, DerivateFileInfo> accu = (mapper, fileInfo) -> {
+            String objID = findObjID.apply(fileInfo, mapper.getCurrentMCRObjID());
+            mapper.add(fileInfo.getUuid(), objID);
+        };
+        BiConsumer<UUIDToMcrObjIDMapper, UUIDToMcrObjIDMapper> comb = (m1, m2) -> {};
+
+        return fileInfos.stream()
+                        .collect(sup, accu, comb)
+                        .stream()
+                        .map(mapper ->
+                                element("mets", "smLink",
+                                        attr("xlink", "from", mapper.getObjID()),
+                                        attr("xlink", "to", "phys_master_" + mapper.getUUID())
+                                )
+                        )
+                        .reduce(Consumer::andThen)
+                        .map(smLinks -> element("mets", "structLink",
+                                smLinks
+                        ))
+                        .orElse(noStructLink -> {});
     }
 }
