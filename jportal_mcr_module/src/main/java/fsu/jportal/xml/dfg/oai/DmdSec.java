@@ -1,24 +1,18 @@
 package fsu.jportal.xml.dfg.oai;
 
+import fsu.jportal.xml.JPMCRObjXMLElementName;
 import fsu.jportal.xml.stream.ParsedMCRObj;
 import fsu.jportal.xml.stream.ParsedXML.ElementData;
 import fsu.jportal.xml.stream.ParserUtils;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static fsu.jportal.xml.JPMCRObjXMLElementName.identi;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.participant;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.*;
 import static fsu.jportal.xml.stream.XMLStreamReaderUtils.*;
 import static fsu.jportal.xml.stream.XMLStreamWriterUtils.*;
 
@@ -34,6 +28,8 @@ public class DmdSec {
                                 element("mets", "xmlData",
                                         element("mods", "mods",
                                                 dmdSecModsIdentifier(obj),
+                                                dmdSecModsTileInfo(obj),
+                                                dmdSecModsOriginInfo(obj),
                                                 dmdSecModsName(obj, objSupplier)
                                         )
                                 )
@@ -45,6 +41,78 @@ public class DmdSec {
                 .map(dmdSecXML)
                 .reduce(Consumer::andThen)
                 .orElse(noDmdSec -> {});
+    }
+
+    private static Consumer<XMLStreamWriter> dmdSecModsOriginInfo(ParsedMCRObj obj) {
+        String inheritedZero = "inheritedZero";
+        String others = "others";
+
+        Function<ElementData, String> inheritedValue = elementData -> Optional
+                .of(elementData)
+                .map(e -> e.getAttr("inherited"))
+                .orElseGet(Stream::empty)
+                .filter("0"::equals)
+                .findFirst()
+                .map(s -> inheritedZero)
+                .orElse(others);
+
+        Map<String, List<ElementData>> dateMap = obj
+                .element(date)
+                .collect(Collectors.groupingBy(inheritedValue));
+
+        UnaryOperator<String> typeMapper = type -> Stream
+                .of("published_from:start", "published_until:end")
+                .filter(s -> s.startsWith(type))
+                .map(s -> s.split(":")[1])
+                .findFirst()
+                .orElse("notSupportedType");
+
+        Function<ElementData, Consumer<XMLStreamWriter>> modsDateIssued = elementData ->
+                element("mods", "dateIssued",
+                        elementData.getAttr("type")
+                                   .map(type -> attr("point", typeMapper.apply(type)))
+                                   .findFirst()
+                                   .orElse(noTypeAttribute -> {}),
+
+                        text(elementData.getText().findFirst().orElse("noDate"))
+                );
+
+        Consumer<XMLStreamWriter> dateInheritedZeroXML = dateMap
+                .getOrDefault(inheritedZero, Collections.emptyList())
+                .stream()
+                .map(modsDateIssued)
+                .reduce(Consumer::andThen)
+                .orElse(noInheritedZero -> {});
+
+        Consumer<XMLStreamWriter> dateInheritedNotEqualsZeroXML = dateMap
+                .getOrDefault(others, Collections.emptyList())
+                .stream()
+                .map(e ->
+                        element("mods", "dateIssued",
+                                text("OthersFoo")
+                        )
+                )
+                .findFirst()
+                .orElse(noInheritedNotEqualsZero -> {});
+
+        return dateInheritedZeroXML.andThen(dateInheritedNotEqualsZeroXML);
+    }
+
+    private static Consumer<XMLStreamWriter> dmdSecModsTileInfo(ParsedMCRObj obj) {
+        BiFunction<JPMCRObjXMLElementName, String, Consumer<XMLStreamWriter>> tileInfoXML = (elementName, type) -> obj
+                .element(elementName)
+                .flatMap(ElementData::getText)
+                .map(title ->
+                        element("mods", "titleInfo",
+                                attr("type", type),
+                                element("mods", "title", text(title))
+                        )
+                )
+                .reduce(Consumer::andThen)
+                .orElse(noMainTitle -> {});
+
+        return tileInfoXML.apply(maintitle, "uniform")
+                          .andThen(tileInfoXML.apply(subtitle, "alternative"));
     }
 
     public static Consumer<XMLStreamWriter> dmdSecModsIdentifier(ParsedMCRObj obj) {

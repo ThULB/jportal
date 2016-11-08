@@ -29,6 +29,9 @@ public class DFGOAIMetXMLCreator {
                 matchElement(mycoreobject).getAttr("ID"),
                 matchElement(child).getAttr("xlink", "href"),
                 matchElement(derobject).getAttr("xlink", "href"),
+                matchElement(maintitle, isInherited("0")).getText(),
+                matchElement(subtitle, isInherited("0")).getText(),
+                matchElement(date).getAttr("type").getText(),
                 matchElement(participant).getAttr("xlink", "href")
                                          .getAttr("type"),
                 matchElement(derivateLink).getAttr("xlink", "href"),
