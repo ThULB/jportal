@@ -21,7 +21,8 @@ import static fsu.jportal.xml.stream.XMLStreamWriterUtils.*;
  */
 public class DmdSec {
     public static Consumer<XMLStreamWriter> dmdSecXMLFragment(List<ParsedMCRObj> rootObjectWithChildren,
-                                                              Function<String, Optional<XMLStreamReader>> objSupplier) {
+                                                              Function<String, Optional<XMLStreamReader>> objSupplier,
+                                                              UnaryOperator<String> getPublishedISODate) {
         Function<ParsedMCRObj, Consumer<XMLStreamWriter>> dmdSecXML = obj ->
                 element("mets", "dmdSec", attr("ID", "dmd_" + obj.getID()),
                         element("mets", "mdWrap", attr("MDTYPE", "MODS"),
@@ -29,7 +30,11 @@ public class DmdSec {
                                         element("mods", "mods",
                                                 dmdSecModsIdentifier(obj),
                                                 dmdSecModsTileInfo(obj),
-                                                dmdSecModsOriginInfo(obj),
+                                                dmdSecModsOriginInfo(obj, getPublishedISODate),
+                                                dmdSecModsNote(obj),
+                                                dmdSecModsLanguage(obj),
+                                                dmdSecModsPart(obj),
+                                                dmdSecModsSubject(obj),
                                                 dmdSecModsName(obj, objSupplier)
                                         )
                                 )
@@ -43,7 +48,45 @@ public class DmdSec {
                 .orElse(noDmdSec -> {});
     }
 
-    private static Consumer<XMLStreamWriter> dmdSecModsOriginInfo(ParsedMCRObj obj) {
+    private static Consumer<XMLStreamWriter> dmdSecModsSubject(ParsedMCRObj obj) {
+        return null;
+    }
+
+    private static Consumer<XMLStreamWriter> dmdSecModsPart(ParsedMCRObj obj) {
+        return obj.element(size)
+                  .flatMap(ElementData::getText)
+                  .map(size ->
+                               element("mods", "part",
+                                       element("mods", "detail", attr("type", "pages"),
+                                               element("mods", "number", text(size))
+                                       )
+                               ))
+                  .reduce(Consumer::andThen)
+                  .orElse(noSize -> {});
+    }
+
+    private static Consumer<XMLStreamWriter> dmdSecModsLanguage(ParsedMCRObj obj) {
+        return obj.element(language)
+                  .flatMap(e -> e.getAttr("categid"))
+                  .map(categid ->
+                               element("mods", "languageTerm",
+                                       attr("authority", "rfc3066"),
+                                       text(categid)
+                               ))
+                  .reduce(Consumer::andThen)
+                  .map(langualeTerms -> element("mods", "language", langualeTerms))
+                  .orElse(noLanguage -> {});
+    }
+
+    private static Consumer<XMLStreamWriter> dmdSecModsNote(ParsedMCRObj obj) {
+        return obj.element(note)
+                  .flatMap(ElementData::getText)
+                  .map(text -> element("mods", "note", text(text)))
+                  .reduce(Consumer::andThen)
+                  .orElse(noNotes -> {});
+    }
+
+    private static Consumer<XMLStreamWriter> dmdSecModsOriginInfo(ParsedMCRObj obj, UnaryOperator<String> getPublishedISODate) {
         String inheritedZero = "inheritedZero";
         String others = "others";
 
@@ -88,9 +131,9 @@ public class DmdSec {
                 .getOrDefault(others, Collections.emptyList())
                 .stream()
                 .map(e ->
-                        element("mods", "dateIssued",
-                                text("OthersFoo")
-                        )
+                             element("mods", "dateIssued",
+                                     text(getPublishedISODate.apply(obj.getID()))
+                             )
                 )
                 .findFirst()
                 .orElse(noInheritedNotEqualsZero -> {});
@@ -103,10 +146,10 @@ public class DmdSec {
                 .element(elementName)
                 .flatMap(ElementData::getText)
                 .map(title ->
-                        element("mods", "titleInfo",
-                                attr("type", type),
-                                element("mods", "title", text(title))
-                        )
+                             element("mods", "titleInfo",
+                                     attr("type", type),
+                                     element("mods", "title", text(title))
+                             )
                 )
                 .reduce(Consumer::andThen)
                 .orElse(noMainTitle -> {});
@@ -127,8 +170,8 @@ public class DmdSec {
                                             .orElse("mcrid");
 
         return element("mods", "identifier",
-                attr("type", objID.get()),
-                text(objType.get())
+                       attr("type", objID.get()),
+                       text(objType.get())
         );
     }
 
@@ -151,8 +194,8 @@ public class DmdSec {
                 .from(objSupplier)
                 .parseDataUsing(parse(
                         matchElement("identifier",
-                                isInherited("0"),
-                                hasType("gnd").or(hasType("pnd")).or(hasType("ppn"))
+                                     isInherited("0"),
+                                     hasType("gnd").or(hasType("pnd")).or(hasType("ppn"))
                         ).getAttr("type")
                          .getText(),
                         matchElement("heading", isInherited("0")).and(
@@ -165,16 +208,16 @@ public class DmdSec {
                 ));
 
         return element("mods", "name",
-                attr("type", Optional.of(participantID)
-                                     .filter(id -> id.contains("_jpinst_"))
-                                     .map(id -> "corporate")
-                                     .orElse("personal")),
+                       attr("type", Optional.of(participantID)
+                                            .filter(id -> id.contains("_jpinst_"))
+                                            .map(id -> "corporate")
+                                            .orElse("personal")),
 
-                authorityAttr(participantMcrObj),
-                modsRole(participantData),
-                modsNamePart(participantMcrObj),
-                modsNamePartDate(participantMcrObj),
-                modsdisplayForm(participantMcrObj)
+                       authorityAttr(participantMcrObj),
+                       modsRole(participantData),
+                       modsNamePart(participantMcrObj),
+                       modsNamePartDate(participantMcrObj),
+                       modsdisplayForm(participantMcrObj)
 
         );
     }
@@ -211,9 +254,9 @@ public class DmdSec {
                 .element("heading/" + nameType)
                 .flatMap(ElementData::getText)
                 .map(text ->
-                        element("mods", "namePart", attr("type", nameTypeMapping.apply(nameType)),
-                                text(text)
-                        )
+                             element("mods", "namePart", attr("type", nameTypeMapping.apply(nameType)),
+                                     text(text)
+                             )
                 );
 
         return Stream.of("lastName", "firstName")
@@ -223,7 +266,7 @@ public class DmdSec {
 
     }
 
-    public static Consumer<XMLStreamWriter> authorityAttr(ParsedMCRObj participant) {
+    private static Consumer<XMLStreamWriter> authorityAttr(ParsedMCRObj participant) {
         String authorityURI = "http://d-nb.info/gnd/";
         String ppnAuthorityURI = "https://kataloge.thulb.uni-jena.de/";
 
@@ -231,24 +274,29 @@ public class DmdSec {
                           .sorted(Comparator.comparing(e -> e.getAttr("type").findFirst().orElse("noType")))
                           .findFirst()
                           .map(e ->
-                                  fragment(
-                                          attr("authority", e.getAttr("type").findFirst()
-                                                             .filter(t -> !t.equals("ppn"))
-                                                             .orElse("gvk-ppn")),
+                                       fragment(
+                                               attr("authority", e.getAttr("type")
+                                                                  .filter(t -> !t.equals("ppn"))
+                                                                  .findFirst()
+                                                                  .orElse("gvk-ppn")),
 
-                                          attr("authorityURI", e.getAttr("type").findFirst()
-                                                                .filter(t -> !t.equals("ppn"))
-                                                                .map(t -> authorityURI)
-                                                                .orElse(ppnAuthorityURI)),
+                                               attr("authorityURI", e.getAttr("type")
+                                                                     .filter(t -> !t.equals("ppn"))
+                                                                     .findFirst()
+                                                                     .map(t -> authorityURI)
+                                                                     .orElse(ppnAuthorityURI)),
 
-                                          attr("valueURI", e.getAttr("type").findFirst()
-                                                            .filter(t -> !t.equals("ppn"))
-                                                            .map(t -> authorityURI + e.getText().findFirst().orElse("noText"))
-                                                            .orElse(ppnAuthorityURI + "PPN?PPN=" + e.getText().findFirst().orElse("noText"))
+                                               attr("valueURI", e.getAttr("type")
+                                                                 .filter(t -> !t.equals("ppn"))
+                                                                 .findFirst()
+                                                                 .map(t -> authorityURI + e.getText().findFirst()
+                                                                                           .orElse("noText"))
+                                                                 .orElse(ppnAuthorityURI + "PPN?PPN=" + e.getText()
+                                                                                                         .findFirst()
+                                                                                                         .orElse("noText"))
 
-                                          )
-                                  )
-
+                                               )
+                                       )
 
                           )
                           .orElse(noIdentifier -> {});
@@ -282,11 +330,11 @@ public class DmdSec {
         return participantData.getAttr("type")
                               .findFirst()
                               .map(type ->
-                                      element("mods", "role",
-                                              element("mods", "roleTerm",
-                                                      text(roleMapping.apply(type))
-                                              )
-                                      )
+                                           element("mods", "role",
+                                                   element("mods", "roleTerm",
+                                                           text(roleMapping.apply(type))
+                                                   )
+                                           )
                               ).orElse(noModsRole -> {});
     }
 

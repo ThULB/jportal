@@ -32,6 +32,10 @@ public class DFGOAIMetXMLCreator {
                 matchElement(maintitle, isInherited("0")).getText(),
                 matchElement(subtitle, isInherited("0")).getText(),
                 matchElement(date).getAttr("type").getText(),
+                matchElement(note, hasType("annotation"), isInherited("0")).getText(),
+                matchElement(language, isInherited("0")).getAttr("categid"),
+                matchElement(size).getText(),
+                matchElement(keyword).getText(),
                 matchElement(participant).getAttr("xlink", "href")
                                          .getAttr("type"),
                 matchElement(derivateLink).getAttr("xlink", "href"),
@@ -45,7 +49,8 @@ public class DFGOAIMetXMLCreator {
     public static Consumer<XMLStreamWriter> oaiRecord(String rootID,
                                                       String oaiIdentifier,
                                                       Function<String, Optional<XMLStreamReader>> objSupplier,
-                                                      Function<String, Stream<DerivateFileInfo>> derivateSupplier) {
+                                                      Function<String, Stream<DerivateFileInfo>> derivateSupplier,
+                                                      UnaryOperator<String> getPublishedISODate) {
 
         ParsedMCRObj rootObj = ParserUtils
                 .getXMLForObj(rootID)
@@ -92,7 +97,7 @@ public class DFGOAIMetXMLCreator {
                         ),
                         element("metadata",
                                 element("mets", "mets",
-                                        dmdSecXMLFragment(rootObjectWithChildren, objSupplier),
+                                        dmdSecXMLFragment(rootObjectWithChildren, objSupplier, getPublishedISODate),
                                         amdSecXMLFragment(rootObjectWithChildren),
                                         fileSecXMLFragment(fileInfos),
                                         structMapPhysXMLFragment(rootObj, fileInfos),

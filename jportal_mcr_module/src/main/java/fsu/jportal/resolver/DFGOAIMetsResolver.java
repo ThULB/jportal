@@ -1,5 +1,6 @@
 package fsu.jportal.resolver;
 
+import fsu.jportal.xml.JPXMLFunctions;
 import fsu.jportal.xml.dfg.oai.DFGOAIMetXMLCreator;
 import fsu.jportal.xml.stream.DerivateFileInfo;
 import org.mycore.common.config.MCRConfiguration;
@@ -71,7 +72,12 @@ public class DFGOAIMetsResolver implements URIResolver {
         return Optional.ofNullable(href)
                        .filter(uri -> uri.startsWith("dfgOai:"))
                        .map(uri -> uri.split(":")[1])
-                       .map(mcrObjID -> DFGOAIMetXMLCreator.oaiRecord(mcrObjID, MCRBackend.oaiId(), MCRBackend::mcrXMLMetadataManager, MCRBackend::ifs))
+                       .map(mcrObjID -> DFGOAIMetXMLCreator
+                               .oaiRecord(mcrObjID,
+                                          MCRBackend.oaiId(),
+                                          MCRBackend::mcrXMLMetadataManager,
+                                          MCRBackend::ifs,
+                                          MCRBackend::getPublishedISODate))
                        .flatMap(DFGOAIMetsResolver::toSource)
                        .orElse(null);
     }
@@ -119,6 +125,9 @@ public class DFGOAIMetsResolver implements URIResolver {
             return Optional.empty();
         }
 
+        public static String getPublishedISODate(String id) {
+            return JPXMLFunctions.getPublishedISODate(id);
+        }
     }
 
     private static class DerivateUtils {
