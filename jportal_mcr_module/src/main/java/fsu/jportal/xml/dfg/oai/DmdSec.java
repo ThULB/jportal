@@ -49,7 +49,12 @@ public class DmdSec {
     }
 
     private static Consumer<XMLStreamWriter> dmdSecModsSubject(ParsedMCRObj obj) {
-        return null;
+        return obj.element(keyword)
+                  .flatMap(ElementData::getText)
+                  .map(txt -> element("mods", "topic", text(txt)))
+                  .reduce(Consumer::andThen)
+                  .map(topic -> element("mods", "subject", topic))
+                  .orElse(noLanguage -> {});
     }
 
     private static Consumer<XMLStreamWriter> dmdSecModsPart(ParsedMCRObj obj) {
@@ -86,7 +91,8 @@ public class DmdSec {
                   .orElse(noNotes -> {});
     }
 
-    private static Consumer<XMLStreamWriter> dmdSecModsOriginInfo(ParsedMCRObj obj, UnaryOperator<String> getPublishedISODate) {
+    private static Consumer<XMLStreamWriter> dmdSecModsOriginInfo(ParsedMCRObj obj,
+                                                                  UnaryOperator<String> getPublishedISODate) {
         String inheritedZero = "inheritedZero";
         String others = "others";
 
