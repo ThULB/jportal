@@ -36,6 +36,8 @@ public class DFGOAIMetXMLCreator {
                 matchElement(language, isInherited("0")).getAttr("categid"),
                 matchElement(size).getText(),
                 matchElement(keyword).getText(),
+                matchElement(journalType, at("classid").hasValue("jportal_class_00000200"))
+                        .getAttr("categid"),
                 matchElement(participant).getAttr("xlink", "href")
                                          .getAttr("type"),
                 matchElement(derivateLink).getAttr("xlink", "href"),
@@ -193,6 +195,9 @@ public class DFGOAIMetXMLCreator {
                                           structMapLogXMLFragment(id, childrenMap)
                                   ))
                           .reduce(Consumer::andThen)
+                          .map(children -> element("mets", "structMap", attr("TYPE", "LOGICAL"),
+                                                   children
+                          ))
                           .orElse(noChildElements -> {});
     }
 
