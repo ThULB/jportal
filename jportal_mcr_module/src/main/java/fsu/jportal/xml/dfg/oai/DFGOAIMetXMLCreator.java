@@ -1,6 +1,5 @@
 package fsu.jportal.xml.dfg.oai;
 
-
 import fsu.jportal.xml.stream.DerivateFileInfo;
 import fsu.jportal.xml.stream.ParsedMCRObj;
 import fsu.jportal.xml.stream.ParserUtils;
@@ -122,48 +121,48 @@ public class DFGOAIMetXMLCreator {
 
     public static Consumer<XMLStreamWriter> fileSecXMLFragment(List<DerivateFileInfo> fileInfos) {
         return element("mets", "fileSec",
-                element("mets", "fileGrp", attr("USE", "DEFAULT"), fileInfos
-                        .stream()
-                        .map(fileInfo ->
-                                element("mets", "file",
-                                        attr("ID", "DEFAULT_" + fileInfo.getUuid()),
-                                        attr("MIMETYPE", fileInfo.getContentType()),
-                                        element("mets", "FLocat",
-                                                attr("LOCTYPE", "URL"),
-                                                attr("xlink", "href", fileInfo.getUri())
-                                        )
-                                )
-                        ).reduce(Consumer::andThen)
-                        .orElse(noFiles -> {})
-                )
+                       element("mets", "fileGrp", attr("USE", "DEFAULT"), fileInfos
+                               .stream()
+                               .map(fileInfo ->
+                                            element("mets", "file",
+                                                    attr("ID", "DEFAULT_" + fileInfo.getUuid()),
+                                                    attr("MIMETYPE", fileInfo.getContentType()),
+                                                    element("mets", "FLocat",
+                                                            attr("LOCTYPE", "URL"),
+                                                            attr("xlink", "href", fileInfo.getUri())
+                                                    )
+                                            )
+                               ).reduce(Consumer::andThen)
+                               .orElse(noFiles -> {})
+                       )
         );
     }
 
     public static Consumer<XMLStreamWriter> structMapPhysXMLFragment(ParsedMCRObj rootObj,
                                                                      List<DerivateFileInfo> fileInfos) {
         return element("mets", "structMap", attr("TYPE", "PHYSICAL"),
-                element("mets", "div",
-                        attr("ID", rootObj.element(derobject)
-                                          .flatMap(o -> o.getAttr("xlink", "href"))
-                                          .map("phys_jportal_derivate_"::concat)
-                                          .findFirst().orElse("noDerivateID")),
+                       element("mets", "div",
+                               attr("ID", rootObj.element(derobject)
+                                                 .flatMap(o -> o.getAttr("xlink", "href"))
+                                                 .map("phys_jportal_derivate_"::concat)
+                                                 .findFirst().orElse("noDerivateID")),
 
-                        attr("TYPE", "physSequence"),
+                               attr("TYPE", "physSequence"),
 
-                        fileInfos.stream()
-                                 .map(fileInfo ->
-                                         element("mets", "div",
-                                                 attr("ID", "phys_master_" + fileInfo.getUuid()),
-                                                 attr("TYPE", "page"),
-                                                 element("mets", "fptr",
-                                                         attr("FILEID", "DEFAULT_" + fileInfo.getUuid())
-                                                 )
-                                         )
+                               fileInfos.stream()
+                                        .map(fileInfo ->
+                                                     element("mets", "div",
+                                                             attr("ID", "phys_master_" + fileInfo.getUuid()),
+                                                             attr("TYPE", "page"),
+                                                             element("mets", "fptr",
+                                                                     attr("FILEID", "DEFAULT_" + fileInfo.getUuid())
+                                                             )
+                                                     )
 
-                                 ).reduce(Consumer::andThen)
-                                 .orElse(noFiles -> {})
+                                        ).reduce(Consumer::andThen)
+                                        .orElse(noFiles -> {})
 
-                )
+                       )
         );
     }
 
@@ -172,7 +171,9 @@ public class DFGOAIMetXMLCreator {
                 .stream()
                 .collect(groupingBy(ParsedMCRObj::getParentID));
 
-        return structMapLogXMLFragment("root", childrenMap);
+        return element("mets", "structMap", attr("TYPE", "LOGICAL"),
+                       structMapLogXMLFragment("root", childrenMap)
+        );
     }
 
     private static Consumer<XMLStreamWriter> structMapLogXMLFragment(String parentID,
@@ -187,17 +188,14 @@ public class DFGOAIMetXMLCreator {
                           .stream()
                           .map(ParsedMCRObj::getID)
                           .map(id ->
-                                  element("mets", "div",
-                                          attr("DMDID", "dmd_" + id),
-                                          attr("ADMID", "amd_" + id),
-                                          attr("ID", id),
-                                          attr("Type", getType.apply(id)),
-                                          structMapLogXMLFragment(id, childrenMap)
-                                  ))
+                                       element("mets", "div",
+                                               attr("DMDID", "dmd_" + id),
+                                               attr("ADMID", "amd_" + id),
+                                               attr("ID", id),
+                                               attr("Type", getType.apply(id)),
+                                               structMapLogXMLFragment(id, childrenMap)
+                                       ))
                           .reduce(Consumer::andThen)
-                          .map(children -> element("mets", "structMap", attr("TYPE", "LOGICAL"),
-                                                   children
-                          ))
                           .orElse(noChildElements -> {});
     }
 
@@ -209,6 +207,7 @@ public class DFGOAIMetXMLCreator {
 
     private static class UUIDToMcrObjIDMapper {
         private Map<String, String> uuidToMcrObjIDMap;
+
         private String currentMCRObjID;
 
         public UUIDToMcrObjIDMapper(String currentMCRObjID) {
@@ -226,7 +225,7 @@ public class DFGOAIMetXMLCreator {
         }
 
         public Stream<UUIDMcrObj> stream() {
-            return uuidToMcrObjIDMap.entrySet().stream().<UUIDMcrObj> map(entry -> new UUIDMcrObj() {
+            return uuidToMcrObjIDMap.entrySet().stream().<UUIDMcrObj>map(entry -> new UUIDMcrObj() {
                 @Override
                 public String getUUID() {
                     return entry.getKey();
@@ -248,7 +247,6 @@ public class DFGOAIMetXMLCreator {
                 .filter(link -> link.contains(fileName))
                 .findFirst()
                 .isPresent();
-
 
         BiFunction<DerivateFileInfo, String, String> findObjID = (fileInfo, currentID) -> rootObjectWithChildren
                 .stream()
@@ -274,14 +272,14 @@ public class DFGOAIMetXMLCreator {
                         .collect(sup, accu, comb)
                         .stream()
                         .map(mapper ->
-                                element("mets", "smLink",
-                                        attr("xlink", "from", mapper.getObjID()),
-                                        attr("xlink", "to", "phys_master_" + mapper.getUUID())
-                                )
+                                     element("mets", "smLink",
+                                             attr("xlink", "from", mapper.getObjID()),
+                                             attr("xlink", "to", "phys_master_" + mapper.getUUID())
+                                     )
                         )
                         .reduce(Consumer::andThen)
                         .map(smLinks -> element("mets", "structLink",
-                                smLinks
+                                                smLinks
                         ))
                         .orElse(noStructLink -> {});
     }
