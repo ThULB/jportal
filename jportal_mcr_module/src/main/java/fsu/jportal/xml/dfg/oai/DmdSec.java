@@ -176,8 +176,8 @@ public class DmdSec {
                                             .orElse("mcrid");
 
         return element("mods", "identifier",
-                       attr("type", objID.get()),
-                       text(objType.get())
+                       attr("type", objType.get()),
+                       text(objID.get())
         );
     }
 

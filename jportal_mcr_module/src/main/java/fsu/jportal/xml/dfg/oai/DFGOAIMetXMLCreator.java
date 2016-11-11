@@ -192,7 +192,7 @@ public class DFGOAIMetXMLCreator {
                                                attr("DMDID", "dmd_" + id),
                                                attr("ADMID", "amd_" + id),
                                                attr("ID", id),
-                                               attr("Type", getType.apply(id)),
+                                               attr("TYPE", getType.apply(id)),
                                                structMapLogXMLFragment(id, childrenMap)
                                        ))
                           .reduce(Consumer::andThen)
