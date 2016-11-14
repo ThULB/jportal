@@ -1,7 +1,7 @@
 package fsu.jportal.mocks;
 
 import fsu.jportal.xml.stream.DerivateFileInfo;
-import spike.mets2.Transformer;
+//import spike.mets2.Transformer;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -12,8 +12,8 @@ import static fsu.jportal.xml.JPMCRObjXMLElementName.child;
  * Created by chi on 14.11.16.
  * @author Huu Chi Vu
  */ // Mockups
-public class DerivateXMLToParsedData implements Transformer<XMLStreamReader, DerivateFileInfo> {
-
+public class DerivateXMLToParsedData /*implements Transformer<XMLStreamReader, DerivateFileInfo>*/ {
+/*
     @Override
     public DerivateFileInfo apply(XMLStreamReader reader) {
         String mimeType = null;
@@ -53,5 +53,5 @@ public class DerivateXMLToParsedData implements Transformer<XMLStreamReader, Der
                 && reader.getAttributeValue(null, "type")
                          .equals("file");
     }
-
+*/
 }
