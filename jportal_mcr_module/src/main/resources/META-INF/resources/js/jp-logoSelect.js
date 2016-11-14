@@ -97,18 +97,20 @@ $(function() {
 		name = "input[name='/mycoreobject/metadata/logo/url[2]']";
 		loadPic(name);
 	};
-	
+
 	function loadPic(input) {
 		if($(input).val() != ""){
-			picAdress = $(input).val();
-			loadElement(encodeURIComponent(picAdress.substring(41)), function(data){
-				$(input).prev().prev(".thumbnail").prepend($(data).find("svg"));
-			});
+			var picAdress = $(input).val();
+			if(picAdress != null) {
+  			loadElement(encodeURIComponent(picAdress.substring(41)), function(data){
+  				$(input).prev().prev(".thumbnail").prepend($(data).find("svg"));
+  			});
+			}
 			$(input).prev().prev(".thumbnail").children().filter("p").hide();
 			$(input).prev("span").show();
 		}
 	}
-	
+
 	function select(item) {
 		$(".list-group-item").removeClass("editor-logo-active");
 		$(item).addClass('editor-logo-active');
