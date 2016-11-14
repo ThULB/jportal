@@ -1,25 +1,8 @@
 package fsu.jportal.resolver;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamSource;
-
+import fsu.jportal.xml.JPXMLFunctions;
+import fsu.jportal.xml.dfg.oai.DFGOAIMetXMLCreator;
+import fsu.jportal.xml.stream.DerivateFileInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
@@ -30,9 +13,22 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 
-import fsu.jportal.xml.JPXMLFunctions;
-import fsu.jportal.xml.dfg.oai.DFGOAIMetXMLCreator;
-import fsu.jportal.xml.stream.DerivateFileInfo;
+import javax.xml.stream.*;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by chi on 17.10.16.
@@ -41,6 +37,32 @@ import fsu.jportal.xml.stream.DerivateFileInfo;
 public class DFGOAIMetsResolver implements URIResolver {
 
     private static Logger LOGGER = LogManager.getLogger();
+
+    private final String oaiIdentifier;
+
+    private final Function<String, Optional<XMLStreamReader>> objSupplier;
+
+    private final Function<String, Stream<DerivateFileInfo>> derivateSupplier;
+
+    private final UnaryOperator<String> getPublishedISODate;
+
+    public DFGOAIMetsResolver(String oaiIdentifier,
+                              Function<String, Optional<XMLStreamReader>> objSupplier,
+                              Function<String, Stream<DerivateFileInfo>> derivateSupplier,
+                              UnaryOperator<String> getPublishedISODate) {
+
+        this.oaiIdentifier = oaiIdentifier;
+        this.objSupplier = objSupplier;
+        this.derivateSupplier = derivateSupplier;
+        this.getPublishedISODate = getPublishedISODate;
+    }
+
+    public DFGOAIMetsResolver() {
+        this(MCRBackend.oaiId(),
+             MCRBackend::mcrXMLMetadataManager,
+             MCRBackend::ifs,
+             MCRBackend::getPublishedISODate);
+    }
 
     /**
      * @param href dfgOai:{McrObjID}
@@ -61,7 +83,7 @@ public class DFGOAIMetsResolver implements URIResolver {
         } finally {
             LOGGER.info("Transforming " + href + " took " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
         }
-       
+
     }
 
     private static Source dfgMetsXSL(String href) {
