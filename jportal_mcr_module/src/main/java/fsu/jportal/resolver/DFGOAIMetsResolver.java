@@ -107,16 +107,16 @@ public class DFGOAIMetsResolver implements URIResolver {
         return Optional.empty();
     }
 
-    private static Source dfgMets(String href) {
+    private Source dfgMets(String href) {
         return Optional.ofNullable(href)
                        .filter(uri -> uri.startsWith("dfgOai:"))
                        .map(uri -> uri.split(":")[1])
                        .map(mcrObjID -> DFGOAIMetXMLCreator
                                .oaiRecord(mcrObjID,
-                                          MCRBackend.oaiId(),
-                                          MCRBackend::mcrXMLMetadataManager,
-                                          MCRBackend::ifs,
-                                          MCRBackend::getPublishedISODate))
+                                          oaiIdentifier,
+                                          objSupplier,
+                                          derivateSupplier,
+                                          getPublishedISODate))
                        .flatMap(DFGOAIMetsResolver::toSource)
                        .orElse(null);
     }
