@@ -3,6 +3,8 @@ package fsu.jportal.resolver;
 import fsu.jportal.xml.JPXMLFunctions;
 import fsu.jportal.xml.dfg.oai.DFGOAIMetXMLCreator;
 import fsu.jportal.xml.stream.DerivateFileInfo;
+import fsu.jportal.xml.stream.ParserUtils;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
@@ -108,20 +110,27 @@ public class DFGOAIMetsResolver implements URIResolver {
     }
 
     private Source dfgMets(String href) {
-        return Optional.ofNullable(href)
-                       .filter(uri -> uri.startsWith("dfgOai:"))
-                       .map(uri -> uri.split(":")[1])
-                       .map(mcrObjID -> DFGOAIMetXMLCreator
-                               .oaiRecord(mcrObjID,
-                                          oaiIdentifier,
-                                          objSupplier,
-                                          derivateSupplier,
-                                          getPublishedISODate))
-                       .flatMap(DFGOAIMetsResolver::toSource)
-                       .orElse(null);
+        long startTime = System.currentTimeMillis();
+        try {
+            return Optional.ofNullable(href)
+                           .filter(uri -> uri.startsWith("dfgOai:"))
+                           .map(uri -> uri.split(":")[1])
+                           .map(mcrObjID -> DFGOAIMetXMLCreator
+                                   .oaiRecord(mcrObjID,
+                                              oaiIdentifier,
+                                              objSupplier,
+                                              derivateSupplier,
+                                              getPublishedISODate))
+                           .flatMap(DFGOAIMetsResolver::toSource)
+                           .orElse(null);
+        } finally {
+            LOGGER.info("Total time for createObj " + ParserUtils.CREATE_OBJECT_TIME + "ms");
+            LOGGER.info("Time for dfgMets (" + href + ") " + (System.currentTimeMillis() - startTime) + "ms");
+        }
     }
 
     private static Optional<Source> toSource(Consumer<XMLStreamWriter> consumer) {
+        long startTime = System.currentTimeMillis();
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             XMLStreamWriter xmlStreamWriter = XMLOutputFactory.newFactory().createXMLStreamWriter(byteArrayOutputStream);
@@ -132,6 +141,8 @@ public class DFGOAIMetsResolver implements URIResolver {
                            .map(StreamSource::new);
         } catch (XMLStreamException e) {
             e.printStackTrace();
+        } finally {
+            LOGGER.info("Time for toSource() " + (System.currentTimeMillis() - startTime) + "ms");
         }
 
         return Optional.empty();

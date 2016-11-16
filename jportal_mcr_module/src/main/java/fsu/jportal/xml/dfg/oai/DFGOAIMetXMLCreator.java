@@ -6,6 +6,10 @@ import fsu.jportal.xml.stream.ParserUtils;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -23,6 +27,9 @@ import static java.util.stream.Collectors.toList;
  * Created by chi on 09.10.16.
  */
 public class DFGOAIMetXMLCreator {
+    
+    private static Logger LOGGER = LogManager.getLogger();
+
     private static Function<XMLStreamReader, Map<String, Map<String, Optional<String>>>> xmlStreamParser() {
         return parse(
                 matchElement(mycoreobject).getAttr("ID"),
@@ -53,16 +60,24 @@ public class DFGOAIMetXMLCreator {
                                                       Function<String, Stream<DerivateFileInfo>> derivateSupplier,
                                                       UnaryOperator<String> getPublishedISODate) {
 
+        long startTime = System.currentTimeMillis();
+
         ParsedMCRObj rootObj = ParserUtils
                 .getXMLForObj(rootID)
                 .from(objSupplier)
                 .parseDataUsing(xmlStreamParser());
 
+        LOGGER.info("getXMLForObj (" + rootID + ") " + (System.currentTimeMillis() - startTime) + "ms");
+        startTime = System.currentTimeMillis();
+        
         List<ParsedMCRObj> rootObjectWithChildren = ParserUtils
                 .getObjectWithChildrenFor(rootObj)
                 .from(objSupplier)
                 .parseDataUsing(xmlStreamParser())
                 .collect(toList());
+
+        LOGGER.info("getObjectWithChildrenFor (" + rootID + ") " + (System.currentTimeMillis() - startTime) + "ms");
+        startTime = System.currentTimeMillis();
 
         List<DerivateFileInfo> fileInfos = rootObj
                 .element(derobject)
@@ -71,43 +86,50 @@ public class DFGOAIMetXMLCreator {
                 .filter(file -> !file.getFileName().equals("mets.xml"))
                 .collect(toList());
 
-        return document(
-                defaultNamespace("http://www.openarchives.org/OAI/2.0/"),
-                namespace("mets", "http://www.loc.gov/METS/"),
-                namespace("mods", "http://www.loc.gov/mods/v3"),
-                namespace("xlink", "http://www.w3.org/1999/xlink"),
-                element("record",
-                        element("header",
-                                element("identifier",
-                                        text("oai:" + oaiIdentifier + ":" + rootObj.getID())
-                                ),
-                                rootObj.element(component)
-                                       .map(e -> Stream.of("classid", "categid")
-                                                       .flatMap(e::getAttr)
-                                                       .collect(Collectors.joining(":")))
-                                       .map(id -> element("setSpec", text(id)))
-                                       .reduce(Consumer::andThen)
-                                       .orElse(noSetSpec -> {}),
+        LOGGER.info("fileInfos (" + rootID + ") " + (System.currentTimeMillis() - startTime) + "ms");
+        startTime = System.currentTimeMillis();
 
-                                rootObj.element(servdate)
-                                       .flatMap(ElementData::getText)
-                                       .map(t -> t.substring(0, 9))
-                                       .map(date -> element("datestamp", text(date)))
-                                       .reduce(Consumer::andThen)
-                                       .orElse(noDatestamp -> {})
-                        ),
-                        element("metadata",
-                                element("mets", "mets",
-                                        dmdSecXMLFragment(rootObjectWithChildren, objSupplier, getPublishedISODate),
-                                        amdSecXMLFragment(rootObjectWithChildren),
-                                        fileSecXMLFragment(fileInfos),
-                                        structMapPhysXMLFragment(rootObj, fileInfos),
-                                        structMapLogXMLFragment(rootObjectWithChildren),
-                                        structLinkXMLFragment(rootObjectWithChildren, fileInfos)
-                                )
-                        )
-                )
-        );
+        try {
+            return document(
+                    defaultNamespace("http://www.openarchives.org/OAI/2.0/"),
+                    namespace("mets", "http://www.loc.gov/METS/"),
+                    namespace("mods", "http://www.loc.gov/mods/v3"),
+                    namespace("xlink", "http://www.w3.org/1999/xlink"),
+                    element("record",
+                            element("header",
+                                    element("identifier",
+                                            text("oai:" + oaiIdentifier + ":" + rootObj.getID())
+                                    ),
+                                    rootObj.element(component)
+                                           .map(e -> Stream.of("classid", "categid")
+                                                           .flatMap(e::getAttr)
+                                                           .collect(Collectors.joining(":")))
+                                           .map(id -> element("setSpec", text(id)))
+                                           .reduce(Consumer::andThen)
+                                           .orElse(noSetSpec -> {}),
+    
+                                    rootObj.element(servdate)
+                                           .flatMap(ElementData::getText)
+                                           .map(t -> t.substring(0, 9))
+                                           .map(date -> element("datestamp", text(date)))
+                                           .reduce(Consumer::andThen)
+                                           .orElse(noDatestamp -> {})
+                            ),
+                            element("metadata",
+                                    element("mets", "mets",
+                                            dmdSecXMLFragment(rootObjectWithChildren, objSupplier, getPublishedISODate),
+                                            amdSecXMLFragment(rootObjectWithChildren),
+                                            fileSecXMLFragment(fileInfos),
+                                            structMapPhysXMLFragment(rootObj, fileInfos),
+                                            structMapLogXMLFragment(rootObjectWithChildren),
+                                            structLinkXMLFragment(rootObjectWithChildren, fileInfos)
+                                    )
+                            )
+                    )
+            );
+        } finally {
+            LOGGER.info("document (" + rootID + ") " + (System.currentTimeMillis() - startTime) + "ms");
+        }
     }
 
     public static Consumer<XMLStreamWriter> amdSecXMLFragment(List<ParsedMCRObj> rootObjectWithChildren) {
