@@ -1,7 +1,5 @@
 package fsu.jportal.mocks;
 
-import spike.mets.XMLWriter;
-
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
