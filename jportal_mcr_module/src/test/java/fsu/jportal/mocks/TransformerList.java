@@ -1,7 +1,5 @@
 package fsu.jportal.mocks;
 
-//import spike.mets2.Transformer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +10,7 @@ import java.util.stream.Stream;
  * @author Huu Chi Vu
  */
 public class TransformerList<T, R> {
-   /* List<Transformer<T , R>> parsers;
+    List<Transformer<T, R>> parsers;
 
     public TransformerList() {
         this.parsers = new ArrayList<>();
@@ -24,7 +22,7 @@ public class TransformerList<T, R> {
     }
 
     public Stream<R> transformToStream(T t) {
-        return  transform(t).stream();
+        return transform(t).stream();
     }
 
     public List<R> transform(T t) {
@@ -33,5 +31,4 @@ public class TransformerList<T, R> {
                       .map(p -> p.apply(t))
                       .collect(Collectors.toList());
     }
-*/
 }

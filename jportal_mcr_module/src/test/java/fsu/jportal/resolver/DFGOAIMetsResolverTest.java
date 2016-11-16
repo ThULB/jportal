@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  * @author Huu Chi Vu
  */
 public class DFGOAIMetsResolverTest {
-    /*String volID = "jportal_jpvolume_00220746";
+    String volID = "jportal_jpvolume_00220746";
 
     Function<String, Optional<XMLStreamReader>> ZServer;
 
@@ -51,5 +51,5 @@ public class DFGOAIMetsResolverTest {
 
         Assert.assertNotNull(testOAICreator);
 
-    }*/
+    }
 }

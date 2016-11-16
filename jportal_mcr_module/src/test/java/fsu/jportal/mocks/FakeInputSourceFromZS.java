@@ -1,8 +1,6 @@
 package fsu.jportal.mocks;
 
 import fsu.jportal.xml.stream.XMLStreamReaderUtils;
-//import spike.mets.DerivateFileCollector;
-//import spike.mets.procs.MetsFileSec_StructMap;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -26,7 +24,6 @@ import java.util.stream.Stream;
  * @author Huu Chi Vu
  */
 public class FakeInputSourceFromZS {
-/*
     public static Optional<InputStream> inputStreamFromThULBPath(String path) {
         try {
             URL url = new URL("http://zs.thulb.uni-jena.de" + path + "?XSL.Style=xml");
@@ -91,7 +88,7 @@ public class FakeInputSourceFromZS {
         return getXmlStreamReader(id, path);
     }
 
-    public static Stream<MetsFileSec_StructMap.DerivateFileConsumer> getDerivateWith(String id) {
+    public static Stream<DerivateFileConsumer> getDerivateWith(String id) {
         return getXmlStreamReader(id, "/servlets/MCRFileNodeServlet/")
                 .map(XMLStreamReaderUtils::toStream)
                 .orElse(Stream.empty())
@@ -103,5 +100,5 @@ public class FakeInputSourceFromZS {
         return inputStreamFromThULBPath(path + id)
                 .map(FakeInputSourceFromZS::xmlStreamReaderFromIS)
                 .orElseGet(Optional::empty);
-    }*/
+    }
 }
