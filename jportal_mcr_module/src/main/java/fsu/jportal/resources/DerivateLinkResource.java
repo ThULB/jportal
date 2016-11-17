@@ -39,14 +39,13 @@ public class DerivateLinkResource {
 
     @POST
     @Path("remove/{id}")
-    public void remove(@PathParam("id") String id, @QueryParam("image") String image)
-        throws MCRActiveLinkException, UnsupportedEncodingException {
+    public void remove(@PathParam("id") String id, @QueryParam("image") String image) throws MCRActiveLinkException {
         if (image == null) {
             throw new WebApplicationException(
                 Response.status(Status.BAD_REQUEST).entity("image param not set").build());
         }
         try {
-            DerivateLinkUtil.removeLink(getMyCoReID(id), URLDecoder.decode(image, "UTF-8"));
+            DerivateLinkUtil.removeLink(getMyCoReID(id), image);
         } catch (MCRAccessException e) {
             throw new WebApplicationException(
                 Response.status(Status.UNAUTHORIZED).entity("image param not set").build());
