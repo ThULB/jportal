@@ -160,6 +160,8 @@ public abstract class DerivateLinkUtil {
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
         MCRMetaDerivateLink linkToRemove = getLink(derLinks, pathOfImage);
         if (linkToRemove == null) {
+            LOGGER.warn(
+                "Couldn't remove link of " + mcrObjId + " with image " + pathOfImage + ". The link couldn't be found.");
             return;
         }
         // remove link
