@@ -63,7 +63,8 @@ public class DFGOAIMetsResolver implements URIResolver {
         this(MCRBackend.oaiId(),
              MCRBackend::mcrXMLMetadataManager,
              MCRBackend::ifs,
-             MCRBackend::getPublishedISODate);
+             id -> "foo");
+//             MCRBackend::getPublishedISODate);
     }
 
     /**
