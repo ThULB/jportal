@@ -1,28 +1,51 @@
 package fsu.jportal.xml.dfg.oai;
 
+import static fsu.jportal.xml.JPMCRObjXMLElementName.date;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.identi;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.keyword;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.language;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.maintitle;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.note;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.participant;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.size;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.subtitle;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.hasType;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.isInherited;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.matchElement;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.parse;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.attr;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.element;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.fragment;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.text;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+
 import fsu.jportal.xml.JPMCRObjXMLElementName;
 import fsu.jportal.xml.stream.ParsedMCRObj;
 import fsu.jportal.xml.stream.ParsedXML.ElementData;
 import fsu.jportal.xml.stream.ParserUtils;
-
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static fsu.jportal.xml.JPMCRObjXMLElementName.*;
-import static fsu.jportal.xml.stream.XMLStreamReaderUtils.*;
-import static fsu.jportal.xml.stream.XMLStreamWriterUtils.*;
 
 /**
  * Created by chi on 09.10.16.
  */
 public class DmdSec {
     public static Consumer<XMLStreamWriter> dmdSecXMLFragment(List<ParsedMCRObj> rootObjectWithChildren,
-                                                              Function<String, Optional<XMLStreamReader>> objSupplier,
-                                                              UnaryOperator<String> getPublishedISODate) {
+                                                              Function<String, Optional<XMLStreamReader>> objSupplier) {
         Function<ParsedMCRObj, Consumer<XMLStreamWriter>> dmdSecXML = obj ->
                 element("mets", "dmdSec", attr("ID", "dmd_" + obj.getID()),
                         element("mets", "mdWrap", attr("MDTYPE", "MODS"),
@@ -30,7 +53,7 @@ public class DmdSec {
                                         element("mods", "mods",
                                                 dmdSecModsIdentifier(obj),
                                                 dmdSecModsTileInfo(obj),
-                                                dmdSecModsOriginInfo(obj, getPublishedISODate),
+                                                dmdSecModsOriginInfo(obj),
                                                 dmdSecModsNote(obj),
                                                 dmdSecModsLanguage(obj),
                                                 dmdSecModsPart(obj),
@@ -91,8 +114,7 @@ public class DmdSec {
                   .orElse(noNotes -> {});
     }
 
-    private static Consumer<XMLStreamWriter> dmdSecModsOriginInfo(ParsedMCRObj obj,
-                                                                  UnaryOperator<String> getPublishedISODate) {
+    private static Consumer<XMLStreamWriter> dmdSecModsOriginInfo(ParsedMCRObj obj) {
         String inheritedZero = "inheritedZero";
         String others = "others";
 
@@ -133,18 +155,7 @@ public class DmdSec {
                 .reduce(Consumer::andThen)
                 .orElse(noInheritedZero -> {});
 
-        Consumer<XMLStreamWriter> dateInheritedNotEqualsZeroXML = dateMap
-                .getOrDefault(others, Collections.emptyList())
-                .stream()
-                .map(e ->
-                             element("mods", "dateIssued",
-                                     text(getPublishedISODate.apply(obj.getID()))
-                             )
-                )
-                .findFirst()
-                .orElse(noInheritedNotEqualsZero -> {});
-
-        return dateInheritedZeroXML.andThen(dateInheritedNotEqualsZeroXML);
+        return dateInheritedZeroXML;
     }
 
     private static Consumer<XMLStreamWriter> dmdSecModsTileInfo(ParsedMCRObj obj) {
