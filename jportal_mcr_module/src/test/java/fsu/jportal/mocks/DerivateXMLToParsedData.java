@@ -40,7 +40,8 @@ public class DerivateXMLToParsedData implements Transformer<XMLStreamReader, Der
                 e.printStackTrace();
             }
         }
-        return new DerivateFileInfo(mimeType, fileName, href);
+        String fakeURL = "http://localhost:8291/jportal/servlets/MCRTileCombineServlet/MID/jportal_derivate_00000001/" + fileName;
+        return new DerivateFileInfo(fakeURL, mimeType, fileName, href);
     }
 
     @Override

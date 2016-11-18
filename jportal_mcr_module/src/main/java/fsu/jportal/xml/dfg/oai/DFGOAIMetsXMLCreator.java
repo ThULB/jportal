@@ -148,7 +148,7 @@ public class DFGOAIMetsXMLCreator {
                                                     attr("MIMETYPE", fileInfo.getContentType()),
                                                     element("mets", "FLocat",
                                                             attr("LOCTYPE", "URL"),
-                                                            attr("xlink", "href", fileInfo.getUri())
+                                                            attr("xlink", "href", fileInfo.getUrl())
                                                     )
                                             )
                                ).reduce(Consumer::andThen)

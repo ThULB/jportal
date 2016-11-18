@@ -1,19 +1,5 @@
 package fsu.jportal.xml.dfg.oai;
 
-import fsu.jportal.xml.stream.DerivateFileInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.ifs.MCRContentInputStream;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.niofs.MCRContentTypes;
-import org.mycore.datamodel.niofs.MCRPath;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +8,23 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.ifs.MCRContentInputStream;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRContentTypes;
+import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.frontend.MCRFrontendUtil;
+
+import fsu.jportal.xml.stream.DerivateFileInfo;
 
 public class DFGOAIMetsXMLHandler {
 
@@ -72,7 +75,7 @@ public class DFGOAIMetsXMLHandler {
         public static Stream<DerivateFileInfo> ifs(String derivateID) {
             return DerivateUtils.stream(derivateID)
                                 .filter(Files::isRegularFile)
-                                .map(DerivateUtils::fileInfo);
+                                .map((p) -> DerivateUtils.fileInfo(derivateID, p));
         }
 
         public static Optional<XMLStreamReader> mcrXMLMetadataManager(String id) {
@@ -93,12 +96,19 @@ public class DFGOAIMetsXMLHandler {
     }
 
     private static class DerivateUtils {
-        public static DerivateFileInfo fileInfo(Path path) {
+
+        public static DerivateFileInfo fileInfo(String derivateID, Path path) {
             String fileName = path.getFileName().toString();
             String uri = path.toUri().toString();
             String contentType = getContentType(path);
+            return new DerivateFileInfo(getURL(derivateID, fileName), contentType, fileName, uri);
+        }
 
-            return new DerivateFileInfo(contentType, fileName, uri);
+        private static String getURL(String derivateID, String fileName) {
+            StringBuilder url = new StringBuilder(MCRFrontendUtil.getBaseURL());
+            url.append("servlets/MCRTileCombineServlet/MID/");
+            url.append(derivateID).append("/").append(fileName);
+            return url.toString();
         }
 
         private static String getContentType(Path path) {
