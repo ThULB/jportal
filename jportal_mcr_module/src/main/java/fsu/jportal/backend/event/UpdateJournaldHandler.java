@@ -74,7 +74,7 @@ public class UpdateJournaldHandler extends MCREventHandlerBase {
                 descendants = descendants.stream()
                                          .filter(id -> !id.equals(journalId.toString()))
                                          .collect(Collectors.toList());
-                MCRSolrIndexer.rebuildMetadataIndex(descendants, true);
+                MCRSolrIndexer.rebuildMetadataIndex(descendants);
             } catch (Exception exc) {
                 LOGGER.error("Unable to update descedants for " + journalId.toString(), exc);
             }

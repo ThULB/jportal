@@ -70,7 +70,7 @@ public class SolrOrderHandler extends MCREventHandlerBase {
 
         @Override
         public void run() {
-            MCRSolrIndexer.rebuildMetadataIndex(ids, true);
+            MCRSolrIndexer.rebuildMetadataIndex(ids);
         }
     }
 

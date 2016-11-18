@@ -179,7 +179,7 @@ public abstract class JPLevelSortingUtil {
             descendantAndSelfIds.forEach(childId -> {
                 MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId));
             });
-            MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds, true);
+            MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds);
         }
     }
 
