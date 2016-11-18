@@ -163,6 +163,20 @@
             </div>
           </xsl:if>
           <!--</xsl:if>-->
+        <xsl:if test="$template = 'template_cma'">
+          <div class="imprint" id="newsletter">
+            <a href="{concat($WebApplicationBaseURL,'jp_templates/template_cma/XML/cmaNewsletter.xed?journalID=', $id)}">
+              Newsletter
+            </a>
+          </div>
+        </xsl:if>
+        <xsl:if test="$template = 'template_gfa'">
+          <div class="imprint" id="newsletter">
+            <a href="{concat($WebApplicationBaseURL,'jp_templates/template_gfa/XML/gfaNewsletter.xed?journalID=', $id)}">
+              Newsletter
+            </a>
+          </div>
+        </xsl:if>
       </div>
     </xsl:if>
   </xsl:template>

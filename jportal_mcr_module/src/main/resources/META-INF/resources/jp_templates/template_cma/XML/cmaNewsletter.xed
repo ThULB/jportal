@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage xmlns:xed="http://www.mycore.de/xeditor" version="1.0" template="template_cma">
+    <section xml:lang="all" title="Newsletter">
+
+        <xed:form>
+
+            <xed:source uri="webapp:/jp_templates/template_cma/XML/cmaNewsletter.xml"/>
+
+            <section xml:lang="all">
+                <div class="container-fluid">
+
+
+                    <div class="row">
+                        <div class="text-center"><h3>CMA Newsletter</h3></div>
+                        <div class="col-md-12"><p>Wenn Sie sich für den <b>CMA Newsletter</b> anmelden wollen,
+                            so können Sie dieses auf zwei Arten erledigen.</p></div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12"><p>Sie können Ihr eigenes E-Mail-Programm benutzen. Dazu müssen Sie in die Betreffzeile
+                            <b>Anmeldung</b> eintragen und diese E-Mail an <a href="mailto:cma-newsletter@gbv.de">cma-newsletter@gbv.de</a> versenden</p></div>
+                        <div class="col-md-12"><p>Sie können das entsprechende Formularfeld auf dieser Seite benutzen und dort Ihre E-Mail-Adresse eintagen</p></div>
+                    </div>
+
+
+                    <div class="row">
+                        <xed:bind xpath="email">
+                            <input type="hidden" name="xsl" value="copynodes" />
+                            <input type="hidden" name="goto" value="{$WebApplicationBaseURL}receive/{$journalID}" />
+                            <div class="col-md-12"><h3>Direktanmeldung</h3></div>
+                            <div class="col-md-7">
+                                <label for="mail">Ihre E-Mail-Adresse:</label>
+                                <div class="input-group">
+                                    <input type="email" id="mail" class="form-control"/>
+                                    <span class="input-group-btn">
+                                        <input class="btn btn-default" type="submit" xed:target="servlet" xed:href="MCRMailer">Anmelden</input>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </xed:bind>
+                    </div>
+                </div>
+            </section>
+        </xed:form>
+    </section>
+</MyCoReWebPage>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<email>
+    <from></from>
+
+    <to>replace@replace.com</to> <!--add receiving email address for the newsletter-->
+
+    <subject>Anmeldung CMA-Newsletter</subject>
+    <body>Bitte schalten sie mich für den CMA-Newsletter frei.</body>
+
+</email>
