@@ -85,6 +85,7 @@ public class DFGOAIMetsResolver implements URIResolver {
         } finally {
             LOGGER.info("Total time for createObj " + ParserUtils.CREATE_OBJECT_TIME + "ms");
             LOGGER.info("Time for dfgMets (" + href + ") " + (System.currentTimeMillis() - startTime) + "ms");
+            ParserUtils.CREATE_OBJECT_TIME = 0;
         }
     }
 
