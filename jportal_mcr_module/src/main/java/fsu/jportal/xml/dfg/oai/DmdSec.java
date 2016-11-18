@@ -1,44 +1,23 @@
 package fsu.jportal.xml.dfg.oai;
 
-import static fsu.jportal.xml.JPMCRObjXMLElementName.date;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.identi;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.keyword;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.language;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.maintitle;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.note;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.participant;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.size;
-import static fsu.jportal.xml.JPMCRObjXMLElementName.subtitle;
-import static fsu.jportal.xml.stream.XMLStreamReaderUtils.hasType;
-import static fsu.jportal.xml.stream.XMLStreamReaderUtils.isInherited;
-import static fsu.jportal.xml.stream.XMLStreamReaderUtils.matchElement;
-import static fsu.jportal.xml.stream.XMLStreamReaderUtils.parse;
-import static fsu.jportal.xml.stream.XMLStreamWriterUtils.attr;
-import static fsu.jportal.xml.stream.XMLStreamWriterUtils.element;
-import static fsu.jportal.xml.stream.XMLStreamWriterUtils.fragment;
-import static fsu.jportal.xml.stream.XMLStreamWriterUtils.text;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-
 import fsu.jportal.xml.JPMCRObjXMLElementName;
 import fsu.jportal.xml.stream.ParsedMCRObj;
 import fsu.jportal.xml.stream.ParsedXML.ElementData;
 import fsu.jportal.xml.stream.ParserUtils;
+
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static fsu.jportal.xml.JPMCRObjXMLElementName.*;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.*;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.*;
 
 /**
  * Created by chi on 09.10.16.
@@ -58,6 +37,7 @@ public class DmdSec {
                                                 dmdSecModsLanguage(obj),
                                                 dmdSecModsPart(obj),
                                                 dmdSecModsSubject(obj),
+//                                                dmdSecModsGenre(obj),
                                                 dmdSecModsName(obj, objSupplier)
                                         )
                                 )
@@ -69,6 +49,29 @@ public class DmdSec {
                 .map(dmdSecXML)
                 .reduce(Consumer::andThen)
                 .orElse(noDmdSec -> {});
+    }
+
+    private static Consumer<XMLStreamWriter> dmdSecModsGenre(ParsedMCRObj obj) {
+        String[] journalTypeMap = {
+                "newspapers:newspaper",
+                "addressBooks:directory",
+                "parliamentDocuments:legislation",
+                "calendars:calendar"
+                //        <xsl:value-of select="'journal'" />
+                //      </xsl:otherwise>
+                //    </xsl:choose>
+        };
+
+        Function<String, Optional<String>> getType = id -> Stream
+                .of("jpjournal", "jparticle")
+                .filter(id::contains)
+                .findFirst();
+
+        Optional.of(obj)
+                .map(ParsedMCRObj::getID)
+                .flatMap(getType);
+//        obj.element()
+        return null;
     }
 
     private static Consumer<XMLStreamWriter> dmdSecModsSubject(ParsedMCRObj obj) {
@@ -115,22 +118,6 @@ public class DmdSec {
     }
 
     private static Consumer<XMLStreamWriter> dmdSecModsOriginInfo(ParsedMCRObj obj) {
-        String inheritedZero = "inheritedZero";
-        String others = "others";
-
-        Function<ElementData, String> inheritedValue = elementData -> Optional
-                .of(elementData)
-                .map(e -> e.getAttr("inherited"))
-                .orElseGet(Stream::empty)
-                .filter("0"::equals)
-                .findFirst()
-                .map(s -> inheritedZero)
-                .orElse(others);
-
-        Map<String, List<ElementData>> dateMap = obj
-                .element(date)
-                .collect(Collectors.groupingBy(inheritedValue));
-
         UnaryOperator<String> typeMapper = type -> Stream
                 .of("published_from:start", "published_until:end")
                 .filter(s -> s.startsWith(type))
@@ -148,14 +135,10 @@ public class DmdSec {
                         text(elementData.getText().findFirst().orElse("noDate"))
                 );
 
-        Consumer<XMLStreamWriter> dateInheritedZeroXML = dateMap
-                .getOrDefault(inheritedZero, Collections.emptyList())
-                .stream()
-                .map(modsDateIssued)
-                .reduce(Consumer::andThen)
-                .orElse(noInheritedZero -> {});
-
-        return dateInheritedZeroXML;
+        return obj.element(date)
+           .map(modsDateIssued)
+           .reduce(Consumer::andThen)
+           .orElse(noInheritedZero -> {});
     }
 
     private static Consumer<XMLStreamWriter> dmdSecModsTileInfo(ParsedMCRObj obj) {
@@ -337,12 +320,7 @@ public class DmdSec {
                 "patron:pat" //Förderer -> parton
         };
 
-        UnaryOperator<String> roleMapping = type -> Arrays
-                .stream(roleMappingConst)
-                .filter(role -> role.startsWith(type))
-                .findFirst()
-                .map(found -> found.split(":")[1])
-                .orElse("asn");
+        UnaryOperator<String> roleMapping = getStringMapper(roleMappingConst, "asn");
 
         return participantData.getAttr("type")
                               .findFirst()
@@ -353,6 +331,15 @@ public class DmdSec {
                                                    )
                                            )
                               ).orElse(noModsRole -> {});
+    }
+
+    private static UnaryOperator<String> getStringMapper(String[] map, String defaultVal){
+        return type -> Arrays
+                .stream(map)
+                .filter(key -> key.startsWith(type))
+                .findFirst()
+                .map(found -> found.split(":")[1])
+                .orElse(defaultVal);
     }
 
 }

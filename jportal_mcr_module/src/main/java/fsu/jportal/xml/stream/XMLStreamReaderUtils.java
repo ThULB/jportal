@@ -5,7 +5,6 @@ import fsu.jportal.xml.JPMCRObjXMLElementName;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -57,9 +56,13 @@ public class XMLStreamReaderUtils {
 
     protected static class DataRetrievalImpl implements DataRetrieval {
         private final String elementName;
+
         private final Predicate<XMLStreamReader> predicate;
+
         private final Map<String, Instruction> getAttrValInstructions;
+
         private Instruction getTextInstruction;
+
         private List<DataRetrieval> childRetrievals;
 
         private DataRetrievalImpl(String elementName, Predicate<XMLStreamReader> predicate) {
@@ -152,21 +155,18 @@ public class XMLStreamReaderUtils {
         }
 
         @Override
-        public boolean test(XMLStreamReader reader) {
-            return predicate.test(reader);
-        }
+        public boolean test(XMLStreamReader reader) { return predicate.test(reader); }
 
         @Override
         public Map<String, Instruction> getIntructionMap() {
-            LinkedHashMap<String, Instruction> textInstMap = new LinkedHashMap<>();
-            Optional.ofNullable(getTextInstruction)
-                    .ifPresent(i -> textInstMap.put("text", i));
+            LinkedHashMap<String, Instruction> instructionMap = new LinkedHashMap<>();
+            instructionMap.putAll(getAttrValInstructions);
 
-            return Stream.of(getAttrValInstructions, textInstMap)
-                         .filter(l -> !l.isEmpty())
-                         .collect(LinkedHashMap::new,
-                                 Map::putAll,
-                                 (BiConsumer<Map<String, Instruction>, Map<String, Instruction>>) Map::putAll);
+            if(getTextInstruction != null) {
+                instructionMap.put("text", getTextInstruction);
+            }
+
+            return instructionMap;
         }
 
         public List<DataRetrieval> getChildRetrievals() {
@@ -196,7 +196,8 @@ public class XMLStreamReaderUtils {
 
         Predicate<XMLStreamReader> limit = r -> r.isEndElement() && r.getLocalName().equals(inst.getElementName());
 
-        Function<List<DataRetrieval>, Map<String, Map<String, Optional<String>>>> evalChildren = children -> toStream(reader, limit)
+        Function<List<DataRetrieval>, Map<String, Map<String, Optional<String>>>> evalChildren = children -> toStream(
+                reader, limit)
                 .map(r -> evalChildren(children, r))
                 .reduce(evalRootInst, (m1, m2) -> {
                     m1.putAll(m2);
@@ -209,20 +210,23 @@ public class XMLStreamReaderUtils {
                        .orElse(evalRootInst);
     }
 
-    private static Map<String, Map<String, Optional<String>>> evalChildren(List<DataRetrieval> children, XMLStreamReader reader) {
+    private static Map<String, Map<String, Optional<String>>> evalChildren(List<DataRetrieval> children,
+                                                                           XMLStreamReader reader) {
         return flatten(children)
                 .filter(inst -> inst.test(reader))
                 .collect(toMap(DataRetrieval::getElementName, inst -> evalInstruction(inst, reader)));
     }
 
-    public static Function<XMLStreamReader, Map<String, Map<String, Optional<String>>>> parse(DataRetrieval... instructions) {
+    public static Function<XMLStreamReader, Map<String, Map<String, Optional<String>>>> parse(
+            DataRetrieval... instructions) {
         return reader -> Arrays.stream(instructions)
                                .filter(inst -> inst.test(reader))
                                .map(inst -> eval(inst, reader))
                                .collect(HashMap::new, Map::putAll, Map::putAll);
     }
 
-    public static DataRetrieval matchElement(JPMCRObjXMLElementName elementName, Predicate<XMLStreamReader>... predicates) {
+    public static DataRetrieval matchElement(JPMCRObjXMLElementName elementName,
+                                             Predicate<XMLStreamReader>... predicates) {
         return matchElement(null, elementName.toString(), predicates);
     }
 
@@ -230,7 +234,8 @@ public class XMLStreamReaderUtils {
         return matchElement(null, elementName, predicates);
     }
 
-    public static DataRetrieval matchElement(String prefix, String localname, Predicate<XMLStreamReader>... predicates) {
+    public static DataRetrieval matchElement(String prefix, String localname,
+                                             Predicate<XMLStreamReader>... predicates) {
         Predicate<XMLStreamReader> isStartElement = XMLStreamReader::isStartElement;
         Predicate<XMLStreamReader> hasElementName = reader -> reader.getLocalName().equals(localname);
         Predicate<XMLStreamReader> hasPrefix = reader -> Optional.ofNullable(prefix)

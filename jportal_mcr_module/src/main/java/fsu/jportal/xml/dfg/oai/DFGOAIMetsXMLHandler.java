@@ -1,19 +1,6 @@
 package fsu.jportal.xml.dfg.oai;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-
+import fsu.jportal.xml.stream.DerivateFileInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
@@ -23,7 +10,18 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 
-import fsu.jportal.xml.stream.DerivateFileInfo;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class DFGOAIMetsXMLHandler {
 
@@ -36,8 +34,8 @@ public class DFGOAIMetsXMLHandler {
     private final Function<String, Stream<DerivateFileInfo>> derivateSupplier;
 
     public DFGOAIMetsXMLHandler(String oaiIdentifier,
-                              Function<String, Optional<XMLStreamReader>> objSupplier,
-                              Function<String, Stream<DerivateFileInfo>> derivateSupplier) {
+                                Function<String, Optional<XMLStreamReader>> objSupplier,
+                                Function<String, Stream<DerivateFileInfo>> derivateSupplier) {
 
         this.oaiIdentifier = oaiIdentifier;
         this.objSupplier = objSupplier;
@@ -54,12 +52,13 @@ public class DFGOAIMetsXMLHandler {
         long startTime = System.currentTimeMillis();
         try {
             return Optional.ofNullable(href)
-                .filter(uri -> uri.startsWith("dfgOai:"))
-                .map(uri -> uri.split(":")[1])
-                .map(mcrObjID -> DFGOAIMetsXMLCreator.oaiRecord(mcrObjID,
-                               oaiIdentifier,
-                               objSupplier,
-                               derivateSupplier));
+                           .filter(uri -> uri.startsWith("dfgOai:"))
+                           .map(uri -> uri.split(":")[1])
+                           .map(mcrObjID -> DFGOAIMetsXMLCreator
+                                   .oaiRecord(mcrObjID,
+                                              oaiIdentifier,
+                                              objSupplier,
+                                              derivateSupplier));
         } finally {
             LOGGER.info("handle (" + href + ") " + (System.currentTimeMillis() - startTime) + "ms");
         }
@@ -126,5 +125,5 @@ public class DFGOAIMetsXMLHandler {
             return Stream.empty();
         }
     }
-    
+
 }
