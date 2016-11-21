@@ -1,18 +1,11 @@
 package fsu.jportal.resolver;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
+import fsu.jportal.mocks.DerivateXMLToParsedData;
+import fsu.jportal.mocks.FakeInputSourceFromZS;
+import fsu.jportal.mocks.TransformerList;
+import fsu.jportal.xml.dfg.oai.DFGOAIMetsXMLHandler;
+import fsu.jportal.xml.stream.DerivateFileInfo;
+import fsu.jportal.xml.stream.XMLStreamReaderUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -23,12 +16,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import fsu.jportal.mocks.DerivateXMLToParsedData;
-import fsu.jportal.mocks.FakeInputSourceFromZS;
-import fsu.jportal.mocks.TransformerList;
-import fsu.jportal.xml.dfg.oai.DFGOAIMetsXMLHandler;
-import fsu.jportal.xml.stream.DerivateFileInfo;
-import fsu.jportal.xml.stream.XMLStreamReaderUtils;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 /**
  * Created by chi on 14.11.16.
@@ -61,7 +58,12 @@ public class DFGOAIMetsResolverTest {
 
     @Test
     public void testResolver() throws Exception {
-        DFGOAIMetsXMLHandler consumer = new DFGOAIMetsXMLHandler("testOAICreator", ZServer, derivateSupplier);
+        UnaryOperator<String> fileSectionHref = s -> Optional.of(s.replaceFirst("ifs", ""))
+                                               .map(url -> url.replaceAll("\\:/", "/"))
+                                               .map("http://localhost"::concat)
+                                               .orElse("noHref");;
+        DFGOAIMetsXMLHandler consumer = new DFGOAIMetsXMLHandler("testOAICreator", ZServer, derivateSupplier,
+                                                                 fileSectionHref);
         Optional<Consumer<XMLStreamWriter>> o = consumer.handle("dfgOai:" + volID);
 
         Assert.assertTrue(o.isPresent());
