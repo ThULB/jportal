@@ -23,10 +23,11 @@
   <!-- * Journal, Article, Volume -->
   <!-- *************************************************** -->
 
-  <!-- parent & order -->
+  <!-- parent, order & ancestorPath -->
   <xsl:template match="parents/parent" mode="structure" priority="1">
     <field name="parent"><xsl:value-of select="@xlink:href" /></field>
     <field name="order"><xsl:value-of select="jpxml:getOrder(../../../@ID)" /></field>
+    <field name="ancestorPath"><xsl:value-of select="jpxml:getAncestorPath(../../../@ID)" /></field>
   </xsl:template>
 
   <!-- journalID -->

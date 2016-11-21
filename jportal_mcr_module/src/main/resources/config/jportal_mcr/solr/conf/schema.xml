@@ -109,15 +109,16 @@
     <field name="id" type="string" required="true" />
     <field name="objectType" type="string" />
     <field name="objectProject" type="string" />
-    <field name="parent" type="string" />
 
     <field name="created" type="date" />
     <field name="modified" type="date" />
 
     <!-- MCRObject structure -->
+    <field name="parent" type="string" />
     <field name="derivates" type="string" multiValued="true" />
     <field name="derivateCount" type="long" />
     <field name="childrenCount" type="long" />
+    <field name="ancestorPath" type="string" />
 
     <!-- MCRDerivate related metadata -->
     <field name="urn" type="string" multiValued="true" />

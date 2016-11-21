@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -359,6 +360,30 @@ public class JPXMLFunctions {
         }
     }
 
+    /**
+     * Returns a path to the ancestors of the mycore object.
+     * <p>
+     * Looks like "jportal_jpjournal_00000001/jportal_jpvolume_00000001/jportal_jpvolume_00000002/"
+     * </p>
+     * 
+     * @param id id of the object
+     * @return path to the ancestor
+     */
+    public static String getAncestorPath(String id) {
+        try {
+            StringBuilder path = new StringBuilder();
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+            List<MCRObject> ancestorsAndSelf = MCRObjectUtils.getAncestors(mcrObj);
+            Collections.reverse(ancestorsAndSelf);
+            ancestorsAndSelf.forEach(obj -> path.append(obj.getId()).append("/"));
+            return path.toString();
+        } catch (Exception exc) {
+            LOGGER.error("Unable to retrieve anchestors of " + id, exc);
+            return null;
+        }
+    }
+    
     /**
      * Return the position in parent for the given id.
      * 
