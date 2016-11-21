@@ -8,8 +8,6 @@ import java.util.UUID;
  */
 public class DerivateFileInfo {
 
-    private String url;
-
     private String contentType;
 
     private String uri;
@@ -18,8 +16,7 @@ public class DerivateFileInfo {
 
     private String uuid;
 
-    public DerivateFileInfo(String url, String contentType, String fileName, String uri) {
-        this.url = url;
+    public DerivateFileInfo(String contentType, String fileName, String uri) {
         this.contentType = contentType;
         this.fileName = fileName;
         this.uri = uri;
@@ -41,9 +38,4 @@ public class DerivateFileInfo {
     public String getUuid() {
         return uuid;
     }
-
-    public String getUrl() {
-        return url;
-    }
-
 }

@@ -1,19 +1,6 @@
 package fsu.jportal.xml.dfg.oai;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-
+import fsu.jportal.xml.stream.DerivateFileInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
@@ -24,7 +11,19 @@ import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
 
-import fsu.jportal.xml.stream.DerivateFileInfo;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class DFGOAIMetsXMLHandler {
 
@@ -36,19 +35,24 @@ public class DFGOAIMetsXMLHandler {
 
     private final Function<String, Stream<DerivateFileInfo>> derivateSupplier;
 
+    private UnaryOperator<String> fileSectionHref;
+
     public DFGOAIMetsXMLHandler(String oaiIdentifier,
                                 Function<String, Optional<XMLStreamReader>> objSupplier,
-                                Function<String, Stream<DerivateFileInfo>> derivateSupplier) {
+                                Function<String, Stream<DerivateFileInfo>> derivateSupplier,
+                                UnaryOperator<String> fileSectionHref) {
 
         this.oaiIdentifier = oaiIdentifier;
         this.objSupplier = objSupplier;
         this.derivateSupplier = derivateSupplier;
+        this.fileSectionHref = fileSectionHref;
     }
 
     public DFGOAIMetsXMLHandler() {
         this(MCRBackend.oaiId(),
              MCRBackend::mcrXMLMetadataManager,
-             MCRBackend::ifs);
+             MCRBackend::ifs,
+             MCRBackend::fileSectionHref);
     }
 
     public Optional<Consumer<XMLStreamWriter>> handle(String href) {
@@ -61,7 +65,8 @@ public class DFGOAIMetsXMLHandler {
                                    .oaiRecord(mcrObjID,
                                               oaiIdentifier,
                                               objSupplier,
-                                              derivateSupplier));
+                                              derivateSupplier,
+                                              fileSectionHref));
         } finally {
             LOGGER.info("handle (" + href + ") " + (System.currentTimeMillis() - startTime) + "ms");
         }
@@ -75,7 +80,7 @@ public class DFGOAIMetsXMLHandler {
         public static Stream<DerivateFileInfo> ifs(String derivateID) {
             return DerivateUtils.stream(derivateID)
                                 .filter(Files::isRegularFile)
-                                .map((p) -> DerivateUtils.fileInfo(derivateID, p));
+                                .map(DerivateUtils::fileInfo);
         }
 
         public static Optional<XMLStreamReader> mcrXMLMetadataManager(String id) {
@@ -93,22 +98,23 @@ public class DFGOAIMetsXMLHandler {
 
             return Optional.empty();
         }
+
+        public static String fileSectionHref(String s) {
+            String baseURL = MCRFrontendUtil.getBaseURL() + "/servlets/MCRTileCombineServlet/MID";
+            return Optional.of(s.replaceFirst("ifs", ""))
+                    .map(url -> url.replaceAll("\\:/", "/"))
+                    .map(baseURL::concat)
+                    .orElse("noHref");
+        }
     }
 
     private static class DerivateUtils {
-
-        public static DerivateFileInfo fileInfo(String derivateID, Path path) {
+        public static DerivateFileInfo fileInfo(Path path) {
             String fileName = path.getFileName().toString();
             String uri = path.toUri().toString();
             String contentType = getContentType(path);
-            return new DerivateFileInfo(getURL(derivateID, fileName), contentType, fileName, uri);
-        }
 
-        private static String getURL(String derivateID, String fileName) {
-            StringBuilder url = new StringBuilder(MCRFrontendUtil.getBaseURL());
-            url.append("servlets/MCRTileCombineServlet/MID/");
-            url.append(derivateID).append("/").append(fileName);
-            return url.toString();
+            return new DerivateFileInfo(contentType, fileName, uri);
         }
 
         private static String getContentType(Path path) {

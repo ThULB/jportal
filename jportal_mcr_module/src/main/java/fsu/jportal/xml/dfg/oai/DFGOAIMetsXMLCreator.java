@@ -55,7 +55,9 @@ public class DFGOAIMetsXMLCreator {
     public static Consumer<XMLStreamWriter> oaiRecord(String rootID,
                                                       String oaiIdentifier,
                                                       Function<String, Optional<XMLStreamReader>> objSupplier,
-                                                      Function<String, Stream<DerivateFileInfo>> derivateSupplier) {
+                                                      Function<String, Stream<DerivateFileInfo>> derivateSupplier,
+                                                      UnaryOperator<String> fileSectionHref
+                                                      ) {
 
         long startTime = System.currentTimeMillis();
 
@@ -116,7 +118,7 @@ public class DFGOAIMetsXMLCreator {
                                     element("mets", "mets",
                                             dmdSecXMLFragment(rootObjectWithChildren, objSupplier),
                                             amdSecXMLFragment(rootObjectWithChildren),
-                                            fileSecXMLFragment(fileInfos),
+                                            fileSecXMLFragment(fileInfos, fileSectionHref),
                                             structMapPhysXMLFragment(rootObj, fileInfos),
                                             structMapLogXMLFragment(rootObjectWithChildren),
                                             structLinkXMLFragment(rootObjectWithChildren, fileInfos)
@@ -138,17 +140,18 @@ public class DFGOAIMetsXMLCreator {
 
     }
 
-    public static Consumer<XMLStreamWriter> fileSecXMLFragment(List<DerivateFileInfo> fileInfos) {
+    public static Consumer<XMLStreamWriter> fileSecXMLFragment(List<DerivateFileInfo> fileInfos,
+                                                               UnaryOperator<String> fileSectionHref) {
         return element("mets", "fileSec",
                        element("mets", "fileGrp", attr("USE", "DEFAULT"), fileInfos
                                .stream()
                                .map(fileInfo ->
                                             element("mets", "file",
                                                     attr("ID", "DEFAULT_" + fileInfo.getUuid()),
-                                                    attr("MIMETYPE", fileInfo.getContentType()),
+                                                    attr("MIMETYPE", "image/jpeg"),
                                                     element("mets", "FLocat",
                                                             attr("LOCTYPE", "URL"),
-                                                            attr("xlink", "href", fileInfo.getUrl())
+                                                            attr("xlink", "href", fileSectionHref.apply(fileInfo.getUri()))
                                                     )
                                             )
                                ).reduce(Consumer::andThen)
