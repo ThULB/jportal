@@ -1,5 +1,7 @@
 package fsu.jportal.xml.dfg.oai;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import fsu.jportal.xml.JPMCRObjXMLElementName;
 import fsu.jportal.xml.stream.ParsedMCRObj;
 import fsu.jportal.xml.stream.ParsedXML.ElementData;
@@ -11,6 +13,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,7 +41,7 @@ public class DmdSec {
                                                 dmdSecModsLanguage(obj),
                                                 dmdSecModsPart(obj),
                                                 dmdSecModsSubject(obj),
-//                                                dmdSecModsGenre(obj),
+                                                //                                                dmdSecModsGenre(obj),
                                                 dmdSecModsName(obj, objSupplier)
                                         )
                                 )
@@ -70,7 +74,7 @@ public class DmdSec {
         Optional.of(obj)
                 .map(ParsedMCRObj::getID)
                 .flatMap(getType);
-//        obj.element()
+        //        obj.element()
         return null;
     }
 
@@ -136,9 +140,9 @@ public class DmdSec {
                 );
 
         return obj.element(date)
-           .map(modsDateIssued)
-           .reduce(Consumer::andThen)
-           .orElse(noInheritedZero -> {});
+                  .map(modsDateIssued)
+                  .reduce(Consumer::andThen)
+                  .orElse(noInheritedZero -> {});
     }
 
     private static Consumer<XMLStreamWriter> dmdSecModsTileInfo(ParsedMCRObj obj) {
@@ -183,13 +187,16 @@ public class DmdSec {
                   .orElse(noModsName -> {});
     }
 
+    static final Cache<String, ParsedMCRObj> participantsCache = CacheBuilder.newBuilder()
+                                                                             .maximumSize(1000).build();
+
     public static Consumer<XMLStreamWriter> dmdSecModsName(ElementData participantData,
                                                            Function<String, Optional<XMLStreamReader>> objSupplier) {
         String participantID = participantData.getAttr("xlink", "href")
                                               .findFirst()
                                               .orElse("noparticipantID");
 
-        ParsedMCRObj participantMcrObj = ParserUtils
+        Callable<ParsedMCRObj> participantSupplier = () -> ParserUtils
                 .getXMLForObj(participantID)
                 .from(objSupplier)
                 .parseDataUsing(parse(
@@ -207,19 +214,25 @@ public class DmdSec {
                         matchElement("dateOfDeath").getText()
                 ));
 
-        return element("mods", "name",
-                       attr("type", Optional.of(participantID)
-                                            .filter(id -> id.contains("_jpinst_"))
-                                            .map(id -> "corporate")
-                                            .orElse("personal")),
+        try {
+            ParsedMCRObj participantMcrObj = participantsCache.get(participantID, participantSupplier);
+            return element("mods", "name",
+                           attr("type", Optional.of(participantID)
+                                                .filter(id -> id.contains("_jpinst_"))
+                                                .map(id -> "corporate")
+                                                .orElse("personal")),
 
-                       authorityAttr(participantMcrObj),
-                       modsRole(participantData),
-                       modsNamePart(participantMcrObj),
-                       modsNamePartDate(participantMcrObj),
-                       modsdisplayForm(participantMcrObj)
+                           authorityAttr(participantMcrObj),
+                           modsRole(participantData),
+                           modsNamePart(participantMcrObj),
+                           modsNamePartDate(participantMcrObj),
+                           modsdisplayForm(participantMcrObj)
 
-        );
+            );
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return noDmdSecModsName -> {};
     }
 
     private static Consumer<XMLStreamWriter> modsNamePartDate(ParsedMCRObj participantMcrObj) {
@@ -333,7 +346,7 @@ public class DmdSec {
                               ).orElse(noModsRole -> {});
     }
 
-    private static UnaryOperator<String> getStringMapper(String[] map, String defaultVal){
+    private static UnaryOperator<String> getStringMapper(String[] map, String defaultVal) {
         return type -> Arrays
                 .stream(map)
                 .filter(key -> key.startsWith(type))
