@@ -14,6 +14,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -31,6 +32,7 @@ import java.util.stream.Stream;
  * Created by chi on 14.11.16.
  * @author Huu Chi Vu
  */
+@Ignore("Ignore cause it takes to long.")
 public class DFGOAIMetsResolverTest {
 
     private static Logger LOGGER = LogManager.getLogger();
