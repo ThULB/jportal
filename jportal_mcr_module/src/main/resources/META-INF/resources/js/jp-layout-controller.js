@@ -464,9 +464,9 @@ $(document).ready(function() {
 		  }
 		  var html = "<div><p>Es ist ein Fehler bei der Paragraphen Referenzierung aufgetreten. Die folgenden" +
 		  		" Fehler müssen im Structify behoben werden:</p><ul style='margin: 8px 0 16px; font-weight: bold;'>";
-		  for(var error of e.error.appearance) {
+		  e.error.appearance.forEach(function(error) {
 		    html += "<li>Seite: " + error.image + "; Artikel; '" + error.label + "'; Paragraph Nummer: " + error.paragraph + "</li>";
-		  }
+		  });
 		  html += "</ul><p>Dieser Fehler tritt auf, wenn einem Paragraph kein ALTO-Block (show paragraph) zugeordnet werden konnte." +
 		  		" Um den Fehler zu beheben muss entweder der Paragraph gelöscht, oder das umschließende Rechteck vergrößert" +
 		  		" werden.</div>";
