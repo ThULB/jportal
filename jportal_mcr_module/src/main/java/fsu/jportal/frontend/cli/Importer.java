@@ -2,6 +2,8 @@ package fsu.jportal.frontend.cli;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +19,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,8 +28,11 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -48,6 +55,7 @@ import org.mycore.mets.model.struct.SmLink;
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.io.HttpImportSource;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.LocalSystemSink;
@@ -233,7 +241,7 @@ public class Importer {
         // save the old mets.xml
         MCRPath metsPath = MCRPath.getPath(derId.toString(), "mets.xml");
         if (Files.exists(metsPath)) {
-            MetsVersionStore.store(derId.toString());
+            MetsVersionStore.store(derId);
         }
 
         // build mets from object structure
@@ -441,6 +449,128 @@ public class Importer {
             return children;
         }
 
+    }
+
+    @MCRCommand(syntax = "jvbImport {0} {1} {2}", help = "Imports a whole jvb year. {target mycore object} {path to the innsbruck folder} {image path}")
+    public static List<String> jvbImport(String targetID, String ocrPath, String imgPath) throws IOException {
+        List<String> commands = new ArrayList<>();
+
+        Path base = Paths.get(ocrPath);
+        String year = base.getFileName().toString();
+        Set<Integer> months = getMonths(base);
+        for (Integer monthIndex : months) {
+            String date = year + "-" + String.format("%02d", monthIndex);
+            String title = MetsImportUtils.MONTH_NAMES.get(monthIndex);
+            try {
+                JPVolume volume = new JPVolume();
+                volume.setTitle(title);
+                volume.setDate(date, null);
+                volume.setParent(targetID);
+                volume.store();
+
+                String objId = volume.getObject().getId().toString();
+                String command = "jvbImportMonth " + objId + " " + monthIndex + " " + ocrPath + " " + imgPath;
+                commands.add(command);
+            } catch (Exception exc) {
+                LOGGER.error("unable to import jvb month " + title, exc);
+            }
+        }
+        return commands;
+    }
+
+    @MCRCommand(syntax = "jvbImportMonth {0} {1} {2} {3}", help = "Imports the nr of a single month. {target mycore object} {month} {path to the innsbruck folder} {image path}")
+    public static List<String> jvbImportMonth(String targetID, String month, String ocrPath, String imgPath)
+        throws IOException {
+        List<String> commands = new ArrayList<>();
+        Path base = Paths.get(ocrPath);
+        getNrs(base).stream().map(Path::getFileName).map(Path::toString).forEach(monthFolder -> {
+            String[] parts = monthFolder.split("_");
+            String date = parts[1];
+            String nr = parts[2];
+
+            String dyear = date.substring(0, 4);
+            String dmonth = date.substring(4, 6);
+            String dday = date.substring(6, 8);
+            if (Integer.valueOf(dmonth) != Integer.valueOf(month)) {
+                return;
+            }
+            String title = getDayTitle(Integer.valueOf(dyear), Integer.valueOf(dmonth), Integer.valueOf(dday),
+                Integer.valueOf(nr));
+            try {
+                JPVolume day = new JPVolume();
+                day.setTitle(title);
+                day.setDate(dyear + "-" + dmonth + "-" + dday, null);
+                day.setParent(targetID);
+                day.store();
+                String altoPath = Paths.get(ocrPath).resolve(monthFolder).resolve("mcralto").toString();
+                commands.add("jvbUpload " + day.getId() + " " + altoPath + " " + imgPath);
+            } catch (Exception exc) {
+                LOGGER.error("unable to import jvb nr. " + title, exc);
+            }
+        });
+        return commands;
+    }
+
+    @MCRCommand(syntax = "jvbUpload {0} {1} {2}", help = "uploads the files to a number. {target mycore object} {path to alto files} {path to img files}")
+    public static void jvbUpload(String targetID, String altoPath, String imgPath)
+        throws IOException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        JPDerivateComponent derivate = new JPDerivateComponent();
+        String mainDoc = null;
+        try (DirectoryStream<Path> altoStream = Files.newDirectoryStream(Paths.get(altoPath), "*.xml")) {
+            altoStream.forEach(alto -> {
+                String altoFileName = alto.getFileName().toString();
+                String imgFileName = altoFileName.replaceAll(".xml", ".tif");
+                if (mainDoc == null) {
+                    derivate.setMainDoc(imgFileName);
+                }
+                try {
+                    derivate.add(Paths.get(imgPath).resolve(imgFileName).toUri().toURL(), imgFileName);
+                    derivate.add(alto.toUri().toURL(), "alto/" + altoFileName);
+                } catch (MalformedURLException e) {
+                    LOGGER.error("Unable to add file to derivate", e);
+                }
+            });
+        }
+        JPVolume volume = new JPVolume(targetID);
+        volume.addDerivate(derivate);
+        volume.store(StoreOption.derivate);
+    }
+
+    private static Set<Integer> getMonths(Path dir) throws IOException {
+        Set<Integer> months = new TreeSet<>();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "JVB_*")) {
+            stream.forEach(path -> {
+                if (!Files.isDirectory(path)) {
+                    return;
+                }
+                String fileName = path.getFileName().toString();
+                Integer month = Integer.valueOf(fileName.split("_")[1].substring(4, 6));
+                months.add(month);
+            });
+        }
+        return months;
+
+    }
+
+    private static List<Path> getNrs(Path dir) throws IOException {
+        List<Path> paths = new ArrayList<>();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "JVB_*")) {
+            stream.forEach(path -> {
+                if (!Files.isDirectory(path)) {
+                    return;
+                }
+                paths.add(path);
+            });
+        }
+        return paths;
+    }
+
+    public static void main(String[] args) throws Exception {
+        Set<Integer> months = Importer.getMonths(Paths.get("/data/temp/mnt/images/OCRausInsbruck/1897/"));
+        months.forEach(System.out::println);
+
+        List<Path> numbers = Importer.getNrs(Paths.get("/data/temp/mnt/images/OCRausInsbruck/1897/"));
+        numbers.forEach(System.out::println);
     }
 
 }
