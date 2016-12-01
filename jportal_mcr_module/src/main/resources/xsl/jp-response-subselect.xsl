@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:decoder="java.net.URLDecoder"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:decoder="java.net.URLDecoder"
   exclude-result-prefixes="xalan mcrxml solrxml i18n decoder">
 
   <xsl:variable name="_xed_subselect_session">
@@ -13,14 +12,14 @@
 
   <!-- subselect param -->
   <xsl:param name="subselect.type" select="''" />
-  <xsl:param name="subselect.session" /> 
+  <xsl:param name="subselect.session" />
   <xsl:param name="subselect.varpath" />
   <xsl:param name="subselect.webpage" />
 
   <xsl:variable name="subselectXML">
     <subselect>
       <param name="subselect.type" value="{$subselect.type}" />
-      <param name="subselect.session" value="{$subselect.session}" />  
+      <param name="subselect.session" value="{$subselect.session}" />
       <param name="_xed_subselect_session" value="{$_xed_subselect_session}" />
       <param name="subselect.varpath" value="{$subselect.varpath}" />
       <param name="subselect.webpage" value="{$subselect.webpage}" />
@@ -68,6 +67,12 @@
   </xsl:template>
 
   <xsl:template mode="renderView" match="@getData[.='subselect.search.form.qry']">
+    <xsl:variable name="qry">
+      <xsl:call-template name="UrlGetParam">
+        <xsl:with-param name="url" select="$RequestURL" />
+        <xsl:with-param name="par" select="'qry'" />
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:attribute name="placeholder">
       <xsl:choose>
         <xsl:when test="$subselect.type = 'person'">
@@ -115,14 +120,12 @@
     </xsl:attribute>
   </xsl:template>
 
-<!--   <xsl:template mode="renderView" match="@value[contains(.,'{subselect.session}')]">  -->
   <xsl:template mode="renderView" match="@value[contains(.,'{_xed_subselect_session}')]">
     <xsl:attribute name="value">
-<!--       <xsl:value-of select="$subselect.session" />  -->
         <xsl:value-of select="$_xed_subselect_session" />
     </xsl:attribute>
   </xsl:template>
-  
+
   <xsl:template mode="renderView" match="@value[contains(.,'{subselect.session}')]">
     <xsl:attribute name="value">
         <xsl:value-of select="$subselect.session" />
@@ -204,19 +207,23 @@
       <url>
         <xsl:choose>
           <xsl:when test="$subselect.session = ''">
-            <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XEditor')" /></base>
+            <base>
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XEditor')" />
+            </base>
             <param name="_xed_submit_return" value="submit" />
             <param name="_xed_session" value="{$_xed_subselect_session}" />
             <param name="@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
-            <param name="@xlink:title" value="{$data/str[@name='heading']}" encode="false"/> <!-- _var_@xlink:title -->
+            <param name="@xlink:title" value="{$data/str[@name='heading']}" encode="false" /> <!-- _var_@xlink:title -->
           </xsl:when>
           <xsl:otherwise>
-            <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XMLEditor')" /></base>
+            <base>
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XMLEditor')" />
+            </base>
             <param name="_action" value="end.subselect" />
             <xsl:copy-of select="$subselectParam/subselect/param" />
             <param name="mode" value="prefix" />
             <param name="_var_@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
-            <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" encode="false"/> <!-- _var_@xlink:title -->
+            <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" encode="false" /> <!-- _var_@xlink:title -->
           </xsl:otherwise>
         </xsl:choose>
       </url>
@@ -259,7 +266,7 @@
         <xsl:value-of select="$data/href" />
     </xsl:attribute>
   </xsl:template>
-  
+
   <xsl:template mode="renderView" match="@action[.='{subselect.url}']">
     <xsl:attribute name="action">
         <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/solr/subselect')" />
