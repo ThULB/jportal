@@ -110,6 +110,15 @@ public class JPDerivateComponent implements JPComponent {
         this.newContentMap.put(targetPath, content);
     }
 
+    /**
+     * Sets a new main document (just sets the internals main doc).
+     * 
+     * @param mainDoc the new main doc
+     */
+    public void setMainDoc(String mainDoc) {
+        this.derivate.getDerivate().getInternals().setMainDoc(mainDoc);
+    }
+
     @Override
     public void store(StoreOption... options)
         throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
