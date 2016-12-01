@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 
 /**
@@ -36,12 +37,13 @@ public class MetsVersionStore {
      * @throws IOException some storing or reading went wrong
      * @throws FileNotFoundException the mets.xml does not exists in the derivate
      */
-    public static synchronized void store(String derivateId) throws IOException, FileNotFoundException {
-        MCRPath metsPath = MCRPath.getPath(derivateId, "mets.xml");
+    public static synchronized void store(MCRObjectID derivateId) throws IOException, FileNotFoundException {
+        String id = derivateId.toString();
+        MCRPath metsPath = MCRPath.getPath(id, "mets.xml");
         if (!Files.exists(metsPath)) {
             throw new FileNotFoundException("mets.xml does not exists in derivate " + derivateId);
         }
-        Path derivatePath = STORE_PATH.resolve(derivateId);
+        Path derivatePath = STORE_PATH.resolve(id);
         if (!Files.exists(derivatePath)) {
             Files.createDirectories(derivatePath);
         }
