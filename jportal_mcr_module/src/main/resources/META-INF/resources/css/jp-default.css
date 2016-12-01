@@ -29,7 +29,6 @@
 
 .jp-popover-container .popover {
 	display: block;
-	width: 100%;
 	max-width: none;
 	position: relative;
 	box-shadow: none;
@@ -407,7 +406,7 @@ p.jp-layout-metadata-list {
 .jp-metadata dd {
     float: left;
     margin-bottom: 4px;
-    margin-left: 22px;
+    margin-left: 20px;
 }
 .jp-metadata dt:AFTER {
 	content: ": "
