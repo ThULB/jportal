@@ -168,7 +168,7 @@ public class METSBaseResource {
      */
     private void storeOldMets(String derivateId) {
         try {
-            MetsVersionStore.store(derivateId);
+            MetsVersionStore.store(MCRObjectID.getInstance(derivateId));
         } catch (Exception exc) {
             JsonObject json = new JsonObject();
             json.addProperty("errorMsg", "unable to store old mets.xml: " + exc.getMessage());
