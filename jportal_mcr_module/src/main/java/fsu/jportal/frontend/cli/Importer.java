@@ -14,7 +14,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -26,10 +25,8 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
-import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -43,19 +40,15 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.FileGrp;
-import org.mycore.mets.model.files.FileSec;
 import org.mycore.mets.model.struct.Fptr;
 import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.PhysicalStructMap;
-import org.mycore.mets.model.struct.PhysicalSubDiv;
-import org.mycore.mets.model.struct.SmLink;
 
-import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPVolume;
-import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.io.HttpImportSource;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.LocalSystemSink;
@@ -65,7 +58,6 @@ import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.MetsImportUtils;
 import fsu.jportal.mets.MetsImporter;
 import fsu.jportal.mets.MetsVersionStore;
-import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.MetsUtil;
 
 /**
@@ -74,8 +66,6 @@ import fsu.jportal.util.MetsUtil;
  */
 @MCRCommandGroup(name = "JPortal Importer")
 public class Importer {
-
-    private static final String ALTO_FOLDER = "mcralto";
 
     static Logger LOGGER = LogManager.getLogger(Importer.class);
 
@@ -106,128 +96,6 @@ public class Importer {
         MetsImporter importer = importerClass.newInstance();
 
         MetsImportUtils.importMets(derivateId, mets, importer);
-    }
-
-    /**
-     * Does a mets import for a year.
-     *
-     * <pre>
-     * importMetsYear jportal_jpvolume_00000002 /data/temp/mnt/images/Jenaer_Volksblatt_1914_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_2/1914
-     * </pre>
-     * 
-     * @param targetID the target volume
-     * @param metsPath path to the mets.xml file
-     * @param contentPath path on the file system to the images and the alto files
-     * @param missingNumbers comma separated list of numbers which are missing. those missing number
-     *        are created as volumes but have no content. If no numbers are missing use the 0 value.
-     * 
-     * @throws Exception darn! something went wrong
-     */
-    @MCRCommand(syntax = "importMetsYear {0} {1} {2}", help = "importMetsYear {targetID} {path to mets.xml} {path to ocr folder}")
-    public static List<String> importMetsYear(String targetID, String metsPath, String contentPath) throws Exception {
-        MCRObjectID target = MCRObjectID.getInstance(targetID);
-        if (!MCRMetadataManager.exists(target)) {
-            throw new MCRException("Unable to find " + target);
-        }
-        LOGGER.info("Import mets to " + targetID);
-        Mets mets = getMets(metsPath);
-        LogicalDiv rootDiv = getLogicalRootDiv(mets);
-
-        List<String> monthCommands = new ArrayList<>();
-
-        for (int order = 1; order < rootDiv.getChildren().size(); order++) {
-            String command = "importMetsMonth " + targetID + " " + metsPath + " " + contentPath + " " + order;
-            monthCommands.add(command);
-        }
-        return monthCommands;
-    }
-
-    /**
-     * importMetsMonth jportal_jpvolume_00000374 /data/temp/mnt/images/Jenaer_Volksblatt_1915_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915 1
-     * 
-     * @param targetID
-     * @param metsPath
-     * @param contentPath
-     * @param monthIndex
-     */
-    @MCRCommand(syntax = "importMetsMonth {0} {1} {2} {3}", help = "importMetsMonth {targetID} {path to mets.xml} {path to ocr folder} {number of month [1-12]}")
-    public static List<String> importMetsMonth(String targetID, String metsPath, String contentPath, int monthIndex)
-        throws Exception {
-        // create month
-        MCRObjectID target = MCRObjectID.getInstance(targetID);
-        if (!MCRMetadataManager.exists(target)) {
-            throw new MCRException("Unable to find " + target);
-        }
-        Optional<JPContainer> parentOptional = JPComponentUtil.getContainer(target);
-
-        JPVolume month = new JPVolume();
-        month.setTitle(MetsImportUtils.MONTH_NAMES.get(monthIndex));
-        month.setParent(target);
-        month.setHiddenPosition(monthIndex);
-        parentOptional.ifPresent(parent -> {
-            MetsImportUtils.setPublishedDate(monthIndex, month, parent);
-        });
-        month.store();
-
-        // create day commands
-        List<String> dayCommands = new ArrayList<>();
-        Mets mets = getMets(metsPath);
-        LogicalDiv rootDiv = getLogicalRootDiv(mets);
-        Optional<LogicalDiv> monthDiv = getMonth(rootDiv, monthIndex);
-        optionalToStream(monthDiv).flatMap(div -> div.getChildren().stream()).forEach(day -> {
-            String command = "importMetsDay " + month.getObject().getId() + " " + metsPath + " " + contentPath + " "
-                + monthIndex + " " + day.getPositionInParent().orElse(0) + 1;
-            dayCommands.add(command);
-        });
-        return dayCommands;
-    }
-
-    /**
-     * importMetsDay jportal_jpvolume_00000374 /data/temp/mnt/images/Jenaer_Volksblatt_1915_167758667_tif/mets.xml /data/temp/mnt/images/OCRbearbInnsbruck_1915_2/1915 1 1
-     * 
-     * @param targetID
-     * @param metsPath
-     * @param contentPath
-     * @param monthIndex
-     * @param dayIndex
-     */
-    @MCRCommand(syntax = "importMetsDay {0} {1} {2} {3} {4}", help = "importMetsDay {targetID} {path to mets.xml} {path to ocr folder} {number of month [1-12]} {order number of day}")
-    public static void importMetsDay(String targetID, String metsPath, String contentPath, int monthIndex, int dayIndex)
-        throws Exception {
-
-        Mets mets = getMets(metsPath);
-        LogicalDiv rootDiv = getLogicalRootDiv(mets);
-        LogicalDiv dayDiv = getDay(rootDiv, monthIndex, dayIndex).orElse(null);
-        if (dayDiv == null) {
-            LOGGER.warn("Unable to get day (position) " + dayIndex + " of month (position) " + monthIndex);
-            return;
-        }
-
-        // parse label
-        String[] labels = dayDiv.getLabel().split(" ");
-        Integer nr = Integer.valueOf(labels[1].substring(0, labels[1].length() - 1));
-        Integer year = Integer.valueOf(labels[4]);
-        Integer month = MetsImportUtils.MONTH_NAMES.inverse().get(labels[3]);
-        Integer dayOfMonth = Integer.valueOf(labels[2].substring(0, labels[2].length() - 1));
-
-        // create day
-        JPVolume day = new JPVolume();
-        String title = getDayTitle(year, month, dayOfMonth, nr);
-        String date = String.format("%d-%02d-%02d", year, month, dayOfMonth);
-        day.setTitle(title);
-        day.setDate(date, null);
-        day.setHiddenPosition(dayOfMonth);
-        day.setParent(MCRObjectID.getInstance(targetID));
-
-        // derivate
-        Path metsFolderPath = Paths.get(metsPath).getParent();
-        Path altoFolderPath = Paths.get(contentPath);
-
-        JPDerivateComponent derivate = buildDerivate(mets, dayDiv, metsFolderPath, altoFolderPath);
-        day.addDerivate(derivate);
-
-        // store the day and its derivate
-        day.store();
     }
 
     @MCRCommand(syntax = "fixLLZ {0} {1}", help = "fixLLZ {mycore object id} {path to the mets with the coordination}")
@@ -343,78 +211,6 @@ public class Importer {
         return div;
     }
 
-    private static JPDerivateComponent buildDerivate(Mets mets, LogicalDiv logicalDiv, Path metsFolderPath,
-        Path altoFolderPath) {
-        JPDerivateComponent derivate = new JPDerivateComponent();
-
-        // get stream of images for the logical day
-        Stream<String> images = getImagesOfLogicalDiv(mets, logicalDiv);
-
-        images.forEach(imageFile -> {
-            try {
-                Path absoluteImagePath = metsFolderPath.resolve(imageFile);
-                String volumeFolder = String.join("_", Arrays.copyOf(imageFile.split("_"), 4));
-                String altoFile = imageFile.replace(".tif", ".xml");
-                Path absoluteAltoPath = altoFolderPath.resolve(volumeFolder).resolve(ALTO_FOLDER).resolve(altoFile);
-
-                if (Files.exists(absoluteImagePath) && !Files.isDirectory(absoluteImagePath)) {
-                    derivate.add(absoluteImagePath.toUri().toURL(), imageFile);
-                } else {
-                    LOGGER.warn("Image not found " + absoluteImagePath.toString());
-                }
-                if (Files.exists(absoluteAltoPath) && !Files.isDirectory(absoluteAltoPath)) {
-                    derivate.add(absoluteAltoPath.toUri().toURL(), "alto/" + altoFile);
-                } else {
-                    LOGGER.warn("ALTO not found " + absoluteAltoPath.toString());
-                }
-            } catch (Exception exc) {
-                LOGGER.error("Unable to add image to derivate", exc);
-            }
-        });
-        return derivate;
-    }
-
-    private static Stream<String> getImagesOfLogicalDiv(Mets mets, LogicalDiv dayDiv) {
-        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
-        FileSec fileSec = mets.getFileSec();
-        FileGrp masterGroup = fileSec.getFileGroup("MASTER");
-
-        Stream<String> images = dayDiv.getChildren().stream().map(LogicalDiv::getId).flatMap(logId -> {
-            return mets.getStructLink().getSmLinkByFrom(logId).stream().map(SmLink::getTo);
-        }).distinct().flatMap(physId -> {
-            PhysicalSubDiv physDiv = physicalStructMap.getDivContainer().get(physId);
-            return physDiv.getChildren().stream().map(Fptr::getFileId);
-        }).distinct().map(fileId -> {
-            return masterGroup.getFileById(fileId).getFLocat().getHref();
-        }).distinct();
-        return images;
-    }
-
-    private static Mets getMets(String metsPath) throws JDOMException, IOException {
-        SAXBuilder builder = new SAXBuilder();
-        Document xml = builder.build(new File(metsPath));
-        return new Mets(xml);
-    }
-
-    private static LogicalDiv getLogicalRootDiv(Mets mets) {
-        LogicalStructMap logicalStructMap = (LogicalStructMap) mets.getStructMap(LogicalStructMap.TYPE);
-        return logicalStructMap.getDivContainer();
-    }
-
-    private static Optional<LogicalDiv> getMonth(LogicalDiv rootDiv, int monthIndex) {
-        return rootDiv.getChildren()
-                      .stream()
-                      .filter(div -> (div.getPositionInParent().orElse(0) + 1) == monthIndex)
-                      .findAny();
-    }
-
-    private static Optional<LogicalDiv> getDay(LogicalDiv rootDiv, int monthOrder, int dayIndex) {
-        return optionalToStream(
-            getMonth(rootDiv, monthOrder)).flatMap(div -> div.getChildren().stream())
-                                          .filter(day -> (day.getPositionInParent().orElse(0) + 1) == dayIndex)
-                                          .findFirst();
-    }
-
     /**
      * https://bugs.openjdk.java.net/browse/JDK-8050820
      * 
@@ -451,8 +247,9 @@ public class Importer {
 
     }
 
-    @MCRCommand(syntax = "jvbImport {0} {1} {2}", help = "Imports a whole jvb year. {target mycore object} {path to the innsbruck folder} {image path}")
-    public static List<String> jvbImport(String targetID, String ocrPath, String imgPath) throws IOException {
+    @MCRCommand(syntax = "jvbImport {0} {1} {2}", help = "Imports a whole jvb year. {target mycore object} {path to the innsbruck folder} {ocr folder} {image path}")
+    public static List<String> jvbImport(String targetID, String ocrPath, String ocrFolder, String imgPath)
+        throws IOException {
         List<String> commands = new ArrayList<>();
 
         Path base = Paths.get(ocrPath);
@@ -469,7 +266,8 @@ public class Importer {
                 volume.store();
 
                 String objId = volume.getObject().getId().toString();
-                String command = "jvbImportMonth " + objId + " " + monthIndex + " " + ocrPath + " " + imgPath;
+                String command = "jvbImportMonth " + objId + " " + monthIndex + " " + ocrPath + "" + ocrFolder + " "
+                    + imgPath;
                 commands.add(command);
             } catch (Exception exc) {
                 LOGGER.error("unable to import jvb month " + title, exc);
@@ -478,9 +276,9 @@ public class Importer {
         return commands;
     }
 
-    @MCRCommand(syntax = "jvbImportMonth {0} {1} {2} {3}", help = "Imports the nr of a single month. {target mycore object} {month} {path to the innsbruck folder} {image path}")
-    public static List<String> jvbImportMonth(String targetID, String month, String ocrPath, String imgPath)
-        throws IOException {
+    @MCRCommand(syntax = "jvbImportMonth {0} {1} {2} {3} {4}", help = "Imports the nr of a single month. {target mycore object} {month} {path to the innsbruck folder} {ocr folder} {image path}")
+    public static List<String> jvbImportMonth(String targetID, String month, String ocrPath, String ocrFolder,
+        String imgPath) throws IOException {
         List<String> commands = new ArrayList<>();
         Path base = Paths.get(ocrPath);
         getNrs(base).stream().map(Path::getFileName).map(Path::toString).forEach(monthFolder -> {
@@ -502,8 +300,8 @@ public class Importer {
                 day.setDate(dyear + "-" + dmonth + "-" + dday, null);
                 day.setParent(targetID);
                 day.store();
-                String altoPath = Paths.get(ocrPath).resolve(monthFolder).resolve("mcralto").toString();
-                commands.add("jvbUpload " + day.getId() + " " + altoPath + " " + imgPath);
+                String altoPath = Paths.get(ocrPath).resolve(monthFolder).resolve(ocrFolder).toString();
+                commands.add("jvbUpload " + day.getId() + " " + altoPath + "" + imgPath);
             } catch (Exception exc) {
                 LOGGER.error("unable to import jvb nr. " + title, exc);
             }
