@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -21,20 +22,22 @@ import fsu.jportal.util.DerivateLinkUtil;
  * @author Matthias Eichner
  */
 public class DeleteDerivateHandler extends MCREventHandlerBase {
-    private static Logger LOGGER = LogManager.getLogger(DeleteDerivateHandler.class);
+
+    private static Logger LOGGER = LogManager.getLogger();
 
     @Override
     protected void handleDerivateDeleted(MCREvent evt, MCRDerivate der) {
-        try {
-            DerivateLinkUtil.deleteDerivateLinks(der);
-        } catch (SolrServerException sse) {
-            LOGGER.error("unable to delete all derivate links");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MCRAccessException e) {
-            LOGGER.info("No Access");
-            e.printStackTrace();
-        }
+        MCRSessionMgr.getCurrentSession().onCommit(() -> {
+            try {
+                DerivateLinkUtil.deleteDerivateLinks(der);
+            } catch (SolrServerException sse) {
+                LOGGER.error("unable to delete all derivate links cause of solr error", sse);
+            } catch (IOException e) {
+                LOGGER.error("unable to delete all derivate links cause of solr error", e);
+            } catch (MCRAccessException e) {
+                LOGGER.error("unable to delete all derivate links cause of mycore access error", e);
+            }
+        });
     }
 
 }
