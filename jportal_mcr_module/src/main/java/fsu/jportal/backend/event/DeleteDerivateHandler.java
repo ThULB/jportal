@@ -1,7 +1,5 @@
 package fsu.jportal.backend.event;
 
-import java.io.IOException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -32,8 +30,6 @@ public class DeleteDerivateHandler extends MCREventHandlerBase {
                 DerivateLinkUtil.deleteDerivateLinks(der);
             } catch (SolrServerException sse) {
                 LOGGER.error("unable to delete all derivate links cause of solr error", sse);
-            } catch (IOException e) {
-                LOGGER.error("unable to delete all derivate links cause of solr error", e);
             } catch (MCRAccessException e) {
                 LOGGER.error("unable to delete all derivate links cause of mycore access error", e);
             }

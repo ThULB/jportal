@@ -19,7 +19,6 @@ import java.util.Objects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -176,16 +175,10 @@ public class DerivateTools {
             MCRPath target = copyHistory.get(sourceNode);
             String sourcePath = getPathNoLeadingRoot(sourceNode);
 
-            List<MCRObjectID> idList = new ArrayList<MCRObjectID>();
-            try {
-                idList = DerivateLinkUtil.getLinks(sourceNode);
-                DerivateLinkUtil.setLinks(idList, MCRPath.toMCRPath(target));
-                DerivateLinkUtil.deleteFileLinks(idList, sourceNode);
-            } catch (SolrServerException e) {
-                LOGGER.error("unable to get or set all file links");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            List<MCRObjectID> idList = DerivateLinkUtil.getLinks(sourceNode);
+            DerivateLinkUtil.setLinks(idList, MCRPath.toMCRPath(target));
+            DerivateLinkUtil.deleteFileLinks(idList, sourceNode);
+
             if (sourcePath.equals(maindoc)) {
                 setAsMain(target.getOwner(), getPathNoLeadingRoot(target));
             }
@@ -252,12 +245,7 @@ public class DerivateTools {
 
     private static void mvSingleFile(MCRPath src, MCRPath tgt) throws IOException, MCRAccessException {
         MCRURN urn = URNTools.getURNForFile(src);
-        List<MCRObjectID> idList = new ArrayList<MCRObjectID>();
-        try {
-            idList = DerivateLinkUtil.getLinks(src);
-        } catch (SolrServerException e) {
-            LOGGER.error("unable to get all file links");
-        }
+        List<MCRObjectID> idList = DerivateLinkUtil.getLinks(src);
         DerivateLinkUtil.deleteFileLinks(idList, src);
 
         Files.move(src, tgt);
@@ -331,7 +319,7 @@ public class DerivateTools {
                         throws IOException {
                     try {
                         DerivateLinkUtil.deleteFileLink(MCRPath.toMCRPath(file));
-                    } catch (SolrServerException | MCRAccessException e) {
+                    } catch (MCRAccessException e) {
                         LOGGER.error("Unable to delete links of path " + mcrPath);
                     }
                     Files.delete(file);

@@ -1,12 +1,10 @@
 package fsu.jportal.util;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -14,9 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
@@ -34,6 +29,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.search.MCRSolrSearchUtils;
 
 /**
  * Collection of util methods for {@link MCRMetaDerivateLink}.
@@ -195,7 +191,7 @@ public abstract class DerivateLinkUtil {
      * @throws SolrServerException
      */
     public static void deleteDerivateLinks(MCRDerivate der)
-        throws SolrServerException, IOException, MCRAccessException {
+        throws SolrServerException, MCRAccessException {
         MCRObjectID derivateId = der.getId();
         List<MCRObjectID> idList = getLinks(derivateId + "*");
         for (MCRObjectID id : idList) {
@@ -217,11 +213,11 @@ public abstract class DerivateLinkUtil {
         }
     }
 
-    public static void deleteFileLink(MCRPath pathOfImg) throws SolrServerException, IOException, MCRAccessException {
+    public static void deleteFileLink(MCRPath pathOfImg) throws MCRAccessException {
         deleteFileLink(pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
     }
 
-    public static void deleteFileLink(String pathOfImg) throws SolrServerException, IOException, MCRAccessException {
+    public static void deleteFileLink(String pathOfImg) throws MCRAccessException {
         List<MCRObjectID> idList = getLinks(pathOfImg);
         for (MCRObjectID id : idList) {
             try {
@@ -232,35 +228,23 @@ public abstract class DerivateLinkUtil {
         }
     }
 
-    public static List<MCRObjectID> getLinks(MCRPath pathOfImg) throws SolrServerException, IOException {
+    public static List<MCRObjectID> getLinks(MCRPath pathOfImg) {
         return getLinks(pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
     }
 
-    public static List<MCRObjectID> getLinks(String pathOfImg) throws SolrServerException, IOException {
-        SolrClient solrServer = MCRSolrClientFactory.getSolrClient();
+    public static List<MCRObjectID> getLinks(String pathOfImg) {
+        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();
-        List<MCRObjectID> idList = new ArrayList<MCRObjectID>();
         params.add("q", "derivateLink:" + pathOfImg);
         params.set("rows", 100);
         params.set("fl", "id");
-        int numFound = Integer.MAX_VALUE, start = 0;
-        while (start < numFound) {
-            params.set("start", start);
-            QueryResponse response = solrServer.query(params);
-            SolrDocumentList results = response.getResults();
-            numFound = (int) results.getNumFound();
-            start += results.size();
-            for (SolrDocument doc : results) {
-                String docId = (String) doc.getFieldValue("id");
-                Optional<MCRObjectID> mcrId = JPComponentUtil.getValidID(docId);
-                if (mcrId.isPresent()) {
-                    idList.add(mcrId.get());
-                } else {
-                    LOGGER.warn("Invalid or not existing object id " + docId);
-                }
-            }
-        }
-        return idList;
+        return MCRSolrSearchUtils.stream(solrClient, params)
+                                 .map(doc -> doc.getFieldValue("id").toString())
+                                 .filter(id -> {
+                                     return JPComponentUtil.getValidID(id).isPresent();
+                                 })
+                                 .map(MCRObjectID::getInstance)
+                                 .collect(Collectors.toList());
     }
 
     private static MCRMetaDerivateLink getLink(MCRMetaElement derLinks, String pathOfImage) {
