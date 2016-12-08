@@ -5,6 +5,7 @@
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
+  <xsl:param name="q" />
 
   <xsl:include href="jp-layout-contentArea-breadcrumb.xsl" />
   <xsl:include href="jp-layout-contentArea-tableOfContent.xsl" />
@@ -76,11 +77,9 @@
           <div class="row">
             <xsl:if test="structure/derobjects or metadata/derivateLinks">
               <div class="col-sm-4 jp-content-thumbnail">
-                <xsl:call-template name="derivateDisplay">
-                  <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
-                  <xsl:with-param name="objID" select="./@ID" />
-                  <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-                </xsl:call-template>
+                <xsl:apply-templates select="." mode="derivateDisplay">
+                  <xsl:with-param name="query" select="$q" />
+                </xsl:apply-templates>
               </div>
             </xsl:if>
             <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">

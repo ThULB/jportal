@@ -1,60 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:xalan="http://xml.apache.org/xalan" xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
   xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://org.mycore.urn.MCRXMLFunctions"
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
   xmlns:encoder="xalan://java.net.URLEncoder" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml jpxml mcrurn acl encoder">
 
-  <xsl:template name="derivatePreview">
-    <xsl:param name="mcrObj" />
-    <xsl:variable name="objID" select="$mcrObj/@ID" />
-    <xsl:variable name="journalID" select="$mcrObj/metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-    <xsl:variable name="published" select="$mcrObj/metadata/dates/date[@type='published' and @inherited=0]" />
-    <xsl:choose>
-      <xsl:when test="$mcrObj/metadata/derivateLinks/derivateLink[1]">
-        <xsl:call-template name="derivateDisplay">
-          <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
-          <xsl:with-param name="objID" select="$journalID" />
-          <xsl:with-param name="journalID" select="$journalID" />
-          <xsl:with-param name="mode" select="'preview'" />
-          <xsl:with-param name="published" select="$published" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="$mcrObj/structure/derobjects/derobject">
-        <xsl:call-template name="derivateDisplay">
-          <xsl:with-param name="nodes" select="$mcrObj/structure/derobjects/derobject[1]" />
-          <xsl:with-param name="objID" select="$objID" />
-          <xsl:with-param name="journalID" select="$journalID" />
-          <xsl:with-param name="editable" select="'false'" />
-          <xsl:with-param name="mode" select="'preview'" />
-          <xsl:with-param name="published" select="$published" />
-        </xsl:call-template>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="derivateDisplay">
-    <xsl:param name="nodes" />
-    <xsl:param name="objID" />
-    <xsl:param name="journalID" />
-    <xsl:param name="editable" select="'true'" />
+  <xsl:template mode="derivateDisplay" match="/mycoreobject">
     <xsl:param name="mode" select="'metadata'" />
-    <xsl:param name="published" select="/mycoreobject/metadata/dates/date[@type='published' and @inherited=0]" />
+    <xsl:param name="editable" select="'true'" />
+    <xsl:param name="query" />
 
-    <xsl:if test="derivAccess:checkPermission($objID, $journalID, $published)">
-      <xsl:if test="count($nodes) &gt; 0">
-        <div class="jp-layout-derivateList">
-          <xsl:apply-templates mode="derivateDisplay" select="$nodes">
-            <xsl:with-param name="editable" select="$editable" />
-            <xsl:with-param name="mode" select="$mode" />
-          </xsl:apply-templates>
-        </div>
-      </xsl:if>
+    <xsl:variable name="published" select="metadata/dates/date[@type='published' and @inherited=0]" />
+    <xsl:variable name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+
+    <xsl:variable name="access" select="derivAccess:checkPermission(@ID, $journalID, $published)" />
+    <xsl:variable name="derivateLink" select="metadata/derivateLinks/derivateLink" />
+    <xsl:variable name="derivate" select="structure/derobjects/derobject" />
+
+    <xsl:if test="$access and ($derivateLink or $derivate)">
+      <div class="jp-layout-derivateList">
+        <xsl:apply-templates select="metadata/derivateLinks/derivateLink" mode="derivateDisplay">
+          <xsl:with-param name="mode" select="$mode" />
+          <xsl:with-param name="editable" select="$editable" />
+          <xsl:with-param name="query" select="$query" />
+        </xsl:apply-templates>
+  
+        <xsl:apply-templates select="structure/derobjects/derobject" mode="derivateDisplay">
+          <xsl:with-param name="mode" select="$mode" />
+          <xsl:with-param name="editable" select="$editable" />
+          <xsl:with-param name="query" select="$query" />
+        </xsl:apply-templates>
+      </div>
     </xsl:if>
   </xsl:template>
 
   <xsl:template mode="derivateDisplay" match="derivateLink">
-    <xsl:param name="editable" select="'true'" />
-    <xsl:param name="mode" select="'metadata'" />
+    <xsl:param name="editable" />
+    <xsl:param name="mode" />
+    <xsl:param name="query" />
+
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
     <xsl:variable name="file" select="substring-after(@xlink:href, '/')" />
@@ -65,6 +49,7 @@
         <xsl:call-template name="iview2Entry">
           <xsl:with-param name="derivID" select="$derivID" />
           <xsl:with-param name="file" select="$file" />
+          <xsl:with-param name="query" select="$query" />
         </xsl:call-template>
         <xsl:if test="$mode = 'metadata'">
           <xsl:call-template name="dfgViewerLink">
@@ -82,8 +67,9 @@
   </xsl:template>
 
   <xsl:template mode="derivateDisplay" match="derobject">
-    <xsl:param name="editable" select="'true'" />
-    <xsl:param name="mode" select="'metadata'" />
+    <xsl:param name="editable" />
+    <xsl:param name="mode" />
+    <xsl:param name="query" />
 
     <xsl:variable name="derivate" select="document(concat('mcrobject:', @xlink:href))/mycorederivate" />
     <xsl:variable name="iviewFile" select="iview2:getSupportedMainFile(@xlink:href)" />
@@ -98,6 +84,7 @@
             <xsl:call-template name="iview2Entry">
               <xsl:with-param name="derivID" select="@xlink:href" />
               <xsl:with-param name="file" select="mcrxml:encodeURIPath($iviewFile)" />
+              <xsl:with-param name="query" select="$query" />
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
@@ -212,7 +199,15 @@
   <xsl:template name="iview2Entry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-    <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}/{$file}" class="thumbnail">
+    <xsl:param name="query" />
+
+    <xsl:variable name="href">
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/viewer/', $derivID, '/', $file)" />
+      <xsl:if test="$query != ''">
+        <xsl:value-of select="concat('?q=', $query)" />
+      </xsl:if>
+    </xsl:variable>
+    <a href="{$href}" class="thumbnail">
       <div class="jp-layout-hidden-Button"></div>
       <img src="{$WebApplicationBaseURL}servlets/MCRTileCombineServlet/MIN/{$derivID}/{$file}?centerThumb=no" />
     </a>

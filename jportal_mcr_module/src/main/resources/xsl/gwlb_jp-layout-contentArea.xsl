@@ -306,10 +306,7 @@
         <!--<div class="row">-->
           <xsl:if test="structure/derobjects or metadata/derivateLinks">
             <div class="col-sm-4 jp-content-thumbnail">
-              <xsl:call-template name="derivateDisplay">
-                <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
-                <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-              </xsl:call-template>
+              <xsl:apply-templates select="." mode="derivateDisplay" />
             </div>
           </xsl:if>
           <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">

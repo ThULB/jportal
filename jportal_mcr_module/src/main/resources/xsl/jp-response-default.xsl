@@ -240,9 +240,11 @@
         <div class="row jp-objectlist-object">
           <div class="jp-objectlist-thumbnail">
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-            <xsl:call-template name="derivatePreview">
-              <xsl:with-param name="mcrObj" select="$mcrObj" />
-            </xsl:call-template>
+            <xsl:apply-templates select="$mcrObj" mode="derivateDisplay">
+              <xsl:with-param name="mode" select="'preview'" />
+              <xsl:with-param name="editable" select="'false'" />
+              <xsl:with-param name="query" select="../../lst[@name='responseHeader']/lst[@name='params']/str[@name='qry']" />
+            </xsl:apply-templates>
           </div>
           <div class="jp-objectlist-metadata">
             <xsl:apply-templates mode="searchHitLabel" select="." />
@@ -274,14 +276,14 @@
 
   <xsl:template mode="searchHitLabel" match="doc">
     <h3 class="jp-layout-clickLabel">
-      <!-- TODO: do not pass the hl parameter, instead we should pass a generated response id. with this id we could get the response from cache and use it in our 
+      <!-- TODO: do not pass the qry parameter, instead we should pass a generated response id. with this id we could get the response from cache and use it in our 
         metadata object -->
-      <xsl:variable name="hl" select="../../lst[@name='responseHeader']/lst[@name='params']/str[@name='qry']" />
+      <xsl:variable name="q" select="../../lst[@name='responseHeader']/lst[@name='params']/str[@name='qry']" />
       <a>
         <xsl:attribute name="href">
           <xsl:value-of select="concat($WebApplicationBaseURL, 'receive/', str[@name='id'])" />
-          <xsl:if test="$hl != ''">
-            <xsl:value-of select="concat('?hl=', $hl)" />   
+          <xsl:if test="$q != ''">
+            <xsl:value-of select="concat('?XSL.q=', $q)" />   
           </xsl:if>
         </xsl:attribute>
         <xsl:attribute name="title">

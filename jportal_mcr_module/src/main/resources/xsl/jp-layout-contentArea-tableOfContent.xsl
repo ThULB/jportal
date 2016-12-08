@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:mcr="http://www.mycore.org/" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan encoder mcr mcrxml solrxml i18n">
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:decoder="xalan://java.net.URLDecoder"
+  exclude-result-prefixes="xalan encoder mcr mcrxml solrxml i18n decoder">
 
   <xsl:param name="referer" />
   <xsl:param name="vol.start" />
   <xsl:param name="art.start" />
+  <xsl:param name="q" />
 
   <xsl:template name="tableOfContent">
     <xsl:param name="id" />
@@ -103,9 +105,11 @@
         <div class="row jp-objectlist-object">
           <div class="jp-objectlist-thumbnail">
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-            <xsl:call-template name="derivatePreview">
-              <xsl:with-param name="mcrObj" select="$mcrObj" />
-            </xsl:call-template>
+            <xsl:apply-templates select="$mcrObj" mode="derivateDisplay">
+              <xsl:with-param name="mode" select="'preview'" />
+              <xsl:with-param name="editable" select="'false'" />
+              <xsl:with-param name="query" select="$q" />
+            </xsl:apply-templates>
           </div>
           <div class="jp-objectlist-metadata">
             <h3 class="jp-layout-clickLabel">
