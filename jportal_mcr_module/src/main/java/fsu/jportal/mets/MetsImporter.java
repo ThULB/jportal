@@ -92,7 +92,7 @@ public abstract class MetsImporter {
                 try {
                     MCRPath path = MCRPath.getPath(derivate.getId().toString(), href);
                     if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
-                        article.setDerivateLink(derivate, href + "?div=" + article.getObject().getId());
+                        article.setDerivateLink(derivate, href);
                     } else {
                         String msg = articleId + ": There is no image " + href + " in this derivate.";
                         getErrorList().add(msg);
