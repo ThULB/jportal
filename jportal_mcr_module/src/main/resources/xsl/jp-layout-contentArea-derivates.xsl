@@ -47,6 +47,7 @@
     <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
       <div class="jp-layout-derivate">
         <xsl:call-template name="iview2Entry">
+          <xsl:with-param name="ID" select="$objID" />
           <xsl:with-param name="derivID" select="$derivID" />
           <xsl:with-param name="file" select="$file" />
           <xsl:with-param name="query" select="$query" />
@@ -82,6 +83,7 @@
         <xsl:choose>
           <xsl:when test="$iviewFile != ''">
             <xsl:call-template name="iview2Entry">
+              <xsl:with-param name="ID" select="$objID" />
               <xsl:with-param name="derivID" select="@xlink:href" />
               <xsl:with-param name="file" select="mcrxml:encodeURIPath($iviewFile)" />
               <xsl:with-param name="query" select="$query" />
@@ -197,14 +199,16 @@
   </xsl:template>
 
   <xsl:template name="iview2Entry">
+    <xsl:param name="ID" />
     <xsl:param name="derivID" />
     <xsl:param name="file" />
     <xsl:param name="query" />
 
     <xsl:variable name="href">
       <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/viewer/', $derivID, '/', $file)" />
+      <xsl:value-of select="concat('?div=', $ID)" />
       <xsl:if test="$query != ''">
-        <xsl:value-of select="concat('?q=', $query)" />
+        <xsl:value-of select="concat('&amp;q=', $query)" />
       </xsl:if>
     </xsl:variable>
     <a href="{$href}" class="thumbnail">
