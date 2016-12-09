@@ -10,6 +10,7 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRBase;
+import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
@@ -42,7 +43,8 @@ public interface JPComponent {
         derivate,
 
         /**
-         * Store the content of a derivate.
+         * Store the content of a derivate. Only relevant if you update
+         * a {@link MCRDerivate}.
          */
         content
     }

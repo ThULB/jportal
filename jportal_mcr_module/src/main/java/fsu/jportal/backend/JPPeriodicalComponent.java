@@ -155,9 +155,17 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
         }
         MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", true, false, null);
         String fromType = until == null ? DateType.published.name() : DateType.published_from.name();
-        dates.addMetaObject(buildISODate("date", from, fromType));
+        MCRMetaISO8601Date fromIsoDate = buildISODate("date", from, fromType);
+        if(fromIsoDate == null) {
+            LOGGER.error("Unable to add published date cause '" + from + "' couldn't be parsed.");
+            return;
+        }
+        dates.addMetaObject(fromIsoDate);
         if (until != null) {
-            dates.addMetaObject(buildISODate("date", until, DateType.published_until.name()));
+            MCRMetaISO8601Date untilIsoDate = buildISODate("date", until, DateType.published_until.name());
+            if(untilIsoDate != null) {
+                dates.addMetaObject(untilIsoDate);
+            }
         }
         object.getMetadata().setMetadataElement(dates);
     }

@@ -253,7 +253,7 @@ public class Importer {
         List<String> commands = new ArrayList<>();
 
         Path base = Paths.get(ocrPath);
-        String year = base.getFileName().toString();
+        String year = base.getFileName().toString().substring(0, 4);
         Set<Integer> months = getMonths(base);
         for (Integer monthIndex : months) {
             String date = year + "-" + String.format("%02d", monthIndex);
@@ -266,7 +266,7 @@ public class Importer {
                 volume.store();
 
                 String objId = volume.getObject().getId().toString();
-                String command = "jvbImportMonth " + objId + " " + monthIndex + " " + ocrPath + "" + ocrFolder + " "
+                String command = "jvbImportMonth " + objId + " " + monthIndex + " " + ocrPath + " " + ocrFolder + " "
                     + imgPath;
                 commands.add(command);
             } catch (Exception exc) {
@@ -301,7 +301,7 @@ public class Importer {
                 day.setParent(targetID);
                 day.store();
                 String altoPath = Paths.get(ocrPath).resolve(monthFolder).resolve(ocrFolder).toString();
-                commands.add("jvbUpload " + day.getId() + " " + altoPath + "" + imgPath);
+                commands.add("jvbUpload " + day.getId() + " " + altoPath + " " + imgPath);
             } catch (Exception exc) {
                 LOGGER.error("unable to import jvb nr. " + title, exc);
             }

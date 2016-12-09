@@ -10,6 +10,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -28,6 +30,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * @author Matthias Eichner
  */
 public abstract class JPObjectComponent implements JPComponent {
+
+    static Logger LOGGER = LogManager.getLogger();
 
     protected MCRObject object;
 
@@ -245,6 +249,10 @@ public abstract class JPObjectComponent implements JPComponent {
         isoDate.setSubTag(subTag);
         isoDate.setType(type);
         isoDate.setDate(dateString);
+        if (isoDate.getMCRISO8601Date().getDt() == null) {
+            LOGGER.warn("Unable to set '" + subTag + "' date: " + dateString);
+            return null;
+        }
         return isoDate;
     }
 
