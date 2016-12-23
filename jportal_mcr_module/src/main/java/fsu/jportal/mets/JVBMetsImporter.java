@@ -65,7 +65,7 @@ public class JVBMetsImporter extends MetsImporter {
         logicalIssue.getChildren().forEach(logicalArticle -> {
             JPArticle article = new JPArticle();
             article.setTitle(logicalArticle.getLabel());
-            article.setSize(getPageNumber(mets, logicalArticle));
+            article.setSize(getPageNumber(mets, logicalArticle) + 1);
             issue.addChild(article);
             handleDerivateLink(mets, derivate, logicalArticle, article);
             divMap.put(logicalArticle, article);
@@ -74,10 +74,11 @@ public class JVBMetsImporter extends MetsImporter {
 
     /**
      * Returns the page number of the given logical div.
+     * The page number starts at zero.
      * 
-     * @param mets
-     * @param div
-     * @return
+     * @param mets the mets
+     * @param div the logical div
+     * @return the page number of the logical div
      */
     private int getPageNumber(Mets mets, LogicalDiv div) {
         // get physical container
