@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.urn.services.MCRURNManager;
 
 import com.google.gson.JsonArray;
@@ -39,6 +42,9 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
         MCRURNManager.hasURNAssigned(deriv.getNode().getOwnerID());
         if(MCRURNManager.hasURNAssigned(deriv.getNode().getOwnerID())){
             nodeJSON.addProperty("hasURN", true);
+            MCRObjectID derivateID = MCRObjectID.getInstance(deriv.getNode().getOwnerID());
+            MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivateID);
+            nodeJSON.addProperty("urn", derivate.getDerivate().getURN());
         }
         else{
             nodeJSON.addProperty("hasURN", false);

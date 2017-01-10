@@ -14,6 +14,8 @@ body {
 
 #file-view-large {
     width: 100%;
+    height: calc(100vh - 208px);
+    min-height: 580px;
 }
 
 #main {
@@ -48,8 +50,7 @@ body {
 }
 
 #view-large-main {
-    min-height: 382px;
-    height: calc(100vh - 400px);
+    height: calc(100% - 198px);
 }
 
 #derivat-panel {

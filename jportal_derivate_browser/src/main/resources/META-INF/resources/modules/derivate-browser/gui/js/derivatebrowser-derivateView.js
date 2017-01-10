@@ -621,9 +621,14 @@ var derivateBrowserDerivateView = (function () {
         $("#derivat-panel-startfile-label").html(data.maindocName);
         if (data.hasURN || !data.urnEnabled){
             $("#btn-urnAll").addClass("hidden");
+            $("#derivat-panel-urn").html(data.urn);
+            $("#derivat-panel-urn").removeClass("hidden");
+            $("#derivat-panel-urn").prev("dt").removeClass("hidden");
         }
         else{
             $("#btn-urnAll").removeClass("hidden");
+            $("#derivat-panel-urn").addClass("hidden");
+            $("#derivat-panel-urn").prev("dt").addClass("hidden");
         }
         $("#btn-urnAll").data("urnEnabled", data.urnEnabled);
         var path = data.maindocName;

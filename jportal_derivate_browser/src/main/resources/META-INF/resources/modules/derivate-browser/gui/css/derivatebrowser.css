@@ -310,6 +310,10 @@ ul{
 	width: 170px;
 }
 
+#browser-table-sort-click > text, #browser-table-sort-click-lastMod > text {
+	cursor: pointer;
+}
+
 span.btn{
 	padding-left: 3px;
 	padding-right: 3px;
@@ -323,26 +327,7 @@ span.btn.faded{
 
 a.downloadlink {
 	color: #333;
-}
-
-a.downloadlink:hover {
-	color: #333;
-	text-decoration: none;
-}
-
-a.downloadlink:visited {
-	color: #333;
-	text-decoration: none;
-}
-
-a.downloadlink:active {
-	color: #333;
-	text-decoration: none;
-}
-
-a.downloadlink:link {
-	color: #333;
-	text-decoration: none;
+	text-decoration: none!important;
 }
 
 .popover-img{
