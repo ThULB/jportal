@@ -108,10 +108,10 @@ project(':jportal_mcr_module') {
         compile "org.mycore:mycore-classeditor:$mcrVersion"
         compile "org.mycore:mycore-mets:$mcrVersion"
         compile "org.mycore:mycore-oai:$mcrVersion"
-        compile "org.mycore:mycore-session-listing:$mcrVersion"
         compile "org.mycore:mycore-swf:$mcrVersion"
         compile "org.mycore:mycore-urn:$mcrVersion"
         compile "org.mycore:mycore-impex:$mcrVersion"
+        compile "org.mycore:mycore-webtools:$mcrVersion"
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
         compile 'org.mycore.mets:mets-model:0.10-SNAPSHOT'
         compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
@@ -124,7 +124,6 @@ project(':jportal_mcr_module') {
         compile 'org.apache.logging.log4j:log4j-api:2.3'
         compile 'org.apache.logging.log4j:log4j-core:2.3'
         compile "org.glassfish.jersey.test-framework:jersey-test-framework-core:$jerseyVersion"
-        // compile "com.sun.jersey.contribs:jersey-apache-client:$jerseyVersion"
         compile "org.glassfish.jersey.core:jersey-server:$jerseyVersion"
         compile "org.glassfish.jersey.core:jersey-client:$jerseyVersion"
         compile 'org.easymock:easymock:3.2'
@@ -132,6 +131,7 @@ project(':jportal_mcr_module') {
         compile 'javax.xml.bind:jaxb-api:2.2.1'
         compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
         compile 'net.bull.javamelody:javamelody-core:1.59.0'
+        compile 'com.google.inject:guice:4.1.0'
 
         // webjars
         compile 'org.webjars.bower:jquery:2.1.4'
