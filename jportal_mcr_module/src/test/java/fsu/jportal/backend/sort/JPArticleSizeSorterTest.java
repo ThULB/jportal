@@ -21,6 +21,10 @@ public class JPArticleSizeSorterTest extends MCRTestCase {
         assertTrue(0 > sorter.compare(Order.ASCENDING, "0001", "0002"));
         assertTrue(0 < sorter.compare(Order.DESCENDING, "0001", "0002"));
 
+        // range
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "093", "093 - 095"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "093 - 094", "093 - 095"));
+
         // map & plate
         assertTrue(0 > sorter.compare(Order.ASCENDING, "0010", "K 01"));
         assertTrue(0 > sorter.compare(Order.ASCENDING, "K 01", "K 02"));

@@ -46,36 +46,45 @@ public class JPArticleSizeSorter implements JPSorter {
     }
 
     public int compare(Order order, String size1, String size2) {
-        size1 = getFirstNumIfRange(size1).trim();
-        size2 = getFirstNumIfRange(size2).trim();
+        String firstPart1 = getFirstNumIfRange(size1).trim();
+        String firstPart2 = getFirstNumIfRange(size2).trim();
+
+        // equal
+        if (firstPart1.equals(firstPart2)) {
+            firstPart1 = getSecondNumIfRange(size1);
+            firstPart2 = getSecondNumIfRange(size2);
+            if(firstPart1.equals(firstPart2)) {
+                return 0;
+            }
+        }
 
         // column
         List<String> columns = Arrays.asList("Sp.", "S.", "S", "sp.", "s.", "s");
         for (String column : columns) {
-            if (size1.startsWith(column)) {
-                size1 = size1.replace(column, "").trim();
+            if (firstPart1.startsWith(column)) {
+                firstPart1 = firstPart1.replace(column, "").trim();
             }
-            if (size2.startsWith(column)) {
-                size2 = size2.replace(column, "").trim();
+            if (firstPart2.startsWith(column)) {
+                firstPart2 = firstPart2.replace(column, "").trim();
             }
         }
 
         // special characters: *, [, K, T
-        Integer result = compareSpecialChar(size1, size2);
+        Integer result = compareSpecialChar(firstPart1, firstPart2);
         if (result != null && result == 0) {
-            return simpleCompare(order, size1, size2);
+            return simpleCompare(order, firstPart1, firstPart2);
         } else if (result != null) {
             return result * getOrder(order);
         }
 
         // Roman numerals: IV
-        result = compareRomanNumerals(size1, size2);
+        result = compareRomanNumerals(firstPart1, firstPart2);
         if (result != null) {
             return result * getOrder(order);
         }
 
         // compare
-        return compareMulti(order, size1, size2);
+        return compareMulti(order, firstPart1, firstPart2);
     }
 
     private Integer compareMulti(Order order, String size1, String size2) {
@@ -132,6 +141,11 @@ public class JPArticleSizeSorter implements JPSorter {
 
     private String getFirstNumIfRange(String range) {
         return range.split("-")[0];
+    }
+
+    private String getSecondNumIfRange(String range) {
+        String[] split = range.split("-");
+        return split.length > 1 ? split[1] : split[0];
     }
 
     /**
