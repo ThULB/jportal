@@ -4,6 +4,7 @@
   <section xml:lang="all">
     <xed:form>
       <xed:load-resource name="acl" uri="acl:{$id}:{$action}-{$type}" />
+      <xed:cleanup-rule xpath="//*[@inherited]" relevant-if="@inherited = '0'" />
       <xed:choose>
         <xed:when test="$acl/@permission = 'true'">
           <xed:if test="$type != 'jpinst'">
