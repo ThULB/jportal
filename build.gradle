@@ -204,7 +204,6 @@ project(':jportal_webapp') {
 
     configurations.all {
       resolutionStrategy {
-          force "org.hibernate:hibernate-core:$hibernateCoreVersion"
           force "org.mycore:mycore-viewer:$mcrVersion"
       }
     }
