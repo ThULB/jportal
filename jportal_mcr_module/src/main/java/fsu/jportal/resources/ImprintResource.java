@@ -136,7 +136,12 @@ public class ImprintResource {
         if (imprintID != null) {
             ltm.deleteReferenceLink(objID, imprintID, fsType);
             JPObjectConfiguration journalConf = getJournalConf(objID);
-            journalConf.remove(fsType);
+            try {
+                journalConf.remove(fsType);
+                journalConf.store();
+            } catch (Exception exc) {
+                LOGGER.error("Unable to remove " + fsType + "=" + imprintID + " from journal config", exc);
+            }
         }
         return Response.ok().build();
     }
@@ -350,7 +355,12 @@ public class ImprintResource {
             JPObjectConfiguration journalConf = getJournalConf(reference);
             String oldImprintID = getImprintID(reference, fsType);
             if (oldImprintID != null) {
-                journalConf.remove(fsType);
+                try {
+                    journalConf.remove(fsType);
+                    journalConf.store();
+                } catch (Exception exc) {
+                    LOGGER.error("Unable to remove " + fsType + "=" + imprintID + " from journal config", exc);
+                }
             }
         }
     }
@@ -386,7 +396,12 @@ public class ImprintResource {
             newMap.put(imprintID, content);
         }
         else {
-            journalConf.remove(fsType);
+            try {
+                journalConf.remove(fsType);
+                journalConf.store();
+            } catch (Exception exc) {
+                LOGGER.error("Unable to remove " + fsType + "=" + imprintID + " from journal config", exc);
+            }
             if (oldImprintID != null && !oldImprintID.equals("") && !oldImprintID.equals(imprintID)) {
                 newMap.remove(oldImprintID);
             }
@@ -403,7 +418,12 @@ public class ImprintResource {
         JPObjectConfiguration journalConf = getJournalConf(objID);
         Map<String, String> newMap = getPropAsMap(objID);
         if (newMap != null) {
-            journalConf.remove(fsType);
+            try {
+                journalConf.remove(fsType);
+                journalConf.store();
+            } catch (Exception exc) {
+                LOGGER.error("Unable to remove " + fsType + "=" + imprintID + " from journal config", exc);
+            }
             newMap.remove(imprintID);
         }
         if (newMap.size() > 0) {
