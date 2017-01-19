@@ -217,28 +217,6 @@
           <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="def.affiliation" minOccurs="0" maxOccurs="1">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="affiliation" minOccurs="0" maxOccurs="unbounded">
-              <xsd:complexType>
-                <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
-                <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
-                <xsd:attribute ref="xlink:type" />
-                <xsd:attribute ref="xlink:href" use="optional" />
-                <xsd:attribute ref="xlink:title" use="optional" />
-                <xsd:attribute ref="xlink:label" use="optional" />
-                <xsd:attribute ref="xlink:role" use="optional" />
-                <xsd:attribute ref="xlink:from" use="optional" />
-                <xsd:attribute ref="xlink:to" use="optional" />
-              </xsd:complexType>
-            </xsd:element>
-          </xsd:sequence>
-          <xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLinkID" />
-          <xsd:attribute name="heritable" type="xsd:boolean" use="optional" />
-          <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
-        </xsd:complexType>
-      </xsd:element>
       <xsd:element name="def.dateOfBirth" minOccurs="0" maxOccurs="1">
         <xsd:complexType>
           <xsd:sequence>

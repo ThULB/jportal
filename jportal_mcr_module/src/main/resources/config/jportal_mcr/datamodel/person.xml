@@ -35,10 +35,6 @@
         <element name="def.placeOfActivity" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="placeOfActivity" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="1024" />
         </element>
-        <!-- affiliation -->
-        <element name="def.affiliation" minOccurs='0' maxOccurs='1'>
-            <mcrmetalinkid name="affiliation" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
-        </element>
         
         <!-- 07 - Geburtsdatum -->
         <element name="def.dateOfBirth" minOccurs='0' maxOccurs='1'>
