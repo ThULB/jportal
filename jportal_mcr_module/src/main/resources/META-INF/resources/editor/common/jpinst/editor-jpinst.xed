@@ -81,7 +81,7 @@
       <xed:bind xpath="def.doubletOf[@class='MCRMetaLangText']/doubletOf[@inherited='0'][@form='plain']">
         <jp:template name="textInput" xpath="."
           i18n="editormask.labels.LdoubletOf" validate="display-validation-message" />
-        <xed:validate display="local" matches=".+_jpinst_\d{8}">
+        <xed:validate display="local" matches=".+_(jpinst|person)_\d{8}">
           <div class="alert alert-danger" role="alert">
             <xed:output i18n="jp.editor.instIDCheck" />
           </div>
