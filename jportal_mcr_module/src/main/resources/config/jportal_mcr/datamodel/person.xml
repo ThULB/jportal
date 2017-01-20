@@ -62,7 +62,6 @@
         <element name="def.identifier" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="identifier" class="MCRMetaLangText" type="text" style="big" minOccurs="1" maxOccurs="unbounded">
                 <type name="gnd" />
-                <type name="pnd" />
                 <type name="ppn" />
             </mcrmetalangtext>
         </element>
