@@ -67,7 +67,7 @@ public abstract class JPLegalEntity extends JPObjectComponent {
     }
 
     /**
-     * Returns the identifier by type. Valid types are 'gnd', 'pnd' and 'ppn'.
+     * Returns the identifier by type. Valid types are 'gnd' and 'ppn'.
      * 
      * @param type type of the identifer
      * @return the identifier itself or null

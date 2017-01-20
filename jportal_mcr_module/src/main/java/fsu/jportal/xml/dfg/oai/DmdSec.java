@@ -202,7 +202,7 @@ public class DmdSec {
                 .parseDataUsing(parse(
                         matchElement("identifier",
                                      isInherited("0"),
-                                     hasType("gnd").or(hasType("pnd")).or(hasType("ppn"))
+                                     hasType("gnd").or(hasType("ppn"))
                         ).getAttr("type")
                          .getText(),
                         matchElement("heading", isInherited("0")).and(
