@@ -148,7 +148,6 @@
 	  				<xsl:when test="@type = 'vd-17'">http://gso.gbv.de/DB=1.28/PPNSET?PPN=</xsl:when>
 	  				<xsl:when test="@type = 'bvb'">http://gateway-bayern.de/</xsl:when>
             <xsl:when test="@type = 'gnd'">http://d-nb.info/gnd/</xsl:when>
-            <xsl:when test="@type = 'pnd'">http://d-nb.info/gnd/</xsl:when>
             <xsl:when test="@type = 'nbn'">https://nbn-resolving.org/</xsl:when>
 	  			</xsl:choose>
 	  		</xsl:variable>
