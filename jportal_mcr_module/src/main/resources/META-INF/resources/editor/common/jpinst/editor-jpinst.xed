@@ -68,7 +68,6 @@
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
            option="true" validate="interdependentSelect">
           <option i18n="metaData.person.gnd" value="gnd" />
-          <option i18n="metaData.person.pnd" value="pnd" />
           <option i18n="metaData.person.ppn" value="ppn" />
         </jp:template>
         <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" />

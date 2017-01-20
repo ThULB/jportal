@@ -92,7 +92,7 @@ function appendHit(html, importable) {
 function doubletCheck(/*string*/ gnd) {
 	var json = $.ajax({
 		type: "GET",
-		url: jp.baseURL + "servlets/solr/select?rows=1&fl=id&q=id.gnd:" + gnd + " id.pnd:" + gnd + "&wt=json",
+		url: jp.baseURL + "servlets/solr/select?rows=1&fl=id&q=id.gnd:" + gnd + "&wt=json",
 		async: false,
 		error: function(error) {
 			console.log(error);

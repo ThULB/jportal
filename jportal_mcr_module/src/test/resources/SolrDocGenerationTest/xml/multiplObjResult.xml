@@ -234,9 +234,6 @@
         <def.placeOfDeath class="MCRMetaLangText" heritable="true" notinherit="true">
           <placeOfDeath inherited="0" form="plain">Zürich</placeOfDeath>
         </def.placeOfDeath>
-        <def.identifier class="MCRMetaLangText" heritable="true" notinherit="true">
-          <identifier type="pnd" inherited="0" form="plain">118589717</identifier>
-        </def.identifier>
       </metadata>
       <service>
         <servdates class="MCRMetaISO8601Date">

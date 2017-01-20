@@ -32,11 +32,6 @@
     <subfield code="a">gnd</subfield>
     <subfield code="0">128407093</subfield>
   </datafield>
-  <datafield tag="007N">
-    <subfield code="a">pnd</subfield>
-    <subfield code="0">128407093</subfield>
-    <subfield code="v">zg</subfield>
-  </datafield>
   <datafield tag="008A">
     <subfield code="a">a</subfield>
     <subfield code="a">f</subfield>

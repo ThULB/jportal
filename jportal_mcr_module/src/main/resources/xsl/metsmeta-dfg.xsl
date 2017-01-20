@@ -235,7 +235,6 @@
       
       <!-- identifier -->
       <xsl:variable name="gnd" select="layoutTools:getIdentifier(@xlink:href, 'gnd')" />
-      <xsl:variable name="pnd" select="layoutTools:getIdentifier(@xlink:href, 'pnd')" />
       <xsl:variable name="ppn" select="layoutTools:getIdentifier(@xlink:href, 'ppn')" />
       <xsl:choose>
         <xsl:when test="$gnd">
@@ -247,17 +246,6 @@
           </xsl:attribute>
           <xsl:attribute name="valueURI">
             <xsl:value-of select="concat('http://d-nb.info/gnd/',$gnd)" />
-          </xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$pnd">
-          <xsl:attribute name="authority">
-            <xsl:value-of select="'pnd'" />
-          </xsl:attribute>
-          <xsl:attribute name="authorityURI">
-            <xsl:value-of select="'http://d-nb.info/gnd/'" />
-          </xsl:attribute>
-          <xsl:attribute name="valueURI">
-            <xsl:value-of select="concat('http://d-nb.info/gnd/',$pnd)" />
           </xsl:attribute>
         </xsl:when>
         <xsl:when test="$ppn">

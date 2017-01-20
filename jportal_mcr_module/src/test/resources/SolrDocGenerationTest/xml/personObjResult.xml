@@ -37,9 +37,6 @@
         <def.dateOfDeath class="MCRMetaISO8601Date" heritable="true" notinherit="true">
           <dateOfDeath inherited="0">1977</dateOfDeath>
         </def.dateOfDeath>
-        <def.identifier class="MCRMetaLangText" heritable="true" notinherit="true">
-          <identifier xml:lang="de" inherited="0" form="plain" type="pnd">11872827X</identifier>
-        </def.identifier>
       </metadata>
       <service>
         <servdates class="MCRMetaISO8601Date">
