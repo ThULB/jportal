@@ -19,6 +19,7 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.filter.ElementFilter;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRAttributeValueFilter;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRLinkTableManager;
@@ -79,7 +80,6 @@ public class RedundancyCommands{
 
     @MCRCommand(help = "internal command for replacing links and removing the doublet", syntax = "internal replace links and remove {0} {1}")
     public static List<String> replaceAndRemove(String doublet, String doubletOf) throws Exception {
-        ArrayList<String> commandList = new ArrayList<String>();
         boolean validDoubletOf = true;
         try {
             validDoubletOf = MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf));
@@ -87,10 +87,10 @@ public class RedundancyCommands{
             validDoubletOf = false;
         }
         if (!validDoubletOf) {
-            LOGGER.error("'" + doublet + "' is defined as a doublet of the nonexistent object or invalid identifier '"
+            throw new MCRException("'" + doublet + "' is defined as a doublet of the nonexistent object or invalid identifier '"
                 + doubletOf + "'!" + " The doublet is not removed!");
-            return commandList;
         }
+        ArrayList<String> commandList = new ArrayList<String>();
         Collection<String> list = MCRLinkTableManager.instance().getSourceOf(doublet, "reference");
         for (String source : list) {
             if (!MCRMetadataManager.exists(MCRObjectID.getInstance(source))) {
