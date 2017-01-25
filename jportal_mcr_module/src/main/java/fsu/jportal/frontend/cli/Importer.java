@@ -247,7 +247,12 @@ public class Importer {
 
     }
 
-    @MCRCommand(syntax = "jvbImport {0} {1} {2} {3}", help = "Imports a whole jvb year. {target mycore object} {path to the innsbruck folder} {ocr folder} {image path}")
+    @MCRCommand(syntax = "jvbImport {0} {1} {2} {3}",
+        help = "Imports a whole jvb year."
+            + " {target mycore object} (jportal_jpvolume_00134247)"
+            + " {base path to the JVB_* folders (/mcr/jp/tmp/mnt/images/OCRausInnsbruck/1890)}"
+            + " {ocr folder (mcralto|mcraltok)}"
+            + " {image path (/mcr/jp/tmp/mnt/images/Jenaer_Volksblatt_1890_167758667_JVB_tif)}")
     public static List<String> jvbImport(String targetID, String ocrPath, String ocrFolder, String imgPath)
         throws IOException {
         List<String> commands = new ArrayList<>();
