@@ -1,4 +1,5 @@
 function UploadEntry(docID, deriID, path, file) {
+  this.uploadID = null;
 	this.docID = docID;
 	this.deriID = deriID;
 	this.path = path;
@@ -17,6 +18,10 @@ function UploadEntry(docID, deriID, path, file) {
 	this.md5 = "";
 }
 
+UploadEntry.prototype.setUploadID = function(uploadID) {
+  this.uploadID = uploadID;
+};
+
 UploadEntry.prototype.getStatus = function() {
 	var template = $("#upload-entry-template").html();
 	var status = $(Mustache.render(template, this));
@@ -27,6 +32,7 @@ UploadEntry.prototype.getStatus = function() {
 UploadEntry.prototype.getFormData = function() {
 	if (this.exists == undefined) return undefined;
     var data = new FormData();
+    data.append("uploadID", this.uploadID);
     data.append("documentID", this.docID);
     data.append("derivateID", this.deriID);
     data.append("path", this.path);

@@ -1,6 +1,7 @@
 var derivateBrowserUpload = (function () {
 
-    var currentUploadList = [],
+    var uploadID = null,
+        currentUploadList = [],
         currentUploadID = 0,
         currentDeriID = "",
         currentPath = "",
@@ -79,7 +80,7 @@ var derivateBrowserUpload = (function () {
 
         $(currentTarget).on("click", "#lightbox-new-derivate-confirm", function () {
             if (currentUploadList.length > 0) {
-                uploadFile(currentUploadList[0], "new");
+                startUpload();
                 $("#lightbox-new-derivate-confirm").addClass("hidden");
                 $(".lightbox-new-derivate-cancel").addClass("hidden");
                 $("#lightbox-new-derivate-message").removeClass("hidden");
@@ -298,6 +299,8 @@ var derivateBrowserUpload = (function () {
     }
 
     function resetUpload() {
+      finishUpload().done(function() {
+        uploadID = null;
         currentUploadList = [];
         currentUploadID = 0;
         currentDeriID= "";
@@ -307,6 +310,9 @@ var derivateBrowserUpload = (function () {
         overwriteAll = false;
         skipAll = false;
         uploadRunning = false;
+      }).fail(function(err) {
+        console.log(err);
+      });
     }
 
     function hideNewDeri() {
@@ -520,6 +526,33 @@ var derivateBrowserUpload = (function () {
         }
     }
 
+    function startUpload() {
+      var docID = derivateBrowserTools.getCurrentDocID();
+      var derID = currentDeriID;
+      var num = currentUploadList.length;
+      var url = derivateBaseURL + "startUpload" +
+      		"?documentID=" + docID +
+      		"&derivateID=" + derID +
+      		"&num=" + num;
+      $.post(url).done(function(res) {
+        uploadID = res.uploadID;
+        $(window).unload(function() {
+          finishUpload();
+        });
+        uploadFile(currentUploadList[0], "new");
+      }).fail(function(err) {
+        console.log(err);
+      });
+    }
+
+    function finishUpload() {
+      if(uploadID != null) {
+        var url = derivateBaseURL + "finishUpload?uploadID=" + uploadID
+        return $.post(url);        
+      }
+      return $.Deferred().resolve();
+    }
+
     //ajax Methods
     /**
      * @property lengthComputable
@@ -527,10 +560,10 @@ var derivateBrowserUpload = (function () {
      * @property total
      */
     function uploadFile(upload, mode) {
-        if (mode == "new"){
+        upload.setUploadID(uploadID);
+        if (mode == "new") {
             updateStatus();
-        }
-        else{
+        } else {
             scrollToElement(upload.statusbar);
             $("#upload-complete-status-current-number").html(currentUploadID + 1);
             $("#upload-complete-status-file-count").html(currentUploadList.length);

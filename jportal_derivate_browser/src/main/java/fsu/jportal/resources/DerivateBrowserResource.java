@@ -3,7 +3,7 @@ package fsu.jportal.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
-import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +29,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
@@ -39,6 +37,7 @@ import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import com.google.gson.JsonArray;
@@ -47,11 +46,10 @@ import com.google.gson.JsonParser;
 
 import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.backend.DocumentTools;
+import fsu.jportal.backend.JPUploader;
 
 @Path("derivatebrowser")
 public class DerivateBrowserResource {
-
-    private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
 
     static Logger LOGGER = LogManager.getLogger(DerivateBrowserResource.class);
 
@@ -220,43 +218,78 @@ public class DerivateBrowserResource {
     }
 
     @POST
+    @Path("startUpload")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response startUpload(@QueryParam("documentID") String documentID,
+        @QueryParam("derivateID") String derivateID, @QueryParam("num") int num) {
+        if (derivateID.equals("")) {
+            derivateID = null;
+        }
+        UUID uuid = JPUploader.start(documentID, derivateID, num);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("uploadID", uuid.toString());
+        return Response.ok(jsonObject.toString()).build();
+    }
+
+    @POST
+    @Path("finishUpload")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response finishUpload(@QueryParam("uploadID") String uploadID) {
+        try {
+            JPUploader.finish(UUID.fromString(uploadID));
+        } catch (Exception exc) {
+            throw new WebApplicationException(exc,
+                Response.status(Status.INTERNAL_SERVER_ERROR)
+                        .entity("Unable to finish upload with id " + uploadID)
+                        .build());
+        }
+        return Response.ok().build();
+    }
+
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("upload")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response getUpload(@FormDataParam("file") InputStream inputStream,
-        @FormDataParam("filename") String filename, @FormDataParam("size") long filesize,
-        @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID,
-        @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite,
-        @FormDataParam("type") String type) {
+    public Response getUpload(@FormDataParam("uploadID") String uploadID,
+        @FormDataParam("file") InputStream inputStream, @FormDataParam("filename") String filename,
+        @FormDataParam("size") long filesize, @FormDataParam("path") String path,
+        @FormDataParam("overwrite") boolean overwrite, @FormDataParam("type") String type) {
+
+        UUID uuid = UUID.fromString(uploadID);
+        MCRUploadHandlerIFS uploadHandler = JPUploader.get(uuid);
+        if (uploadHandler == null) {
+            throw new WebApplicationException(
+                Response.status(Status.NOT_FOUND).entity("No upload handler with id " + uploadID + " found!").build());
+        }
         type = type.toLowerCase();
-        
+
         // TODO: ignore supported files types because there are some issues with windows 7 and
         // firefox V. 49.0.1. the type is octet stream and not pdf
         // List<String> fileTypes = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
         // if (fileTypes.contains(type)) {
-            if (overwrite) {
-                MCRPath filePath = MCRPath.getPath(documentID, path + "/" + filename);
-                if (DerivateTools.delete(filePath) != 1) {
-                    throw new WebApplicationException(
-                        "Unable to delete/overwrite " + filePath + " while uploading " + filename);
-                }
+        if (overwrite) {
+            MCRPath filePath = MCRPath.getPath(uploadHandler.getDocumentID(), path + "/" + filename);
+            if (DerivateTools.delete(filePath) != 1) {
+                throw new WebApplicationException(
+                    "Unable to delete/overwrite " + filePath + " while uploading " + filename);
             }
-            if (derivateID.equals("")) {
-                derivateID = null;
-            }
-            String filePath = path + "/" + filename;
+        }
 
-            try {
-                derivateID = DerivateTools.uploadFile(inputStream, filesize, documentID, derivateID, filePath);
-            } catch (Exception e) {
-                throw new WebApplicationException("Error while uploading file " + filename, e);
-            }
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("derivateID", derivateID);
-            jsonObject.addProperty("md5", DerivateTools.getMD5forFile(derivateID, filePath));
+        String filePath = path + "/" + filename;
 
-            return Response.ok(jsonObject.toString()).build();
+        try {
+            JPUploader.upload(uuid, filePath, inputStream, filesize);
+        } catch (Exception e) {
+            throw new WebApplicationException("Error while uploading file " + filename, e);
+        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("uploadID", uploadID);
+        jsonObject.addProperty("md5", DerivateTools.getMD5forFile(uploadHandler.getDerivateID(), filePath));
+
+        return Response.ok(jsonObject.toString()).build();
         // }
         // throw new WebApplicationException(
         //    new MCRException("Unsupported media type " + type + ". Only one of " + fileTypes + " is allowed."),
