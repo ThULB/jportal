@@ -80,7 +80,7 @@ var derivateBrowserUpload = (function () {
 
         $(currentTarget).on("click", "#lightbox-new-derivate-confirm", function () {
             if (currentUploadList.length > 0) {
-                startUpload();
+                startUpload("new");
                 $("#lightbox-new-derivate-confirm").addClass("hidden");
                 $(".lightbox-new-derivate-cancel").addClass("hidden");
                 $("#lightbox-new-derivate-message").removeClass("hidden");
@@ -526,7 +526,7 @@ var derivateBrowserUpload = (function () {
         }
     }
 
-    function startUpload() {
+    function startUpload(mode) {
       var docID = derivateBrowserTools.getCurrentDocID();
       var derID = currentDeriID;
       var num = currentUploadList.length;
@@ -539,7 +539,11 @@ var derivateBrowserUpload = (function () {
         $(window).unload(function() {
           finishUpload();
         });
-        uploadFile(currentUploadList[0], "new");
+        if(mode == "new") {
+          uploadFile(currentUploadList[0], mode);
+        } else {
+          uploadFilesAndAsk();
+        }
       }).fail(function(err) {
         console.log(err);
       });
@@ -699,9 +703,9 @@ var derivateBrowserUpload = (function () {
             statusCode: {
                 200: function (data) {
                     addDataToFileList(data.files);
-                    if (!uploadRunning){
+                    if (!uploadRunning) {
                         uploadRunning = true;
-                        uploadFilesAndAsk();
+                        startUpload();
                     }
                 },
                 500: function () {
