@@ -22,11 +22,16 @@
  */
 package fsu.jportal.frontend.iview;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.backend.jpa.MCREntityManagerProvider;
+import org.mycore.iview2.frontend.MCRFooterInterface;
+import org.mycore.urn.hibernate.MCRURN;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
@@ -37,20 +42,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.mycore.backend.hibernate.MCRHIBConnection;
-import org.mycore.iview2.frontend.MCRFooterInterface;
-import org.mycore.urn.hibernate.MCRURN;
 
 /**
  * @author Thomas Scheffler (yagee)
@@ -104,13 +95,18 @@ public class UrmelFooter implements MCRFooterInterface {
         image = imagePath.substring(imagePath.lastIndexOf('/') + 1);
         path = imagePath.substring(0, imagePath.length() - image.length());
         LOGGER.info("path: " + path + ", image: " + image);
-        Session session = MCRHIBConnection.instance().getSession();
-        Criteria urnForImage = session.createCriteria(MCRURN.class);
-        urnForImage.add(Restrictions.eq("key.mcrid", derivateID));
-        urnForImage.add(Restrictions.eq("path", path));
-        urnForImage.add(Restrictions.eq("filename", image));
-        urnForImage.setProjection(Projections.property("key.mcrurn"));
-        String urn = (String) urnForImage.uniqueResult();
+
+        String selectURNQuery = "Select u From MCRURN u where u.key.mcrid = :mcrid and u.path = :path and u.filename = :filename";
+        String urn = MCREntityManagerProvider
+                .getCurrentEntityManager()
+                .createQuery(selectURNQuery, MCRURN.class)
+                .setParameter("mcrid", derivateID)
+                .setParameter("path", path)
+                .setParameter("filename", image)
+                .getSingleResult()
+                .getKey()
+                .getMcrurn();
+
         if (urn != null) {
             return urn;
         }
@@ -215,7 +211,6 @@ public class UrmelFooter implements MCRFooterInterface {
 
     /**
      * reads a logo from <code>imgFile</code> and scales it down if needed.
-     * @param imgFile the image
      * @param maxWidth maximum image width
      * @param maxHeight maximum image height
      * @return
