@@ -68,7 +68,7 @@
         updateSearchbar();
       });
     </script>
-    <div id="searchBar" class="container">
+    <div id="searchBar">
       <xsl:if test="$showSearchBar = 'true'">
         <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find">
           <div class="row">

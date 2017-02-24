@@ -10,7 +10,7 @@
 	<xsl:param name="JP.GWLB.Author.Portal.CMA.Journal.Ids"/>
 
 	<xsl:template name="breadcrumb">
-	<div class="container" id="bread">
+	<div id="bread">
 	<div class="row">
 		<div id="jp-breadcrumb-container" class="col-sm-12">
 			<ol class="col-sm-10 breadcrumb jp-layout-mcbreadcrumb">

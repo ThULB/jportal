@@ -48,8 +48,8 @@
   <xsl:variable name="selectedFacets" select="xalan:nodeset($selectedFacetsXML)" />
 
   <xsl:template match="/response">
-  	<xsl:call-template name="searchBreadcrumb" >
-  		<xsl:with-param name="objID" select="$journalID" />
+    <xsl:call-template name="searchBreadcrumb" >
+      <xsl:with-param name="objID" select="$journalID" />
   		<xsl:with-param name="returnURL" select="$returnURL" />
   		<xsl:with-param name="returnHash" select="$returnHash" />
   		<!-- returnID = is something like jportal_jpjournal_00000024 also id from where you came -->

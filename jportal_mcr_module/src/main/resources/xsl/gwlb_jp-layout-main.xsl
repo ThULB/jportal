@@ -145,7 +145,7 @@
           jp.lang = '<xsl:value-of select="i18n:getCurrentLocale()" />';
 
           window.addEventListener("resize", function(){
-            var content= jQuery("#jp-journal-content");
+            var content = jQuery("#main");
             content.css({"min-height":""});
             content.css({"min-height": jQuery("#footer").offset().top-content.offset().top+"px" });
           });

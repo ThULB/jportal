@@ -386,9 +386,11 @@
         <div class="list-group jp-list-group-special" id="jp-journal-link-list">
           <div id="jp-tableOfContent" class="jp-layout-tableOfContent list-group jp-list-group-special">
             <xsl:for-each select="imprint:getLinks($id)">
-              <a class="list-group-item" href="{./@href}">
-                <xsl:value-of select="./@text"></xsl:value-of>
-              </a>
+              <p id="portal">
+                <a href="{./@href}">
+                  <xsl:value-of select="./@text"></xsl:value-of>
+                </a>
+              </p>
             </xsl:for-each>
           </div>
         </div>
