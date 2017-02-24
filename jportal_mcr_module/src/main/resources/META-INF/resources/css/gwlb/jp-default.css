@@ -31,6 +31,8 @@ ul.pagination>li>a{
 .thumbnail {
   position: relative;
   cursor: pointer;
+  border-color: transparent !important;
+  background-color: transparent;
 }
 
 .jp-popover-container .popover {
@@ -434,9 +436,12 @@ select.form-control.input-sm {
   box-shadow: -1px 0px 0px 0px #ccc;
   padding-left: 3em;
   padding-top: 1em;
+  padding-bottom: 30px;
   min-height: 643px;
+}
 
-
+.greetings {
+  max-width: 770px;
 }
 
 #newsletter {
@@ -537,7 +542,7 @@ dt.col-sm-4.col-xs-7.jp-layout-metadataList-participant {
 }
 
 dd.col-sm-8.col-xs-5.jp-layout-metadataList-identi {
-  padding-top: 14px;
+  /*padding-top: 14px;*/
   border-bottom: 1px solid white;
   box-shadow: 0px 1px 0px 0px #ccc;
   padding-bottom: 30px;
@@ -546,7 +551,7 @@ dd.col-sm-8.col-xs-5.jp-layout-metadataList-identi {
 dt.col-sm-4.col-xs-7.jp-layout-metadataList-identi {
   margin-bottom: 35px;
   /* width: 4%; */
-  padding-top: 14px;
+  /*padding-top: 14px;*/
   border-bottom: 1px solid white;
   box-shadow: 0px 1px 0px 0px #ccc;
   padding-bottom: 30px;
@@ -669,7 +674,11 @@ p.jp-layout-metadata-list {
 
 #resultPaginator .pagination {
   margin-bottom: 0;
+  display: inherit !important;
 
+}
+span.input-group.input-group-sm {
+  display: inherit; !important;
 }
 
 #resultPaginator .pagination-jumper {
@@ -811,7 +820,6 @@ p.jp-layout-metadata-list {
   background-color: transparent;
   position: relative;
   padding-top: 30px;
-  margin: 0px;
   padding-bottom: 43px;
   border-left: 1px solid white;
   border-right: 1px solid #ccc;
@@ -832,8 +840,15 @@ p.jp-layout-metadata-list {
 
 @media (min-width: 1200px) {
   .container {
-    width: 1280px;
+    width: 960px;
+    }
   }
+
+@media (min-width: 992px) {
+  .container {
+    width: 960px;
+  }
+}
 
   #searchBar .input-group-addon {
     background-color: #005595;
@@ -1996,4 +2011,3 @@ p.jp-layout-metadata-list {
   .gwlb-layout-index-list-elm > img {
     max-width: 256px;
   }
-}
