@@ -48,15 +48,15 @@
   <xsl:variable name="selectedFacets" select="xalan:nodeset($selectedFacetsXML)" />
 
   <xsl:template match="/response">
-    <xsl:call-template name="searchBreadcrumb" >
+    <!--<xsl:call-template name="searchBreadcrumb" >
       <xsl:with-param name="objID" select="$journalID" />
-  		<xsl:with-param name="returnURL" select="$returnURL" />
-  		<xsl:with-param name="returnHash" select="$returnHash" />
-  		<!-- returnID = is something like jportal_jpjournal_00000024 also id from where you came -->
-  		<xsl:with-param name="returnID" select="$returnID" />
-  		<!-- returnName = if no id then give a name, like advanced search or law search (only i18n format)-->
-  		<xsl:with-param name="returnName" select="$returnName" />
-  	</xsl:call-template>
+      <xsl:with-param name="returnURL" select="$returnURL" />
+      <xsl:with-param name="returnHash" select="$returnHash" />-->
+      <!-- returnID = is something like jportal_jpjournal_00000024 also id from where you came -->
+      <!--<xsl:with-param name="returnID" select="$returnID" />-->
+      <!-- returnName = if no id then give a name, like advanced search or law search (only i18n format)-->
+      <!--<xsl:with-param name="returnName" select="$returnName" />
+    </xsl:call-template>-->
     <xsl:if test="$selectedFacets/lst/lst/int">
       <div id="resultListHeader" class="row">
         <div class="list-group jp-list-group-special visible-xs">
@@ -113,7 +113,7 @@
   </xsl:template>
 
   <xsl:template mode="resultList" match="response[result/@numFound &gt;= 1]">
-    <div class="col-sm-3">
+    <div class="col-sm-3" id="vintage">
       <!-- bootstrap visible-xs and navbar-collapse have problems to be in the same class, so wrap visible around navbar-collapse -->
       <div class="visible-xs">
         <div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
@@ -141,7 +141,7 @@
         </xsl:apply-templates>
       </div>
     </div>
-    <div class="col-sm-9 jp-layout-hits">
+    <div class="col-sm-9" id="jp-journal-content">
       <div class="jp-layout-triangle hidden-xs"></div>
       <div class="jp-layout-triangle hidden-xs"></div>
       <div class="jp-objectlist">
@@ -242,7 +242,7 @@
     <xsl:variable name="mcrId" select="str[@name='id']" />
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">
-        <div class="row jp-objectlist-object">
+        <div class="jp-objectlist-object">
           <!--<div class="jp-objectlist-thumbnail">-->
             <!--<xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />-->
             <!--<xsl:call-template name="derivatePreview">-->

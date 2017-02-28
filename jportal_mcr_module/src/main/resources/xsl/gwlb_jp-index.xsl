@@ -7,7 +7,7 @@
     <div class="jp-layout-index col-lg-12">
       <div class="jp-layout-index-intro col-md-10 col-md-offset-1">
         <xsl:variable name="currentLang" select="i18n:getCurrentLocale()" />
-        <div class="greetings container">
+        <!--<div class="greetings container"> need to be added in greetings editor -->
           <xsl:choose>
             <xsl:when test="imprint:has('index', 'greeting')">
               <xsl:apply-templates select="imprint:getImprintContent('index', 'greeting', $currentLang)" />
@@ -16,7 +16,7 @@
               <xsl:apply-templates select="imprint:getDefaultGreetingXSL('index', $currentLang)" />
             </xsl:otherwise>
         </xsl:choose>
-        </div>
+        <!--</div>-->
       </div>
     </div>
     <div class="container"></div>

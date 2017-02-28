@@ -36,6 +36,11 @@
   <xsl:param name="layout" />
   <xsl:param name="MCR.NameOfProject" />
 
+  <xsl:param name="returnURL" />
+  <xsl:param name="returnHash" />
+  <xsl:param name="returnID" />
+  <xsl:param name="returnName" />
+
   <!-- user -->
   <xsl:variable name="user" select="jpxml:getUserID()" />
 
@@ -145,7 +150,7 @@
           jp.lang = '<xsl:value-of select="i18n:getCurrentLocale()" />';
 
           window.addEventListener("resize", function(){
-            var content = jQuery("#main");
+            var content= jQuery("#jp-journal-content");
             content.css({"min-height":""});
             content.css({"min-height": jQuery("#footer").offset().top-content.offset().top+"px" });
           });
@@ -173,67 +178,78 @@
         <div id="border">
         <div id="mainWrapper">
         <xsl:choose>
-            <xsl:when test="$template = 'template_gwlb'">
-        <div id="globalHeader">
-          <div class="row">
-            <div class="col-md-6 navbar-header">
-              <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-globalHeader">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <img class="GBV" src="{concat($templateWebURL, 'IMAGES/VZG.png')}"></img>
-              <ul class="list-inline jp-layout-mainHeader-UlLeft">
+          <xsl:when test="$template = 'template_gwlb'">
+      <div id="globalHeader">
+        <div class="row">
+          <div class="col-md-6 navbar-header">
+            <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-globalHeader">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <img class="GBV" src="{concat($templateWebURL, 'IMAGES/VZG.png')}"></img>
+            <ul class="list-inline jp-layout-mainHeader-UlLeft">
+              <!--<li class="jp-layout-mainHeader-SeperatorRight">-->
+                <!--<xsl:variable name="imprintHref">-->
+                  <!--<xsl:choose>-->
+                    <!--<xsl:when test="$journalID != '' and imprint:has($journalID, 'imprint')">-->
+                      <!--<xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/', $journalID)" />-->
+                    <!--</xsl:when>-->
+                    <!--<xsl:otherwise>-->
+                      <!--<xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />-->
+                    <!--</xsl:otherwise>-->
+                  <!--</xsl:choose>-->
+                <!--</xsl:variable>-->
+                <!--<a href="{$imprintHref}">-->
+                  <!--<xsl:value-of select="i18n:translate('jp.site.imprint')" />-->
+                <!--</a>-->
+              <!--</li>-->
+              <!--<xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">-->
                 <!--<li class="jp-layout-mainHeader-SeperatorRight">-->
-                  <!--<xsl:variable name="imprintHref">-->
-                    <!--<xsl:choose>-->
-                      <!--<xsl:when test="$journalID != '' and imprint:has($journalID, 'imprint')">-->
-                        <!--<xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/', $journalID)" />-->
-                      <!--</xsl:when>-->
-                      <!--<xsl:otherwise>-->
-                        <!--<xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />-->
-                      <!--</xsl:otherwise>-->
-                    <!--</xsl:choose>-->
-                  <!--</xsl:variable>-->
-                  <!--<a href="{$imprintHref}">-->
-                    <!--<xsl:value-of select="i18n:translate('jp.site.imprint')" />-->
+                  <!--<a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">-->
+                    <!--<xsl:value-of select="i18n:translate('jp.site.partner')" />-->
                   <!--</a>-->
                 <!--</li>-->
-                <!--<xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">-->
-                  <!--<li class="jp-layout-mainHeader-SeperatorRight">-->
-                    <!--<a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">-->
-                      <!--<xsl:value-of select="i18n:translate('jp.site.partner')" />-->
-                    <!--</a>-->
-                  <!--</li>-->
-                <!--</xsl:if>-->
-                <!--<li class="jp-layout-mainHeader-LiPaPushleft">-->
-                  <!--<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">-->
-                    <!--Kontakt-->
-                  <!--</a>-->
-                <!--</li>-->
+              <!--</xsl:if>-->
+              <!--<li class="jp-layout-mainHeader-LiPaPushleft">-->
+                <!--<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">-->
+                  <!--Kontakt-->
+                <!--</a>-->
+              <!--</li>-->
 
-                <li class="jp-layout-mainHeader-LiPaPushleft">
-                  <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
-                    Zeitschriftenserver der VZG
-                  </a>
-                </li>
-               <!-- <li class="jp-layout-mainheader-LiPaPushright">Digitale Bibliothek
-                </li> -->
-              </ul>
-            </div>
-            <div id="navbar-collapse-globalHeader" class="col-md-6 collapse navbar-collapse navbar-right">
-              <!-- <ul class="list-inline" style="padding: 10px"> </ul> -->
-              <xsl:call-template name="jp.navigation.top" />
-              <p class="jp-layout-mainheader-LiPaPushright">Digitale Bibliothek</p>
-            </div>
+              <li class="jp-layout-mainHeader-LiPaPushleft">
+                <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
+                  Zeitschriftenserver der VZG
+                </a>
+              </li>
+             <!-- <li class="jp-layout-mainheader-LiPaPushright">Digitale Bibliothek
+              </li> -->
+            </ul>
+          </div>
+          <div id="navbar-collapse-globalHeader" class="col-md-6 collapse navbar-collapse navbar-right">
+            <!-- <ul class="list-inline" style="padding: 10px"> </ul> -->
+            <xsl:call-template name="jp.navigation.top" />
+            <p class="jp-layout-mainheader-LiPaPushright">Digitale Bibliothek</p>
           </div>
         </div>
+      </div>
 
-        <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage" />
-        <div id="logo">
-        </div>
-          </xsl:when>
+      <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage" />
+      <div id="logo">
+      </div>
+            <xsl:if test="response/result/@name = 'response'">
+              <xsl:call-template name="searchBreadcrumb" >
+                <xsl:with-param name="objID" select="$journalID" />
+                <xsl:with-param name="returnURL" select="$returnURL" />
+                <xsl:with-param name="returnHash" select="$returnHash" />
+                <!-- returnID = is something like jportal_jpjournal_00000024 also id from where you came -->
+                <xsl:with-param name="returnID" select="$returnID" />
+                <!-- returnName = if no id then give a name, like advanced search or law search (only i18n format)-->
+                <xsl:with-param name="returnName" select="$returnName" />
+              </xsl:call-template>
+            </xsl:if>
+        </xsl:when>
           <xsl:otherwise>
             <div id="globalHeader">
                 <div id="logo">

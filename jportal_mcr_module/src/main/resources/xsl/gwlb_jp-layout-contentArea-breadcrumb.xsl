@@ -83,59 +83,74 @@
 		<xsl:param name="returnHash" />
 		<xsl:param name="returnID" />
 		<xsl:param name="returnName" />
-		<div class="row">
-		<div id="jp-breadcrumb-container" class="col-sm-10">
-			<ol class="breadcrumb jp-layout-mcbreadcrumb">
-				<xsl:variable name="hash">
-					<xsl:if test="not($objID = '')">	
-						<xsl:variable name="char" select="substring(document(concat('mcrobject:',$objID))/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
-							<xsl:if test="contains(concat($lcletters, $ucletters), $char)">
-								<xsl:value-of select="$char" />
+		<div id="bread">
+			<div class="row">
+				<div id="jp-breadcrumb-container" class="col-sm-10">
+					<ol class="breadcrumb jp-layout-mcbreadcrumb">
+						<xsl:variable name="hash">
+							<xsl:if test="not($objID = '')">
+								<xsl:variable name="char"
+															select="substring(document(concat('mcrobject:',$objID))/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
+								<xsl:if test="contains(concat($lcletters, $ucletters), $char)">
+									<xsl:value-of select="$char" />
+								</xsl:if>
 							</xsl:if>
-					</xsl:if>
-				</xsl:variable>
-				<li>
-					<a href="{$WebApplicationBaseURL}content/main/journalListGWLB.xml#{$hash}">
-						<xsl:value-of select="'A-Z'" />
-					</a>
-				</li>
-				<xsl:if test="not($objID = '')">
-					<li>
-						<a href="{$WebApplicationBaseURL}receive/{$objID}">
-							<xsl:apply-templates mode="jp.printListEntryContent" select="document(concat('mcrobject:',$objID))/mycoreobject/metadata/maintitles/maintitle" />
-						</a>
-					</li>
-				</xsl:if>
-				<xsl:if test="$returnURL">
-					<li>
-						<a href="{$returnURL}">
-							<xsl:if test="$returnHash"><xsl:attribute name="href"><xsl:value-of select="concat($returnURL,'#',$returnHash)"/></xsl:attribute></xsl:if>
+						</xsl:variable>
+						<li>
+							<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
+								<i class="fa fa-reply" aria-hidden="true"></i>
+								Zeitschriftenserver des GBV
+							</a>
+						</li>
+						<li>
+							<a href="{$WebApplicationBaseURL}content/main/journalListGWLB.xml#{$hash}">
+								<xsl:value-of select="'A-Z'" />
+							</a>
+						</li>
+						<xsl:if test="not($objID = '')">
+							<li>
+								<a href="{$WebApplicationBaseURL}receive/{$objID}">
+									<xsl:apply-templates mode="jp.printListEntryContent"
+																			 select="document(concat('mcrobject:',$objID))/mycoreobject/metadata/maintitles/maintitle" />
+								</a>
+							</li>
+						</xsl:if>
+						<xsl:if test="$returnURL">
+							<li>
+								<a href="{$returnURL}">
+									<xsl:if test="$returnHash">
+										<xsl:attribute name="href">
+											<xsl:value-of select="concat($returnURL,'#',$returnHash)" />
+										</xsl:attribute>
+									</xsl:if>
+									<xsl:choose>
+										<xsl:when test="$returnName">
+											<xsl:value-of select="i18n:translate($returnName)" />
+										</xsl:when>
+										<xsl:when test="$returnID">
+											<xsl:apply-templates mode="jp.printListEntryContent"
+																					 select="document(concat('mcrobject:',$returnID))/mycoreobject/metadata/maintitles/maintitle" />
+										</xsl:when>
+										<xsl:otherwise>
+											no data for name
+										</xsl:otherwise>
+									</xsl:choose>
+								</a>
+							</li>
+						</xsl:if>
+						<li>
 							<xsl:choose>
-								<xsl:when test="$returnName">
-									<xsl:value-of select="i18n:translate($returnName)"/>
-								</xsl:when>
-								<xsl:when test="$returnID">
-									<xsl:apply-templates mode="jp.printListEntryContent" select="document(concat('mcrobject:',$returnID))/mycoreobject/metadata/maintitles/maintitle" />
+								<xsl:when test="$returnURL">
+									<xsl:value-of select="i18n:translate('jp.metadata.search.result')" />
 								</xsl:when>
 								<xsl:otherwise>
-									no data for name
+									<xsl:value-of select="i18n:translate('jp.metadata.search.search')" />
 								</xsl:otherwise>
 							</xsl:choose>
-						</a>
-					</li>
-				</xsl:if>
-				<li>
-					<xsl:choose>
-						<xsl:when test="$returnURL">
-							<xsl:value-of select="i18n:translate('jp.metadata.search.result')"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="i18n:translate('jp.metadata.search.search')"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</li>
-			</ol>
-		</div>
+						</li>
+					</ol>
+				</div>
+			</div>
 		</div>
 	</xsl:template>
 

@@ -543,8 +543,8 @@ dt.col-sm-4.col-xs-7.jp-layout-metadataList-participant {
 
 dd.col-sm-8.col-xs-5.jp-layout-metadataList-identi {
   /*padding-top: 14px;*/
-  border-bottom: 1px solid white;
-  box-shadow: 0px 1px 0px 0px #ccc;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0px 1px 0px 0px white;
   padding-bottom: 30px;
 }
 
@@ -552,8 +552,8 @@ dt.col-sm-4.col-xs-7.jp-layout-metadataList-identi {
   margin-bottom: 35px;
   /* width: 4%; */
   /*padding-top: 14px;*/
-  border-bottom: 1px solid white;
-  box-shadow: 0px 1px 0px 0px #ccc;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0px 1px 0px 0px white;
   padding-bottom: 30px;
 }
 
@@ -660,7 +660,7 @@ p.jp-layout-metadata-list {
 }
 
 #resultListHeader {
-  margin-bottom: 10px;
+
 }
 
 #resultPaginator {
@@ -969,7 +969,7 @@ span.input-group.input-group-sm {
   }
 
   #resultList {
-    padding: 30px 0 10px 0;
+    padding: 0px 0 0px 0;
     border-bottom: 1px solid #F0F0F0;
     border-top: 1px solid #F0F0F0;
     margin-left: 0;
@@ -1155,8 +1155,8 @@ span.input-group.input-group-sm {
   }
 
   .volume {
-    border-bottom: 1px solid white;
-    box-shadow: 0px 1px 0px 0px #ccc;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0px 1px 0px 0px white;
   }
 
   .jp-layout-maintitle-big {
@@ -1289,7 +1289,7 @@ span.input-group.input-group-sm {
   }
 
   #resultList h3 {
-    font-size: 13px;
+    font-size: 16px;
   }
 
   .content {
@@ -1395,7 +1395,7 @@ span.input-group.input-group-sm {
   }
 
   .jp-layout-searchList .jp-layout-facet-group-head {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .jp-layout-searchList .dt-collapse {
@@ -1501,8 +1501,8 @@ span.input-group.input-group-sm {
 
   .jp-objectlist > .jp-objectlist-object > .jp-objectlist-metadata {
     /*margin-left: 105px;*/
-    border-bottom: 1px solid white;
-    box-shadow: 0px 1px 0px 0px #ccc;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0px 1px 0px 0px white;
     padding-top: 15px;
     padding-bottom: 10px;
     font-size: 16px;
@@ -1753,7 +1753,8 @@ span.input-group.input-group-sm {
     }
 
     #resultList .jp-layout-hits {
-      border-left: 1px solid #F0F0F0;
+      border-left: 1px solid white;
+      box-shadow: -1px 0px 0px 0px #ccc;
       padding-left: 3em;
       margin-left: -1px;
     }
@@ -1764,7 +1765,7 @@ span.input-group.input-group-sm {
 
     #resultList > .col-sm-3 {
       border-right: 1px solid #F0F0F0;
-      padding-left: 0;
+
     }
 
     .jp-layout-sharpBorderRight {
@@ -1895,8 +1896,8 @@ span.input-group.input-group-sm {
     padding-bottom: 15px;
     padding-left: 1.5em;
     padding-right: 2em;
-    border-bottom: 1px solid white;
-    box-shadow: 0px 1px 0px 0px #ccc;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0px 1px 0px 0px white;
     font-size: 16px;
     font-weight: 700;
   }
