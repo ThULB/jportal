@@ -108,10 +108,31 @@
             <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
               <xsl:if test="not(mcrurn:hasURNDefined(@xlink:href))">
                 <li>
-                  <a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a>
+                  <a href="#" data-toggle="modal" data-target="#generateURNDialog">URN vergeben</a>
                 </li>
-              </xsl:if>
-              <xsl:if test="not(mcrurn:hasURNDefined(@xlink:href))">
+                <div class="modal fade" id="generateURNDialog" tabindex="-1" role="dialog" data-backdrop="static" data-id="{@xlink:href}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">URN vergeben</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                          <div class="col-md-2" id="generateURNIcon" style="text-align: center;">
+                            <i class='fa fa-3x fa-question-circle'></i>
+                          </div>
+                          <div class="col-md-10" id="generateURNDialogContent">
+                            Sind Sie sich sicher das Sie URN vergeben möchten. Diese wäre permanent und kann nicht gelöscht werden.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                        <button type="button" class="btn btn-primary" id="generateURNDialogStart">URN Vergeben</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="modal fade" id="generateURNDialog" tabindex="-1" role="dialog" data-backdrop="static" data-id="{@xlink:href}">
                   <div class="modal-dialog">
                     <div class="modal-content">
