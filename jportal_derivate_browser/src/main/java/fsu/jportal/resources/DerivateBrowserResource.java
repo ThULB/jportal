@@ -287,6 +287,7 @@ public class DerivateBrowserResource {
         }
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("uploadID", uploadID);
+        jsonObject.addProperty("derivateID", uploadHandler.getDerivateID());
         jsonObject.addProperty("md5", DerivateTools.getMD5forFile(uploadHandler.getDerivateID(), filePath));
 
         return Response.ok(jsonObject.toString()).build();
