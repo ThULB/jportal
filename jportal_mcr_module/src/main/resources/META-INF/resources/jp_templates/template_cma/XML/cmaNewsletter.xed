@@ -1,49 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage xmlns:xed="http://www.mycore.de/xeditor" version="1.0" template="template_cma">
-    <section xml:lang="all" title="Newsletter">
+  <section xml:lang="all" title="Newsletter">
 
-        <xed:form>
-
-            <xed:source uri="webapp:/jp_templates/template_cma/XML/cmaNewsletter.xml"/>
-
-            <section xml:lang="all">
-                <div class="container-fluid">
-
-
-                    <div class="row">
-                        <div class="text-center"><h3>CMA Newsletter</h3></div>
-                        <div class="col-md-12"><p>Wenn Sie sich für den <b>CMA Newsletter</b> anmelden wollen,
-                            so können Sie dieses auf zwei Arten erledigen.</p></div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-12"><p>Sie können Ihr eigenes E-Mail-Programm benutzen. Dazu müssen Sie in die Betreffzeile
-                            <b>Anmeldung</b> eintragen und diese E-Mail an <a href="mailto:cma-newsletter@gbv.de">cma-newsletter@gbv.de</a> versenden</p></div>
-                        <div class="col-md-12"><p>Sie können das entsprechende Formularfeld auf dieser Seite benutzen und dort Ihre E-Mail-Adresse eintagen</p></div>
-                    </div>
-
-
-                    <div class="row">
-                        <xed:bind xpath="email">
-                            <input type="hidden" name="xsl" value="copynodes" />
-                            <input type="hidden" name="goto" value="{$WebApplicationBaseURL}receive/{$journalID}" />
-                            <div class="col-md-12"><h3>Direktanmeldung</h3></div>
-                            <div class="col-md-7">
-                                <label for="mail">Ihre E-Mail-Adresse:</label>
-                                <div class="input-group">
-                                    <input type="email" id="mail" class="form-control"/>
-                                    <span class="input-group-btn">
-                                        <input class="btn btn-default" type="submit" xed:target="servlet" xed:href="MCRMailer">Anmelden</input>
-                                    </span>
-                                </div>
-                            </div>
-
-                        </xed:bind>
-                    </div>
+    <xed:form onsubmit="return validate(event);" name="frm">
+      <xed:source uri="webapp:/jp_templates/template_cma/XML/cmaNewsletter.xml" />
+      <section xml:lang="all">
+        <xed:choose>
+          <xed:when test="$sent='true'">
+            <div class="container-fluid">
+              <h3>CMA Newsletter</h3>
+              <p>Vielen Danke für ihre Anmeldung.
+                <br />
+                Ihre Anfrage wird bearbeitet und Sie erhalten in kürze Antwort.
+              </p>
+            </div>
+          </xed:when>
+          <xed:otherwise>
+            <div class="container-fluid">
+              <h3>CMA Newsletter</h3>
+              <div>
+                <p>Wenn Sie sich für den <b>CMA Newsletter</b> anmelden wollen,
+                  so können Sie dieses auf zwei Arten erledigen.
+                </p>
+              </div>
+              <div>
+                <p>Sie können Ihr eigenes E-Mail-Programm benutzen. Dazu müssen Sie in die Betreffzeile
+                  <b>Anmeldung</b>
+                  eintragen und diese E-Mail an <a href="mailto:cma-newsletter@gbv.de">cma-newsletter@gbv.de</a> versenden
+                </p>
+                <p>Sie können das entsprechende Formularfeld auf dieser Seite benutzen und dort Ihre E-Mail-Adresse eintagen</p>
+              </div>
+              <xed:bind xpath="email">
+                <input type="hidden" name="xsl" value="copynodes" />
+                <xed:bind xpath="link">
+                  <input type="hidden" name="goto"
+                         value="{$WebApplicationBaseURL}jp_templates/template_cma/XML/cmaNewsletter.xed?journalID={$journalID}&amp;sent=true" />
+                </xed:bind>
+                <div>
+                  <h3>Direktanmeldung</h3>
+                  <br />
                 </div>
-            </section>
-        </xed:form>
-    </section>
+                <div class="col-md-7">
+                  <xed:bind xpath="to">
+                    <input type="hidden" value="{$JP.Newsletter.CMA.Receiver}" />
+                  </xed:bind>
+                  <xed:bind xpath="from">
+                    <div class="form-group">
+
+                      <label for="mail" class="col-sm-3 control-label">Ihre E-Mail-Adresse:</label>
+                      <div class="col-sm-9">
+                        <input placeholder="Mail-Adresse" class="form-control" type="email" name="mail" />
+                        <p id="error"></p>
+                      </div>
+
+                    </div>
+                  </xed:bind>
+                  <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-10">
+                      <button class="btn btn-primary" type="submit" xed:target="servlet"
+                              xed:href="MCRMailer">Speichern
+                      </button>
+                      <xed:cancel url="{$WebApplicationBaseURL}receive/{$journalID}" />
+                      <button class="btn btn-danger" type="submit" xed:target="cancel">Abbrechen</button>
+                    </div>
+                  </div>
+                </div>
+              </xed:bind>
+            </div>
+          </xed:otherwise>
+        </xed:choose>
+      </section>
+    </xed:form>
+    <script type="text/javascript">
+      function validate(event) {
+        var form = document.frm;
+        if(document.forms['frm'].mail.value === "") {
+          event.preventDefault();
+          document.getElementById("error").innerHTML = "Bitte geben Sie eine gültige Mail-Adresse ein.";
+          form.mail.focus();
+          return false;
+          } else {
+              return true;
+            }
+      }
+
+    </script>
+  </section>
 </MyCoReWebPage>
+

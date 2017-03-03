@@ -2,7 +2,7 @@
 <email>
     <from></from>
 
-    <to>replace@replace.com</to> <!--add receiving email address for the newsletter-->
+    <to></to>
 
     <subject>Anmeldung CMA-Newsletter</subject>
     <body>Bitte schalten sie mich für den CMA-Newsletter frei.</body>
