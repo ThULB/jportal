@@ -17,7 +17,7 @@
 				<li>
 					<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
 						<i class="fa fa-reply" aria-hidden="true"></i>
-						Zeitschriftenserver des GBV
+						Zeitschriftenserver der VZG
 					</a>
 				</li>
 				<xsl:variable name="journalID">
@@ -99,7 +99,7 @@
 						<li>
 							<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
 								<i class="fa fa-reply" aria-hidden="true"></i>
-								Zeitschriftenserver des GBV
+								Zeitschriftenserver der VZG
 							</a>
 						</li>
 						<li>
