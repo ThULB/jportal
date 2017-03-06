@@ -181,6 +181,7 @@ public class METSImportResource {
         } else {
             throw new ConvertException("Unknown type. It should be either 'llz' or 'jvb'.");
         }
+        converter.setFailEasyOnStructLinkGeneration(false);
         return converter;
     }
 

@@ -1,13 +1,10 @@
 package fsu.jportal.resources;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,7 +39,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.mets.ALTOMETSHierarchyGenerator;
 import fsu.jportal.mets.MetsVersionStore;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.MetsUtil;
@@ -82,26 +78,10 @@ public class METSBaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response generate(@PathParam("id") String derivateId) {
         // check write permission on derivate
-        MCRJerseyUtil.checkPermission(MCRObjectID.getInstance(derivateId), MCRAccessManager.PERMISSION_WRITE);
+        MCRObjectID derId = MCRObjectID.getInstance(derivateId);
+        MCRJerseyUtil.checkPermission(derId, MCRAccessManager.PERMISSION_WRITE);
         try {
-            // get old mets
-            Mets oldMets;
-            try {
-                oldMets = MetsUtil.getMets(derivateId);
-            } catch(FileNotFoundException fnfe) {
-                oldMets = null;
-            }
-            // generate
-            Mets newMets = new ALTOMETSHierarchyGenerator(oldMets).getMETS(MCRPath.getPath(derivateId, "/"),
-                new HashSet<MCRPath>());
-            // as mcr content
-            MCRJDOMContent newMetsContent = new MCRJDOMContent(newMets.asDocument());
-            // store old mets
-            storeOldMets(derivateId);
-            // path to mets.xml
-            MCRPath metsPath = MCRPath.getPath(derivateId, "mets.xml");
-            // store in derivate
-            Files.copy(newMetsContent.getInputStream(), metsPath, StandardCopyOption.REPLACE_EXISTING);
+            MetsUtil.generateAndReplace(derId);
             // send response
             JsonObject response = new JsonObject();
             response.addProperty("status", "ok");
@@ -125,7 +105,8 @@ public class METSBaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response sync(@PathParam("id") String derivateId) {
         // check write permission on derivate
-        MCRJerseyUtil.checkPermission(MCRObjectID.getInstance(derivateId), MCRAccessManager.PERMISSION_WRITE);
+        MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
+        MCRJerseyUtil.checkPermission(mcrDerivateId, MCRAccessManager.PERMISSION_WRITE);
         // get mets
         Mets mets = getMets(derivateId);
 
@@ -139,7 +120,7 @@ public class METSBaseResource {
 
         if (structLinkSynced || !updatedList.isEmpty()) {
             // store old mets
-            storeOldMets(derivateId);
+            storeOldMets(mcrDerivateId);
             // replace mets
             write(mets.asDocument(), derivateId);
         }
@@ -166,9 +147,9 @@ public class METSBaseResource {
      * 
      * @param derivateId the derivate
      */
-    private void storeOldMets(String derivateId) {
+    private void storeOldMets(MCRObjectID derivateId) {
         try {
-            MetsVersionStore.store(MCRObjectID.getInstance(derivateId));
+            MetsVersionStore.store(derivateId);
         } catch (Exception exc) {
             JsonObject json = new JsonObject();
             json.addProperty("errorMsg", "unable to store old mets.xml: " + exc.getMessage());
