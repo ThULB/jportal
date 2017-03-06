@@ -24,7 +24,7 @@
     <var name="linkImgAllowed" value="{$bookmarkedImage != '' and not($linkExist) and not($hasSourceOfLink)}" />
     <var name="notJournal" value="{/mycoreobject/@xsi:noNamespaceSchemaLocation != 'datamodel-jpjournal.xsd'}" />
     <var name="hasChildren" value="{count(/mycoreobject/structure/children) &gt; 0}" />
-    <var name="hasGND" value="{count(/mycoreobject/metadata/def.identifier/identifier[@type='gnd']) &gt; 0}" />
+    <var name="hasGND" value="{count(/mycoreobject/metadata/*[name() = 'def.identifier' or name() = 'identifiers']/identifier[@type='gnd']) &gt; 0}" />
   </xsl:variable>
   <xsl:variable name="menuVar" select="xalan:nodeset($menuVarXML)" />
 
@@ -44,7 +44,7 @@
         </item>
         <item>
           <restriction name="hasGND" value="true" />
-          <label name="Mit Katalogdaten anreichern" gnd="{/mycoreobject/metadata/def.identifier/identifier[@type='gnd']/text()}" mcrid="{/mycoreobject/@ID}" id="updateSRU" />
+          <label name="Mit Katalogdaten anreichern" gnd="{/mycoreobject/metadata/*[name() = 'def.identifier' or name() = 'identifiers']/identifier[@type='gnd']/text()}" mcrid="{/mycoreobject/@ID}" id="updateSRU" />
         </item>
         <item>
           <restriction name="hasChildren" value="true" />
