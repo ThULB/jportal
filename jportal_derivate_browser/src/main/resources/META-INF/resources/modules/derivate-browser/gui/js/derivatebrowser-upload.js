@@ -96,7 +96,9 @@ var derivateBrowserUpload = (function () {
             if (deriID != "" && deriID != undefined) {
                 $("body").trigger("addTempDoc", [deriID, deriID, "derivate", $(this).data("docID")]);
                 $("body").trigger("derivateCreated", deriID);
-                derivateBrowserTools.goTo(deriID, "");
+                finishUpload().done(function() {
+                    derivateBrowserTools.goTo(deriID, "");  
+                });
             }
             resetUpload();
             hideNewDeri();
