@@ -37,14 +37,7 @@ public abstract class JPUploader {
                                 @Override
                                 public void onRemoval(RemovalNotification<UUID, MCRUploadHandlerIFS> notification) {
                                     MCRUploadHandlerIFS uploadHandler = notification.getValue();
-                                    try {
-                                        uploadHandler.finishUpload();
-                                    } catch (IOException exc) {
-                                        LOGGER.error("Unable to finish upload for " + uploadHandler.getDerivateID(),
-                                            exc);
-                                    } finally {
-                                        uploadHandler.unregister();
-                                    }
+                                    finishUploadHandler(uploadHandler);
                                 }
                             })
                             .build();
@@ -87,6 +80,7 @@ public abstract class JPUploader {
      * @throws IOException 
      */
     public static void finish(UUID uuid) throws IOException {
+        finishUploadHandler(get(uuid));
         CACHE.invalidate(uuid);
     }
 
@@ -108,6 +102,19 @@ public abstract class JPUploader {
             throw new MCRException("Couldn't find cache entry " + uuid + ". Unable to upload " + filePath + ".");
         }
         uploadHandler.receiveFile(filePath, inputStream, fileSize, null);
+    }
+
+    private static void finishUploadHandler(MCRUploadHandlerIFS uploadHandler) {
+        if (uploadHandler == null || uploadHandler.isSuccessful()) {
+            return;
+        }
+        try {
+            uploadHandler.finishUpload();
+        } catch (IOException exc) {
+            LOGGER.error("Unable to finish upload for " + uploadHandler.getDerivateID(), exc);
+        } finally {
+            uploadHandler.unregister();
+        }
     }
 
 }
