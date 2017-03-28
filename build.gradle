@@ -548,4 +548,4 @@ configurations.all {
     }
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '2.8' }
+task wrapper(type: Wrapper) { gradleVersion = '3.4.1' }
