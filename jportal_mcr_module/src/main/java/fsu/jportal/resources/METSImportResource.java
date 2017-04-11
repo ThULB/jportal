@@ -80,7 +80,7 @@ public class METSImportResource {
         METS_TYPE type = getType(doc);
         if (!type.equals(METS_TYPE.unknown)) {
             try {
-                Mets mets = convert(derivateId, doc);
+                Mets mets = convert(derivateId, doc, true);
                 validate(derivateId, mets);
             } catch (BlockReferenceException bre) {
                 LOGGER.error("Unable to convert mets.xml", bre);
@@ -104,7 +104,7 @@ public class METSImportResource {
 
         // build document stuff
         Document enmapMetsXML = MetsUtil.getMetsXMLasDocument(derivateId);
-        Mets mcrMets = convert(derivateId, enmapMetsXML);
+        Mets mcrMets = convert(derivateId, enmapMetsXML, false);
         METS_TYPE type = getType(enmapMetsXML);
 
         // import mets
@@ -135,7 +135,7 @@ public class METSImportResource {
     public String print(@PathParam("id") String derivateId) throws IOException, JDOMException, ConvertException {
         MetsImportUtils.checkPermission(derivateId);
         Document metsXML = MetsUtil.getMetsXMLasDocument(derivateId);
-        Mets mets = convert(derivateId, metsXML);
+        Mets mets = convert(derivateId, metsXML, false);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         StringWriter writer = new StringWriter();
         out.output(mets.asDocument(), writer);
@@ -145,15 +145,16 @@ public class METSImportResource {
     /**
      * Converts the given enmap mets to an mcr one.
      * 
-     * @param derivateId
-     * @param enmapMetsXML
-     * @return
-     * @throws IOException
-     * @throws JDOMException
-     * @throws ConvertException
+     * @param derivateId derivateId to convert
+     * @param enmapMetsXML mets.xml (ENMAP format)
+     * @param failEasy should the convert process fail easy (break on small bugs or not)
+     * 
+     * @return the converted mycore mets.xml as java object
      */
-    private Mets convert(String derivateId, Document enmapMetsXML) throws IOException, JDOMException, ConvertException {
+    private Mets convert(String derivateId, Document enmapMetsXML, boolean failEasy) throws IOException, JDOMException, ConvertException {
         ENMAPConverter converter = getConverter(enmapMetsXML, derivateId);
+        converter.setFailEasyOnStructLinkGeneration(failEasy);
+        converter.setFailOnEmptyAreas(failEasy);
         return converter.convert(enmapMetsXML, MCRPath.getPath(derivateId, "/"));
     }
 
@@ -181,7 +182,6 @@ public class METSImportResource {
         } else {
             throw new ConvertException("Unknown type. It should be either 'llz' or 'jvb'.");
         }
-        converter.setFailEasyOnStructLinkGeneration(false);
         return converter;
     }
 

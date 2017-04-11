@@ -509,7 +509,14 @@ $(document).ready(function() {
       html += "</ul><p>Dieser Fehler tritt auf, wenn einem Paragraph kein ALTO-Block (show paragraph) zugeordnet werden konnte." +
           " Um den Fehler zu beheben muss entweder der Paragraph gelöscht, oder das umschließende Rechteck vergrößert" +
           " werden.</div>";
+      html += "<p>Sie können den Importvorgan trotzdem starten. Bitte tun Sie dies nur, wenn Sie sich der Konsequenzen bewusst" +
+      		" sind!</p> <label><input type='checkbox' id='importMetsDialogImportAnyway'> Trotz Fehler importieren</label>";
       dialogContent.html(html);
+
+      $("#importMetsDialogImportAnyway").on("click", function() {
+        startImportButton.removeAttr("disabled");
+        startImportButton.on("click", startImport);
+      });
     } else if(e.status == "401") {
       dialogContent.html("Sie haben nicht die notwendige Berechtigung um den Importvorgang zu starten!");
     } else {
