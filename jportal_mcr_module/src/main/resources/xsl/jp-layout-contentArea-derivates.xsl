@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
-  xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://org.mycore.urn.MCRXMLFunctions"
+  xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://fsu.jportal.xml.LayoutTools"
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
   xmlns:encoder="xalan://java.net.URLEncoder" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml jpxml mcrurn acl encoder">
 
@@ -106,7 +106,7 @@
               <a href="{$WebApplicationBaseURL}rsc/derivatebrowser/compact#/{@xlink:href}/">Details</a>
             </li>
             <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
-              <xsl:if test="not(mcrurn:hasURNDefined(@xlink:href))">
+              <xsl:if test="not(mcrurn:hasURNAssigned(@xlink:href))">
                 <li>
                   <a href="#" data-toggle="modal" data-target="#generateURNDialog">URN vergeben</a>
                 </li>
