@@ -479,6 +479,10 @@ $(document).ready(function() {
 		});
 	});
 
+	dialog.on("hidden.bs.modal", function(){
+		location.reload();
+	});
+
 	function failed(e) {
 		dialogIcon.html("<i class='fa fa-3x fa-ban' />");
 		if(e.status == "401") {

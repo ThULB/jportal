@@ -91,15 +91,13 @@ public class URNTools {
                      .getIdentifier();
             //            return manager.get("DNBURNGranular", derivID, URLDecoder.decode(path, "UTF-8")).getIdentifier();
         } catch (UnsupportedEncodingException e) {
-            String errorMsg = "Wrong encoding in xlink:href " + path + "\n";
-            LOGGER.error(errorMsg, e);
-            return errorMsg;
+            LOGGER.error("Wrong encoding in derivate {} with xlink:href {}", derivID, path);
+            e.printStackTrace();
         } catch (NoResultException e) {
-            String errorMsg = "Link to nirvana xlink:href: " + path + "\n";
-            LOGGER.error(errorMsg, e);
-            return errorMsg;
+            LOGGER.info("No URN for {}:{}.", derivID, path);
         }
 
+        return "";
     }
 
     public static void updateURN(MCRPath sourceNode, MCRPath target) {
