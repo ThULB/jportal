@@ -56,7 +56,7 @@
   <!-- 1 line is split into 3 parts: 1. title, 2. input (input, textArea, 
   	select) and 3. buttons -->
   <!-- Form: titel | input | buttons -->
-  <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|logoThumbnail', @name)]">
+  <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|logoThumbnail|subselect', @name)]">
     <div class="row">
       <xsl:if test="@small">
         <xsl:attribute name="class"></xsl:attribute>
@@ -363,6 +363,28 @@
         <xed:output i18n="jp.editor.person.select" />
       </button>
       <button type="button" class="btn btn-default jp-personSelect-inst" tabindex="1">
+        <xed:output i18n="jp.editor.inst.select" />
+      </button>
+    </div>
+  </xsl:template>
+  
+  <xsl:template match="jp:template[@name='subselect']" mode="input">
+    <div class="jp-personSelect-name">
+      <div class="jp-name-display"></div>
+      <xed:bind xpath="@xlink:title">
+        <input type="text" style="display:none" />
+      </xed:bind>
+      <xed:bind xpath="@xlink:href">
+        <input type="text" style="display:none" />
+      </xed:bind>
+    </div>
+
+  <!-- button to select institution _ subselect -->
+    <div class="form-group">
+      <button type="button" tabindex="1">
+        <xsl:attribute name="class">
+          <xsl:value-of select="concat('btn btn-default ', @subselectClass)" />
+        </xsl:attribute>
         <xed:output i18n="jp.editor.inst.select" />
       </button>
     </div>

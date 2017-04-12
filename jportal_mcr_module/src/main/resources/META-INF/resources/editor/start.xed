@@ -7,25 +7,23 @@
       <xed:cleanup-rule xpath="//*[@inherited]" relevant-if="@inherited = '0'" />
       <xed:choose>
         <xed:when test="$acl/@permission = 'true'">
-          <xed:if test="$type != 'jpinst'">
-            <link href="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />
-            <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" class="jp-db-load"></script>
-            <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/js/bootstrap-datetimepicker.min.js" class="jp-db-load"></script>
-            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js" class="jp-db-load"></script>
-			<script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js" class="jp-db-load jp-db-reload"></script>
+          <link href="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />
+          <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" class="jp-db-load"></script>
+          <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/js/bootstrap-datetimepicker.min.js" class="jp-db-load"></script>
+          <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js" class="jp-db-load"></script>
+	        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js" class="jp-db-load jp-db-reload"></script>
 
-            <script type="text/javascript">
+          <script type="text/javascript">
               $(function () {
               	var newDocTitle = $("#xeditor-title").text().trim() + " ";
 				if (document.title.indexOf(newDocTitle) == -1){
 					document.title = newDocTitle + document.title;					
 				}
               });
-            </script>
-            <span id="hiddenLanguage" style="display:none">
-              <xed:output value="$CurrentLang" />
-            </span>
-          </xed:if>
+          </script>
+          <span id="hiddenLanguage" style="display:none">
+            <xed:output value="$CurrentLang" />
+          </span>
           <xed:if test="$type = 'jpinst'">
           	<script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-logoSelect.js" class="jp-db-load"></script>
           </xed:if>

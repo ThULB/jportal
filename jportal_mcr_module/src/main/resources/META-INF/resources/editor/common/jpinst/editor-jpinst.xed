@@ -18,6 +18,30 @@
           <xed:cleanup-rule xpath="//alternative" relevant-if="(string-length(name/text()) > 0)" />
       </xed:repeat>
     </jp:section>
+    
+    <jp:section title="{i18n:metaData.headlines.jpinst.historyData}">
+      <jp:template name="title" i18n="metaData.headlines.jpinst.historyData" />
+
+      <xed:repeat xpath="placesOfActivity[@class='MCRMetaLangText']/placeOfActivity[@inherited='0']" min="0" max="10">
+        <jp:template name="textInput" xpath="." i18n="metaData.jpinst.placeOfActivity"
+          buttons="true" />
+      </xed:repeat>
+      
+      <jp:template name="textInput"
+        xpath="timesOfActivity[@class='MCRMetaLangText']/timeOfActivity[@inherited='0']" i18n="metaData.jpinst.timeOfActivity"
+        maxlength="10" />
+    </jp:section>
+    
+    <jp:section title="{i18n:metaData.headlines.jpinst.otherInst}">
+      <jp:template name="title" i18n="metaData.headlines.jpinst.otherInst" />
+
+      <jp:template name="subselect" xpath="links[@class='MCRMetaLinkID']/link[@type='predecessor'][@inherited='0'][@xlink:type='locator']" i18n="editormask.labels.predecessor"
+        subselectClass="jp-personSelect-inst" myClass="col-md-8 participant_subselect" />
+      <jp:template name="subselect" xpath="links[@class='MCRMetaLinkID']/link[@type='successor'][@inherited='0'][@xlink:type='locator']" i18n="editormask.labels.successor"
+        subselectClass="jp-personSelect-inst" myClass="col-md-8 participant_subselect" />
+      <jp:template name="subselect" xpath="links[@class='MCRMetaLinkID']/link[@type='superior'][@inherited='0'][@xlink:type='locator']" i18n="editormask.labels.superior"
+        subselectClass="jp-personSelect-inst" myClass="col-md-8 participant_subselect" />
+    </jp:section>
 
     <jp:section title="{i18n:metaData.headlines.jpinst.address}">
       <jp:template name="title" i18n="metaData.headlines.jpinst.address" />
@@ -62,6 +86,9 @@
 
       <jp:template name="textArea"
         xpath="notes[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain']" i18n="editormask.labels.LNote" />
+        
+      <jp:template name="textInput"
+        xpath="functions[@class='MCRMetaLangText']/function[@inherited='0'][@form='plain']" i18n="editormask.labels.function" />
 
       <xed:repeat xpath="identifiers[@class='MCRMetaLangText']/identifier[@inherited='0'][@form='plain']"
         min="0" max="10">

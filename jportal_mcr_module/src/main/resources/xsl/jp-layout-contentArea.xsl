@@ -91,7 +91,7 @@
                   <xsl:variable name="elements">
                     <xsl:choose>
                       <xsl:when test="$currentType = 'jpinst'">
-                      	names|alternatives|addresses|phones|urls|emails|notes|identifiers|logo|def.doubletOf
+                      	names|alternatives|placesOfActivity|timesOfActivity|links|addresses|phones|urls|emails|notes|functions|identifiers|logo|def.doubletOf
                       </xsl:when>
                       <xsl:when test="$currentType = 'person'">
                       	def.heading|def.alternative|def.peerage|def.gender|def.contact|def.role|def.placeOfActivity|def.dateOfBirth|def.placeOfBirth|def.dateOfDeath|def.placeOfDeath|def.note|def.link|def.identifier|def.doubletOf

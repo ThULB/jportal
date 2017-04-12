@@ -12,8 +12,8 @@ $(document).ready(function () {
 			var that = $(this);
 			that.click(function(){
 				var type = that.attr("class").indexOf("-inst") != -1 ? "jpinst" : "person";
-				var namebase = that.parent().prev().prev(".form-group").find(".form-control").attr("name");
-				namebase = namebase.substr(0, namebase.length - 6);
+				var namebase = that.parent().prev(".jp-personSelect-name").find("input").filter(":last").attr("name");
+				namebase = namebase.substr(0, namebase.length - 12);
 				
 				var conn = connector(type, namebase);
 				initModal(conn, labelName);
@@ -33,7 +33,7 @@ $(document).ready(function () {
   				callback(data);
   			},
   			error: function(error) {
-  				alert(error);
+  			    alert(error.statusText + "/n" + error.responseText);
   			}
   		});
   	}
@@ -48,7 +48,7 @@ $(document).ready(function () {
   				callback(data);
   			},
   			error: function(error) {
-  				alert(error);
+  				alert(error.statusText + "/n" + error.responseText);
   			}
   		});
   	}
