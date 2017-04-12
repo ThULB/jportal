@@ -99,6 +99,10 @@ project(':jportal_mcr_module') {
 
     dependencies {
         testCompile 'org.mycore:mycore-base:$mcrVersion:tests'
+        testCompile 'org.hibernate:hibernate-hikaricp:5.2.2.Final'
+        testCompile 'com.h2database:h2:1.4.192'
+
+
 
         compile "org.mycore:mycore-base:$mcrVersion"
         compile "org.mycore:mycore-solr:$mcrVersion"
@@ -113,12 +117,13 @@ project(':jportal_mcr_module') {
         compile "org.mycore:mycore-impex:$mcrVersion"
         compile "org.mycore:mycore-webtools:$mcrVersion"
         compile "org.mycore:mycore-webcli:$mcrVersion"
+        compile "org.mycore:mycore-pi:$mcrVersion"
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
         compile 'org.mycore.mets:mets-model:0.10-SNAPSHOT'
         compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
         compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.2-SNAPSHOT'
 
-        compile files("/Users/chi/Development/git-Projects/mycore-git/mycore-pi/target/mycore-pi-2017.01-SNAPSHOT.jar")
+//        compile files("/Users/chi/Development/git-Projects/mycore-git/mycore-pi/target/mycore-pi-2017.01-SNAPSHOT.jar")
 
         compile "org.mycore:mycore-migration-2015:$mcrVersion"
 
@@ -133,7 +138,6 @@ project(':jportal_mcr_module') {
         compile 'xmlunit:xmlunit:1.3'
         compile 'javax.xml.bind:jaxb-api:2.2.1'
         compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
-        compile 'net.bull.javamelody:javamelody-core:1.59.0'
         compile 'com.google.inject:guice:4.1.0'
 
         // webjars
