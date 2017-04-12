@@ -84,7 +84,7 @@ subprojects {
         }
     }
 
-    jar << {
+    jar.doLast {
         copy {
             from "$project.buildDir/tmp/jar"
             include "MANIFEST.MF"
@@ -550,4 +550,4 @@ configurations.all {
     }
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '3.4.1' }
+task wrapper(type: Wrapper) { gradleVersion = '2.8' }
