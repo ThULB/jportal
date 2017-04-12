@@ -12,6 +12,11 @@ import org.jdom2.output.DOMOutputter;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.pi.MCRPIRegistrationService;
+import org.mycore.pi.MCRPersistentIdentifierManager;
+import org.mycore.pi.urn.MCRDNBURN;
+import org.mycore.pi.urn.MCRURNGranularOAIRegistrationService;
+import org.mycore.pi.urn.MCRURNOAIRegistrationService;
 import org.w3c.dom.Node;
 
 import fsu.jportal.backend.JPLegalEntity;
@@ -111,6 +116,14 @@ public abstract class LayoutTools {
     public static String getIdentifier(String mcrID, String type) {
         Optional<JPLegalEntity> legalEntity = JPComponentUtil.getLegalEntity(MCRObjectID.getInstance(mcrID));
         return legalEntity.map(le -> le.getId(type).orElse(null)).orElse(null);
+    }
+
+    public static boolean hasURNAssigned(String objID){
+        String registrationServiceID = "DNBURNGranular";
+        MCRURNGranularOAIRegistrationService registrationService = new MCRURNGranularOAIRegistrationService(
+                registrationServiceID);
+
+        return registrationService.isCreated(MCRObjectID.getInstance(objID), "");
     }
 
 }

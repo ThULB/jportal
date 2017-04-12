@@ -118,6 +118,8 @@ project(':jportal_mcr_module') {
         compile 'org.mycore.mets:mets-validator:1.2-SNAPSHOT'
         compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.2-SNAPSHOT'
 
+        compile files("/Users/chi/Development/git-Projects/mycore-git/mycore-pi/target/mycore-pi-2017.01-SNAPSHOT.jar")
+
         compile "org.mycore:mycore-migration-2015:$mcrVersion"
 
         // extern libs
