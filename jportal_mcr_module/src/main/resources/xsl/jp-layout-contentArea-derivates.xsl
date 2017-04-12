@@ -110,8 +110,6 @@
                 <li>
                   <a href="#" data-toggle="modal" data-target="#generateURNDialog">URN vergeben</a>
                 </li>
-              </xsl:if>
-              <xsl:if test="not(mcrurn:hasURNDefined(@xlink:href))">
                 <div class="modal fade" id="generateURNDialog" tabindex="-1" role="dialog" data-backdrop="static" data-id="{@xlink:href}">
                   <div class="modal-dialog">
                     <div class="modal-content">
