@@ -42,7 +42,7 @@ public class URNMigration {
                        .flatMap(URNMigration::parse)
                        .map(dnbURN -> dnbURN.withSuffix(suffix))
                        .map(MCRDNBURN::asString)
-                       .map(dfgURN -> new MCRPI(dfgURN, MCRDNBURN.TYPE + suffix, derivID, additional, serviceID, null))
+                       .map(dfgURN -> new MCRPI(dfgURN, MCRDNBURN.TYPE + suffix, derivID, additional, serviceID + suffix, null))
                        .map(dfgMcrPi -> Stream.of(mcrpi, dfgMcrPi))
                        .orElse(Stream.of(mcrpi));
     }
