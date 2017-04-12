@@ -1,18 +1,35 @@
 package fsu.jportal.urn;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRFileMetadata;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectDerivate;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.pi.MCRPIRegistrationInfo;
+import org.mycore.pi.MCRPersistentIdentifierManager;
+import org.mycore.pi.backend.MCRPI;
+import org.mycore.pi.backend.MCRPI_;
 import org.mycore.urn.hibernate.MCRURN;
 import org.mycore.urn.services.MCRURNManager;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 public class URNTools {
+    private static Logger LOGGER = LogManager.getLogger();
+
     public static void updateURNFileName(MCRURN urn, String path, String newName) {
         boolean registered = true;
 
@@ -58,22 +75,49 @@ public class URNTools {
         return null;
     }
 
+    public static String getURNForFile(String derivID, String path) {
+        //        MCRPersistentIdentifierManager manager = MCRPersistentIdentifierManager.getInstance();
+
+        try {
+            // TODO: fix manager
+            EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
+            return em.createQuery(
+                    "select u from MCRPI u where u.service = :service and u.mycoreID = :mcrID and u.additional = :path",
+                    MCRPIRegistrationInfo.class)
+                     .setParameter("service", "DNBURNGranular")
+                     .setParameter("mcrID", derivID)
+                     .setParameter("path", URLDecoder.decode(path, "UTF-8"))
+                     .getSingleResult()
+                     .getIdentifier();
+            //            return manager.get("DNBURNGranular", derivID, URLDecoder.decode(path, "UTF-8")).getIdentifier();
+        } catch (UnsupportedEncodingException e) {
+            String errorMsg = "Wrong encoding in xlink:href " + path + "\n";
+            LOGGER.error(errorMsg, e);
+            return errorMsg;
+        } catch (NoResultException e) {
+            String errorMsg = "Link to nirvana xlink:href: " + path + "\n";
+            LOGGER.error(errorMsg, e);
+            return errorMsg;
+        }
+
+    }
+
     public static void updateURN(MCRPath sourceNode, MCRPath target) {
-        if(!Files.exists(sourceNode) || !Files.exists(target)){
+        if (!Files.exists(sourceNode) || !Files.exists(target)) {
             return;
         }
-        
+
         MCRURN urn = getURNForFile(sourceNode);
-        if(urn == null){
+        if (urn == null) {
             return;
         }
-        
+
         String targetName = target.getFileName().toString();
         String targetPath = target.getParent().getOwnerRelativePath();
-        if(!targetPath.endsWith("/")){
+        if (!targetPath.endsWith("/")) {
             targetPath += "/";
         }
-        
+
         updateURNFileName(urn, targetPath, targetName);
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" xmlns:urn="xalan://org.mycore.urn.services.MCRURNManager"
+  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" xmlns:urn="xalan://fsu.jportal.urn.URNTools"
   exclude-result-prefixes="i18n xsi xlink mcrxml jpxml">
 
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
