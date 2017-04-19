@@ -17,6 +17,7 @@ import org.mycore.pi.MCRPersistentIdentifierManager;
 import org.mycore.pi.urn.MCRDNBURN;
 import org.mycore.pi.urn.MCRURNGranularOAIRegistrationService;
 import org.mycore.pi.urn.MCRURNOAIRegistrationService;
+import org.mycore.urn.MCRXMLFunctions;
 import org.w3c.dom.Node;
 
 import fsu.jportal.backend.JPLegalEntity;
@@ -123,7 +124,10 @@ public abstract class LayoutTools {
         MCRURNGranularOAIRegistrationService registrationService = new MCRURNGranularOAIRegistrationService(
                 registrationServiceID);
 
-        return registrationService.isCreated(MCRObjectID.getInstance(objID), "");
+        boolean mcrPIcreated = registrationService.isCreated(MCRObjectID.getInstance(objID), "");
+        boolean mcrURNDefined = MCRXMLFunctions.hasURNDefined(objID);
+
+        return mcrPIcreated || mcrURNDefined;
     }
 
 }
