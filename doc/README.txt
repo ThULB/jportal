@@ -1,17 +1,14 @@
 TOC
-===========================================================================================================================
+======================================
 1. LICENSE
 2. REQUIREMENTS
 3. GETTING SOURCES
-4. CONFIGURATION
-5. INSTALLATION
-    5.1 NEW INSTALLATION
-    5.2 REINSTALLATION
-6. RUNNING
-7. SOLR IN TOMCAT
-8. DEFAULT USERS
-9. RIGHTS MANAGEMENT
-===========================================================================================================================
+4. RUN JPORTAL
+5. DEPLOY JPORTAL
+6. CONFIGURE JPORTAL
+7. RIGHTS MANAGEMENT
+======================================
+
 
 1. LICENSE
 ======================================
@@ -23,126 +20,74 @@ Watch and agree license agreement specified in LICENSE.txt
 ======================================
 ======================================
 - Subversion-Client
-- JAVA 6 JDK
-- ANT
-- MAVEN
+- JAVA 8 JDK
+- GRADLE
+
 
 3. GETTING SOURCES
 ======================================
 ======================================
-svn checkout https://server.mycore.de/svn/docportal/trunk docportal
+svn checkout https://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal2
+
+# optional: if you want to checkout the mycore system
 svn checkout https://server.mycore.de/svn/mycore/trunk mycore
-svn checkout https://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 
-4. CONFIGURATION  
+
+4. RUN JPORTAL
 ======================================
 ======================================
 
-Copy templates (in docportal)
-  - cp config/mycore.private.properties.template config/mycore.private.properties
-  - cp config/pom.xml.template config/pom.xml
+# Go to the checked out jportal2 project.
+cd /jportal2
 
-Setting properties in mycore.private.properties (in docportal)
-  - MCR.basedir=<Path to docportal>
-  - MCR.Modules.Application=common,maven
-  - MCR.Components.Exclude=migration20-21,iview
-  - MCR.Module-solr.ServerURL=http\://localhost:8296
-  - MCR.Module-solr.Core=jportal
+# We use gradle as our build system. If you checked out jportal2 the
+# first time run the following command. This will build 
+# and start solr (search engine), h2 (database) and the web application.
+./gradlew build runApp
 
-  optional develop properties
-  - MCR.LayoutService.LastModifiedCheckPeriod = 1000
+# After the command is processed you find the application here
+# application: http://localhost:8291/jportal
+# solr: http://localhost:8391/solr
+#
+# To log in use 'administrator' and 'alleswirdgut'.
 
-Add in pom.xml below the <dependencies> element
-  <dependency>
-    <groupId>fsu.thulb</groupId>
-    <artifactId>jportal_mcr_module</artifactId>
-    <version>2.0.18-SNAPSHOT</version>
-    <type>jar</type>
-    <scope>compile</scope>
-  </dependency>
+# To stop the whole thing do:
+./gradlew stopApp
 
-For DB2 users, the driver and licence jar have to be installed, eG.
-  mvn install:install-file -Dfile=$PATH_TO_LIB/db2jcc.jar -DgroupId=com.ibm.db2 
-  	-DartifactId=db2jcc -Dversion=9.1 -Dpackaging=jar
-  
-  mvn install:install-file -Dfile=$PATH_TO_LIB/db2jcc_license_cu.jar 
-  	-DgroupId=com.ibm.db2 -DartifactId=db2jcc_license_cu -Dversion=9.1 -Dpackaging=jar
-  	
-  and add following into pom.xml
-  <dependency>
-  	<groupId>com.ibm.db2</groupId>
-    <artifactId>db2jcc</artifactId>
-   	<version>9.1</version>
-  </dependency>
-  <dependency>
-  	<groupId>com.ibm.db2</groupId>
-    <artifactId>db2jcc_license_cu</artifactId>
-    <version>9.1</version>
-  </dependency>
-  
+# To rebuild the whole thing do:
+./gradlew stopApp clean build runApp
 
-5. INSTALLATION
+# For developing it is usually not necessary to start/stop solr and the
+# database. Its easier to just restart the jetty.
+./gradlew stopJetty clean build runJetty
+
+
+5. DEPLOY JPORTAL
 ======================================
 ======================================
+After building jportal2 (see 4. RUN JPORTAL) a *.war file will be created
+in 'jportal2/jportal_webapp/build/libs/'. You can use this war in your
+preferred servlet container.
 
-5.1 NEW INSTALLATION
-==================================================
-cd $JPORTAL_HOME
-mvn install
-cd $DOCPORTAL_HOME 
-ant clean clean.data; rm -rf save; ant resolve create.jar create.scripts
-build/bin/solrstart.sh &
-build/bin/hsqldbstart.sh &
-ant init.database create.users create.default-rules create.class create.webapp
 
-5.2 REINSTALLATION - already installed application 
-==================================================
-cd $JPORTAL_HOME
-mvn clean install
-cd $DOCPORTAL_HOME
-ant resolve create.jar create.webapp
-
-6. SOLR IN TOMCAT
+6. CONFIGURE JPORTAL
 ======================================
 ======================================
-Its required that JPortal is deployed in docportal. Go to $DOCPORTAL_HOME/config/solr-home and
-check if the solr.xml contains a core named 'jportal'. If not, you have to install jportal as
-described above.
-cd $DOCPORTAL_HOME/config
-mvn clean install -f solr-pom.xml
+On build time a new configuration folder will be created for jportal2.
+You can find it under '~/.mycore/jportal/'
 
-A new target directory is created in the config folder which contains a solr-*.war. Copy this
-war to your webapps folder in tomcat and rename it to solr.war.
+To specify where jportal is installed, you can start your servlet container
+with '-DMCR.Home=/path to the mycore home directory'.
 
-Now we need to create a solr-home directory where the configuration of solr is set. It should be
-outside of tomcat, maybe the home directory. Copy all content of $DOCPORTAL_HOME/config/solr-home
-to that directory. Then create a new file 'setenv.sh' in your tomcat/bin directory and paste the
-following code (set correct path to solr-home directory):
+If you want to use your own solr you can simply change the url.
+Open the mycore.properties file and change 'MCR.Module-solr.ServerURL' to
+your preferred location.
 
-#!/bin/sh
-export CATALINA_OPTS="-Xms2G -Xmx2G -Dsolr.solr.home={PATH TO solr-home directory}"
-
-Start tomcat and look if solr is running at localhost:8080/solr
+To change your database go to '~/.mycore/jportal/resources/META-INF/' and
+edit the persistence.xml
 
 
-7. RUNNING
-======================================
-======================================
-Once you have followed all steps from chapter 5 you can run the server and watch JPortal in action
-All you have to do is 
-- make sure RDBMS is running ($DOCPORTAL_HOME/build/bin/hsqldbstart.sh)
-- $DOCPORTAL_HOME/build/bin/jettystart.sh
-- Go to web browser and visit http://localhost:8291
-
-
-8. DEFAULT USERS
-======================================
-======================================
-By default the installation creates a super user called "administrator" with password "alleswirdgut", that is member of group "rootgroup". Watch chapter "RIGHTS MANAGEMENT" to
-see what this user is allowed to do. 
-
-
-9. RIGHTS MANAGEMENT
+7. RIGHTS MANAGEMENT
 ======================================
 ======================================          
 Following groups will created by default:
@@ -179,4 +124,3 @@ Following groups will created by default:
     4. "admin"
     - Allowed to do all actions on JPJournal, JPVolumes, JPArticles, Persons, JPinst
     - add, edit, delete users and groups
-    - 
