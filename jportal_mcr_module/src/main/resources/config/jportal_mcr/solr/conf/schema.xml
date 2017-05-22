@@ -33,6 +33,7 @@
         <filter class="solr.ASCIIFoldingFilterFactory" />
         <filter class="solr.ICUNormalizer2FilterFactory" />
         <filter class="solr.PatternReplaceCharFilterFactory" pattern="[^\p{L}\p{Nd}]" replacement="" />
+        <filter class="solr.SnowballPorterFilterFactory" language="German2" />
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.WhitespaceTokenizerFactory" />
@@ -40,6 +41,7 @@
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
         <filter class="solr.ASCIIFoldingFilterFactory" />
         <filter class="solr.ICUNormalizer2FilterFactory" />
+        <filter class="solr.SnowballPorterFilterFactory" language="German2" />
       </analyzer>
     </fieldtype>
 
@@ -244,5 +246,5 @@
   <defaultSearchField>allMeta</defaultSearchField>
 
   <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
-  <solrQueryParser defaultOperator="OR" />
+  <solrQueryParser defaultOperator="AND" />
 </schema>
