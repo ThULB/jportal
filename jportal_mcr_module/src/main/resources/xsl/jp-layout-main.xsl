@@ -157,7 +157,7 @@
                     <xsl:value-of select="$JP.Site.label" />
                   </a>
                 </li>
-                <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'gast'">
+                <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'guest'">
                   <li>
                     <span class="webWriteProtection">
                       <xsl:value-of select="websiteWriteProtection:getMessage()" />

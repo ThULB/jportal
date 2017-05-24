@@ -1,0 +1,111 @@
+##############################################################################
+# YOUR CONFIG
+##############################################################################
+
+# Displayed title in the WEB browser
+# Also used as jar file name (lower case), so do not use whitespace in the value
+  MCR.NameOfProject=JPortal
+
+#############################################################################
+# WEB browser base URL
+#############################################################################
+
+  MCR.baseurl=http://localhost:8291/jportal/
+
+#############################################################################
+# System directories
+#############################################################################
+
+# The data directory of the jportal installation
+  MCR.datadir=%MCR.basedir%/data
+
+##############################################################################
+# User Management                                                            #
+##############################################################################
+
+# The configuration for the superuser
+  MCR.Users.Superuser.UserName=administrator
+  MCR.Users.Superuser.UserPasswd=alleswirdgut
+  MCR.Users.Superuser.GroupName=admin
+
+##############################################################################
+# SITE
+##############################################################################
+  JP.Site.label=Journals@UrMEL
+  JP.Site.Owner.label=Th\u00FCringer Universit\u00E4ts- und Landesbibliothek
+  JP.Site.Owner.url=http://www.thulb.uni-jena.de
+  JP.Site.Logo.url=http://wrackdm17.thulb.uni-jena.de/logos
+  JP.Site.Owner.logo=%JP.Site.Logo.url%/thulb.svg
+  JP.Site.Parent.label=UrMEL
+  JP.Site.Parent.url=http://www.urmel-dl.de/
+  JP.Site.Parent.logo=%JP.Site.Logo.url%/Urmel.svg
+  JP.Site.Parent.fullLogo=%JP.Site.Logo.url%/Urmel+text.svg
+  JP.Site.Footer.Logo.url=%JP.Site.Owner.url%
+  JP.Site.Footer.Logo.default=%JP.Site.Logo.url%/gray/thulb_text_right.svg
+  JP.Site.Footer.Logo.small=%JP.Site.Logo.url%/gray/thulb.svg
+
+  JP.Site.HTML.Head.Meta.Keywords.de=Zeitschriften,historisch,aktuell,Paper,Forschung,UrMEL,ThULB, FSU Jena,Langzeitarchivierung
+  JP.Site.HTML.Head.Meta.Keywords.en=Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation
+
+##############################################################################
+# Solr
+##############################################################################
+  MCR.Module-solr.ServerURL=http\://localhost:8391/solr
+  MCR.Module-solr.Core=jportal
+
+##############################################################################
+# Layout
+##############################################################################
+
+# path to alternative Layout, to overwrite default Layout (e.g. gwlb_) (if not in use, leave blank)
+  MCR.AlternativeLayout.Path=
+
+##############################################################################
+# Mail
+##############################################################################
+  MCR.Mail.Sender=jpadmin@thulb.uni-jena.de
+  MCR.Mail.Server=webmail.thulb.uni-jena.de
+  MCR.Mail.Protocol=smtp
+  MCR.Mail.Debug=false
+  MCR.Mail.Encoding=UTF-8
+  MCR.Mail.NumTries=1
+  MCR.Mail.Address=
+
+##############################################################################
+# URN
+##############################################################################
+
+# NISS
+  MCR.URN.NISS=frontend
+
+# URL of the master resolver at Deutsche Bibliothek
+  MCR.URN.Resolver.MasterURL=http://nbn-resolving.de/urn/resolver.pl?urn=
+
+##############################################################################
+# PIWIK
+##############################################################################
+#MCR.Piwik.enable=false
+#MCR.Piwik.baseurl=http://localhost/piwik/
+# id of the piwik website (if you registered only one website in piwik this should be 1)
+# @see Websitemanagement in piwik properties
+  MCR.Piwik.id=1
+
+##############################################################################
+# Website
+##############################################################################
+
+# Read access verification for the website
+## true | false 
+## "true": each displayed webpage and menu item will be checked if 
+## allowed to watch
+## "false": no check will be done. every page can be watched by everyone
+## -> use "false" if you don't have restrictions, 'cause loading times are shorter
+  MCR.Website.ReadAccessVerification=true
+
+##############################################################################
+# Newsletter Mail Receiver		                                             #
+##############################################################################
+
+# sets the email address for the receiver to the CMA and GFA newsletter
+  JP.Newsletter.GFA.Receiver=
+  JP.Newsletter.CMA.Receiver=
