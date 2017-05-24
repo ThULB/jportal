@@ -11,13 +11,7 @@
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink xalan i18n">
   &html-output;
   <xsl:include href="MyCoReLayout.xsl" />
-  <xsl:include href="editor.xsl" />
-  <xsl:include href="classificationBrowser.xsl" />
-<!--   <xsl:include href="workflow.xsl" /> -->
-  <xsl:include href="fileupload.xsl" />
   <xsl:include href="xslInclude:objectTypes" />
-<!--   <xsl:include href="sitemap.xsl" /> -->
-<!--   <xsl:include href="search-website.xsl" /> -->
 
   <xsl:variable name="PageTitle">
     <xsl:choose>
