@@ -393,7 +393,7 @@ project(':jportal_webapp') {
             classpath configurations.jetty, configurations.h2db, configurations.websocket
 
             jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-            jvmArgs '-Xmx2048m'
+            jvmArgs '-Xmx4096m'
 
             main "org.eclipse.jetty.runner.Runner"
             args '--config', "$project.projectDir/config/jetty/jetty-config.xml"
