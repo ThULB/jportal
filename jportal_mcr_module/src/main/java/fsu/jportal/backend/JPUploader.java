@@ -63,7 +63,7 @@ public abstract class JPUploader {
      */
     public static UUID start(String documentID, String derivateID, int numFiles) {
         if (derivateID == null) {
-            String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
+            String projectID = MCRConfiguration.instance().getString("MCR.Metadata.Project", "jportal");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
         }
         UUID uuid = UUID.randomUUID();

@@ -372,7 +372,7 @@ public class DerivateTools {
     public static String uploadFile(InputStream inputStream, long filesize, String documentID, String derivateID,
                                     String filePath) throws Exception {
         if (derivateID == null) {
-            String projectID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
+            String projectID = MCRConfiguration.instance().getString("MCR.Metadata.Project", "MCR");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
         }
         MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID);
