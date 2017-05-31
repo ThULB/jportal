@@ -29,7 +29,7 @@ import org.mycore.mets.validator.validators.ValidationException;
 
 import fsu.jportal.mets.ConvertException;
 import fsu.jportal.mets.ENMAPConverter;
-import fsu.jportal.mets.LLZMetsConverter;
+import fsu.jportal.mets.MetsImportUtils;
 
 public class ENMAPChecker {
 
@@ -39,10 +39,11 @@ public class ENMAPChecker {
         return visitor.getPaths();
     }
 
-    public Document convert(Path metsFile, ENMAPConverter converter)
+    public Document convert(Path metsFile)
         throws JDOMException, IOException, ConvertException {
         SAXBuilder b = new SAXBuilder();
         Document document = b.build(metsFile.toFile());
+        ENMAPConverter converter = MetsImportUtils.getConverter(document);
         Mets mets = converter.convert(document, metsFile.getParent());
         return mets.asDocument();
     }
@@ -111,15 +112,14 @@ public class ENMAPChecker {
         //            }
         //        }
 
-        System.setProperty("MCR.Home", "/data/mcrHome");
+        System.setProperty("MCR.Home", "~/.mycore/jportal/");
         System.setProperty("MCR.AppName", "jportal");
         Map<String, String> properties = MCRConfigurationLoaderFactory.getConfigurationLoader().load();
         MCRConfiguration.instance().initialize(properties, true);
 
         // convert
-        Path metsFile = Paths.get("/data/temp/test/test2.xml");
-        LLZMetsConverter converter = new LLZMetsConverter();
-        Document doc = enmapChecker.convert(metsFile, converter);
+        Path metsFile = Paths.get("/data/temp/mnt/images/ThULB_129489824_1887_Perthes/mets.xml");
+        Document doc = enmapChecker.convert(metsFile);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         out.output(doc, new FileOutputStream(new File("/data/temp/mets.xml")));
 

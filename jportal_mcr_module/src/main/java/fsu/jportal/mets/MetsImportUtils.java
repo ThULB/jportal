@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.Text;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
@@ -61,22 +62,15 @@ public class MetsImportUtils {
     }
 
     static enum MONTH {
-        Januar,
-        Februar,
-        März,
-        April,
-        Mai,
-        Juni,
-        Juli,
-        August,
-        September,
-        Oktober,
-        November,
-        Dezember;
+        Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember;
 
-        MONTH(){
+        MONTH() {
 
         }
+    }
+
+    public static enum METS_TYPE {
+        unknown, llz, jvb, perthes
     }
 
     /**
@@ -135,7 +129,7 @@ public class MetsImportUtils {
     /**
      * Checks if the user has the permissions to perform the task.
      * 
-     * @param derivateId
+     * @param derivateId derivate to check
      */
     public static void checkPermission(String derivateId) {
         MCRJerseyUtil.checkPermission(derivateId, "readdb");
@@ -188,6 +182,56 @@ public class MetsImportUtils {
             refArray.add(refError);
         }
         return error;
+    }
+
+    /**
+     * Returns the type of the document.
+     * 
+     * @param doc mets.xml document
+     * @return enum of 'llz' | 'jvb' | 'perthes' | 'unknown' 
+     */
+    public static METS_TYPE determineType(Document doc) {
+        METS_TYPE type = METS_TYPE.unknown;
+        if (MetsUtil.isENMAP(doc)) {
+            Element mets = doc.getRootElement();
+            XPathExpression<Text> titleExp = XPathFactory.instance().compile(
+                "mets:dmdSec/mets:mdWrap/mets:xmlData/mods:mods/mods:titleInfo/mods:title/text()", Filters.text(), null,
+                MetsUtil.METS_NS_LIST);
+            Text title = titleExp.evaluateFirst(mets);
+            if (title != null && title.getText().equals("Jenaer Volksblatt")) {
+                type = METS_TYPE.jvb;
+            } else if (title != null && title.getText().endsWith("_Perthes")) {
+                type = METS_TYPE.perthes;
+            } else {
+                type = METS_TYPE.llz;
+            }
+        }
+        return type;
+    }
+
+    /**
+     * Returns the appropriate converter for the given derivate.
+     * 
+     * @param type of the mets.xml jvb|llz
+     * @return instance of java mets
+     * 
+     * @throws ConvertException converter type couldn't be determined
+     */
+    public static ENMAPConverter getConverter(Document metsXML) throws ConvertException {
+        // load mets
+        METS_TYPE type = MetsImportUtils.determineType(metsXML);
+        // convert
+        ENMAPConverter converter = null;
+        if (type.equals(METS_TYPE.llz)) {
+            converter = new LLZMetsConverter();
+        } else if (type.equals(METS_TYPE.jvb)) {
+            converter = new JVBMetsConverter();
+        } else if (type.equals(METS_TYPE.perthes)) {
+            converter = new PerthesMetsConverter();
+        } else {
+            throw new ConvertException("Unknown type. It should be either 'llz', 'jvb' or 'perthes'.");
+        }
+        return converter;
     }
 
 }

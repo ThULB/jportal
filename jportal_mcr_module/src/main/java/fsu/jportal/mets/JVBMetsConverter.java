@@ -1,6 +1,5 @@
 package fsu.jportal.mets;
 
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -9,11 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.files.FileGrp;
 import org.mycore.mets.model.struct.LogicalDiv;
-
-import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
-import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
 
 public class JVBMetsConverter extends ENMAPConverter {
 
@@ -25,15 +20,6 @@ public class JVBMetsConverter extends ENMAPConverter {
     public Mets convert(Document enmap, Path basePath) throws ConvertException {
         lastSerialNovel = null;
         return super.convert(enmap, basePath);
-    }
-
-    protected void handleFileSection(Element enmap, Mets mcr) throws URISyntaxException {
-        FileGrp masterGroup = handleFileGroup(enmap, "MASTER",
-            "mets:fileSec//mets:fileGrp[@ID='OCRMasterFiles']/mets:file", "image/tiff", new TiffHrefStrategy());
-        FileGrp altoGroup = handleFileGroup(enmap, "ALTO", "mets:fileSec//mets:fileGrp[@ID='ALTOFiles']/mets:file",
-            "text/xml", new AltoHrefStrategy());
-        mcr.getFileSec().addFileGrp(masterGroup);
-        mcr.getFileSec().addFileGrp(altoGroup);
     }
 
     @Override

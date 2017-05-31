@@ -39,12 +39,12 @@ public class ABBYYtoALTOConverter {
         if(abbyyFileGrp != null) {
             abbyyFileGrp.setAttribute("ID", "ALTOFiles");
         }
-        // files
-        XPathExpression<Element> fileSecXPath = XPathFactory.instance().compile(
+        // alto files
+        XPathExpression<Element> altoFileSecXPath = XPathFactory.instance().compile(
             "mets:fileGrp/mets:fileGrp/mets:file[ends-with(@ID, '-ABBYY')]", Filters.element(), null,
             IMetsElement.METS);
-        List<Element> files = fileSecXPath.evaluate(fileSec);
-        for (Element file : files) {
+        List<Element> altoFiles = altoFileSecXPath.evaluate(fileSec);
+        for (Element file : altoFiles) {
             // fix id
             file.setAttribute("ID", file.getAttributeValue("ID").replace("-ABBYY", "-ALTO"));
             // fix path
@@ -56,6 +56,16 @@ public class ABBYYtoALTOConverter {
             } else {
                 throw new RuntimeException("Flocat of id is null (and shouldn't)! " + file.getAttributeValue("ID"));
             }
+        }
+        // img files
+        XPathExpression<Element> imgFileSecXPath = XPathFactory.instance().compile(
+            "mets:fileGrp/mets:fileGrp/mets:file/mets:FLocat[contains(@xlink:href, 'OCRmaster/')]", Filters.element(), null,
+            IMetsElement.METS, IMetsElement.XLINK);
+        List<Element> imgFiles = imgFileSecXPath.evaluate(fileSec);
+        for (Element flocat : imgFiles) {
+            String href = flocat.getAttributeValue("href", IMetsElement.XLINK);
+            href = href.replace("OCRmaster/", "");
+            flocat.setAttribute("href", href, IMetsElement.XLINK);
         }
     }
 

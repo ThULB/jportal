@@ -17,7 +17,6 @@ import org.jdom2.output.XMLOutputter;
 import org.mycore.mets.validator.validators.ValidationException;
 
 import fsu.jportal.mets.ABBYYtoALTOConverter;
-import fsu.jportal.mets.LLZMetsConverter;
 
 public class LLZFixer {
 
@@ -49,7 +48,7 @@ public class LLZFixer {
             llzFixer.save(originalMets, fixedFile);
             // convert
             Path metsFile = Paths.get(fixedFile);
-            Document convertedMets = llzChecker.convert(metsFile, new LLZMetsConverter());
+            Document convertedMets = llzChecker.convert(metsFile);
             // validate
             ByteArrayInputStream in = ENMAPChecker.toByteStream(convertedMets);
             List<ValidationException> errors = llzChecker.validate(in);
