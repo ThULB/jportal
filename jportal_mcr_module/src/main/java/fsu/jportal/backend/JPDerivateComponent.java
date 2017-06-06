@@ -119,6 +119,25 @@ public class JPDerivateComponent implements JPComponent {
         this.derivate.getDerivate().getInternals().setMainDoc(mainDoc);
     }
 
+    /**
+     * Sets the visibality of this derivate.
+     * 
+     * @param visible true = derivate is visible otherwise its hidden
+     */
+    public void setDisplay(boolean visible) {
+        this.derivate.getDerivate().setDisplayEnabled(visible);
+    }
+
+    /**
+     * Checks if this derivate is visible or hidden.
+     * 
+     * @return true if its visible
+     */
+    public boolean isVisible() {
+        return this.derivate.getDerivate().isDisplayEnabled();
+        
+    }
+
     @Override
     public void store(StoreOption... options)
         throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
