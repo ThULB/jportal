@@ -1,6 +1,7 @@
 package fsu.jportal.frontend.cli;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.DirectoryStream;
@@ -20,6 +21,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +32,7 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -45,6 +48,10 @@ import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.PhysicalStructMap;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import com.google.common.collect.Lists;
 
 import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.JPDerivateComponent;
@@ -247,12 +254,104 @@ public class Importer {
 
     }
 
-    @MCRCommand(syntax = "jvbImport {0} {1} {2} {3}",
-        help = "Imports a whole jvb year."
-            + " {target mycore object} (jportal_jpvolume_00134247)"
-            + " {base path to the JVB_* folders (/mcr/jp/tmp/mnt/images/OCRausInnsbruck/1890)}"
-            + " {ocr folder (mcralto|mcraltok)}"
-            + " {image path (/mcr/jp/tmp/mnt/images/Jenaer_Volksblatt_1890_167758667_JVB_tif)}")
+    @MCRCommand(syntax = "jvbEasyImport {0} {1} {2}", help = "Imports a whole jvb year more easy." + " {year} (1890)"
+        + " {goobiId} (25636)" + " {mntPath} (where the goobi id will be mounted locally)")
+    public static List<String> jvbEasyImport(String year, String goobiId, String mntPath) throws Exception {
+        // unmount always
+        try {
+            Process unmount = Runtime.getRuntime().exec("fusermount -u " + mntPath);
+            unmount.waitFor();
+        } catch (Exception exc) {
+            LOGGER.error("unable to unmount " + mntPath, exc);
+            return Lists.newArrayList();
+        }
+        // mount
+        try {
+            String mntCommand = "sshfs root@141.35.20.232:/opt/digiverso/goobi/metadata/" + goobiId + " " + mntPath
+                + " -o allow_root";
+            Process mount = Runtime.getRuntime().exec(mntCommand);
+            if (!mount.waitFor(1, TimeUnit.MINUTES)) {
+                LOGGER.error("timeout while mount '" + mntCommand + "'");
+                return Lists.newArrayList();
+            }
+
+        } catch (Exception exc) {
+            LOGGER.error("unable to mount " + mntPath, exc);
+            return Lists.newArrayList();
+        }
+        // check mounted files
+        Path imagesPath = Paths.get(mntPath).resolve("images");
+        if (!Files.exists(imagesPath)) {
+            throw new FileNotFoundException(
+                "there should be an images folder " + imagesPath.toAbsolutePath().toString());
+        }
+        Path ocrPath = imagesPath.resolve("OCRausInnsbruck/" + year);
+        if (!Files.exists(ocrPath)) {
+            throw new FileNotFoundException("there should be an ocr folder " + ocrPath.toAbsolutePath().toString());
+        }
+        Path tifPath = imagesPath.resolve("Jenaer_Volksblatt_" + year + "_167758667_JVB_tif");
+        if (!Files.exists(tifPath)) {
+            throw new FileNotFoundException("there should be a tif folder " + tifPath.toAbsolutePath().toString());
+        }
+        // get volume
+        String yearId = null;
+        String yearQuery = "+parent:jportal_jpjournal_00000109 +date.published:" + year;
+        try {
+            List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(), yearQuery);
+            if (ids.isEmpty()) {
+                LOGGER.error("unable to find volume for year " + year);
+                return Lists.newArrayList();
+            }
+            if (ids.size() > 1) {
+                LOGGER.error("cannot import due multiple results for query '" + yearQuery + "'");
+                return Lists.newArrayList();
+            }
+            yearId = ids.get(0);
+        } catch (Exception exc) {
+            LOGGER.error("unable to retrieve volume by query '" + yearQuery + "'", exc);
+            return Lists.newArrayList();
+        }
+        // empty volume
+        // - delete derivate
+        MCRObjectID mcrYearId = MCRObjectID.getInstance(yearId);
+        MCRObject mcrYear = MCRMetadataManager.retrieveMCRObject(mcrYearId);
+        List<MCRMetaLinkID> derivates = mcrYear.getStructure().getDerivates();
+        if (!derivates.stream().map(MCRMetaLinkID::getXLinkHrefID).allMatch(derivateId -> {
+            try {
+                MCRMetadataManager.deleteMCRDerivate(derivateId);
+                return true;
+            } catch (Exception exc) {
+                LOGGER.error("unable to delete derivate " + derivateId, exc);
+                return false;
+            }
+        })) {
+            return Lists.newArrayList();
+        }
+        // - delete children
+        List<MCRMetaLinkID> children = mcrYear.getStructure().getChildren();
+        if (!children.stream().map(MCRMetaLinkID::getXLinkHrefID).allMatch(objectId -> {
+            try {
+                MCRMetadataManager.deleteMCRObject(objectId);
+                return true;
+            } catch (Exception exc) {
+                LOGGER.error("unable to delete object " + objectId, exc);
+                return false;
+            }
+        })) {
+            LOGGER.error("unable to remove children of " + yearId);
+            return Lists.newArrayList();
+        }
+        // fire import command
+        String jvbImport = "jvbImport " + yearId + " " + ocrPath.toAbsolutePath().toString() + " mcraltok "
+            + tifPath.toAbsolutePath().toString();
+        return Lists.newArrayList(jvbImport);
+    }
+
+    @MCRCommand(syntax = "jvbImport {0} {1} {2} {3}", help = "Imports a whole jvb year."
+        + " {target mycore object} (jportal_jpvolume_00134247)"
+        + " {base path to the JVB_* folders (/mcr/jp/tmp/mnt/images/OCRausInnsbruck/1890)}"
+        + " {ocr folder (mcralto|mcraltok)}"
+        + " {image path (/mcr/jp/tmp/mnt/images/Jenaer_Volksblatt_1890_167758667_JVB_tif)}")
     public static List<String> jvbImport(String targetID, String ocrPath, String ocrFolder, String imgPath)
         throws IOException {
         List<String> commands = new ArrayList<>();
