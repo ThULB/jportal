@@ -1775,6 +1775,7 @@
       <str name="qf">id^100 heading^25 titles^25 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 allMeta content</str>
       <int name="rows">10</int>
       <str name="qry">*:*</str>
+      <str name="q.op">AND</str>
       <!-- facet -->
       <str name="facet">true</str>
       <str name="facet.field">objectType</str>
@@ -1799,6 +1800,7 @@
       <str name="echoParams">explicit</str>
       <int name="rows">10</int>
       <str name="q">*:*</str>
+      <str name="q.op">AND</str>
       <!-- facet -->
       <str name="facet">true</str>
       <str name="facet.field">objectType</str>
@@ -1819,6 +1821,7 @@
       <str name="qf">id^100 heading^25 alternatives^5 heading_de^5 alternatives_de^3 dateOfBirth dateOfDeath allMeta</str>
       <int name="rows">6</int>
       <str name="qry">*:*</str>
+      <str name="q.op">AND</str>
       <str name="XSL.subselect.type">person</str>
       <str name="sort">created desc</str>
     </lst>
@@ -1838,6 +1841,7 @@
       </str>
       <int name="rows">10</int>
       <str name="qry">*:*</str>
+      <str name="q.op">AND</str>
       <str name="sort">published asc, maintitle_sort asc</str>
     </lst>
     <lst name="appends">
