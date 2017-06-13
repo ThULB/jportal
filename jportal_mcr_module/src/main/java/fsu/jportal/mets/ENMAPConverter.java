@@ -310,17 +310,21 @@ public abstract class ENMAPConverter {
      */
     protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv mcrDiv = buildLogicalSubDiv(enmapDiv);
-        // handle children
-        handleLogicalDivs(enmap, enmapDiv, mcrDiv, mcrMets, altoReferences);
-        // handle fptr
-        handleLogicalFilePointer(enmapDiv, mcrDiv, mcrMets, altoReferences);
+        List<Element> areas = getAreas(enmapDiv);
+        if(areas.isEmpty()) {
+            // handle children
+            handleLogicalDivs(enmap, enmapDiv, mcrDiv, mcrMets, altoReferences);
+        } else {
+            // handle fptr
+            handleLogicalFilePointer(areas, mcrDiv, mcrMets, altoReferences);
+        }
         return mcrDiv;
     }
 
     protected LogicalDiv buildLogicalSubDiv(Element enmapDiv) {
         String id = enmapDiv.getAttributeValue("ID");
         String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
-        String label = enmapDiv.getAttributeValue("LABEL");
+        String label = enmapDiv.getAttributeValue("LABEL").trim();
         return new LogicalDiv(id, type, (label == null || label.equals("")) ? type : label);
     }
 
@@ -342,15 +346,22 @@ public abstract class ENMAPConverter {
         return mcrDiv;
     }
 
-    protected void handleLogicalFilePointer(Element enmapDiv, LogicalDiv mcrDiv, Mets mcrMets,
-        List<ALTO> altoReferences) {
+    /**
+     * Returns a list of areas from a logical div. We ignore the
+     * 'paragraph' div and return the internal areas of them.
+     * 
+     * @param enmapDiv the enmap logical div
+     * @return list of area elements
+     */
+    protected List<Element> getAreas(Element enmapDiv) {
         XPathExpression<Element> areaExp = XPathFactory.instance().compile(
             "mets:div/mets:fptr/mets:area[contains(@FILEID, 'ALTO')]", Filters.element(), null, IMetsElement.METS);
-        List<Element> areas = areaExp.evaluate(enmapDiv);
-        if (areas.isEmpty()) {
-            return;
-        }
-        Map<String, Set<Block>> altoBlockMap = new CoordinatesToIdMapper().map(altoReferences, areas, emptyAreas);
+        return areaExp.evaluate(enmapDiv);
+    }
+
+    protected void handleLogicalFilePointer(List<Element> enmapAreas, LogicalDiv mcrDiv, Mets mcrMets,
+        List<ALTO> altoReferences) {
+        Map<String, Set<Block>> altoBlockMap = new CoordinatesToIdMapper().map(altoReferences, enmapAreas, emptyAreas);
         if (failOnEmptyAreas && !emptyAreas.isEmpty()) {
             // there are empty block -> no need to continue;
             return;

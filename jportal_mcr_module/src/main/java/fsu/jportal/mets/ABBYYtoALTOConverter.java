@@ -70,15 +70,15 @@ public class ABBYYtoALTOConverter {
     }
 
     private static void handleStructMap(Element mets) {
-        XPathExpression<Element> physStructMapXPath = XPathFactory.instance().compile("mets:structMap//mets:fptr",
+        XPathExpression<Element> structMapXPath = XPathFactory.instance().compile("mets:structMap//mets:fptr",
             Filters.element(), null, IMetsElement.METS);
-        List<Element> fptrs = physStructMapXPath.evaluate(mets);
+        List<Element> fptrs = structMapXPath.evaluate(mets);
         for (Element fptr : fptrs) {
             fixFileID(fptr);
-            Element area = fptr.getChild("area", IMetsElement.METS);
-            if (area != null) {
+            List<Element> areas = fptr.getChildren("area", IMetsElement.METS);
+            areas.forEach(area -> {
                 fixFileID(area);
-            }
+            });
         }
     }
 

@@ -47,7 +47,7 @@ public class JVBMetsConverter extends ENMAPConverter {
         } else {
             return null;
         }
-        handleLogicalFilePointer(enmapDiv, logicalSubDiv, mcrMets, altoReferences);
+        handleLogicalFilePointer(getAreas(enmapDiv), logicalSubDiv, mcrMets, altoReferences);
         return logicalSubDiv;
     }
 
