@@ -478,7 +478,7 @@ $(document).ready(function() {
         });
       } else if(e.error) {
         failed(e);
-      } else if(e.type == "llz" || e.type == 'jvb') {
+      } else if(e.type == "llz" || e.type == 'jvb' || e.type == 'perthes') {
         importable();
       } else {
         failed(e);

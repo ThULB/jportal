@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.transform.TransformerException;
 
+import fsu.jportal.mets.PerthesMetsImporter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -98,11 +99,13 @@ public class METSImportResource {
         METS_TYPE type = MetsImportUtils.determineType(enmapMetsXML);
 
         // import mets
-        MetsImporter importer = null;
+        MetsImporter importer;
         if (type.equals(METS_TYPE.jvb)) {
             importer = new JVBMetsImporter();
         } else if (type.equals(METS_TYPE.llz)) {
             importer = new LLZMetsImporter();
+        } else if(type.equals(METS_TYPE.perthes)) {
+            importer = new PerthesMetsImporter();
         } else {
             throw new MetsImportException("Unable to get importer class due type is not supported: " + type);
         }

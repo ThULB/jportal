@@ -23,6 +23,8 @@ import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.SmLink;
 
 import com.google.common.collect.BiMap;
@@ -61,7 +63,7 @@ public class MetsImportUtils {
                                     .build();
     }
 
-    static enum MONTH {
+    enum MONTH {
         Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember;
 
         MONTH() {
@@ -69,7 +71,7 @@ public class MetsImportUtils {
         }
     }
 
-    public static enum METS_TYPE {
+    public enum METS_TYPE {
         unknown, llz, jvb, perthes
     }
 
@@ -127,6 +129,28 @@ public class MetsImportUtils {
     }
 
     /**
+     * Returns the page number of the given logical div.
+     * The page number starts at zero.
+     *
+     * @param mets the mets
+     * @param div the logical div
+     * @return the page number of the logical div
+     */
+    public static int getPageNumber(Mets mets, LogicalDiv div) {
+        // get physical container
+        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
+        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
+        // get logical id
+        String logicalId = div.getId();
+        List<SmLink> links = mets.getStructLink().getSmLinkByFrom(logicalId);
+        // map phyisical div's and get the lowest by order
+        return links.stream()
+                .map(link -> divContainer.get(link.getTo()).getPositionInParent().orElse(0))
+                .min(Integer::compareTo)
+                .orElse(0);
+    }
+
+    /**
      * Checks if the user has the permissions to perform the task.
      * 
      * @param derivateId derivate to check
@@ -142,8 +166,9 @@ public class MetsImportUtils {
     /**
      * Creates the json error object for a block reference exception (It was not
      * possible to resolve the coordinates for one or more logical div's). 
-     * 
-     * @param bre the exception
+     *
+     * @param message
+     * @param ids
      * @param doc the mets.xml
      * @return the error object as json
      */
@@ -212,8 +237,8 @@ public class MetsImportUtils {
     /**
      * Returns the appropriate converter for the given derivate.
      * 
-     * @param type of the mets.xml jvb|llz
-     * @return instance of java mets
+     * @param metsXML xml mets document
+     * @return instance of the converter
      * 
      * @throws ConvertException converter type couldn't be determined
      */
@@ -221,7 +246,7 @@ public class MetsImportUtils {
         // load mets
         METS_TYPE type = MetsImportUtils.determineType(metsXML);
         // convert
-        ENMAPConverter converter = null;
+        ENMAPConverter converter;
         if (type.equals(METS_TYPE.llz)) {
             converter = new LLZMetsConverter();
         } else if (type.equals(METS_TYPE.jvb)) {

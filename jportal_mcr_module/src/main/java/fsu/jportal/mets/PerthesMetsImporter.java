@@ -1,9 +1,9 @@
 package fsu.jportal.mets;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPVolume;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -15,16 +15,16 @@ import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.SmLink;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPVolume;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Does the import for a JVB mets.xml file. Creates articles for the given issue.
- * 
+ * Does the import for a Perthes mets.xml file. Creates articles for the given issue.
+ *
  * @author Matthias Eichner
  */
-public class JVBMetsImporter extends MetsImporter {
+public class PerthesMetsImporter extends MetsImporter {
 
     @Override
     public Map<LogicalDiv, JPComponent> importMets(Mets mets, MCRObjectID derivateId) throws MetsImportException {
@@ -38,7 +38,7 @@ public class JVBMetsImporter extends MetsImporter {
             // run through mets
             Map<LogicalDiv, JPComponent> divMap = new HashMap<>();
             LogicalStructMap structMap = (LogicalStructMap) mets.getStructMap(LogicalStructMap.TYPE);
-            handleIssues(mets, derivate, structMap.getDivContainer(), volume, divMap);
+            handleArticles(mets, derivate, structMap.getDivContainer(), volume, divMap);
 
             // import to mycore system
             volume.store();
@@ -48,26 +48,14 @@ public class JVBMetsImporter extends MetsImporter {
         }
     }
 
-    private void handleIssues(Mets mets, MCRDerivate derivate, LogicalDiv logicalVolume, JPVolume volume,
-        Map<LogicalDiv, JPComponent> divMap) {
-        logicalVolume.getChildren().forEach(logicalIssue -> {
-            JPVolume issue = new JPVolume();
-            issue.setTitle(logicalIssue.getLabel());
-            issue.setHiddenPosition(logicalIssue.getPositionInParent().orElse(0));
-            volume.addChild(issue);
-            divMap.put(logicalIssue, issue);
-            handleArticles(mets, derivate, logicalIssue, issue, divMap);
-        });
-    }
-
-    private void handleArticles(Mets mets, MCRDerivate derivate, LogicalDiv logicalIssue, JPVolume issue,
-        Map<LogicalDiv, JPComponent> divMap) {
-        logicalIssue.getChildren().forEach(logicalArticle -> {
+    private void handleArticles(Mets mets, MCRDerivate derivate, LogicalDiv logicalVolume, JPVolume volume,
+                              Map<LogicalDiv, JPComponent> divMap) {
+        logicalVolume.getChildren().forEach(logicalArticle -> {
             JPArticle article = new JPArticle();
             article.setTitle(logicalArticle.getLabel());
             article.setSize(MetsImportUtils.getPageNumber(mets, logicalArticle) + 1);
-            issue.addChild(article);
             handleDerivateLink(mets, derivate, logicalArticle, article);
+            volume.addChild(article);
             divMap.put(logicalArticle, article);
         });
     }
