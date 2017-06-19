@@ -5,10 +5,10 @@ import static org.junit.Assert.assertEquals;
 import org.jdom2.Content;
 import org.jdom2.Element;
 import org.junit.Test;
-import org.mycore.common.MCRTestCase;
+import org.mycore.common.MCRJPATestCase;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 
-public class JPPersonTest extends MCRTestCase {
+public class JPPersonTest extends MCRJPATestCase {
 
     @Test
     public void setName() {
