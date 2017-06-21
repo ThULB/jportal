@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -207,13 +208,13 @@ public class PerthesMetsConverter extends ENMAPConverter {
         List<LogicalDiv> divs = mets.getLogicalStructMap().getDivContainer().getChildren();
         divs = Lists.reverse(divs);
         Set<String> uniqueFILEIDs = new HashSet<>();
-        for(LogicalDiv div : divs) {
-            for(Fptr fptr : div.getFptrList()) {
-                for(Seq seq : fptr.getSeqList()) {
+        for (LogicalDiv div : divs) {
+            for (Fptr fptr : div.getFptrList()) {
+                for (Seq seq : fptr.getSeqList()) {
                     List<Area> areaList = new ArrayList<>(seq.getAreaList());
-                    for(Area area : areaList) {
-                        if(area.getBetype() == null) {
-                            if(!uniqueFILEIDs.contains(area.getFileId())) {
+                    for (Area area : areaList) {
+                        if (area.getBetype() == null) {
+                            if (!uniqueFILEIDs.contains(area.getFileId())) {
                                 uniqueFILEIDs.add(area.getFileId());
                             } else {
                                 seq.getAreaList().remove(area);
@@ -224,5 +225,36 @@ public class PerthesMetsConverter extends ENMAPConverter {
             }
         }
     }
-    
+
+    @Override
+    protected Map<String, Set<Block>> getAltoBlockMap(List<Element> enmapAreas, List<ALTO> altoReferences) {
+        Map<String, Set<Block>> altoBlockMap = super.getAltoBlockMap(enmapAreas, altoReferences);
+
+        // add missing pages to block map, some images don't have mets:area's. Add those.
+        List<String> sortedFileIDs = new ArrayList<String>(altoBlockMap.keySet());
+        if(sortedFileIDs.isEmpty()) {
+            return altoBlockMap;
+        }
+        sortedFileIDs.sort((s1, s2) -> s1.compareTo(s2));
+        List<String> missingFileIDs = new ArrayList<>();
+
+        String baseFileID = sortedFileIDs.get(0);
+        Integer from = getPage(baseFileID).get();
+        Integer to = getPage(sortedFileIDs.get(sortedFileIDs.size() - 1)).get();
+
+        for(int i = from + 1; i < to; i++) {
+            String fileId = replacePage(baseFileID, i).get();
+            if(!sortedFileIDs.contains(fileId)) {
+                missingFileIDs.add(fileId);
+            }
+        }
+
+        // add missing file ids
+        missingFileIDs.forEach(fileId -> {
+            altoBlockMap.put(fileId, new HashSet<>());
+        });
+
+        return altoBlockMap;
+    }
+
 }

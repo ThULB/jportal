@@ -311,7 +311,7 @@ public abstract class ENMAPConverter {
     protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv mcrDiv = buildLogicalSubDiv(enmapDiv);
         List<Element> areas = getAreas(enmapDiv);
-        if(areas.isEmpty()) {
+        if (areas.isEmpty()) {
             // handle children
             handleLogicalDivs(enmap, enmapDiv, mcrDiv, mcrMets, altoReferences);
         } else {
@@ -361,7 +361,7 @@ public abstract class ENMAPConverter {
 
     protected void handleLogicalFilePointer(List<Element> enmapAreas, LogicalDiv mcrDiv, Mets mcrMets,
         List<ALTO> altoReferences) {
-        Map<String, Set<Block>> altoBlockMap = new CoordinatesToIdMapper().map(altoReferences, enmapAreas, emptyAreas);
+        Map<String, Set<Block>> altoBlockMap = getAltoBlockMap(enmapAreas, altoReferences);
         if (failOnEmptyAreas && !emptyAreas.isEmpty()) {
             // there are empty block -> no need to continue;
             return;
@@ -372,6 +372,10 @@ public abstract class ENMAPConverter {
         if (!fptr.getSeqList().isEmpty()) {
             mcrDiv.getFptrList().add(fptr);
         }
+    }
+
+    protected Map<String, Set<Block>> getAltoBlockMap(List<Element> enmapAreas, List<ALTO> altoReferences) {
+        return new CoordinatesToIdMapper().map(altoReferences, enmapAreas, emptyAreas);
     }
 
     /**
@@ -398,6 +402,12 @@ public abstract class ENMAPConverter {
         }).forEachOrdered(entry -> {
             String altoID = entry.getKey();
             ArrayList<Block> blockList = new ArrayList<>(entry.getValue());
+            if (blockList.isEmpty()) {
+                Area area = new Area();
+                area.setFileId(altoID);
+                seq.getAreaList().add(area);
+                return;
+            }
             blockList.sort(new Comparator<Block>() {
                 public int compare(Block block1, Block block2) {
                     String num1 = block1.id.replaceAll(altoBlockNumberRegex(), "");
@@ -533,7 +543,7 @@ public abstract class ENMAPConverter {
         protected Rectangle getRectangleForArea(Element area) {
             String COORDS = area.getAttributeValue("COORDS");
             String[] areaCoordinates = COORDS.split(",");
-            if(areaCoordinates.length != 4) {
+            if (areaCoordinates.length != 4) {
                 areaCoordinates = COORDS.split(" ");
             }
             int areaX1 = Integer.valueOf(areaCoordinates[0].trim());
