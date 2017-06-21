@@ -62,7 +62,7 @@ public class PerthesMetsConverter extends ENMAPConverter {
     protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv logicalSubDiv = super.getLogicalSubDiv(enmap, enmapDiv, mcrMets, altoReferences);
         boolean maps = logicalSubDiv.getLabel().startsWith("Karten, Abbildungen");
-        boolean lastGeoLiteratur = logicalSubDiv.getLabel().startsWith("Geographischer Literatur")
+        boolean lastGeoLiteratur = logicalSubDiv.getLabel().startsWith("Geographischer ")
             && lastLogicalDivId.equals(logicalSubDiv.getId());
 
         if (maps || lastGeoLiteratur) {
