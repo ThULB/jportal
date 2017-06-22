@@ -1,5 +1,7 @@
 package fsu.jportal.backend.event;
 
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +13,7 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.datamodel.niofs.MCRPath;
 
 import fsu.jportal.mets.MetsAutoGenerator;
 import fsu.jportal.util.DerivateLinkUtil;
@@ -50,6 +53,30 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
     @Override
     protected void handleDerivateDeleted(MCREvent evt, MCRDerivate der) {
         metsAutoGenerator.remove(der.getId());
+    }
+
+    @Override
+    protected void handlePathDeleted(MCREvent evt, Path path, BasicFileAttributes attrs) {
+        handleMetsFile(path);
+    }
+
+    @Override
+    protected void handlePathCreated(MCREvent evt, Path path, BasicFileAttributes attrs) {
+        handleMetsFile(path);
+    }
+
+    /**
+     * Removes the derivate from mets creation if the mets.xml is created
+     * or removed.
+     * 
+     * @param path the path
+     */
+    private void handleMetsFile(Path path) {
+        MCRPath mcrPath = MCRPath.toMCRPath(path);
+        String fileName = mcrPath.getFileName().toString();
+        if ("mets.xml".equals(fileName)) {
+            metsAutoGenerator.remove(MCRObjectID.getInstance(mcrPath.getOwner()));
+        }
     }
 
     /**
