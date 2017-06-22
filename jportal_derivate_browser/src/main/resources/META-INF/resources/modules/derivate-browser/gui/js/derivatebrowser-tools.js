@@ -188,7 +188,7 @@ var derivateBrowserTools = (function () {
     }
 
     function loadI18nKeys(lang) {
-        jQuery.getJSON(jp.baseURL + "servlets/MCRLocaleServlet/" + lang + "/db.*", function(data) {
+        jQuery.getJSON(jp.baseURL + "rsc/locale/translate/" + lang + "/db.*", function(data) {
             i18nKeys = data;
             changeAllI18n();
         });
