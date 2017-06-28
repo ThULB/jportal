@@ -26,11 +26,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.iview2.frontend.MCRFooterInterface;
+import org.mycore.pi.backend.MCRPI;
 import org.mycore.urn.hibernate.MCRURN;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import javax.persistence.PersistenceException;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
@@ -91,25 +93,25 @@ public class UrmelFooter implements MCRFooterInterface {
     }
 
     private String getFooterText(String derivateID, String imagePath) {
-        String path, image;
-        image = imagePath.substring(imagePath.lastIndexOf('/') + 1);
-        path = imagePath.substring(0, imagePath.length() - image.length());
-        LOGGER.info("path: " + path + ", image: " + image);
+        LOGGER.info("path: " + imagePath);
 
-        String selectURNQuery = "Select u From MCRURN u where u.key.mcrid = :mcrid and u.path = :path and u.filename = :filename";
-        String urn = MCREntityManagerProvider
-                .getCurrentEntityManager()
-                .createQuery(selectURNQuery, MCRURN.class)
-                .setParameter("mcrid", derivateID)
-                .setParameter("path", path)
-                .setParameter("filename", image)
-                .getSingleResult()
-                .getKey()
-                .getMcrurn();
+        String selectURNQuery = "Select u From MCRPI u where u.mycoreID = :mcrid and u.additional = :path";
+        try {
+            String urn = MCREntityManagerProvider
+                    .getCurrentEntityManager()
+                    .createQuery(selectURNQuery, MCRPI.class)
+                    .setParameter("mcrid", derivateID)
+                    .setParameter("path", imagePath)
+                    .getSingleResult()
+                    .getIdentifier();
 
-        if (urn != null) {
-            return urn;
+            if (urn != null) {
+                return urn;
+            }
+        } catch (PersistenceException p) {
+            return derivateID + ":" + imagePath;
         }
+
         return derivateID + ":" + imagePath;
     }
 
