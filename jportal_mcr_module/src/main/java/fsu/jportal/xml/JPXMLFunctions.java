@@ -41,22 +41,19 @@ public class JPXMLFunctions {
 
     private static final Logger LOGGER = LogManager.getLogger(JPXMLFunctions.class);
 
-    private static final ThreadLocal<DocumentBuilder> BUILDER_LOCAL = new ThreadLocal<DocumentBuilder>() {
-        @Override
-        protected DocumentBuilder initialValue() {
-            try {
-                return DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            } catch (ParserConfigurationException pce) {
-                LOGGER.error("Unable to create document builder.", pce);
-                return null;
-            }
+    private static final ThreadLocal<DocumentBuilder> BUILDER_LOCAL = ThreadLocal.withInitial(() -> {
+        try {
+            return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException pce) {
+            LOGGER.error("Unable to create document builder.", pce);
+            return null;
         }
-    };
+    });
 
     public static String formatISODate(String isoDate, String iso639Language) {
         try {
             if (LOGGER.isDebugEnabled()) {
-                StringBuffer sb = new StringBuffer("isoDate=");
+                StringBuilder sb = new StringBuilder("isoDate=");
                 sb.append(isoDate).append(", iso649Language=").append(iso639Language);
                 LOGGER.debug(sb.toString());
             }
@@ -135,7 +132,7 @@ public class JPXMLFunctions {
                 try {
                     resource.close();
                 } catch (IOException ioExc) {
-                    LOGGER.warn("Unable to close resource " + webResource + ".", ioExc);
+                    LOGGER.error("Unable to close resource " + webResource + ".", ioExc);
                 }
                 return true;
             }
@@ -149,9 +146,8 @@ public class JPXMLFunctions {
         try {
             return (Integer.valueOf(date.substring(0, 2)) + 1);
         } catch (Exception exc) {
-            LOGGER.warn("unable to format date " + date + " to century.");
-            // return default 18 century
-            return 18;
+            LOGGER.error("unable to format date " + date + " to century.");
+            return 18; // return default 18 century
         }
     }
 
@@ -395,12 +391,12 @@ public class JPXMLFunctions {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
             Integer order = JPComponentUtil.getOrder(mcrId);
             if (order == null) {
-                LOGGER.warn("Unable to retrieve the order of " + id);
+                LOGGER.error("Unable to retrieve the order of " + id);
                 return 0;
             }
             return order;
         } catch (Exception exc) {
-            LOGGER.warn("Unable to retrieve the order of " + id, exc);
+            LOGGER.error("Unable to retrieve the order of " + id, exc);
             return 0;
         }
     }

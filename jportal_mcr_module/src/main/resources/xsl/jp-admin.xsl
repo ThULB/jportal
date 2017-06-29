@@ -82,6 +82,9 @@
             <li>
               <a href="{$WebApplicationBaseURL}modules/webtools/processing/processing.xml">Processing</a>
             </li>
+            <li>
+              <a href="{$WebApplicationBaseURL}modules/iview2/alto/altoChanges.xml">Viewer Volltext Redaktion</a>
+            </li>
           </xsl:if>
           <li>
             <a href="{$WebApplicationBaseURL}jp-errorMenu.xml">Systemfehler Übersicht</a>

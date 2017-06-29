@@ -49,9 +49,7 @@ public class AutoSortHandler extends MCREventHandlerBase {
         if (MCRMarkManager.instance().isMarkedForDeletion(obj.getId())) {
             return;
         }
-        getContainer(obj).ifPresent(container -> {
-            container.sort();
-        });
+        getContainer(obj).ifPresent(JPContainer::sort);
     }
 
     /**
