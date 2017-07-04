@@ -113,8 +113,12 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
      */
     private void handlePath(Path path) {
         MCRPath mcrPath = MCRPath.toMCRPath(path);
-        String fileName = mcrPath.getFileName().toString();
         MCRObjectID derivateId = MCRObjectID.getInstance(mcrPath.getOwner());
+        Path fileNamePath = mcrPath.getFileName();
+        if(fileNamePath == null) {
+            return;
+        }
+        String fileName = fileNamePath.toString();
         if ("mets.xml".equals(fileName)) {
             metsAutoGenerator.remove(derivateId);
         } else {
