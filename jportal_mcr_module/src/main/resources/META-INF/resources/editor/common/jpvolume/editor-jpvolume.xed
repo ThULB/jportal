@@ -105,7 +105,7 @@
       </xed:repeat>
 
       <xed:repeat xpath="footNotes[@class='MCRMetaLangText']/footNote[@inherited='0'][@form='plain']" min="0" max="10">
-        <jp:template name="textInput" xpath="." i18n="editormask.labels.footNote" buttons="true" />
+        <jp:template name="textArea" xpath="." i18n="editormask.labels.footNote" buttons="true" />
       </xed:repeat>
 
       <xed:repeat xpath="bibEvidences[@class='MCRMetaLangText']/bibEvidence[@inherited='0'][@form='plain']" min="0" max="10">
