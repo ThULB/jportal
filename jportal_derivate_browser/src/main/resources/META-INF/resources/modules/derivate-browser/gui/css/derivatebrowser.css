@@ -135,7 +135,6 @@ ul{
 #files{
 	height: 100%;
 	position: relative;
-	display: inline-flex;
 }
 
 #folder-list-div{
@@ -1873,7 +1872,7 @@ textarea {
 #btn-close {
 	position: absolute;
 	z-index: 5000;
-	right: 5px;
+	right: 22px;
 	top: 5px;
 	font-size: 24px;
 	cursor: pointer;

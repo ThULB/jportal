@@ -51,8 +51,8 @@ var derivateBrowserDocumentView = (function () {
 
         $("body").on("click", "#lightbox-alert-delete-docs-confirm", function () {
             var json = [];
-            $.each(docDeleteList, function (i, elm) {
-                json.push({"objId": elm});
+            $.each(docDeleteList, function (i, doc) {
+                json.push({"objId": doc.id});
             });
             derivateBrowserTools.showLoadingScreen();
             deleteDocument(json, removeFromView);
@@ -84,7 +84,7 @@ var derivateBrowserDocumentView = (function () {
             }
             if ($(".aktiv").length > 1) {
                 docDeleteList = [];
-                var selectedDocs =[];
+                var selectedDocs = [];
                 $(".aktiv").each(function (i, elm) {
                     selectedDocs.push($(elm).data("docID"));
                 });
@@ -220,14 +220,18 @@ var derivateBrowserDocumentView = (function () {
      */
     function checkForChilds(data, docs, docID) {
         if (data.docs[0].derivateCount > 0) {
-            var name = data.docs[0].maintitle;
+            let name = data.docs[0].maintitle;
             if (name == undefined) name = docID;
             derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.delete.digi", name), false);
             docDeleteList = [];
         }
         else {
-            if (docs != undefined){
-                docDeleteList.push(data.docs[0].maintitle);
+            if (docs != undefined) {
+                let doc = {
+                    id: data.docs[0].id,
+                    maintitle: data.docs[0].maintitle
+                };
+                docDeleteList.push(doc);
                 if (docs.length > 0) {
                     deleteMultipleDocs(docs);
                 }
