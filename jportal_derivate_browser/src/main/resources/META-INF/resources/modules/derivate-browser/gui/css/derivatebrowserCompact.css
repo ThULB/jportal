@@ -56,3 +56,7 @@ body {
 #derivat-panel {
     box-shadow: 0 3px 10px 0 rgba(50, 50, 50, 0.5);
 }
+
+#btn-close {
+    right: 5px;
+}
