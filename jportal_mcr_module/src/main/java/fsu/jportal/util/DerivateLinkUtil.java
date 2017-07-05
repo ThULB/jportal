@@ -157,7 +157,8 @@ public abstract class DerivateLinkUtil {
         MCRMetaDerivateLink linkToRemove = getLink(derLinks, pathOfImage);
         if (linkToRemove == null) {
             LOGGER.warn(
-                "Couldn't remove link of " + mcrObjId + " with image " + pathOfImage + ". The link couldn't be found.");
+                "Couldn't remove link of " + mcrObjId + " with image " + pathOfImage + ". The link couldn't be found.",
+                new NullPointerException());
             return;
         }
         // remove link
