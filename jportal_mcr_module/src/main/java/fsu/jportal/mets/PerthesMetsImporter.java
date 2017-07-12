@@ -1,6 +1,5 @@
 package fsu.jportal.mets;
 
-
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.backend.JPVolume;
@@ -11,12 +10,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
-import org.mycore.mets.model.struct.PhysicalDiv;
-import org.mycore.mets.model.struct.PhysicalStructMap;
-import org.mycore.mets.model.struct.SmLink;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

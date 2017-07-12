@@ -40,7 +40,11 @@ public class AutoSortHandler extends MCREventHandlerBase {
                     addDefaultSorter(container);
                 }
             }
-            container.sort();
+            try {
+                container.sort();
+            } catch(Exception exc) {
+                LOGGER.error("Unable to auto sort object '" + obj.getId() + "'.", exc);
+            }
         });
     }
 
@@ -49,7 +53,11 @@ public class AutoSortHandler extends MCREventHandlerBase {
         if (MCRMarkManager.instance().isMarkedForDeletion(obj.getId())) {
             return;
         }
-        getContainer(obj).ifPresent(JPContainer::sort);
+        try {
+            getContainer(obj).ifPresent(JPContainer::sort);
+        } catch(Exception exc) {
+            LOGGER.error("Unable to auto sort object '" + obj.getId() + "'.", exc);
+        }
     }
 
     /**

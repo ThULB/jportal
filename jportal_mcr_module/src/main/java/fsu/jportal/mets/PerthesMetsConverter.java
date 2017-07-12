@@ -83,7 +83,7 @@ public class PerthesMetsConverter extends ENMAPConverter {
      * Adds /mets:fptr/mets:seq/mets:area/@FILEID to a logical div which has no file id.
      * The ids are calculated by the mets:area/@FILEID of the preceding and following
      * logical divs.
-     * 
+     *
      * @param enmapDiv
      * @param logicalSubDiv
      * @param mcrMets
@@ -97,9 +97,9 @@ public class PerthesMetsConverter extends ENMAPConverter {
 
         // calc from & to
         int from = getPage(precedingFileID).orElseThrow(
-            () -> new MCRException("Unable to get page number of file id " + precedingFileID)) + 1;
+            () -> new MCRException("Unable to get page number of file id " + precedingFileID)) + (precedingFileIDAttr != null ? 1 : 0);
         int to = getPage(followingFileID).orElseThrow(
-            () -> new MCRException("Unable to get page number of file id " + followingFileID)) - 1;
+            () -> new MCRException("Unable to get page number of file id " + followingFileID)) - (followingFileIDAttr != null ? 1 : 0);
 
         if (to < from) {
             throw new MCRException("Cannot calculate from - to pages cause from is lower than to. " + precedingFileID
@@ -124,11 +124,11 @@ public class PerthesMetsConverter extends ENMAPConverter {
 
     /**
      * Get file id of the first or the last physical div.
-     * 
+     *
      * @param attr the fileID attribute
      * @param mcrMets the mcr mets
      * @param first the first or the last file id
-     * 
+     *
      * @return optional of the file ID
      */
     private String getFileID(Attribute attr, Mets mcrMets, boolean first) {
@@ -141,10 +141,10 @@ public class PerthesMetsConverter extends ENMAPConverter {
 
     /**
      * Get file id of the first or the last physical div.
-     * 
+     *
      * @param mcrMets the mcr mets
      * @param first the first or the last file id
-     * 
+     *
      * @return optional of the file ID
      */
     private Optional<String> getFileID(Mets mcrMets, boolean first) {
@@ -163,7 +163,7 @@ public class PerthesMetsConverter extends ENMAPConverter {
 
     /**
      * Returns the page as integer of the the given fileID.
-     * 
+     *
      * @param fileID the file id to get the page
      * @return the page
      */
@@ -201,7 +201,7 @@ public class PerthesMetsConverter extends ENMAPConverter {
      * &lt;mets:area FILEID="FID-ThULB_129489824_1887_Perthes_XXXX-ALTO" /&gt; are
      * duplicated. Thats only important for areas which have no BEGIN,END,BETYPE
      * attribute. Remove duplicated entries.
-     * 
+     *
      * @param mets the mets to fix
      */
     private void fixMetsAreas(Mets mets) {
