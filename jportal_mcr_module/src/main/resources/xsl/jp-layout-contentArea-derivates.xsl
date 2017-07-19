@@ -75,10 +75,10 @@
     <xsl:variable name="derivate" select="document(concat('mcrobject:', @xlink:href))/mycorederivate" />
     <xsl:variable name="iviewFile" select="iview2:getSupportedMainFile(@xlink:href)" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
-    <xsl:variable name="deleteDB" select="acl:checkPermission(@xlink:href, 'deletedb')" />
+    <xsl:variable name="updateDerivate" select="acl:checkPermission(@xlink:href, 'update-derivate')" />
     <xsl:variable name="showDerivate" select="layoutTools:getDerivateDisplay(@xlink:href) = 'true'" />
 
-    <xsl:if test="$deleteDB or $showDerivate">
+    <xsl:if test="$updateDerivate or $showDerivate">
       <div class="jp-layout-derivate">
         <xsl:choose>
           <xsl:when test="$iviewFile != ''">
