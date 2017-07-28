@@ -1,8 +1,6 @@
 package spike;
 
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.common.params.ModifiableSolrParams;
-import org.apache.solr.common.params.MultiMapSolrParams;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -11,23 +9,18 @@ import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.junit.Before;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationLoaderFactory;
 import org.mycore.solr.MCRSolrCore;
-import org.mycore.solr.MCRSolrUtils;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,6 +45,7 @@ public class JournalOverviewCSV {
             CSVEntry entry = new CSVEntry();
             entry.id = (String) doc.getFieldValue("id");
             entry.maintitle = (String) doc.getFieldValue("maintitle");
+            @SuppressWarnings("unchecked")
             List<String> categories = (List<String>) doc.getFieldValue("category");
             if (categories != null && !categories.isEmpty()) {
                 entry.project = categories.stream().filter(c -> c.startsWith("jportal_class_00000062"))
@@ -67,7 +61,7 @@ public class JournalOverviewCSV {
 
     public void save(String file, List<CSVEntry> csv) {
         Path path = Paths.get(file);
-        List<String> collect = csv.stream().map(e -> e.toString()).collect(Collectors.toList());
+        List<String> collect = csv.stream().map(CSVEntry::toString).collect(Collectors.toList());
         String result = String.join("\r\n", collect);
         try (BufferedWriter writer = Files.newBufferedWriter(path, Charset.forName("UTF-8"))) {
             writer.write(result, 0, result.length());
