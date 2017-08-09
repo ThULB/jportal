@@ -1,23 +1,23 @@
 $(document).ready(function() {
 	// create date fields
 	createDate();
-	
-	$("select.dynamicBinding").change(function() {
+
+  $("select.dynamicBinding").change(function() {
 	  updateBindings();
 	});
 
 	function updateBindings() {
 	  $("select.dynamicBinding").each(function() {
-	    var on = $(this).attr("on");
-	    if(on == null) {
+	    let on = $(this).attr("on");
+	    if(on === null) {
 	      return;
 	    }
-	    var row = $(this).closest(".row");
-	    var classid = on.split(":")[0];
-	    var categid = on.split(":")[1];
-	    var dependentBinding = $("select.dynamicBinding[data-classid='" + classid + "']");
-	    var display = (categid == dependentBinding.val()) ? "block" : "none";
-      if(display == "none") {
+      let row = $(this).closest(".row");
+      let classid = on.split(":")[0];
+      let categid = on.split(":")[1];
+      let dependentBinding = $("select.dynamicBinding[data-classid='" + classid + "']");
+      let display = (categid === dependentBinding.val()) ? "block" : "none";
+      if(display === "none") {
         $(this).val("");
       }
 	    row.css("display", display);
