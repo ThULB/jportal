@@ -41,19 +41,16 @@ public final class URNRESTRegistrationTask extends TimerTask implements Closeabl
             .getInstance()
             .setRegisteredDateForUnregisteredIdenifiers(MCRDNBURN.TYPE, dnburnClient::register, b);
 
-        Integer numOfRegisteredObj = MCRTransactionExec.cute(register).apply(BATCH_SIZE);
+        int numRegisteredObj = 0;
 
-        while (numOfRegisteredObj > 0) {
-            if(numOfRegisteredObj % 3000 == 0){
-                try {
-                    LOGGER.info("URN registration sleep for 6 seconds.");
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        while (numRegisteredObj < 3000) {
+            int batch = MCRTransactionExec.cute(register).apply(BATCH_SIZE);
+
+            if(batch == 0){
+                break;
             }
 
-            numOfRegisteredObj = MCRTransactionExec.cute(register).apply(BATCH_SIZE);
+            numRegisteredObj = numRegisteredObj + batch;
         }
 
     }
