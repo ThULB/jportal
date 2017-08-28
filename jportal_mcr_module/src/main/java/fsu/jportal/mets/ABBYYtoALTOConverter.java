@@ -1,13 +1,13 @@
 package fsu.jportal.mets;
 
-import java.util.List;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.mets.model.IMetsElement;
+
+import java.util.List;
 
 /**
  * Simple converter class which replaces all '-ABBYY' references with '-ALTO'.

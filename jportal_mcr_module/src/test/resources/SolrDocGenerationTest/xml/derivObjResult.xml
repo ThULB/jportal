@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<solr-document-container xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink">
+<solr-document-container xmlns:xlink="http://www.w3.org/1999/xlink">
   <source>
     <mycorederivate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
       xsi:noNamespaceSchemaLocation="datamodel-derivate.xsd" ID="jportal_derivate_00061804" label="Dataobject from jportal_jparticle_00028380"

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mycoreobject xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xlink="http://www.w3.org/1999/xlink" ID="jportal_jpjournal_00000003" label="jportal_jpjournal_00000003" version="2.0"
-    xsi:noNamespaceSchemaLocation="datamodel-jpjournal.xsd">
+<mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:xlink="http://www.w3.org/1999/xlink" ID="jportal_jpjournal_00000003"
+              label="jportal_jpjournal_00000003" version="2.0"
+              xsi:noNamespaceSchemaLocation="datamodel-jpjournal.xsd">
     <structure />
     <metadata>
         <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">

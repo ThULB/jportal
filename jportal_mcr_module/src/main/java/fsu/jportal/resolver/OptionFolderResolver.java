@@ -1,21 +1,19 @@
 package fsu.jportal.resolver;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.Enumeration;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
+import fsu.jportal.nio.JarResource;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
 
-import fsu.jportal.nio.JarResource;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.Enumeration;
 
 @URIResolverSchema(schema = "templatesOption")
 public class OptionFolderResolver implements URIResolver {

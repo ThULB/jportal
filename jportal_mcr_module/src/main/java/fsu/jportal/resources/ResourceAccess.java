@@ -1,9 +1,9 @@
 package fsu.jportal.resources;
 
-import javax.ws.rs.container.ContainerRequestContext;
-
 import org.mycore.access.MCRAccessManager;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
+
+import javax.ws.rs.container.ContainerRequestContext;
 
 public class ResourceAccess implements MCRResourceAccessChecker {
 

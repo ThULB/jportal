@@ -1,12 +1,7 @@
 package fsu.jportal.resolver;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.util.JPComponentUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -17,8 +12,11 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
 
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.util.JPComponentUtil;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This resolver returns the parents of an mycore object. The returned element looks like:

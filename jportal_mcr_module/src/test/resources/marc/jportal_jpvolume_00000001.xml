@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="datamodel-jpvolume.xsd" ID="jportal_jpvolume_00000001"
+              label="jportal_jpvolume_00000001" version="2.0">
+    <structure>
+        <parents class="MCRMetaLinkID">
+            <parent inherited="0" xlink:type="locator" xlink:href="jportal_jpjournal_00000001"/>
+        </parents>
+        <children class="MCRMetaLinkID">
+            <child inherited="0" xlink:type="locator" xlink:href="jportal_jparticle_00000001"/>
+        </children>
+    </structure>
+    <metadata>
+        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+            <maintitle inherited="0" form="plain">Test Band</maintitle>
+            <maintitle inherited="1" form="plain">Test Zeitschrift</maintitle>
+        </maintitles>
+        <hidden_jpjournalsID class="MCRMetaLangText" heritable="true" notinherit="false">
+            <hidden_jpjournalID inherited="1" form="plain">jportal_jpjournal_00000001</hidden_jpjournalID>
+        </hidden_jpjournalsID>
+        <autosort class="MCRMetaElementXML" heritable="false" notinherit="true">
+            <sortby order="ascending" inherited="0">fsu.jportal.backend.sort.JPMagicSorter</sortby>
+        </autosort>
+    </metadata>
+    <service>
+        <servdates class="MCRMetaISO8601Date">
+            <servdate type="modifydate" inherited="0">2017-08-18T14:29:03.724Z</servdate>
+            <servdate type="createdate" inherited="0">2017-08-18T14:28:46.060Z</servdate>
+        </servdates>
+    </service>
+</mycoreobject>

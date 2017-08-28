@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="http://gso.gbv.de/sru/?xsl=searchRetrieveResponse" ?>
 <srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/"
-	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:diag="http://www.loc.gov/zing/srw/diagnostic/"
-	xmlns:xcql="http://www.loc.gov/zing/cql/xcql/">
+>
 	<srw:version>1.1</srw:version>
 	<srw:numberOfRecords>1395</srw:numberOfRecords>
 	<srw:resultSetId>SIDb37eaf08-16c0S1</srw:resultSetId>

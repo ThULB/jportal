@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-person.xsd"
+              ID="jportal_person_00000001" label="jportal_person_00000001" version="2.0">
+  <structure />
+  <metadata>
+    <def.heading class="MCRMetaXML" heritable="false" notinherit="true">
+      <heading xml:lang="de" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Johann Wolfgang</firstName>
+        <nameAffix>von</nameAffix>
+      </heading>
+    </def.heading>
+    <def.alternative class="MCRMetaXML" heritable="false" notinherit="true">
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Johann Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Johan Wolfgang</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Johan Wolphgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Johan W.</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Joh. Wolfg.</firstName>
+        <nameAffix>v.</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>J. Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>J. W.</firstName>
+        <nameAffix>v.</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>J. W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Jan Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Jean Wolfgang</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Juan Wolfgang</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Juan Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Juan W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>João Wolfgang</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Iohann Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Iohan Wolphgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Ioannes W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>I. W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Wolfgango</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Wolfango</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>W.</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Volfgango</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Volfango</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Giov. L.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>G. L.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Goethe</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Von Goethe</lastName>
+        <firstName>Johann Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Goethius</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Göthe</lastName>
+        <firstName>Johann Wolfgang</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Göthe</lastName>
+        <firstName>Johann W. êvonë</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Göthe</lastName>
+        <firstName>Jan Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Göthe</lastName>
+        <firstName>Jan Wolfang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Göthe</lastName>
+        <firstName>J. W.</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Göthe</lastName>
+        <firstName>Giov. Volfango</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Göthe</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Göte</lastName>
+        <firstName>Iogann V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Göte</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goete</lastName>
+        <firstName>Iohan V.</firstName>
+        <nameAffix>p'on</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goet'e</lastName>
+        <firstName>Iohan Volp'gang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Goet'e</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Goe te</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gêôt'ê</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>G'ote</lastName>
+        <firstName>Jochan Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Yohan Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>G'ote</lastName>
+        <firstName>V.</firstName>
+        <nameAffix>f.</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>G'ote</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gót</lastName>
+        <firstName>J. V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gót</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Go't</lastName>
+        <firstName>I. V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Goithios</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gotenin</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gejteh</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Jōhan Wolfgang</firstName>
+        <nameAffix>fon</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Johann Volʹfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Géte</lastName>
+        <firstName>Johans Volfgangs</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gėtė</lastName>
+        <firstName>Johanas Volfgangas</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Jochan Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Jogann Vol'fgang</firstName>
+        <nameAffix>fon</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Jogann Vol'fgang êfonë</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Jogann-Vol'fgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>J. V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>J.-V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Iogann W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>I. W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Iohan Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gëte</lastName>
+        <firstName>Iogann Vol'fgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gëte</lastName>
+        <firstName>Johann Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gëte</lastName>
+        <firstName>Iogann Vol'fgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>I. V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>I.-V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Yohan Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Yôhân Wôlfgang</firstName>
+        <nameAffix>fôn</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gête</lastName>
+        <firstName>Yôhan Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Yohann Volfqanq</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Yogann Volʹfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Y. W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gêtê</lastName>
+        <firstName>Y. W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Volʹfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Egan Vol'fgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gete</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gēte</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gě'ṭe</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gette</lastName>
+        <firstName>G.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gede</lastName>
+        <firstName>Yuehan Wofugang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gede</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Ge de</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Geteh</lastName>
+        <firstName>Yohan Ṿolfgang</firstName>
+        <nameAffix>fon</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gūta</lastName>
+        <firstName>Yūhān Wulfgāng</firstName>
+        <nameAffix>fun</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gūta</lastName>
+        <firstName>Yūhān Wulfgāng</firstName>
+        <nameAffix>fūn</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Ǧūta</lastName>
+        <firstName>Yūhān Wulfǧānǧ</firstName>
+        <nameAffix>fūn</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gūta</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Ǧīta</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Ǧītā</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Ǧītah</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Ǧītih</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Giote</lastName>
+        <firstName>Johan Wolphgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Giote</lastName>
+        <firstName>J. W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gǐote</lastName>
+        <firstName>Jochan Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Giote</lastName>
+        <firstName>J. V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Ġūta</lastName>
+        <firstName>Yūhān Fūlfġānḡ</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Ġūtah</lastName>
+        <firstName>Yūhān Fūlfġānḡ</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Ġūtih</lastName>
+        <firstName>Yūhān Vūlfġanġ</firstName>
+        <nameAffix>fūn</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Ġūtih</lastName>
+        <firstName>Yūhān Fūlfġānḡ</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goytä</lastName>
+        <firstName>Yohan Welfgang</firstName>
+        <nameAffix>fon</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gyote</lastName>
+        <firstName>Johān Bholphgãā</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gyot'e</lastName>
+        <firstName>Yohan Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gyot'e</lastName>
+        <firstName>Yohan Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>GŚutih</lastName>
+        <firstName>YŚuhŚan VŚulf·gan·g fŚun</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gkaite</lastName>
+        <firstName>Giochan Bolphnkannk</firstName>
+        <nameAffix>phon</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gkaite</lastName>
+        <firstName>Giochan Bolphnkannk êphonë</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gkaite</lastName>
+        <firstName>Giochan B.</firstName>
+        <nameAffix>phon</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gkaite</lastName>
+        <firstName>Iōann Mpolphgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Gkaite</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Koet'e</lastName>
+        <firstName>Yohan Polp'ŭgang</firstName>
+        <nameAffix>p'on</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Koet'e</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Kêôt'ê</lastName>
+        <firstName>Volfkank</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Kēōthē</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Kote</lastName>
+        <firstName>Johann Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Kote</lastName>
+        <firstName>Jochann Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Kote</lastName>
+        <firstName>J. V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Kote</lastName>
+        <firstName>V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Hete</lastName>
+        <firstName>Johann-Vol'fhanh</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Hëte</lastName>
+        <firstName>Ëhan Vol'fhanh</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Hëte</lastName>
+        <firstName>&amp;Euml;han Vol'fhanh</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Höte</lastName>
+        <firstName>Iohann Volfqanq</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Yo han Bol peu gang pon Goe te</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Yohan-Bolpeugang-pon-Goete</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Yue han Wo fu gang Ge de</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Yuehan-Wofugang-Gede</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gyote</lastName>
+        <firstName>Yohan Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Johann Wolfgang</firstName>
+        <nameAffix>v.</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Johann W.</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Johann W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>J. W.</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Wolfgang</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>Wolfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Johan Volfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>Iogann Volʹfgang</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gete</lastName>
+        <firstName>J.V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goithios</lastName>
+        <firstName>I.V.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Gēte</lastName>
+        <firstName>Yohan Vorufugangu Fon</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Ġūtih</lastName>
+        <firstName>Yūhān Fūlfġānġ fūn</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>Goythe</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>J.W.</firstName>
+        <nameAffix>von</nameAffix>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Goethe</lastName>
+        <firstName>J.W.</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>Гёте</lastName>
+        <firstName>Йоҳанн Волфганг</firstName>
+        <collocation>uzb</collocation>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>歌德</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>約翰・沃爾夫岡・馮・歌德</name>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>约翰・沃尔夫冈・冯・歌德</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>ゲーテ</lastName>
+        <firstName>ヨハン・ヴォルフガング・フォン</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>גתה</lastName>
+        <firstName>יוהן וולפגנג פון</firstName>
+      </alternative>
+      <alternative xml:lang="de" type="single" inherited="0">
+        <name>歌德</name>
+      </alternative>
+      <alternative xml:lang="de" type="complete" inherited="0">
+        <lastName>ゲーテ</lastName>
+        <firstName>ヨハン・ヴォルフガング・フォン</firstName>
+      </alternative>
+    </def.alternative>
+    <def.identifier class="MCRMetaLangText" heritable="false" notinherit="true">
+      <identifier type="ppn" inherited="0" form="plain">133416720</identifier>
+      <identifier type="gnd" inherited="0" form="plain">118540238</identifier>
+    </def.identifier>
+    <def.dateOfBirth class="MCRMetaISO8601Date" heritable="false" notinherit="true">
+      <dateOfBirth inherited="0">1749-08-28</dateOfBirth>
+    </def.dateOfBirth>
+    <def.dateOfDeath class="MCRMetaISO8601Date" heritable="false" notinherit="true">
+      <dateOfDeath inherited="0">1832-03-22</dateOfDeath>
+    </def.dateOfDeath>
+    <def.placeOfBirth class="MCRMetaLangText" heritable="false" notinherit="true">
+      <placeOfBirth inherited="0" form="plain">Frankfurt am Main</placeOfBirth>
+    </def.placeOfBirth>
+    <def.placeOfDeath class="MCRMetaLangText" heritable="false" notinherit="true">
+      <placeOfDeath inherited="0" form="plain">Weimar</placeOfDeath>
+    </def.placeOfDeath>
+    <def.gender class="MCRMetaClassification" heritable="false" notinherit="true">
+      <gender inherited="0" classid="urmel_class_00000001" categid="male" />
+    </def.gender>
+    <def.placeOfActivity class="MCRMetaLangText" heritable="false" notinherit="true">
+      <placeOfActivity inherited="0" form="plain">Weimar</placeOfActivity>
+    </def.placeOfActivity>
+    <def.role class="MCRMetaLangText" heritable="false" notinherit="true">
+      <role inherited="0" form="plain">Publizist</role>
+      <role inherited="0" form="plain">Politiker</role>
+      <role inherited="0" form="plain">Jurist</role>
+      <role inherited="0" form="plain">Naturwissenschaftler</role>
+      <role inherited="0" form="plain">Theaterintendant</role>
+      <role inherited="0" form="plain">Maler</role>
+      <role inherited="0" form="plain">Zeichner</role>
+      <role inherited="0" form="plain">Schriftsteller</role>
+    </def.role>
+    <def.note class="MCRMetaLangText" heritable="false" notinherit="true">
+      <note xml:lang="de" type="visible" inherited="0" form="plain">Staatsmann, Geheimrat</note>
+    </def.note>
+  </metadata>
+  <service>
+    <servdates class="MCRMetaISO8601Date">
+      <servdate type="createdate" inherited="0">2017-08-11T10:58:04.243Z</servdate>
+      <servdate type="modifydate" inherited="0">2017-08-11T10:58:04.243Z</servdate>
+    </servdates>
+  </service>
+</mycoreobject>

@@ -1,14 +1,5 @@
 package fsu.jportal.resolver;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.text.MessageFormat;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -21,6 +12,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mycore.common.config.MCRConfiguration;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.text.MessageFormat;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ListFolderResolverTest {
 

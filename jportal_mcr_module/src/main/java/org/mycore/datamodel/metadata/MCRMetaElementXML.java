@@ -1,11 +1,10 @@
 package org.mycore.datamodel.metadata;
 
+import com.google.gson.JsonObject;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRXMLHelper;
-
-import com.google.gson.JsonObject;
 
 public class MCRMetaElementXML extends MCRMetaDefault {
 

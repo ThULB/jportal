@@ -1,35 +1,9 @@
 package fsu.jportal.resources;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.mycore.access.MCRAccessManager;
-import org.mycore.common.MCRException;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectStructure;
-import org.mycore.frontend.jersey.MCRJerseyUtil;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.sort.JPLevelSorting;
@@ -37,6 +11,21 @@ import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPLevelSortingUtil;
+import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRException;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectStructure;
+import org.mycore.frontend.jersey.MCRJerseyUtil;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Resource to handle jportal sorting. 

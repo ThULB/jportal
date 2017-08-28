@@ -1,13 +1,8 @@
 package spike;
 
-import static org.junit.Assert.assertFalse;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
+import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
+import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -19,9 +14,13 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.junit.Test;
 
-import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
-import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import static org.junit.Assert.assertFalse;
 
 public class SRU {
     @Test

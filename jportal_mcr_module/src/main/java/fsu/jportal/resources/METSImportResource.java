@@ -1,20 +1,9 @@
 package fsu.jportal.resources;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.List;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
-import javax.xml.transform.TransformerException;
-
-import fsu.jportal.mets.PerthesMetsImporter;
+import com.google.gson.JsonObject;
+import fsu.jportal.mets.*;
+import fsu.jportal.mets.MetsImportUtils.METS_TYPE;
+import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -26,18 +15,13 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import com.google.gson.JsonObject;
-
-import fsu.jportal.mets.BlockReferenceException;
-import fsu.jportal.mets.ConvertException;
-import fsu.jportal.mets.ENMAPConverter;
-import fsu.jportal.mets.JVBMetsImporter;
-import fsu.jportal.mets.LLZMetsImporter;
-import fsu.jportal.mets.MetsImportException;
-import fsu.jportal.mets.MetsImportUtils;
-import fsu.jportal.mets.MetsImportUtils.METS_TYPE;
-import fsu.jportal.mets.MetsImporter;
-import fsu.jportal.util.MetsUtil;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.List;
 
 @Path("mets/import")
 public class METSImportResource {

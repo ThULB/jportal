@@ -1,15 +1,6 @@
 package fsu.jportal.mets;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.google.common.collect.Lists;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -19,13 +10,12 @@ import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRException;
 import org.mycore.mets.model.IMetsElement;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.struct.Area;
-import org.mycore.mets.model.struct.Fptr;
-import org.mycore.mets.model.struct.LogicalDiv;
-import org.mycore.mets.model.struct.PhysicalSubDiv;
-import org.mycore.mets.model.struct.Seq;
+import org.mycore.mets.model.struct.*;
 
-import com.google.common.collect.Lists;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PerthesMetsConverter extends ENMAPConverter {
 

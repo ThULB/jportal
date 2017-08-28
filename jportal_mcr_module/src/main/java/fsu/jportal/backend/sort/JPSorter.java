@@ -1,17 +1,16 @@
 package fsu.jportal.backend.sort;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.util.JPComponentUtil;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.util.JPComponentUtil;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Base interface for sorting children of journals and volumes.

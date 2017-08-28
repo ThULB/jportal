@@ -1,17 +1,12 @@
 package fsu.jportal.backend;
 
+import org.mycore.datamodel.common.MCRISO8601Date;
+import org.mycore.datamodel.metadata.*;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.mycore.datamodel.common.MCRISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Simple java abstraction of a jportal article. This class is not complete at all.
@@ -20,7 +15,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  */
 public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
-    public static String TYPE = "jparticle";
+    public static String TYPE = JPObjectType.jparticle.name();
 
     public static enum RecensionDateType {
         published_Original, published_Original_From, published_Original_Till
@@ -116,20 +111,16 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
         setSize(String.valueOf(size));
     }
 
-    public String getSize() {
+    public Optional<String> getSize() {
         MCRMetaElement sizes = object.getMetadata().getMetadataElement("sizes");
         if (sizes == null) {
-            return null;
+            return Optional.empty();
         }
         MCRMetaLangText size = (MCRMetaLangText) sizes.getElementByName("size");
         if (size == null) {
-            return null;
+            return Optional.empty();
         }
-        return size.getText();
-    }
-
-    public void setIdenti(String type, String id) {
-        setText("identis", "identi", id, type, false, true);
+        return Optional.of(size.getText());
     }
 
     /**
@@ -175,7 +166,9 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     public JPArticle clone() throws CloneNotSupportedException {
         JPArticle clone = (JPArticle) super.clone();
         clone.setTitle(getTitle());
-        clone.setSize(getSize());
+        getSize().ifPresent(size -> {
+            clone.setSize(size);
+        });
         String derivateLink = getDerivateLink();
         if (derivateLink != null) {
             try {

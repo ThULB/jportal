@@ -1,14 +1,8 @@
 package fsu.jportal.backend.event;
 
-import static fsu.jportal.util.ImprintUtil.getImprintID;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
@@ -19,6 +13,11 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.index.MCRSolrIndexer;
 import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static fsu.jportal.util.ImprintUtil.getImprintID;
 
 public class UpdateJournaldHandler extends MCREventHandlerBase {
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ZiNG:searchRetrieveResponse xmlns:ZiNG="urn:z3950:ZiNG:Service"
-	xmlns:dc="http://purl.org/dc/elements/1.1/">
+>
 	<ZiNG:resultSetId />
 	<ZiNG:numberOfRecords>17</ZiNG:numberOfRecords>
 	<ZiNG:records>

@@ -1,13 +1,6 @@
 package fsu.jportal.frontend.cli;
 
-import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
+import fsu.jportal.backend.MetaDataTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -30,7 +23,13 @@ import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.solr.MCRSolrClientFactory;
 
-import fsu.jportal.backend.MetaDataTools;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
 
 @MCRCommandGroup(name = "JP doubletOf Commands")
 public class RedundancyCommands{

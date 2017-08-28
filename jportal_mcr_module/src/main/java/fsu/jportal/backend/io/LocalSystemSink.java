@@ -1,11 +1,9 @@
 package fsu.jportal.backend.io;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
+import fsu.jportal.backend.DerivateTools;
+import fsu.jportal.backend.ImportDerivateObject;
+import fsu.jportal.backend.ImportFileObject;
+import fsu.jportal.frontend.cli.Importer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -15,17 +13,13 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.*;
 
-import fsu.jportal.backend.DerivateTools;
-import fsu.jportal.backend.ImportDerivateObject;
-import fsu.jportal.backend.ImportFileObject;
-import fsu.jportal.frontend.cli.Importer;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by michel on 07.07.15.

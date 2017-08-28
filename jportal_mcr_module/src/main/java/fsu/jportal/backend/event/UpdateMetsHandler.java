@@ -8,19 +8,13 @@ import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.common.inject.MCRInjectorConfig;
 import org.mycore.datamodel.common.MCRMarkManager;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.datamodel.metadata.*;
 import org.mycore.datamodel.niofs.MCRPath;
-import org.mycore.mets.events.MCRUpdateMetsOnDerivateChangeEventHandler;
 import org.mycore.mets.tools.MCRMetsSave;
 
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**

@@ -1,13 +1,12 @@
 package fsu.jportal.util;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.StreamSupport;
-
+import fsu.archiv.mycore.sru.GBVKeywordStore;
+import fsu.archiv.mycore.sru.SRUQueryParser;
+import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
+import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
+import fsu.jportal.backend.pica.JPInstitutionProducer;
+import fsu.jportal.backend.pica.JPPersonProducer;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -27,13 +26,13 @@ import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.sru.SRUConnector;
 import org.mycore.sru.SRUConnectorFactory;
 
-import fsu.archiv.mycore.sru.GBVKeywordStore;
-import fsu.archiv.mycore.sru.SRUQueryParser;
-import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
-import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
-import fsu.jportal.backend.pica.JPInstitutionProducer;
-import fsu.jportal.backend.pica.JPPersonProducer;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 public class GndUtil {
 

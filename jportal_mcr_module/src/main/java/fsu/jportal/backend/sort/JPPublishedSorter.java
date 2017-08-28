@@ -1,9 +1,9 @@
 package fsu.jportal.backend.sort;
 
+import fsu.jportal.backend.JPPeriodicalComponent;
+
 import java.time.LocalDate;
 import java.util.Comparator;
-
-import fsu.jportal.backend.JPPeriodicalComponent;
 
 /**
  * Orders the children by their published date.

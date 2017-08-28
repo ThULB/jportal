@@ -1,11 +1,10 @@
 package fsu.jportal.backend.sort;
 
-import static org.junit.Assert.assertTrue;
-
+import fsu.jportal.backend.sort.JPSorter.Order;
 import org.junit.Test;
 import org.mycore.common.MCRTestCase;
 
-import fsu.jportal.backend.sort.JPSorter.Order;
+import static org.junit.Assert.assertTrue;
 
 public class JPArticleSizeSorterTest extends MCRTestCase {
 
@@ -57,6 +56,7 @@ public class JPArticleSizeSorterTest extends MCRTestCase {
         // Strange roman
         assertTrue(0 > sorter.compare(Order.ASCENDING, "S. (XXI)--(XXIII)", "S. (XXX)--(XXXI)"));
         assertTrue(0 > sorter.compare(Order.ASCENDING, "S. (XXV)--(XXVI)", "S. (XXVIII)"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "III - XIV", "003"));
 
         // not the first article on a page
         assertTrue(0 > sorter.compare(Order.ASCENDING, "025 [1]", "025 [2]"));

@@ -4,7 +4,7 @@
                 xmlns:mcr="http://www.mycore.org/"
                 xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
                 xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:dc="http://www.loc.gov/mods/v3"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
                 exclude-result-prefixes="xalan encoder mcr mcrxml solrxml i18n">
 
   <xsl:param name="referer" />

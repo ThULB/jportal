@@ -1,9 +1,7 @@
 package fsu.jportal.backend.event;
 
-import fsu.jportal.backend.JPArticle;
 import org.junit.Test;
 import org.mycore.common.MCRTestCase;
-import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObjectID;
 

@@ -1,13 +1,13 @@
 package spike;
 
+import org.junit.Test;
+import org.mycore.frontend.cli.MCRAccessCommands;
+import org.mycore.frontend.cli.annotation.MCRCommand;
+
 import java.lang.reflect.Method;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.text.ParseException;
-
-import org.junit.Test;
-import org.mycore.frontend.cli.MCRAccessCommands;
-import org.mycore.frontend.cli.annotation.MCRCommand;
 
 public class MessageFormatTest {
 

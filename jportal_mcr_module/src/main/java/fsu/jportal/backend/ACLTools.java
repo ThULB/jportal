@@ -1,14 +1,5 @@
 package fsu.jportal.backend;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Method;
-import java.nio.file.Path;
-import java.text.MessageFormat;
-import java.text.ParseException;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessInterface;
@@ -19,6 +10,15 @@ import org.mycore.common.xml.MCRXMLParserFactory;
 import org.mycore.frontend.cli.MCRAccessCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.xml.sax.SAXParseException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Method;
+import java.nio.file.Path;
+import java.text.MessageFormat;
+import java.text.ParseException;
 
 public class ACLTools {
     public void createRules(Path toCmdFile){

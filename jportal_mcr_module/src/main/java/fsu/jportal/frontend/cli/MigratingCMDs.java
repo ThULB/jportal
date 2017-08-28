@@ -1,33 +1,16 @@
 package fsu.jportal.frontend.cli;
 
-import static fsu.jportal.util.ImprintUtil.getJournalConf;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamSource;
-
+import fsu.jportal.backend.JPObjectConfiguration;
+import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.resolver.JournalFilesResolver;
+import fsu.jportal.util.JPLevelSortingUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.hibernate.Session;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.Text;
+import org.jdom2.*;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.transform.JDOMResult;
@@ -49,10 +32,17 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
-import fsu.jportal.backend.JPObjectConfiguration;
-import fsu.jportal.backend.sort.JPLevelSorting;
-import fsu.jportal.resolver.JournalFilesResolver;
-import fsu.jportal.util.JPLevelSortingUtil;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static fsu.jportal.util.ImprintUtil.getJournalConf;
 
 @MCRCommandGroup(name = "JP Migrating Commands")
 public class MigratingCMDs {

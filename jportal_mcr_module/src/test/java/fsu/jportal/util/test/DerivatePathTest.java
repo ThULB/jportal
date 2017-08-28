@@ -1,10 +1,9 @@
 package fsu.jportal.util.test;
 
-import static org.junit.Assert.assertEquals;
-
+import fsu.jportal.util.DerivatePath;
 import org.junit.Test;
 
-import fsu.jportal.util.DerivatePath;
+import static org.junit.Assert.assertEquals;
 
 public class DerivatePathTest {
     @Test

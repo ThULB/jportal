@@ -1,24 +1,11 @@
 package fsu.jportal.resources;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.mets.MetsVersionStore;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -35,13 +22,13 @@ import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.StructLink;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.mets.MetsVersionStore;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.MetsUtil;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>

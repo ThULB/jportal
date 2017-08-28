@@ -1,9 +1,11 @@
 package fsu.jportal.resolver;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Optional;
-import java.util.function.Consumer;
+import fsu.jportal.xml.dfg.oai.DFGOAIMetsXMLHandler;
+import fsu.jportal.xml.stream.ParserUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.xml.MCRURIResolver;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -12,14 +14,10 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.common.xml.MCRURIResolver;
-
-import fsu.jportal.xml.dfg.oai.DFGOAIMetsXMLHandler;
-import fsu.jportal.xml.stream.ParserUtils;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Created by chi on 17.10.16.

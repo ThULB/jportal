@@ -1,14 +1,6 @@
 package fsu.jportal.backend.event;
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.stream.StreamSource;
-
+import fsu.jportal.xml.XMLTools;
 import org.jdom2.Document;
 import org.jdom2.transform.JDOMResult;
 import org.jdom2.transform.JDOMSource;
@@ -17,7 +9,13 @@ import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.jportal.xml.XMLTools;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.stream.StreamSource;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateJournaldHandler extends MCREventHandlerBase {
     @Override

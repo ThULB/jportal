@@ -1,23 +1,18 @@
 package fsu.jportal.frontend;
 
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.datamodel.metadata.*;
+
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
-
-import fsu.jportal.backend.JPJournal;
-import fsu.jportal.backend.JPPeriodicalComponent;
 
 public class DynamicLayoutTemplateDetector {
 

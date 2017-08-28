@@ -1,10 +1,10 @@
 package spike;
 
+import org.junit.Test;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.SimpleTimeZone;
-
-import org.junit.Test;
 
 
 public class DateFormatSpike {

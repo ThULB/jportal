@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-jpjournal.xsd" ID="jportal_jpjournal_00000001" label="jportal_jpjournal_00000001" version="2.0">
+    <structure>
+        <children class="MCRMetaLinkID">
+            <child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00000001"/>
+        </children>
+    </structure>
+    <metadata>
+        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+            <maintitle inherited="0" form="plain">Test Zeitschrift</maintitle>
+        </maintitles>
+        <languages class="MCRMetaClassification" heritable="false" notinherit="true">
+            <language inherited="0" classid="jportal_class_00000004" categid="de"/>
+        </languages>
+        <hidden_templates class="MCRMetaLangText" heritable="false" notinherit="true">
+            <hidden_template inherited="0" form="plain">template_forumPolJen</hidden_template>
+        </hidden_templates>
+        <hidden_jpjournalsID class="MCRMetaLangText" heritable="true" notinherit="false">
+            <hidden_jpjournalID inherited="0" form="plain">jportal_jpjournal_00000001</hidden_jpjournalID>
+        </hidden_jpjournalsID>
+        <autosort class="MCRMetaElementXML" heritable="false" notinherit="true">
+            <sortby order="ascending" inherited="0">fsu.jportal.backend.sort.JPMagicSorter</sortby>
+        </autosort>
+    </metadata>
+    <service>
+        <servdates class="MCRMetaISO8601Date">
+            <servdate type="modifydate" inherited="0">2017-08-24T12:26:39.858Z</servdate>
+            <servdate type="createdate" inherited="0">2017-08-16T13:57:26.399Z</servdate>
+        </servdates>
+    </service>
+</mycoreobject>

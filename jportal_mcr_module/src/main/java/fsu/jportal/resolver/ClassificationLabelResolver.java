@@ -1,13 +1,12 @@
 package fsu.jportal.resolver;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
+import fsu.jportal.util.ResolverUtil;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 
-import fsu.jportal.util.ResolverUtil;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 
 @URIResolverSchema(schema = "xClassificationLabel")
 public class ClassificationLabelResolver implements URIResolver {

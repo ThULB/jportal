@@ -1,17 +1,16 @@
 package fsu.jportal.backend.pica;
 
-import java.io.IOException;
-import java.util.List;
-
+import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
+import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
+import fsu.archiv.mycore.sru.impex.pica.producer.CorporationProducer;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 
-import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
-import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
-import fsu.archiv.mycore.sru.impex.pica.producer.CorporationProducer;
+import java.io.IOException;
+import java.util.List;
 
 public class JPInstitutionProducer extends CorporationProducer {
 

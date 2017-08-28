@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<solr-document-container xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink">
+<solr-document-container xmlns:xlink="http://www.w3.org/1999/xlink">
   <source>
     <mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-test.xsd" ID="jportal_test_00031348" label="jportal_test_00031348" version="Version 1.3">
       <structure>

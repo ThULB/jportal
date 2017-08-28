@@ -1,19 +1,7 @@
 package fsu.jportal.mets.impl;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
+import fsu.jportal.mets.MetsAutoGenerator;
+import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.events.MCRShutdownHandler;
@@ -25,8 +13,18 @@ import org.mycore.util.concurrent.processing.MCRProcessableExecutor;
 import org.mycore.util.concurrent.processing.MCRProcessableFactory;
 import org.mycore.util.concurrent.processing.MCRProcessableSupplier;
 
-import fsu.jportal.mets.MetsAutoGenerator;
-import fsu.jportal.util.MetsUtil;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * <p>

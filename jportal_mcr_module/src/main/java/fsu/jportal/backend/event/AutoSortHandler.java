@@ -1,7 +1,13 @@
 package fsu.jportal.backend.event;
 
-import java.util.Optional;
-
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.backend.sort.JPLevelSorting.Level;
+import fsu.jportal.backend.sort.JPSorter;
+import fsu.jportal.backend.sort.JPSorter.Order;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPLevelSortingUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
@@ -11,14 +17,7 @@ import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.sort.JPLevelSorting;
-import fsu.jportal.backend.sort.JPLevelSorting.Level;
-import fsu.jportal.backend.sort.JPSorter;
-import fsu.jportal.backend.sort.JPSorter.Order;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.JPLevelSortingUtil;
+import java.util.Optional;
 
 /**
  * Each journal or volume can have a {@link JPSorter} which enables

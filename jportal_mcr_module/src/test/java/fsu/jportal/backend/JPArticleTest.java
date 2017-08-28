@@ -1,11 +1,11 @@
 package fsu.jportal.backend;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 import org.mycore.common.MCRJPATestCase;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.metadata.MCRMetaElement;
+
+import static org.junit.Assert.assertEquals;
 
 public class JPArticleTest extends MCRJPATestCase {
 

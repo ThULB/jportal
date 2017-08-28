@@ -1,20 +1,13 @@
 package fsu.jportal.xml;
 
+import org.jdom2.Document;
+import org.jdom2.transform.JDOMResult;
+
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamSource;
-
-import org.jdom2.Document;
-import org.jdom2.transform.JDOMResult;
 
 public class XMLTools {
 

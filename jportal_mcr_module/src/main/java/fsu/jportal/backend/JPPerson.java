@@ -1,22 +1,12 @@
 package fsu.jportal.backend;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.metadata.MCRMetaClassification;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaXML;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Person abstraction. Be aware this class is not fully implemented.
@@ -25,7 +15,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  */
 public class JPPerson extends JPLegalEntity {
 
-    public static String TYPE = "person";
+    public static String TYPE = JPObjectType.person.name();
 
     public static enum Sex {
         male, female, unknown
@@ -184,7 +174,7 @@ public class JPPerson extends JPLegalEntity {
      * @param metaXML the meta xml to flatten
      * @return a map containing the element name and text's
      */
-    protected Map<String, String> metaXMLToMap(Optional<MCRMetaXML> metaXML) {
+    public Map<String, String> metaXMLToMap(Optional<MCRMetaXML> metaXML) {
         return metaXML.map(MCRMetaXML::getContent).orElseGet(Collections::emptyList).stream()
             .filter(Filters.element()::matches).map(c -> (Element) c)
             .collect(Collectors.toMap(Element::getName, Element::getTextTrim));
@@ -195,7 +185,7 @@ public class JPPerson extends JPLegalEntity {
      * 
      * @return the heading.
      */
-    protected Optional<MCRMetaXML> getHeading() {
+    public Optional<MCRMetaXML> getHeading() {
         return metadataStreamNotInherited("def.heading", MCRMetaXML.class).findFirst();
     }
 
@@ -204,14 +194,14 @@ public class JPPerson extends JPLegalEntity {
      * 
      * @return list of <code>MCRMetaXML</code>
      */
-    protected List<MCRMetaXML> getAlternative() {
+    public List<MCRMetaXML> getAlternative() {
         return metadataStreamNotInherited("def.alternative", MCRMetaXML.class).collect(Collectors.toList());
     }
 
     /**
      * Sets the sex for this person.
      * 
-     * @param sex
+     * @param sex male, female or unknown
      */
     public void setGender(Sex sex) {
         if (sex == null) {

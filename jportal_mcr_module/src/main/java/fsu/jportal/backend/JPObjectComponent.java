@@ -1,28 +1,17 @@
 package fsu.jportal.backend;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.*;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Base component for person, jpinst, jparticle, jpvolume and jpjournal.
@@ -232,8 +221,21 @@ public abstract class JPObjectComponent implements JPComponent {
      */
     protected List<String> listText(String enclosingTag, String type) {
         return metadataStreamNotInherited(enclosingTag, MCRMetaLangText.class).filter(typeFilter(type))
-                                                                              .map(MCRMetaLangText::getText)
-                                                                              .collect(Collectors.toList());
+                .map(MCRMetaLangText::getText)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Simple helper method to get the link of an not inherited MCRMetaLinkID metadata element.
+     *
+     * @param enclosingTag the enclosing tag e.g. def.participant
+     * @param type         the type, can be null
+     * @return an optional containing the text
+     */
+    protected List<MCRObjectID> getLinks(String enclosingTag, String type) {
+        return metadataStreamNotInherited(enclosingTag, MCRMetaLinkID.class).filter(typeFilter(type))
+                .map(MCRMetaLinkID::getXLinkHrefID)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -257,16 +259,16 @@ public abstract class JPObjectComponent implements JPComponent {
     }
 
     /**
-     * Predicate to compare MCRMetaLangText types. Returns true if the given type is null
+     * Predicate to compare MCRMetaDefault types. Returns true if the given type is null
      * and the MCRMetaLangText type is null, or if both are equal().
      * 
      * @param type the type to compare
      * @return true if they are equal
      */
-    protected Predicate<MCRMetaLangText> typeFilter(String type) {
-        return new Predicate<MCRMetaLangText>() {
+    protected Predicate<MCRMetaDefault> typeFilter(String type) {
+        return new Predicate<MCRMetaDefault>() {
             @Override
-            public boolean test(MCRMetaLangText metaText) {
+            public boolean test(MCRMetaDefault metaText) {
                 return (type == null && metaText.getType() == null) || (metaText.getType().equals(type));
             }
         };

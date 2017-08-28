@@ -1,36 +1,10 @@
 package fsu.jportal.resources;
 
-import static fsu.jportal.util.ImprintUtil.getImprintID;
-import static fsu.jportal.util.ImprintUtil.getJournalConf;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.Normalizer;
-import java.text.Normalizer.Form;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
+import com.google.gson.Gson;
+import fsu.jportal.backend.*;
+import fsu.jportal.util.ImprintUtil;
+import fsu.jportal.xml.MCRWebpage;
+import fsu.jportal.xml.XMLTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
@@ -42,16 +16,23 @@ import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.services.i18n.MCRTranslation;
 
-import com.google.gson.Gson;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.util.*;
 
-import fsu.jportal.backend.GreetingsFS;
-import fsu.jportal.backend.GreetingsManager;
-import fsu.jportal.backend.ImprintFS;
-import fsu.jportal.backend.ImprintManager;
-import fsu.jportal.backend.JPObjectConfiguration;
-import fsu.jportal.util.ImprintUtil;
-import fsu.jportal.xml.MCRWebpage;
-import fsu.jportal.xml.XMLTools;
+import static fsu.jportal.util.ImprintUtil.getImprintID;
+import static fsu.jportal.util.ImprintUtil.getJournalConf;
 
 @Path("fs/{fsType}")
 //@MCRRestrictedAccess(IPRuleAccess.class)

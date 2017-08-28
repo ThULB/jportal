@@ -1,9 +1,9 @@
 package spike;
 
+import org.junit.Test;
+
 import java.lang.reflect.TypeVariable;
 import java.util.UUID;
-
-import org.junit.Test;
 
 
 public class GenericSpike {

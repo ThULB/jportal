@@ -1,13 +1,13 @@
 package spike;
 
+import org.junit.Before;
+import org.mycore.imagetiler.MCRImage;
+import org.mycore.iview2.services.MCRIView2Tools;
+
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import org.junit.Before;
-import org.mycore.imagetiler.MCRImage;
-import org.mycore.iview2.services.MCRIView2Tools;
 
 public class IView2Hacking {
     @Before

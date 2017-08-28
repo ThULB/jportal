@@ -27,7 +27,6 @@ import org.apache.logging.log4j.Logger;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.iview2.frontend.MCRFooterInterface;
 import org.mycore.pi.backend.MCRPI;
-import org.mycore.urn.hibernate.MCRURN;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;

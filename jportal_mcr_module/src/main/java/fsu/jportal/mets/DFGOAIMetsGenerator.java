@@ -1,10 +1,5 @@
 package fsu.jportal.mets;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -15,6 +10,11 @@ import org.mycore.mets.model.sections.AmdSec;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Created by chi on 28.07.16.

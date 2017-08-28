@@ -1,9 +1,9 @@
 package fsu.jportal.backend;
 
-import java.util.Optional;
-
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import java.util.Optional;
 
 /**
  * Base class for persons and institutions.

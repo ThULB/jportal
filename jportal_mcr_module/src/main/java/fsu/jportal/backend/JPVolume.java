@@ -1,10 +1,10 @@
 package fsu.jportal.backend;
 
-import java.util.Optional;
-
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import java.util.Optional;
 
 /**
  * Volume abstraction. Be aware that this class is not complete.
@@ -13,7 +13,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  */
 public class JPVolume extends JPContainer {
 
-    public static String TYPE = "jpvolume";
+    public static String TYPE = JPObjectType.jpvolume.name();
 
     public JPVolume() {
         super();

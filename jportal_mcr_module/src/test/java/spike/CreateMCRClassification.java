@@ -1,9 +1,9 @@
 package spike;
 
-import static org.junit.Assert.fail;
-
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+
+import static org.junit.Assert.fail;
 
 public class CreateMCRClassification {
 

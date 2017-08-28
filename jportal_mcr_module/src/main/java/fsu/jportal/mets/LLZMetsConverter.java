@@ -1,14 +1,14 @@
 package fsu.jportal.mets;
 
-import java.nio.file.Path;
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
+
+import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Converts the the enmap llz format to mycore mets format. 

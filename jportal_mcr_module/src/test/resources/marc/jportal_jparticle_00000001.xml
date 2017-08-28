@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="datamodel-jparticle.xsd" ID="jportal_jparticle_00000001"
+              label="jportal_jparticle_00000001" version="2.0">
+    <structure>
+        <parents class="MCRMetaLinkID">
+            <parent inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00000001"/>
+        </parents>
+    </structure>
+    <metadata>
+        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+            <maintitle inherited="0" form="plain">Test Artikel</maintitle>
+            <maintitle inherited="1" form="plain">Test Band</maintitle>
+            <maintitle inherited="2" form="plain">Test Zeitschrift</maintitle>
+        </maintitles>
+        <subtitles class="MCRMetaLangText" heritable="false" notinherit="true">
+            <subtitle type="short" inherited="0" form="plain">Kurztitel</subtitle>
+            <subtitle type="title_beside" inherited="0" form="plain">ein Nebentitel</subtitle>
+        </subtitles>
+        <participants class="MCRMetaLinkID" heritable="false" notinherit="true">
+            <participant type="author" inherited="0" xlink:type="locator" xlink:title="Goethe, Johann Wolfgang von"
+                         xlink:href="jportal_person_00000001"/>
+            <participant type="mainPublisher" inherited="0" xlink:type="locator"
+                         xlink:title="Thüringer Universitäts- und Landesbibliothek Jena"
+                         xlink:href="jportal_jpinst_00000001"/>
+        </participants>
+        <dates class="MCRMetaISO8601Date" heritable="false" notinherit="true">
+            <date type="published" inherited="0">2001-10-10</date>
+        </dates>
+        <identis class="MCRMetaLangText" heritable="false" notinherit="true">
+            <identi type="zdb-id" inherited="0" form="plain">4231245123</identi>
+        </identis>
+        <sizes class="MCRMetaLangText" heritable="false" notinherit="true">
+            <size inherited="0" form="plain">S. 11-13</size>
+        </sizes>
+        <keywords class="MCRMetaLangText" heritable="false" notinherit="true">
+            <keyword inherited="0" form="plain">keyword 1</keyword>
+            <keyword inherited="0" form="plain">keyword 2</keyword>
+        </keywords>
+        <abstracts class="MCRMetaLangText" heritable="false" notinherit="true">
+            <abstract inherited="0" form="plain">Ein Test Artikel Zusammenfassung</abstract>
+        </abstracts>
+        <notes class="MCRMetaLangText" heritable="false" notinherit="true">
+            <note type="annotation" inherited="0" form="plain">Ein Test Artikel Bemerkung</note>
+        </notes>
+        <hidden_jpjournalsID class="MCRMetaLangText" heritable="true" notinherit="false">
+            <hidden_jpjournalID inherited="2" form="plain">jportal_jpjournal_00000001</hidden_jpjournalID>
+        </hidden_jpjournalsID>
+    </metadata>
+    <service>
+        <servdates class="MCRMetaISO8601Date">
+            <servdate type="modifydate" inherited="0">2017-08-16T13:59:02.189Z</servdate>
+            <servdate type="createdate" inherited="0">2017-08-16T13:59:02.189Z</servdate>
+        </servdates>
+    </service>
+</mycoreobject>

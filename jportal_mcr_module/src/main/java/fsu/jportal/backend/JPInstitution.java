@@ -1,11 +1,11 @@
 package fsu.jportal.backend;
 
-import java.util.Optional;
-import java.util.stream.StreamSupport;
-
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 /**
  * Abstraction of a jportal institution. Be aware that this class is not fully implemented.
@@ -14,7 +14,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  */
 public class JPInstitution extends JPLegalEntity {
 
-    public static String TYPE = "jpinst";
+    public static String TYPE = JPObjectType.jpinst.name();
 
     public JPInstitution() {
         super();

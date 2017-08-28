@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-jpinst.xsd"
+              ID="jportal_jpinst_00000001" label="jportal_jpinst_00000001" version="2.0">
+  <structure />
+  <metadata>
+    <names class="MCRMetaInstitutionName" heritable="true" notinherit="false">
+      <name inherited="0">
+        <fullname>Thüringer Universitäts- und Landesbibliothek Jena</fullname>
+        <nickname>ThULB</nickname>
+      </name>
+    </names>
+    <alternatives class="MCRMetaXML" heritable="true" notinherit="true">
+      <alternative inherited="0">
+        <name>Thüringer Universitäts- und Landesbibliothek</name>
+      </alternative>
+      <alternative inherited="0">
+        <name>Universitäts- und Landesbibliothek Jena</name>
+      </alternative>
+      <alternative inherited="0">
+        <name>Universität Jena</name>
+      </alternative>
+      <alternative inherited="0">
+        <name>Universität Jena</name>
+      </alternative>
+      <alternative inherited="0">
+        <name>ThULB</name>
+      </alternative>
+    </alternatives>
+    <identifiers class="MCRMetaLangText" heritable="true" notinherit="false">
+      <identifier type="ppn" inherited="0" form="plain">104053259</identifier>
+      <identifier type="gnd" inherited="0" form="plain">5053491-9</identifier>
+    </identifiers>
+    <timesOfActivity class="MCRMetaLangText" heritable="false" notinherit="true">
+      <timeOfActivity inherited="0" form="plain">1991</timeOfActivity>
+    </timesOfActivity>
+    <placesOfActivity class="MCRMetaLangText" heritable="false" notinherit="true">
+      <placeOfActivity inherited="0" form="plain">Jena</placeOfActivity>
+    </placesOfActivity>
+  </metadata>
+  <service>
+    <servdates class="MCRMetaISO8601Date">
+      <servdate type="createdate" inherited="0">2017-08-21T12:44:51.347Z</servdate>
+      <servdate type="modifydate" inherited="0">2017-08-21T12:44:51.347Z</servdate>
+    </servdates>
+  </service>
+</mycoreobject>

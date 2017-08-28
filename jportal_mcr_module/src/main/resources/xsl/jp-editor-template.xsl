@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jp="http://www.mycore.de/components/jp" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xed xlink xalan jp i18n encoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xalan="http://xml.apache.org/xalan" xmlns:jp="http://www.mycore.de/components/jp"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+                xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
+                exclude-result-prefixes="xed xlink xalan jp i18n encoder">
 
   <xsl:include href="copynodes.xsl" />
   <xsl:include href="coreFunctions.xsl" />

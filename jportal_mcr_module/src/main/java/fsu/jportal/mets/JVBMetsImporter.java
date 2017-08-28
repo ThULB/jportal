@@ -1,9 +1,8 @@
 package fsu.jportal.mets;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPVolume;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -11,13 +10,9 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
-import org.mycore.mets.model.struct.PhysicalDiv;
-import org.mycore.mets.model.struct.PhysicalStructMap;
-import org.mycore.mets.model.struct.SmLink;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPVolume;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Does the import for a JVB mets.xml file. Creates articles for the given issue.

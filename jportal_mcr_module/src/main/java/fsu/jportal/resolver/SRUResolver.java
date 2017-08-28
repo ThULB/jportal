@@ -1,9 +1,7 @@
 package fsu.jportal.resolver;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
+import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.jportal.util.GndUtil;
 import org.jdom2.Document;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRObjectMerger;
@@ -11,8 +9,9 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.jportal.util.GndUtil;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 
 @URIResolverSchema(schema = "sru")
 public class SRUResolver implements URIResolver {

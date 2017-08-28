@@ -1,17 +1,13 @@
 package fsu.jportal.xml;
 
+import org.jdom2.*;
+import org.jdom2.input.SAXBuilder;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
-import org.jdom2.Text;
-import org.jdom2.input.SAXBuilder;
 
 /*
 <?xml version="1.0" encoding="UTF-8"?>

@@ -1,12 +1,11 @@
 package fsu.jportal.backend.pica;
 
+import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
+import org.jdom2.Element;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import org.jdom2.Element;
-
-import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
 
 public class JPPersonProducer extends PersonProducer {
 

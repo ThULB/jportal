@@ -1,13 +1,13 @@
 package fsu.jportal.mets;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.util.MetsUtil;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Text;
@@ -27,15 +27,13 @@ import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.SmLink;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.util.MetsUtil;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 
 /**
  * Some utility methods for the mets import.

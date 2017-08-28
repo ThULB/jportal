@@ -1,10 +1,10 @@
 package fsu.jportal.resolver;
 
+import fsu.jportal.frontend.SolrToc;
+
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
-
-import fsu.jportal.frontend.SolrToc;
 
 /**
  * Created by chi on 08.09.15.

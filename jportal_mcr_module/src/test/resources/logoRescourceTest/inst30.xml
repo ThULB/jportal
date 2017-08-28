@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mycoreobject xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
-  ID="jportal_jpinst_00000030" label="jportal_jpinst_00000030" version="2.0" xsi:noNamespaceSchemaLocation="datamodel-jpinst.xsd">
+<mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              ID="jportal_jpinst_00000030" label="jportal_jpinst_00000030" version="2.0"
+              xsi:noNamespaceSchemaLocation="datamodel-jpinst.xsd">
   <structure />
   <metadata>
     <names class="MCRMetaInstitutionName" heritable="true" notinherit="false">

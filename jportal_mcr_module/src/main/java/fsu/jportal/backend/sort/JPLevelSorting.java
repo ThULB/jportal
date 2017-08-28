@@ -1,15 +1,14 @@
 package fsu.jportal.backend.sort;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import fsu.jportal.backend.sort.JPSorter.Order;
 import fsu.jportal.util.JPLevelSortingUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 

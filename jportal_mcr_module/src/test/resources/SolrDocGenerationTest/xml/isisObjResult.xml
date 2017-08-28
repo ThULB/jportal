@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<solr-document-container xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink">
+<solr-document-container xmlns:xlink="http://www.w3.org/1999/xlink">
   <source>
     <mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
       xsi:noNamespaceSchemaLocation="datamodel-jpjournal.xsd" ID="jportal_jpjournal_00000024" label="jportal_jpjournal_00000024" version="2.0">

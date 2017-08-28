@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:include href="coreFunctions.xsl"/>
   <xsl:include href="jp-layout-contentArea-searchResults.xsl"/>
   <xsl:include href="jp-layout-contentArea-derivates.xsl"/>

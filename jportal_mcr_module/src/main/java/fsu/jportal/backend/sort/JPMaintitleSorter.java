@@ -1,8 +1,8 @@
 package fsu.jportal.backend.sort;
 
-import java.util.Comparator;
-
 import fsu.jportal.backend.JPPeriodicalComponent;
+
+import java.util.Comparator;
 
 /**
  * Orders the children by their maintitle.

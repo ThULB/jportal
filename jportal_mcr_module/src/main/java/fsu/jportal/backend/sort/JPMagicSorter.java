@@ -1,18 +1,13 @@
 package fsu.jportal.backend.sort;
 
-import java.util.Comparator;
-import java.util.List;
-
+import fsu.jportal.backend.*;
+import fsu.jportal.util.JPComponentUtil;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPJournal;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.util.JPComponentUtil;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * This is the default {@link JPSorter} implementation for the zs.thulb.uni-jena.de
@@ -49,13 +44,13 @@ public class JPMagicSorter implements JPSorter {
             sorter = new JPHiddenPositionSorter();
         } else if (canSortedByPublishedDate(journal)) {
             // the new way for an online journal
-            boolean isOnlineJournal = journal.getJournalTypes().stream().filter(id -> {
+            boolean isOnlineJournal = journal.getJournalTypes().stream().anyMatch(id -> {
                 return "jportal_class_00000210".equals(id.getRootID()) && "onlineJournal".equals(id.getID());
-            }).findAny().isPresent();
+            });
             // the old way
-            boolean isOldOnlineJournal = journal.getContentClassis(1).stream().filter(id -> {
+            boolean isOldOnlineJournal = journal.getContentClassis(1).stream().anyMatch(id -> {
                 return "jportal_class_00000061".equals(id.getRootID()) && "online".equals(id.getID());
-            }).findAny().isPresent();
+            });
             // sort them
             boolean descending = isOnlineJournal || isOldOnlineJournal;
             order = descending ? Order.DESCENDING : Order.ASCENDING;
@@ -68,7 +63,7 @@ public class JPMagicSorter implements JPSorter {
      * Determines if the volume contains articles or volumes.
      * 
      * @param volume the volume to sort
-     * @param order
+     * @param order the order
      */
     protected void handleVolume(JPVolume volume, Order order) {
         volume.getChildren().stream().findAny().ifPresent(id -> {
@@ -84,22 +79,22 @@ public class JPMagicSorter implements JPSorter {
      * Articles are ordered by their size. If they have no size, they are
      * ordered by their title.
      * 
-     * @param volume
-     * @param order
+     * @param volume the volume to sort
+     * @param order the order
      * @param sampleArticleID one of the article of the volume
      */
     private void handleArticleChildren(JPVolume volume, Order order, MCRObjectID sampleArticleID) {
         JPArticle article = new JPArticle(sampleArticleID);
-        JPSorter sorter = article.getSize() != null ? new JPArticleSizeSorter() : new JPMaintitleSorter();
+        JPSorter sorter = article.getSize().isPresent() ? new JPArticleSizeSorter() : new JPMaintitleSorter();
         sorter.sort(volume, order != null ? order : Order.ASCENDING);
     }
 
     /**
      * Volumes are ordered by their hidden_position. If no hidden position is given
      * they are ordered by their title.
-     * 
-     * @param volume
-     * @param order
+     *
+     * @param volume the volume to sort
+     * @param order the order
      * @param sampleVolumeID one of the article of the volume
      */
     protected void handleVolumeChildren(JPVolume volume, Order order, MCRObjectID sampleVolumeID) {

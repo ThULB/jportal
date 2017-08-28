@@ -1,7 +1,9 @@
 package fsu.jportal.resources;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import com.google.gson.Gson;
+import fsu.jportal.frontend.GlobalMessageFile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -13,13 +15,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.google.gson.Gson;
-
-import fsu.jportal.frontend.GlobalMessageFile;
+import java.io.IOException;
+import java.io.OutputStream;
 
 @Path("globalMessage")
 public class GlobalMessageResource {

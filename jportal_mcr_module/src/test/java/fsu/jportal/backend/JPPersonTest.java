@@ -1,12 +1,12 @@
 package fsu.jportal.backend;
 
-import static org.junit.Assert.assertEquals;
-
 import org.jdom2.Content;
 import org.jdom2.Element;
 import org.junit.Test;
 import org.mycore.common.MCRJPATestCase;
 import org.mycore.datamodel.metadata.MCRMetaXML;
+
+import static org.junit.Assert.assertEquals;
 
 public class JPPersonTest extends MCRJPATestCase {
 

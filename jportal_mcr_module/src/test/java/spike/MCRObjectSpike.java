@@ -1,9 +1,5 @@
 package spike;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -13,6 +9,10 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertNotNull;
 
 
 public class MCRObjectSpike {

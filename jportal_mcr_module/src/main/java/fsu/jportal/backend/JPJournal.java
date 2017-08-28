@@ -1,13 +1,13 @@
 package fsu.jportal.backend;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Journal abstraction. Be aware this class is not fully implemented.
@@ -16,7 +16,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  */
 public class JPJournal extends JPContainer {
 
-    public static String TYPE = "jpjournal";
+    public static String TYPE = JPObjectType.jpjournal.name();
 
     public JPJournal() {
         super();
@@ -42,6 +42,19 @@ public class JPJournal extends JPContainer {
     @Override
     public String getNameOfTemplate() {
         return getText("hidden_templates", null).orElse(null);
+    }
+
+    /**
+     * Returns the ISO 639-1 language code of this journal.
+     *
+     * @return the language code
+     */
+    @Override
+    public String getLanguageCode() {
+        return metadataStreamNotInherited("languages", MCRMetaClassification.class)
+                .map(MCRMetaClassification::getCategId)
+                .findAny()
+                .orElse(null);
     }
 
     /**

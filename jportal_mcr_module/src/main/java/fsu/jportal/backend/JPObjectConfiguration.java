@@ -1,5 +1,7 @@
 package fsu.jportal.backend;
 
+import fsu.jportal.resolver.JournalFilesResolver;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,8 +14,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import fsu.jportal.resolver.JournalFilesResolver;
 
 /**
  * Java abstraction of an object configuration. Each mycore object can have additional

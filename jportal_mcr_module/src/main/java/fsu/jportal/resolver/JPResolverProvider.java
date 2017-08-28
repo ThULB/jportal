@@ -1,19 +1,17 @@
 package fsu.jportal.resolver;
 
+import fsu.jportal.nio.JarResource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.xml.MCRURIResolver.MCRResolverProvider;
+
+import javax.xml.transform.URIResolver;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.transform.URIResolver;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.xml.MCRURIResolver.MCRResolverProvider;
-
-import fsu.jportal.nio.JarResource;
 
 public class JPResolverProvider implements MCRResolverProvider {
     private static final Logger LOGGER = LogManager.getLogger(JPResolverProvider.class);

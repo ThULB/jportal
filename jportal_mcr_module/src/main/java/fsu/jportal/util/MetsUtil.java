@@ -1,15 +1,7 @@
 package fsu.jportal.util;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.stream.Stream;
-
+import fsu.jportal.mets.ALTOMETSHierarchyGenerator;
+import fsu.jportal.mets.MetsVersionStore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -29,8 +21,15 @@ import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.Mets;
 
-import fsu.jportal.mets.ALTOMETSHierarchyGenerator;
-import fsu.jportal.mets.MetsVersionStore;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.stream.Stream;
 
 /**
  * Util class for mets.xml handling.

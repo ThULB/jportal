@@ -1,9 +1,6 @@
 package fsu.jportal.handler;
 
-import java.nio.file.Paths;
-
-import javax.servlet.ServletContext;
-
+import fsu.jportal.backend.ACLTools;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.mycore.backend.hibernate.MCRHIBConnection;
@@ -12,7 +9,8 @@ import org.mycore.common.events.MCRStartupHandler;
 import org.mycore.user2.MCRUserCommands;
 import org.mycore.user2.MCRUserManager;
 
-import fsu.jportal.backend.ACLTools;
+import javax.servlet.ServletContext;
+import java.nio.file.Paths;
 
 /**
  * Created by chi on 11.11.15.

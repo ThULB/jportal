@@ -1,11 +1,11 @@
 package fsu.jportal.urn;
 
-import java.util.UUID;
-import java.util.function.IntFunction;
-
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.urn.services.MCRIURNProvider;
 import org.mycore.urn.services.MCRURN;
+
+import java.util.UUID;
+import java.util.function.IntFunction;
 
 /**
  * @author chi

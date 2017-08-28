@@ -1,12 +1,11 @@
 package fsu.jportal.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import fsu.jportal.backend.*;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.jdom2.Text;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRException;
@@ -15,15 +14,13 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPInstitution;
-import fsu.jportal.backend.JPJournal;
-import fsu.jportal.backend.JPLegalEntity;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.JPPerson;
-import fsu.jportal.backend.JPVolume;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Utility class for jportal components.
@@ -36,7 +33,7 @@ public abstract class JPComponentUtil {
         private String[] xpathList;
 
         public JPInfoProvider(String id, String xpath) {
-            this(id, new String[] { xpath });
+            this(id, new String[]{xpath});
         }
 
         public JPInfoProvider(String id, String... xpath) {
@@ -88,7 +85,7 @@ public abstract class JPComponentUtil {
     /**
      * Returns an optional of a mycore id when the identifier is valid
      * and the object does exists.
-     * 
+     *
      * @param id the id as string
      * @return optional mycore object id
      */
@@ -107,7 +104,7 @@ public abstract class JPComponentUtil {
 
     /**
      * Returns the corresponding journal id of the given mycore object id.
-     * 
+     *
      * @param mcrID mycore object id
      * @return id of the journal
      */
@@ -117,7 +114,7 @@ public abstract class JPComponentUtil {
 
     /**
      * Returns the main title.
-     * 
+     *
      * @param mcrID mycore object
      * @return main title
      */
@@ -127,13 +124,22 @@ public abstract class JPComponentUtil {
 
     public static Optional<String> getListType(String mcrID) {
         JPInfoProvider infoProvider = new JPInfoProvider(mcrID,
-            "/mycoreobject/metadata/contentClassis1/contentClassi1/@categid");
+                "/mycoreobject/metadata/contentClassis1/contentClassi1/@categid");
         return infoProvider.get(new JPSimpleAttribute());
+    }
+
+    public static <T extends JPComponent> T of(InputStream is, Class<T> type) throws JDOMException, IOException,
+            NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        SAXBuilder builder = new SAXBuilder();
+        Document document = builder.build(is);
+        MCRObject mcrObject = new MCRObject(document);
+        Constructor<T> constructor = type.getConstructor(MCRObject.class);
+        return constructor.newInstance(mcrObject);
     }
 
     /**
      * Returns a <JPComponent> based on the given id.
-     * 
+     *
      * @param id the mycore id
      * @return optional of JPComponent
      */
@@ -143,7 +149,7 @@ public abstract class JPComponentUtil {
 
     /**
      * Returns a <JPComponent> based on the given id.
-     * 
+     *
      * @param id the mycore id
      * @return optional of JPComponent
      */
@@ -157,8 +163,32 @@ public abstract class JPComponentUtil {
     }
 
     /**
+     * Returns a component based on the given class.
+     *
+     * @param id   the mycore id
+     * @param type class of the component, e.g. JPArticle.class
+     * @param <T>  the return type
+     * @return an optional component
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends JPComponent> Optional<T> get(MCRObjectID id, Class<T> type) {
+        if (JPArticle.class.equals(type)) {
+            return Optional.of((T) new JPArticle(id));
+        } else if (JPVolume.class.equals(type)) {
+            return Optional.of((T) new JPVolume(id));
+        } else if (JPJournal.class.equals(type)) {
+            return Optional.of((T) new JPJournal(id));
+        } else if (JPPerson.class.equals(type)) {
+            return Optional.of((T) new JPPerson(id));
+        } else if (JPInstitution.class.equals(type)) {
+            return Optional.of((T) new JPInstitution(id));
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Checks if the given mcr object id is one of jpjournal, jpvolume or jparticle.
-     * 
+     *
      * @param id the mycore identifier
      * @return true if its a periodical, otherwise false
      */
@@ -169,7 +199,7 @@ public abstract class JPComponentUtil {
 
     /**
      * checks if the given mcr object id is one of person or jpinst.
-     * 
+     *
      * @param id the mycore identifer
      * @return true if its a legal entity, otherwise false
      */
@@ -180,7 +210,7 @@ public abstract class JPComponentUtil {
 
     /**
      * Returns a periodical object for the given id.
-     * 
+     *
      * @param id mycore identifier
      * @return periodical optional
      */
@@ -198,7 +228,7 @@ public abstract class JPComponentUtil {
 
     /**
      * Returns a container object for the given id.
-     * 
+     *
      * @param id mycore identifier
      * @return container optional
      */
@@ -214,7 +244,7 @@ public abstract class JPComponentUtil {
 
     /**
      * Returns a periodical component for the given mycore object.
-     * 
+     *
      * @param mcrObject the mycore object
      * @return periodical component
      */
@@ -233,7 +263,7 @@ public abstract class JPComponentUtil {
 
     /**
      * Returns a legal entity object for the given id.
-     * 
+     *
      * @param id mycore identifier
      * @return legal entity optional
      */
@@ -249,9 +279,9 @@ public abstract class JPComponentUtil {
 
     /**
      * Checks if the given component is of the type.
-     * 
-     * @param component
-     * @param type something like jparticle or jpvolume 
+     *
+     * @param component the component to check
+     * @param type      something like jparticle or jpvolume
      * @return true if its the same type
      */
     public static boolean is(JPComponent component, String type) {
@@ -260,9 +290,9 @@ public abstract class JPComponentUtil {
 
     /**
      * Checks if the given id is of the type.
-     * 
-     * @param id the id to check
-     * @param type the type
+     *
+     * @param id   the id to check
+     * @param type the type e.g. jparticle, person, jpinst
      * @return true if its the same type
      */
     public static boolean is(MCRObjectID id, String type) {
@@ -270,8 +300,19 @@ public abstract class JPComponentUtil {
     }
 
     /**
+     * Checks if the given component is of the type.
+     *
+     * @param component the component to check
+     * @param type      something like jparticle or jpvolume
+     * @return true if its the same type
+     */
+    public static boolean is(JPComponent component, JPObjectType type) {
+        return JPObjectType.valueOf(component.getType()).equals(type);
+    }
+
+    /**
      * Returns the order for the given mycore object identifier.
-     * 
+     *
      * @param id the mycore id
      * @return the order of the given child
      */

@@ -1,17 +1,13 @@
 package fsu.jportal.backend.sort;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.common.RomanNumeral;
 import fsu.jportal.util.JPComponentUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.*;
 
 /**
  * Default implementation to sort jparticle's by their size.
@@ -20,7 +16,7 @@ import fsu.jportal.util.JPComponentUtil;
  */
 public class JPArticleSizeSorter implements JPSorter {
 
-    static Logger LOGGER = LogManager.getLogger(JPArticleSizeSorter.class);
+    private static Logger LOGGER = LogManager.getLogger(JPArticleSizeSorter.class);
 
     @Override
     public Comparator<? super JPPeriodicalComponent> getSortComparator(Order order) {
@@ -31,13 +27,13 @@ public class JPArticleSizeSorter implements JPSorter {
             if (child2 == null || !JPComponentUtil.is(child2, JPArticle.TYPE)) {
                 return Integer.MAX_VALUE;
             }
-            String size1 = ((JPArticle) child1).getSize();
-            String size2 = ((JPArticle) child2).getSize();
-            if (isOneNull(size1, size2)) {
+            Optional<String> size1 = ((JPArticle) child1).getSize();
+            Optional<String> size2 = ((JPArticle) child2).getSize();
+            if (!size1.isPresent() || !size2.isPresent()) {
                 return handleNull(size1, size2);
             }
             try {
-                return compare(order, size1, size2);
+                return compare(order, size1.get(), size2.get());
             } catch (Exception exc) {
                 LOGGER.warn("Unable to compare " + child1.getId() + " with " + child2.getId(), exc);
                 return Integer.MAX_VALUE;
@@ -45,7 +41,7 @@ public class JPArticleSizeSorter implements JPSorter {
         };
     }
 
-    public int compare(Order order, String size1, String size2) {
+    int compare(Order order, String size1, String size2) {
         String firstPart1 = getFirstNumIfRange(size1).trim();
         String firstPart2 = getFirstNumIfRange(size2).trim();
 
@@ -168,14 +164,14 @@ public class JPArticleSizeSorter implements JPSorter {
      * @param size2 the second size
      * @return null if no special character is found
      */
-    public Integer compareSpecialChar(String size1, String size2) {
-        List<String> pre = Arrays.asList("*");
+    private Integer compareSpecialChar(String size1, String size2) {
+        List<String> pre = Collections.singletonList("*");
         List<String> post = Arrays.asList("[", "K", "T");
         List<String> concat = new ArrayList<>(pre);
         concat.addAll(post);
-        if (!concat.stream().filter(c -> {
+        if (concat.stream().noneMatch(c -> {
             return size1.startsWith(c) || size2.startsWith(c);
-        }).findAny().isPresent()) {
+        })) {
             return null;
         }
         return concat.stream().mapToInt(c -> {

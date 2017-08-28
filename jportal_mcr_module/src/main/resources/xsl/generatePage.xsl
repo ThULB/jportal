@@ -3,7 +3,7 @@
 <!-- $Revision$ $Date$ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-    xmlns:layoutUtils="xalan:///org.mycore.frontend.MCRLayoutUtilities" exclude-result-prefixes="xalan">
+                exclude-result-prefixes="xalan">
     <xsl:output method="html" indent="yes" encoding="UTF-8" media-type="text/html" xalan:indent-amount="2" doctype-public="-//W3C//DTD HTML 4.01//EN"
         doctype-system="http://www.w3.org/TR/html4/strict.dtd" />
 

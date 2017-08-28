@@ -1,15 +1,7 @@
 package fsu.jportal.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
+import com.google.gson.Gson;
+import fsu.jportal.backend.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.xalan.extensions.ExpressionContext;
@@ -26,13 +18,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.google.gson.Gson;
-
-import fsu.jportal.backend.GreetingsFS;
-import fsu.jportal.backend.GreetingsManager;
-import fsu.jportal.backend.ImprintFS;
-import fsu.jportal.backend.ImprintManager;
-import fsu.jportal.backend.JPObjectConfiguration;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class ImprintUtil {
 

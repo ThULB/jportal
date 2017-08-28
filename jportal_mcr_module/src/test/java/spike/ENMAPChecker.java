@@ -1,21 +1,8 @@
 package spike;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import fsu.jportal.mets.ConvertException;
+import fsu.jportal.mets.ENMAPConverter;
+import fsu.jportal.mets.MetsImportUtils;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -27,9 +14,12 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import fsu.jportal.mets.ConvertException;
-import fsu.jportal.mets.ENMAPConverter;
-import fsu.jportal.mets.MetsImportUtils;
+import java.io.*;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ENMAPChecker {
 
@@ -118,7 +108,7 @@ public class ENMAPChecker {
         MCRConfiguration.instance().initialize(properties, true);
 
         // convert
-        Path metsFile = Paths.get("/data/temp/mnt/images/ThULB_129489816_1856_Perthes/mets.xml");
+        Path metsFile = Paths.get("/data/temp/mnt/images/ThULB_129489824_1898_Perthes/mets.xml");
         Document doc = enmapChecker.convert(metsFile);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         out.output(doc, new FileOutputStream(new File("/data/temp/mets.xml")));
