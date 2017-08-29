@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:decoder="java.net.URLDecoder"
-  exclude-result-prefixes="xalan mcrxml solrxml i18n decoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
+                xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+                xmlns:decoder="java.net.URLDecoder"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                exclude-result-prefixes="xalan mcrxml solrxml i18n decoder">
 
   <xsl:variable name="_xed_subselect_session">
     <xsl:call-template name="UrlGetParam">

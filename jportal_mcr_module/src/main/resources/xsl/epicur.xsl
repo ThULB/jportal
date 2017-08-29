@@ -5,6 +5,7 @@
 <!-- ================================================ -->
 <xsl:stylesheet version="1.0" xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:urn="http://www.ddb.de/standards/urn" xmlns="http://www.openarchives.org/OAI/2.0/"
                 xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="encoder mcr">
 
