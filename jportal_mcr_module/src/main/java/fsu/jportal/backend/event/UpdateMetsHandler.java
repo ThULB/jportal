@@ -107,6 +107,9 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
      */
     private void handlePath(Path path) {
         MCRPath mcrPath = MCRPath.toMCRPath(path);
+        if(!MCRObjectID.isValid(mcrPath.getOwner())) {
+            return;
+        }
         MCRObjectID derivateId = MCRObjectID.getInstance(mcrPath.getOwner());
         Path fileNamePath = mcrPath.getFileName();
         if(fileNamePath == null) {
