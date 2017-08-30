@@ -161,6 +161,9 @@ var derivateBrowserDerivateView = (function () {
         });
 
         $("body").on("click", "#btn-tileDeri", function () {
+            $(this).attr("disabled", true);
+            $(this).find("span").addClass("glyphicon-refresh button-spinner-solo");
+            $(this).find("span").removeClass("glyphicon-th");
             tileDerivate(derivateBrowserTools.getCurrentDocID())
         });
 
@@ -415,6 +418,44 @@ var derivateBrowserDerivateView = (function () {
             else {
                 derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.move.targetFolder"), false);
             }
+        });
+
+        $("body").on("click", "#btn-renameFiles", function () {
+            getFileList(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath(),
+                $("#lightbox-multi-rename-filelist"));
+        });
+
+
+        $("body").on("click", "#lightbox-multi-rename-send-button", function () {
+            $(this).attr("disabled", true);
+            $(this).append('<span class="glyphicon glyphicon-refresh button-spinner" aria-hidden="true"></span>');
+            renameMultiple(derivateBrowserTools.getCurrentDocID(), $("#lightbox-multi-rename-pattern").val(),
+                $("#lightbox-multi-rename-newname").val());
+        });
+
+        $("body").on("keyup", ".lightbox-multi-rename-input", function () {
+            if ($(this).val() != "" && $(this).siblings(".lightbox-multi-rename-input").val() != "") {
+                renameTest($("#lightbox-multi-rename-filelist").val(), $("#lightbox-multi-rename-pattern").val(),
+                    $("#lightbox-multi-rename-newname").val());
+            }
+        });
+
+        $("body").on("change", "#lightbox-multi-rename-filelist", function () {
+            if ($("#lightbox-multi-rename-pattern").val() != "" && $("lightbox-multi-rename-newname").val() != "") {
+                renameTest($("#lightbox-multi-rename-filelist").val(), $("#lightbox-multi-rename-pattern").val(),
+                    $("#lightbox-multi-rename-newname").val());
+            }
+        });
+
+        $("body").on("click", ".lightbox-multi-rename-cancel", function () {
+            $("#lightbox-multi-rename").modal("hide");
+            $("#lightbox-multi-rename-newname").val("");
+            $("#lightbox-multi-rename-pattern").val("");
+            $("#lightbox-multi-rename-result > ul").html("");
+            $("#lightbox-multi-rename-test-input").val("");
+            $('#lightbox-multi-rename-send-button').removeAttr("disabled");
+            $('#lightbox-multi-rename-send-button').find('.button-spinner').remove();
+            getDerivate(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
         });
 
         $("#browser-table").stupidtable();
@@ -806,6 +847,18 @@ var derivateBrowserDerivateView = (function () {
             $("body").trigger("resetFilteredList");
         }
     }
+    
+    function listFilesInSelect(data, select) {
+        var resultTemplate = $("#multi-rename-select-template").html();
+        var resultOutput = $(Mustache.render(resultTemplate, data));
+        $(select).html(resultOutput);
+    }
+
+    function removeTileSpinner() {
+        $("#btn-tileDeri").removeAttr("disabled");
+        $("#btn-tileDeri").find("span").addClass("glyphicon-th");
+        $("#btn-tileDeri").find("span").removeClass("glyphicon-refresh button-spinner-solo");
+    }
 
     //ajax Methods
     function getDerivate(deriID, path, filename){
@@ -1000,12 +1053,15 @@ var derivateBrowserDerivateView = (function () {
             statusCode: {
                 200: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.tile.success"), true);
+                    removeTileSpinner();
                 },
                 500: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.tile.error"), false);
+                    removeTileSpinner();
                 },
                 401: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                    removeTileSpinner();
                 }
             }
         });
@@ -1095,6 +1151,75 @@ var derivateBrowserDerivateView = (function () {
                 401: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
                 }
+            }
+        });
+    }
+
+    function renameTest(filename, pattern, newname){
+        var json = {
+            fileName: filename,
+            pattern: pattern,
+            newName: newname
+        };
+        $.ajax({
+            url: "renameMultiple/test",
+            type: "POST",
+            contentType: 'application/json',
+            data: JSON.stringify(json),
+            success: function(data) {
+                $("#lightbox-multi-rename-test-input").val(data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function renameMultiple(deriID, pattern, newname){
+        var json = {
+            deriID: deriID,
+            pattern: pattern,
+            newName: newname
+        };
+        $.ajax({
+            url: "renameMultiple",
+            type: "POST",
+            contentType: 'application/json',
+            dataType: "json",
+            data: JSON.stringify(json),
+            success: function(data) {
+                var resultTemplate = $("#multi-rename-template").html();
+                var resultOutput = $(Mustache.render(resultTemplate, data));
+                derivateBrowserTools.updateI18nForElm($(resultOutput));
+                $("#lightbox-multi-rename-result").html(resultOutput);
+                if (data.length < 1) {
+                    $("#lightbox-multi-rename-result").html("<ul><li>" + derivateBrowserTools.getI18n("db.alert.rename.multi.nothing") + "</li></ul>");
+                }
+                $('#lightbox-multi-rename-send-button').removeAttr("disabled");
+                $('#lightbox-multi-rename-send-button').find('.button-spinner').remove();
+
+            },
+            error: function(error) {
+                console.log(error);
+                $("#lightbox-multi-rename-result").html("<ul><li>" + derivateBrowserTools.getI18n("db.alert.rename.multi.error") + "</li></ul>");
+                $('#lightbox-multi-rename-send-button').removeAttr("disabled");
+                $('#lightbox-multi-rename-send-button').find('.button-spinner').remove();
+            }
+        });
+    }
+
+    function getFileList(deriID, path, select){
+        $.ajax({
+            url: "./" + deriID + path,
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                listFilesInSelect(data, select);
+                $("#lightbox-multi-rename").modal("show");
+            },
+            error: function(error) {
+                console.log(error);
+                derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.loadFailed", deriID), false);
             }
         });
     }

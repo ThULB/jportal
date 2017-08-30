@@ -970,7 +970,7 @@ div.statusbar-progress-single-status.noAnimation {
 	border-radius: 0;
 }
 
-.browser-button{
+.browser-button, .browser-button:disabled{
 	border-radius: 0;
 	border-width: 0;
 	box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.2);
@@ -1412,6 +1412,11 @@ div.statusbar-progress-single-status.noAnimation {
 	animation: spinner 1500ms infinite linear;
 }
 
+.button-spinner-solo {
+	top: 2px;
+	-webkit-animation: spinner 1500ms infinite linear;
+	animation: spinner 1500ms infinite linear;
+}
 .derivate-button{
     /*display: block;*/
     /*margin-bottom: 5px;*/
@@ -1471,6 +1476,33 @@ div.statusbar-progress-single-status.noAnimation {
 
 textarea {
 	resize: none;
+}
+
+#lightbox-multi-rename-result > ul {
+	max-height: 300px;
+	overflow: auto;
+}
+
+#lightbox-multi-rename input, #lightbox-multi-rename select {
+	box-shadow: 0 1px 3px 0 rgba(150, 150, 150, 0.2);
+	border: 1px solid rgba(240,240,240, 0.5);
+	border-radius: 0;
+	display: block;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+}
+
+#lightbox-multi-rename input:disabled {
+	background-color: #EBEBE4;
+}
+
+#lightbox-multi-rename .container {
+	float: none;
 }
 
 /******************************************************
@@ -1876,4 +1908,8 @@ textarea {
 	top: 5px;
 	font-size: 24px;
 	cursor: pointer;
+}
+
+#lightbox-multi-rename > .modal-dialog{
+	width: 720px;
 }

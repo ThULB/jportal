@@ -48,6 +48,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DerivateTools {
     static Logger LOGGER = LogManager.getLogger(DerivateTools.class);
@@ -229,6 +231,56 @@ public class DerivateTools {
 
             });
         }
+    }
+
+    public static Map<String, String> renameFiles(String derivateID, String pattern, String newName)
+        throws IOException {
+        MCRPath derivateRoot = MCRPath.getPath(derivateID, "/");
+        Pattern patternObj = Pattern.compile(pattern);
+        Map<String, String> resultMap = new HashMap<String, String>();
+        MCRDerivate mcrDerivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateID));
+        String mainDoc = mcrDerivate.getDerivate().getInternals().getMainDoc();
+
+        Files.walkFileTree(derivateRoot, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                throws IOException {
+                Matcher matcher = patternObj.matcher(file.getFileName().toString());
+                if (matcher.matches()) {
+                    String newFilename;
+
+                    try {
+                        newFilename = matcher.replaceAll(newName);
+                    }
+                    catch (IndexOutOfBoundsException e) {
+                        LOGGER.info("The file " + file + " can't be renamed to " + newName + ". To many groups!");
+                        return FileVisitResult.CONTINUE;
+                    }
+                    catch (IllegalArgumentException e) {
+                        LOGGER.info("The new name '" + newName + "' contains illegal characters!");
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    try {
+                        mvSingleFile(MCRPath.toMCRPath(file), MCRPath.toMCRPath(file.resolveSibling(newFilename)));
+                    } catch (MCRAccessException e) {
+                        e.printStackTrace();
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    if (MCRPath.toMCRPath(file).getOwnerRelativePath().equals(mainDoc)) {
+                        String path = file.toString().substring(0, file.toString().lastIndexOf("/") + 1) + newFilename;
+                        DerivateTools.setAsMain(file.toString().substring(0, file.toString().lastIndexOf(":")),
+                            path.substring(path.lastIndexOf(":") + 1));
+                    }
+
+                    LOGGER.info("The file " + file + " was renamed to " + newFilename);
+                    resultMap.put(file.getFileName().toString(), newFilename);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return resultMap;
     }
 
     private static void mvSingleFile(MCRPath src, MCRPath tgt) throws IOException, MCRAccessException {

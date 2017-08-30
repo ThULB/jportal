@@ -218,6 +218,12 @@ var derivateBrowserTools = (function() {
         $(node).attr("title", i18nKey);
       }
     });
+    $(elm).find(".i18n-placeholder").each(function(i, node) {
+      let i18nKey = i18nKeys[$(node).attr("i18n")];
+      if (i18nKey != undefined) {
+          $(node).attr("placeholder", i18nKey);
+      }
+    });
   }
 
   function getI18nKey(key) {

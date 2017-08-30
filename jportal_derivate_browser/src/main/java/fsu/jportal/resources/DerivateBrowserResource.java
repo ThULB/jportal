@@ -3,7 +3,11 @@ package fsu.jportal.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -382,6 +386,66 @@ public class DerivateBrowserResource {
             return Response.ok().build();
         }
         return Response.serverError().build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("renameMultiple")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    public Response renameMultiple(String data) {
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
+
+        try {
+            Map<String, String> resultMap = DerivateTools.renameFiles(jsonObject.get("deriID").getAsString(),
+                jsonObject.get("pattern").getAsString(), jsonObject.get("newName").getAsString());
+
+            JsonArray jsonArray = new JsonArray();
+            for (Map.Entry<String, String> entry : resultMap.entrySet())
+            {
+                JsonObject renameJson = new JsonObject();
+                renameJson.addProperty("oldName", entry.getKey());
+                renameJson.addProperty("newName", entry.getValue());
+                jsonArray.add(renameJson);
+            }
+
+            return Response.ok(jsonArray.toString()).build();
+
+        } catch (Exception e) {
+            throw new WebApplicationException("Error while renaming!", e);
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("renameMultiple/test")
+    @MCRRestrictedAccess(DerivateBrowserPermission.class)
+    public Response renameMultipleTest(String data) {
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
+
+        String filename = jsonObject.get("fileName").getAsString();
+        String pattern = jsonObject.get("pattern").getAsString();
+        String newName = jsonObject.get("newName").getAsString();
+        String newFilename = "";
+
+        try {
+            Pattern patternObj = Pattern.compile(pattern);
+            Matcher matcher = patternObj.matcher(filename);
+            newFilename = matcher.replaceAll(newName);
+            LOGGER.info("The file " + filename + " will be renamed to " + newFilename);
+        }
+        catch (PatternSyntaxException e) {
+            LOGGER.info("The pattern '" + pattern + "' contains errors!");
+        }
+        catch (IndexOutOfBoundsException e) {
+            LOGGER.info("The file " + filename + " can't be renamed to " + newName + ". To many groups!");
+        }
+        catch (IllegalArgumentException e) {
+            LOGGER.info("The new name '" + newName + "' contains illegal characters!");
+        }
+
+        return Response.ok(newFilename).build();
     }
 
     protected byte[] transform(String xmlFile) throws Exception {
