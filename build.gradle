@@ -60,8 +60,8 @@ subprojects {
         testCompile 'org.jmockit:jmockit:1.20'
         testCompile 'junit:junit:4.12'
         testCompile 'com.github.tomakehurst:wiremock:1.57'
-        testCompile 'org.apache.logging.log4j:log4j-api:2.3'
-        testCompile 'org.apache.logging.log4j:log4j-core:2.3'
+        testCompile 'org.apache.logging.log4j:log4j-api:$log4jVersion'
+        testCompile 'org.apache.logging.log4j:log4j-core:$log4jVersion'
         testCompile 'org.seleniumhq.selenium:selenium-java:2.53.0'
     }
 
@@ -98,12 +98,12 @@ project(':jportal_mcr_module') {
     mcrModule()
 
     dependencies {
+        // test
         testCompile 'org.mycore:mycore-base:$mcrVersion:tests'
         testCompile 'org.hibernate:hibernate-hikaricp:5.2.2.Final'
         testCompile 'com.h2database:h2:1.4.192'
 
-
-
+        // mycore
         compile "org.mycore:mycore-base:$mcrVersion"
         compile "org.mycore:mycore-solr:$mcrVersion"
         compile "org.mycore:mycore-iview2:$mcrVersion"
@@ -117,15 +117,19 @@ project(':jportal_mcr_module') {
         compile "org.mycore:mycore-webtools:$mcrVersion"
         compile "org.mycore:mycore-webcli:$mcrVersion"
         compile "org.mycore:mycore-pi:$mcrVersion"
+
+        // mycore external
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
         compile 'org.mycore.mets:mets-model:0.11-SNAPSHOT'
         compile 'org.mycore.mets:mets-validator:1.3-SNAPSHOT'
+
+        // thulb libs
         compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.2-SNAPSHOT'
 
-        // extern libs
+        // external libs
         compile 'javax.servlet:javax.servlet-api:3.1.0'
-        compile 'org.apache.logging.log4j:log4j-api:2.3'
-        compile 'org.apache.logging.log4j:log4j-core:2.3'
+        compile 'org.apache.logging.log4j:log4j-api:$log4jVersion'
+        compile 'org.apache.logging.log4j:log4j-core:$log4jVersion'
         compile "org.glassfish.jersey.test-framework:jersey-test-framework-core:$jerseyVersion"
         compile "org.glassfish.jersey.core:jersey-server:$jerseyVersion"
         compile "org.glassfish.jersey.core:jersey-client:$jerseyVersion"
@@ -134,6 +138,7 @@ project(':jportal_mcr_module') {
         compile 'javax.xml.bind:jaxb-api:2.2.1'
         compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
         compile 'com.google.inject:guice:4.1.0'
+        compile 'org.marc4j:marc4j:2.8.2'
 
         // webjars
         compile 'org.webjars.bower:jquery:2.1.4'
@@ -212,13 +217,12 @@ project(':jportal_webapp') {
 
     dependencies {
         testCompile 'junit:junit:4.12'
-        testCompile "org.apache.logging.log4j:log4j-api:2.3"
-        testCompile "org.apache.logging.log4j:log4j-core:2.3"
+        testCompile "org.apache.logging.log4j:log4j-core:$log4jVersion"
         testCompile "org.hamcrest:hamcrest-library:1.3"
         testCompile 'org.seleniumhq.selenium:selenium-java:2.53.0'
         testCompile "org.mycore:selenium-utils:$seleniumUtilsVersion"
 
-        runtime "org.apache.logging.log4j:log4j-web:2.3"
+        runtime "org.apache.logging.log4j:log4j-web:$log4jVersion"
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
         runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.mycore:mycore-acl-editor2:$mcrVersion"
