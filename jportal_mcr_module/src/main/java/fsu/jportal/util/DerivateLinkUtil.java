@@ -20,7 +20,6 @@ import org.mycore.solr.search.MCRSolrSearchUtils;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -34,9 +33,9 @@ public abstract class DerivateLinkUtil {
 
     private static Logger LOGGER = LogManager.getLogger(DerivateLinkUtil.class);
 
-    public static final String IMAGE_BOOKMARK_DERIVATE_ID = "image_bookmark_derivateId";
+    private static final String IMAGE_BOOKMARK_DERIVATE_ID = "image_bookmark_derivateId";
 
-    public static final String IMAGE_BOOKMARK_FILE = "image_bookmark_file";
+    private static final String IMAGE_BOOKMARK_FILE = "image_bookmark_file";
 
     private static final String DERIVATE_LINK = "derivateLink";
 
@@ -58,7 +57,7 @@ public abstract class DerivateLinkUtil {
     /**
      * Gets the bookmarked image as derivate path (derivateID/image_path).
      *
-     * @return
+     * @return the bookmarked image
      */
     public static String getBookmarkedImage() {
         MCRSession session = MCRSessionMgr.getCurrentSession();
@@ -66,7 +65,7 @@ public abstract class DerivateLinkUtil {
         String derivateId = (String) session.get(IMAGE_BOOKMARK_DERIVATE_ID);
         if (file == null || derivateId == null)
             return null;
-        return new StringBuffer(derivateId).append(file.startsWith("/") ? "" : "/").append(file).toString();
+        return derivateId + (file.startsWith("/") ? "" : "/") + file;
     }
 
     /**
@@ -121,6 +120,17 @@ public abstract class DerivateLinkUtil {
     }
 
     public static void setLink(MCRObject mcrObj, String pathOfImage) throws MCRActiveLinkException, MCRAccessException {
+        /*
+         * This is for debugging purposes only. There is a bug where mets.xml derivate links are randomly
+         * added to objects. Check if the path ends with mets.xml and then throw an exception.
+         */
+        if (pathOfImage.endsWith("mets.xml")) {
+            // THIS SHOULD NEVER HAPPEN!
+            throw new MCRException("try to add a mets.xml derivate link to " + mcrObj.getId() +
+                    " which is not supposed to happen!");
+        }
+
+        // set the link
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
         if (derLinks == null) {
             derLinks = new MCRMetaElement();
@@ -182,8 +192,9 @@ public abstract class DerivateLinkUtil {
      * Deletes all corresponding derivate links of a derivate. Be aware that this 
      * method uses solr! It cannot be guaranteed that all links are found!
      *
-     * @param der
-     * @throws SolrServerException
+     * @param der where to delete the derivate links
+     * @throws SolrServerException solr exception
+     * @throws MCRAccessException if the permission is missing
      */
     public static void deleteDerivateLinks(MCRDerivate der)
         throws SolrServerException, MCRAccessException {
@@ -235,9 +246,7 @@ public abstract class DerivateLinkUtil {
         params.set("fl", "id");
         return MCRSolrSearchUtils.stream(solrClient, params)
                                  .map(doc -> doc.getFieldValue("id").toString())
-                                 .filter(id -> {
-                                     return JPComponentUtil.getValidID(id).isPresent();
-                                 })
+                                 .filter(id -> JPComponentUtil.getValidID(id).isPresent())
                                  .map(MCRObjectID::getInstance)
                                  .collect(Collectors.toList());
     }
@@ -246,9 +255,7 @@ public abstract class DerivateLinkUtil {
         if (derLinks == null) {
             return null;
         }
-        Iterator<MCRMetaInterface> it = derLinks.iterator();
-        while (it.hasNext()) {
-            MCRMetaInterface link = it.next();
+        for (MCRMetaInterface link : derLinks) {
             if (link.getSubTag().equals(DERIVATE_LINK) && link instanceof MCRMetaDerivateLink) {
                 String href = ((MCRMetaDerivateLink) link).getXLinkHref();
                 if (href.equals(pathOfImage)) {
@@ -262,9 +269,7 @@ public abstract class DerivateLinkUtil {
     private static List<MCRMetaDerivateLink> getLinks(MCRMetaElement derLinks, String derivateId) {
         List<MCRMetaDerivateLink> linkList = new ArrayList<>();
         if (derLinks != null) {
-            Iterator<MCRMetaInterface> it = derLinks.iterator();
-            while (it.hasNext()) {
-                MCRMetaInterface link = it.next();
+            for (MCRMetaInterface link : derLinks) {
                 if (link.getSubTag().equals(DERIVATE_LINK) && link instanceof MCRMetaDerivateLink) {
                     String href = ((MCRMetaDerivateLink) link).getXLinkHref();
                     if (href.startsWith(derivateId)) {

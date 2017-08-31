@@ -78,8 +78,8 @@ public abstract class JPComponentUtil {
         }
     }
 
-    public static interface JPObjectInfo<T> {
-        public T getInfo(List<Object> node);
+    public interface JPObjectInfo<T> {
+        T getInfo(List<Object> node);
     }
 
     /**
@@ -90,7 +90,7 @@ public abstract class JPComponentUtil {
      * @return optional mycore object id
      */
     public static Optional<MCRObjectID> getValidID(String id) {
-        MCRObjectID mcrId = null;
+        MCRObjectID mcrId;
         try {
             mcrId = MCRObjectID.getInstance(id);
         } catch (MCRException mcrExc) {
