@@ -27,13 +27,13 @@ public class JPArticleSizeSorter implements JPSorter {
             if (child2 == null || !JPComponentUtil.is(child2, JPArticle.TYPE)) {
                 return Integer.MAX_VALUE;
             }
-            Optional<String> size1 = ((JPArticle) child1).getSize();
-            Optional<String> size2 = ((JPArticle) child2).getSize();
-            if (!size1.isPresent() || !size2.isPresent()) {
+            String size1 = ((JPArticle) child1).getSize().orElse(null);
+            String size2 = ((JPArticle) child2).getSize().orElse(null);
+            if (isOneNull(size1, size2)) {
                 return handleNull(size1, size2);
             }
             try {
-                return compare(order, size1.get(), size2.get());
+                return compare(order, size1, size2);
             } catch (Exception exc) {
                 LOGGER.warn("Unable to compare " + child1.getId() + " with " + child2.getId(), exc);
                 return Integer.MAX_VALUE;

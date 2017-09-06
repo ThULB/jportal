@@ -22,7 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -51,7 +50,7 @@ public class MetsAutoGeneratorImpl implements MetsAutoGenerator {
 
     private MCRProcessableDefaultCollection collection;
 
-    private Map<MCRObjectID, Long> map;
+    private final Map<MCRObjectID, Long> map;
 
     @Inject
     public MetsAutoGeneratorImpl(MCRProcessableRegistry registry) {
@@ -132,36 +131,26 @@ public class MetsAutoGeneratorImpl implements MetsAutoGenerator {
         @Override
         public void run() {
             synchronized (this.map) {
-                this.map.entrySet().stream().filter(filterEntry()).forEach(handleEntry());
+                this.map.entrySet().stream().filter(filterEntry()).forEach(e -> {
+                    MCRObjectID id = e.getKey();
+                    this.map.put(id, -1L);
+                    MetsGenerationTask metsGenerationTask = new MetsGenerationTask(id);
+                    MCRTransactionableRunnable transactionableRunnable = new MCRTransactionableRunnable(metsGenerationTask);
+                    MCRProcessableSupplier<?> supplier = this.executor.submit(transactionableRunnable);
+
+                    supplier.getFuture().whenComplete((result, throwable) -> {
+                        this.map.remove(e.getKey());
+                        if (throwable != null) {
+                            LOGGER.warn("Unable to generate mets xml for " + id, throwable);
+                        }
+                    });
+                });
                 this.collection.setProperty("derivates", derivates(this.map));
             }
         }
 
         private Predicate<? super Entry<MCRObjectID, Long>> filterEntry() {
-            return e -> {
-                long currentTimeMillis = System.currentTimeMillis();
-                if (e.getValue() == -1) {
-                    return false;
-                }
-                return e.getValue() + DELAY < currentTimeMillis;
-            };
-        }
-
-        private Consumer<? super Entry<MCRObjectID, Long>> handleEntry() {
-            return e -> {
-                MCRObjectID id = e.getKey();
-                this.map.put(id, -1L);
-                MetsGenerationTask metsGenerationTask = new MetsGenerationTask(id);
-                MCRTransactionableRunnable transactionableRunnable = new MCRTransactionableRunnable(metsGenerationTask);
-                MCRProcessableSupplier<?> supplier = this.executor.submit(transactionableRunnable);
-
-                supplier.getFuture().whenComplete((result, throwable) -> {
-                    this.map.remove(e.getKey());
-                    if (throwable != null) {
-                        LOGGER.warn("Unable to generate mets xml for " + id, throwable);
-                    }
-                });
-            };
+            return e -> (e.getValue() != -1) && (e.getValue() + DELAY < System.currentTimeMillis());
         }
 
     }

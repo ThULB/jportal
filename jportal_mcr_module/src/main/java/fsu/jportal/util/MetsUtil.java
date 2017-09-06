@@ -9,6 +9,8 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -19,16 +21,24 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.mets.misc.StructLinkGenerator;
 import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.files.FLocat;
+import org.mycore.mets.model.files.File;
+import org.mycore.mets.model.files.FileGrp;
+import org.mycore.mets.model.struct.Fptr;
+import org.mycore.mets.model.struct.LOCTYPE;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
+import org.mycore.mets.tools.MCRMetsSave;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -126,9 +136,7 @@ public abstract class MetsUtil {
      * <ul>
      * <li>the derivate does exist</li>
      * <li>the owner object does exist</li>
-     * <li>the owner object has at least one child</li>
      * <li>the derivate contains at least one image</li>
-     * <li>the derivate doesn't have a mets.xml OR the mets.xml was generated too</li>
      * </ul>
      * 
      * @param id the mycore object id to check
@@ -147,14 +155,9 @@ public abstract class MetsUtil {
         if (!MCRMetadataManager.exists(objId)) {
             return false;
         }
-        MCRObject object = MCRMetadataManager.retrieveMCRObject(objId);
-        // check children not empty
-        if (object.getStructure().getChildren().isEmpty()) {
-            return false;
-        }
         // check contains at least one image
         try (Stream<Path> stream = Files.walk(MCRPath.getPath(id.toString(), "/"))) {
-            if (!stream.anyMatch(path -> {
+            if (stream.noneMatch(path -> {
                 try {
                     String probeContentType = MCRContentTypes.probeContentType(path);
                     return probeContentType.startsWith("image/");
@@ -171,8 +174,13 @@ public abstract class MetsUtil {
     }
 
     /**
-     * Generates a new mets.xml for the given derivate. The mets.xml is just
-     * generated and not stored!
+     * Generates a new mets.xml for the given derivate. This method check fi the owner of the derivate contains
+     * children or not.
+     *
+     * <ul>
+     * <li>no children: use the ALTOMETSHierarchyGenerator</li>
+     * <li>with children: just update the file/physical section and leave the logical one alone</li>
+     * </ul>
      * 
      * @see ALTOMETSHierarchyGenerator
      * @param derivateId the derivate to generate the mets.xml for
@@ -188,8 +196,17 @@ public abstract class MetsUtil {
             oldMets = null;
         }
         // generate
-        return new ALTOMETSHierarchyGenerator(oldMets).getMETS(MCRPath.getPath(derivateId.toString(), "/"),
-            new HashSet<MCRPath>());
+        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivateId);
+        MCRObjectID objId = derivate.getOwnerID();
+        MCRObject object = MCRMetadataManager.retrieveMCRObject(objId);
+        MCRPath path = MCRPath.getPath(derivateId.toString(), "/");
+        // check children not empty
+        if (oldMets != null && object.getStructure().getChildren().isEmpty()) {
+            MCRMetsSave.updateFiles(oldMets, path);
+            return oldMets;
+        } else {
+            return new ALTOMETSHierarchyGenerator(oldMets).getMETS(path, new HashSet<>());
+        }
     }
 
     /**
