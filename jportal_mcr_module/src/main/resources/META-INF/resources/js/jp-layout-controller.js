@@ -23,8 +23,8 @@ jp.session.init();
 
 // CKEDITOR
 function introEditor(journalID) {
-  var createdElem = null;
-  var ckEditorMainButtonCtr = function(tmpElem) {
+  let createdElem = null;
+    let ckEditorMainButtonCtr = function(tmpElem) {
     $('#ckeditorButton').hide();
     var introFrame = $('#intro');
     introFrame.removeClass("hidden");
@@ -37,8 +37,14 @@ function introEditor(journalID) {
           tabSpaces : 4,
           fillEmptyBlocks : false,
           height : '500px',
-          toolbar : [ [ 'Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-              'Source' ] ]
+          toolbar: [
+              { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+              { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
+              { name: 'styles', items: [ 'Format' ] },
+              { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+              { name: 'paragraph', items: [ 'NumberedList', 'BulletedList'] },
+              { name: 'links', items: [ 'Link', 'Unlink' ] },
+              { name: 'document', items: [ 'Source' ] }]
         });
     var ckeditorButtons = $("<ul id='ckeditorButtons' class='ckeditorButtons'></ul>");
     var ckeditorCancelButton = $("<button id='ckeditorCancelButton'>Abbrechen</button>");

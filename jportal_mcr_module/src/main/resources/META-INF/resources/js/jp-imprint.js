@@ -1,5 +1,5 @@
-var ImprintEditor = function (objID, type) {
-	var currentObjID = objID,
+let ImprintEditor = function (objID, type) {
+    let currentObjID = objID,
 		currentType = type,
 		i18nKeys =[];
 	return {
@@ -22,8 +22,14 @@ var ImprintEditor = function (objID, type) {
 				tabSpaces: 4,
 				fillEmptyBlocks: false,
 				height: '265px',
-				toolbar : [ ['Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-',
-					'Link', 'Unlink', 'Source', 'FontSize' ] ]
+                toolbar: [
+                    { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+                    { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
+                    { name: 'styles', items: [ 'Format' ] },
+                    { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                    { name: 'paragraph', items: [ 'NumberedList', 'BulletedList'] },
+                    { name: 'links', items: [ 'Link', 'Unlink' ] },
+                    { name: 'document', items: [ 'Source' ] }]
 			});
 
 			$("#imprintGUIMain").on("click", ".imprint-list-link", function () {

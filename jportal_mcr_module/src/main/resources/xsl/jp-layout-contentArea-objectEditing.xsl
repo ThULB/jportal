@@ -186,12 +186,11 @@
     </script>
   </xsl:template>
 
-
   <xsl:template name="jp.object.editing.items">
     <xsl:apply-templates mode="menuItem" select="$menu/item" />
     <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
-      <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/ckeditor/4.5.3/standard/ckeditor.js" />
-      <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/ckeditor/4.5.3/standard/adapters/jquery.js" />
+      <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/ckeditor/4.7.0/full/ckeditor.js" />
+      <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/ckeditor/4.7.0/full/adapters/jquery.js" />
       <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-imprint.js" />
       <xsl:call-template name="classificationEditorDiag" />
       <xsl:call-template name="introEditorDiag" />
