@@ -7,6 +7,7 @@ $(document).ready(function() {
         $("#main").append($(template).filter("#lightbox-alert-deleteDoc"));
         $("#main").append($(template).filter("#lightbox-upload-overwrite"));
         $("#main").append($(template).filter("#lightbox-new-derivate"));
+        $("#main").append($(template).filter("#lightbox-multi-rename"));
         $("#main").append($(template).filter("#popover-template"));
         $("#main").append($(template).filter("#file-entry-template"));
         $("#main").append($(template).filter("#xml-entry-template"));
@@ -16,6 +17,8 @@ $(document).ready(function() {
         $("#main").append($(template).filter("#upload-overwrite-template"));
         $("#main").append($(template).filter("#large-view-status-template"));
         $("#main").append($(template).filter("#upload-entry-template3"));
+        $("#main").append($(template).filter("#multi-rename-select-template"));
+        $("#main").append($(template).filter("#multi-rename-template"));
 
         derivateBrowserDerivateView.init();
         derivateBrowserLargeView.init();
