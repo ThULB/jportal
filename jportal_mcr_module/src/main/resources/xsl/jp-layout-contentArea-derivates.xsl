@@ -154,8 +154,7 @@
                           <i class='fa fa-3x fa-question-circle'></i>
                         </div>
                         <div class="col-md-10" id="generateMetsDialogContent">
-                          Sind Sie sich sicher das Sie die aktuelle mets.xml überschreiben wollen? Alle manuellen Änderungen und alle
-                          ALTO Referenzen (JVB und LLZ) gehen verloren!
+                          Sind Sie sich sicher das Sie die aktuelle mets.xml überschreiben wollen?
                         </div>
                       </div>
                     </div>

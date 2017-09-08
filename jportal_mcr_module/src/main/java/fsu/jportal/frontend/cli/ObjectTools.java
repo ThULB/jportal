@@ -3,6 +3,7 @@ package fsu.jportal.frontend.cli;
 import fsu.jportal.backend.io.*;
 import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSink;
 import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSource;
+import fsu.jportal.mets.MetsVersionStore;
 import fsu.jportal.util.DerivateLinkUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -349,6 +350,18 @@ public class ObjectTools {
             commandList.add("internal fix hidden journal id for " + childID.getXLinkHref() + " " + hiddenJournalID);
         }
         return commandList;
+    }
+
+    @MCRCommand(help = "restores the mets.xml in the given derivate with the version selected", syntax = "restore mets.xml of {0} to {1}")
+    public static void restoreMets(String derivateId, int version) throws IOException {
+        MetsVersionStore.restore(MCRObjectID.getInstance(derivateId), version);
+    }
+
+    @MCRCommand(help = "list all the versions of the mets store for a given derivate", syntax = "list mets.xml revisions of {0}")
+    public static void listMetsRevisions(String derivateId) throws IOException {
+        StringBuilder msg = new StringBuilder("Revisions:");
+        MetsVersionStore.list(MCRObjectID.getInstance(derivateId)).forEach(r -> msg.append("\n").append(r));
+        LOGGER.info(msg);
     }
 
     private static void setHiddenJournalID(MCRObject obj, String hiddenJournalID)
