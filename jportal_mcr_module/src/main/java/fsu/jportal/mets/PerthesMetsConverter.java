@@ -174,10 +174,10 @@ public class PerthesMetsConverter extends ENMAPConverter {
             lastFrom = m.start();
             lastTo = m.end();
         }
-        if (lastFrom != null && lastTo != null) {
+        if (lastFrom != null) {
             int length = lastTo - lastFrom;
             String numberAsString = String.format("%0" + length + "d", number);
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             result.append(fileID.substring(0, lastFrom));
             result.append(numberAsString);
             result.append(fileID.substring(lastTo));
@@ -204,8 +204,9 @@ public class PerthesMetsConverter extends ENMAPConverter {
                     List<Area> areaList = new ArrayList<>(seq.getAreaList());
                     for (Area area : areaList) {
                         if (area.getBetype() == null) {
-                            if (!uniqueFILEIDs.contains(area.getFileId())) {
-                                uniqueFILEIDs.add(area.getFileId());
+                            String fileId = area.getFileId();
+                            if (!uniqueFILEIDs.contains(fileId) && !isLinkedWithAltoBlocks(fileId, divs)) {
+                                uniqueFILEIDs.add(fileId);
                             } else {
                                 seq.getAreaList().remove(area);
                             }
@@ -214,6 +215,19 @@ public class PerthesMetsConverter extends ENMAPConverter {
                 }
             }
         }
+    }
+
+    /**
+     * Checks if there is one mets:area with the given fileId and a BEGIN and END attribute.
+     *
+     * @param fileId the @FiLEID to check
+     * @param divs all the logical divs
+     * @return true if there is an area with this fileID and a BEGIN and END attribute
+     */
+    private boolean isLinkedWithAltoBlocks(String fileId, List<LogicalDiv> divs) {
+        return divs.stream().flatMap(d -> d.getFptrList().stream()).flatMap(fptr -> fptr.getSeqList().stream())
+                   .flatMap(seq -> seq.getAreaList().stream())
+                   .anyMatch(area -> area.getBetype() != null && area.getBegin() != null && area.getEnd() != null);
     }
 
     @Override
