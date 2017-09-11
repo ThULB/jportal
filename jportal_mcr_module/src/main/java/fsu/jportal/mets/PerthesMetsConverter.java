@@ -205,11 +205,10 @@ public class PerthesMetsConverter extends ENMAPConverter {
                     for (Area area : areaList) {
                         if (area.getBetype() == null) {
                             String fileId = area.getFileId();
-                            if (!uniqueFILEIDs.contains(fileId) && !isLinkedWithAltoBlocks(fileId, divs)) {
-                                uniqueFILEIDs.add(fileId);
-                            } else {
+                            if(uniqueFILEIDs.contains(fileId) || isLinkedWithAltoBlocks(fileId, divs)) {
                                 seq.getAreaList().remove(area);
                             }
+                            uniqueFILEIDs.add(fileId);
                         }
                     }
                 }
@@ -227,6 +226,7 @@ public class PerthesMetsConverter extends ENMAPConverter {
     private boolean isLinkedWithAltoBlocks(String fileId, List<LogicalDiv> divs) {
         return divs.stream().flatMap(d -> d.getFptrList().stream()).flatMap(fptr -> fptr.getSeqList().stream())
                    .flatMap(seq -> seq.getAreaList().stream())
+                   .filter(area -> area.getFileId().equals(fileId))
                    .anyMatch(area -> area.getBetype() != null && area.getBegin() != null && area.getEnd() != null);
     }
 
