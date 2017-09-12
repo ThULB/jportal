@@ -9,36 +9,28 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRPathContent;
+import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
-import org.mycore.mets.misc.StructLinkGenerator;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.files.FLocat;
-import org.mycore.mets.model.files.File;
-import org.mycore.mets.model.files.FileGrp;
-import org.mycore.mets.model.struct.Fptr;
-import org.mycore.mets.model.struct.LOCTYPE;
-import org.mycore.mets.model.struct.PhysicalDiv;
-import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.tools.MCRMetsSave;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.stream.Stream;
 
 /**
@@ -53,7 +45,7 @@ public abstract class MetsUtil {
     public static final ArrayList<Namespace> METS_NS_LIST;
 
     static {
-        METS_NS_LIST = new ArrayList<Namespace>();
+        METS_NS_LIST = new ArrayList<>();
         METS_NS_LIST.add(MCRConstants.METS_NAMESPACE);
         METS_NS_LIST.add(MCRConstants.MODS_NAMESPACE);
         METS_NS_LIST.add(MCRConstants.XLINK_NAMESPACE);
@@ -136,27 +128,28 @@ public abstract class MetsUtil {
      * <ul>
      * <li>the derivate does exist</li>
      * <li>the owner object does exist</li>
+     * <li>derivate or owner is not marked for deletion</li>
      * <li>the derivate contains at least one image</li>
      * </ul>
      * 
-     * @param id the mycore object id to check
+     * @param derivateId the mycore derivateId to check
      * @return true if a mets.xml can be generated for this derivate
      * @throws IOException the derivate files couldn't be read
-     * @throws JDOMException when the mets.xml exists but couldn't be parsed with jdom
+     * @throws JDOMException the mets.xml exists but couldn't be parsed with jdom
      */
-    public static boolean isGeneratable(MCRObjectID id) throws IOException, JDOMException {
+    public static boolean isGeneratable(MCRObjectID derivateId) throws IOException, JDOMException {
         // check derivate exists
-        if (!MCRMetadataManager.exists(id)) {
+        if (!MCRMetadataManager.exists(derivateId) || MCRMarkManager.instance().isMarkedForDeletion(derivateId)) {
             return false;
         }
-        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(id);
+        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivateId);
         MCRObjectID objId = derivate.getOwnerID();
         // check owner exists
-        if (!MCRMetadataManager.exists(objId)) {
+        if (!MCRMetadataManager.exists(objId) || MCRMarkManager.instance().isMarkedForDeletion(objId)) {
             return false;
         }
         // check contains at least one image
-        try (Stream<Path> stream = Files.walk(MCRPath.getPath(id.toString(), "/"))) {
+        try (Stream<Path> stream = Files.walk(MCRPath.getPath(derivateId.toString(), "/"))) {
             if (stream.noneMatch(path -> {
                 try {
                     String probeContentType = MCRContentTypes.probeContentType(path);

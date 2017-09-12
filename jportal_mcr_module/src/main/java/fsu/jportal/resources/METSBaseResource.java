@@ -25,7 +25,6 @@ import org.mycore.mets.model.struct.StructLink;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -57,8 +56,8 @@ public class METSBaseResource {
     /**
      * Generates the mets.xml for the given derivate. This will overwrite the existing mets.xml.
      * 
-     * @param derivateId
-     * @return
+     * @param derivateId where to generate the mets.xml
+     * @return the json response object {status = 'ok'}
      */
     @Path("generate/{id}")
     @GET
@@ -68,6 +67,10 @@ public class METSBaseResource {
         MCRObjectID derId = MCRObjectID.getInstance(derivateId);
         MCRJerseyUtil.checkPermission(derId, MCRAccessManager.PERMISSION_WRITE);
         try {
+            if (!MetsUtil.isGeneratable(derId)) {
+                throw new WebApplicationException("Unable to generate mets.xml cause derivate or object does not exists"
+                        + " or the derivate does not contain any image.");
+            }
             MetsUtil.generateAndReplace(derId);
             // send response
             JsonObject response = new JsonObject();
@@ -176,8 +179,7 @@ public class METSBaseResource {
     private Mets getMets(String derivateId) {
         try {
             Document metsXML = MetsUtil.getMetsXMLasDocument(derivateId);
-            Mets mets = new Mets(metsXML);
-            return mets;
+            return new Mets(metsXML);
         } catch (Exception exc) {
             JsonObject json = new JsonObject();
             json.addProperty("errorMsg", "mets.xml not found");
@@ -248,7 +250,6 @@ public class METSBaseResource {
      * 
      * @param doc the mets.xml to store
      * @param derivateId the derivate
-     * @throws IOException something went wrong while writing
      */
     private void write(Document doc, String derivateId) {
         try {

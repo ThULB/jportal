@@ -239,7 +239,7 @@ public class PerthesMetsConverter extends ENMAPConverter {
         if(sortedFileIDs.isEmpty()) {
             return altoBlockMap;
         }
-        sortedFileIDs.sort((s1, s2) -> s1.compareTo(s2));
+        sortedFileIDs.sort(String::compareTo);
         List<String> missingFileIDs = new ArrayList<>();
 
         String baseFileID = sortedFileIDs.get(0);

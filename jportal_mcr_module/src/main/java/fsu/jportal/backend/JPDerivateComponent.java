@@ -63,7 +63,7 @@ public class JPDerivateComponent implements JPComponent {
     /**
      * Creates a new JPDerivateComponent container for the mycore object.
      * 
-     * @param mcrObject the mycore object
+     * @param mcrDerivate the mycore derivate
      */
     public JPDerivateComponent(MCRDerivate mcrDerivate) {
         this.derivate = mcrDerivate;
