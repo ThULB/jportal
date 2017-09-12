@@ -58,6 +58,13 @@ public class JPArticleSizeSorterTest extends MCRTestCase {
         assertTrue(0 > sorter.compare(Order.ASCENDING, "S. (XXV)--(XXVI)", "S. (XXVIII)"));
         assertTrue(0 > sorter.compare(Order.ASCENDING, "III - XIV", "003"));
 
+        // recto-verso
+        assertTrue(0 == sorter.compare(Order.ASCENDING, "1r", "1r"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "1r", "1v"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "2r", "1v"));
+        assertTrue(0 > sorter.compare(Order.ASCENDING, "1r - 5v", "2v"));
+        assertTrue(0 < sorter.compare(Order.ASCENDING, "5r", "4v - 5r"));
+
         // not the first article on a page
         assertTrue(0 > sorter.compare(Order.ASCENDING, "025 [1]", "025 [2]"));
         assertTrue(0 < sorter.compare(Order.ASCENDING, "025 [2]", "025 [1]"));

@@ -79,6 +79,12 @@ public class JPArticleSizeSorter implements JPSorter {
             return result * getOrder(order);
         }
 
+        // recto-verso
+        result = compareRectoVerso(firstPart1, firstPart2);
+        if (result != null) {
+            return result * getOrder(order);
+        }
+
         // compare
         return compareMulti(order, firstPart1, firstPart2);
     }
@@ -135,6 +141,15 @@ public class JPArticleSizeSorter implements JPSorter {
         return roman1 == null ? 1 : (roman2 == null ? -1 : Integer.compare(roman1.toInt(), roman2.toInt()));
     }
 
+    private Integer compareRectoVerso(String size1, String size2) {
+        if(!((size1.endsWith("r") || size1.endsWith("v")) && (size2.endsWith("r") || size2.endsWith("v")))) {
+            return null;
+        }
+        Integer value1 = Integer.valueOf(size1.replaceAll("[^0-9]", "")) * 2 + (size1.endsWith("v") ? 1 : 0);
+        Integer value2 = Integer.valueOf(size2.replaceAll("[^0-9]", "")) * 2 + (size2.endsWith("v") ? 1 : 0);
+        return value1.compareTo(value2);
+    }
+
     private String getFirstNumIfRange(String range) {
         return range.split("-")[0];
     }
@@ -169,9 +184,7 @@ public class JPArticleSizeSorter implements JPSorter {
         List<String> post = Arrays.asList("[", "K", "T");
         List<String> concat = new ArrayList<>(pre);
         concat.addAll(post);
-        if (concat.stream().noneMatch(c -> {
-            return size1.startsWith(c) || size2.startsWith(c);
-        })) {
+        if (concat.stream().noneMatch(c -> size1.startsWith(c) || size2.startsWith(c))) {
             return null;
         }
         return concat.stream().mapToInt(c -> {
