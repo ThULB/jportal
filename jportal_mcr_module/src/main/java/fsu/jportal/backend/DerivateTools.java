@@ -111,46 +111,38 @@ public class DerivateTools {
     public static boolean cp(String sourcePath, String targetPath, boolean delAfterCopy) throws MCRAccessException {
         if (sourcePath == null || targetPath == null) {
             LOGGER.info("Usage: copy {path_to_file} {new_path}");
-        }
-
-        try {
-            String[] sourcePathArray = sourcePath.split(":");
-            MCRPath sourceNode = MCRPath.getPath(sourcePathArray[0], sourcePathArray[1]);
-
-            if (!Files.exists(sourceNode)) {
-                LOGGER.info("cp: source " + sourcePath + " does not exists (not copied)");
-                return false;
-            }
-
-            String[] targetPathArray = targetPath.split(":");
-            MCRPath targetNode = MCRPath.getPath(targetPathArray[0], targetPathArray[1]);
-
-            if (!Files.exists(targetNode)) {
-                LOGGER.info("cp: target " + targetPath + " does not exists (not copied)");
-                return false;
-            }
-            String newFileName = null;
-            if (!Files.isDirectory(targetNode)) {
-                newFileName = targetNode.getFileName().toString();
-            }
-
-            Map<MCRPath, MCRPath> copyHistory = new HashMap<MCRPath, MCRPath>();
-            if (cp(sourceNode, targetNode, newFileName, copyHistory)) {
-                if (delAfterCopy) {
-                    String derivID = sourceNode.getOwner();
-                    JPDerivateComponent derivate = new JPDerivateComponent(derivID);
-                    moveAttachedData(derivate, copyHistory);
-                    delete(sourceNode);
-                }
-                return true;
-            }
             return false;
-        } catch (MCRUsageException e) {
-            e.printStackTrace();
-        } catch (MCRPersistenceException e) {
-            e.printStackTrace();
+        }
+        String[] sourcePathArray = sourcePath.split(":");
+        MCRPath sourceNode = MCRPath.getPath(sourcePathArray[0], sourcePathArray[1]);
+
+        if (!Files.exists(sourceNode)) {
+            LOGGER.info("cp: source " + sourcePath + " does not exists (not copied)");
+            return false;
         }
 
+        String[] targetPathArray = targetPath.split(":");
+        MCRPath targetNode = MCRPath.getPath(targetPathArray[0], targetPathArray[1]);
+
+        if (!Files.exists(targetNode)) {
+            LOGGER.info("cp: target " + targetPath + " does not exists (not copied)");
+            return false;
+        }
+        String newFileName = null;
+        if (!Files.isDirectory(targetNode)) {
+            newFileName = targetNode.getFileName().toString();
+        }
+
+        Map<MCRPath, MCRPath> copyHistory = new HashMap<>();
+        if (cp(sourceNode, targetNode, newFileName, copyHistory)) {
+            if (delAfterCopy) {
+                String derivID = sourceNode.getOwner();
+                JPDerivateComponent derivate = new JPDerivateComponent(derivID);
+                moveAttachedData(derivate, copyHistory);
+                delete(sourceNode);
+            }
+            return true;
+        }
         return false;
     }
 
@@ -408,10 +400,9 @@ public class DerivateTools {
      * @param derivateID derivate where the file is added (when null, a new derivate is created)
      * @param filePath path of the file
      * @return derivateId
-     * @throws Exception
      */
     public static String uploadFile(InputStream inputStream, long filesize, String documentID, String derivateID,
-                                    String filePath) throws Exception {
+                                    String filePath) throws IOException, MCRAccessException {
         if (derivateID == null) {
             String projectID = MCRConfiguration.instance().getString("MCR.Metadata.Project", "MCR");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
@@ -583,10 +574,7 @@ public class DerivateTools {
         XPathExpression<Element> xpE = xpF.compile("mycorederivate/derivate", Filters.element());
         Element derivateNode = (Element) xpE.evaluateFirst(xml);
         Attribute displayAttr = derivateNode.getAttribute("display");
-        if (displayAttr != null) {
-            return Boolean.parseBoolean(displayAttr.getValue());
-        }
-        return false;
+        return displayAttr != null && Boolean.parseBoolean(displayAttr.getValue());
     }
 
     public static boolean tileDerivate(String derivateID) {
@@ -644,10 +632,7 @@ public class DerivateTools {
         } catch (MCRConfigurationException e) {
             LOGGER.info("Property MCR.URN.Enabled.Object not set, URN allocation not possible.");
         }
-        if (urnObjects.contains("derivate")) {
-            return true;
-        }
-        return false;
+        return urnObjects.contains("derivate");
     }
 
 }

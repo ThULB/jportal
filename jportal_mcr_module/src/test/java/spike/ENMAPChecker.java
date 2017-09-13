@@ -108,10 +108,10 @@ public class ENMAPChecker {
         MCRConfiguration.instance().initialize(properties, true);
 
         // convert
-        Path metsFile = Paths.get("/data/temp/mnt/images/ThULB_129489824_1898_Perthes/mets.xml");
+        Path metsFile = Paths.get("/data/mnt/images/ThULB_129489824_1935_Perthes/mets.xml");
         Document doc = enmapChecker.convert(metsFile);
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
-        out.output(doc, new FileOutputStream(new File("/data/temp/mets.xml")));
+        out.output(doc, new FileOutputStream(new File("/data/tmp/mets.xml")));
 
         ByteArrayInputStream in = toByteStream(doc);
         List<ValidationException> excs = enmapChecker.validate(in);
