@@ -241,7 +241,7 @@ public abstract class DerivateLinkUtil {
     public static List<MCRObjectID> getLinks(String pathOfImg) {
         SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();
-        params.add("q", "derivateLink:" + pathOfImg);
+        params.add("q", "derivateLink:\"" + pathOfImg + "\"");
         params.set("rows", 100);
         params.set("fl", "id");
         return MCRSolrSearchUtils.stream(solrClient, params)
