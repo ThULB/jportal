@@ -69,7 +69,7 @@ public abstract class ENMAPConverter {
      * @param enmap jdom document to convert
      * @return new mycore mets.xml
      * 
-     * @throws ConvertException
+     * @throws ConvertException converting went wrong
      */
     public Mets convert(Document enmap, Path basePath) throws ConvertException {
         this.emptyAreas = new ArrayList<>();
@@ -186,13 +186,10 @@ public abstract class ENMAPConverter {
             "mets:structMap[@TYPE='physical_structmap' or @TYPE='PHYSICAL']//mets:div[mets:fptr]", Filters.element(),
             null, IMetsElement.METS);
         List<Element> divs = new ArrayList<Element>(xpathExp.evaluate(enmap));
-        Collections.sort(divs, new Comparator<Element>() {
-            @Override
-            public int compare(Element e1, Element e2) {
-                int o1 = Integer.valueOf(e1.getAttributeValue("ORDER"));
-                int o2 = Integer.valueOf(e2.getAttributeValue("ORDER"));
-                return Integer.compare(o1, o2);
-            }
+        divs.sort((e1, e2) -> {
+            int o1 = Integer.valueOf(e1.getAttributeValue("ORDER"));
+            int o2 = Integer.valueOf(e2.getAttributeValue("ORDER"));
+            return Integer.compare(o1, o2);
         });
         for (Element divElement : divs) {
             PhysicalSubDiv div = new PhysicalSubDiv(divElement.getAttributeValue("ID"), "page");
@@ -302,9 +299,19 @@ public abstract class ENMAPConverter {
 
     protected LogicalDiv buildLogicalSubDiv(Element enmapDiv) {
         String id = enmapDiv.getAttributeValue("ID");
-        String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
-        String label = enmapDiv.getAttributeValue("LABEL").trim();
-        return new LogicalDiv(id, type, (label == null || label.equals("")) ? type : label);
+        String type = enmapDiv.getAttributeValue("TYPE");
+        String label = enmapDiv.getAttributeValue("LABEL");
+        if(type == null) {
+            LOGGER.warn("@TYPE of " + id + " is null.");
+        } else {
+            type = type.toLowerCase(Locale.ROOT);
+        }
+        if(label == null) {
+            LOGGER.warn("@LABEL of " + id + " is null.");
+        } else {
+            label = label.trim();
+        }
+        return new LogicalDiv(id, type, (label == null || "".equals(label)) ? type : label);
     }
 
     /**
@@ -472,14 +479,8 @@ public abstract class ENMAPConverter {
                 if (ref.blocks.isEmpty()) {
                     emptyAreas.add(ref.logicalDivId);
                 }
-                Set<Block> blockSet = altoBlockMap.get(ref.alto.getId());
-                if (blockSet == null) {
-                    blockSet = new HashSet<>();
-                    altoBlockMap.put(ref.alto.getId(), blockSet);
-                }
-                for (Block block : ref.blocks) {
-                    blockSet.add(block);
-                }
+                Set<Block> blockSet = altoBlockMap.computeIfAbsent(ref.alto.getId(), k -> new HashSet<>());
+                blockSet.addAll(ref.blocks);
             }
             return altoBlockMap;
         }
@@ -583,7 +584,7 @@ public abstract class ENMAPConverter {
          * Returns a list of blocks which lie's within the bounds of the rectangle.
          * A block has to be fully covered by the rectangle.
          * 
-         * @param rectangle
+         * @param rectangle the rectangle to check
          * @return list of blocks
          */
         public List<Block> liesWithin(Rectangle rectangle) {
@@ -595,7 +596,7 @@ public abstract class ENMAPConverter {
         /**
          * Returns a list of blocks which touches the bounds of the rectangle.
         
-         * @param rectangle
+         * @param rectangle the rectangle to check
          * @return list of blocks
          */
         public List<Block> touch(Rectangle rectangle) {
@@ -720,7 +721,7 @@ public abstract class ENMAPConverter {
         /**
          * Returns the area of this rectangle.
          * 
-         * @return
+         * @return width * height
          */
         public int area() {
             return width * height;
@@ -761,9 +762,7 @@ public abstract class ENMAPConverter {
                 return false;
             if (x != other.x)
                 return false;
-            if (y != other.y)
-                return false;
-            return true;
+            return y == other.y;
         }
 
     }

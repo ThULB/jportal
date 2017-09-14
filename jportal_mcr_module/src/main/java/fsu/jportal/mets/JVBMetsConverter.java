@@ -25,7 +25,11 @@ public class JVBMetsConverter extends ENMAPConverter {
     @Override
     protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv logicalSubDiv = this.buildLogicalSubDiv(enmapDiv);
-        String type = enmapDiv.getAttributeValue("TYPE").toLowerCase();
+        if(enmapDiv.getChildren().isEmpty()) {
+            throw new ConvertException("Logical mets:div[@ID='" + logicalSubDiv.getId() + "'] has no children. This can"
+                    + " happen if there is an empty issue or article in Structify.");
+        }
+        String type = logicalSubDiv.getType();
         if (type.equals("issue")) {
             if (enmapDiv.getChildren().isEmpty()) {
                 LOGGER.warn("Issue has no content! " + logicalSubDiv.getId());
@@ -33,10 +37,9 @@ public class JVBMetsConverter extends ENMAPConverter {
             }
             handleLogicalDivs(enmap, enmapDiv, logicalSubDiv, mcrMets, altoReferences);
             return logicalSubDiv;
-        }
-        if (type.equals("article") || type.equals("serialnovel")) {
-            logicalSubDiv.setType("article");
+        } else if (type.equals("article") || type.equals("serialnovel")) {
             if (type.equals("serialnovel")) {
+                logicalSubDiv.setType("article");
                 lastSerialNovel = logicalSubDiv;
             }
         } else if (type.equals("serialnovelcontinue")) {
