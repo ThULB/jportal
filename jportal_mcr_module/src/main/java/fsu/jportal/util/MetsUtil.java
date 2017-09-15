@@ -109,6 +109,7 @@ public abstract class MetsUtil {
      * PROFILE is 'ENMAP'.
      * 
      * @param metsDocument the document to check
+     * @return true if the document is an ENMAP mets.xml
      */
     public static boolean isENMAP(Document metsDocument) {
         // check root element
@@ -122,6 +123,16 @@ public abstract class MetsUtil {
     }
 
     /**
+     * Checks if the mets.xml of this derivate is of the PROFILE 'ENMAP'.
+     *
+     * @param derivateId the derivate id (mets.xml) to check
+     * @return true if the derivate's mets.xml is of the TYPE 'ENMAP'
+     */
+    public static boolean isENMAP(MCRObjectID derivateId) throws IOException, JDOMException {
+        return isENMAP(getMetsXMLasDocument(derivateId.toString()));
+    }
+
+    /**
      * Checks if this derivate can have a generated mets.xml. The following conditions
      * have to be true:
      * 
@@ -129,6 +140,7 @@ public abstract class MetsUtil {
      * <li>the derivate does exist</li>
      * <li>the owner object does exist</li>
      * <li>derivate or owner is not marked for deletion</li>
+     * <li>an existing mets.xml is not of the PROFILE 'ENMAP'</li>
      * <li>the derivate contains at least one image</li>
      * </ul>
      * 
@@ -146,6 +158,10 @@ public abstract class MetsUtil {
         MCRObjectID objId = derivate.getOwnerID();
         // check owner exists
         if (!MCRMetadataManager.exists(objId) || MCRMarkManager.instance().isMarkedForDeletion(objId)) {
+            return false;
+        }
+        // checks if there is an existing mets.xml which could be an ENMAP mets -> DO NOT OVERWRITE!
+        if (Files.exists(MCRPath.getPath(derivateId.toString(), "/mets.xml")) && isENMAP(derivateId)) {
             return false;
         }
         // check contains at least one image
