@@ -32,6 +32,7 @@ import org.mycore.solr.search.MCRSolrSearchUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.time.LocalDate;
@@ -135,7 +136,9 @@ public class Importer {
         // replace
         LOGGER.info("replacing mets.xml...");
         MCRJDOMContent newMetsContent = new MCRJDOMContent(newMets.asDocument());
-        Files.copy(newMetsContent.getInputStream(), metsPath, StandardCopyOption.REPLACE_EXISTING);
+        try (InputStream metsStream = newMetsContent.getInputStream()) {
+            Files.copy(metsStream, metsPath, StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 
     private static void buildLogicalFptr(LogicalDiv llzDiv, Mets llzMets, Mets newMets) {

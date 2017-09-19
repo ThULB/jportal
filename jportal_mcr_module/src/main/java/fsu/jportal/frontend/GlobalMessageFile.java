@@ -29,9 +29,10 @@ public class GlobalMessageFile {
             }
 
             if (!Files.exists(GLOBAL_MESSAGE_FILE)) {
-                InputStream origMsgFile = GlobalMessageResource.class
-                    .getResourceAsStream("/META-INF/resources/config/" + confFileName);
-                Files.copy(origMsgFile, GLOBAL_MESSAGE_FILE);
+                try (InputStream origMsgFile = GlobalMessageResource.class
+                        .getResourceAsStream("/META-INF/resources/config/" + confFileName)) {
+                    Files.copy(origMsgFile, GLOBAL_MESSAGE_FILE);
+                }
                 LOGGER.info("Creating global message file: " + GLOBAL_MESSAGE_FILE.toString());
             } else {
                 LOGGER.info("Using global message file: " + GLOBAL_MESSAGE_FILE.toString());

@@ -239,7 +239,9 @@ public abstract class MetsUtil {
         }
 
         // replace
-        Files.copy(newMetsContent.getInputStream(), metsPath, StandardCopyOption.REPLACE_EXISTING);
+        try (InputStream metsStream = newMetsContent.getInputStream()) {
+            Files.copy(metsStream, metsPath, StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 
 }
