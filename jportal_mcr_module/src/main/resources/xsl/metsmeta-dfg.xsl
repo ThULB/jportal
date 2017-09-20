@@ -94,11 +94,20 @@
     </xsl:if>
 
     <!-- Part -->
-    <xsl:if test="./metadata/sizes/size">
+    <xsl:if test="./metadata/sizes/size or ./structure/parents/parent">
       <mods:part>
-        <mods:detail type="pages">
-          <mods:number><xsl:value-of select="./metadata/sizes/size/text()" /></mods:number>
-        </mods:detail>
+        <xsl:if test="./metadata/sizes/size">
+          <mods:detail type="pages">
+            <mods:number><xsl:value-of select="./metadata/sizes/size/text()" /></mods:number>
+          </mods:detail>
+        </xsl:if>
+        <xsl:if test="./structure/parents/parent">
+          <mods:detail type="order">
+            <mods:number>
+              <xsl:value-of select="jpxml:getOrder(@ID)" />
+            </mods:number>
+          </mods:detail>
+        </xsl:if>
       </mods:part>
     </xsl:if>
 
@@ -140,7 +149,12 @@
         </mods:titleInfo>
         <xsl:for-each select="document(concat('parents:',@ID))/parents/parent[contains(@xlink:href, '_jpvolume_')]">
           <mods:part ID="{@xlink:href}" type="volume" order="{position()}">
-            <text><xsl:value-of select="@xlink:title" /></text>
+            <mods:text><xsl:value-of select="@xlink:title" /></mods:text>
+            <mods:detail type="order">
+              <mods:number>
+                <xsl:value-of select="jpxml:getOrder(@xlink:href)" />
+              </mods:number>
+            </mods:detail>
           </mods:part>
         </xsl:for-each>
       </mods:relatedItem>
@@ -160,6 +174,15 @@
       <mods:location>
         <mods:physicalLocation><xsl:value-of select="./metadata/contentClassis3/contentClassi3/@categid" /></mods:physicalLocation>
       </mods:location>
+    </xsl:if>
+
+    <!-- physical description -->
+    <xsl:if test="./metadata/collationNotes/collationNote">
+      <mods:physicalDescription>
+        <xsl:if test="./metadata/collationNotes/collationNote[@type='siteDetails']">
+          <mods:extent><xsl:value-of select="./metadata/collationNotes/collationNote[@type='siteDetails']/text()" /></mods:extent>
+        </xsl:if>
+      </mods:physicalDescription>
     </xsl:if>
 
     <!-- journal type extension -->
@@ -253,7 +276,7 @@
             <xsl:value-of select="'gvk-ppn'" />
           </xsl:attribute>
           <xsl:variable name="sourceCatalog">
-            <xsl:value-of select="'https://kataloge.thulb.uni-jena.de'"></xsl:value-of>
+            <xsl:value-of select="'https://kataloge.thulb.uni-jena.de'" />
           </xsl:variable>
           <xsl:attribute name="authorityURI">
             <xsl:value-of select="$sourceCatalog" />

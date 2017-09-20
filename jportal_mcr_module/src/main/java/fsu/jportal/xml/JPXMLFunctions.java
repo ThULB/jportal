@@ -42,9 +42,7 @@ public class JPXMLFunctions {
     public static String formatISODate(String isoDate, String iso639Language) {
         try {
             if (LOGGER.isDebugEnabled()) {
-                StringBuilder sb = new StringBuilder("isoDate=");
-                sb.append(isoDate).append(", iso649Language=").append(iso639Language);
-                LOGGER.debug(sb.toString());
+                LOGGER.debug("isoDate=" + isoDate + ", iso649Language=" + iso639Language);
             }
             Locale locale = new Locale(iso639Language);
             SimpleDateFormat df = new SimpleDateFormat(getFormat(isoDate), locale);
@@ -109,8 +107,8 @@ public class JPXMLFunctions {
     /**
      * Checks if the given path exists.
      * 
-     * @param path
-     * @return
+     * @param webResource the resource to check
+     * @return true if the resource is found otherwise false
      */
     public static boolean resourceExist(String webResource) {
         try {
@@ -152,7 +150,7 @@ public class JPXMLFunctions {
             return "";
         }
         try {
-            SimpleDateFormat format = null;
+            SimpleDateFormat format;
             if (date.length() == 4) {
                 // 4 digit year
                 format = new SimpleDateFormat("yyyy");
@@ -173,9 +171,9 @@ public class JPXMLFunctions {
 
     /**
      * Checks if the mets.xml can be generated.
-     * 
-     * @param derivateId
-     * @return
+     *
+     * @param derivateId the derivate to check
+     * @return true if the mets is generatable
      */
     public static boolean isMetsGeneratable(String derivateId) {
         try {
@@ -198,8 +196,9 @@ public class JPXMLFunctions {
     /**
      * Checks if the given derivate contains an uibk mets file
      * and the corresponding mycore object has no children. 
-     * 
-     * @return
+     *
+     * @param derivateId the derivate to check
+     * @return true if the mets is importable
      */
     public static boolean isMetsImportable(String derivateId) {
         boolean enmapMets = isENMAPMets(derivateId);
@@ -247,10 +246,10 @@ public class JPXMLFunctions {
     /**
      * Checks if a fq request parameter for the specified facet exist.
      * 
-     * @param requestURL
-     * @param facet
-     * @param value
-     * @return
+     * @param requestURL the request url
+     * @param facet the facet to check
+     * @param value the value of the facet
+     * @return if the facet with the specific value is selected
      */
     public static boolean isFacetSelected(String requestURL, String facet, String value) {
         String query = facet + ":" + value;
@@ -283,11 +282,7 @@ public class JPXMLFunctions {
         try {
             return MCRXMLFunctions.normalizeAbsoluteURL(url);
         } catch (MalformedURLException | URISyntaxException e) {
-            try {
-                return MCRXMLFunctions.encodeURIPath(url);
-            } catch (URISyntaxException e2) {
-                throw e2;
-            }
+            return MCRXMLFunctions.encodeURIPath(url);
         }
     }
 
