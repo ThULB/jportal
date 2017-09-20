@@ -8,7 +8,11 @@ import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.common.inject.MCRInjectorConfig;
 import org.mycore.datamodel.common.MCRMarkManager;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.tools.MCRMetsSave;
 
@@ -82,16 +86,11 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
         }
 
         // fetch all derivates
-        List<String> derivateLinks = getDerivateLinks(object);
-
-        // run through derivates
-        for (String derivateID : derivateLinks) {
-            MCRObjectID mcrDerivateID = MCRObjectID.getInstance(derivateID);
-            if (MCRMarkManager.instance().isMarkedForDeletion(mcrDerivateID)) {
-                continue;
-            }
-            metsAutoGenerator.add(mcrDerivateID);
-        }
+        getDerivateLinks(object).stream()
+                                .map(MCRObjectID::getInstance)
+                                .filter(der -> !MCRMarkManager.instance().isMarkedForDeletion(der))
+                                .distinct()
+                                .forEach(metsAutoGenerator::add);
     }
 
     private void handleDerivate(MCRDerivate derivate) {

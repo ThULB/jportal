@@ -8,7 +8,11 @@ import fsu.jportal.backend.io.HttpImportSource;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.LocalSystemSink;
 import fsu.jportal.backend.io.RecursiveImporter;
-import fsu.jportal.mets.*;
+import fsu.jportal.mets.JPortalMetsGenerator;
+import fsu.jportal.mets.LLZMetsConverter;
+import fsu.jportal.mets.MetsImportUtils;
+import fsu.jportal.mets.MetsImporter;
+import fsu.jportal.mets.MetsVersionStore;
 import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,14 +22,23 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.common.MCRMarkManager;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.FileGrp;
-import org.mycore.mets.model.struct.*;
+import org.mycore.mets.model.struct.Fptr;
+import org.mycore.mets.model.struct.LOCTYPE;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.LogicalStructMap;
+import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
@@ -34,13 +47,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.nio.file.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -396,13 +419,15 @@ public class Importer {
     public static void jvbUpload(String targetID, String altoPath, String imgPath)
         throws IOException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         JPDerivateComponent derivate = new JPDerivateComponent();
-        String mainDoc = null;
+        MCRMarkManager.instance().mark(derivate.getId(), MCRMarkManager.Operation.IMPORT);
         try (DirectoryStream<Path> altoStream = Files.newDirectoryStream(Paths.get(altoPath), "*.xml")) {
-            altoStream.forEach(alto -> {
+            String mainDoc = null;
+            for(Path alto : altoStream) {
                 String altoFileName = alto.getFileName().toString();
                 String imgFileName = altoFileName.replaceAll(".xml", ".tif");
                 if (mainDoc == null) {
                     derivate.setMainDoc(imgFileName);
+                    mainDoc = imgFileName;
                 }
                 try {
                     derivate.add(Paths.get(imgPath).resolve(imgFileName).toUri().toURL(), imgFileName);
@@ -410,11 +435,12 @@ public class Importer {
                 } catch (MalformedURLException e) {
                     LOGGER.error("Unable to add file to derivate", e);
                 }
-            });
+            }
         }
         JPVolume volume = new JPVolume(targetID);
         volume.addDerivate(derivate);
         volume.store(StoreOption.derivate);
+        MCRMarkManager.instance().remove(derivate.getId());
     }
 
     private static Set<Integer> getMonths(Path dir) throws IOException {

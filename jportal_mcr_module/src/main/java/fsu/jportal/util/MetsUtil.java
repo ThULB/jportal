@@ -239,8 +239,8 @@ public abstract class MetsUtil {
         }
 
         // replace
-        try (InputStream metsStream = newMetsContent.getInputStream()) {
-            Files.copy(metsStream, metsPath, StandardCopyOption.REPLACE_EXISTING);
+        try (InputStream is = newMetsContent.getInputStream()) {
+            Files.copy(is, metsPath, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 

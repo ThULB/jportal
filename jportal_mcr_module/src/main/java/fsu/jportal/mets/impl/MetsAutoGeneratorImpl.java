@@ -4,6 +4,7 @@ import fsu.jportal.mets.MetsAutoGenerator;
 import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.events.MCRShutdownHandler;
 import org.mycore.common.processing.MCRProcessableDefaultCollection;
 import org.mycore.common.processing.MCRProcessableRegistry;
@@ -61,8 +62,9 @@ public class MetsAutoGeneratorImpl implements MetsAutoGenerator {
         registry.register(collection);
         this.executor = MCRProcessableFactory.newPool(Executors.newSingleThreadExecutor(), collection);
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleWithFixedDelay(new MetsGenerationHandler(map, executor, collection), DELAY, DELAY,
-            TimeUnit.MINUTES);
+        scheduler.scheduleWithFixedDelay(
+                new MCRTransactionableRunnable(new MetsGenerationHandler(map, executor, collection),
+                        MCRSessionMgr.getCurrentSession()), DELAY, DELAY, TimeUnit.MINUTES);
 
         MCRShutdownHandler.getInstance().addCloseable(new MCRShutdownHandler.Closeable() {
 
@@ -94,6 +96,10 @@ public class MetsAutoGeneratorImpl implements MetsAutoGenerator {
 
     @Override
     public void add(MCRObjectID derivateId) {
+        MCRSessionMgr.getCurrentSession().onCommit(() -> doAdd(derivateId));
+    }
+
+    private void doAdd(MCRObjectID derivateId) {
         Long insertTime = map.get(derivateId);
         if (insertTime != null && insertTime == -1L) {
             // thread to create is already spawned
@@ -115,11 +121,11 @@ public class MetsAutoGeneratorImpl implements MetsAutoGenerator {
 
     private static class MetsGenerationHandler implements Runnable {
 
-        private MCRProcessableExecutor executor;
+        private final MCRProcessableExecutor executor;
 
-        private MCRProcessableDefaultCollection collection;
+        private final MCRProcessableDefaultCollection collection;
 
-        private Map<MCRObjectID, Long> map;
+        private final Map<MCRObjectID, Long> map;
 
         public MetsGenerationHandler(Map<MCRObjectID, Long> map, MCRProcessableExecutor executor,
             MCRProcessableDefaultCollection collection) {
@@ -150,7 +156,8 @@ public class MetsAutoGeneratorImpl implements MetsAutoGenerator {
         }
 
         private Predicate<? super Entry<MCRObjectID, Long>> filterEntry() {
-            return e -> (e.getValue() != -1) && (e.getValue() + DELAY < System.currentTimeMillis());
+            return e -> (e.getValue() != -1) && (e.getValue() + TimeUnit.MINUTES.toMillis(DELAY) < System
+                    .currentTimeMillis());
         }
 
     }
