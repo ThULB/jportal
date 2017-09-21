@@ -62,7 +62,7 @@
     <xsl:param name="urn" />
     <xsl:if test="$urn != ''">
       <dt class="col-sm-4">
-        URN
+          URN
       </dt>
       <dd class="col-sm-8">
         <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">

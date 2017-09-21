@@ -24,7 +24,7 @@
           <xsl:with-param name="editable" select="$editable" />
           <xsl:with-param name="query" select="$query" />
         </xsl:apply-templates>
-  
+
         <xsl:apply-templates select="structure/derobjects/derobject" mode="derivateDisplay">
           <xsl:with-param name="mode" select="$mode" />
           <xsl:with-param name="editable" select="$editable" />
@@ -106,7 +106,8 @@
               <a href="{$WebApplicationBaseURL}rsc/derivatebrowser/compact#/{@xlink:href}/">Details</a>
             </li>
             <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
-              <xsl:if test="not(mcrurn:hasURNAssigned(@xlink:href))">
+              <xsl:choose>
+              <xsl:when test="not(mcrurn:hasURNAssigned(@xlink:href))">
                 <li>
                   <a href="#" data-toggle="modal" data-target="#generateURNDialog">URN vergeben</a>
                 </li>
@@ -118,7 +119,7 @@
                       </div>
                       <div class="modal-body">
                         <div class="row">
-                          <div class="col-md-2" id="generateURNIcon" style="text-align: center;">
+                          <div class="col-md-2" id="generateURNDialogIcon" style="text-align: center;">
                             <i class='fa fa-3x fa-question-circle'></i>
                           </div>
                           <div class="col-md-10" id="generateURNDialogContent">
@@ -133,7 +134,35 @@
                     </div>
                   </div>
                 </div>
-              </xsl:if>
+              </xsl:when>
+                  <xsl:otherwise>
+                    <div class="modal fade" id="updateURNDialog" tabindex="-1" role="dialog" data-backdrop="static" data-id="{@xlink:href}">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title">URN vergeben</h4>
+                          </div>
+                          <div class="modal-body">
+                            <div class="row">
+                              <div class="col-md-2" id="updateURNDialogIcon" style="text-align: center;">
+                                <i class='fa fa-3x fa-question-circle'></i>
+                              </div>
+                              <div class="col-md-10" id="updateURNDialogContent">
+                                Sind Sie sich sicher das Sie URL der URN aktualisieren möchten. Diese wäre permanent,
+                                die alte URL kann nicht wiederhergestellt werden.
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                            <button type="button" class="btn btn-primary" id="updateURNDialogStart">Aktualisieren</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a href="#" data-toggle="modal" data-target="#updateURNDialog">URL der URN aktualisieren</a>
+                  </xsl:otherwise>
+              </xsl:choose>
               <li>
                 <a href="javascript:window.open(&quot;{$WebApplicationBaseURL}rsc/mets/editor/start/{@xlink:href}&quot;,&quot;Mets Editor&quot;,&quot;scrollbars=no,location=no&quot;);void(0);">Mets Editor</a>
               </li>

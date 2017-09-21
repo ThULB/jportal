@@ -430,6 +430,7 @@ $(document).ready(function() {
 	var dialogIcon = $("#generateURNDialogIcon");
 	var dialogContent = $("#generateURNDialogContent");
 
+
 	generateButton.click(function() {
 		dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
 		dialogContent.html("URN wird vergeben. Bitte warten...");
@@ -463,6 +464,48 @@ $(document).ready(function() {
 		dialogIcon.html("<i class='fa fa-3x fa-check' />");
 		dialogContent.html("Die URN wurde erfolgreich vergeben!");
 	}
+
+});
+
+$(document).ready(function() {
+    var dialog = $("#updateURNDialog");
+    var generateButton = $("#updateURNDialogStart");
+    var dialogIcon = $("#updateURNDialogIcon");
+    var dialogContent = $("#updateURNDialogContent");
+
+    generateButton.click(function() {
+        dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
+        dialogContent.html("URL der URN wird aktulisiert. Bitte warten...");
+        generateButton.attr("disabled", "disabled");
+        $.post(jp.baseURL + "rsc/urn/update/" + dialog.attr("data-id")).done(function(e) {
+            if(e.error) {
+                failed(e);
+                return;
+            }
+            success();
+        }).fail(function(e) {
+            console.log(e);
+            failed(e);
+        });
+    });
+
+    dialog.on("hidden.bs.modal", function(){
+        location.reload();
+    });
+
+    function failed(e) {
+        dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+        if(e.status == "401") {
+            dialogContent.html("Sie haben nicht die notwendige Berechtigung, um die URL der URN zu aktualisieren!");
+        } else {
+            dialogContent.html("Es ist ein Fehler bei der Generierung aufgetreten. Bitte wenden Sie sich an den Administrator.");
+        }
+    }
+
+    function success() {
+        dialogIcon.html("<i class='fa fa-3x fa-check' />");
+        dialogContent.html("Die URN wurde erfolgreich vergeben!");
+    }
 
 });
 
