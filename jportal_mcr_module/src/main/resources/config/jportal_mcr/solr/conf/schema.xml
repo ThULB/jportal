@@ -2,6 +2,8 @@
 <!-- please see http://wiki.apache.org/solr/SchemaXml -->
 <schema name="Solr-Schema" version="1.4">
 
+  <similarity class="solr.SchemaSimilarityFactory"/>
+
   <types>
 
     <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
@@ -79,6 +81,7 @@
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
         <filter class="solr.LengthFilterFactory" min="3" max="30" />
       </analyzer>
+      <similarity class="solr.BM25SimilarityFactory"/>
     </fieldType>
 
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
@@ -97,6 +100,7 @@
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
         <filter class="solr.LengthFilterFactory" min="2" max="30" />
       </analyzer>
+      <similarity class="solr.BM25SimilarityFactory"/>
     </fieldType>
 
   </types>
