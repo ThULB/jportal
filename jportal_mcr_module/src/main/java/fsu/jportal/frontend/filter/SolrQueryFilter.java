@@ -45,9 +45,9 @@ public class SolrQueryFilter implements Filter {
             String[] values = super.getParameterValues(name);
             if (values != null && name.equals(QRY)) {
                 List<String> valueList = new ArrayList<>();
-                for (int i = 0; i < values.length; i++) {
-                    if (values[i].trim().length() > 0) {
-                        valueList.add(values[i]);
+                for (String value : values) {
+                    if (value.trim().length() > 0) {
+                        valueList.add(value);
                     }
                 }
                 return valueList.isEmpty() ? null : valueList.toArray(new String[valueList.size()]);

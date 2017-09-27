@@ -9,7 +9,7 @@ $(document).ready(function() {
 	function updateBindings() {
 	  $("select.dynamicBinding").each(function() {
 	    let on = $(this).attr("on");
-	    if(on === null) {
+	    if(on == null) {
 	      return;
 	    }
       let row = $(this).closest(".row");
@@ -168,7 +168,7 @@ $.fn.dateCombiner = function() {
 							if(forms["Monat"].val() != "") {
 								// check right month input
 								if(forms["Monat"].val() > "12" || forms["Monat"].val() < "01") {
-									errorOutput("Es gibt max. 12 Monate im Jahr, min. 01 Monat. Achten Sie bitte auch darauf, dass die Eingabe als Zahl erfolgt. Bsp: 01, 02, 03, 08, 11", forms["Tag"]);
+									errorOutput("Die Monatsangabe muss zwischen 01 und 12 liegen.", forms["Tag"]);
 								} else {
 									var extraNul = "";
 									if(forms["Monat"].val().length < 2) extraNul = "0";
@@ -177,7 +177,7 @@ $.fn.dateCombiner = function() {
 									if(forms["Tag"].val() != "") {
 										// check right day input
 										if(forms["Tag"].val() > "31" || forms["Tag"].val() < "01") {
-											errorOutput("Ein Monat hat max. 31 Tage und min 01 Tag. Achten Sie bitte auch darauf, dass die Eingabe als Zahl erfolgt. Bsp: 01, 02, 08, 15, 20, 25", forms["Tag"]);
+											errorOutput("Die Tagesangabe muss zwischen 01 und 31 liegen.", forms["Tag"]);
 										} else {
 											extraNul = "";
 											if(forms["Tag"].val().length < 2) extraNul = "0";
@@ -187,13 +187,13 @@ $.fn.dateCombiner = function() {
 								}
 							} else {
 								if(forms["Tag"].val() != "") {
-									errorOutput("Die Monats Eingabe fehlt!", forms["Tag"]);
+									errorOutput("Die Monatsangabe fehlt!", forms["Tag"]);
 								}
 							}
 						}
 					} else {
 						if(forms["Monat"].val() != "" || forms["Tag"].val() != "") {
-							errorOutput("Die Jahres Eingabe fehlt!", forms["Tag"]);
+							errorOutput("Die Jahresangabe fehlt!", forms["Tag"]);
 						} else {
 							killError(forms["Monat"]);
 						}

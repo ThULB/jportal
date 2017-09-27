@@ -177,16 +177,7 @@ public class JPXMLFunctions {
      */
     public static boolean isMetsGeneratable(String derivateId) {
         try {
-            MCRObjectID id = MCRObjectID.getInstance(derivateId);
-            if (!MCRMetadataManager.exists(id)) {
-                return false;
-            }
-            try {
-                MetsUtil.getMetsXMLasDocument(derivateId);
-            } catch (FileNotFoundException fnfe) {
-                return false;
-            }
-            return true;
+            return MetsUtil.isGeneratable(MCRObjectID.getInstance(derivateId));
         } catch (Exception exc) {
             LOGGER.error("Unable to check if mets.xml of " + derivateId + " is generatable.", exc);
             return false;

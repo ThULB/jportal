@@ -10,6 +10,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRStreamUtils;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRPathContent;
@@ -26,6 +27,7 @@ import org.mycore.mets.tools.MCRMetsSave;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -166,7 +168,7 @@ public abstract class MetsUtil {
         }
         // check contains at least one image
         try (Stream<Path> stream = Files.walk(MCRPath.getPath(derivateId.toString(), "/"))) {
-            if (stream.noneMatch(path -> {
+            if (stream.filter(MCRStreamUtils.not(Files::isDirectory)).noneMatch(path -> {
                 try {
                     String probeContentType = MCRContentTypes.probeContentType(path);
                     return probeContentType.startsWith("image/");
@@ -236,8 +238,8 @@ public abstract class MetsUtil {
         // store old mets
         if (Files.exists(metsPath)) {
             MetsVersionStore.store(derivateId);
-        }
 
+        }
         // replace
         try (InputStream is = newMetsContent.getInputStream()) {
             Files.copy(is, metsPath, StandardCopyOption.REPLACE_EXISTING);
