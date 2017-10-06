@@ -95,10 +95,10 @@ public class JPJournal extends JPContainer {
      * @return true if this journal is one of the type
      */
     public boolean isJournalType(String classId, String categId) {
-        return getJournalTypes().stream().filter(id -> {
+        return getJournalTypes().stream().anyMatch(id -> {
             MCRCategoryID cmp = new MCRCategoryID(classId, categId);
             return cmp.equals(id);
-        }).findAny().isPresent();
+        });
     }
 
     /**

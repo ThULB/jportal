@@ -1,12 +1,17 @@
 package fsu.jportal.backend;
 
-import org.mycore.datamodel.common.MCRISO8601Date;
-import org.mycore.datamodel.metadata.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.mycore.datamodel.common.MCRISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Simple java abstraction of a jportal article. This class is not complete at all.
@@ -17,7 +22,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     public static String TYPE = JPObjectType.jparticle.name();
 
-    public static enum RecensionDateType {
+    public enum RecensionDateType {
         published_Original, published_Original_From, published_Original_Till
     }
 
@@ -166,9 +171,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     public JPArticle clone() throws CloneNotSupportedException {
         JPArticle clone = (JPArticle) super.clone();
         clone.setTitle(getTitle());
-        getSize().ifPresent(size -> {
-            clone.setSize(size);
-        });
+        getSize().ifPresent(clone::setSize);
         String derivateLink = getDerivateLink();
         if (derivateLink != null) {
             try {

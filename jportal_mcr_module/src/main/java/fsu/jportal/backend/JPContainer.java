@@ -3,7 +3,7 @@ package fsu.jportal.backend;
 import fsu.jportal.backend.event.AutoSortHandler;
 import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
-import fsu.jportal.common.Pair;
+import fsu.jportal.util.Pair;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
@@ -27,7 +27,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
 
     public JPContainer() {
         super();
-        childrenMap = new LinkedHashMap<MCRObjectID, JPObjectComponent>();
+        childrenMap = new LinkedHashMap<>();
     }
 
     public JPContainer(String mcrId) {
@@ -40,7 +40,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
 
     public JPContainer(MCRObject mcrObject) {
         super(mcrObject);
-        childrenMap = new LinkedHashMap<MCRObjectID, JPObjectComponent>();
+        childrenMap = new LinkedHashMap<>();
     }
 
     /**
@@ -58,7 +58,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      * Removes the child by the given id. If there is no such child
      * nothing happens.
      * 
-     * @param id
+     * @param id the child to remove
      */
     public void removeAddedChild(MCRObjectID id) {
         JPObjectComponent component = childrenMap.remove(id);
@@ -115,17 +115,16 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      */
     public Optional<Pair<JPSorter, Order>> getSortBy() {
         Stream<MCRMetaElementXML> stream = metadataStream("autosort", MCRMetaElementXML.class);
-        return stream.map(metaXML -> metaXML.createXML()).map(sortByElement -> {
+        return stream.map(MCRMetaElementXML::createXML).map(sortByElement -> {
             try {
                 Class<?> forName = Class.forName(sortByElement.getText());
                 String orderAttribute = sortByElement.getAttributeValue("order");
                 Order order = orderAttribute != null ? Order.valueOf(orderAttribute.toUpperCase()) : null;
                 if (JPSorter.class.isAssignableFrom(forName)) {
-                    return new Pair<JPSorter, Order>((JPSorter) forName.newInstance(), order);
+                    return new Pair<>((JPSorter) forName.newInstance(), order);
                 } else {
                     throw new MCRException("The sorter class " + forName.getName() + " is not a subclass of JPSorter.");
                 }
-
             } catch (Exception exc) {
                 throw new MCRException("Unable to retrieve sorter for object " + getObject().getId(), exc);
             }
@@ -136,7 +135,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      * Sets the autosort for this container. If the sorter is null,
      * the autosort is removed.
      * 
-     * @param sorter the JPSorter
+     * @param sorterClass class of the JPSorter
      * @param order ascending or descending
      */
     public void setSortBy(Class<? extends JPSorter> sorterClass, Order order) {
@@ -163,9 +162,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      */
     public void sort() {
         JPContainer component = this;
-        getSortBy().ifPresent(pair -> {
-            pair.getKey().sort(component, pair.getValue());
-        });
+        getSortBy().ifPresent(pair -> pair.getKey().sort(component, pair.getValue()));
     }
 
 }

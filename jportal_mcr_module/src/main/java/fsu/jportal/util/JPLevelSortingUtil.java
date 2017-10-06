@@ -8,7 +8,6 @@ import fsu.jportal.backend.sort.JPMagicSorter;
 import fsu.jportal.backend.sort.JPPublishedSorter;
 import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
-import fsu.jportal.common.Unthrow;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -52,21 +51,19 @@ public abstract class JPLevelSortingUtil {
         Map<String, String> levels = config.keyFilter("level.");
         levels.entrySet().stream().collect(Collectors.groupingBy(entry -> {
             String key = entry.getKey();
-            Integer level = Integer.valueOf(key.substring(6, key.indexOf(".", 6)));
-            return level;
-        })).entrySet().stream().forEach(entry -> {
+            return Integer.valueOf(key.substring(6, key.indexOf(".", 6)));
+        })).forEach((level, value) -> {
             // level
-            Integer level = entry.getKey();
             // name
-            String name = entry.getValue().stream().filter(e -> {
+            String name = value.stream().filter(e -> {
                 return e.getKey().endsWith(".name");
             }).map(Entry::getValue).findAny().orElse("unknown");
             // sorter
-            String sorter = entry.getValue().stream().filter(e -> {
+            String sorter = value.stream().filter(e -> {
                 return e.getKey().endsWith(".sorter");
             }).map(Entry::getValue).findAny().orElse(null);
             // order
-            Order order = entry.getValue().stream().filter(e -> {
+            Order order = value.stream().filter(e -> {
                 return e.getKey().endsWith(".order");
             }).map(Entry::getValue).map(Order::valueOf).findAny().orElse(null);
             Unthrow.wrapProc(() -> {
@@ -162,9 +159,7 @@ public abstract class JPLevelSortingUtil {
             apply(objectID, levelSorting, 0);
         } finally {
             // unmark all descendants
-            descendantAndSelfIds.forEach(childId -> {
-                MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId));
-            });
+            descendantAndSelfIds.forEach(childId -> MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId)));
             MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds);
         }
     }
@@ -212,7 +207,7 @@ public abstract class JPLevelSortingUtil {
      * Analyzes the journal and returns a good starting point for the
      * level sorting structure.
      * 
-     * @param objectID the journal id
+     * @param journalID the journal id
      */
     public static JPLevelSorting analyze(MCRObjectID journalID) {
         JPJournal journal = new JPJournal(journalID);
@@ -259,9 +254,9 @@ public abstract class JPLevelSortingUtil {
             levelSorting.add("Jahrgang", JPPublishedSorter.class, Order.ASCENDING);
             return;
         }
-        if (Arrays.asList(DateFormatSymbols.getInstance(Locale.GERMAN).getMonths()).stream().filter(month -> {
+        if (Arrays.stream(DateFormatSymbols.getInstance(Locale.GERMAN).getMonths()).anyMatch(month -> {
             return !month.isEmpty() && title.toLowerCase().contains(month.toLowerCase());
-        }).findAny().isPresent()) {
+        })) {
             levelSorting.add("Monat", JPPublishedSorter.class, Order.ASCENDING);
             return;
         }

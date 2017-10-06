@@ -1,11 +1,17 @@
 package org.mycore.datamodel.metadata;
 
 import com.google.gson.JsonObject;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
 import org.jdom2.Element;
-import org.jdom2.Namespace;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRXMLHelper;
 
+/**
+ * Simpler version of {@link MCRMetaXML} with support of a single xml element instead of multiple content.
+ *
+ * @author Matthias Eichner
+ */
 public class MCRMetaElementXML extends MCRMetaDefault {
 
     protected Element element;
@@ -18,31 +24,35 @@ public class MCRMetaElementXML extends MCRMetaDefault {
 
     @Override
     public Element createXML() throws MCRException {
-        if (!isValid()) {
-            debug();
-            throw new MCRException("The content of MCRMetaDefault is not valid.");
+        Element elm = super.createXML();
+        for (Attribute attr : this.element.getAttributes()) {
+            elm.setAttribute(attr.clone());
         }
-        Element clone = this.element != null ? this.element.clone().setName(subtag) : new Element(subtag);
-        if (getLang() != null && getLang().length() > 0)
-            clone.setAttribute("lang", getLang(), Namespace.XML_NAMESPACE);
-        if (getType() != null && getType().length() > 0) {
-            clone.setAttribute("type", getType());
+        for (Content content : this.element.getContent()) {
+            elm.addContent(content.clone());
         }
-        clone.setAttribute("inherited", Integer.toString(getInherited()));
-        return clone;
+        return elm;
     }
 
+    /**
+     * Creates the JSON representation. Extends the {@link MCRMetaDefault#createJSON()} method
+     * with the following data.
+     *
+     * <pre>
+     *   {
+     *     content: {
+     *         ... properties of the parsed content ...
+     *     }
+     *   }
+     * </pre>
+     *
+     * @see MCRXMLHelper#jsonSerialize(Element)
+     */
     @Override
     public JsonObject createJSON() {
-        JsonObject obj = MCRXMLHelper.jsonSerialize(this.element);
-        if (getLang() != null) {
-            obj.addProperty("lang", getLang());
-        }
-        if (getType() != null) {
-            obj.addProperty("type", getType());
-        }
-        obj.addProperty("inherited", getInherited());
-        return obj;
+        JsonObject json = super.createJSON();
+        json.add("content", MCRXMLHelper.jsonSerialize(this.element));
+        return json;
     }
 
     @Override
@@ -62,11 +72,6 @@ public class MCRMetaElementXML extends MCRMetaDefault {
             return false;
         final MCRMetaElementXML other = (MCRMetaElementXML) obj;
         return MCRXMLHelper.deepEqual(this.element, other.element);
-    }
-
-    @Override
-    public boolean isValid() {
-        return super.isValid();
     }
 
 }

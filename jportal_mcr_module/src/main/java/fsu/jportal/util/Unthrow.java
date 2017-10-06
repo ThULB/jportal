@@ -1,4 +1,4 @@
-package fsu.jportal.common;
+package fsu.jportal.util;
 
 import java.util.stream.Stream;
 

@@ -1,4 +1,4 @@
-package fsu.jportal.common;
+package fsu.jportal.util;
 
 /**
  * An object of type RomanNumeral is an integer between 1 and 3999.  It can

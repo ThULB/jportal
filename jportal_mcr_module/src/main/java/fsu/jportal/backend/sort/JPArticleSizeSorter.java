@@ -2,7 +2,7 @@ package fsu.jportal.backend.sort;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.common.RomanNumeral;
+import fsu.jportal.util.RomanNumeral;
 import fsu.jportal.util.JPComponentUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
