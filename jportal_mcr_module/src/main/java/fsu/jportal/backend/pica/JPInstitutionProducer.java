@@ -1,5 +1,8 @@
 package fsu.jportal.backend.pica;
 
+import java.io.IOException;
+import java.util.List;
+
 import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
 import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
 import fsu.archiv.mycore.sru.impex.pica.producer.CorporationProducer;
@@ -8,9 +11,6 @@ import org.jdom2.Namespace;
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaXML;
-
-import java.io.IOException;
-import java.util.List;
 
 public class JPInstitutionProducer extends CorporationProducer {
 
@@ -69,11 +69,11 @@ public class JPInstitutionProducer extends CorporationProducer {
             return null;
         }
         Element names = generateDefElement("names", MCRMetaInstitutionName.class, true, false);
-        createInstitutionNameElement(names, "name");
+        createInstitutionNameElement(names);
         return names;
     }
 
-    protected void createInstitutionNameElement(Element parent, String elementName) {
+    protected void createInstitutionNameElement(Element parent) {
         Element nameElement = new Element("name").setAttribute("inherited", "0");
         parent.addContent(nameElement);
         String fullname = this.record.getValue("029A", "a");
@@ -92,16 +92,16 @@ public class JPInstitutionProducer extends CorporationProducer {
             return null;
         }
         Element alternatives = generateDefElement("alternatives", MCRMetaXML.class, true, true);
-        createMetaXMLNameElement(alternatives, "alternative", tag);
+        createMetaXMLNameElement(alternatives, tag);
         return alternatives;
     }
 
-    protected void createMetaXMLNameElement(Element defElement, String elementName, String fieldName) {
+    protected void createMetaXMLNameElement(Element defElement, String fieldName) {
         List<Datafield> datafields = this.record.getDatafieldsByName(fieldName);
         for(Datafield datafield : datafields) {
             List<Subfield> subfields = datafield.getSubfieldsByCode("a");
             if (!subfields.isEmpty()) {
-                Element childElement = new Element(elementName).setAttribute("inherited", "0");
+                Element childElement = new Element("alternative").setAttribute("inherited", "0");
                 Element nameElement = new Element("name").setText(subfields.get(0).getValue());
                 defElement.addContent(childElement.addContent(nameElement));
             }
