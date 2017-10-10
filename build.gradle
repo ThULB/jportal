@@ -1,4 +1,8 @@
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 
 def resourcePaths = new HashSet<File>();
 
@@ -117,6 +121,7 @@ project(':jportal_mcr_module') {
         compile "org.mycore:mycore-webtools:$mcrVersion"
         compile "org.mycore:mycore-webcli:$mcrVersion"
         compile "org.mycore:mycore-pi:$mcrVersion"
+        compile "org.mycore:mycore-iiif:$mcrVersion"
 
         // mycore external
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
@@ -227,8 +232,8 @@ project(':jportal_webapp') {
         runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.mycore:mycore-acl-editor2:$mcrVersion"
         runtime "org.mycore:mycore-ifs:$mcrVersion"
-		    runtime "com.zaxxer:HikariCP:2.4.5"
-		    runtime "org.hibernate:hibernate-hikaricp:$hibernateVersion"
+		runtime "com.zaxxer:HikariCP:2.4.5"
+		runtime "org.hibernate:hibernate-hikaricp:$hibernateVersion"
         runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
 
         runtime project(':jportal_laws')
@@ -271,7 +276,6 @@ project(':jportal_webapp') {
         jetty
         jettyStart
         h2db
-        solrWar
         printer
     }
 
@@ -279,7 +283,6 @@ project(':jportal_webapp') {
         jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
         jettyStart "org.eclipse.jetty:jetty-start:$jettyVersion"
         h2db "com.h2database:h2:1.4.191"
-        solrWar "org.mycore.solr:solr:$solrVersion@war"
     }
 
     ext.appName = "jportal"
@@ -288,8 +291,6 @@ project(':jportal_webapp') {
     ext.appPath = "$mcrHome/$appName"
     ext.confDir = "$project.projectDir/config"
     ext.solrPort = '8391'
-    ext.stopSolrPort = '8395'
-    ext.stopSolrKey = 'StopJpSolr'
     ext.jettyStopPort = '8296'
     ext.jettyStopKey = 'StopJetty'
 
@@ -299,36 +300,56 @@ project(':jportal_webapp') {
         }
     }
 
+    def solrBasePath = Paths.get(projectDir.getAbsolutePath(), "solr");
+    def solrZipFile = solrBasePath.resolve("solr-${solrVersion}.zip");
+    def solrServerPath = solrBasePath.resolve("server");
+
     task configApp << {
+        // copy config/*
         copy {
             from(confDir) {
                 include "**"
                 exclude "jetty/**"
             }
             into appPath
+        }
 
-            def moduleFiles = project(':jportal_mcr_module').fileTree("src/main/resources").files
+        // handle SOLR
+        // download
+        if(!Files.exists(solrBasePath)) {
+            Files.createDirectory(solrBasePath);
+        }
+        def newVersion = false;
+        if(!Files.exists(solrZipFile)) {
+            def solrZipURL = "http://apache.mirror.iphh.net/lucene/solr/${solrVersion}/solr-${solrVersion}.zip"
+            new URL(solrZipURL).withInputStream { is -> solrZipFile.withOutputStream { it << is } }
+            newVersion = true;
+        }
 
-            configurations {
-                mcrsolr
+        // extract
+        if(!Files.exists(solrServerPath) || newVersion) {
+            if(Files.exists(solrServerPath) && newVersion) {
+                println "There is probably a new solr version. Delete old folder..."
+                delete solrServerPath.toAbsolutePath().toString()
             }
-
-            dependencies {
-                mcrsolr "org.mycore:mycore-solr:$mcrVersion@jar"
-            }
-
-            into("solr-home") {
-                from moduleFiles
-                include '**/solr.xml'
-            }
-
-            into("solr-home/conf") {
-                from moduleFiles
-                include '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
-                from({ zipTree(configurations.mcrsolr.singleFile).files }) {
-                    include 'classificationSchema.xml'
+            println "Solr not installed. Installing into " + solrServerPath + "..."
+            Files.createDirectories(solrServerPath);
+            def ignoreRootDir = 'solr-' + solrVersion
+            copy {
+                from zipTree(solrZipFile.toAbsolutePath().toString()).matching {include "$ignoreRootDir/**"}
+                into solrServerPath.toAbsolutePath().toString()
+                eachFile { fcp ->
+                    fcp.path = fcp.path.replaceFirst("^$ignoreRootDir", '')
                 }
+                includeEmptyDirs false
             }
+        }
+
+        // copy additional libs to solr-home
+        copy {
+            from solrServerPath.toAbsolutePath().toString() + "/contrib/analysis-extras/lib"
+            from solrServerPath.toAbsolutePath().toString() + "/contrib/analysis-extras/lucene-libs"
+            into appPath + "/solr-home/lib"
         }
     }
 
@@ -365,25 +386,18 @@ project(':jportal_webapp') {
         args "-tcpShutdown", "tcp://localhost:9092"
     }
 
-    task runSolr(type: JavaProcess) {
-        doFirst {
-            systemProperties.put("solr.solr.home", "$appPath/solr-home")
-            classpath configurations.jetty
-            main "org.eclipse.jetty.runner.Runner"
-            args '--config', "$project.projectDir/config/jetty/jetty-solr-config.xml"
-            args '--port', solrPort
-            args '--stop-port', stopSolrPort
-            args '--stop-key', stopSolrKey
-            args '--path', '/solr', configurations.solrWar.singleFile
-        }
+    task runSolr(type: Exec) {
+        workingDir solrServerPath.toAbsolutePath().toString()
+        ignoreExitValue true
+        commandLine './bin/solr', 'restart', '-noprompt'
+        args '-s', appPath + '/solr-home'
+        args '-p', solrPort
     }
 
-    task stopSolr(type: JavaProcess) {
-        systemProperties.put('STOP.PORT', stopSolrPort)
-        systemProperties.put('STOP.KEY', stopSolrKey)
-        classpath configurations.jettyStart
-        main "org.eclipse.jetty.start.Main"
-        args '--stop'
+    task stopSolr(type: Exec) {
+        workingDir solrServerPath.toAbsolutePath().toString()
+        ignoreExitValue true
+        commandLine './bin/solr', 'stop'
     }
 
     task runJetty(type: JavaProcess) {
