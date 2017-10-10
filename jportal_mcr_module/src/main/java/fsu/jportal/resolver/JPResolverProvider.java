@@ -1,6 +1,6 @@
 package fsu.jportal.resolver;
 
-import fsu.jportal.nio.JarResource;
+import fsu.jportal.util.JarResource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.xml.MCRURIResolver.MCRResolverProvider;
@@ -14,10 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JPResolverProvider implements MCRResolverProvider {
+
     private static final Logger LOGGER = LogManager.getLogger(JPResolverProvider.class);
+
     @Override
     public Map<String, URIResolver> getURIResolverMapping() {
-        HashMap<String, URIResolver> resolverMap = new HashMap<String, URIResolver>();
+        HashMap<String, URIResolver> resolverMap = new HashMap<>();
         LOGGER.info("Init resolver ....");
         try {
             ClassLoader classLoader = getClass().getClassLoader();
@@ -25,9 +27,8 @@ public class JPResolverProvider implements MCRResolverProvider {
             String pkgName = "fsu.jportal.resolver";
             Enumeration<URL> resources = classLoader.getResources(pkgName.replace(".", "/"));
             while (resources.hasMoreElements()) {
-                URL url = (URL) resources.nextElement();
+                URL url = resources.nextElement();
                 JarResource jarResource = new JarResource(url);
-                
                 for (Path path : jarResource.listFiles()) {
                     String fileName = path.getFileName().toString();
                     
@@ -50,8 +51,7 @@ public class JPResolverProvider implements MCRResolverProvider {
                 }
             }
         } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LogManager.getLogger().error("Unable to resolve URI mapping.", e);
         }
         return resolverMap;
     }

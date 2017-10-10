@@ -1,6 +1,7 @@
 package fsu.jportal.resolver;
 
-import fsu.jportal.nio.JarResource;
+import fsu.jportal.util.JarResource;
+import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -24,9 +25,8 @@ public class OptionFolderResolver implements URIResolver {
         try {
             Enumeration<URL> resources = getClass().getClassLoader().getResources("META-INF/resources/jp_templates");
             while (resources.hasMoreElements()) {
-                URL url = (URL) resources.nextElement();
+                URL url = resources.nextElement();
                 JarResource jarResource = new JarResource(url);
-                
                 for (Path child : jarResource.listFiles()) {
                     String folderName = child.getFileName().getFileName().toString().replace("/", "");
                     folderList.addContent(createItemElement(folderName));
@@ -35,8 +35,7 @@ public class OptionFolderResolver implements URIResolver {
                 jarResource.close();
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LogManager.getLogger().error("Unable to resolve templates", e);
         }
         ContenComparator comparator = new ContenComparator();
         folderList.sortChildren(comparator);
@@ -51,9 +50,6 @@ public class OptionFolderResolver implements URIResolver {
             
             return value1.compareTo(value2);
         }
-
-        
-
     }
 
     private Element createItemElement(String folderName) {
@@ -63,4 +59,5 @@ public class OptionFolderResolver implements URIResolver {
         item.addContent(label);
         return item;
     }
+
 }

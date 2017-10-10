@@ -1,4 +1,4 @@
-package fsu.jportal.nio;
+package fsu.jportal.util;
 
 import java.io.IOException;
 import java.net.URI;

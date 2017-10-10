@@ -4,11 +4,6 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
 
-  <xsl:include href="object2record.xsl" />
-  <xsl:include href="epicur.xsl" />
-
-  <xsl:template match="mycoreobject" mode="metadata">
-    <xsl:apply-templates select="." />
-  </xsl:template>
+    <xsl:include href="mycoreobject-marcxml.xsl"/>
 
 </xsl:stylesheet>

@@ -1,6 +1,6 @@
 package fsu.jportal.handler;
 
-import fsu.jportal.nio.JarResource;
+import fsu.jportal.util.JarResource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
