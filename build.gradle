@@ -344,13 +344,6 @@ project(':jportal_webapp') {
                 includeEmptyDirs false
             }
         }
-
-        // copy additional libs to solr-home
-        copy {
-            from solrServerPath.toAbsolutePath().toString() + "/contrib/analysis-extras/lib"
-            from solrServerPath.toAbsolutePath().toString() + "/contrib/analysis-extras/lucene-libs"
-            into appPath + "/solr-home/lib"
-        }
     }
 
     task configWebTests << {
