@@ -1,11 +1,11 @@
 package fsu.jportal.backend.pica;
 
-import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
-import org.jdom2.Element;
-
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
+import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
+import org.jdom2.Element;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
 
 public class JPPersonProducer extends PersonProducer {
 
@@ -30,11 +30,19 @@ public class JPPersonProducer extends PersonProducer {
     protected Element createDefIdentifierElement() {
         Element e = super.createDefIdentifierElement();
         // no pnd, we already have gnd!
-        List<Element> filteredContent = StreamSupport.stream(e.getChildren().spliterator(), false)
+        List<Element> filteredContent = e.getChildren().stream()
             .filter(ide -> !ide.getAttributeValue("type").equals("pnd")).collect(Collectors.toList());
         e.removeContent();
         e.addContent(filteredContent);
         return e;
+    }
+
+    @Override
+    protected Element createDefElement(String defElementName, String tag, String code, String type, Class<? extends MCRMetaInterface> metaInterfaceClass, String conditionCode, String conditionValue, Integer maxOccurs) {
+        if(defElementName.equals("def.dateOfBirth") || defElementName.equals("def.dateOfDeath")) {
+            return super.createDefElement(defElementName, tag, code, type, metaInterfaceClass, conditionCode, conditionValue, maxOccurs);
+        }
+        return null;
     }
 
     @Override
