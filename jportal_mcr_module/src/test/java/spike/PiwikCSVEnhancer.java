@@ -2,6 +2,7 @@ package spike;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import java.io.ByteArrayInputStream;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Reads a csv file from piwik and adds all journal title's.
+ * Reads a csv file from piwik and adds all journalId title's.
  * 
  * @author Matthias Eichner
  */
@@ -32,8 +33,9 @@ public class PiwikCSVEnhancer {
     }
 
     public void write(String filePath, String data) throws IOException {
-        InputStream is = new ByteArrayInputStream(data.getBytes(Charset.defaultCharset()));
-        Files.copy(is, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+        try (InputStream is = new ByteArrayInputStream(data.getBytes(Charset.defaultCharset()))) {
+            Files.copy(is, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 
     private String processLine(String line) {
@@ -44,18 +46,21 @@ public class PiwikCSVEnhancer {
             String[] lineParts = line.split(",");
             String journalId = lineParts[0];
 
-            URL url = new URL("http://zs.thulb.uni-jena.de/receive/" + journalId + "?XSL.Style=xml");
-            URLConnection connection = url.openConnection();
-
-            SAXBuilder b = new SAXBuilder();
-            Document xml = b.build(connection.getInputStream());
-            Element root = xml.getRootElement();
-            String title = root.getChild("metadata").getChild("maintitles").getChild("maintitle").getText();
+            String title = getJournalTitle(journalId);
             return line + ",\"" + title + "\"";
         } catch (Exception exc) {
             exc.printStackTrace();
             return line;
         }
+    }
+
+    public static String getJournalTitle(String journalId) throws IOException, JDOMException {
+        URL url = new URL("http://zs.thulb.uni-jena.de/receive/" + journalId + "?XSL.Style=xml");
+        URLConnection connection = url.openConnection();
+        SAXBuilder b = new SAXBuilder();
+        Document xml = b.build(connection.getInputStream());
+        Element root = xml.getRootElement();
+        return root.getChild("metadata").getChild("maintitles").getChild("maintitle").getText();
     }
 
     public static void main(String[] args) throws IOException {
