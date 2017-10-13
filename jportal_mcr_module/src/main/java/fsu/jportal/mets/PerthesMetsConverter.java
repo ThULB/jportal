@@ -52,8 +52,9 @@ public class PerthesMetsConverter extends ENMAPConverter {
     @Override
     protected LogicalDiv getLogicalSubDiv(Element enmap, Element enmapDiv, Mets mcrMets, List<ALTO> altoReferences) {
         LogicalDiv logicalSubDiv = super.getLogicalSubDiv(enmap, enmapDiv, mcrMets, altoReferences);
-        boolean maps = logicalSubDiv.getLabel().startsWith("Karten, Abbildungen");
-        boolean lastGeoLiteratur = logicalSubDiv.getLabel().startsWith("Geographischer ")
+        String subDivLabel = logicalSubDiv.getLabel();
+        boolean maps = subDivLabel.startsWith("Karten, Abbildungen") || subDivLabel.startsWith("Karten und Abbildungen");
+        boolean lastGeoLiteratur = subDivLabel.startsWith("Geographischer ")
             && lastLogicalDivId.equals(logicalSubDiv.getId());
 
         if (maps || lastGeoLiteratur) {
@@ -177,11 +178,8 @@ public class PerthesMetsConverter extends ENMAPConverter {
         if (lastFrom != null) {
             int length = lastTo - lastFrom;
             String numberAsString = String.format("%0" + length + "d", number);
-            StringBuilder result = new StringBuilder();
-            result.append(fileID.substring(0, lastFrom));
-            result.append(numberAsString);
-            result.append(fileID.substring(lastTo));
-            return Optional.of(result.toString());
+            String result = fileID.substring(0, lastFrom) + numberAsString + fileID.substring(lastTo);
+            return Optional.of(result);
         }
         return Optional.empty();
     }
