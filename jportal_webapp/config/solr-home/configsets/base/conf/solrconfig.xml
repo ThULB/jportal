@@ -1291,7 +1291,7 @@
     <lst name="defaults">
       <str name="echoParams">explicit</str>
       <str name="qf">id^100 heading^25 titles^25 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 allMeta</str>
-      <str name="qfContent">content</str>
+      <str name="qfContent">content alto_content</str>
       <int name="rows">10</int>
       <str name="qry">*:*</str>
       <str name="q.op">OR</str>
@@ -1356,21 +1356,20 @@
   <requestHandler name="/laws" class="solr.SearchHandler">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
-      <str name="qf">id^100 titles^25 participants^10 participants_de^5 dates^5 titles_de^5 content allMeta
-      </str>
+      <str name="qf">id^100 titles^25 participants^10 participants_de^5 dates^5 titles_de^5 allMeta</str>
+      <str name="qfContent">content alto_content</str>
       <int name="rows">10</int>
       <str name="qry">*:*</str>
       <str name="q.op">AND</str>
       <str name="sort">published asc, maintitle_sort asc</str>
     </lst>
     <lst name="appends">
-      <str name="fq">+contentClassi2:Gesetzesblaetter</str>
+      <str name="fq">+journalType:jportal_class_00000205\:governmentGazettes</str>
       <str name="fq">+objectType:(jpvolume OR jparticle)</str>
     </lst>
     <lst name="invariants">
-      <str name="q">({!join from=returnId to=id}{!type=edismax v=$qry qf=$qf}) OR {!type=edismax v=$qry qf=$qf}</str>
+      <str name="q">({!join from=returnId to=id}{!type=edismax v=$qry qf=$qfContent}) OR {!type=edismax v=$qry qf=$qf}</str>
     </lst>
   </requestHandler>
-
 
 </config>
