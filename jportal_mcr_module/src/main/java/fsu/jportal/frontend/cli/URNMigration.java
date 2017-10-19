@@ -60,14 +60,24 @@ public class URNMigration {
 
     @MCRCommand(syntax = "migrate urn with serveID {0}")
     public static void migrateURN(String serviceID) {
+        migrateURN(serviceID, null);
+    }
+
+    @MCRCommand(syntax = "migrate urn with serveID {0} derivID {1}")
+    public static void migrateURN(String serviceID, String derivID) {
         EntityManager entityManager = MCREntityManagerProvider.getCurrentEntityManager();
 
-        entityManager.createQuery("select u from MCRURN u", MCRURN.class)
-                     .getResultList()
-                     .stream()
-                     .flatMap(mcrurn -> toMCRPI(mcrurn, serviceID))
-                     .peek(URNMigration::logInfo)
-                     .forEach(entityManager::persist);
+        String qlString = "select u from MCRURN u";
+        if(derivID != null && derivID != ""){
+            qlString = qlString + "where mcrid = '" + derivID + "'";
+        }
+
+        entityManager.createQuery(qlString, MCRURN.class)
+            .getResultList()
+            .stream()
+            .flatMap(mcrurn -> toMCRPI(mcrurn, serviceID))
+            .peek(URNMigration::logInfo)
+            .forEach(entityManager::persist);
 
         EntityTransaction transaction = entityManager.getTransaction();
 

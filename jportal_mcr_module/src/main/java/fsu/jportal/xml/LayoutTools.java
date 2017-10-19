@@ -2,6 +2,7 @@ package fsu.jportal.xml;
 
 import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.frontend.cli.URNMigration;
 import fsu.jportal.resolver.LogoResolver;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPComponentUtil.JPInfoProvider;
@@ -114,15 +115,20 @@ public abstract class LayoutTools {
         return legalEntity.map(le -> le.getId(type).orElse(null)).orElse(null);
     }
 
-    public static boolean hasURNAssigned(String objID){
+    public static boolean hasURNAssigned(String derivID){
         String registrationServiceID = "DNBURNGranular";
         MCRURNGranularOAIRegistrationService registrationService = new MCRURNGranularOAIRegistrationService(
                 registrationServiceID);
 
-        boolean mcrPIcreated = registrationService.isCreated(MCRObjectID.getInstance(objID), "");
-        boolean mcrURNDefined = MCRXMLFunctions.hasURNDefined(objID);
+        boolean mcrURNDefined = MCRXMLFunctions.hasURNDefined(derivID);
+        boolean mcrPIcreated = registrationService.isCreated(MCRObjectID.getInstance(derivID), "");
 
-        return mcrPIcreated || mcrURNDefined;
+        if(!mcrPIcreated && mcrURNDefined){
+            URNMigration.migrateURN("DNBURNGranular", derivID);
+        }
+
+
+        return mcrPIcreated;
     }
 
 }
