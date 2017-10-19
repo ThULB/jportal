@@ -69,7 +69,7 @@ public class URNMigration {
 
         String qlString = "select u from MCRURN u";
         if(derivID != null && derivID != ""){
-            qlString = qlString + "where mcrid = '" + derivID + "'";
+            qlString = qlString + " where mcrid = '" + derivID + "'";
         }
 
         entityManager.createQuery(qlString, MCRURN.class)
