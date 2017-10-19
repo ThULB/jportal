@@ -128,7 +128,7 @@ public abstract class LayoutTools {
         }
 
 
-        return mcrPIcreated;
+        return mcrPIcreated || mcrURNDefined;
     }
 
 }
