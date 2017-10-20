@@ -1,61 +1,115 @@
 package fsu.jportal.mets;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.xml.MCRXMLFunctions;
-import org.mycore.datamodel.niofs.MCRContentTypes;
-import org.mycore.datamodel.niofs.MCRPath;
-import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.files.FLocat;
-import org.mycore.mets.model.files.File;
-import org.mycore.mets.model.files.FileGrp;
-import org.mycore.mets.model.files.FileSec;
-import org.mycore.mets.model.struct.*;
+import static fsu.jportal.frontend.SolrToc.buildQuery;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.common.params.ModifiableSolrParams;
+import org.mycore.common.xml.MCRXMLFunctions;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRContentTypes;
+import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.mets.model.MCRMETSHierarchyGenerator;
+import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.files.FLocat;
+import org.mycore.mets.model.files.File;
+import org.mycore.mets.model.files.FileGrp;
+import org.mycore.mets.model.files.FileSec;
+import org.mycore.mets.model.struct.Area;
+import org.mycore.mets.model.struct.Fptr;
+import org.mycore.mets.model.struct.LOCTYPE;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.LogicalStructMap;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
+import org.mycore.mets.model.struct.Seq;
+import org.mycore.mets.tools.MCRMetsSave;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.search.MCRSolrSearchUtils;
 
 /**
- * Uses the jportal mets generator and adds the support for ALTO files. This includes
+ * Uses the mycore mets hierarchy generator and adds the support for ALTO files. This includes
  * adding alto files to the fileSec and physical struct map.
  * <p>
  * An additional feature is coping ALTO block references from an "old"
  * mets to the newly generated one.
  * </p>
- * 
+ *
  * @author Matthias Eichner
  */
-public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
+public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private Mets oldMets;
-
     private Set<FileRef> files;
 
-    public ALTOMETSHierarchyGenerator(Mets oldMets) {
+    public JPMetsHierarchyGenerator() {
         super();
-        this.oldMets = oldMets;
         this.files = new TreeSet<>();
     }
 
+    protected String getType(MCRObject obj) {
+        return obj.getId().getTypeId().substring(2);
+    }
+
+    protected String getLabel(MCRObject obj) {
+        Optional<MCRMetaLangText> maintitle = obj.getMetadata().findFirst("maintitles");
+        return maintitle.map(MCRMetaLangText::getText).orElse("no title for " + obj.getId());
+    }
+
+    protected List<MCRObject> getChildren(MCRObject parentObject) {
+        if (parentObject.getId().getTypeId().equals("jparticle")) {
+            return Collections.emptyList();
+        }
+        List<MCRObject> children = new ArrayList<>();
+        getChildren(parentObject, "jpvolume").stream()
+                                             .map(MCRMetadataManager::retrieveMCRObject)
+                                             .forEach(children::add);
+        getChildren(parentObject, "jparticle").stream()
+                                              .map(MCRMetadataManager::retrieveMCRObject)
+                                              .forEach(children::add);
+        return children;
+    }
+
+    protected List<MCRObjectID> getChildren(MCRObject parentObject, String objectType) {
+        String parentID = parentObject.getId().toString();
+        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, "order asc");
+        solrParams.set("fl", "id objectType");
+        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        return MCRSolrSearchUtils.stream(solrClient, solrParams).map(doc -> {
+            String id = (String) doc.getFieldValue("id");
+            return MCRObjectID.getInstance(id);
+        }).collect(Collectors.toList());
+    }
+
     @Override
-    protected FileSec createFileSection(MCRPath dir, Set<MCRPath> ignoreNodes) throws IOException {
+    protected FileSec createFileSection() throws IOException {
         FileSec fileSec = new FileSec();
         FileGrp masterGroup = new FileGrp(FileGrp.USE_MASTER);
         FileGrp altoGroup = new FileGrp("ALTO");
 
-        try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(dir)) {
+        try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(getDerivatePath())) {
             for (Path child : dirStream) {
                 MCRPath imagePath = MCRPath.toMCRPath(child);
-                if (ignoreNodes.contains(imagePath)) {
+                if (getIgnorePaths().contains(imagePath)) {
                     continue;
                 }
                 if (Files.isDirectory(imagePath)) {
@@ -66,7 +120,6 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
                     continue;
                 }
                 FileRef ref = new FileRef();
-                ref.uuid = UUID.randomUUID().toString();
                 ref.imagePath = imagePath;
                 ref.imageContentType = contentType;
 
@@ -96,7 +149,7 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
         return fileSec;
     }
 
-    private File addFile(String id, FileGrp fileGroup, MCRPath imagePath, String mimeType) {
+    private void addFile(String id, FileGrp fileGroup, MCRPath imagePath, String mimeType) {
         File imageFile = new File(id, mimeType);
         try {
             final String href = MCRXMLFunctions.encodeURIPath(imagePath.getOwnerRelativePath().substring(1), true);
@@ -106,7 +159,6 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
         } catch (URISyntaxException uriSyntaxException) {
             LOGGER.error("invalid href", uriSyntaxException);
         }
-        return imageFile;
     }
 
     @Override
@@ -116,7 +168,8 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
         pstr.setDivContainer(physicalDiv);
         // run through file references
         for (FileRef ref : this.files) {
-            PhysicalSubDiv page = new PhysicalSubDiv(PhysicalSubDiv.ID_PREFIX + ref.uuid, PhysicalSubDiv.TYPE_PAGE);
+            PhysicalSubDiv page = new PhysicalSubDiv(ref.toPhysId(), PhysicalSubDiv.TYPE_PAGE);
+            getOrderLabel(ref.toImageId()).ifPresent(page::setOrderLabel);
             physicalDiv.add(page);
             // add file pointers
             page.add(new Fptr(ref.toImageId()));
@@ -130,18 +183,16 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
     @Override
     protected LogicalStructMap createLogicalStruct() {
         LogicalStructMap lsm = super.createLogicalStruct();
-        if (this.oldMets == null) {
+        if (!this.getOldMets().isPresent()) {
             return lsm;
         }
-        LogicalStructMap oldLsm = this.oldMets.getLogicalStructMap();
-
-        FileGrp oldAltoGroup = this.oldMets.getFileSec().getFileGroup("ALTO");
+        Mets oldMets = this.getOldMets().get();
+        LogicalStructMap oldLsm = oldMets.getLogicalStructMap();
+        FileGrp oldAltoGroup = oldMets.getFileSec().getFileGroup("ALTO");
         FileGrp newAltoGroup = this.fileSection.getFileGroup("ALTO");
 
         List<LogicalDiv> descendants = oldLsm.getDivContainer().getDescendants();
-        descendants.stream().filter(div -> {
-            return !div.getFptrList().isEmpty();
-        }).forEach(oldDiv -> {
+        descendants.stream().filter(div -> !div.getFptrList().isEmpty()).forEach(oldDiv -> {
             String id = oldDiv.getId();
             LogicalDiv newDiv = lsm.getDivContainer().getLogicalSubDiv(id);
             if (newDiv != null) {
@@ -164,8 +215,6 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
 
     private class FileRef implements Comparable<FileRef> {
 
-        String uuid;
-
         public MCRPath imagePath;
 
         public MCRPath altoPath;
@@ -175,17 +224,29 @@ public class ALTOMETSHierarchyGenerator extends JPortalMetsGenerator {
         public String altoContentType;
 
         public String toImageId() {
-            return "master_" + uuid;
+            return "master_" + MCRMetsSave.getFileBase(imagePath);
         }
 
         public String toAltoId() {
-            return "alto_" + uuid;
+            return "alto_" + MCRMetsSave.getFileBase(altoPath);
+        }
+
+        public String toPhysId() {
+            return PhysicalSubDiv.ID_PREFIX + MCRMetsSave.getFileBase(imagePath);
         }
 
         @Override
         public int compareTo(FileRef ref) {
             return imagePath.compareTo(ref.imagePath);
         }
+    }
+
+    protected String getEnclosingDerivateLinkName() {
+        return "derivateLinks";
+    }
+
+    protected String getDerivateLinkName() {
+        return "derivateLink";
     }
 
 }

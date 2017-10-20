@@ -1,6 +1,14 @@
 package fsu.jportal.util;
 
-import fsu.jportal.mets.ALTOMETSHierarchyGenerator;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
 import fsu.jportal.mets.MetsVersionStore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +18,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRStreamUtils;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -17,23 +26,11 @@ import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.mets.model.MCRMETSGeneratorFactory;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.tools.MCRMetsSave;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.stream.Stream;
 
 /**
  * Util class for mets.xml handling.
@@ -64,6 +61,21 @@ public abstract class MetsUtil {
      */
     public static Mets getMets(String derivateId) throws IOException, JDOMException {
         return new Mets(getMetsXMLasDocument(derivateId));
+    }
+
+    /**
+     * Checks if the given derivate has a mets.xml or not.
+     *
+     * @param derivateId the derivate to check
+     * @return true if it has a mets, false otherwise
+     */
+    public static boolean hasMets(String derivateId) {
+        try {
+            MetsUtil.getMets(derivateId);
+            return true;
+        } catch (Exception exc) {
+            return false;
+        }
     }
 
     /**
@@ -185,39 +197,21 @@ public abstract class MetsUtil {
     }
 
     /**
-     * Generates a new mets.xml for the given derivate. This method check fi the owner of the derivate contains
+     * Generates a new mets.xml for the given derivate. This method checks if the owner of the derivate contains
      * children or not.
      *
      * <ul>
-     * <li>no children: use the ALTOMETSHierarchyGenerator</li>
+     * <li>no children: use the JPMetsHierarchyGenerator</li>
      * <li>with children: just update the file/physical section and leave the logical one alone</li>
      * </ul>
-     * 
-     * @see ALTOMETSHierarchyGenerator
+     *
+     * @see fsu.jportal.mets.JPMetsHierarchyGenerator
      * @param derivateId the derivate to generate the mets.xml for
      * @return the new mets.xml
-     * @throws IOException mets.xml couldn't be generated due I/O error
+     * @throws MCRException mets.xml couldn't be generated due I/O error
      */
-    public static Mets generate(MCRObjectID derivateId) throws IOException {
-        // get old mets
-        Mets oldMets;
-        try {
-            oldMets = MetsUtil.getMets(derivateId.toString());
-        } catch (Exception fnfe) {
-            oldMets = null;
-        }
-        // generate
-        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivateId);
-        MCRObjectID objId = derivate.getOwnerID();
-        MCRObject object = MCRMetadataManager.retrieveMCRObject(objId);
-        MCRPath path = MCRPath.getPath(derivateId.toString(), "/");
-        // check children not empty
-        if (oldMets != null && object.getStructure().getChildren().isEmpty()) {
-            MCRMetsSave.updateFiles(oldMets, path);
-            return oldMets;
-        } else {
-            return new ALTOMETSHierarchyGenerator(oldMets).getMETS(path, new HashSet<>());
-        }
+    public static Mets generate(MCRObjectID derivateId) throws MCRException {
+        return MCRMETSGeneratorFactory.create(MCRPath.getPath(derivateId.toString(), "/")).generate();
     }
 
     /**
@@ -233,12 +227,15 @@ public abstract class MetsUtil {
 
         // generate
         Mets mets = MetsUtil.generate(derivateId);
+        if (mets == null) {
+            LOGGER.error("Unable to generate mets.xml for derivate " + derivateId);
+            return;
+        }
         MCRJDOMContent newMetsContent = new MCRJDOMContent(mets.asDocument());
 
         // store old mets
         if (Files.exists(metsPath)) {
             MetsVersionStore.store(derivateId);
-
         }
         // replace
         try (InputStream is = newMetsContent.getInputStream()) {

@@ -1,26 +1,24 @@
 package fsu.jportal.mets;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
-import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.sections.AmdSec;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
-
 /**
  * Created by chi on 28.07.16.
  * @author Huu Chi Vu
  */
-public class DFGOAIMetsGenerator extends JPortalMetsGenerator {
+public class DFGOAIMetsGenerator extends JPMetsHierarchyGenerator {
     protected final static Logger LOGGER = LogManager.getLogger();
 
     @Override
@@ -36,8 +34,8 @@ public class DFGOAIMetsGenerator extends JPortalMetsGenerator {
     }
 
     @Override
-    protected Mets createMets(MCRPath dir, Set<MCRPath> ignoreNodes) throws IOException {
-        Mets mets = super.createMets(dir, ignoreNodes);
+    protected Mets createMets() throws IOException {
+        Mets mets = super.createMets();
         visitMCRObjTree(this.rootObj)
                 .forEach(id -> {
                              mets.addAmdSec(new AmdSec("amd_" + id.toString()));

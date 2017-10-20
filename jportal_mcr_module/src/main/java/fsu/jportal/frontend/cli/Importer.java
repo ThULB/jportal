@@ -1,5 +1,31 @@
 package fsu.jportal.frontend.cli;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
 import com.google.common.collect.Lists;
 import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.JPDerivateComponent;
@@ -8,7 +34,7 @@ import fsu.jportal.backend.io.HttpImportSource;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.LocalSystemSink;
 import fsu.jportal.backend.io.RecursiveImporter;
-import fsu.jportal.mets.JPortalMetsGenerator;
+import fsu.jportal.mets.JPMetsHierarchyGenerator;
 import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.MetsImportUtils;
 import fsu.jportal.mets.MetsImporter;
@@ -41,31 +67,6 @@ import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 /**
  * Created by chi on 22.04.15.
@@ -122,8 +123,8 @@ public class Importer {
         // build mets from object structure
         LOGGER.info("build mets.xml from jportal volume/article structure...");
         ImporterMetsGenerator metsGenerator = new ImporterMetsGenerator();
-        HashSet<MCRPath> ignoreNodes = new HashSet<MCRPath>();
-        Mets newMets = metsGenerator.getMETS(MCRPath.getPath(derId.toString(), "/"), ignoreNodes);
+        metsGenerator.setDerivatePath(MCRPath.getPath(derId.toString(), "/"));
+        Mets newMets = metsGenerator.generate();
 
         // add alto
         LOGGER.info("add ALTO stuff to generated mets.xml...");
@@ -225,15 +226,15 @@ public class Importer {
      * 
      * TODO: remove in jdk 9
      * 
-     * @param optional
-     * @return
+     * @param optional the optional to convert to a stream
+     * @return stream of the optional
      */
     public static <T> Stream<T> optionalToStream(Optional<T> optional) {
         return optional.map(Stream::of).orElse(Stream.empty());
     }
 
     private static String getDayTitle(Integer year, Integer month, Integer dayOfMonth, Integer nr) {
-        StringBuffer title = new StringBuffer();
+        StringBuilder title = new StringBuilder();
         title.append("Nr. ").append(nr).append(" : ");
         // date
         LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
@@ -245,12 +246,12 @@ public class Importer {
         return title.toString();
     }
 
-    private static class ImporterMetsGenerator extends JPortalMetsGenerator {
+    private static class ImporterMetsGenerator extends JPMetsHierarchyGenerator {
 
         @Override
         protected List<MCRObject> getChildren(MCRObject parentObject) {
             List<MCRObject> children = MCRObjectUtils.getChildren(parentObject);
-            children.sort((o1, o2) -> o1.getId().toString().compareTo(o2.getId().toString()));
+            children.sort(Comparator.comparing(o -> o.getId().toString()));
             return children;
         }
 
@@ -296,7 +297,7 @@ public class Importer {
             throw new FileNotFoundException("there should be a tif folder " + tifPath.toAbsolutePath().toString());
         }
         // get volume
-        String yearId = null;
+        String yearId;
         String yearQuery = "+parent:jportal_jpjournal_00000109 +date.published:" + year;
         try {
             List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(), yearQuery);
@@ -395,7 +396,7 @@ public class Importer {
             String dyear = date.substring(0, 4);
             String dmonth = date.substring(4, 6);
             String dday = date.substring(6, 8);
-            if (Integer.valueOf(dmonth) != Integer.valueOf(month)) {
+            if (!Objects.equals(Integer.valueOf(dmonth), Integer.valueOf(month))) {
                 return;
             }
             String title = getDayTitle(Integer.valueOf(dyear), Integer.valueOf(dmonth), Integer.valueOf(dday),
