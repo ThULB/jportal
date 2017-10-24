@@ -435,12 +435,23 @@ $(document).ready(function() {
 		dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
 		dialogContent.html("URN wird vergeben. Bitte warten...");
 		generateButton.attr("disabled", "disabled");
-		$.post(jp.baseURL + "rsc/pi/registration/service/DNBURNGranular/" + dialog.attr("data-id")).done(function(e) {
+        let derivID = dialog.attr("data-id");
+
+        $.post(jp.baseURL + "rsc/pi/registration/service/DNBURNGranular/" + derivID).done(function(e) {
 			if(e.error) {
 				failed(e);
 				return;
 			}
-			success();
+            $.post(jp.baseURL + "rsc/urn/update/" + derivID).done(function(e) {
+                if(e.error) {
+                    failed(e);
+                    return;
+                }
+                success();
+            }).fail(function(e) {
+                console.log(e);
+                failed(e);
+            });
 		}).fail(function(e) {
 			console.log(e);
 			failed(e);

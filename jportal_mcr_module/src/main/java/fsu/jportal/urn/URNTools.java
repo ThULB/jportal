@@ -1,11 +1,16 @@
 package fsu.jportal.urn;
 
+import fsu.jportal.resources.URNResource;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.*;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.pi.MCRPIRegistrationInfo;
+import org.mycore.pi.urn.rest.MCRDerivateURNUtils;
+import org.mycore.pi.urn.rest.MCREpicurLite;
 import org.mycore.urn.hibernate.MCRURN;
 import org.mycore.urn.services.MCRURNManager;
 
@@ -15,6 +20,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class URNTools {
     private static Logger LOGGER = LogManager.getLogger();
@@ -106,5 +113,23 @@ public class URNTools {
         }
 
         updateURNFileName(urn, targetPath, targetName);
+    }
+
+    public static Optional<UsernamePasswordCredentials> getUsernamePassword() {
+       String username = MCRConfiguration.instance().getString("MCR.URN.DNB.Credentials.Login", null);
+       String password = MCRConfiguration.instance().getString("MCR.URN.DNB.Credentials.Password", null);
+
+       if (username == null || password == null || username.length() == 0 || password.length() == 0) {
+           LOGGER.warn("Please set MCR.URN.DNB.Credentials.Login and MCR.URN.DNB.Credentials.Password");
+           return Optional.empty();
+       }
+
+       return Optional.of(new UsernamePasswordCredentials(username, password));
+   }
+
+    public static Function<MCRPIRegistrationInfo, MCREpicurLite> getEpicureProvider(
+        UsernamePasswordCredentials credentials) {
+        return urn -> MCREpicurLite.instance(urn, MCRDerivateURNUtils.getURL(urn))
+            .setCredentials(credentials);
     }
 }
