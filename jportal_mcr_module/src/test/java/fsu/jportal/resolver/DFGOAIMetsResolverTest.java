@@ -37,7 +37,7 @@ public class DFGOAIMetsResolverTest {
 
     private static Logger LOGGER = LogManager.getLogger();
 
-    String volID = "jportal_jparticle_00157238";
+    String volID = "jportal_jpvolume_00220746";
 
     Function<String, Optional<XMLStreamReader>> ZServer;
 
@@ -61,9 +61,9 @@ public class DFGOAIMetsResolverTest {
     @Test
     public void testResolver() throws Exception {
         UnaryOperator<String> fileSectionHref = s -> Optional.of(s.replaceFirst("ifs", ""))
-                                               .map(url -> url.replaceAll("\\:/", "/"))
-                                               .map("http://localhost"::concat)
-                                               .orElse("noHref");
+                                                             .map(url -> url.replaceAll(":/", "/"))
+                                                             .map("http://localhost"::concat)
+                                                             .orElse("noHref");
         DFGOAIMetsXMLHandler consumer = new DFGOAIMetsXMLHandler("testOAICreator", ZServer, derivateSupplier,
                                                                  fileSectionHref);
         Optional<Consumer<XMLStreamWriter>> o = consumer.handle("dfgOai:" + volID);
@@ -91,4 +91,5 @@ public class DFGOAIMetsResolverTest {
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         LOGGER.info(out.outputString(document));
     }
+
 }
