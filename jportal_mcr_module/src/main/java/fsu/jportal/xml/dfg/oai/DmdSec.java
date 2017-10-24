@@ -6,6 +6,7 @@ import fsu.jportal.xml.JPMCRObjXMLElementName;
 import fsu.jportal.xml.stream.ParsedMCRObj;
 import fsu.jportal.xml.stream.ParsedXML.ElementData;
 import fsu.jportal.xml.stream.ParserUtils;
+import org.apache.logging.log4j.LogManager;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
@@ -230,7 +231,7 @@ public class DmdSec {
 
             );
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            LogManager.getLogger().error("Unable to get participant " + participantID, e);
         }
         return noDmdSecModsName -> {};
     }

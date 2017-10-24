@@ -1,5 +1,18 @@
 package fsu.jportal.xml.dfg.oai;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+
 import fsu.jportal.xml.stream.DerivateFileInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,20 +23,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class DFGOAIMetsXMLHandler {
 
@@ -90,12 +89,10 @@ public class DFGOAIMetsXMLHandler {
                         .retrieveContent(MCRObjectID.getInstance(id))
                         .getContentInputStream();
                 XMLInputFactory factory = XMLInputFactory.newFactory();
-
                 return Optional.of(factory.createXMLStreamReader(contentInputStream));
-            } catch (IOException | XMLStreamException e) {
-                e.printStackTrace();
+            } catch (Throwable t) {
+                LOGGER.error("Unable to retrieve metadata from " + id, t);
             }
-
             return Optional.empty();
         }
 
@@ -120,10 +117,9 @@ public class DFGOAIMetsXMLHandler {
         private static String getContentType(Path path) {
             try {
                 return MCRContentTypes.probeContentType(path);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Throwable t) {
+                LOGGER.error("Unable to get content type of " + path, t);
             }
-
             return "noContentType";
         }
 
@@ -135,8 +131,8 @@ public class DFGOAIMetsXMLHandler {
         private static Stream<Path> pathStream(MCRPath path) {
             try {
                 return StreamSupport.stream(Files.newDirectoryStream(path).spliterator(), false);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Throwable t) {
+                LOGGER.error("Unable to stream path " + path, t);
             }
             return Stream.empty();
         }

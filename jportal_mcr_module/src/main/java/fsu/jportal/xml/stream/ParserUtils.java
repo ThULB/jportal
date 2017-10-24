@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.*;
 public class ParserUtils {
 
     private static Logger LOGGER = LogManager.getLogger();
-    
+
     public static long CREATE_OBJECT_TIME = 0;
     
     public interface ObjectSupplier<T> {

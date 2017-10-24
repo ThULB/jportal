@@ -37,7 +37,7 @@ public class DFGOAIMetsResolverTest {
 
     private static Logger LOGGER = LogManager.getLogger();
 
-    String volID = "jportal_jpvolume_00220746";
+    String volID = "jportal_jparticle_00157238";
 
     Function<String, Optional<XMLStreamReader>> ZServer;
 
@@ -47,7 +47,7 @@ public class DFGOAIMetsResolverTest {
 
     @Before
     public void setUp() throws Exception {
-        ZServer = id -> FakeInputSourceFromZS.getReaderFor(id);
+        ZServer = FakeInputSourceFromZS::getReaderFor;
 
         xmlDerivateToParsedData = new TransformerList<>();
         xmlDerivateToParsedData.add(new DerivateXMLToParsedData());
@@ -63,7 +63,7 @@ public class DFGOAIMetsResolverTest {
         UnaryOperator<String> fileSectionHref = s -> Optional.of(s.replaceFirst("ifs", ""))
                                                .map(url -> url.replaceAll("\\:/", "/"))
                                                .map("http://localhost"::concat)
-                                               .orElse("noHref");;
+                                               .orElse("noHref");
         DFGOAIMetsXMLHandler consumer = new DFGOAIMetsXMLHandler("testOAICreator", ZServer, derivateSupplier,
                                                                  fileSectionHref);
         Optional<Consumer<XMLStreamWriter>> o = consumer.handle("dfgOai:" + volID);
