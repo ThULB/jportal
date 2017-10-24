@@ -43,16 +43,26 @@ public class DFGOAIMetsResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         LOGGER.info("Start transforming oai " + href + "...");
         long startTime = System.currentTimeMillis();
+        String format = href.substring(href.indexOf("format=") + 7);
         try {
-            return Optional.of(href)
-                           .filter(uri -> uri.endsWith("?format=mets-dfg-xsl"))
-                           .map(uri -> uri.split("\\?")[0])
-                           .map(DFGOAIMetsResolver::dfgMetsXSL)
-                           .orElseGet(() -> dfgMets(href.split("\\?")[0]));
+            String newHref = href.split("\\?")[0];
+            switch (format) {
+            case "mets-dfg-xsl":
+                return DFGOAIMetsResolver.dfgMetsXSL(newHref);
+            case "mets-dfg":
+                return dfgMets(newHref);
+            default:
+                return oaiDCXSL(newHref);
+            }
         } finally {
             LOGGER.info("Transforming " + href + " took " + ((System.currentTimeMillis() - startTime) / 1000) + "s");
         }
+    }
 
+    public static Source oaiDCXSL(String href) throws TransformerException {
+        String id = MCRConfiguration.instance().getString("OAIRepositoryIdentifier", "noOaiIdentifier");
+        String objectId = href.split(":")[1];
+        return MCRURIResolver.instance().resolve("xslStyle:jp2oai_dc?identifier=" + id + ":mcrobject:" + objectId, "");
     }
 
     private static Source dfgMetsXSL(String href) {

@@ -72,7 +72,7 @@ public class DerivateBrowserResource {
     public Response browsePath(@PathParam("derivID") String derivID, @PathParam("path") String path) {
         JsonObject derivateJson = DerivateTools.getDerivateAsJson(derivID, path);
         if (derivateJson == null) {
-            Response.serverError().build();
+            return Response.serverError().build();
         }
         return Response.ok(derivateJson.toString()).build();
     }
