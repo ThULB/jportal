@@ -24,8 +24,8 @@ jp.sort = jp.sort || {
       return;
     }
     $(elm).find(".i18n").each(function(i, node) {
-      var key = $(node).attr("i18n");
-      var i18nKey = jp.sort.i18nKeys[key];
+      let key = $(node).attr("i18n");
+      let i18nKey = jp.sort.i18nKeys[key];
       if (i18nKey != undefined) {
         $(node).html(i18nKey);
       } else {
@@ -81,7 +81,7 @@ jp.sort.object = {
     jp.sort.object.loadSortContainer();
     jp.sort.loadI18nKeys();
     jp.sort.object.getObject(id, function(object) {
-      var sortBy = object.metadata.autosort != null ? object.metadata.autosort.data[0] : null;
+      let sortBy = object.metadata.autosort != null ? object.metadata.autosort.data[0].content : null;
       if(sortBy != null) {
         jp.sort.object.selectSorter(sortBy.$text);
         if(sortBy._order != null) {
@@ -99,10 +99,10 @@ jp.sort.object = {
   },
 
   loadSortContainer: function() {
-    var container = $("#autoSortContainer");
+    let container = $("#autoSortContainer");
     for(let key in jp.sort.sorters) {
-      var className = key.substring(key.lastIndexOf(".") + 1, key.length);
-      var btn = "<a href='#' type='button' class='jp-sort-object-sorter list-group-item " + className + "' onclick='jp.sort.object.selectSorter(`" + key + "`)'>" +
+      let className = key.substring(key.lastIndexOf(".") + 1, key.length);
+      let btn = "<a href='#' type='button' class='jp-sort-object-sorter list-group-item " + className + "' onclick='jp.sort.object.selectSorter(`" + key + "`)'>" +
           "<div class='i18n' i18n='jp.sort." + className + "' style='font-weight: bold;'></div>" +
           "<div class='i18n' i18n='jp.sort." + className + ".description'></div>" +
       	"</a>";
@@ -119,16 +119,16 @@ jp.sort.object = {
       return;
     }
     jp.sort.object.selectedSorter = sorterName;
-    var className = sorterName.substring(sorterName.lastIndexOf(".") + 1, sorterName.length);
+    let className = sorterName.substring(sorterName.lastIndexOf(".") + 1, sorterName.length);
     $("." + className).addClass("active");
     jp.sort.object.updateChildrenToolbar();
   },
 
   reloadChildren: function(solrResponse) {
-    var docs = solrResponse.docs;
+    let docs = solrResponse.docs;
     jp.sort.object.children = [];
     jp.sort.object.oldChildren = [];
-    for(var doc of docs) {
+    for(let doc of docs) {
       jp.sort.object.oldChildren.push(doc);
       jp.sort.object.children.push(doc);
     }
@@ -137,43 +137,43 @@ jp.sort.object = {
   },
 
   renderChildren: function() {
-    var container = $("#childrenContainer");
-    var paginator = $("#childrenPaginator");
+    let container = $("#childrenContainer");
+    let paginator = $("#childrenPaginator");
     container.empty();
     paginator.empty();
 
-    var children = jp.sort.object.children;
-    if(children.length == 0) {
+    let children = jp.sort.object.children;
+    if(children.length === 0) {
       container.html("Keine Kinder gefunden.");
       return;
     }
 
-    var currentPage = jp.sort.object.childrenPage;
+    let currentPage = jp.sort.object.childrenPage;
 
     updateChildren(container, children, currentPage);
     updatePaginator(paginator, children, currentPage);
     updateToolbar();
 
     function updateChildren(container, children, currentPage) {
-      var start = (jp.sort.object.childrenPerPage * (currentPage - 1));
-      var end = Math.min(start + jp.sort.object.childrenPerPage, children.length);
+      let start = (jp.sort.object.childrenPerPage * (currentPage - 1));
+      let end = Math.min(start + jp.sort.object.childrenPerPage, children.length);
       // add children
-      for(var i = start; i < end; i++) {
+      for(let i = start; i < end; i++) {
         addChild(container, children[i]);
       }
     }
 
     function updatePaginator(paginator, children, currentPage) {
-      var numPages = Math.ceil(children.length / jp.sort.object.childrenPerPage);
-      var startPage = Math.max(currentPage - (Math.max(currentPage - numPages + 3, 1)), 2);
-      var endPage = Math.min(currentPage + (Math.max(4 - currentPage, 1)), numPages - 1);
-      
+      let numPages = Math.ceil(children.length / jp.sort.object.childrenPerPage);
+      let startPage = Math.max(currentPage - (Math.max(currentPage - numPages + 3, 1)), 2);
+      let endPage = Math.min(currentPage + (Math.max(4 - currentPage, 1)), numPages - 1);
+
       addPaginatorPage(paginator, 1, currentPage);
       if(endPage > 1) {
         if(currentPage >= 4) {
           paginator.append("<li class='plain'><span>...</span></li>");
         }
-        for(var pageNumber = startPage; pageNumber <= endPage; pageNumber++) {
+        for(let pageNumber = startPage; pageNumber <= endPage; pageNumber++) {
           addPaginatorPage(paginator, pageNumber, currentPage);
         }
         if(numPages - currentPage >= 3) {
@@ -184,8 +184,8 @@ jp.sort.object = {
     }
 
     function updateToolbar() {
-      var child = jp.sort.object.getChild(jp.sort.object.selectedChildId);
-      var value = child != null ? jp.sort.object.children.indexOf(child) : null;
+      let child = jp.sort.object.getChild(jp.sort.object.selectedChildId);
+      let value = child != null ? jp.sort.object.children.indexOf(child) : null;
       $("#childOrderPosition").val(value);
     }
 
@@ -384,10 +384,10 @@ jp.sort.object = {
   },
 
   getChildren: function(id, callback) {
-    var q = "parent:" + id;
-    var fl = "id,maintitle,size,date.published";
-    var sort = "order+asc";
-    var rows = "9999";
+    let q = "parent:" + id;
+    let fl = "id,maintitle,size,date.published";
+    let sort = "order+asc";
+    let rows = "9999";
     $.getJSON(jp.baseURL + "servlets/search?q=" + q + "&fl=" + fl + "&sort=" + sort + "&rows=" + rows + "&wt=json", function(response) {
       callback(response);
     }, function(error) {
@@ -396,7 +396,7 @@ jp.sort.object = {
     });
   },
 
-}
+};
 
 jp.sort.level = {
 
@@ -545,9 +545,9 @@ jp.sort.level = {
   },
 
   buildLevels: function() {
-    var levels = [];
+    let levels = [];
     jp.sort.level.model.forEach(function(row, arrayIndex) {
-      var level = {
+      let level = {
         index: arrayIndex,
         name: row.name
       };
@@ -563,7 +563,7 @@ jp.sort.level = {
   },
 
   save: function(apply) {
-    var levels = jp.sort.level.buildLevels();
+    let levels = jp.sort.level.buildLevels();
     jp.sort.beforeSaving();
     $.ajax({
       method: 'POST',
@@ -581,10 +581,10 @@ jp.sort.level = {
   },
 
   saveAndApply: function() {
-    var title = jp.sort.i18nKeys["jp.sort.level.reviewDialog.title"];
-    var message = jp.sort.i18nKeys["jp.sort.level.reviewDialog.message"];
-    var yes = jp.sort.i18nKeys["jp.sort.button.yes"];
-    var no = jp.sort.i18nKeys["jp.sort.button.no"];
+    let title = jp.sort.i18nKeys["jp.sort.level.reviewDialog.title"];
+    let message = jp.sort.i18nKeys["jp.sort.level.reviewDialog.message"];
+    let yes = jp.sort.i18nKeys["jp.sort.button.yes"];
+    let no = jp.sort.i18nKeys["jp.sort.button.no"];
 
     new BootstrapDialog({
       title: title,
@@ -605,16 +605,16 @@ jp.sort.level = {
     }).open();
   }
 
-}
+};
 
 $(document).ready(function() {
 
-  var dialogs = ["object", "level"];
+  let dialogs = ["object", "level"];
 
-  for(var dialog of dialogs) {
+  for(let dialog of dialogs) {
     $("body").on("click", "#jp-sort-" + dialog + "-show-button", function() {
-      var dialog = $(this).attr("dialog");
-      var mcrid = $(this).attr("mcrid");
+      let dialog = $(this).attr("dialog");
+      let mcrid = $(this).attr("mcrid");
       showAndOrLoadDialog(dialog, mcrid);
     });
   }
@@ -637,7 +637,7 @@ $(document).ready(function() {
   }
 
   function loadDialog(dialog, mcrID, data) {
-    var html = $("<div></div>").append(data).find("#jp-sort-" + dialog + "-dialog");
+    let html = $("<div></div>").append(data).find("#jp-sort-" + dialog + "-dialog");
     loadCSS();
     $("body").append(html);
     jp.sort[dialog].init(mcrID);
@@ -648,7 +648,7 @@ $(document).ready(function() {
   }
 
   function loadCSS() {
-    var path = jp.baseURL + "css/jp-sort.css";
+    let path = jp.baseURL + "css/jp-sort.css";
     if (!$("link[href='" + path + "']").length) {
       $("head").append("<link href='"+ path + "' rel='stylesheet' type='text/css'>");
     }
