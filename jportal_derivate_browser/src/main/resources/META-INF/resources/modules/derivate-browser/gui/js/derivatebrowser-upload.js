@@ -343,7 +343,14 @@ var derivateBrowserUpload = (function () {
                 json.files.push(currentUploadList[i].getCheckJson());
             }
         }
-        doExistsCheck(json)
+        if (json.files.length > 0) {
+            doExistsCheck(json);
+        }
+        else {
+            if (!uploadRunning) {
+                cancelUpload();
+            }
+        }
     }
 
     function addDataToFileList(data) {

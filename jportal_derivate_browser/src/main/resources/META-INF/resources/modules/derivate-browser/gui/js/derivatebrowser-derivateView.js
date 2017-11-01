@@ -458,6 +458,13 @@ var derivateBrowserDerivateView = (function () {
             getDerivate(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
         });
 
+        $("body").on("click", "#lightbox-multi-rename-copy", function () {
+            $("#lightbox-multi-rename-copy-input").val($("#lightbox-multi-rename-filelist").val());
+            $("#lightbox-multi-rename-copy-input").removeClass("hidden").focus().select();
+            document.execCommand('copy');
+            $("#lightbox-multi-rename-copy-input").blur().addClass("hidden");
+        });
+
         $("#browser-table").stupidtable();
         $("#browser-table").on("aftertablesort", function (event, data) {
             $("#browser-table-sort-click").find(".glyphicon").addClass("hidden");

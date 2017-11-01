@@ -1505,6 +1505,31 @@ textarea {
 	float: none;
 }
 
+#lightbox-multi-rename #lightbox-multi-rename-copy-input {
+	position: fixed;
+	left: 1px;
+	bottom: 1px;
+	border: none;
+	box-shadow: none;
+	color: transparent;
+	background-color: transparent;
+}
+
+#lightbox-multi-rename #lightbox-multi-rename-copy-input:focus {
+	border: none;
+	box-shadow: none;
+	outline: none;
+}
+
+#lightbox-multi-rename #lightbox-multi-rename-copy-input::selection {
+	background-color: transparent;
+}
+
+#lightbox-multi-rename .icn {
+	padding: 8px 14px;
+	font-size: 16px;
+}
+
 /******************************************************
 * Large File
 ******************************************************/
@@ -1913,3 +1938,4 @@ textarea {
 #lightbox-multi-rename > .modal-dialog{
 	width: 720px;
 }
+

@@ -42,6 +42,7 @@ import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
+import org.mycore.frontend.fileupload.MCRUploadHelper;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import com.google.gson.JsonArray;
@@ -262,6 +263,8 @@ public class DerivateBrowserResource {
         @FormDataParam("size") long filesize, @FormDataParam("path") String path,
         @FormDataParam("overwrite") boolean overwrite, @FormDataParam("type") String type) {
 
+        String filePath = path + "/" + filename;
+        MCRUploadHelper.checkPathName(filePath.startsWith("/") ? filePath.substring(1) : filePath);
         UUID uuid = UUID.fromString(uploadID);
         MCRUploadHandlerIFS uploadHandler = JPUploader.get(uuid);
         if (uploadHandler == null) {
@@ -275,14 +278,13 @@ public class DerivateBrowserResource {
         // List<String> fileTypes = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
         // if (fileTypes.contains(type)) {
         if (overwrite) {
-            MCRPath filePath = MCRPath.getPath(uploadHandler.getDocumentID(), path + "/" + filename);
-            if (DerivateTools.delete(filePath) != 1) {
+            MCRPath mcrFilePath = MCRPath.getPath(uploadHandler.getDocumentID(), path + "/" + filename);
+            if (DerivateTools.delete(mcrFilePath) != 1) {
                 throw new WebApplicationException(
                     "Unable to delete/overwrite " + filePath + " while uploading " + filename);
             }
         }
 
-        String filePath = path + "/" + filename;
 
         try {
             JPUploader.upload(uuid, filePath, inputStream, filesize);

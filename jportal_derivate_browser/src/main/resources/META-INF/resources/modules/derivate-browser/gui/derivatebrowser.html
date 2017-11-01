@@ -499,7 +499,9 @@
                     <div class="container col-md-12">
                         <div class="row">
                             <input id="lightbox-multi-rename-pattern" type="text" class="lightbox-multi-rename-input col-sm-4 i18n-placeholder" i18n="db.placeholder.regex" placeholder="RegEx">
-                            <input id="lightbox-multi-rename-newname" type="text" class="lightbox-multi-rename-input col-sm-4 col-md-offset-1 i18n-placeholder" i18n="db.placeholder.newname" placeholder="neuer Name">
+                            <span class="fa fa-question col-md-1 icn" aria-hidden="true" title="E.g. Bibliotheca_536682534_1_([0-9]+)_([0-9]+).tif"></span>
+                            <input id="lightbox-multi-rename-newname" type="text" class="lightbox-multi-rename-input col-sm-4 i18n-placeholder" i18n="db.placeholder.newname" placeholder="neuer Name">
+                            <span class="fa fa-question col-md-1 icn" aria-hidden="true" title="E.g. Bibliotheca_$1_$2.tif"></span>
                             <button id="lightbox-multi-rename-send-button" type="button" class="btn btn-danger browser-button pull-right"><text class="i18n" i18n="db.title.edit" i18n-def="Umbenennen"></text></button>
                         </div>
                         <div class="row">
@@ -508,7 +510,9 @@
                         <h4 class="row"><text class="i18n" i18n="db.title.testing" i18n-def="Testing"></text></h4>
                         <div class="row">
                             <select id="lightbox-multi-rename-filelist" class="col-md-5"></select>
-                            <input type="text" id="lightbox-multi-rename-test-input" disabled class="col-md-6 col-md-offset-1">
+                            <input type="text" id="lightbox-multi-rename-copy-input" class="hidden" spellcheck="false">
+                            <span id="lightbox-multi-rename-copy" class="fa fa-files-o col-md-1 icn" aria-hidden="true"></span>
+                            <input type="text" id="lightbox-multi-rename-test-input" disabled class="col-md-6">
                         </div>
                         <div class="row">
                             <hr>
