@@ -263,21 +263,6 @@ public class JPXMLFunctions {
     }
 
     /**
-     * This method encodes the url. After the encoding the url is redirectable.
-     * taken from MCRServlet
-     *
-     * @param url
-     *            the source URL
-     */
-    public static String encodeURL(String url) throws URISyntaxException {
-        try {
-            return MCRXMLFunctions.normalizeAbsoluteURL(url);
-        } catch (MalformedURLException | URISyntaxException e) {
-            return MCRXMLFunctions.encodeURIPath(url);
-        }
-    }
-
-    /**
      * Returns the label of the given classID.
      * 
      * @param classID classification identifier

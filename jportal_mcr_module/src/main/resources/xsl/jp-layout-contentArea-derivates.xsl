@@ -272,7 +272,7 @@
     <xsl:param name="derivate" />
     <xsl:variable name="derivID" select="$derivate/@ID" />
     <xsl:variable name="maindoc" select="$derivate/derivate/internals/internal/@maindoc" />
-    <xsl:variable name="encodedMaindoc" select="jpxml:encodeURL($maindoc)" />
+    <xsl:variable name="encodedMaindoc" select="mcrxml:encodeURIPath($maindoc)" />
     <xsl:variable name="derivbase" select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivID,'/')" />
     <xsl:variable name="fileType">
       <xsl:call-template name="uppercase">
