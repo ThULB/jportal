@@ -2,8 +2,8 @@ package fsu.jportal.xml;
 
 import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.frontend.cli.URNMigration;
 import fsu.jportal.resolver.LogoResolver;
+import fsu.jportal.urn.URNTools;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPComponentUtil.JPInfoProvider;
 import fsu.jportal.util.JPComponentUtil.JPObjectInfo;
@@ -16,8 +16,8 @@ import org.jdom2.output.DOMOutputter;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.pi.urn.MCRURNGranularOAIRegistrationService;
-import org.mycore.urn.MCRXMLFunctions;
+import org.mycore.pi.MCRPIRegistrationService;
+import org.mycore.pi.MCRPersistentIdentifier;
 import org.w3c.dom.Node;
 
 import java.util.List;
@@ -116,19 +116,10 @@ public abstract class LayoutTools {
     }
 
     public static boolean hasURNAssigned(String derivID){
-        String registrationServiceID = "DNBURNGranular";
-        MCRURNGranularOAIRegistrationService registrationService = new MCRURNGranularOAIRegistrationService(
-                registrationServiceID);
+        MCRPIRegistrationService<MCRPersistentIdentifier> urnServiceManager = URNTools.getURNServiceManager();
+        MCRObjectID derivObjID = MCRObjectID.getInstance(derivID);
 
-        boolean mcrURNDefined = MCRXMLFunctions.hasURNDefined(derivID);
-        boolean mcrPIcreated = registrationService.isCreated(MCRObjectID.getInstance(derivID), "");
-
-        if(!mcrPIcreated && mcrURNDefined){
-            URNMigration.migrateURN("DNBURNGranular", derivID);
-        }
-
-
-        return mcrPIcreated || mcrURNDefined;
+        return urnServiceManager.isCreated(derivObjID, "");
     }
 
 }

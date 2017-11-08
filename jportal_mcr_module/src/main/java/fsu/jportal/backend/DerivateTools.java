@@ -13,12 +13,14 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.*;
+import org.mycore.common.MCRJSONManager;
+import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -33,15 +35,23 @@ import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.iview2.frontend.MCRIView2Commands;
 import org.mycore.iview2.services.MCRIView2Tools;
-import org.mycore.urn.hibernate.MCRURN;
-import org.mycore.urn.services.MCRURNAdder;
-import org.mycore.urn.services.MCRURNManager;
-import org.xml.sax.SAXException;
+import org.mycore.pi.MCRPIRegistrationService;
+import org.mycore.pi.MCRPIRegistrationServiceManager;
+import org.mycore.pi.MCRPersistentIdentifier;
+import org.mycore.pi.backend.MCRPI;
+import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
+import org.mycore.pi.urn.MCRDNBURN;
+import org.mycore.pi.urn.rest.MCRURNGranularRESTRegistrationService;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -276,19 +286,15 @@ public class DerivateTools {
     }
 
     private static void mvSingleFile(MCRPath src, MCRPath tgt) throws IOException, MCRAccessException {
-        MCRURN urn = URNTools.getURNForFile(src);
         List<MCRObjectID> idList = DerivateLinkUtil.getLinks(src);
         DerivateLinkUtil.deleteFileLinks(idList, src);
 
         Files.move(src, tgt);
 
         DerivateLinkUtil.setLinks(idList, tgt);
+        MCRPI urn = URNTools.getURNForFile(src);
         if (urn != null) {
-            String path = tgt.getParent().getOwnerRelativePath();
-            if (!path.endsWith("/")) {
-                path += "/";
-            }
-            URNTools.updateURNFileName(urn, path, tgt.getFileName().toString());
+            URNTools.updateURNFileName(urn, tgt);
         }
     }
 
@@ -503,37 +509,27 @@ public class DerivateTools {
     }
 
     public static boolean addURNToDerivate(String derivateID) {
-        MCRURNAdder urnAdder = new MCRURNAdder();
-        try {
-            return urnAdder.addURNToDerivates(derivateID);
-        } catch (IOException | JDOMException | SAXException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return addURNToFile(derivateID, "") != "";
     }
 
     public static String addURNToFile(String derivatID, String path) {
-        MCRURNAdder urnAdder = new MCRURNAdder();
-        try {
-            if (urnAdder.addURNToSingleFile(derivatID, path)) {
-                return getURNforFile(derivatID, path);
-            } else {
-                return "";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
+        MCRPIRegistrationService<MCRPersistentIdentifier> dnburnGranular = MCRPIRegistrationServiceManager
+            .getInstance().getRegistrationService("DNBURNGranular");
 
-    private static String getURNforFile(String derivate, String path) {
-        String fileName = path;
-        String pathToFile = "/";
-        if (path.contains("/")) {
-            pathToFile = path.substring(0, path.lastIndexOf("/") + 1);
-            fileName = path.substring(path.lastIndexOf("/") + 1);
+        MCRObjectID derivID = MCRObjectID.getInstance(derivatID);
+        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivID);
+        try {
+            MCRPersistentIdentifier urn = dnburnGranular.fullRegister(derivate, path);
+            return urn.asString();
+        } catch (MCRAccessException e) {
+            e.printStackTrace();
+        } catch (MCRActiveLinkException e) {
+            e.printStackTrace();
+        } catch (MCRPersistentIdentifierException e) {
+            e.printStackTrace();
         }
-        return MCRURNManager.getURNForFile(derivate, pathToFile, fileName);
+
+        return "";
     }
 
     public static void setLink(String documentID, String path) throws MCRActiveLinkException, MCRAccessException {

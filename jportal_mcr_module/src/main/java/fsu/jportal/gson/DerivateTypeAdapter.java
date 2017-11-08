@@ -1,12 +1,17 @@
 package fsu.jportal.gson;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import fsu.jportal.urn.URNTools;
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.urn.services.MCRURNManager;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -14,8 +19,9 @@ import java.text.SimpleDateFormat;
 
 public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
     private static final String dateFormat = "dd.MM.yyyy HH:mm:ss";
+
     private static final DateFormat dateFormatter = new SimpleDateFormat(dateFormat);
-    
+
     @Override
     public JsonElement serialize(FileNodeWrapper deriv, Type typeOfSrc, JsonSerializationContext context) {
         String maindoc = deriv.getMaindoc();
@@ -33,14 +39,15 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
 
             childrenJSON.add(childNodeJSON);
         }
-        MCRURNManager.hasURNAssigned(deriv.getNode().getOwnerID());
-        if(MCRURNManager.hasURNAssigned(deriv.getNode().getOwnerID())){
+
+        String ownerID = deriv.getNode().getOwnerID();
+
+        if (URNTools.hasURNAssigned(ownerID)) {
             nodeJSON.addProperty("hasURN", true);
-            MCRObjectID derivateID = MCRObjectID.getInstance(deriv.getNode().getOwnerID());
+            MCRObjectID derivateID = MCRObjectID.getInstance(ownerID);
             MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivateID);
             nodeJSON.addProperty("urn", derivate.getDerivate().getURN());
-        }
-        else{
+        } else {
             nodeJSON.addProperty("hasURN", false);
         }
         if (!deriv.getNode().getAbsolutePath().equals("/")) {
@@ -50,7 +57,7 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
                 dateFormatter.format(deriv.getNode().getRootDirectory().getLastModified().getTime()));
         }
         nodeJSON.add("children", childrenJSON);
-        
+
         return nodeJSON;
     }
 
@@ -64,7 +71,7 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
 
     @Override
     public FileNodeWrapper deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException {
+        throws JsonParseException {
         // TODO Auto-generated method stub
         return null;
     }

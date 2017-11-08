@@ -1,10 +1,14 @@
 package fsu.jportal.gson;
 
-import com.google.gson.*;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import fsu.jportal.urn.URNTools;
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.urn.services.MCRURNManager;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -34,7 +38,7 @@ public class MCRFilesystemNodeTypeAdapter extends MCRJSONTypeAdapter<MCRFilesyst
         
         String derivID = fileNode.getOwnerID();
         String absolutePath = fileNode.getAbsolutePath();
-        String urnForFile = MCRURNManager.getURNForFile(derivID, absolutePath);
+        String urnForFile = URNTools.getURNForFile(derivID, absolutePath);
         if(urnForFile != null && !"".equals(urnForFile)){
             fileNodeJSON.addProperty("urn", urnForFile);
         }

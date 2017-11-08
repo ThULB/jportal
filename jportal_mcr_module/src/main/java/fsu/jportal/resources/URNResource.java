@@ -41,7 +41,7 @@ public class URNResource {
             .orElseThrow(() -> new MCRException("Could not create URN Rest client."));
 
         List<MCRPIRegistrationInfo> regURN = MCRPersistentIdentifierManager.getInstance()
-            .getCreatedIdentifiers(mcrObjectID, MCRDNBURN.TYPE, "DNBURNGranular");
+            .getCreatedIdentifiers(mcrObjectID, MCRDNBURN.TYPE, URNTools.SERVICEID);
 
         for (MCRPIRegistrationInfo urn : regURN) {
             MCRPI pi = (MCRPI) urn;
