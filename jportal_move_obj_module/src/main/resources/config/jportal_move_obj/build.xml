@@ -6,12 +6,6 @@
     <property name="module.directory" location="${ant.file}/.." />
     <property file="${module.directory}/build.properties" />
 
-	<!--
-	<target name="config">
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="de.uni_jena.thulb.mcr.resources" />
-	</target>
-	-->
-	
 	<target name="create.default-rules" description="loads default acl rules for move object module">
 		<echo>Move Object Module default rules</echo>
 		<antcall target="invoke.cli">
