@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
+import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.*;
 import org.mycore.datamodel.niofs.MCRPath;
@@ -14,6 +15,8 @@ import org.mycore.pi.MCRPIRegistrationServiceManager;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.MCRPersistentIdentifierManager;
 import org.mycore.pi.backend.MCRPI;
+import org.mycore.pi.urn.MCRDNBURN;
+import org.mycore.pi.urn.rest.MCRDNBURNRestClient;
 import org.mycore.pi.urn.rest.MCRDerivateURNUtils;
 import org.mycore.pi.urn.rest.MCREpicurLite;
 
@@ -24,6 +27,7 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class URNTools {
     private static Logger LOGGER = LogManager.getLogger();
@@ -122,5 +126,28 @@ public class URNTools {
 
     public static boolean hasURNAssigned(MCRObjectID derivateID) {
         return getURNServiceManager().isCreated(derivateID, "");
+    }
+
+    /**
+     *
+     * @param derivateID
+     * @return Stream of registerd and not registered URNs
+     */
+    public static Stream<MCRPI> registerURNs(MCRObjectID derivateID) {
+        MCRDNBURNRestClient urnRestClient = getUsernamePassword()
+            .map(URNTools::getEpicureProvider)
+            .map(MCRDNBURNRestClient::new)
+            .orElseThrow(() -> new MCRException("Could not create URN Rest client."));
+
+        return MCRPersistentIdentifierManager.getInstance()
+            .getCreatedIdentifiers(derivateID, MCRDNBURN.TYPE, SERVICEID)
+            .stream()
+            .map(MCRPI.class::cast)
+            .map(pi -> urnRestClient.register(pi)
+                    .map(date -> {
+                        pi.setRegistered(date);
+                        return pi;
+                    })
+                .orElse(pi));
     }
 }

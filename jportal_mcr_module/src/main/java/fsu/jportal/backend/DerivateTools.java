@@ -509,14 +509,23 @@ public class DerivateTools {
     }
 
     public static boolean addURNToDerivate(String derivateID) {
-        return addURNToFile(derivateID, "") != "";
+        MCRObjectID mcrObjectID = MCRObjectID.getInstance(derivateID);
+        return addURNToFile(mcrObjectID, "") != ""
+            && !URNTools
+            .registerURNs(mcrObjectID)
+            .filter(pi -> pi.getRegistered() == null)
+            .findFirst()
+            .isPresent();
     }
 
     public static String addURNToFile(String derivatID, String path) {
-        MCRPIRegistrationService<MCRPersistentIdentifier> dnburnGranular = MCRPIRegistrationServiceManager
-            .getInstance().getRegistrationService("DNBURNGranular");
+        return addURNToFile(MCRObjectID.getInstance(derivatID), path);
+    }
 
-        MCRObjectID derivID = MCRObjectID.getInstance(derivatID);
+    public static String addURNToFile(MCRObjectID derivID, String path) {
+        MCRPIRegistrationService<MCRPersistentIdentifier> dnburnGranular = MCRPIRegistrationServiceManager
+            .getInstance().getRegistrationService(URNTools.SERVICEID);
+
         MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivID);
         try {
             MCRPersistentIdentifier urn = dnburnGranular.fullRegister(derivate, path);
