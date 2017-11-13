@@ -8,6 +8,7 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRXMLFunctions;
@@ -119,7 +120,15 @@ public abstract class DerivateLinkUtil {
         setLink(mcrObj, pathOfImage);
     }
 
-    public static void setLink(MCRObject mcrObj, String pathOfImage) throws MCRActiveLinkException, MCRAccessException {
+    /**
+     * Creates a new derivate link for the given mycore object.
+     *
+     * @param mcrObj the mycore object
+     * @param pathOfImage path of the image including the derivate
+     * @throws MCRPersistenceException cannot set link due I/O error
+     * @throws MCRAccessException if the write permission is missing
+     */
+    public static void setLink(MCRObject mcrObj, String pathOfImage) throws MCRPersistenceException, MCRAccessException {
         /*
          * This is for debugging purposes only. There is a bug where mets.xml derivate links are randomly
          * added to objects. Check if the path ends with mets.xml and then throw an exception.

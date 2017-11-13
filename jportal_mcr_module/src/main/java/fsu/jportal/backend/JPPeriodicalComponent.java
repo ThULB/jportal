@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRISO8601Date;
 import org.mycore.datamodel.metadata.*;
@@ -26,11 +27,11 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
 
     static Logger LOGGER = LogManager.getLogger(JPPeriodicalComponent.class);
 
-    public static enum DateType {
+    public enum DateType {
         published, published_from, published_until
     }
 
-    public static enum SubtitleType {
+    public enum SubtitleType {
         title_spokenAbout, title_main, title_short, title_beside, title_rezensation, title_original, additional, misc
     }
 
@@ -140,9 +141,10 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * <b>jportal_derivate_xxxxxxxx/path_to_image</b>.
      *
      * @param link the link, this should include the derivate and the path to the file
-     * @throws MCRActiveLinkException
+     * @throws MCRPersistenceException cannot set link due I/O error
+     * @throws MCRAccessException if the write permission is missing
      */
-    public void setDerivateLink(String link) throws MCRActiveLinkException, MCRAccessException {
+    public void setDerivateLink(String link) throws MCRPersistenceException, MCRAccessException {
         DerivateLinkUtil.setLink(object, link);
     }
 
@@ -307,9 +309,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
                     ". Only person or jpinst is allowed.");
         }
         return metadataStreamNotInherited("participants", MCRMetaLinkID.class)
-                .filter(link -> {
-                    return link.getXLinkHrefID().getTypeId().equals(objectType.name());
-                })
+                .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name()))
                 .map(MCRMetaLinkID::getXLinkHrefID)
                 .collect(Collectors.toList());
     }
@@ -328,9 +328,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
                     ". Only person or jpinst is allowed.");
         }
         return metadataStreamNotInherited("participants", MCRMetaLinkID.class)
-                .filter(link -> {
-                    return link.getXLinkHrefID().getTypeId().equals(objectType.name());
-                })
+                .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name()))
                 .filter(typeFilter(role))
                 .map(MCRMetaLinkID::getXLinkHrefID)
                 .collect(Collectors.toList());

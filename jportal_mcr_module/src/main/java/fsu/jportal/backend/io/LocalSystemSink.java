@@ -1,5 +1,10 @@
 package fsu.jportal.backend.io;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.backend.ImportDerivateObject;
 import fsu.jportal.backend.ImportFileObject;
@@ -8,18 +13,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 
 /**
  * Created by michel on 07.07.15.
@@ -62,9 +67,8 @@ public class LocalSystemSink implements ImportSink {
                 MCRMetadataManager.create(mcrObject);
                 LOGGER.info("Created object: " + mcrObject.getId().toString());
             }
-        } catch (MCRActiveLinkException | MCRAccessException e) {
-            LOGGER.error("Error while updating Object" + mcrObject.getId().toString());
-            e.printStackTrace();
+        } catch (MCRPersistenceException | MCRAccessException e) {
+            LOGGER.error("Error while updating Object " + mcrObject.getId().toString(), e);
         }
     }
 
@@ -82,8 +86,7 @@ public class LocalSystemSink implements ImportSink {
                 LOGGER.info("Created classification: " + category.getId().toString());
             }
         } catch (URISyntaxException e) {
-            LOGGER.error("Error while saving Classification");
-            e.printStackTrace();
+            LOGGER.error("Error while saving Classification", e);
         }
     }
 
@@ -101,13 +104,11 @@ public class LocalSystemSink implements ImportSink {
                             .uploadFileWithoutTransaction(url.openStream(), file.getSize(), deriObj.getDocumentID(),
                                                           deriObj.getDerivateID(), file.getPath());
                 } catch (Exception e) {
-                    LOGGER.error("Error while uploading File " + completePath);
-                    e.printStackTrace();
+                    LOGGER.error("Error while uploading File " + completePath, e);
                 }
             }
-        } catch (IOException | MCRAccessException e) {
-            LOGGER.error("Error while creating Derivate " + derivate.getId().toString());
-            e.printStackTrace();
+        } catch (MCRPersistenceException | MCRAccessException e) {
+            LOGGER.error("Error while creating Derivate " + derivate.getId().toString(), e);
         }
     }
 
@@ -117,8 +118,7 @@ public class LocalSystemSink implements ImportSink {
             try {
                 DerivateTools.setLink(link.document, link.file);
             } catch (MCRActiveLinkException | MCRAccessException e) {
-                LOGGER.error("Error while linking Document " + link.document + " with file " + link.file);
-                e.printStackTrace();
+                LOGGER.error("Error while linking Document " + link.document + " with file " + link.file, e);
             }
         }
     }
@@ -132,4 +132,5 @@ public class LocalSystemSink implements ImportSink {
         }
         obj.getMetadata().removeMetadataElement("derivateLinks");
     }
+
 }
