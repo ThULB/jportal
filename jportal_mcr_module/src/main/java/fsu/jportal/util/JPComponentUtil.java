@@ -1,6 +1,23 @@
 package fsu.jportal.util;
 
-import fsu.jportal.backend.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPInstitution;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPLegalEntity;
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPPerson;
+import fsu.jportal.backend.JPVolume;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -13,14 +30,6 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Utility class for jportal components.
@@ -43,7 +52,7 @@ public abstract class JPComponentUtil {
 
         public <T> T get(JPObjectInfo<T> fromObj) {
             MCRObjectID mcrid = MCRObjectID.getInstance(id);
-            List<Object> nodes = new ArrayList<Object>();
+            List<Object> nodes = new ArrayList<>();
             if (MCRMetadataManager.exists(mcrid)) {
                 Document xml = MCRMetadataManager.retrieve(mcrid).createXML();
                 for (String xpath : xpathList) {

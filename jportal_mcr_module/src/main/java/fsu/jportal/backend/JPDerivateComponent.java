@@ -1,22 +1,29 @@
 package fsu.jportal.backend;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaIFS;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.*;
-
+/**
+ * MyCoRe derivate abstraction for jportal.
+ *
+ * @author Matthias Eichner
+ */
 public class JPDerivateComponent implements JPComponent {
 
     protected MCRDerivate derivate;
@@ -135,8 +142,7 @@ public class JPDerivateComponent implements JPComponent {
     }
 
     @Override
-    public void store(StoreOption... options)
-        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
+    public void store(StoreOption... options) throws MCRPersistenceException, MCRAccessException {
         List<StoreOption> optionList = Arrays.asList(options);
 
         if (optionList.contains(StoreOption.metadata)) {
@@ -153,9 +159,12 @@ public class JPDerivateComponent implements JPComponent {
             for (Map.Entry<String, URL> entry : this.newContentMap.entrySet()) {
                 String path = entry.getKey();
                 URL url = entry.getValue();
+                MCRPath sourcePath = MCRPath.getPath(this.derivate.getId().toString(), path);
                 try (InputStream in = url.openStream()) {
-                    Files.copy(in, MCRPath.getPath(this.derivate.getId().toString(), path),
-                        StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(in, sourcePath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (Exception exc) {
+                    throw new MCRPersistenceException(
+                            "Unable to upload " + url.toString() + " to " + sourcePath.toAbsolutePath(), exc);
                 }
             }
         }

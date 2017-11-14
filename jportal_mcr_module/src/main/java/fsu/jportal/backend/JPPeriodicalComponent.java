@@ -1,15 +1,5 @@
 package fsu.jportal.backend;
 
-import fsu.jportal.util.DerivateLinkUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRException;
-import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.common.MCRISO8601Date;
-import org.mycore.datamodel.metadata.*;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -17,6 +7,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import fsu.jportal.util.DerivateLinkUtil;
+import fsu.jportal.util.JPComponentUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRException;
+import org.mycore.common.MCRPersistenceException;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRISO8601Date;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 
 /**
  * Base class for jparticle, jpvolume and jpjournal.
@@ -318,7 +327,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * List all participants of the given object type (only person or jpinst is allowed)
      * and role.
      *
-     * @param objectType person or jpinst
+     * @param objectType person or institution
      * @param role the role, e.g. author
      * @return list of participants
      */
@@ -333,6 +342,24 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
                 .map(MCRMetaLinkID::getXLinkHrefID)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Returns the first found legal entity of the given type and role.
+     *
+     * @param objectType person or institution
+     * @param role the role, e.g. author
+     * @return the first found participant
+     */
+    public Optional<JPLegalEntity> getParticipant(JPObjectType objectType, String role) {
+        return getParticipants(objectType, role).stream().findFirst().flatMap(JPComponentUtil::getLegalEntity);
+    }
+
+    /**
+     * Returns the person or institution who created this component. This is usally the author or publisher.
+     *
+     * @return optional legal entity
+     */
+    public abstract Optional<JPLegalEntity> getCreator();
 
     /**
      * Get the identifier of the given type.
@@ -355,18 +382,27 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
+     * Returns the journal of this component. Each component is either a journal or should have a journal as ancestor.
+     *
+     * @return the journal
+     */
+    public JPJournal getJournal() {
+        MCRObject journal = MCRObjectUtils.getRoot(object);
+        if (!journal.getId().getTypeId().equals(JPJournal.TYPE)) {
+            throw new MCRException("Unable to get template of object " + journal.getId()
+                    + " because its not a journal but the root ancestor of " + object.getId() + ".");
+        }
+        return new JPJournal(journal);
+    }
+
+    /**
      * Returns the template name for this component. Each component is either a journal or
      * should have a journal as ancestor. This method returns the template of this journal.
      *
      * @return the template name
      */
     public String getNameOfTemplate() {
-        MCRObject journal = MCRObjectUtils.getRoot(object);
-        if (!journal.getId().getTypeId().equals(JPJournal.TYPE)) {
-            throw new MCRException("Unable to get template of object " + journal.getId()
-                    + " because its not a journal but the root ancestor of " + object.getId() + ".");
-        }
-        return new JPJournal(journal).getNameOfTemplate();
+        return getJournal().getNameOfTemplate();
     }
 
     /**

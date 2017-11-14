@@ -1,10 +1,10 @@
 package fsu.jportal.backend;
 
+import java.util.Optional;
+
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import java.util.Optional;
 
 /**
  * Volume abstraction. Be aware that this class is not complete.
@@ -84,6 +84,18 @@ public class JPVolume extends JPContainer {
      */
     public Optional<String> getNote() {
         return getText("notes", null);
+    }
+
+    /**
+     * Returns the publisher of this volume.
+     *
+     * @return publisher of this volume
+     */
+    @Override
+    public Optional<JPLegalEntity> getCreator() {
+        Optional<JPLegalEntity> mainPublisher = getParticipant(JPObjectType.jpinst, "mainPublisher");
+        Optional<JPLegalEntity> publisher = getParticipant(JPObjectType.jpinst, "publisher");
+        return mainPublisher.map(Optional::of).orElse(publisher);
     }
 
     /**

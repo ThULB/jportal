@@ -195,7 +195,7 @@ public abstract class Marc21Converter {
 
     private static void addPerson(String marcEntry, MarcFactory marcFactory, List<DataField> fields, MCRObjectID id) {
         JPPerson person = new JPPerson(id);
-        Map<String, String> nameMap = person.metaXMLToMap(person.getHeading());
+        Map<String, String> nameMap = person.metaXMLToMap(person.getHeading().orElse(null));
         char firstIndicator = nameMap.containsKey("lastName") ? '1' : '0';
         DataField dataField = marcFactory.newDataField(marcEntry, firstIndicator, '#');
         dataField.addSubfield(marcFactory.newSubfield('a', person.getTitle()));

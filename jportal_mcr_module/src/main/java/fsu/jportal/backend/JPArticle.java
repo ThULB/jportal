@@ -139,6 +139,18 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     }
 
     /**
+     * Returns the author of this article.
+     *
+     * @return author of this article
+     */
+    @Override
+    public Optional<JPLegalEntity> getCreator() {
+        Optional<JPLegalEntity> mainAuthor = getParticipant(JPObjectType.person, "mainAuthor");
+        Optional<JPLegalEntity> author = getParticipant(JPObjectType.person, "author");
+        return mainAuthor.map(Optional::of).orElse(author);
+    }
+
+    /**
      * Adds a keyword to the article.
      * 
      * @param keyword the keyword to add

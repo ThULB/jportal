@@ -1,11 +1,10 @@
 package fsu.jportal.backend;
 
+import java.util.Optional;
+
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 /**
  * Abstraction of a jportal institution. Be aware that this class is not fully implemented.
@@ -63,13 +62,8 @@ public class JPInstitution extends JPLegalEntity {
      * @return name of the institution.
      */
     protected String getInstitutionName() {
-        return Optional.ofNullable(object.getMetadata().getMetadataElement("names"))
-                       .map(_names -> StreamSupport.stream(_names.spliterator(), false))
-                       .flatMap(
-                               stream -> stream.filter(_names -> _names.getInherited() == 0)
-                                               .map(c -> (MCRMetaInstitutionName) c)
-                                               .findFirst()
-                       ).orElse(null).getFullName();
+        return metadataStreamNotInherited("names", MCRMetaInstitutionName.class)
+                .map(MCRMetaInstitutionName::getFullName).findFirst().orElse(null);
     }
 
     @Override

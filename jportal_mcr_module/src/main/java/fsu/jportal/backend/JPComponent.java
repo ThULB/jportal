@@ -1,15 +1,17 @@
 package fsu.jportal.backend;
 
-import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
-
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+
+import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRPersistenceException;
+import org.mycore.datamodel.metadata.MCRBase;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectService;
 
 /**
  * Base jportal interface of components. This includes persons, institutions, articles,
@@ -22,7 +24,7 @@ public interface JPComponent {
     /**
      * Describes what to store.
      */
-    public enum StoreOption {
+    enum StoreOption {
         /**
          * Store the metadata of an mcrobject or mcrderivate.
          */
@@ -50,14 +52,14 @@ public interface JPComponent {
      * 
      * @return the base <code>MCRObject</code>
      */
-    public MCRBase getObject();
+    MCRBase getObject();
 
     /**
      * Returns the mycore object id for this component.
      * 
      * @return the mycore object id
      */
-    default public MCRObjectID getId() {
+    default MCRObjectID getId() {
         return getObject().getId();
     }
 
@@ -67,7 +69,7 @@ public interface JPComponent {
      * 
      * @return date and time of creation
      */
-    default public LocalDateTime getCreateDate() {
+    default LocalDateTime getCreateDate() {
         MCRObjectService service = getObject().getService();
         Date date = service.getDate(MCRObjectService.DATE_TYPE_CREATEDATE);
         if (date == null) {
@@ -82,7 +84,7 @@ public interface JPComponent {
      * 
      * @return date and time of creation
      */
-    default public LocalDateTime getModifyDate() {
+    default LocalDateTime getModifyDate() {
         MCRObjectService service = getObject().getService();
         Date date = service.getDate(MCRObjectService.DATE_TYPE_MODIFYDATE);
         if (date == null) {
@@ -96,13 +98,15 @@ public interface JPComponent {
      * 
      * @return the title or null
      */
-    public String getTitle();
+    String getTitle();
 
     /**
      * Stores the component metadata, all its children and all derivates with content.
+     *
+     * @throws MCRPersistenceException if a persistence problem occur
+     * @throws MCRAccessException if write permission is missing
      */
-    default public void store()
-        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
+    default void store() throws MCRPersistenceException, MCRAccessException {
         this.store(StoreOption.metadata, StoreOption.children, StoreOption.derivate, StoreOption.content);
     }
 
@@ -111,14 +115,11 @@ public interface JPComponent {
      * handle what to store.
      * 
      * @param options what to store
-     * 
-     * @throws MCRPersistenceException
-     * @throws MCRActiveLinkException
-     * @throws MCRAccessException
-     * @throws IOException
+     *
+     * @throws MCRPersistenceException if a persistence problem occur
+     * @throws MCRAccessException if write permission is missing
      */
-    public void store(StoreOption... options)
-        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException;
+    void store(StoreOption... options) throws MCRPersistenceException, MCRAccessException;
 
     /**
      * Returns the type of the component. One of person, jpinst, jpjournal, jpvolume,
@@ -126,6 +127,6 @@ public interface JPComponent {
      * 
      * @return the tpye of the component
      */
-    public abstract String getType();
+    String getType();
 
 }

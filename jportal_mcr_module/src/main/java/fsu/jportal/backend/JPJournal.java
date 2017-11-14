@@ -1,13 +1,13 @@
 package fsu.jportal.backend;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Journal abstraction. Be aware this class is not fully implemented.
@@ -76,6 +76,18 @@ public class JPJournal extends JPContainer {
     }
 
     /**
+     * Returns the publisher of this journal.
+     *
+     * @return publisher of this journal
+     */
+    @Override
+    public Optional<JPLegalEntity> getCreator() {
+        Optional<JPLegalEntity> mainPublisher = getParticipant(JPObjectType.jpinst, "mainPublisher");
+        Optional<JPLegalEntity> publisher = getParticipant(JPObjectType.jpinst, "publisher");
+        return mainPublisher.map(Optional::of).orElse(publisher);
+    }
+
+    /**
      * Returns a list of journal types this journal is labeled as.
      * 
      * @return list of journal types
@@ -111,6 +123,11 @@ public class JPJournal extends JPContainer {
         return metadataStream("contentClassis" + number, MCRMetaClassification.class).map(mc -> {
             return new MCRCategoryID(mc.getClassId(), mc.getCategId());
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public JPJournal getJournal() {
+        return this;
     }
 
 }

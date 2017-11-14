@@ -17,11 +17,11 @@ public class JPPerson extends JPLegalEntity {
 
     public static String TYPE = JPObjectType.person.name();
 
-    public static enum Sex {
+    public enum Sex {
         male, female, unknown
     }
 
-    public static enum NoteType {
+    public enum NoteType {
         visible, hidden
     }
 
@@ -58,7 +58,7 @@ public class JPPerson extends JPLegalEntity {
      */
     @Override
     public String getTitle() {
-        Map<String, String> nameMap = metaXMLToMap(getHeading());
+        Map<String, String> nameMap = metaXMLToMap(getHeading().orElse(null));
         return buildName(nameMap);
     }
 
@@ -127,7 +127,7 @@ public class JPPerson extends JPLegalEntity {
         List<String> returnList = new ArrayList<>();
         List<MCRMetaXML> xmlList = getAlternative();
         for (MCRMetaXML xml : xmlList) {
-            Map<String, String> nameMap = metaXMLToMap(Optional.of(xml));
+            Map<String, String> nameMap = metaXMLToMap(xml);
             returnList.add(buildName(nameMap));
         }
         return returnList;
@@ -174,10 +174,10 @@ public class JPPerson extends JPLegalEntity {
      * @param metaXML the meta xml to flatten
      * @return a map containing the element name and text's
      */
-    public Map<String, String> metaXMLToMap(Optional<MCRMetaXML> metaXML) {
-        return metaXML.map(MCRMetaXML::getContent).orElseGet(Collections::emptyList).stream()
-            .filter(Filters.element()::matches).map(c -> (Element) c)
-            .collect(Collectors.toMap(Element::getName, Element::getTextTrim));
+    public Map<String, String> metaXMLToMap(MCRMetaXML metaXML) {
+        return Optional.ofNullable(metaXML).map(MCRMetaXML::getContent).orElseGet(Collections::emptyList).stream()
+                       .filter(Filters.element()::matches).map(c -> (Element) c)
+                       .collect(Collectors.toMap(Element::getName, Element::getTextTrim));
     }
 
     /**
@@ -221,7 +221,7 @@ public class JPPerson extends JPLegalEntity {
      */
     public Optional<Sex> getGender() {
         return metadataStreamNotInherited("def.gender", MCRMetaClassification.class)
-            .map(MCRMetaClassification::getCategId).map(categ -> Sex.valueOf(categ)).findFirst();
+                .map(MCRMetaClassification::getCategId).map(Sex::valueOf).findFirst();
     }
 
     /**
@@ -281,8 +281,8 @@ public class JPPerson extends JPLegalEntity {
 
     /**
      * Sets the place of death for this person.
-     * 
-     * @param placeOfDeath the place as string
+     *
+     * @param placeOfActivity the place as string
      */
     public void addPlaceOfActivity(String placeOfActivity) {
         addText("def.placeOfActivity", "placeOfActivity", placeOfActivity, null, true, true);

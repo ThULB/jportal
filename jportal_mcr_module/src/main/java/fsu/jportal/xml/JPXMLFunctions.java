@@ -1,5 +1,22 @@
 package fsu.jportal.xml;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.MetsUtil;
@@ -7,24 +24,17 @@ import fsu.jportal.util.ResolverUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.common.xml.MCRXMLFunctions;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.MCRURL;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 public class JPXMLFunctions {
 
@@ -217,8 +227,8 @@ public class JPXMLFunctions {
 
     /**
      * Checks if the corresponding mycore object has children.
-     * 
-     * @param derivateId
+     *
+     * @param derivateId the derivate to check
      * @return true if there are children
      */
     private static boolean hasChildren(String derivateId) {
@@ -273,6 +283,21 @@ public class JPXMLFunctions {
     }
 
     /**
+     * Returns the title for the given object.
+     *
+     * @param id mycore object identifier
+     * @return the title or null
+     */
+    public static String getTitle(String id) {
+        try {
+            return JPComponentUtil.get(id).map(JPComponent::getTitle).orElse(null);
+        } catch (Exception exc) {
+            LOGGER.error("Unable to retrieve title of " + id, exc);
+            return null;
+        }
+    }
+
+    /**
      * Returns the best published date of a dates container. The type of the date has
      * to be equals 'published' or 'published_from' and has the lowest inherited value.
      * <p>
@@ -303,15 +328,68 @@ public class JPXMLFunctions {
                     continue;
                 }
                 MCRMetaISO8601Date published = periodical.get().getDate("published").orElse(
-                    periodical.get().getDate("published_from").orElse(null));
+                        periodical.get().getDate("published_from").orElse(null));
                 if (published == null) {
                     continue;
                 }
                 return published.getISOString();
             }
-            return null;
         } catch (Exception exc) {
             LOGGER.error("Unable to retrieve published date of " + id, exc);
+        }
+        return null;
+    }
+
+    /**
+     * Returns the ISO 639-1 language of the given object. If the object itself does not have its own language metadata,
+     * then the parents are checked.
+     *
+     * @param id the object identifier to get the language of
+     * @return the language in ISO 639
+     */
+    public static String getLanguage(String id) {
+        try {
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            return JPComponentUtil.getPeriodical(mcrId).map(JPPeriodicalComponent::getLanguageCode).orElse(null);
+        } catch (Exception exc) {
+            LOGGER.error("Unable to retrieve language of " + id, exc);
+            return null;
+        }
+    }
+
+    /**
+     * Returns the author or the published of the given periodical component.
+     *
+     * @param id the identifier of the object
+     * @return the author or publisher as string
+     */
+    public static String getCreator(String id) {
+        try {
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            Optional<JPLegalEntity> creator = JPComponentUtil.getPeriodical(mcrId)
+                                                             .flatMap(JPPeriodicalComponent::getCreator);
+            return creator.map(JPLegalEntity::getTitle).orElse(null);
+        } catch (Exception exc) {
+            LOGGER.error("Unable to retrieve creator of " + id, exc);
+            return null;
+        }
+    }
+
+    /**
+     * Returns the publisher of the given component.
+     *
+     * @param id the identifier of the object
+     * @return the publisher
+     */
+    public static String getPublisher(String id) {
+        try {
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            Optional<JPLegalEntity> publisher = JPComponentUtil.getPeriodical(mcrId)
+                                                               .map(JPPeriodicalComponent::getJournal)
+                                                               .flatMap(JPJournal::getCreator);
+            return publisher.map(JPLegalEntity::getTitle).orElse(null);
+        } catch (Exception exc) {
+            LOGGER.error("Unable to retrieve publisher of " + id, exc);
             return null;
         }
     }

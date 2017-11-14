@@ -1,17 +1,27 @@
 package fsu.jportal.backend;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
-
-import java.io.IOException;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.mycore.datamodel.metadata.MCRMetaDefault;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Base component for person, jpinst, jparticle, jpvolume and jpjournal.
@@ -76,8 +86,7 @@ public abstract class JPObjectComponent implements JPComponent {
     }
 
     @Override
-    public void store(StoreOption... options)
-        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException, IOException {
+    public void store(StoreOption... options) throws MCRPersistenceException, MCRAccessException {
         List<StoreOption> optionList = Arrays.asList(options);
         if (optionList.contains(StoreOption.metadata)) {
             MCRMetadataManager.update(object);
@@ -266,11 +275,6 @@ public abstract class JPObjectComponent implements JPComponent {
      * @return true if they are equal
      */
     protected Predicate<MCRMetaDefault> typeFilter(String type) {
-        return new Predicate<MCRMetaDefault>() {
-            @Override
-            public boolean test(MCRMetaDefault metaText) {
-                return (type == null && metaText.getType() == null) || (metaText.getType().equals(type));
-            }
-        };
+        return metaText -> (type == null && metaText.getType() == null) || (metaText.getType().equals(type));
     }
 }
