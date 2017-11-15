@@ -23,12 +23,9 @@
 
   <parsers>
 
-    <parser name="parse-mcrxml" class="org.mycore.tika.parser.xml.MCRXMLParser">
+    <parser name="parse-dcxml" class="org.apache.tika.parser.xml.DcXMLParser">
       <mime>text/xml</mime>
       <mime>application/xml</mime>
-    </parser>
-
-    <parser name="parse-dcxml" class="org.apache.tika.parser.xml.DcXMLParser">
       <mime>image/svg+xml</mime>
     </parser>
 
