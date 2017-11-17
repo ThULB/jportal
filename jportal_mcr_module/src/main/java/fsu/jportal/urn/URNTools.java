@@ -3,11 +3,18 @@ package fsu.jportal.urn;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.output.DOMOutputter;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRFileMetadata;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectDerivate;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.pi.MCRPIRegistrationInfo;
 import org.mycore.pi.MCRPIRegistrationService;
@@ -15,18 +22,23 @@ import org.mycore.pi.MCRPIRegistrationServiceManager;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.MCRPersistentIdentifierManager;
 import org.mycore.pi.backend.MCRPI;
+import org.mycore.pi.backend.MCRPI_;
 import org.mycore.pi.urn.MCRDNBURN;
 import org.mycore.pi.urn.rest.MCRDNBURNRestClient;
 import org.mycore.pi.urn.rest.MCRDerivateURNUtils;
 import org.mycore.pi.urn.rest.MCREpicurLite;
+import org.w3c.dom.NodeList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class URNTools {
@@ -67,11 +79,61 @@ public class URNTools {
         return getURNForFile(derivID, additional);
     }
 
+
+    public static String createAlternativeURN(String urn, String toAppend) {
+        LOGGER.info("Base URN: " + urn + ", adding string '" + toAppend + "'");
+
+        String[] parts = urn.split("-");
+        StringBuilder b = new StringBuilder(parts[0] + "-" + toAppend);
+        for (int i = 1; i < parts.length; i++) {
+            b.append("-" + parts[i]);
+        }
+
+        return b.toString();
+    }
+
+    public static NodeList getURNsForMCRID(String mcrid) {
+        EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery getQuery = cb.createQuery(MCRPIRegistrationInfo.class);
+        Root pi = getQuery.from(MCRPI.class);
+        List<MCRPIRegistrationInfo> mcrPiList = em
+                .createQuery(getQuery.select(pi).where(cb.equal(pi.get(MCRPI_.mycoreID), mcrid)))
+                .getResultList();
+
+        List<Element> fileElemList = mcrPiList
+                .stream()
+                .map(piInfo -> {
+                    Element fileElem = new Element("file");
+                    fileElem.setAttribute("urn", piInfo.getIdentifier());
+                    String additional = piInfo.getAdditional();
+                    if(additional.startsWith("/")){
+                        additional = additional.substring(1);
+                    }
+                    fileElem.setAttribute("name", additional);
+
+                    return fileElem;
+                })
+                .collect(Collectors.toList());
+
+        Element root = new Element("root");
+        root.addContent(fileElemList);
+
+        DOMOutputter domOutputter = new DOMOutputter();
+        try {
+            return domOutputter.output(root).getChildNodes();
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static MCRPI getURNForFile(MCRObjectID derivID, String additional) {
         try {
             return MCRPersistentIdentifierManager
-                .getInstance()
-                .get(SERVICEID, derivID.toString(), additional);
+                    .getInstance()
+                    .get(SERVICEID, derivID.toString(), additional);
         } catch (NoResultException e) {
             return null;
         }
@@ -79,9 +141,9 @@ public class URNTools {
 
     public static String getURNForFile(String derivID, String path) {
         return Optional
-            .ofNullable(getURNForFile(MCRObjectID.getInstance(derivID), path))
-            .map(MCRPI::getIdentifier)
-            .orElse("");
+                .ofNullable(getURNForFile(MCRObjectID.getInstance(derivID), path))
+                .map(MCRPI::getIdentifier)
+                .orElse("");
     }
 
     public static void updateURN(MCRPath sourceNode, MCRPath target) {
@@ -110,14 +172,14 @@ public class URNTools {
     }
 
     public static Function<MCRPIRegistrationInfo, MCREpicurLite> getEpicureProvider(
-        UsernamePasswordCredentials credentials) {
+            UsernamePasswordCredentials credentials) {
         return urn -> MCREpicurLite.instance(urn, MCRDerivateURNUtils.getURL(urn))
-            .setCredentials(credentials);
+                                   .setCredentials(credentials);
     }
 
     public static MCRPIRegistrationService<MCRPersistentIdentifier> getURNServiceManager() {
         return MCRPIRegistrationServiceManager
-            .getInstance().getRegistrationService(SERVICEID);
+                .getInstance().getRegistrationService(SERVICEID);
     }
 
     public static boolean hasURNAssigned(String derivID) {
@@ -129,25 +191,24 @@ public class URNTools {
     }
 
     /**
-     *
      * @param derivateID
      * @return Stream of registerd and not registered URNs
      */
     public static Stream<MCRPI> registerURNs(MCRObjectID derivateID) {
         MCRDNBURNRestClient urnRestClient = getUsernamePassword()
-            .map(URNTools::getEpicureProvider)
-            .map(MCRDNBURNRestClient::new)
-            .orElseThrow(() -> new MCRException("Could not create URN Rest client."));
+                .map(URNTools::getEpicureProvider)
+                .map(MCRDNBURNRestClient::new)
+                .orElseThrow(() -> new MCRException("Could not create URN Rest client."));
 
         return MCRPersistentIdentifierManager.getInstance()
-            .getCreatedIdentifiers(derivateID, MCRDNBURN.TYPE, SERVICEID)
-            .stream()
-            .map(MCRPI.class::cast)
-            .map(pi -> urnRestClient.register(pi)
-                    .map(date -> {
-                        pi.setRegistered(date);
-                        return pi;
-                    })
-                .orElse(pi));
+                                             .getCreatedIdentifiers(derivateID, MCRDNBURN.TYPE, SERVICEID)
+                                             .stream()
+                                             .map(MCRPI.class::cast)
+                                             .map(pi -> urnRestClient.register(pi)
+                                                                     .map(date -> {
+                                                                         pi.setRegistered(date);
+                                                                         return pi;
+                                                                     })
+                                                                     .orElse(pi));
     }
 }

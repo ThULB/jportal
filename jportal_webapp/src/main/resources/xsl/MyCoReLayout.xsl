@@ -3,7 +3,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:websiteWriteProtection="xalan://org.mycore.frontend.MCRWebsiteWriteProtection"
-  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://org.mycore.urn.MCRXMLFunctions" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://fsu.jportal.urn.URNTools" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns:gndo="http://d-nb.info/standards/elementset/gnd#" xmlns:geo="http://www.opengis.net/ont/geosparql#" 
   exclude-result-prefixes="rdf gndo geo xlink mcr acl i18n mcrxsl websiteWriteProtection xalan mcrurn">
 
@@ -219,7 +219,7 @@
     <xsl:if test="$objectHost = 'local'">
       <xsl:for-each select="derivateLink">
         <xsl:variable select="substring-before(@xlink:href, '/')" name="deriv" />
-        <xsl:variable name="derivateWithURN" select="mcrurn:hasURNDefined(@xlink:href)" />
+        <xsl:variable name="derivateWithURN" select="mcrurn:hasURNAssigned(@xlink:href)" />
         <xsl:choose>
           <xsl:when test="acl:checkPermissionForReadingDerivate($deriv)">
             <xsl:variable name="firstSupportedFile" select="concat('/', substring-after(@xlink:href, '/'))" />

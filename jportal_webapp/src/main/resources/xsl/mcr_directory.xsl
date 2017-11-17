@@ -8,7 +8,7 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:mcrurn="xalan://org.mycore.urn.MCRXMLFunctions" exclude-result-prefixes="xlink mcr mcrurn">
+  xmlns:mcrurn="xalan://fsu.jportal.urn.URNTools" exclude-result-prefixes="xlink mcr mcrurn">
     &html-output;
   <xsl:param name="MCR.URN.Display.DFG.Viewer.URN" />
   <xsl:param name="MCR.Mets.Filename" />
