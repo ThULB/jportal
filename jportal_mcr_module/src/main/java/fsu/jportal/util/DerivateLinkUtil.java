@@ -207,15 +207,18 @@ public abstract class DerivateLinkUtil {
      */
     public static void deleteDerivateLinks(MCRDerivate der)
         throws SolrServerException, MCRAccessException {
-        MCRObjectID derivateId = der.getId();
-        List<MCRObjectID> idList = getLinks(derivateId + "*");
-        for (MCRObjectID id : idList) {
-            try {
-                DerivateLinkUtil.removeLinks(id, derivateId);
-            } catch (MCRException | MCRActiveLinkException exc) {
-                LOGGER.error("unable to delete derivate link of object " + id + " and derivate " + derivateId, exc);
-            }
-        }
+        MCRSolrSearchUtils
+                .listIDs(MCRSolrClientFactory.getSolrClient(), "derivateLink:" + der.getId() + "*")
+                .stream()
+                .map(MCRObjectID::getInstance)
+                .forEach(id -> {
+                    try {
+                        DerivateLinkUtil.removeLinks(id, der.getId());
+                    } catch (Exception exc) {
+                        LOGGER.error("unable to delete derivate link of object " + id +
+                                " and derivate " + der.getId(), exc);
+                    }
+                });
     }
 
     public static void deleteFileLinks(List<MCRObjectID> idList, MCRPath pathOfImg) throws MCRAccessException {
