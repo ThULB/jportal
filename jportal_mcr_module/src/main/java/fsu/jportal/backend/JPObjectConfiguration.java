@@ -87,9 +87,7 @@ public class JPObjectConfiguration {
      */
     public Map<String, String> keyFilter(String filter) {
         Map<String, String> map = new HashMap<>();
-        filter(filter).forEach(entry -> {
-            map.put(entry.getKey().toString(), entry.getValue().toString());
-        });
+        filter(filter).forEach(entry -> map.put(entry.getKey().toString(), entry.getValue().toString()));
         return map;
     }
 
@@ -110,7 +108,7 @@ public class JPObjectConfiguration {
         });
     }
 
-    public void store() throws FileNotFoundException, IOException {
+    public void store() throws IOException {
         Path path = JournalFilesResolver.getPath(configFilePath);
         properties.store(new FileOutputStream(path.toFile()), null);
     }

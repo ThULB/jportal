@@ -1,6 +1,11 @@
 package fsu.jportal.frontend;
 
-import fsu.jportal.util.JPComponentUtil;
+import java.io.IOException;
+import java.util.List;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -14,11 +19,6 @@ import org.mycore.common.content.MCRURLContent;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrURL;
 import org.xml.sax.SAXException;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by chi on 03.09.15.
@@ -61,18 +61,6 @@ public class SolrToc {
         return null;
     }
 
-    public static boolean isPartOfOnlineJournal(String parentID) {
-        String journalID = JPComponentUtil.getJournalID(parentID);
-        if(journalID == null) {
-            return false;
-        }
-        String listType = JPComponentUtil.getListType(journalID).orElse("");
-        if (listType.equals("online")) {
-            return true;
-        }
-        return false;
-    }
-
     public static int getRefererStart(String parentID, String objectType, String referer, int rows) throws TransformerException {
         ModifiableSolrParams solrParams = buildQuery(parentID, objectType, "order asc", 99999, 0).set("fl", "id");
 
@@ -94,4 +82,5 @@ public class SolrToc {
         }
         return 0;
     }
+
 }

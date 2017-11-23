@@ -24,6 +24,7 @@ import fsu.jportal.util.ResolverUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -371,6 +372,18 @@ public class JPXMLFunctions {
             return creator.map(JPLegalEntity::getTitle).orElse(null);
         } catch (Exception exc) {
             LOGGER.error("Unable to retrieve creator of " + id, exc);
+            return null;
+        }
+    }
+
+    public static String getAccessRights(String id) {
+        try {
+            if(MCRXMLFunctions.isWorldReadableComplete(id)) {
+                return "info:eu-repo/semantics/openAccess";
+            }
+            return "info:eu-repo/semantics/restrictedAccess";
+        } catch(Exception exc) {
+            LOGGER.error("Unable to retrieve access rights of " + id, exc);
             return null;
         }
     }

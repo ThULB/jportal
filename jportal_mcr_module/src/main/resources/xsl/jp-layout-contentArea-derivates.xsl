@@ -10,10 +10,7 @@
     <xsl:param name="editable" select="'true'" />
     <xsl:param name="query" />
 
-    <xsl:variable name="published" select="metadata/dates/date[@type='published' and @inherited=0]" />
-    <xsl:variable name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-
-    <xsl:variable name="access" select="derivAccess:checkPermission(@ID, $journalID, $published)" />
+    <xsl:variable name="access" select="derivAccess:checkPermission(@ID)" />
     <xsl:variable name="derivateLink" select="metadata/derivateLinks/derivateLink" />
     <xsl:variable name="derivate" select="structure/derobjects/derobject" />
 

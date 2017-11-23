@@ -24,6 +24,7 @@
       <xsl:call-template name="language" />
       <xsl:call-template name="coverage"/>
       <xsl:call-template name="relation"/>
+      <xsl:call-template name="rights"/>
     </oai_dc:dc>
   </xsl:template>
 
@@ -143,6 +144,15 @@
       <dc:relation>
         <xsl:value-of select="concat('IsPartOf ', metadata/maintitles/maintitle[last()])"/>
       </dc:relation>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="rights">
+    <xsl:variable name="rights" select="jpxml:getAccessRights(@ID)"/>
+    <xsl:if test="$rights">
+      <dc:rights>
+        <xsl:value-of select="$rights"/>
+      </dc:rights>
     </xsl:if>
   </xsl:template>
 

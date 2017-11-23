@@ -117,8 +117,8 @@ public abstract class JPComponentUtil {
      * @param mcrID mycore object id
      * @return id of the journal
      */
-    public static String getJournalID(String mcrID) {
-        return getPeriodical(MCRObjectID.getInstance(mcrID)).map(JPPeriodicalComponent::getJournalIdAsString).orElse(null);
+    public static String getJournalID(MCRObjectID mcrID) {
+        return getPeriodical(mcrID).map(JPPeriodicalComponent::getJournalIdAsString).orElse(null);
     }
 
     /**

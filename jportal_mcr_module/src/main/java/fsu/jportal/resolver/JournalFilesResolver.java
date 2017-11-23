@@ -1,5 +1,6 @@
 package fsu.jportal.resolver;
 
+import org.apache.logging.log4j.LogManager;
 import org.mycore.common.config.MCRConfiguration;
 
 import javax.xml.transform.Source;
@@ -20,12 +21,9 @@ public class JournalFilesResolver implements URIResolver {
         href = href.substring(href.indexOf(":") + 1);
         try {
             FileInputStream fis = stream(href);
-            if (fis == null) {
-                return null;
-            }
             return fis != null ? new StreamSource(fis) : null;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LogManager.getLogger().error("Unable to resolve " + href, e);
         }
         return null;
     }
@@ -45,4 +43,5 @@ public class JournalFilesResolver implements URIResolver {
         }
         return null;
     }
+
 }

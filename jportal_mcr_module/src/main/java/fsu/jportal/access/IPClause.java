@@ -1,18 +1,16 @@
 package fsu.jportal.access;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import fsu.jportal.parser.IPAddress;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.mycore.access.mcrimpl.MCRAccessData;
 import org.mycore.access.mcrimpl.MCRIPClause;
 import org.mycore.parsers.bool.MCRIPCondition;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 public class IPClause implements MCRIPCondition {
-    static Logger LOGGER = LogManager.getLogger(IPClause.class);
 
     private IPAddress ipAddress;
 
@@ -35,16 +33,10 @@ public class IPClause implements MCRIPCondition {
                 long _startAddress = ipToLong(startAddress);
                 long _address = ipToLong(address);
                 long _endAddress = ipToLong(endAddress);
-
-                if (!(_startAddress <= _address && _address <= _endAddress)) {
-                    return false;
-                }
-
-                return true;
+                return _startAddress <= _address && _address <= _endAddress;
             }
         } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LogManager.getLogger().error("Unable to check range for " + data, e);
         }
         return false;
     }
@@ -57,8 +49,8 @@ public class IPClause implements MCRIPCondition {
         }
         return result;
     }
-
     @Override
+
     public Element toXML() {
         Element cond = new Element("condition");
         cond.setAttribute("field", "ip");

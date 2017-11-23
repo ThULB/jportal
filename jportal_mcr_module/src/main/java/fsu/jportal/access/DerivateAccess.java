@@ -1,68 +1,54 @@
 package fsu.jportal.access;
 
+import java.io.IOException;
+
 import fsu.jportal.backend.JPObjectConfiguration;
+import fsu.jportal.util.JPComponentUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.solr.MCRSolrClientFactory;
-
-import java.io.IOException;
+import org.mycore.solr.search.MCRSolrSearchUtils;
 
 public class DerivateAccess {
 
     private static final Logger LOGGER = LogManager.getLogger(DerivateAccess.class);
 
-    public static boolean checkPermission(String id, String journalID, String date) {
-        String accessClassName = null;
-        try {
-            JPObjectConfiguration journalConfig = new JPObjectConfiguration(journalID, "fsu.jportal.derivate.access");
-            accessClassName = journalConfig.get("accessClass");
-        } catch (Exception exc) {
-            LOGGER.error("Unable to check permission of " + id + " and journal " + journalID
-                + " because the journal config couldn't be loaded.", exc);
-        }
+    public static boolean checkPermission(String id) {
+        MCRObjectID objectID = MCRObjectID.getInstance(id);
+        String journalID = JPComponentUtil.getJournalID(objectID);
+        String accessClassName = getAccessClassName(id, journalID);
 
-        if (accessClassName != null && "klostermann".equals(accessClassName)) {
-            if (date.equals("")) {
-                return true;
-            }
-
+        if ("klostermann".equals(accessClassName)) {
             try {
-                String sorlQuery = "+journalID:" + journalID + " +objectType:jparticle +published:[NOW-1YEAR TO NOW]";
-                ModifiableSolrParams solrParams = new ModifiableSolrParams();
-                solrParams.set("q", sorlQuery).set("fl", "id");
+                String query = "+id:" + id + " +published:[NOW-1YEAR TO NOW]";
                 SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
-                QueryResponse response = solrClient.query(solrParams);
-
-                SolrDocumentList results = response.getResults();
-                long numFound = results.getNumFound();
-
-                solrParams.set("rows", (int) numFound);
-                response = solrClient.query(solrParams);
-                results = response.getResults();
-
-                for (SolrDocument result : results) {
-                    String idFromResultList = (String) result.getFieldValue("id");
-                    if (id.equals(idFromResultList)) {
-                        return checkPerm(id, journalID);
-                    }
+                SolrDocument solrArticle = MCRSolrSearchUtils.first(solrClient, query);
+                if (solrArticle != null) {
+                    return checkPerm(id, journalID);
                 }
             } catch (SolrServerException | IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER.error("Error while checking derivate access for " + id, e);
                 return false;
             }
-
             return true;
         }
-
         return checkPerm(id, journalID);
+    }
+
+    private static String getAccessClassName(String id, String journalID) {
+        try {
+            JPObjectConfiguration journalConfig = new JPObjectConfiguration(journalID, "fsu.jportal.derivate.access");
+            return journalConfig.get("accessClass");
+        } catch (Exception exc) {
+            LOGGER.error("Unable to check permission of " + id + " and journal " + journalID
+                    + " because the journal config couldn't be loaded.", exc);
+            return null;
+        }
     }
 
     private static boolean checkPerm(String id, String journalID) {
