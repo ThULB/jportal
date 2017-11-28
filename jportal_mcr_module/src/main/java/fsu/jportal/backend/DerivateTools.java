@@ -549,7 +549,7 @@ public class DerivateTools {
         DerivateLinkUtil.removeLink(MCRJerseyUtil.getID(documentID), path);
     }
 
-    public static JsonObject getDerivateAsJson(String derivateID, String path) {
+    public static JsonObject getDerivateAsJson(String derivateID, String path, boolean noChilds) {
         MCRJSONManager gsonManager = MCRJSONManager.instance();
         gsonManager.registerAdapter(new DerivateTypeAdapter());
         gsonManager.registerAdapter(new MCRFilesystemNodeTypeAdapter());
@@ -563,7 +563,7 @@ public class DerivateTools {
         JPDerivateComponent derivateComponent = new JPDerivateComponent(derivateID);
         String maindoc = getMaindoc(derivateComponent);
 
-        FileNodeWrapper wrapper = new FileNodeWrapper(node, maindoc);
+        FileNodeWrapper wrapper = new FileNodeWrapper(node, maindoc, noChilds);
         JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
 
         json.addProperty("display", isHidden(derivateID));

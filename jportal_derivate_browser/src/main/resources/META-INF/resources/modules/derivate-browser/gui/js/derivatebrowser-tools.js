@@ -81,6 +81,7 @@ var derivateBrowserTools = (function() {
 
   function getImg(img, deriID, path) {
     getImgWithPath(img, jp.baseURL + "servlets/MCRTileCombineServlet/MIN/" + deriID + path);
+    // getImgWithPath(img, jp.baseURL + "rsc/iiif/image/Iview/" + deriID + path.replace("/", "%2F") + "/full/400,/0/color.jpg");
     $(img).data("deriID", deriID);
     $(img).data("path", path);
   }
@@ -100,23 +101,12 @@ var derivateBrowserTools = (function() {
       }
     }
     if (docID != "" && docID != undefined) {
-      var fileName = path.substr(path.lastIndexOf("/") + 1);
-      if (fileName.contains(".")) {
-        path = path.substring(0, path.lastIndexOf("/"));
-      }
-      else {
-        fileName = "";
-      }
-      setDocIDs(docID, path, fileName);
-      $("body").trigger("goToDocument", [docID, path]);
-      if (docID.contains("derivate")) {
-        $("body").trigger("showDerivate", [docID, path, fileName]);
-      }
-      else {
-        $("body").trigger("showDoc", docID);
-      }
-      disableButton();
-      $.address.path("/" + currentDocID + currentPath + "/" + currentFile);
+        if (docID.contains("derivate")) {
+            getFileOrFolder(docID, path, setAndLoadDoc)
+        }
+        else {
+            setAndLoadDoc(docID, path, "");
+        }
     }
     else {
       setDocIDs("", "", "");
@@ -126,6 +116,19 @@ var derivateBrowserTools = (function() {
     $("#journal-info-button-delete-label").removeClass("hidden");
     $("#journal-info-button-goToPage").removeClass("hidden");
     $("#journal-info-button-edit").removeClass("hidden");
+  }
+
+  function setAndLoadDoc(docID, path, fileName) {
+      setDocIDs(docID, path, fileName);
+      $("body").trigger("goToDocument", [docID, path]);
+      if (docID.contains("derivate")) {
+          $("body").trigger("showDerivate", [docID, path, fileName]);
+      }
+      else {
+          $("body").trigger("showDoc", docID);
+      }
+      disableButton();
+      $.address.path("/" + currentDocID + currentPath + "/" + currentFile);
   }
 
   function disableButton() {
@@ -449,6 +452,26 @@ var derivateBrowserTools = (function() {
         }
       }
     });
+  }
+
+  function getFileOrFolder(deriID, path, callback){
+      $.ajax({
+          url: "./" + deriID + path + "?noChilds=true" ,
+          type: "GET",
+          dataType: "json",
+          success: function(data) {
+              if (data.type == "directory") {
+                  callback(deriID, path, "");
+              }
+              else {
+                  callback(deriID, data.absPath.substring(0, data.absPath.lastIndexOf("/")), data.name);
+              }
+          },
+          error: function(error) {
+              console.log(error);
+              derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.loadFailed", deriID), false);
+          }
+      });
   }
 
   return {
