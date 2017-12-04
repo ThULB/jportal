@@ -143,7 +143,7 @@ public class URNTools {
         return Optional
                 .ofNullable(getURNForFile(MCRObjectID.getInstance(derivID), path))
                 .map(MCRPI::getIdentifier)
-                .orElse("");
+                .orElse(null);
     }
 
     public static void updateURN(MCRPath sourceNode, MCRPath target) {
