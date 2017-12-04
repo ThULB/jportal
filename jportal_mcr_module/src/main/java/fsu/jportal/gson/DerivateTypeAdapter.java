@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import fsu.jportal.urn.URNTools;
+import org.apache.logging.log4j.LogManager;
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -18,6 +19,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
+
     private static final String dateFormat = "dd.MM.yyyy HH:mm:ss";
 
     private static final DateFormat dateFormatter = new SimpleDateFormat(dateFormat);
@@ -34,11 +36,13 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
         MCRFilesystemNode[] children = deriv.getChildren();
         JsonArray childrenJSON = new JsonArray();
 
+        long serializeChildren = System.currentTimeMillis();
         for (MCRFilesystemNode childNode : children) {
             JsonElement childNodeJSON = createJSON(context, maindoc, childNode);
-
             childrenJSON.add(childNodeJSON);
         }
+        LogManager.getLogger()
+                  .info("Serialize children took " + (System.currentTimeMillis() - serializeChildren) + "ms");
 
         String ownerID = deriv.getNode().getOwnerID();
 
@@ -72,7 +76,6 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
     @Override
     public FileNodeWrapper deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
         throws JsonParseException {
-        // TODO Auto-generated method stub
         return null;
     }
 

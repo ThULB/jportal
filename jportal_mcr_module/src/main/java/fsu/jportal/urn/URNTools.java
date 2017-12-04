@@ -50,7 +50,7 @@ public class URNTools {
         boolean registered = true;
 
         if (newName != null) {
-            urn.setAdditional(newName.getOwnerRelativePath().toString());
+            urn.setAdditional(newName.getOwnerRelativePath());
             registered = false;
         }
 
@@ -75,7 +75,7 @@ public class URNTools {
 
     public static MCRPI getURNForFile(MCRPath file) {
         MCRObjectID derivID = MCRObjectID.getInstance(file.getOwner());
-        String additional = file.getOwnerRelativePath().toString();
+        String additional = file.getOwnerRelativePath();
         return getURNForFile(derivID, additional);
     }
 
@@ -86,7 +86,7 @@ public class URNTools {
         String[] parts = urn.split("-");
         StringBuilder b = new StringBuilder(parts[0] + "-" + toAppend);
         for (int i = 1; i < parts.length; i++) {
-            b.append("-" + parts[i]);
+            b.append("-").append(parts[i]);
         }
 
         return b.toString();

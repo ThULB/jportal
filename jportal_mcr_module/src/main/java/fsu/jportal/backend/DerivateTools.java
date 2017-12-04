@@ -1,5 +1,23 @@
 package fsu.jportal.backend;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fsu.jportal.gson.DerivateTypeAdapter;
@@ -10,12 +28,6 @@ import fsu.jportal.urn.URNTools;
 import fsu.jportal.util.DerivateLinkUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRPersistenceException;
@@ -40,26 +52,6 @@ import org.mycore.pi.MCRPIRegistrationServiceManager;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.backend.MCRPI;
 import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
-import org.mycore.pi.urn.MCRDNBURN;
-import org.mycore.pi.urn.rest.MCRURNGranularRESTRegistrationService;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DerivateTools {
     static Logger LOGGER = LogManager.getLogger(DerivateTools.class);
@@ -181,7 +173,7 @@ public class DerivateTools {
 
     public static String getPathNoLeadingRoot(MCRPath node) {
         String nodePath = node.getOwnerRelativePath();
-        if (!node.equals("/")) {
+        if (!nodePath.equals("/")) {
             nodePath = nodePath.substring(1);
         }
         return nodePath;
@@ -239,7 +231,7 @@ public class DerivateTools {
         throws IOException {
         MCRPath derivateRoot = MCRPath.getPath(derivateID, "/");
         Pattern patternObj = Pattern.compile(pattern);
-        Map<String, String> resultMap = new HashMap<String, String>();
+        Map<String, String> resultMap = new HashMap<>();
         MCRDerivate mcrDerivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateID));
         String mainDoc = mcrDerivate.getDerivate().getInternals().getMainDoc();
 
@@ -438,7 +430,6 @@ public class DerivateTools {
         }
 
         if (path != null && !"".equals(path.trim())) {
-            getDirByPath(derivateID, path);
             node = (MCRDirectory) node.getChildByPath(path);
             if(node == null){
                 return null;
@@ -456,15 +447,6 @@ public class DerivateTools {
         } else {
             return null;
         }
-    }
-
-    private static MCRFilesystemNode getDirByPath(String derivateID, String path) {
-        MCRDirectory rootDir = getRootDir(derivateID);
-        if(rootDir == null){
-            return null;
-        }
-
-        return rootDir.getChildByPath(path);
     }
 
     private static MCRDirectory getRootDir(String derivateID) {
@@ -510,12 +492,10 @@ public class DerivateTools {
 
     public static boolean addURNToDerivate(String derivateID) {
         MCRObjectID mcrObjectID = MCRObjectID.getInstance(derivateID);
-        return addURNToFile(mcrObjectID, "") != ""
-            && !URNTools
+        return !addURNToFile(mcrObjectID, "").equals("")
+            && URNTools
             .registerURNs(mcrObjectID)
-            .filter(pi -> pi.getRegistered() == null)
-            .findFirst()
-            .isPresent();
+            .noneMatch(pi -> pi.getRegistered() == null);
     }
 
     public static String addURNToFile(String derivatID, String path) {
@@ -530,12 +510,8 @@ public class DerivateTools {
         try {
             MCRPersistentIdentifier urn = dnburnGranular.fullRegister(derivate, path);
             return urn.asString();
-        } catch (MCRAccessException e) {
-            e.printStackTrace();
-        } catch (MCRActiveLinkException e) {
-            e.printStackTrace();
-        } catch (MCRPersistentIdentifierException e) {
-            e.printStackTrace();
+        } catch (MCRAccessException | MCRActiveLinkException | MCRPersistentIdentifierException e) {
+            LOGGER.error("Unable to add URN to file " + path);
         }
 
         return "";
@@ -574,12 +550,7 @@ public class DerivateTools {
 
     private static boolean isHidden(String derivateID) {
         MCRDerivate derObj = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateID));
-        Document xml = derObj.createXML();
-        XPathFactory xpF = XPathFactory.instance();
-        XPathExpression<Element> xpE = xpF.compile("mycorederivate/derivate", Filters.element());
-        Element derivateNode = (Element) xpE.evaluateFirst(xml);
-        Attribute displayAttr = derivateNode.getAttribute("display");
-        return displayAttr != null && Boolean.parseBoolean(displayAttr.getValue());
+        return !derObj.getDerivate().isDisplayEnabled();
     }
 
     public static boolean tileDerivate(String derivateID) {
