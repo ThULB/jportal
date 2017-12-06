@@ -188,6 +188,11 @@ public class URNTools {
 
     public static boolean hasURNAssigned(MCRObjectID derivateID) {
         return getURNServiceManager().isCreated(derivateID, "");
+
+    }
+
+    public static List<MCRPIRegistrationInfo> getURNsForDerivate(MCRObjectID derivateID) {
+        return MCRPersistentIdentifierManager.getInstance().getRegistered(MCRMetadataManager.retrieveMCRObject(derivateID));
     }
 
     /**

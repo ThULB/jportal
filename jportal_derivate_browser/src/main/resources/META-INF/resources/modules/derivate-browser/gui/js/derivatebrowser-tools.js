@@ -102,7 +102,7 @@ var derivateBrowserTools = (function() {
     }
     if (docID != "" && docID != undefined) {
         if (docID.contains("derivate")) {
-            getFileOrFolder(docID, path, setAndLoadDoc)
+            checkFileType(docID, path, setAndLoadDoc)
         }
         else {
             setAndLoadDoc(docID, path, "");
@@ -454,17 +454,16 @@ var derivateBrowserTools = (function() {
     });
   }
 
-  function getFileOrFolder(deriID, path, callback){
+  function checkFileType(deriID, path, callback){
       $.ajax({
-          url: "./" + deriID + path + "?noChilds=true" ,
+          url: "./checkFileType/" + deriID + path ,
           type: "GET",
-          dataType: "json",
           success: function(data) {
-              if (data.type == "directory") {
+              if (data === "directory") {
                   callback(deriID, path, "");
               }
               else {
-                  callback(deriID, data.absPath.substring(0, data.absPath.lastIndexOf("/")), data.name);
+                  callback(deriID, path.substring(0, path.lastIndexOf("/")), path.substr(path.lastIndexOf("/") + 1));
               }
           },
           error: function(error) {

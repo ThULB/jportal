@@ -442,6 +442,12 @@ public class DerivateBrowserResource {
         return Response.ok(newFilename).build();
     }
 
+    @GET
+    @Path("checkFileType/{derivID}{path:(/.*)*}")
+    public Response checkFileType(@PathParam("derivID") String derivID, @PathParam("path") String path) {
+        return Response.ok(DerivateTools.checkFileType(derivID, path)).build();
+    }
+
     protected byte[] transform(String xmlFile) throws Exception {
         InputStream is = getClass().getResourceAsStream(xmlFile);
         if (is == null) {

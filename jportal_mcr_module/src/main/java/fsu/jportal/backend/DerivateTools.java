@@ -542,15 +542,15 @@ public class DerivateTools {
         FileNodeWrapper wrapper = new FileNodeWrapper(node, maindoc, noChilds);
         JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
 
-        json.addProperty("display", isHidden(derivateID));
+        json.addProperty("display", isDisplayEnabled(derivateID));
         json.addProperty("urnEnabled", urnEnabled());
 
         return json;
     }
 
-    private static boolean isHidden(String derivateID) {
+    private static boolean isDisplayEnabled(String derivateID) {
         MCRDerivate derObj = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateID));
-        return !derObj.getDerivate().isDisplayEnabled();
+        return derObj.getDerivate().isDisplayEnabled();
     }
 
     public static boolean tileDerivate(String derivateID) {
@@ -611,4 +611,25 @@ public class DerivateTools {
         return urnObjects.contains("derivate");
     }
 
+    public static Object checkFileType(String derivateID, String path) {
+        MCRDirectory rootDir = getRootDir(derivateID);
+
+        if(rootDir == null){
+            return "";
+        }
+        if ("".equals(path)) {
+            return "directory";
+        }
+
+        MCRFilesystemNode mcrFile = rootDir.getChildByPath(path);
+        if (mcrFile instanceof MCRDirectory) {
+            return "directory";
+        }
+        if (mcrFile instanceof MCRFile) {
+            return "file";
+        }
+        else {
+            return "";
+        }
+    }
 }

@@ -9,8 +9,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import fsu.jportal.urn.URNTools;
-import org.mycore.common.MCRCache;
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
@@ -20,12 +18,6 @@ public class MCRFilesystemNodeTypeAdapter extends MCRJSONTypeAdapter<MCRFilesyst
     private static final String DATE_FORMAT = "dd.MM.yyyy HH:mm:ss";
 
     private static final DateFormat DATE_FORMATTER = new SimpleDateFormat(DATE_FORMAT);
-
-    private static final MCRCache<String, Boolean> URN_CACHE;
-
-    static {
-        URN_CACHE = new MCRCache<>(1000, MCRFilesystemNodeTypeAdapter.class.getName());
-    }
 
     @Override
     public JsonElement serialize(MCRFilesystemNode fileNode, Type typeOfSrc, JsonSerializationContext context) {
@@ -46,18 +38,7 @@ public class MCRFilesystemNodeTypeAdapter extends MCRJSONTypeAdapter<MCRFilesyst
 
         String derivID = fileNode.getOwnerID();
         String absolutePath = fileNode.getAbsolutePath();
-        Boolean hasURNAssigned = URN_CACHE.get(derivID);
-        if (hasURNAssigned == null || hasURNAssigned) {
-            String urnForFile = URNTools.getURNForFile(derivID, absolutePath);
-            if (urnForFile != null && !"".equals(urnForFile)) {
-                fileNodeJSON.addProperty("urn", urnForFile);
-            }
-        }
         return fileNodeJSON;
-    }
-
-    public static void setURNAssigned(String derivateId, Boolean hasURNAssigned) {
-        URN_CACHE.put(derivateId, hasURNAssigned);
     }
 
     @Override
