@@ -9,15 +9,9 @@ public class FileNodeWrapper {
     private MCRFilesystemNode node;
     private boolean isDir = false;
     
-    public FileNodeWrapper(MCRFilesystemNode node, String maindoc, boolean noChilds) {
+    public FileNodeWrapper(MCRFilesystemNode node, String maindoc) {
         if(node instanceof MCRDirectory){
-            if (!noChilds) {
-                setChildren(((MCRDirectory) node).getChildren());
-            }
-            else
-            {
-                setChildren(new MCRFilesystemNode[]{});
-            }
+            setChildren(((MCRDirectory) node).getChildren());
             setDir(true);
         } else {
             setChildren(new MCRFilesystemNode[]{});

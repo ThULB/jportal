@@ -1,5 +1,6 @@
 package fsu.jportal.gson;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import com.google.gson.JsonSerializationContext;
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.niofs.MCRPathUtils;
 
 public class MCRFilesystemNodeTypeAdapter extends MCRJSONTypeAdapter<MCRFilesystemNode> {
 
@@ -24,7 +26,11 @@ public class MCRFilesystemNodeTypeAdapter extends MCRJSONTypeAdapter<MCRFilesyst
         JsonObject fileNodeJSON = new JsonObject();
         fileNodeJSON.addProperty("name", fileNode.getName());
         fileNodeJSON.addProperty("absPath", fileNode.getAbsolutePath());
-        fileNodeJSON.addProperty("size", fileNode.getSize());
+        try {
+            fileNodeJSON.addProperty("size", MCRPathUtils.getSize(fileNode.toPath()));
+        } catch (IOException e) {
+            fileNodeJSON.addProperty("size", 0);
+        }
         fileNodeJSON.addProperty("lastmodified", DATE_FORMATTER.format(fileNode.getLastModified().getTime()));
 
         if (fileNode instanceof MCRFile) {

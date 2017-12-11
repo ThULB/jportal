@@ -1,5 +1,6 @@
 package fsu.jportal.gson;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRPathUtils;
 import org.mycore.pi.MCRPIRegistrationInfo;
 
 public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
@@ -49,17 +51,22 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
 
         nodeJSON.add("children", childrenJSON);
         MCRObjectID derivateID = MCRObjectID.getInstance(deriv.getNode().getOwnerID());
+        String path = deriv.getNode().toPath().getOwnerRelativePath();
         String urn = MCRMetadataManager.retrieveMCRDerivate(derivateID).getDerivate().getURN();
         if (urn != null && !"".equals(urn)) {
             nodeJSON.addProperty("hasURN", true);
-            addURNs(nodeJSON, derivateID);
+            addURNs(nodeJSON, derivateID, path);
         }
         else {
             nodeJSON.addProperty("hasURN", false);
         }
         if (!deriv.getNode().getAbsolutePath().equals("/")) {
             nodeJSON.addProperty("parentName", deriv.getNode().getRootDirectory().getName());
-            nodeJSON.addProperty("parentSize", deriv.getNode().getRootDirectory().getSize());
+            try {
+                nodeJSON.addProperty("parentSize", MCRPathUtils.getSize(deriv.getNode().getRootDirectory().toPath()));
+            } catch (IOException e) {
+                nodeJSON.addProperty("parentSize", 0);
+            }
             nodeJSON.addProperty("parentLastMod",
                 DATE_FORMATTER.format(deriv.getNode().getRootDirectory().getLastModified().getTime()));
         }
@@ -67,8 +74,9 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
         return nodeJSON;
     }
 
-    private void addURNs(JsonObject nodeJSON, MCRObjectID derivateID) {
-        Map<String, MCRPIRegistrationInfo> urnMap = URNTools.getURNsForDerivate(derivateID).stream()
+    private void addURNs(JsonObject nodeJSON, MCRObjectID derivateID, String path) {
+        Map<String, MCRPIRegistrationInfo> urnMap = URNTools.getURNsForDerivateAndPath(derivateID, path
+        ).stream()
             .collect(Collectors.toMap(MCRPIRegistrationInfo::getAdditional, Function.identity()));
         addURNToJSONObject(urnMap, nodeJSON, "");
         nodeJSON.get("children").getAsJsonArray().forEach(file -> {

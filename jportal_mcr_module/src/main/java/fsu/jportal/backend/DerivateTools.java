@@ -539,7 +539,7 @@ public class DerivateTools {
         JPDerivateComponent derivateComponent = new JPDerivateComponent(derivateID);
         String maindoc = getMaindoc(derivateComponent);
 
-        FileNodeWrapper wrapper = new FileNodeWrapper(node, maindoc, noChilds);
+        FileNodeWrapper wrapper = new FileNodeWrapper(node, maindoc);
         JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
 
         json.addProperty("display", isDisplayEnabled(derivateID));

@@ -10,11 +10,7 @@ import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRFileMetadata;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectDerivate;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.*;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.pi.MCRPIRegistrationInfo;
 import org.mycore.pi.MCRPIRegistrationService;
@@ -193,6 +189,32 @@ public class URNTools {
 
     public static List<MCRPIRegistrationInfo> getURNsForDerivate(MCRObjectID derivateID) {
         return MCRPersistentIdentifierManager.getInstance().getRegistered(MCRMetadataManager.retrieveMCRObject(derivateID));
+    }
+
+    public static List<MCRPIRegistrationInfo> getURNsForDerivateAndPath(MCRObjectID derivateID, String path) {
+        path = path.equals("/") ? "" : path;
+        MCRObject object = MCRMetadataManager.retrieveMCRObject(derivateID);
+        EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<MCRPIRegistrationInfo> getQuery = cb.createQuery(MCRPIRegistrationInfo.class);
+        Root<MCRPI> pi = getQuery.from(MCRPI.class);
+        return em.createQuery(
+            getQuery
+                .select(pi)
+                .where(
+                    cb.and(
+                        cb.equal(pi.get(MCRPI_.mycoreID), object.getId().toString()),
+                        cb.or(
+                            cb.and(
+                                cb.like(pi.get(MCRPI_.additional), path + "/%.%"),
+                                cb.notLike(pi.get(MCRPI_.additional), path + "/%/%")
+                            ),
+                            cb.like(pi.get(MCRPI_.additional),"")
+                        )
+                    )
+                )
+            )
+            .getResultList();
     }
 
     /**
