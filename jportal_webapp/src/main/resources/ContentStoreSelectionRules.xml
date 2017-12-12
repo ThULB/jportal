@@ -3,7 +3,7 @@
 
 <!-- Default file content store, if no other rule applies: -->
 <ContentStoreSelectionRules 
-  default="FS" 
+  default="IFS2"
 >
 
 <!-- Uncomment this if you want to use Helix Universal Server or Real Server -->
