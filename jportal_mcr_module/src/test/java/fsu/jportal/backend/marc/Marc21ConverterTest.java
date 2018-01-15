@@ -1,20 +1,21 @@
 package fsu.jportal.backend.marc;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.Map;
+
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPVolume;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.junit.Test;
-import org.marc4j.MarcXmlWriter;
 import org.marc4j.marc.Record;
 import org.mycore.common.MCRStoreTestCase;
 import org.mycore.datamodel.metadata.MCRObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-import java.util.Map;
 
 public class Marc21ConverterTest extends MCRStoreTestCase {
 
@@ -48,23 +49,22 @@ public class Marc21ConverterTest extends MCRStoreTestCase {
     }
 
     @Test
-    public void convert() throws Exception {
+    public void convert() {
         JPArticle article = new JPArticle(this.article);
         Record marcArticle = Marc21Converter.convert(article);
+        assertNotNull(marcArticle);
 
         JPVolume volume = new JPVolume(this.volume);
         Record marcVolume = Marc21Converter.convert(volume);
+        assertNotNull(marcVolume);
 
         JPJournal journal = new JPJournal(this.journal);
         Record marcJournal = Marc21Converter.convert(journal);
+        assertNotNull(marcJournal);
 
         /*MarcTxtWriter txtWriter = new MarcTxtWriter(System.out);
-        txtWriter.write(marcRecord);
+        txtWriter.write(marcArticle);
         txtWriter.close();*/
-
-        MarcXmlWriter xmlWriter = new MarcXmlWriter(System.out, true);
-        xmlWriter.write(marcArticle);
-        xmlWriter.close();
     }
 
 }

@@ -1,8 +1,5 @@
-import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
 
 def resourcePaths = new HashSet<File>();
 
@@ -15,13 +12,18 @@ def getDate() {
 allprojects {
     def releaseURL = "http://artifactory.mycore.de/mycore-releases"
     def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
+    def sonatypeSnapshotsURL = "https://oss.sonatype.org/content/repositories/snapshots"
 
     repositories {
         mavenLocal()
 
+        mavenCentral()
+
         maven { url releaseURL }
 
         maven { url snapshotsURL }
+
+        maven { url sonatypeSnapshotsURL }
     }
 }
 
@@ -100,6 +102,13 @@ subprojects {
 project(':jportal_mcr_module') {
 
     mcrModule()
+
+    configurations.all {
+        resolutionStrategy {
+            force "org.apache.logging.log4j:log4j-api:$log4jVersion"
+            force "org.apache.logging.log4j:log4j-core:$log4jVersion"
+        }
+    }
 
     dependencies {
         // test
@@ -215,9 +224,10 @@ project(':jportal_webapp') {
     }
 
     configurations.all {
-      resolutionStrategy {
-          force "org.mycore:mycore-viewer:$mcrVersion"
-      }
+        resolutionStrategy {
+            force "org.apache.logging.log4j:log4j-api:$log4jVersion"
+            force "org.apache.logging.log4j:log4j-core:$log4jVersion"
+        }
     }
 
     dependencies {
