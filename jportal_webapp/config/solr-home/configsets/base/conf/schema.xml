@@ -6,6 +6,10 @@
 
   <types>
 
+    <!-- ******************************************** -->
+    <!-- * BASE FIELDS                                -->
+    <!-- ******************************************** -->
+
     <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true" />
     <fieldType name="long" class="solr.LongPointField" docValues="true" omitNorms="true" positionIncrementGap="0" />
@@ -25,8 +29,11 @@
       </analyzer>
     </fieldtype>
 
-    <!-- text with word coordinates -->
-    <fieldtype name="text_wc" class="solr.TextField" multiValued="true">
+    <!-- ******************************************** -->
+    <!-- * ALTO                                       -->
+    <!-- ******************************************** -->
+
+    <fieldtype name="alto_word_coordinates" class="solr.TextField" multiValued="true">
       <analyzer type="index">
         <tokenizer class="solr.WhitespaceTokenizerFactory" />
         <filter class="solr.DelimitedPayloadTokenFilterFactory" delimiter="|" encoder="identity" />
@@ -34,6 +41,7 @@
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
         <filter class="solr.ASCIIFoldingFilterFactory" />
         <filter class="solr.ICUNormalizer2FilterFactory" />
+        <filter class="solr.ApostropheFilterFactory" />
         <filter class="solr.PatternReplaceCharFilterFactory" pattern="[^\p{L}\p{Nd}]" replacement="" />
         <filter class="solr.SnowballPorterFilterFactory" language="German2" />
       </analyzer>
@@ -47,6 +55,31 @@
       </analyzer>
     </fieldtype>
 
+    <fieldType name="alto_continuous_text" class="solr.TextField">
+      <analyzer type="index">
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.ASCIIFoldingFilterFactory" />
+        <filter class="solr.ICUNormalizer2FilterFactory" />
+        <filter class="solr.ApostropheFilterFactory" />
+        <filter class="solr.PatternReplaceCharFilterFactory" pattern="[^\p{L}\p{Nd}]" replacement="" />
+        <filter class="solr.SnowballPorterFilterFactory" language="German2" />
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.ASCIIFoldingFilterFactory" />
+        <filter class="solr.ICUNormalizer2FilterFactory" />
+        <filter class="solr.SnowballPorterFilterFactory" language="German2" />
+      </analyzer>
+    </fieldType>
+
+    <!-- ******************************************** -->
+    <!-- * SORT                                       -->
+    <!-- ******************************************** -->
+
     <!-- sort -> lowercase, handle umlaute, replace special characters -->
     <fieldType name="sort" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
       <analyzer>
@@ -56,6 +89,10 @@
         <filter class="solr.PatternReplaceFilterFactory" pattern="[^A-Za-z0-9\s]" replacement="" />
       </analyzer>
     </fieldType>
+
+    <!-- ******************************************** -->
+    <!-- * TEXT                                       -->
+    <!-- ******************************************** -->
 
     <fieldType name="text_de" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
@@ -107,6 +144,10 @@
     <!-- required solr fields -->
     <field name="_version_" type="long" />
 
+    <!-- ******************************************** -->
+    <!-- * BASE FIELDS                                -->
+    <!-- ******************************************** -->
+
     <!-- kind of mcrobjectid, mcrderivateid, fileid -->
     <field name="id" type="string" required="true" />
     <field name="objectType" type="string" />
@@ -142,7 +183,7 @@
     <copyField source="content" dest="allMeta" />
 
     <!-- ******************************************** -->
-    <!-- * METADATA -->
+    <!-- * METADATA                                   -->
     <!-- ******************************************** -->
 
     <!-- journal, volume, article -->
@@ -181,7 +222,7 @@
     <dynamicField name="id.*" type="string" multiValued="true" />
 
     <!-- ******************************************** -->
-    <!-- * SEARCH -->
+    <!-- * SEARCH                                     -->
     <!-- ******************************************** -->
 
     <!-- default search fields -->
@@ -220,7 +261,7 @@
     <field name="link" type="string" multiValued="true" stored="false" />
 
     <!-- ******************************************** -->
-    <!-- * SORT -->
+    <!-- * SORT                                       -->
     <!-- ******************************************** -->
     <field name="order" type="long" />
 
@@ -235,10 +276,10 @@
     <copyField source="heading_base" dest="alphabetic_sort" />
 
     <!-- ******************************************** -->
-    <!-- * TEXT WITH WORD COORDINATES -->
+    <!-- * ALTO                                       -->
     <!-- ******************************************** -->
-    <field name="alto_content" type="text_de" />
-    <field name="alto_words" type="text_wc" />
+    <field name="alto_content" type="alto_continuous_text" />
+    <field name="alto_words" type="alto_word_coordinates" />
 
   </fields>
 
