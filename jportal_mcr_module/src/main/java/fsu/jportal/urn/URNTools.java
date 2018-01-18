@@ -204,6 +204,7 @@ public class URNTools {
                 .where(
                     cb.and(
                         cb.equal(pi.get(MCRPI_.mycoreID), object.getId().toString()),
+                        cb.equal(pi.get(MCRPI_.service), SERVICEID),
                         cb.or(
                             cb.and(
                                 cb.like(pi.get(MCRPI_.additional), path + "/%.%"),
