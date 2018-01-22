@@ -21,9 +21,9 @@ allprojects {
 
         maven { url releaseURL }
 
-        maven { url snapshotsURL }
-
         maven { url sonatypeSnapshotsURL }
+
+        maven { url snapshotsURL }
     }
 }
 
