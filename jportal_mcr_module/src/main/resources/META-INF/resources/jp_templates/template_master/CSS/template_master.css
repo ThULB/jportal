@@ -1,110 +1,135 @@
 @CHARSET "UTF-8";
-#jp-main {
-	color: #615f5f;
+#jp-main, #jpNavTop li a, #searchDropDownButton, #searchLoupe {
+    color: #615f5f;
+}
+
+#jpNavTop li a:hover {
+    color: black;
 }
 
 html, body {
-	height: 100%;
+    height: 100%;
 }
 
 body {
-	background-color: white;
+    background-color: white;
 }
 
 #main {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 #globalHeader {
-	background-color: transparent;
+    background-color: transparent;
+}
+
+@media (min-width: 768px) {
+    #jpNavTop .navbar-nav {
+        display: inline-block;
+        float: none;
+        vertical-align: top;
+    }
+
+    #jpNavTop .navbar-collapse {
+        text-align: center;
+    }
+}
+
+#jpNavTop.navbar-default {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+#languageMenu .btn-default {
+    background-color: transparent;
 }
 
 #logo {
-	background-image: none;
-	background-color: transparent;
+    background-image: none;
+    background-color: transparent;
 }
 
 #searchBar {
-	background-color: transparent;
+    background-color: transparent;
 }
 
-#searchBar .inputFields{
-	float: none;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+#searchBar .inputFields {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #searchBar .input-group-addon {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 #searchBar #inputField {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 #searchBar #searchDropDownButton {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 .opacity {
-	width: 95.5%;
-	height: 100%;
-	position: absolute;
-	opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0.5;
 }
 
-
-.background{
-	background-image: url("../IMAGES/background.jpg");
-	background-repeat: no-repeat;
-	background-size: 100%;
-	height: 100%;
+.background {
+    background-image: url("../IMAGES/background.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 100%;
 }
 
 #jp-header.navbar-default {
-	background-color: white;
+    background-color: white;
 }
 
 #jpNavTop.container {
-	width: 472px;
+    width: 472px;
 }
-#jpNavTop.container .navbar-nav>li>a {
-	color: #615f5f;
+
+#jpNavTop.container .navbar-nav > li > a {
+    color: #615f5f;
 }
 
 #jpNavTop.container .navbar.navbar-default {
-	width: 472px;
-	background-image: none;
-	background-color: transparent;
-	border-color: transparent;
-	box-shadow: none;
+    width: 472px;
+    background-image: none;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
 }
 
 #searchBar.container {
-	width: 704px;
-	padding-top: 84px;
+    width: 704px;
+    padding-top: 84px;
 }
 
 .logo.container {
-	width: 704px;
-	padding-top: 120px;
+    width: 704px;
+    padding-top: 120px;
 }
 
 .info.container {
-	width: 770px;
-	font-size: 12pt;
-	text-align: center;
-	padding-top: 45px;
-	color: #615f5f;
+    width: 770px;
+    font-size: 12pt;
+    text-align: center;
+    padding-top: 45px;
+    color: #615f5f;
 }
 
 #portfolio.container {
-	width: 151px;
-	padding-top: 55px;
+    width: 151px;
+    padding-top: 55px;
 }
 
-#portfolio.container a{
-	background-color: #615f5f;
-	color: white;
+#portfolio.container a {
+    background-color: #615f5f;
+    color: white;
 }

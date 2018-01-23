@@ -138,40 +138,7 @@
       <body>
         <div class="background">
           <div id="globalHeader">
-            <div class="row">
-              <div class="col-md-5 navbar-header">
-                <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-globalHeader">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-
-                <ul class="list-inline jp-layout-mainHeader-UlLeft">
-                  <li class="jp-layout-mainHeader-SeperatorRight">
-                    <a href="{$JP.Site.Parent.url}" target="_blank">
-                      <xsl:value-of select="$JP.Site.Parent.label"/>
-                    </a>
-                  </li>
-                  <li class="jp-layout-mainHeader-LiPaPushleft">
-                    <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
-                      <xsl:value-of select="$JP.Site.label"/>
-                    </a>
-                  </li>
-                  <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'gast'">
-                    <li>
-                      <span class="webWriteProtection">
-                        <xsl:value-of select="websiteWriteProtection:getMessage()"/>
-                      </span>
-                    </li>
-                  </xsl:if>
-                </ul>
-              </div>
-              <div id="navbar-collapse-globalHeader" class="col-md-7 collapse navbar-collapse navbar-right">
-                <!-- <ul class="list-inline" style="padding: 10px"> </ul> -->
-                <xsl:call-template name="jp.navigation.top"/>
-              </div>
-            </div>
+              <xsl:call-template name="jp.navigation.top"/>
           </div>
 
           <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage"/>
