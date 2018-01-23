@@ -204,57 +204,108 @@ jp.az = {
         //params={q=objectType:"jpjournal"+AND+journalType:*+&facet.field=journalType&indent=true&wt=json&facet=true&_=1495637943282}
         //$.getJSON(jp.az.getSearchURL() + ' ' + qry + jp.az.getFilterQuery(), function(searchResult)
 
-        $('#atozFacets').append('<ul id="atozFacetsItems"/>');
-        var facetQry = '&facet.field=journalType&indent=true&wt=json&facet=true';
-        var qry = jp.az.getSearchURL() + ' ' + facetQry + jp.az.getFilterQuery();
-        console.log(isNaN(1));
-        var facetClassiStream = Rx.Observable.just(qry)
-            .flatMap(function (requestURL) {
-                return Rx.Observable.fromPromise($.getJSON(requestURL));
-            })
-            .flatMap(function (response) {
-                return Rx.Observable.from(response.facet_counts.facet_fields.journalType)
-            })
-            .bufferWithCount(2)
-            .flatMap(function(journalType){
-                return jp.az.getFacetLabel(journalType[0])
-                        .map(label => ({"label" : label,
-                        "categID" : journalType[0],
-                        "count" : journalType[1]})
+        // $('#atozFacets').empty().append('<ul id="atozFacetsItems"/>');
+        var listContainer = document.createElement('ul');
+        listContainer.id = 'atozFacetsItems';
+        var facetsContainer = document.querySelector('#atozFacets');
+        facetsContainer.innerHTML = "";
+        facetsContainer.append(listContainer);
+
+        function createFacetsRequestStream(param) {
+            var facetQry = ' &facet.field=journalType&indent=true&wt=json&facet=true';
+            if (param != null && param != '') {
+                facetQry = param + facetQry;
+            }
+
+            var qry = jp.az.getSearchURL() + facetQry + jp.az.getFilterQuery();
+
+            console.log(qry);
+
+            return Rx.Observable.just(qry);
+        }
+
+        function createFacetsResponseStream(facetsRequestStream) {
+            return facetsRequestStream
+                .flatMap(requestURL => Rx.Observable.fromPromise($.getJSON(requestURL)));
+        }
+
+        function createFacetObj(journalType) {
+            var categID = journalType[0];
+            var url = jp.baseURL + 'rsc/facets/label/' + categID;
+
+            return Rx.Observable.fromPromise($.get(url))
+                .map(label => ({
+                        "label": label,
+                        "categID": journalType[0],
+                        "count": journalType[1]
+                    })
+                )
+        }
+
+        function renderButton(journalType) {
+            var button = document.createElement('button');
+            button.className = 'clickButton';
+            button.dataset.categID = journalType.categID;
+            button.className = "facetButton";
+            button.textContent = journalType.label + " (" + journalType.count + ")";
+            return button;
+        }
+
+        function renderListElement(button, listContainer) {
+            var li = document.createElement('li');
+            li.appendChild(button);
+            listContainer.appendChild(li);
+        }
+
+        function createButtonStream(facetsResponseStream) {
+            return facetsResponseStream
+                .flatMap(response => Rx.Observable.from(response.facet_counts.facet_fields.journalType))
+                .bufferWithCount(2)
+                .filter(journalType => journalType[1] > 0)
+                .flatMap(journalType => createFacetObj(journalType))
+                .map(facet => renderButton(facet));
+        }
+
+        function createClickStream(containerStream, facetsParam) {
+            var facetsRequestStream = createFacetsRequestStream(facetsParam);
+            var facetsResponseStream = createFacetsResponseStream(facetsRequestStream);
+            var buttonStream = createButtonStream(facetsResponseStream);
+            return buttonStream
+                .flatMap(button => Rx.Observable.fromEvent(button, 'click')
+                    .combineLatest(containerStream, function (click, container) {
+                        container.innerHTML = "";
+                        return click;
+                    })
+                    .flatMap(click => createClickStream(containerStream, ' %2BjournalType:"' + button.dataset.categID + '"%20'))
+                    .startWith(button)
                 );
+        }
 
-            });
+        // var container = document.querySelector('#atozFacetsItems');
+        var containerStream = Rx.Observable.of(listContainer);
 
-
-
-
-        facetClassiStream.subscribe(function (journalType) {
-                document.createElement('div')
-                var button = $('#atozFacetsItems').append('<li><button class="facetButton" id="' + journalType.categID + '">' + journalType.label + ' (' + journalType.count + ')</button></li>')
-                console.log("RX rules in Chrom: " + journalType.label + ' # ' + journalType.count);
-
-
-
-            },
-            function(err){
-                console.log("Error: " + err);
-            },
-            function(){
-                console.log("on Complete");
-                var facetButtons = document.querySelectorAll('.facetButton');
-                console.log("buttons: " + facetButtons)
-                var facetButtonStream = Rx.Observable.fromEvent(facetButtons, 'click');
-
-                facetButtonStream.subscribe(event => console.log("Facet: " + event.currentTarget.id));
-
-            });
-
-
+        createClickStream(containerStream).subscribe(function (button) {
+            renderListElement(button, listContainer);
+        })
     },
 
-    getFacetLabel: function (categID) {
-        var url = jp.baseURL + 'rsc/facets/label/' + categID;
-        return Rx.Observable.fromPromise($.get(url));
+    treeify: function (list, idAttr, parentAttr, childrenAttr) {
+        if (!idAttr) idAttr = 'id';
+        if (!parentAttr) parentAttr = 'parent';
+        if (!childrenAttr) childrenAttr = 'children';
+        var treeList = [];
+        var lookup = {};
+        list.forEach(function (obj) {
+            lookup[obj[idAttr]] = obj;
+            obj[childrenAttr] = [];
+        });
+        list.forEach(function (obj) {
+            if (obj[parentAttr] != null) {
+                lookup[obj[parentAttr]][childrenAttr].push(obj);
+            } else {
+                treeList.push(obj);
+            }
+        });
+        return treeList;
     }
 }
-
