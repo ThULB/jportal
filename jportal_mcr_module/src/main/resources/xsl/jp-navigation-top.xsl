@@ -20,7 +20,9 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-globalHeader">
           <ul class="list-inline nav navbar-nav">
-            <xsl:call-template name="jp.navigation.top.language"/>
+            <xsl:call-template name="jp.navigation.top.object.editing">
+              <xsl:with-param name="isGuest" select="$isGuest"/>
+            </xsl:call-template>
             <li>
               <a href="{$JP.Site.Parent.url}" target="_blank">
                 <xsl:value-of select="$JP.Site.Parent.label"/>
@@ -98,25 +100,29 @@
                 </li>
               </xsl:when>
             </xsl:choose>
-            <xsl:if test="not($isGuest) and $objectEditing//li/a">
-              <li>
-                <!-- edit object -->
-                <div class="col-sm-4 col-xs-2">
-                  <div class="dropdown dropdown-menu-left pull-left jp-layout-object-editing-container">
-                    <button id="jp-edit-menu-button" class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown"/>
-                    <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
-                      <xsl:copy-of select="$objectEditing/*"/>
-                    </ul>
-                  </div>
-                </div>
-              </li>
-            </xsl:if>
+            <xsl:call-template name="jp.navigation.top.language"/>
           </ul>
         </div>
       </div>
     </nav>
   </xsl:template>
 
+  <xsl:template name="jp.navigation.top.object.editing">
+    <xsl:param name="isGuest"/>
+    <xsl:if test="not($isGuest) and $objectEditing//li/a">
+      <li>
+        <!-- edit object -->
+        <div class="col-sm-4 col-xs-2">
+          <div class="dropdown dropdown-menu-left pull-left jp-layout-object-editing-container">
+            <button id="jp-edit-menu-button" class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown"/>
+            <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
+              <xsl:copy-of select="$objectEditing/*"/>
+            </ul>
+          </div>
+        </div>
+      </li>
+    </xsl:if>
+  </xsl:template>
   <xsl:template name="jp.navigation.top.language">
     <li id="languageMenu" class="dropdown-toggle">
       <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">

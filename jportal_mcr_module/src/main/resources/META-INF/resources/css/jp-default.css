@@ -1439,18 +1439,6 @@ body {
 	margin-right: auto;
 }
 
-#searchBar .input-group-addon {
-	background-color: transparent;
-}
-
-#searchBar #inputField {
-	background-color: transparent;
-}
-
-#searchBar #searchDropDownButton {
-	background-color: transparent;
-}
-
 .opacity {
 	width: 100%;
 	height: 100%;
@@ -1499,4 +1487,8 @@ body {
 #portfolio.container a {
 	background-color: #615f5f;
 	color: white;
+}
+
+#navbar-collapse-globalHeader .jp-navigation-topHeader-DropdownBorder {
+	background-color: transparent;
 }
