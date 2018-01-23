@@ -3,7 +3,59 @@
 	color: #615f5f;
 }
 
-#jp-header{
+html, body {
+	height: 100%;
+}
+
+body {
+	background-color: white;
+}
+
+#main {
+	background-color: transparent;
+}
+
+#globalHeader {
+	background-color: transparent;
+}
+
+#logo {
+	background-image: none;
+	background-color: transparent;
+}
+
+#searchBar {
+	background-color: transparent;
+}
+
+#searchBar .inputFields{
+	float: none;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#searchBar .input-group-addon {
+	background-color: transparent;
+}
+
+#searchBar #inputField {
+	background-color: transparent;
+}
+
+#searchBar #searchDropDownButton {
+	background-color: transparent;
+}
+
+.opacity {
+	width: 95.5%;
+	height: 100%;
+	position: absolute;
+	opacity: 0.5;
+}
+
+
+.background{
 	background-image: url("../IMAGES/background.jpg");
 	background-repeat: no-repeat;
 	background-size: 100%;
@@ -34,12 +86,12 @@
 	padding-top: 84px;
 }
 
-#logo.container {
+.logo.container {
 	width: 704px;
 	padding-top: 120px;
 }
 
-#info.container {
+.info.container {
 	width: 770px;
 	font-size: 12pt;
 	text-align: center;

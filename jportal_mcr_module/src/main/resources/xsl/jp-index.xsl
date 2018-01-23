@@ -3,13 +3,8 @@
   exclude-result-prefixes="xalan i18n">
 
   <xsl:template match="jpindex">
-    <style type="text/css">
-      #logo {
-      background-image: none;
-      }
-    </style>
 
-    <div class="jp-layout-index col-md-12">
+    <div class="jp-layout-index">
       <div class="logo container"><img src="{$templateWebURL}IMAGES/logo.svg" alt="logo"/></div>
       <div class="info container">
         Das von der Thüringer Universitäts- und Landesbibliothek Jena (ThULB) betriebene Internetportal journals@UrMEL
@@ -17,7 +12,7 @@
       </div>
       <div id="portfolio" class="container">
         <nav>
-          <a class="btn btn-default" href="{$WebApplicationBaseURL}content/main/journalList.xml#A" role="button">ZUM BESTAND</a>
+          <a class="btn btn-default" href="../inventories" role="button">ZUM BESTAND</a>
         </nav>
       </div>
     </div>
