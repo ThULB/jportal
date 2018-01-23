@@ -1,0 +1,58 @@
+@CHARSET "UTF-8";
+#jp-main {
+	color: #615f5f;
+}
+
+#jp-header{
+	background-image: url("../IMAGES/background.jpg");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	height: 100%;
+}
+
+#jp-header.navbar-default {
+	background-color: white;
+}
+
+#jpNavTop.container {
+	width: 472px;
+}
+#jpNavTop.container .navbar-nav>li>a {
+	color: #615f5f;
+}
+
+#jpNavTop.container .navbar.navbar-default {
+	width: 472px;
+	background-image: none;
+	background-color: transparent;
+	border-color: transparent;
+	box-shadow: none;
+}
+
+#searchBar.container {
+	width: 704px;
+	padding-top: 84px;
+}
+
+#logo.container {
+	width: 704px;
+	padding-top: 120px;
+}
+
+#info.container {
+	width: 770px;
+	font-size: 12pt;
+	text-align: center;
+	padding-top: 45px;
+	color: #615f5f;
+}
+
+#portfolio.container {
+	width: 151px;
+	padding-top: 55px;
+}
+
+#portfolio.container a{
+	background-color: #615f5f;
+	color: white;
+}
