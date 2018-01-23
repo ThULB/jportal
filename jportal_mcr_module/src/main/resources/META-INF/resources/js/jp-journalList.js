@@ -326,9 +326,15 @@ jp.az = {
         var li = document.createElement('li');
         li.dataset.categID = journalType.categID;
         li.dataset.parent = journalType.parent;
-        li.className = "facetButton";
-        li.textContent = journalType.label + " (" + journalType.count + ")";
-        // li.appendChild(button);
+        var span = document.createElement('span');
+        span.className = "facetButton";
+        span.textContent = journalType.label + " (" + journalType.count + ")";
+        if(journalType.parent != null){
+            var input = document.createElement('input');
+            input.type = "checkbox";
+            li.appendChild(input);
+        }
+        li.appendChild(span);
         // li.appendChild(button);
         return li;
     }
@@ -362,19 +368,24 @@ jp.az = {
     createFacetButtonClickStream: function (facetObjStream, container) {
         return facetObjStream
             .map(jp.az.createFacetListEntry)
-            .reduce(function (f, li) {
-                f.appendChild(li);
-                return f;
-            }, document.createDocumentFragment())
+            // .reduce(function (f, li) {
+            //     f.appendChild(li);
+            //     return f;
+            // }, document.createDocumentFragment())
+            .reduce(function (list, li) {
+                list.push(li);
+                return list;
+            }, [])
+            .map(jp.az.treeify2)
             .flatMap(fragment => jp.az.renderFacetList(fragment, container))
             .flatMap(b => Rx.Observable.fromEvent(b, 'click'))
-            .map(click => click.target.dataset.categID)
+            .map(click => click.currentTarget.dataset.categID)
             .map(id => ' %2BjournalType:"' + id + '"%20');
     }
     ,
 
     createFacetTree(fragment, facet){
-        if(fragment.dataset.lookup == undefined){
+        if (fragment.dataset.lookup == undefined) {
             fragment.dataset.lookup = {};
         }
 
@@ -411,5 +422,37 @@ jp.az = {
             }
         });
         return treeList;
+    },
+
+    treeify2: function (list) {
+        var fragment = document.createDocumentFragment();
+        var lookup = {};
+
+        list.forEach(function (li) {
+            lookup[li.dataset.categID] = li;
+        });
+        list.forEach(function (li) {
+            if (li.dataset.parent != "null") {
+                var parent = lookup[li.dataset.parent];
+                if (parent != null) {
+                    var listOfChildNodes = parent.getElementsByTagName('ul')
+
+                    var childNodes;
+                    if (listOfChildNodes.length > 0) {
+                        childNodes = listOfChildNodes[0];
+                    } else {
+                        childNodes = document.createElement('ul');
+                        parent.appendChild(childNodes);
+                    }
+                    var nodeWithParent = lookup[li.dataset.categID]
+                    childNodes.appendChild(nodeWithParent);
+                }
+            } else {
+                var nodeWithNoParent = lookup[li.dataset.categID];
+                fragment.appendChild(nodeWithNoParent);
+            }
+        });
+
+        return fragment;
     }
 }
