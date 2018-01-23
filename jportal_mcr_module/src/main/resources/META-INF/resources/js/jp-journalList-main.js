@@ -59,26 +59,22 @@ function getSearchURL(/*List*/ facets, titleFilter, /*boolean*/ justTitles, tabL
     return searchURL + qry + facetParams + titlesFlag + '&facet.field=journalType&facet=true' + titleFilter;
 }
 
-function update(model) {
-    if (location.hash != undefined && location.hash != null && location.hash != "") {
-        model.selectedTab = location.hash.substring(1, 2).toUpperCase();
-    } else {
-        model.selectedTab = "A";
-    }
+function getTabsChar(model) {
+  var journalTitlesSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, true);
 
-    var journalTitlesSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, true);
-    var selectedTabSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, false, model.selectedTab);
+  var journalTitlesStream = Rx.Observable.fromPromise($.getJSON(journalTitlesSearchUrl))
+      .flatMap(searchResults => searchResultsToModel(searchResults));
 
-    var journalTitlesStream = Rx.Observable.fromPromise($.getJSON(journalTitlesSearchUrl))
-        .flatMap(searchResults => searchResultsToModel(searchResults));
+  return journalTitlesStream.reduce((m, changeFn) => changeFn(m), model);
+}
 
-    var journalsStream = Rx.Observable.fromPromise($.getJSON(selectedTabSearchUrl))
-        .map(searchResults => journalsToModel(searchResults));
+function getResultList(model) {
+  var selectedTabSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, false, model.selectedTab);
 
-    return Rx.Observable.merge(
-        journalTitlesStream,
-        journalsStream
-    ).reduce((model, changeFn) => changeFn(model), model);
+  var journalsStream = Rx.Observable.fromPromise($.getJSON(selectedTabSearchUrl))
+      .map(searchResults => journalsToModel(searchResults));
+
+  return journalsStream.reduce((m, changeFn) => changeFn(m), model);
 }
 
 var facetsContainer = document.getElementById("document_type");
@@ -135,10 +131,34 @@ function importCSS() {
     }
 }
 
+function checkSelectedTab(model){
+  if(!model.activeTabs.has(model.selectedTab)){
+    Rx.Observable.from(model.activeTabs)
+        .min()
+        .subscribe(min => model.selectedTab = min)
+  }
+
+  location.hash = model.selectedTab;
+
+  return model;
+}
+
+function getLocationHash(model) {
+  if (location.hash != undefined && location.hash != null && location.hash != "") {
+    model.selectedTab = location.hash.substring(1, 2).toUpperCase();
+  } else {
+    model.selectedTab = "A";
+  }
+
+  return model;
+}
+
 UIEvents
     .startWith(UIModel)
-    .flatMap(update)
-    .do(m => console.log(m))
+    .map(getLocationHash)
+    .flatMap(getTabsChar)
+    .map(checkSelectedTab)
+    .flatMap(getResultList)
     .subscribe(model => {
         renderFacetList(model, facetsContainer, facetCheckboxEventHandler);
 
