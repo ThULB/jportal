@@ -44,6 +44,7 @@
 	font-size: 0.95rem;
 	font-weight: bold;
 	padding: 0px;
+	margin-bottom: 0.5em;
 }
 
 .journalList .tab-nav li {
@@ -117,4 +118,32 @@
 .facetButton:hover {
 	cursor: pointer;
 	color: #008BD0;
+}
+
+#document_type ul {
+	list-style-type: none;
+}
+
+#document_type li > ul {
+	padding-left: 15px;
+}
+
+#atozFacets {
+	padding-left: 0px;
+}
+#atozFacetsItems {
+	padding: 0px;
+}
+
+#atozFacetsItems > li {
+	margin-bottom: 10px;
+}
+
+#atozFacetsItems input[type='checkbox']{
+	margin-right: 5px;
+}
+
+#atozFacets h5 {
+	padding-bottom: 1.2em;
+	border-bottom: 1px solid #CCCCCC;
 }

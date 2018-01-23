@@ -2,12 +2,9 @@ package fsu.jportal.resources;
 
 import com.google.gson.JsonObject;
 import fsu.jportal.util.ResolverUtil;
-import org.apache.solr.common.params.ModifiableSolrParams;
-import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
@@ -21,12 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 /**
  * Created by Huu Chi Vu on 15.06.17.

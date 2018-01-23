@@ -8,39 +8,121 @@
     <link media="screen" type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/webjars/bootstrap/3.3.4/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/css/jp-default.css">
     <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/css/jp-local-overrides.css">
-    <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/css/jp-journalList.css">
+    <link type="text/css" rel="stylesheet" href="http://localhost:8291/dev/css/jp-journalList.css">
     <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext,cyrillic">
     <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/jp_templates/template_master/CSS/template_master.css">
 
 </head>
 <body>
 
-<div class="container-fluid" id="main">
-
-    <div id="firstLetterTab" class="journalList" additionalQuery="">
-        <div class="atoz col-md-12">
-            <div class="form-group col-md-2 jp-layout-atozilter">
-                <div id="atozFilterContainer" class="input-group">
-                    <input id="atozFilter" class="form-control jp-input-with-groupaddon" type="text"
-                           placeholder="Filter"/>
-                    <div id="atozFilterRemoveButton" class="input-group-addon">
-                    <span id="atozFilterRemoveIcon" class="glyphicon glyphicon-remove form-control-feedback"
-                          aria-hidden="true"></span>
+<div class="background">
+    <div class="container-fluid" id="header">
+        <div id="globalHeader">
+            <nav xmlns:layouttools="xalan://fsu.jportal.xml.LayoutTools" class="navbar navbar-default" id="jpNavTop">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button data-target="#navbar-collapse-globalHeader" data-toggle="collapse" class="navbar-toggle collapsed jp-layout-mynavbarbutton" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                    </div>
+                    <div id="navbar-collapse-globalHeader" class="collapse navbar-collapse">
+                        <ul class="list-inline nav navbar-nav">
+                            <li>
+                                <a target="_blank" href="http://www.urmel-dl.de/">UrMEL</a>
+                            </li>
+                            <li class="jp-layout-mainHeader-LiPaPushleft">
+                                <a target="_self" href="http://localhost:8291/jportal/content/below/index.xml">Journals@UrMEL</a>
+                            </li>
+                            <li>
+                                <a href="http://localhost:8291/jportal/jp-imprint.xml">Impressum</a>
+                            </li>
+                            <li>
+                                <a href="http://localhost:8291/jportal/servlets/MCRLoginServlet?action=login" id="jp.login.button">Anmelden</a>
+                            </li>
+                            <li class="dropdown-toggle" id="languageMenu">
+                                <a type="button" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" data-toggle="dropdown">de<span class="caret"></span></a>
+                                <ul class="dropdown-menu jp-navigation-topHeader-DropdownMenu" role="menu" id="languageList">
+                                    <li>
+                                        <a class="changeLang text-center" href="http://localhost:8291/jportal/content/main/journalList.xml?lang=en">en</a>
+                                    </li>
+                                    <li>
+                                        <a class="changeLang text-center" href="http://localhost:8291/jportal/content/main/journalList.xml?lang=pl">pl</a>
+                                    </li>
+                                    <li>
+                                        <a class="changeLang text-center" href="http://localhost:8291/jportal/content/main/journalList.xml?lang=ru">ru</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1">
-
-            </ul>
+            </nav>
         </div>
-        <div class="row container-fluid">
-            <div id="atozFacets" class="col-sm-2"></div>
-            <div class="col-sm-9 col-md-offset-1">
-                <div id="resultList" class="tab-panel"></div>
+        <div id="logo"></div>
+        <div id="searchBar">
+            <form action="http://localhost:8291/jportal/servlets/solr/find" id="searchForm">
+                <div class="row">
+                    <div class="inputFields col-sm-7 col-xs-12">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button id="searchDropDownButton" data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button"><i class="fa fa-fw fa-globe"></i><span class="caret"></span><span class="sr-only">Toggle Search</span></button>
+                                <ul id="searchDropDownMenu" role="menu" class="dropdown-menu">
+                                    <li>
+                                        <a href="http://localhost:8291/jportal/jp-advancedsearch.xml"><i class="fa fa-fw fa-search-plus"></i>Erweiterte Suche</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <input value="" name="qry" id="inputField" type="text" class="form-control jp-input-with-groupaddon" placeholder="Suche im Gesamtbestand" title="Suche im Gesamtbestand"><span class="input-group-addon" id="searchLoupe"><span onclick="$('#searchForm').submit()" class="glyphicon glyphicon-search glyphSearchBar" title="Suchen"></span></span>
+                        </div>
+                        <div class="hidden">
+                            <span id="globalSearchLabel">Suche im Gesamtbestand</span><span id="journalSearchLabel">Suche innerhalb der Zeitschrift</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Main -->
+    <div class="container-fluid" id="main">
+
+        <div id="firstLetterTab" class="journalList" additionalQuery="">
+
+            <div class="atoz col-md-12">
+                <div class="form-group col-md-2 jp-layout-atozilter">
+                    <div id="atozFilterContainer" class="input-group">
+                        <input id="atozFilter" class="form-control jp-input-with-groupaddon" type="text"
+                               placeholder="Filter"/>
+                        <div id="atozFilterRemoveButton" class="input-group-addon">
+                    <span id="atozFilterRemoveIcon" class="glyphicon glyphicon-remove form-control-feedback"
+                          aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1">
+
+                </ul>
+            </div>
+            <div class="row container-fluid" id="resultList">
+                <div id="atozFacets" class="col-sm-3">
+                    <h5>Dokumenttyp</h5>
+                    <div id="document_type"></div>
+                </div>
+                <div class="col-sm-9 jp-layout-hits">
+                    <div class="jp-layout-triangle hidden-xs"></div>
+                    <div class="jp-layout-triangle hidden-xs"></div>
+                    <div id="objectList" class="tab-panel"></div>
+                </div>
             </div>
         </div>
     </div>
+    <!-- end Main -->
+
+
+    <div class="jp-layout-footer">
+        <a href="http://www.thulb.uni-jena.de"><img class="logo" src="http://wrackdm17.thulb.uni-jena.de/logos/gray/thulb_text_right.svg"></a>
+    </div>
 </div>
+
 
 <script
         src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -53,7 +135,11 @@
         integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/rxjs@5.4.3/bundles/Rx.min.js"></script>
-<script src="rxtest.js"></script>
+<script src="jp-journalList-facetsModel.js"></script>
+<script src="jp-journalList-facetsView.js"></script>
+<script src="jp-journalList-resultListModelView.js"></script>
+<script src="jp-journalList-tabsModelView.js"></script>
+<script src="jp-journalList-main.js"></script>
 <!--<script type="text/javascript">-->
     <!--$(document).ready(function () {-->
         <!--jp.az.load();-->
