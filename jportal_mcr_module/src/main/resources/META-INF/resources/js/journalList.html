@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JournalList</title>
+
+    <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/webjars/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link media="screen" type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/webjars/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/css/jp-default.css">
+    <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/css/jp-local-overrides.css">
+    <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/css/jp-journalList.css">
+    <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext,cyrillic">
+    <link type="text/css" rel="stylesheet" href="http://localhost:8291/jportal/jp_templates/template_master/CSS/template_master.css">
+
+</head>
+<body>
+
+<div class="container-fluid" id="main">
+
+    <div id="firstLetterTab" class="journalList" additionalQuery="">
+        <div class="atoz col-md-12">
+            <div class="form-group col-md-2 jp-layout-atozilter">
+                <div id="atozFilterContainer" class="input-group">
+                    <input id="atozFilter" class="form-control jp-input-with-groupaddon" type="text"
+                           placeholder="Filter"/>
+                    <div id="atozFilterRemoveButton" class="input-group-addon">
+                    <span id="atozFilterRemoveIcon" class="glyphicon glyphicon-remove form-control-feedback"
+                          aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+            <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1">
+
+            </ul>
+        </div>
+        <div class="row container-fluid">
+            <div id="atozFacets" class="col-sm-2"></div>
+            <div class="col-sm-9 col-md-offset-1">
+                <div id="resultList" class="tab-panel"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/rxjs@5.4.3/bundles/Rx.min.js"></script>
+<script src="rxtest.js"></script>
+<!--<script type="text/javascript">-->
+    <!--$(document).ready(function () {-->
+        <!--jp.az.load();-->
+    <!--});-->
+<!--</script>-->
+</body>
+</html>

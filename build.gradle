@@ -418,6 +418,7 @@ project(':jportal_webapp') {
             args '--stop-port', jettyStopPort
             args '--stop-key', jettyStopKey
             args '--path', '/jportal', war.archivePath
+            args '--path', '/dev', "/Users/chi/Development/git-Projects/jportal-git/jportal_mcr_module/src/main/resources/META-INF/resources"
         }
     }
 

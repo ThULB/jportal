@@ -20,9 +20,6 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-globalHeader">
           <ul class="list-inline nav navbar-nav">
-            <xsl:call-template name="jp.navigation.top.object.editing">
-              <xsl:with-param name="isGuest" select="$isGuest"/>
-            </xsl:call-template>
             <li>
               <a href="{$JP.Site.Parent.url}" target="_blank">
                 <xsl:value-of select="$JP.Site.Parent.label"/>
@@ -101,6 +98,9 @@
               </xsl:when>
             </xsl:choose>
             <xsl:call-template name="jp.navigation.top.language"/>
+            <xsl:call-template name="jp.navigation.top.object.editing">
+              <xsl:with-param name="isGuest" select="$isGuest"/>
+            </xsl:call-template>
           </ul>
         </div>
       </div>
@@ -126,7 +126,8 @@
   <xsl:template name="jp.navigation.top.language">
     <li id="languageMenu" class="dropdown-toggle">
       <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
-        <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush"/>
+        <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush"/>-->
+        <xsl:value-of select="$CurrentLang"/>
         <span class="caret"></span>
       </a>
 
@@ -148,7 +149,8 @@
                     <xsl:with-param name="url" select="$newurl"/>
                   </xsl:call-template>
                 </xsl:attribute>
-                <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{text()}.png" alt="{text()}"/>
+                <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{text()}.png" alt="{text()}"/>-->
+                <xsl:value-of select="text()"/>
               </a>
             </li>
           </xsl:if>
