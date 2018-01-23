@@ -18,6 +18,7 @@
 
   <xsl:include href="jp-layout-searchbar.xsl"/>
 
+  <xsl:include href="jp_template_utils.xsl"/>
   <xsl:include href="xslInclude:jportal"/>
   <xsl:include href="xslInclude:components"/>
   <xsl:include href="xslInclude:class.templates"/>

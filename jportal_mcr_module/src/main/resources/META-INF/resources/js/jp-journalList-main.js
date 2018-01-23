@@ -60,7 +60,7 @@ function getSearchURL(/*List*/ facets, titleFilter, /*boolean*/ justTitles, tabL
 }
 
 function update(model) {
-    if (location.hash != "" && location.hash != null) {
+    if (location.hash != undefined && location.hash != null) {
         model.selectedTab = location.hash.substring(1, 2).toUpperCase();
     } else {
         model.selectedTab = "A";

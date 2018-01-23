@@ -505,6 +505,7 @@ p.jp-layout-metadata-list {
 }
 
 #header {
+	height: 210px;
 	background-position: left bottom;
 	background-repeat: no-repeat;
 }
@@ -513,8 +514,19 @@ p.jp-layout-metadata-list {
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
-	height: 103px;
+	height: 111px;
+	margin-bottom: 3px;
 	background-position: center;
+}
+
+#logo .logoDate {
+	width: 50%;
+	margin: 0 auto;
+	text-align: center;
+	padding-top: 3px;
+	color: white;
+	font-size: small;
+	font-weight: bold;
 }
 
 #logo .logoTitle {
@@ -554,8 +566,12 @@ p.jp-layout-metadata-list {
 	margin-right: 2px;
 }
 
-#searchBar .input-group-addon {
-	background-color: #fff;
+/*#searchBar .input-group-addon {*/
+	/*background-color: #fff;*/
+/*}*/
+
+#searchDropDownButton, #inputField, #searchLoupe {
+	background: rgba(255,255,255,0.8);
 }
 
 .jp-input-with-groupaddon {
@@ -1418,6 +1434,7 @@ body {
 
 	#jpNavTop .navbar-collapse {
 		text-align: center;
+		padding-top: 5px;
 	}
 }
 

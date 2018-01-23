@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-person.xsd" ID="jportal_person_00000001" label="jportal_person_00000001" version="2.0">
+  <structure />
+  <metadata>
+    <def.heading class="MCRMetaXML" heritable="false" notinherit="true">
+      <heading inherited="0">
+        <lastName>Muster</lastName>
+        <firstName>Max</firstName>
+      </heading>
+    </def.heading>
+    <def.gender class="MCRMetaClassification" heritable="false" notinherit="true">
+      <gender inherited="0" classid="urmel_class_00000001" categid="male" />
+    </def.gender>
+  </metadata>
+  <service>
+    <servdates class="MCRMetaISO8601Date">
+      <servdate type="modifydate" inherited="0">2017-11-16T16:33:01.158Z</servdate>
+      <servdate type="createdate" inherited="0">2017-11-16T16:33:01.160Z</servdate>
+    </servdates>
+  </service>
+</mycoreobject>

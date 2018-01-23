@@ -29,7 +29,6 @@ function buildQuery() {
 function setLogo(baseURL) {
 	var logo = $('#logo');
 	// set background
-	logo.css('background-image', 'url(' + baseURL + 'jp_templates/template_thLegislativExekutiv/IMAGES/logo.png)');
 	// add link
 	logo.css("position", "relative");
 	logo.wrapInner("<a id='logoLink' href='http://www.urmel-dl.de/Projekte/LegislativundExekutiv.html'></a>");
