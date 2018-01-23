@@ -500,6 +500,10 @@ p.jp-layout-metadata-list {
 	margin-right: 0px;
 }
 
+#jp-edit-menu-button {
+	background-color: rgba(255,255,255,0.5);
+}
+
 #logo {
 	background-position: left top;
 	background-repeat: no-repeat;
@@ -514,6 +518,18 @@ p.jp-layout-metadata-list {
     height: 115px;
     padding: 0 30px;
     vertical-align: middle;
+}
+
+.logo.container {
+	padding-top: 12%;
+}
+
+.logo.container img {
+	float: none;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 56%;
 }
 
 #searchBar {
@@ -855,7 +871,6 @@ ul.ckeditorButtons li:last-child {
 }
 
 .message-wrapper {
-	background-color: white;
 	padding: 9px;
 }
 
@@ -1080,7 +1095,12 @@ textarea {
 }
 
 /* Extra small devices Phones (<768px) */
-@media (max-width: 767px) {	
+@media (max-width: 767px) {
+	.logo.container img{
+		width: 77%;
+	}
+
+
 	#resultListHeader{
 		border-bottom: 1px solid #A8A9AA;
 		padding: 0 0 10px 0; 
@@ -1445,13 +1465,8 @@ body {
 	padding-top: 84px;
 }
 
-.logo.container {
-	width: 704px;
-	padding-top: 120px;
-}
-
 .info.container {
-	width: 770px;
+	width: 80%;
 	font-size: 12pt;
 	text-align: center;
 	padding-top: 45px;
