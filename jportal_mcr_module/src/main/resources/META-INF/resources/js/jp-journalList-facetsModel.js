@@ -13,10 +13,23 @@ function getLabels(){
 
   return labelsMap;
 }
+
+
+function checkFacetLabel(label, facetObj) {
+  if(label === undefined){
+    var labelsUrl = baseURL + 'rsc/facets/label/' + facetObj.categID;
+    return Rx.Observable.fromPromise($.get(labelsUrl));
+  }
+
+  return Rx.Observable.of(label.label)
+}
+
+
 function getFacetLabel(facetObj) {
     return getLabels()
         .map(labels => labels[facetObj.categID])
-        .map(label => Object.assign({}, facetObj, {label: label.label}));
+        .flatMap(label => checkFacetLabel(label, facetObj))
+        .map(label => Object.assign({}, facetObj, {label: label}));
 }
 
 var lookUpTable = null;
