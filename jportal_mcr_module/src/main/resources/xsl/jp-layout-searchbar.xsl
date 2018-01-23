@@ -150,7 +150,7 @@
                 </xsl:variable>
 
                 <input class="form-control" type="text" id="inputField" name="qry" value="{$qry}" />
-                  <span class="input-group-addon">
+                  <span id="searchLoupe" class="input-group-addon">
                     <span class="glyphicon glyphicon-search glyphSearchBar"
                       onclick="$('#searchForm').submit()">
                       <xsl:attribute name="title">

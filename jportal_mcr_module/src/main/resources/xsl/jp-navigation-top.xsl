@@ -20,19 +20,6 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-globalHeader">
           <ul class="list-inline nav navbar-nav">
-            <xsl:if test="not($isGuest) and $objectEditing//li/a">
-              <li>
-                <!-- edit object -->
-                <div class="col-sm-4 col-xs-2">
-                  <div class="dropdown dropdown-menu-left pull-left jp-layout-object-editing-container">
-                    <button id="jp-edit-menu-button" class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown" />
-                    <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-left" role="menu">
-                      <xsl:copy-of select="$objectEditing/*" />
-                    </ul>
-                  </div>
-                </div>
-              </li>
-            </xsl:if>
             <li>
               <a href="http://www.thulb.uni-jena.de/" target="_blank">
                 ThULB
@@ -133,7 +120,6 @@
         <xsl:for-each select="$languages/lang">
           <xsl:if test="$CurrentLang != text()">
             <li>
-
               <a class="changeLang text-center">
                 <xsl:attribute name="href">
                   <xsl:variable name="newurl">
