@@ -13,6 +13,7 @@ import java.util.Optional;
  * Utility class for all URIResolver.
  * 
  * @author Matthias Eichner
+ * @author Huu Chi Vu
  */
 public abstract class ResolverUtil {
 
@@ -21,16 +22,15 @@ public abstract class ResolverUtil {
     /**
      * Returns the label of the given classification in the current language.
      * 
-     * @param classID classification identifier
+     * @param categoryId must be in format classificationId:categoryId or is rootID
      * @return label of the classification
      */
-    public static Optional<String> getClassLabel(String classID) {
-        Optional<MCRCategory> rootCategory = Optional
-            .ofNullable(MCRCategoryDAOFactory.getInstance().getRootCategory(MCRCategoryID.rootID(classID), 0));
-        if (!rootCategory.isPresent()) {
-            LOGGER.warn("Could not find ROOT Category <" + classID + ">");
-        }
-        return rootCategory.flatMap(MCRCategory::getCurrentLabel).map(MCRLabel::getText);
+    public static Optional<String> getClassLabel(String categoryId) {
+        return Optional.ofNullable(categoryId)
+                .map(MCRCategoryID::fromString)
+                .map(id -> MCRCategoryDAOFactory.getInstance().getCategory(id, 0))
+                .flatMap(MCRCategory::getCurrentLabel)
+                .map(MCRLabel::getText);
     }
 
 }
