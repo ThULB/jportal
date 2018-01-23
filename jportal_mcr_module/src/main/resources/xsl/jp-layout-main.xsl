@@ -95,6 +95,7 @@
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css"/>
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css"/>
         <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css"/>
+        <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css"/>
         <link href="{$WebApplicationBaseURL}css/jp-move-obj.css" rel="stylesheet" type="text/css"/>
 
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext,cyrillic' rel='stylesheet' type='text/css'/>
@@ -112,6 +113,9 @@
           </xsl:if>
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'CSS/', $template, '.css'))">
             <link href="{$templateWebURL}CSS/{$template}.css" rel="stylesheet" type="text/css"/>
+          </xsl:if>
+          <xsl:if test="/MyCoReWebPage/section/jpindex and jpxml:resourceExist(concat($templateResourcePath, 'CSS/', 'index.css'))">
+            <link href="{$templateWebURL}CSS/index.css" rel="stylesheet" type="text/css"/>
           </xsl:if>
         </xsl:if>
         <script type="text/javascript">
@@ -137,15 +141,18 @@
       </head>
       <body>
         <div class="background">
-          <div id="globalHeader">
+          <div id="header" class="container-fluid">
+
+            <div id="globalHeader">
               <xsl:call-template name="jp.navigation.top"/>
+            </div>
+
+            <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage"/>
+            <div id="logo"></div>
+
+            <!-- searchbar -->
+            <xsl:call-template name="jp.layout.searchbar"/>
           </div>
-
-          <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage"/>
-          <div id="logo"></div>
-
-          <!-- searchbar -->
-          <xsl:call-template name="jp.layout.searchbar"/>
 
           <div id="main" class="container-fluid">
             <xsl:apply-templates/>

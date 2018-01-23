@@ -83,6 +83,19 @@
                   <xsl:value-of select="i18n:translate('jp.site.account')"/>
                 </a>
               </li>
+              <xsl:if test="$objectEditing//li/a">
+                <li>
+
+                <div class="col-sm-4 col-xs-2">
+                  <div class="dropdown dropdown-menu-right pull-right jp-layout-object-editing-container">
+                    <button class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown" />
+                    <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
+                      <xsl:copy-of select="$objectEditing/*" />
+                    </ul>
+                  </div>
+                </div>
+                </li>
+              </xsl:if>
             </xsl:if>
             <li>
               <a id="jp.login.button">
