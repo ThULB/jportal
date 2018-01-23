@@ -54,7 +54,7 @@
         </item>
         <item>
           <restriction name="hasChildren" value="true" />
-          <restriction name="updatePerm" value="true" />
+          <restriction name="createJournal" value="true" />
           <label name="Kinder sortieren" id="jp-sort-object-show-button" mcrid="{$currentObjID}" dialog="object" />
         </item>
         <item>
