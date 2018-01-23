@@ -1,7 +1,17 @@
 package fsu.jportal.resources;
 
+import com.google.gson.JsonObject;
 import fsu.jportal.util.ResolverUtil;
 import org.apache.solr.common.params.ModifiableSolrParams;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filter;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,6 +19,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by Huu Chi Vu on 15.06.17.
@@ -23,12 +41,30 @@ public class FacetsResource {
     }
 
     @GET
-    @Path("list")
+    @Path("lookupTable")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response list() {
-        //wt=json&sort=maintitle_sort asc&rows=9999&q='
-        ModifiableSolrParams solrParams = new ModifiableSolrParams();
+    public Response lookupTable() {
+        InputStream layoutSettingsXML = this.getClass().getResourceAsStream("/xml/layoutDefaultSettings.xml");
+        SAXBuilder saxBuilder = new SAXBuilder();
+        try {
+            Document layoutSettingsDoc = saxBuilder.build(layoutSettingsXML);
+            XPathFactory xPathFactory = XPathFactory.instance();
+            XPathExpression<Element> xpath = xPathFactory
+                    .compile("/layoutSettings/editor/jpjournal/bind/row", Filters.element());
+            BiConsumer<JsonObject, ? super Element> accu = (jsonObj, elem) -> jsonObj
+                    .addProperty(elem.getAttributeValue("class"), elem.getAttributeValue("on"));
+            JsonObject jsonObject = xpath
+                    .evaluate(layoutSettingsDoc)
+                    .stream()
+                    .collect(JsonObject::new, accu, (j1, j2) -> {});
 
-        return null;
+            return Response.ok(jsonObject.toString()).build();
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Response.serverError().build();
     }
 }
