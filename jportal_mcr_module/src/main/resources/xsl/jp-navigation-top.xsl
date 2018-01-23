@@ -124,10 +124,13 @@
     </xsl:if>
   </xsl:template>
   <xsl:template name="jp.navigation.top.language">
+    <xsl:variable name="smallcase" select="'abcdefghijklmnopqrstuvwxyz'" />
+    <xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
+
     <li id="languageMenu" class="dropdown-toggle">
       <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
         <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush"/>-->
-        <xsl:value-of select="$CurrentLang"/>
+        <xsl:value-of select="translate($CurrentLang, $smallcase, $uppercase)"/>
         <span class="caret"></span>
       </a>
 
@@ -149,8 +152,7 @@
                     <xsl:with-param name="url" select="$newurl"/>
                   </xsl:call-template>
                 </xsl:attribute>
-                <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{text()}.png" alt="{text()}"/>-->
-                <xsl:value-of select="text()"/>
+                <xsl:value-of select="translate(text(), $smallcase, $uppercase)"/>
               </a>
             </li>
           </xsl:if>
