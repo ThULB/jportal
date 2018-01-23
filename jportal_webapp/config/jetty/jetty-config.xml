@@ -12,6 +12,18 @@
     </Arg>
   </Call>
 
+
+  <!-- Passwords and keystore location we are specifying -->
+<!--
+  <New id="sslContextFactory" class="org.eclipse.jetty.util.ssl.SslContextFactory">
+    <Set name="KeyStorePath">/Users/chi/Development/tmp/keystore.jks</Set>
+    <Set name="KeyStorePassword">123456</Set>
+    <Set name="KeyManagerPassword">123456</Set>
+    <Set name="TrustStorePath">/Users/chi/Development/tmp/keystore.jks</Set>
+    <Set name="TrustStorePassword">123456</Set>
+  </New>
+-->
+
   <Set name="connectors">
     <Array type="org.eclipse.jetty.server.Connector">
       <Item>
@@ -19,21 +31,115 @@
           <Arg>
             <Ref refid="JPortal" />
           </Arg>
+  <!--
+          <Arg>
+            <Ref refid="sslContextFactory" />
+          </Arg>
           <Set name="port">8291</Set>
         </New>
+  -->
       </Item>
     </Array>
   </Set>
 
-  <!--<Call class="fsu.jportal.startup.WebappConf" name="instance">-->
-    <!--<Call id="solrHome" name="getSolrHome" />-->
-  <!--</Call>-->
-  <!-- -->
-  <!--<New id="solr" class="org.eclipse.jetty.plus.jndi.EnvEntry">-->
-    <!--<Arg>/solr/home</Arg>-->
-    <!--<Arg>-->
-      <!--<Ref refid="solrHome"/>-->
-    <!--</Arg>-->
-  <!--</New>-->
+  <!-- Force all communication over secure channels. -->
+  <!--
+  <Set name="handler">
+    <New id="Handlers" class="org.eclipse.jetty.server.handler.HandlerCollection">
+      <Set name="handlers">
+        <Array type="org.eclipse.jetty.server.Handler">
+          <Item>
+            <New id="SecuredRedirectHandler" class="org.eclipse.jetty.server.handler.SecuredRedirectHandler" />
+          </Item>
+          <Item>
+            <New id="Contexts" class="org.eclipse.jetty.server.handler.ContextHandlerCollection" />
+          </Item>
+          <Item>
+            <New id="DefaultHandler" class="org.eclipse.jetty.server.handler.DefaultHandler" />
+          </Item>
+        </Array>
+      </Set>
+    </New>
+  </Set>
+
+  <New id="httpConfig" class="org.eclipse.jetty.server.HttpConfiguration">
+    <Set name="secureScheme">https</Set>
+    <Set name="securePort">8443</Set>
+  </New>
+
+  <New id="httpsConfig" class="org.eclipse.jetty.server.HttpConfiguration">
+    <Call name="addCustomizer">
+      <Arg>
+        <New class="org.eclipse.jetty.server.SecureRequestCustomizer" />
+      </Arg>
+    </Call>
+  </New>
+
+  <New id="connector" class="org.eclipse.jetty.server.ServerConnector">
+    <Arg name="server">
+      <Ref refid="JPortal" />
+    </Arg>
+    <Arg name="factories">
+      <Array type="org.eclipse.jetty.server.ConnectionFactory">
+        <Item>
+          <New class="org.eclipse.jetty.server.HttpConnectionFactory">
+            <Arg name="config">
+              <Ref refid="httpConfig" />
+            </Arg>
+          </New>
+        </Item>
+      </Array>
+    </Arg>
+
+    <Set name="port">8291</Set>
+  </New>
+
+  <New id="sslContextFactory" class="org.eclipse.jetty.util.ssl.SslContextFactory">
+    <Set name="KeyStorePath">/Users/chi/Development/tmp/keystore.jks</Set>
+    <Set name="KeyStorePassword">123456</Set>
+  </New>
+
+  <New id="sslConnectionFactory" class="org.eclipse.jetty.server.SslConnectionFactory">
+    <Arg name="sslContextFactory">
+      <Ref refid="sslContextFactory" />
+    </Arg>
+    <Arg name="next">http/1.1</Arg>
+  </New>
+
+  <New id="sslConnector" class="org.eclipse.jetty.server.ServerConnector">
+    <Arg name="server">
+      <Ref refid="JPortal" />
+    </Arg>
+    <Arg name="factories">
+      <Array type="org.eclipse.jetty.server.ConnectionFactory">
+        <Item>
+          <Ref refid="sslConnectionFactory" />
+        </Item>
+        <Item>
+          <New class="org.eclipse.jetty.server.HttpConnectionFactory">
+            <Arg name="config">
+              <Ref refid="httpsConfig" />
+            </Arg>
+          </New>
+        </Item>
+      </Array>
+    </Arg>
+
+    <Set name="port">8443</Set>
+  </New>
+
+  <Call name="setConnectors">
+    <Arg>
+      <Array type="org.eclipse.jetty.server.ServerConnector">
+        <Item>
+          <Ref refid="connector" />
+        </Item>
+        <Item>
+          <Ref refid="sslConnector" />
+        </Item>
+      </Array>
+    </Arg>
+  </Call>
+  -->
 </Configure>
 
