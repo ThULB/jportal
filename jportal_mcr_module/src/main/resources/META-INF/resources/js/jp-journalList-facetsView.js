@@ -11,9 +11,12 @@ function renderFacetListEntry(facetObj, /*function*/ usedFacets, /*function*/ ev
     label.textContent = facetObj.label;
     var count = document.createElement('span');
     count.classList.add("pull-right")
+    count.classList.add("facetCount")
     count.textContent = facetObj.count;
     var input = document.createElement('input');
     input.type = "checkbox";
+    input.className = "facetCheckBox";
+
 
     if (usedFacets.has(facetObj.categID)) {
         input.checked = true;

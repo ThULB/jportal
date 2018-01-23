@@ -14,3 +14,17 @@
     	font-size: 1.3em; 
 	}
 }
+
+#header {
+	background-position: center;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+#logo {
+	margin-bottom: 0px;
+}
+
+#searchBar {
+	background-color: #859198;
+}

@@ -115,9 +115,21 @@
 	}
 }
 
-.facetButton:hover {
+.facetButton, .facetCount {
+	transition: 250ms background-color linear,250ms color linear,250ms opacity linear;
+	border-radius: 8px;
+	padding-left: 5px;
+	padding-right: 5px;
+	box-decoration-break: clone;
+}
+
+.facetCheckBox:hover {
 	cursor: pointer;
-	color: #008BD0;
+}
+
+.facetCheckBox:hover + .facetButton, .facetCheckBox:hover + .facetButton + .facetCount{
+	background-color: #615f5f;
+	color: white;
 }
 
 #document_type ul {
@@ -126,6 +138,7 @@
 
 #document_type li > ul {
 	padding-left: 15px;
+	padding-top: 3px;
 }
 
 #atozFacets {
