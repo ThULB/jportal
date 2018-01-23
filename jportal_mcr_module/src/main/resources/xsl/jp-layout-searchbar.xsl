@@ -168,17 +168,6 @@
                   <input type="hidden" name="sort" value="{$sort}" />
                 </xsl:if>
             </div>
-            <!-- edit object -->
-            <xsl:if test="$objectEditing//li/a">
-              <div class="col-sm-4 col-xs-2">
-                <div class="dropdown dropdown-menu-right pull-right jp-layout-object-editing-container">
-                  <button class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown" />
-                  <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
-                    <xsl:copy-of select="$objectEditing/*" />
-                  </ul>
-                </div>
-              </div>
-             </xsl:if>
           </div>
         </form>
       </xsl:if>
