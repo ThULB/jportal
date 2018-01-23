@@ -11,3 +11,9 @@
     background-image: url("../IMAGES/logo.svg");
     background-size: 40%;
 }
+
+@media (max-width: 767px) {
+    #logo {
+        background-size: 94%;
+    }
+}
