@@ -25,20 +25,30 @@
 
         </ul>
       </div>
-      <div class="row container-fluid">
-        <div id="atozFacets" class="col-sm-2"></div>
-        <div class="col-sm-9 col-md-offset-1">
-          <div id="resultList" class="tab-panel"></div>
+        <div class="row container-fluid" id="resultList">
+            <div id="atozFacets" class="col-sm-3">
+                <h5>Dokumenttyp</h5>
+                <div id="document_type"></div>
+            </div>
+            <div class="col-sm-9 jp-layout-hits">
+                <div class="jp-layout-triangle hidden-xs"></div>
+                <div class="jp-layout-triangle hidden-xs"></div>
+                <div id="objectList" class="tab-panel"></div>
+            </div>
         </div>
-      </div>
     </div>
-    <script src="{$WebApplicationBaseURL}js/lib/rx.all.js"></script>
-    <script src="{$WebApplicationBaseURL}js/jp-journalList.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-      jp.az.load();
-      });
-    </script>
+
+    <script src="https://unpkg.com/rxjs@5.4.3/bundles/Rx.min.js"></script>
+    <script src="{$WebApplicationBaseURL}js/jp-journalList-facetsModel.js"></script>
+    <script src="{$WebApplicationBaseURL}js/jp-journalList-facetsView.js"></script>
+    <script src="{$WebApplicationBaseURL}js/jp-journalList-resultListModelView.js"></script>
+    <script src="{$WebApplicationBaseURL}js/jp-journalList-tabsModelView.js"></script>
+    <script src="{$WebApplicationBaseURL}js/jp-journalList-main.js"></script>
+      <script type="text/javascript">
+          $(document).ready(function() {
+          importCSS();
+          });
+      </script>
   </xsl:template>
 
   <!-- =================================================================== -->

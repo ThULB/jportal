@@ -1,4 +1,5 @@
-var baseURL = "http://localhost:8291/jportal/"
+var jp = jp || {};
+var baseURL = jp.baseURL
 
 var UIModel = {
     activeTabs: new Set(),
@@ -119,6 +120,20 @@ var UIEvents = Rx.Observable.merge(
     titleFilter,
     clearFilter
 ).scan((model, changeFn) => changeFn(model), UIModel);
+
+function importCSS() {
+    if (document.createStyleSheet) {
+        document.createStyleSheet(baseURL + 'css/jp-journalList.css');
+    } else {
+        var link = $('<link>').attr({
+            type: 'text/css',
+            rel: 'stylesheet',
+            href: jp.baseURL + 'css/jp-journalList.css',
+            'class': 'myStyle'
+        });
+        $('head').append(link);
+    }
+}
 
 UIEvents
     .startWith(UIModel)
