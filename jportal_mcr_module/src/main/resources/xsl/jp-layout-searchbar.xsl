@@ -82,7 +82,8 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <div class="col-sm-8 {$mobileCol}">
+            <div class="inputFields col-sm-8 {$mobileCol}">
+              <div class="opacity form-control"></div>
               <div class="input-group">
 		            
                 <div class="input-group-btn">
