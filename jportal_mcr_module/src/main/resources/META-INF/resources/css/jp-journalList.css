@@ -35,6 +35,8 @@
 
 .journalList {
 	padding-top: 8px;
+	background-color: white;
+	padding: 1px 29px 49px;
 }
 
 .journalList .atoz {
@@ -88,24 +90,28 @@
 	font-style: italic;
 }
 
-.jp-layout-atozilter{
-	padding: 0;
-} 
+/*.jp-layout-atozilter{*/
+	/*padding: 0;*/
+/*} */
 
-#atozFilterRemove {
-	left: 11em; 
-	top: 0.1em;
-	cursor: pointer; 
+#atozFilterRemoveIcon{
+	cursor: pointer;
 	visibility: hidden;
-	color: #666;
 }
+/*#atozFilterRemove {*/
+	/*left: 11em; */
+	/*top: 0.1em;*/
+	/*cursor: pointer; */
+	/*visibility: hidden;*/
+	/*color: #666;*/
+/*}*/
 
 @media(max-width: 992px){
-	.jp-layout-atozilter{
-		max-height: 2em;
-	}
-	#atozFilterRemove {
-		left: 8.3em;
-		top: -1.56em;
-	}
+	/*.jp-layout-atozilter{*/
+		/*max-height: 2em;*/
+	/*}*/
+	/*#atozFilterRemove {*/
+		/*left: 8.3em;*/
+		/*top: -1.56em;*/
+	/*}*/
 }

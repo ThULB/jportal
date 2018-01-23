@@ -141,6 +141,10 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 .jp-layout-index-latestArticles div {
     margin: 0;
 }
+.jp-layout-mainContent {
+	padding: 1px 29px 49px;
+	background-color: white;
+}
 .jp-layout-titlewrap{
 	overflow: hidden; 
 }
@@ -208,8 +212,9 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 
 #jp-breadcrumb-container {
 	font-size: 11px;
-	padding-right: 0;
-	padding-left: 0;
+	padding-right: 29px;
+	padding-left: 29px;
+	background-color: white;
 }
 
 #jp-breadcrumb-container .jp-layout-scroller {
@@ -496,13 +501,11 @@ p.jp-layout-metadata-list {
 }
 
 #logo {
-	background-image: url("../jp_templates/template_master2/IMAGES/logo.png");
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
-	height: 115px;	
-	background-color: #859198;
-	background-position: bottom; 
+	height: 115px;
+	background-position: center;
 }
 
 #logo .logoTitle {
@@ -544,9 +547,7 @@ p.jp-layout-metadata-list {
 }
 
 #main {
-	background-color: white;
 	overflow: hidden;
-	padding: 1px 29px 49px;
 }
 
 @media(min-width: 768px) {
@@ -1323,4 +1324,125 @@ textarea {
 	display: inline-block;
 	width: 300px;
 	text-align: left;
+}
+
+#jp-main, #jpNavTop li a, #searchDropDownButton, #searchLoupe {
+	color: #615f5f;
+}
+
+#jpNavTop li a:hover {
+	color: black;
+}
+
+body {
+	background-color: white;
+}
+
+#main {
+	background-color: transparent;
+	padding: 0px;
+}
+
+#globalHeader {
+	background-color: transparent;
+}
+
+@media (min-width: 768px) {
+	#jpNavTop .navbar-nav {
+		display: inline-block;
+		float: none;
+		vertical-align: top;
+	}
+
+	#jpNavTop .navbar-collapse {
+		text-align: center;
+	}
+}
+
+#jpNavTop.navbar-default {
+	background-color: transparent;
+	border-color: transparent;
+	margin-bottom: 0px;
+}
+
+#languageMenu .btn-default {
+	background-color: transparent;
+}
+
+#searchBar {
+	background-color: transparent;
+}
+
+#searchBar .inputFields {
+	float: none;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#searchBar .input-group-addon {
+	background-color: transparent;
+}
+
+#searchBar #inputField {
+	background-color: transparent;
+}
+
+#searchBar #searchDropDownButton {
+	background-color: transparent;
+}
+
+.opacity {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	opacity: 0.5;
+}
+
+#jp-header.navbar-default {
+	background-color: white;
+}
+
+#jpNavTop.container {
+	width: 472px;
+}
+
+#jpNavTop.container .navbar-nav > li > a {
+	color: #615f5f;
+}
+
+#jpNavTop.container .navbar.navbar-default {
+	width: 472px;
+	background-image: none;
+	background-color: transparent;
+	border-color: transparent;
+	box-shadow: none;
+}
+
+#searchBar.container {
+	width: 704px;
+	padding-top: 84px;
+}
+
+.logo.container {
+	width: 704px;
+	padding-top: 120px;
+}
+
+.info.container {
+	width: 770px;
+	font-size: 12pt;
+	text-align: center;
+	padding-top: 45px;
+	color: #615f5f;
+}
+
+#portfolio.container {
+	width: 151px;
+	padding-top: 55px;
+}
+
+#portfolio.container a {
+	background-color: #615f5f;
+	color: white;
 }

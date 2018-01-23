@@ -80,16 +80,18 @@ jp.az = {
 
 	printFilter: function() {
 		var filter = $("#atozFilter");
-		var filterRemove = $("#atozFilterRemove");
+		var filterRemoveButton = $("#atozFilterRemoveButton");
 		filter.on("keyup paste", function() {
-			jp.az.updateTabs(); 
+			filterRemoveButton.css("cursor", "pointer");
+			jp.az.updateTabs();
 			jp.az.updateJournals();
 			jp.az.updateFilter();
 		});
-		filterRemove.on("click", function() {
+		filterRemoveButton.on("click", function() {
 			$('#atozFilter').val('');
-			$(this).css("visibility", 'hidden');
-			jp.az.updateTabs(); 
+			$('#atozFilterRemoveIcon').css("visibility", 'hidden');
+			filterRemoveButton.css("cursor", "");
+			jp.az.updateTabs();
 			jp.az.updateJournals();
 		});
 	},
@@ -186,9 +188,9 @@ jp.az = {
 
 	updateFilter: function(){
 	    if($('#atozFilter').val() == '') {
-	        $('#atozFilterRemove').css("visibility", 'hidden');
+	        $('#atozFilterRemoveIcon').css("visibility", 'hidden');
 	    } else {
-	    	$('#atozFilterRemove').css("visibility", 'visible');
+	    	$('#atozFilterRemoveIcon').css("visibility", 'visible');
 	    }
 	},
 

@@ -120,6 +120,7 @@
         <xsl:for-each select="$languages/lang">
           <xsl:if test="$CurrentLang != text()">
             <li>
+
               <a class="changeLang text-center">
                 <xsl:attribute name="href">
                   <xsl:variable name="newurl">
