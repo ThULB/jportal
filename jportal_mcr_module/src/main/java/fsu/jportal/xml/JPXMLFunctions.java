@@ -3,12 +3,18 @@ package fsu.jportal.xml;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -260,6 +266,29 @@ public class JPXMLFunctions {
         } catch (Exception exc) {
             LOGGER.error("Unable to parse request url " + requestURL, exc);
             return false;
+        }
+    }
+
+    public static String rmStartParam(String requestURL) {
+        try {
+            URL url = new URL(requestURL);
+            String query = url.getQuery();
+            if(query.contains("&start=")){
+                String[] queryArray = query.split("&");
+                String queryRmStartParam = Arrays.asList(queryArray)
+                                       .stream()
+                                       .filter(q -> !q.startsWith("start="))
+                                       .collect(Collectors.joining("&"));
+
+                return new URL(url.getProtocol(),
+                               url.getHost(),
+                               url.getPort(),
+                               url.getPath() + "?" + queryRmStartParam)
+                        .toString();
+            }
+            return requestURL;
+        } catch (MalformedURLException e) {
+            return "Malformed URL: " + requestURL;
         }
     }
 

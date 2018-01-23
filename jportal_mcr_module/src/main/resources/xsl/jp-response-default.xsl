@@ -474,15 +474,16 @@
     <xsl:variable name="value" select="@name"/>
     <xsl:variable name="count" select="text()"/>
     <xsl:variable name="facet" select="../@name"/>
-    <xsl:variable name="selected" select="jpxml:isFacetSelected($RequestURL, $facet, $value)"/>
+    <xsl:variable name="requestURLNoStartParam" select="jpxml:rmStartParam($RequestURL)"/>
+    <xsl:variable name="selected" select="jpxml:isFacetSelected($requestURLNoStartParam, $facet, $value)"/>
 
     <xsl:variable name="href">
       <xsl:choose>
         <xsl:when test="$selected">
-          <xsl:value-of select="jpxml:removeFacet($RequestURL, $facet, $value)"/>
+          <xsl:value-of select="jpxml:removeFacet($requestURLNoStartParam, $facet, $value)"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat($RequestURL, '&amp;fq=', $facet, ':&quot;', $value, '&quot;')"/>
+          <xsl:value-of select="concat($requestURLNoStartParam, '&amp;fq=', $facet, ':&quot;', $value, '&quot;')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
