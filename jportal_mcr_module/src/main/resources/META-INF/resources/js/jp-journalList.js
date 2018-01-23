@@ -53,6 +53,7 @@ jp.az = {
 		tab = (tab == "" || tab == null) ? "A" : tab; 
 		jp.az.setTab(tab);
 		jp.az.updateJournals();
+		jp.az.loadFacets();
 	},
 
 	importCSS: function() {
@@ -194,5 +195,26 @@ jp.az = {
 	    }
 	},
 
+	loadFacets: function(){
+		//params={q=objectType:"jpjournal"+AND+journalType:*+&facet.field=journalType&indent=true&wt=json&facet=true&_=1495637943282}
+		//$.getJSON(jp.az.getSearchURL() + ' ' + qry + jp.az.getFilterQuery(), function(searchResult)
+
+		$('#atozFacets').append('<ul id="atozFacetsItems"/>');
+		var facetQry = '&facet.field=journalType&indent=true&wt=json&facet=true';
+		var qry = jp.az.getSearchURL() + ' ' + facetQry + jp.az.getFilterQuery();
+
+		var facetClassiStream = Rx.Observable.just(qry)
+				.flatMap(function (requestURL) {
+					return Rx.Observable.fromPromise($.getJSON(requestURL));
+				})
+				.flatMap(function(response){
+					return Rx.Observable.from(response.facet_counts.facet_fields.journalType)
+				}).bufferWithCount(2);
+
+		facetClassiStream.subscribe(function(response){
+			$('#atozFacetsItems').append('<li>' + response[0] + ' # ' + response[1] + '</li>')
+			console.log("RX rules in Chrom: " + response[0] + ' # ' + response[1]);
+		});
+	}
 }
 

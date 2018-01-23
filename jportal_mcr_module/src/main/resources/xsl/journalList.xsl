@@ -23,8 +23,14 @@
         </div>
         <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1"/>
       </div>
-      <div id="resultList" class="tab-panel"></div>
+      <div class="row container-fluid">
+        <div id="atozFacets" class="col-sm-2"></div>
+        <div class="col-sm-9 col-md-offset-1">
+          <div id="resultList" class="tab-panel"></div>
+        </div>
+      </div>
     </div>
+    <script src="{$WebApplicationBaseURL}js/lib/rx.all.js"></script>
     <script src="{$WebApplicationBaseURL}js/jp-journalList.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {

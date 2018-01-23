@@ -40,6 +40,7 @@ public class URNToolsTest extends MCRJPATestCase{
         Assert.assertEquals("Urn should be: ", identifier, urn);
     }
 
+    @Ignore
     @Test
     public void urlDecode() throws Exception {
         String url = "jportal_derivate_00203695/alt-_129513253_1995_29_%200005.tif";
