@@ -954,11 +954,16 @@ ul.ckeditorButtons li:last-child {
 	padding-right: 4px;
 }
 
-.jp-navigation-topHeader-DropdownBorder{
-	border: none;
+.jp-navigation-topHeader-Dropdown{
+	padding: 6px;
 }
 
-.jp-navigation-topHeader-DropdownBorder .caret {
+.jp-navigation-topHeader-Dropdown button{
+	border: none;
+	padding: 5px;
+}
+
+.jp-navigation-topHeader-Dropdown .caret {
 	margin-left: 0.3em;
 }
 /*******************************************************
@@ -1240,24 +1245,30 @@ textarea {
 		border-top: 1px solid #A8A9AA;
 	}
 	
-	.jp-navigation-topHeader-DropdownBorder, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
-		/*transition: background-color ease-in-out .15s,box-shadow ease-in-out .15s;*/
+	.jp-navigation-topHeader-Dropdown button, .open .jp-navigation-topHeader-Dropdown button{
 		transition: 250ms background-color linear,250ms color linear,250ms opacity linear;
 	}
-	.jp-navigation-topHeader-DropdownBorder:hover, .jp-navigation-topHeader-DropdownBorder:focus, .jp-navigation-topHeader-DropdownBorder:active, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
-		background-color: rgba(255,255,255, .50) !important;
-		box-shadow: inset 0 0 8px rgba(102,175,233,.6);
+	.jp-navigation-topHeader-Dropdown .btn:hover, .jp-navigation-topHeader-Dropdown .btn:focus, .jp-navigation-topHeader-Dropdown .btn:active, .open .jp-navigation-topHeader-Dropdown .btn-default{
+		background-color: #615f5f !important;
+		color: white;
 	}
 		
 	.jp-navigation-topHeader-DropdownMenu{
-		min-width: 55px; 
+		min-width: 55px;
 		margin-top: 0.3em !important;
 		margin-right: -0.3em;
 	}
+
+	.jp-navigation-topHeader-Dropdown button {
+		font-size: small;
+		font-weight: bold;
+		color: #615f5f;
+	}
 	
-	.jp-navigation-topHeader-DropdownMenu > li > a{
+	.jp-navigation-topHeader-Dropdown > ul > li > a{
 		padding-left: 0; 
 		padding-right: 0;
+		font-size: small;
 	}
 	
 	.jp-navigation-topHeader-UlRightWraper{
@@ -1309,7 +1320,7 @@ textarea {
 		margin-left: -1px;
 	}
 
-	.jp-navigation-topHeader-DropdownBorder.btn:active, .jp-navigation-topHeader-DropdownBorder.btn.active{
+	.jp-navigation-topHeader-Dropdown .btn:active, .jp-navigation-topHeader-Dropdown .btn.active{
 		box-shadow: none;
 	}
 	
@@ -1518,7 +1529,7 @@ body {
 	color: white;
 }
 
-#navbar-collapse-globalHeader .jp-navigation-topHeader-DropdownBorder {
+#navbar-collapse-globalHeader .jp-navigation-topHeader-Dropdown .btn {
 	background-color: transparent;
 }
 

@@ -71,29 +71,30 @@
               </xsl:when>
               <xsl:when test="not($isGuest)">
                 <li>
-                  <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
-                    <xsl:value-of select="layoutTools:getUserName()"/>
-                    <span class="caret"></span>
-                  </a>
-
-                  <ul id="userDropdownMenu" role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
-                    <xsl:if test="acl:checkPermission('administrate-jportal')">
+                  <div class="btn-group jp-navigation-topHeader-Dropdown">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <xsl:value-of select="layoutTools:getUserName()"/>
+                      <span class="caret"></span>
+                    </button>
+                    <ul id="userDropdownMenu" role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
+                      <xsl:if test="acl:checkPermission('administrate-jportal')">
+                        <li>
+                          <a href="{$WebApplicationBaseURL}jp-admin.xml">Administration</a>
+                        </li>
+                      </xsl:if>
                       <li>
-                        <a href="{$WebApplicationBaseURL}jp-admin.xml">Administration</a>
+                        <a href="{$WebApplicationBaseURL}jp-account.xml">
+                          <xsl:value-of select="i18n:translate('jp.site.account')"/>
+                        </a>
                       </li>
-                    </xsl:if>
-                    <li>
-                      <a href="{$WebApplicationBaseURL}jp-account.xml">
-                        <xsl:value-of select="i18n:translate('jp.site.account')"/>
-                      </a>
-                    </li>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                      <a id="jp.login.button" href="{concat($WebApplicationBaseURL, 'servlets/logout')}">
-                        <xsl:value-of select="i18n:translate('jp.site.logout')"/>
-                      </a>
-                    </li>
-                  </ul>
+                      <li role="separator" class="divider"></li>
+                      <li>
+                        <a id="jp.login.button" href="{concat($WebApplicationBaseURL, 'servlets/logout')}">
+                          <xsl:value-of select="i18n:translate('jp.site.logout')"/>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </li>
               </xsl:when>
             </xsl:choose>
@@ -112,52 +113,51 @@
     <xsl:if test="not($isGuest) and $objectEditing//li/a">
       <li>
         <!-- edit object -->
-        <div class="col-sm-4 col-xs-2">
-          <div class="dropdown dropdown-menu-left pull-left jp-layout-object-editing-container">
-            <button id="jp-edit-menu-button" class="btn btn-default fa fa-bars dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button" data-toggle="dropdown"/>
-            <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
-              <xsl:copy-of select="$objectEditing/*"/>
-            </ul>
-          </div>
+        <div class="btn-group jp-navigation-topHeader-Dropdown">
+          <button type="button" class="btn btn-default dropdown-toggle fa fa-bars"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"/>
+          <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
+            <xsl:copy-of select="$objectEditing/*"/>
+          </ul>
         </div>
       </li>
     </xsl:if>
   </xsl:template>
   <xsl:template name="jp.navigation.top.language">
-    <xsl:variable name="smallcase" select="'abcdefghijklmnopqrstuvwxyz'" />
-    <xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
+    <xsl:variable name="smallcase" select="'abcdefghijklmnopqrstuvwxyz'"/>
+    <xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
 
     <li id="languageMenu" class="dropdown-toggle">
-      <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
-        <!--<img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush"/>-->
-        <xsl:value-of select="translate($CurrentLang, $smallcase, $uppercase)"/>
-        <span class="caret"></span>
-      </a>
+      <div class="btn-group jp-navigation-topHeader-Dropdown">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <xsl:value-of select="translate($CurrentLang, $smallcase, $uppercase)"/>
+          <span class="caret"></span>
+        </button>
+        <ul id="languageList" role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
+          <xsl:for-each select="$languages/lang">
+            <xsl:if test="$CurrentLang != text()">
+              <li>
 
-      <ul id="languageList" role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
-        <xsl:for-each select="$languages/lang">
-          <xsl:if test="$CurrentLang != text()">
-            <li>
-
-              <a class="changeLang text-center">
-                <xsl:attribute name="href">
-                  <xsl:variable name="newurl">
-                    <xsl:call-template name="UrlSetParam">
-                      <xsl:with-param name="url" select="$RequestURL"/>
-                      <xsl:with-param name="par" select="'lang'"/>
-                      <xsl:with-param name="value" select="text()"/>
+                <a class="changeLang text-center">
+                  <xsl:attribute name="href">
+                    <xsl:variable name="newurl">
+                      <xsl:call-template name="UrlSetParam">
+                        <xsl:with-param name="url" select="$RequestURL"/>
+                        <xsl:with-param name="par" select="'lang'"/>
+                        <xsl:with-param name="value" select="text()"/>
+                      </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:call-template name="UrlAddSession">
+                      <xsl:with-param name="url" select="$newurl"/>
                     </xsl:call-template>
-                  </xsl:variable>
-                  <xsl:call-template name="UrlAddSession">
-                    <xsl:with-param name="url" select="$newurl"/>
-                  </xsl:call-template>
-                </xsl:attribute>
-                <xsl:value-of select="translate(text(), $smallcase, $uppercase)"/>
-              </a>
-            </li>
-          </xsl:if>
-        </xsl:for-each>
-      </ul>
+                  </xsl:attribute>
+                  <xsl:value-of select="translate(text(), $smallcase, $uppercase)"/>
+                </a>
+              </li>
+            </xsl:if>
+          </xsl:for-each>
+        </ul>
+      </div>
     </li>
   </xsl:template>
 
