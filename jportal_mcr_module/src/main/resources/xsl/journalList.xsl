@@ -13,12 +13,12 @@
   <xsl:template match="journalList[@mode='javascript']">
     <div id="firstLetterTab" class="journalList" additionalQuery="{additionalQuery}">
       <div class="atoz col-md-12">
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-2 jp-layout-atozilter">
           <!--<input id="atozFilter" class="form-control" type="text" placeholder="Filter"/>-->
           <!--<span id="atozFilterRemove" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>-->
 
           <div class="input-group">
-            <input id="atozFilter" class="form-control" type="text" placeholder="Filter"/>
+            <input id="atozFilter" class="form-control jp-input-with-groupaddon" type="text" placeholder="Filter"/>
             <div id="atozFilterRemoveButton" class="input-group-addon">
               <span id="atozFilterRemoveIcon" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
             </div>
