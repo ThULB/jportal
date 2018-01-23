@@ -1241,7 +1241,8 @@ textarea {
 	}
 	
 	.jp-navigation-topHeader-DropdownBorder, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
-		transition: background-color ease-in-out .15s,box-shadow ease-in-out .15s;
+		/*transition: background-color ease-in-out .15s,box-shadow ease-in-out .15s;*/
+		transition: 250ms background-color linear,250ms color linear,250ms opacity linear;
 	}
 	.jp-navigation-topHeader-DropdownBorder:hover, .jp-navigation-topHeader-DropdownBorder:focus, .jp-navigation-topHeader-DropdownBorder:active, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
 		background-color: rgba(255,255,255, .50) !important;
@@ -1519,4 +1520,46 @@ body {
 
 #navbar-collapse-globalHeader .jp-navigation-topHeader-DropdownBorder {
 	background-color: transparent;
+}
+
+.jp-pagination {
+	list-style-type: none;
+	float: none;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+
+.jp-pagination li {
+	float: left;
+}
+
+.jp-pagination input.currentPage {
+	border-radius: 4px;
+	width: 30%;
+	border: 1px solid #d6d6d6;
+	text-align: center;
+}
+
+.jp-pagination .paginationtext {
+	padding-left: 8px;
+}
+
+.jp-pagination .fa {
+	line-height: 25px;
+	width: 25px;
+	height: 25px;
+	border-radius: 25px;
+	vertical-align: middle;
+	transition: 250ms background-color linear,250ms color linear,250ms opacity linear;
+}
+
+.jp-pagination i.inactive {
+	color: #A8A9AA;
+}
+.jp-pagination .fa.active:hover {
+	background-color: #615f5f;
+	color: white;
+	cursor: pointer;
 }
