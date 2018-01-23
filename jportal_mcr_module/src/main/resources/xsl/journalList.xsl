@@ -14,7 +14,7 @@
     <div id="firstLetterTab" class="journalList" additionalQuery="{additionalQuery}">
       <div class="atoz col-md-12">
         <div class="form-group col-md-2 jp-layout-atozilter">
-          <div class="input-group">
+          <div id="atozFilterContainer" class="input-group">
             <input id="atozFilter" class="form-control jp-input-with-groupaddon" type="text" placeholder="Filter"/>
             <div id="atozFilterRemoveButton" class="input-group-addon">
               <span id="atozFilterRemoveIcon" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>

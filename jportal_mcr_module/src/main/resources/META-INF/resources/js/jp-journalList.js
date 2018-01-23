@@ -1,53 +1,52 @@
 var jp = jp || {};
 /*
-*   GUI: Filter, A-Z list, facet list, result list
-*   A-Z list and facet list -> 1 solr request, then split result list and facet list
-*
+ *   GUI: Filter, A-Z list, facet list, result list
+ *   A-Z list and facet list -> 1 solr request, then split result list and facet list
+ *
  */
 jp.az = {
-
     getSearchURL: function () {
         var url = jp.baseURL + 'servlets/solr/select?wt=json&sort=maintitle_sort asc&rows=9999&q=';
         var additionalQuery = $('#firstLetterTab').attr('additionalQuery');
         return url + additionalQuery;
-    },
+    }
+    ,
 
     getFilterQuery: function () {
         var filter = $("#atozFilter").val().toLowerCase();
         ;
         return filter != "" ? "&fq=maintitle_sort:*" + filter + "*" : "";
-    },
+    }
+    ,
 
-    getTabs: function (/* function */ onSuccess) {
-        var url = jp.az.getSearchURL() + '&fl=maintitle&facet.field=journalType&facet=true' + jp.az.getFilterQuery();
+    getTabsAndFacets: function (/* function */ onSuccess, facetParamStream) {
+        // get tabs and facets
+        let facetOnOption = '&fl=maintitle&facet.field=journalType&facet=true';
 
-        /*
-        $.getJSON(url, function (searchResult) {
-            var response = searchResult.response;
-            var tabs = [];
-            for (var i = 0; i < response.numFound; i++) {
-                var maintitle = response.docs[i].maintitle;
-                if (maintitle != null && maintitle.length > 0) {
-                    var char = maintitle[0].toUpperCase();
-                    char = (char.charCodeAt(0) < 65 || char.charCodeAt(0) > 90) ? "#" : char;
-                    if ($.inArray(char, tabs) == -1) {
-                        tabs.push(char);
-                    }
-                }
-            }
-            onSuccess(tabs);
-        });
-        */
+        facetParamStream
+            .distinct()
+            .reduce((facetFilter, f) => facetFilter + f, '')
+            .map(facetFilter => jp.az.getSearchURL() + facetFilter + facetOnOption + jp.az.getFilterQuery())
+            .do(url => console.log("getTabsAndFacets: " + url))
+            .flatMap(url => Rx.Observable.fromPromise($.getJSON(url)))
+            .flatMap(function (searchResult) {
+                var facetObjStream = jp.az.createFacetObjStream(searchResult);
+                var alreadyUsedFacetFilterStream = jp.az.getFacetFilterFrom(searchResult);
+                return jp.az.createTabStream(searchResult)
+                    .map(tabs => ({
+                        tabs: tabs,
+                        facetObjStream: facetObjStream,
+                        alreadyUsedFacetFilterStream: alreadyUsedFacetFilterStream
+                    }));
+            })
+            .subscribe(function (r) {
+                onSuccess(r.tabs, r.facetObjStream, r.alreadyUsedFacetFilterStream);
+            });
+    }
+    ,
 
-
-        var searchResultsStream = Rx.Observable.fromPromise($.getJSON(url));
-        var journalsStream =  searchResultsStream.flatMap(searchResult => searchResult.response.docs);
-        var facetsStream =  searchResultsStream.flatMap(searchResult => searchResult.facet_counts.facet_fields.journalType);
-
-        facetsStream.bufferWithCount(2).subscribe(facet => console.log("Facet: " + facet));
-
-
-        journalsStream
+    createTabStream: function (searchResult) {
+        return Rx.Observable.from(searchResult.response.docs)
             .map(doc => doc.maintitle)
             .filter(title => title != null && title.length > 0)
             .map(title => title[0].toUpperCase())
@@ -56,34 +55,51 @@ jp.az = {
             .reduce(function (tabs, char) {
                 tabs.push(char);
                 return tabs;
-            }, [])
-            .subscribe(tabs => onSuccess(tabs));
-    },
+            }, []);
+    }
+    ,
 
-    getJournals: function (/* string */ tabLetter, /* function */ onSuccess) {
+    getFacetFilterFrom: function (searchResult) {
+        return Rx.Observable.of(searchResult)
+            .map(r => r.responseHeader.params.q)
+            .flatMap(q => q.split(' '))
+            .filter(q => q.startsWith('+journalType'))
+            .map(q => q.replace('+journalType:', ''))
+            .map(q => q.replace(/"/g, ''))
+            .map(id => ' %2BjournalType:"' + id + '"%20');
+    }
+    ,
+
+    getJournals: function (/* string */ tabLetter, /* function */ onSuccess, facetParamStream) {
         var qry = '';
         if (tabLetter == '#') {
             qry = '-maintitle_sort:[a TO z] -maintitle_sort:z*';
         } else {
             qry = '%2Bmaintitle_sort:' + tabLetter.toLowerCase() + '*';
         }
-        $.getJSON(jp.az.getSearchURL() + ' ' + qry + jp.az.getFilterQuery(), function (searchResult) {
-            onSuccess(searchResult.response);
-        });
-    },
+
+        facetParamStream
+            .distinct()
+            .reduce((facetFilter, f) => facetFilter + f, '')
+            .map(facetFilter => jp.az.getSearchURL() + facetFilter + ' ' + qry + jp.az.getFilterQuery())
+            .do(url => console.log("getJournals: " + url))
+            .flatMap(url => Rx.Observable.fromPromise($.getJSON(url)))
+            .subscribe(searchResult => onSuccess(searchResult.response));
+    }
+    ,
 
     load: function () {
         jp.az.importCSS();
         jp.az.printTabNav();
         jp.az.printFilter();
 
-        jp.az.updateTabs(null);
+        jp.az.updateTabsAndFacets(null);
         var tab = $(location).attr('hash').substring(1, 2).toUpperCase();
         tab = (tab == "" || tab == null) ? "A" : tab;
         jp.az.setTab(tab);
         jp.az.updateJournals();
-        jp.az.loadFacets();
-    },
+    }
+    ,
 
     importCSS: function () {
         if (document.createStyleSheet) {
@@ -97,7 +113,8 @@ jp.az = {
             });
             $('head').append(link);
         }
-    },
+    }
+    ,
 
     printTabNav: function () {
         var tabsHTML = "<li>#</li>";
@@ -106,72 +123,76 @@ jp.az = {
             tabsHTML += "<li>" + char + "</li>";
         }
         $('#tabNav').append(tabsHTML);
-    },
+    }
+    ,
 
     printFilter: function () {
-        /*
-        var filter = $("#atozFilter");
-        var filterRemoveButton = $("#atozFilterRemoveButton");
-        filter.on("keyup paste", function () {
-            filterRemoveButton.css("cursor", "pointer");
-            jp.az.updateTabs();
-            jp.az.updateJournals();
-            jp.az.updateFilter();
-        });
-        filterRemoveButton.on("click", function () {
-            $('#atozFilter').val('');
-            $('#atozFilterRemoveIcon').css("visibility", 'hidden');
-            filterRemoveButton.css("cursor", "");
-            jp.az.updateTabs();
-            jp.az.updateJournals();
-        });
-        */
-
         var filterInput = document.querySelector('#atozFilter');
         var filterRemoveButton = document.querySelector('#atozFilterRemoveButton');
-        var filterRemoveIcon = document.querySelector('#atozFilterRemoveIcon');
         var filterInputStream = Rx.Observable.of(filterInput);
         var filterInputEventStream = Rx.Observable.fromEvent(filterInput, 'input');
         var filterRemoveButtonClickStream = Rx.Observable.fromEvent(filterRemoveButton, 'click');
+        var facetParamStream = $('#atozFilter').data('facetFilter')
 
-        function updateButtonCSS(inputVal){
-            if(inputVal === ""){
-                    filterRemoveButton.setAttribute("style", "cursor:default;");
-                    filterRemoveIcon.setAttribute("style", "visibility:hidden;");
-            }else {
-                filterRemoveButton.setAttribute("style", "cursor:pointer;");
-                filterRemoveIcon.setAttribute("style", "visibility:visible;");
-            }
+        if(facetParamStream === undefined ){
+            facetParamStream = Rx.Observable.empty();
         }
 
         filterInputEventStream.merge(filterRemoveButtonClickStream)
-            .combineLatest(filterInputStream, function(event, input){
-                if(event instanceof MouseEvent){
+            .combineLatest(filterInputStream, function (event, input) {
+                if (event instanceof MouseEvent) {
+                    console.log("click remove");
                     input.value = '';
                 }
 
                 return input;
             })
             .map(input => input.value)
-            .subscribe(function(inputVal){
-                updateButtonCSS(inputVal);
-                jp.az.updateTabs();
-                jp.az.updateJournals();
+            .subscribe(function (inputVal) {
+                var facetParamStream = $('#atozFilter').data('facetFilter')
+
+                if(facetParamStream === undefined ){
+                    facetParamStream = Rx.Observable.empty();
+                }
+
+                jp.az.updateFilterRemoveButtonCSS(inputVal);
+                jp.az.updateTabsAndFacets(facetParamStream);
+                jp.az.updateJournals(facetParamStream);
             });
+    }
+    ,
+
+    updateFilterRemoveButtonCSS: function (inputVal) {
+        var filterRemoveIcon = document.querySelector('#atozFilterRemoveIcon');
+        var filterRemoveButton = document.querySelector('#atozFilterRemoveButton');
+        if (inputVal === "") {
+            filterRemoveButton.setAttribute("style", "cursor:default;");
+            filterRemoveIcon.setAttribute("style", "visibility:hidden;");
+        } else {
+            filterRemoveButton.setAttribute("style", "cursor:pointer;");
+            filterRemoveIcon.setAttribute("style", "visibility:visible;");
+        }
     },
 
     setTab: function (/* string */ tab) {
         $(location).attr('hash', tab);
         $("#tabNav > li").removeClass("selected-tab");
         $("#tabNav > li:contains('" + tab + "')").addClass("selected-tab");
-    },
+    }
+    ,
 
     getTab: function () {
         return $("#tabNav > li.selected-tab").text();
-    },
+    }
+    ,
 
-    updateTabs: function () {
-        jp.az.getTabs(function (activeTabs) {
+    updateTabsAndFacets: function (facetParam) {
+        // update tabs and facets
+        if (facetParam === null || facetParam === undefined) {
+            facetParam = Rx.Observable.empty();
+        }
+
+        jp.az.getTabsAndFacets(function (activeTabs, facetObjStream, alreadyUsedFacetFilterStream) {
             $("#tabNav > li").each(function () {
                 var li = $(this);
                 li.off("click");
@@ -185,10 +206,19 @@ jp.az = {
                     li.removeClass('active');
                 }
             });
-        });
-    },
 
-    updateJournals: function () {
+            $('#atozFilter').data('facetFilter', alreadyUsedFacetFilterStream);
+            //jp.az.printFilter(alreadyUsedFacetFilterStream);
+            jp.az.updateFacets(facetObjStream, alreadyUsedFacetFilterStream);
+        }, facetParam);
+    }
+    ,
+
+    updateJournals: function (facetParamStream) {
+        if (facetParamStream === null || facetParamStream === undefined) {
+            facetParamStream = Rx.Observable.empty();
+        }
+
         var tab = jp.az.getTab();
         jp.az.getJournals(tab, function (response) {
             var resultList = $('<ul/>');
@@ -201,8 +231,9 @@ jp.az = {
                 resultList.append(resultListEntry);
             }
             $("#resultList").empty().append(resultList);
-        });
-    },
+        }, facetParamStream);
+    }
+    ,
 
     printJournalEntry: function (resultListEntry, metadata) {
         var titleLink = $('<a/>').html(metadata.maintitle).attr('href', jp.baseURL + 'receive/' + metadata.id);
@@ -211,7 +242,8 @@ jp.az = {
         jp.az.printPublished(resultListEntry, metadata);
         jp.az.printPublisher(resultListEntry, metadata, "participant.mainPublisher", "Herausgeber");
         jp.az.printPublisher(resultListEntry, metadata, "participant.author", "Autor");
-    },
+    }
+    ,
 
     printPublished: function (node, journal) {
         var publishedStr = 'Erscheinungsverlauf: ';
@@ -225,7 +257,8 @@ jp.az = {
             }
             node.append($('<div class="journal-published"/>').html(publishedStr));
         }
-    },
+    }
+    ,
 
     printPublisher: function (node, journal, solrKey, caption) {
         var publisherList = journal[solrKey];
@@ -248,7 +281,8 @@ jp.az = {
             }
             node.append(pusblisherStr + "</div>");
         }
-    },
+    }
+    ,
 
     updateFilter: function () {
         if ($('#atozFilter').val() == '') {
@@ -256,114 +290,98 @@ jp.az = {
         } else {
             $('#atozFilterRemoveIcon').css("visibility", 'visible');
         }
-    },
+    }
+    ,
 
-    // - request A-Z list with facets
-    // - split for A-Z and facets list
-    // - Observeable filter + facets
-    // - solr facets stream
-    // - label of facets
-    // - class hierarchy in layoutDefaultSettings.xml
-    loadFacets: function () {
-        //params={q=objectType:"jpjournal"+AND+journalType:*+&facet.field=journalType&indent=true&wt=json&facet=true&_=1495637943282}
-        //$.getJSON(jp.az.getSearchURL() + ' ' + qry + jp.az.getFilterQuery(), function(searchResult)
+    createFacetObj: function (journalType) {
+        var categID = journalType[0];
+        var count = journalType[1];
+        var labelsUrl = jp.baseURL + 'rsc/facets/label/' + categID;
+        let lookupTableUrl = jp.baseURL + 'rsc/facets/lookupTable';
+        var lookupTableStream = Rx.Observable.fromPromise($.get(lookupTableUrl));
 
-        // $('#atozFacets').empty().append('<ul id="atozFacetsItems"/>');
-        var listContainer = document.createElement('ul');
-        listContainer.id = 'atozFacetsItems';
+        return Rx.Observable.fromPromise($.get(labelsUrl))
+            .combineLatest(lookupTableStream, function (label, lookup) {
+                var rootID = categID.split(':')[0];
+                var parent = lookup[rootID];
+                console.log('Parent: ' + categID + ' # ' + parent);
+
+                return {
+                    "label": label,
+                    "categID": categID,
+                    "count": count,
+                    "parent": parent
+                };
+            })
+
+    }
+    ,
+
+    createFacetListEntry: function (journalType) {
+        var button = document.createElement('button');
+        button.dataset.categID = journalType.categID;
+        button.dataset.parent = journalType.parent;
+        button.className = "facetButton";
+        button.textContent = journalType.label + " (" + journalType.count + ")";
+        var li = document.createElement('li');
+        li.appendChild(button);
+        li.appendChild(button);
+        return li;
+    }
+    ,
+
+    renderFacetList: function (fragment, container) {
+        var newList = document.createElement('ul');
+        newList.id = 'atozFacetsItems';
+        newList.appendChild(fragment);
+
+        var currentList = container.querySelector('#' + newList.id);
+        if (currentList != null) {
+            currentList.replaceWith(newList);
+        } else {
+            container.appendChild(newList);
+        }
+
+        return Rx.Observable.from(newList.children);
+    }
+    ,
+
+    createFacetObjStream: function (searchResult) {
+        var journalType = searchResult.facet_counts.facet_fields.journalType;
+        return Rx.Observable.from(journalType)
+            .bufferWithCount(2)
+            .filter(journalType => journalType[1] > 0)
+            .flatMap(journalType => jp.az.createFacetObj(journalType));
+    }
+    ,
+
+    createFacetButtonClickStream: function (facetObjStream, container) {
+        return facetObjStream
+            .map(jp.az.createFacetListEntry)
+            .reduce(function (f, li) {
+                f.appendChild(li);
+                return f;
+            }, document.createDocumentFragment())
+            .flatMap(fragment => jp.az.renderFacetList(fragment, container))
+            .map(li => li.querySelector('.facetButton'))
+            .flatMap(b => Rx.Observable.fromEvent(b, 'click'))
+            .map(click => click.target.dataset.categID)
+            .map(id => ' %2BjournalType:"' + id + '"%20');
+    }
+    ,
+
+    updateFacets: function (facetObjStream, alreadyUsedFacetFilterStream) {
         var facetsContainer = document.querySelector('#atozFacets');
-        facetsContainer.innerHTML = "";
-        facetsContainer.append(listContainer);
+        jp.az.createFacetButtonClickStream(facetObjStream, facetsContainer)
+            .subscribe(function (facetParam) {
+                var param = alreadyUsedFacetFilterStream.concat(Rx.Observable.of(facetParam))
+                jp.az.updateTabsAndFacets(param);
+                jp.az.updateJournals(param);
+            });
+    }
+    ,
 
-        function createFacetsRequestStream(param) {
-            var facetQry = ' &facet.field=journalType&indent=true&wt=json&facet=true';
-            if (param != null && param != '') {
-                facetQry = param + facetQry;
-            }
-
-            var qry = jp.az.getSearchURL() + facetQry + jp.az.getFilterQuery();
-
-            console.log(qry);
-
-            return Rx.Observable.just(qry);
-        }
-
-        function createFacetsResponseStream(facetsRequestStream) {
-            return facetsRequestStream
-                .flatMap(requestURL => Rx.Observable.fromPromise($.getJSON(requestURL)));
-        }
-
-        var lookupTableStream = Rx.Observable.fromPromise($.get(jp.baseURL + 'rsc/facets/lookupTable'));
-
-        function createFacetObj(journalType) {
-            var categID = journalType[0];
-            var url = jp.baseURL + 'rsc/facets/label/' + categID;
-
-            return Rx.Observable.fromPromise($.get(url))
-                .map(label => ({
-                        "label": label,
-                        "categID": journalType[0],
-                        "count": journalType[1]
-                    })
-                ).combineLatest(lookupTableStream, function(journalType, lookup){
-                    var rootID = journalType.categID.split(':')[0];
-                    var parent = lookup[rootID];
-                    console.log('Parent: ' + journalType.categID + ' # ' + parent);
-                    journalType.parent = parent;
-                    return journalType;
-                })
-        }
-
-        function renderButton(journalType) {
-            var button = document.createElement('button');
-            button.className = 'clickButton';
-            button.dataset.categID = journalType.categID;
-            button.dataset.parent = journalType.parent;
-            button.className = "facetButton";
-            button.textContent = journalType.label + " (" + journalType.count + ")";
-            return button;
-        }
-
-        function renderListElement(button, listContainer) {
-            var li = document.createElement('li');
-            li.appendChild(button);
-            listContainer.appendChild(li);
-        }
-
-        function createFacetObjStream(facetsResponseStream) {
-            return facetsResponseStream
-                .flatMap(response => Rx.Observable.from(response.facet_counts.facet_fields.journalType))
-                .bufferWithCount(2)
-                .filter(journalType => journalType[1] > 0)
-                .flatMap(journalType => createFacetObj(journalType));
-        }
-
-        function createClickStream(containerStream, facetsParam) {
-            var facetsRequestStream = createFacetsRequestStream(facetsParam);
-            var facetsResponseStream = createFacetsResponseStream(facetsRequestStream);
-            var facetObjStream = createFacetObjStream(facetsResponseStream);
-            return facetObjStream
-                .map(facet => renderButton(facet))
-                .flatMap(button => Rx.Observable.fromEvent(button, 'click')
-                    .combineLatest(containerStream, function (click, container) {
-                        container.innerHTML = "";
-                        return click;
-                    })
-                    .flatMap(click => createClickStream(containerStream, ' %2BjournalType:"' + button.dataset.categID + '"%20'))
-                    .startWith(button)
-                );
-        }
-
-        // var container = document.querySelector('#atozFacetsItems');
-        var containerStream = Rx.Observable.of(listContainer);
-
-        createClickStream(containerStream).subscribe(function (button) {
-            //render selected "root" category first
-            renderListElement(button, listContainer);
-        })
-    },
-
-    //http://stackoverflow.com/a/22367819/3123195
+//http://stackoverflow.com/a/22367819/3123195
     treeify: function (list, idAttr, parentAttr, childrenAttr) {
         if (!idAttr) idAttr = 'id';
         if (!parentAttr) parentAttr = 'parent';
