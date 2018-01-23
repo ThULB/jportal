@@ -878,6 +878,15 @@ ul.ckeditorButtons li:last-child {
 	margin-bottom: 0;
 }
 
+.form-login {
+	float: none;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 23%;
+	margin-top: 10%;
+}
+
 .form-login .control-label {
 	display: none;
 }
@@ -1100,6 +1109,10 @@ textarea {
 		width: 77%;
 	}
 
+	.form-login {
+		width: 59%;
+		margin-top: 20%;
+	}
 
 	#resultListHeader{
 		border-bottom: 1px solid #A8A9AA;
