@@ -5,6 +5,9 @@
   <xsl:template match="/template[@id='template_calendar']" mode="template">
     <xsl:param name="mcrObj"/>
     <xsl:apply-templates select="$mcrObj" mode="template_calendar" />
+    <xsl:call-template name="template_date">
+      <xsl:with-param name="mcrObj" select="$mcrObj"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_calendar">

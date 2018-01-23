@@ -8,6 +8,12 @@
     <xsl:param name="mcrObj" />
     <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
     <xsl:apply-templates select="$journal" mode="template_DynamicLayoutTemplates" />
+    <xsl:call-template name="template_date">
+      <xsl:with-param name="mcrObj" select="$mcrObj"/>
+    </xsl:call-template>
+    <xsl:call-template name="template_maintitle">
+      <xsl:with-param name="mcrObj" select="$mcrObj"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_DynamicLayoutTemplates">
@@ -31,20 +37,6 @@
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
-    
-    <xsl:variable name="published_until">
-      <xsl:value-of select=".//date[@type='published_until']" />
-    </xsl:variable>
-    <xsl:variable name="pubYear">
-      <xsl:choose>
-        <xsl:when test="$published != ''">
-          <xsl:value-of select="$published" />
-        </xsl:when>
-        <xsl:when test="($published_from != '') and ($published_until != '')">
-          <xsl:value-of select="concat($published_from, ' - ', $published_until)" />
-        </xsl:when>
-      </xsl:choose>
-    </xsl:variable>
 
     <script type="text/javascript">
       $(document).ready(function() {
@@ -54,12 +46,10 @@
           console.error("Unable to find template. Maybe there is no valid published or published_from metadata field set.");
           return;
         }
-        $('#logo').css('background-image', 'url(' + baseURL + 'jp_templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
-        var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle(@ID))" />';
-        $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear" /></div>');
-        $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 96) + '</div>');
-        if (maintitle.length > 40) {
-          $('#logoTitle').css('font-size', 'large');
+
+        var century = <xsl:value-of select="$century" />;
+        if(century > 19){
+          $('#header').css('background-image', 'url(' + baseURL + 'jp_templates/template_DynamicLayoutTemplates/IMAGES/logo19.png)');
         }
       });
     </script>

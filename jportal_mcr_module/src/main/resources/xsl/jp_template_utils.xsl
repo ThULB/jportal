@@ -38,4 +38,23 @@
       });
     </script>
   </xsl:template>
+
+  <xsl:template name="template_maintitle">
+    <xsl:param name="mcrObj"/>
+    <xsl:apply-templates select="$mcrObj/metadata/maintitles/maintitle[@inherited = 0]" mode="template_maintitle" />
+  </xsl:template>
+
+  <xsl:template match="maintitle[@inherited = 0]" mode="template_maintitle">
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(.)" />';
+
+        $('#logo').append('<div class="logoTitle">' + truncate(maintitle, 96) + '</div>');
+
+        if (maintitle.length > 40) {
+          $('#logoTitle').css('font-size', 'large');
+        }
+      });
+    </script>
+  </xsl:template>
 </xsl:stylesheet>

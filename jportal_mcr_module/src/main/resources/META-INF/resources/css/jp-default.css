@@ -540,11 +540,11 @@ p.jp-layout-metadata-list {
 }
 
 #logo .logoTitle {
-    color: white;
-    display: table-cell;
-    height: 115px;
-    padding: 0 30px;
-    vertical-align: middle;
+	font-size: large;
+	width: 50%;
+	text-align: center;
+	margin: 0 auto;
+	padding-top: 20px;
 }
 
 .logo.container {
