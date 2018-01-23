@@ -7,6 +7,7 @@ import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.MCRFrontendUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public abstract class Marc21Converter {
         Record marcRecord = marcFactory.newRecord();
         List<DataField> fields = marcRecord.getDataFields();
 
-        addCommon(journal, marcFactory, fields, null, "mainPublisher");
+        addShared(journal, marcFactory, fields, null, "mainPublisher");
 
         // 260 Publication, Distribution, etc. (Imprint)
         journal.getDate(JPJournal.DateType.published_from.name()).ifPresent(from -> {
@@ -49,7 +50,7 @@ public abstract class Marc21Converter {
         MarcFactory marcFactory = MarcFactory.newInstance();
         Record marcRecord = marcFactory.newRecord();
         List<DataField> fields = marcRecord.getDataFields();
-        addCommon(volume, marcFactory, fields, null, null);
+        addShared(volume, marcFactory, fields, null, null);
         // 260 Publication, Distribution, etc. (Imprint)
         addPublishedDate(volume, marcFactory, fields);
         return marcRecord;
@@ -60,7 +61,7 @@ public abstract class Marc21Converter {
         Record marcRecord = marcFactory.newRecord();
         List<DataField> fields = marcRecord.getDataFields();
 
-        addCommon(article, marcFactory, fields, "author", null);
+        addShared(article, marcFactory, fields, "author", null);
 
         // 260 Publication, Distribution, etc. (Imprint)
         addPublishedDate(article, marcFactory, fields);
@@ -78,7 +79,6 @@ public abstract class Marc21Converter {
         return marcRecord;
     }
 
-
     /**
      * Helper method to add a field with exactly one subfield.
      *
@@ -95,7 +95,20 @@ public abstract class Marc21Converter {
         return dataField;
     }
 
-    private static void addCommon(JPPeriodicalComponent component, MarcFactory marcFactory, List<DataField> fields, String mainPersonRole, String mainInstitutionRole) {
+    /**
+     * Shared fields for all components.
+     *
+     * @param component the compontent to parse
+     * @param marcFactory marc factory
+     * @param fields the fields to enhance
+     * @param mainPersonRole name of the person role
+     * @param mainInstitutionRole name of the institution role
+     */
+    private static void addShared(JPPeriodicalComponent component, MarcFactory marcFactory, List<DataField> fields, String mainPersonRole, String mainInstitutionRole) {
+
+        // 024 - ID
+        fields.add(getField(marcFactory, "024", '8', '0', 'a', component.getId().toString()));
+
         // 245 - Title Statement
         fields.add(getTitle(component.getTitle(), marcFactory));
 
@@ -113,6 +126,10 @@ public abstract class Marc21Converter {
         addIdentis("020", "isbn", fields, component, marcFactory);
         addIdentis("022", "issn", fields, component, marcFactory);
         addIdentis("026", "fingerprint", fields, component, marcFactory);
+
+        // 856 - URI
+        String uri = MCRFrontendUtil.getBaseURL() + "receive/" + component.getId();
+        fields.add(getField(marcFactory, "856", '4', '0', 'u', uri));
 
         // 100 - Main Entry-Personal Name
         MCRObjectID mainPersonID = null;
