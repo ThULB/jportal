@@ -1,5 +1,9 @@
 var jp = jp || {};
-
+/*
+*   GUI: Filter, A-Z list, facet list, result list
+*   A-Z list and facet list -> 1 solr request, then split result list and facet list
+*
+ */
 jp.az = {
 
     getSearchURL: function () {
@@ -15,7 +19,10 @@ jp.az = {
     },
 
     getTabs: function (/* function */ onSuccess) {
-        $.getJSON(jp.az.getSearchURL() + '&fl=maintitle' + jp.az.getFilterQuery(), function (searchResult) {
+        var url = jp.az.getSearchURL() + '&fl=maintitle&facet.field=journalType&facet=true' + jp.az.getFilterQuery();
+
+        /*
+        $.getJSON(url, function (searchResult) {
             var response = searchResult.response;
             var tabs = [];
             for (var i = 0; i < response.numFound; i++) {
@@ -30,6 +37,26 @@ jp.az = {
             }
             onSuccess(tabs);
         });
+        */
+
+        var searchResultsStream = Rx.Observable.fromPromise($.getJSON(url));
+        var journalsStream =  searchResultsStream.flatMap(searchResult => searchResult.response.docs);
+        var facetsStream =  searchResultsStream.flatMap(searchResult => searchResult.facet_counts.facet_fields.journalType);
+
+        facetsStream.bufferWithCount(2).subscribe(facet => console.log("Facet: " + facet));
+
+
+        journalsStream
+            .map(doc => doc.maintitle)
+            .filter(title => title != null && title.length > 0)
+            .map(title => title[0].toUpperCase())
+            .map(char => (char.charCodeAt(0) < 65 || char.charCodeAt(0) > 90) ? "#" : char)
+            .distinct()
+            .reduce(function (tabs, char) {
+                tabs.push(char);
+                return tabs;
+            }, [])
+            .subscribe(tabs => onSuccess(tabs));
     },
 
     getJournals: function (/* string */ tabLetter, /* function */ onSuccess) {
@@ -81,6 +108,7 @@ jp.az = {
     },
 
     printFilter: function () {
+        /*
         var filter = $("#atozFilter");
         var filterRemoveButton = $("#atozFilterRemoveButton");
         filter.on("keyup paste", function () {
@@ -96,6 +124,39 @@ jp.az = {
             jp.az.updateTabs();
             jp.az.updateJournals();
         });
+        */
+
+        var filterInput = document.querySelector('#atozFilter');
+        var filterRemoveButton = document.querySelector('#atozFilterRemoveButton');
+        var filterRemoveIcon = document.querySelector('#atozFilterRemoveIcon');
+        var filterInputStream = Rx.Observable.of(filterInput);
+        var filterInputEventStream = Rx.Observable.fromEvent(filterInput, 'input');
+        var filterRemoveButtonClickStream = Rx.Observable.fromEvent(filterRemoveButton, 'click');
+
+        function updateButtonCSS(inputVal){
+            if(inputVal === ""){
+                    filterRemoveButton.setAttribute("style", "cursor:default;");
+                    filterRemoveIcon.setAttribute("style", "visibility:hidden;");
+            }else {
+                filterRemoveButton.setAttribute("style", "cursor:pointer;");
+                filterRemoveIcon.setAttribute("style", "visibility:visible;");
+            }
+        }
+
+        filterInputEventStream.merge(filterRemoveButtonClickStream)
+            .combineLatest(filterInputStream, function(event, input){
+                if(event instanceof MouseEvent){
+                    input.value = '';
+                }
+
+                return input;
+            })
+            .map(input => input.value)
+            .subscribe(function(inputVal){
+                updateButtonCSS(inputVal);
+                jp.az.updateTabs();
+                jp.az.updateJournals();
+            });
     },
 
     setTab: function (/* string */ tab) {
@@ -196,6 +257,8 @@ jp.az = {
         }
     },
 
+    // - request A-Z list with facets
+    // - split for A-Z and facets list
     // - Observeable filter + facets
     // - solr facets stream
     // - label of facets

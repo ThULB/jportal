@@ -21,7 +21,9 @@
             </div>
           </div>
         </div>
-        <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1"/>
+        <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1">
+
+        </ul>
       </div>
       <div class="row container-fluid">
         <div id="atozFacets" class="col-sm-2"></div>
