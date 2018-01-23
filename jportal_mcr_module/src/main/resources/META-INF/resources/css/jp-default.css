@@ -504,6 +504,11 @@ p.jp-layout-metadata-list {
 	background-color: rgba(255,255,255,0.5);
 }
 
+#header {
+	background-position: left bottom;
+	background-repeat: no-repeat;
+}
+
 #logo {
 	background-position: left top;
 	background-repeat: no-repeat;

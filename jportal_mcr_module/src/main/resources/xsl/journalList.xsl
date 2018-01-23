@@ -14,9 +14,6 @@
     <div id="firstLetterTab" class="journalList" additionalQuery="{additionalQuery}">
       <div class="atoz col-md-12">
         <div class="form-group col-md-2 jp-layout-atozilter">
-          <!--<input id="atozFilter" class="form-control" type="text" placeholder="Filter"/>-->
-          <!--<span id="atozFilterRemove" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>-->
-
           <div class="input-group">
             <input id="atozFilter" class="form-control jp-input-with-groupaddon" type="text" placeholder="Filter"/>
             <div id="atozFilterRemoveButton" class="input-group-addon">
@@ -24,10 +21,6 @@
             </div>
           </div>
         </div>
-        <!--<div class="col-md-2 jp-layout-atozilter">-->
-        <!--<input id="atozFilter" class="form-control filter" type="text" placeholder="Filter"/>-->
-        <!--<span id="atozFilterRemove" class="glyphicon glyphicon-remove"></span>-->
-        <!--</div>-->
         <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1"/>
       </div>
       <div id="resultList" class="tab-panel"></div>

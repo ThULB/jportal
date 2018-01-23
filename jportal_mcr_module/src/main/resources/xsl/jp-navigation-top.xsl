@@ -10,7 +10,7 @@
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()"/>
     <nav id="jpNavTop" class="navbar navbar-default">
       <div class="container-fluid">
-        <div class="col-md-5 navbar-header">
+        <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-globalHeader">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -20,24 +20,7 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-globalHeader">
           <ul class="list-inline nav navbar-nav">
-            <xsl:if test="not($isGuest) and $objectEditing//li/a">
-              <li>
-                <!-- edit object -->
-                <div class="col-sm-4 col-xs-2">
-                  <div class="dropdown dropdown-menu-left pull-left jp-layout-object-editing-container">
-                    <button id="jp-edit-menu-button" class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown" />
-                    <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-left" role="menu">
-                      <xsl:copy-of select="$objectEditing/*" />
-                    </ul>
-                  </div>
-                </div>
-              </li>
-            </xsl:if>
-            <li>
-              <a href="http://www.thulb.uni-jena.de/" target="_blank">
-                ThULB
-              </a>
-            </li>
+            <xsl:call-template name="jp.navigation.top.language"/>
             <li>
               <a href="{$JP.Site.Parent.url}" target="_blank">
                 <xsl:value-of select="$JP.Site.Parent.label"/>
@@ -56,13 +39,6 @@
               </li>
             </xsl:if>
 
-            <xsl:if test="not($isGuest)">
-              <li class="userName jp-layout-mainHeader-SeperatorRight">
-                <a>
-                  <xsl:value-of select="layoutTools:getUserName()"/>
-                </a>
-              </li>
-            </xsl:if>
             <li>
               <xsl:variable name="imprintHref">
                 <xsl:choose>
@@ -85,37 +61,56 @@
                 </a>
               </li>
             </xsl:if>
-            <xsl:if test="acl:checkPermission('administrate-jportal')">
+
+            <xsl:choose>
+              <xsl:when test="$isGuest">
+                <li>
+                  <a id="jp.login.button" href="{concat($WebApplicationBaseURL, 'servlets/MCRLoginServlet?action=login')}">
+                    <xsl:value-of select="i18n:translate('jp.site.login')"/>
+                  </a>
+                </li>
+              </xsl:when>
+              <xsl:when test="not($isGuest)">
+                <li>
+                  <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
+                    <xsl:value-of select="layoutTools:getUserName()"/>
+                    <span class="caret"></span>
+                  </a>
+
+                  <ul id="userDropdownMenu" role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
+                    <xsl:if test="acl:checkPermission('administrate-jportal')">
+                      <li>
+                        <a href="{$WebApplicationBaseURL}jp-admin.xml">Administration</a>
+                      </li>
+                    </xsl:if>
+                    <li>
+                      <a href="{$WebApplicationBaseURL}jp-account.xml">
+                        <xsl:value-of select="i18n:translate('jp.site.account')"/>
+                      </a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                      <a id="jp.login.button" href="{concat($WebApplicationBaseURL, 'servlets/logout')}">
+                        <xsl:value-of select="i18n:translate('jp.site.logout')"/>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </xsl:when>
+            </xsl:choose>
+            <xsl:if test="not($isGuest) and $objectEditing//li/a">
               <li>
-                <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>
+                <!-- edit object -->
+                <div class="col-sm-4 col-xs-2">
+                  <div class="dropdown dropdown-menu-left pull-left jp-layout-object-editing-container">
+                    <button id="jp-edit-menu-button" class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown"/>
+                    <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
+                      <xsl:copy-of select="$objectEditing/*"/>
+                    </ul>
+                  </div>
+                </div>
               </li>
             </xsl:if>
-            <xsl:if test="not($isGuest)">
-              <li>
-                <a href="{$WebApplicationBaseURL}jp-account.xml">
-                  <xsl:value-of select="i18n:translate('jp.site.account')"/>
-                </a>
-              </li>
-            </xsl:if>
-            <li>
-              <a id="jp.login.button">
-                <xsl:attribute name="href">
-                  <xsl:if test="$isGuest">
-                    <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRLoginServlet?action=login')"/>
-                  </xsl:if>
-                  <xsl:if test="not($isGuest)">
-                    <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/logout')"/>
-                  </xsl:if>
-                </xsl:attribute>
-                <xsl:if test="$isGuest">
-                  <xsl:value-of select="i18n:translate('jp.site.login')"/>
-                </xsl:if>
-                <xsl:if test="not($isGuest)">
-                  <xsl:value-of select="i18n:translate('jp.site.logout')"/>
-                </xsl:if>
-              </a>
-            </li>
-            <xsl:call-template name="jp.navigation.top.language"/>
           </ul>
         </div>
       </div>

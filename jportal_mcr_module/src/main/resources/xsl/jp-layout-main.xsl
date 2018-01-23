@@ -106,7 +106,7 @@
         <xsl:if test="$template != ''">
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
             <style type="text/css">
-              #logo {
+              #header {
               background-image: url(<xsl:value-of select="concat($templateWebURL, 'IMAGES/logo.png')"/>);
               }
             </style>
@@ -149,7 +149,6 @@
 
             <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage"/>
             <div id="logo"></div>
-
             <!-- searchbar -->
             <xsl:call-template name="jp.layout.searchbar"/>
           </div>
