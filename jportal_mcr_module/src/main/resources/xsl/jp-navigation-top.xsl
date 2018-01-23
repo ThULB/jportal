@@ -20,14 +20,14 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse-globalHeader">
           <ul class="list-inline nav navbar-nav">
-            <li>
-              <a href="{$JP.Site.Parent.url}" target="_blank">
-                <xsl:value-of select="$JP.Site.Parent.label"/>
-              </a>
-            </li>
             <li class="jp-layout-mainHeader-LiPaPushleft">
               <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
                 <xsl:value-of select="$JP.Site.label"/>
+              </a>
+            </li>
+            <li>
+              <a href="{$JP.Site.Parent.url}" target="_blank">
+                <xsl:value-of select="$JP.Site.Parent.label"/>
               </a>
             </li>
             <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'gast'">
