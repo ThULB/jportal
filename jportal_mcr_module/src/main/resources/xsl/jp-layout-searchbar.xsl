@@ -82,7 +82,8 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <div class="inputFields col-sm-7 {$mobileCol}">
+            <div class="inputFields col-sm-8 {$mobileCol}">
+              <div class="opacity form-control"></div>
               <div class="input-group">
 		            
                 <div class="input-group-btn">
@@ -148,8 +149,8 @@
                   <xsl:value-of select="decoder:decode($encodedQry, 'UTF-8')" />
                 </xsl:variable>
 
-                <input class="form-control jp-input-with-groupaddon" type="text" id="inputField" name="qry" value="{$qry}" />
-                  <span id="searchLoupe" class="input-group-addon">
+                <input class="form-control" type="text" id="inputField" name="qry" value="{$qry}" />
+                  <span class="input-group-addon">
                     <span class="glyphicon glyphicon-search glyphSearchBar"
                       onclick="$('#searchForm').submit()">
                       <xsl:attribute name="title">
@@ -168,6 +169,17 @@
                   <input type="hidden" name="sort" value="{$sort}" />
                 </xsl:if>
             </div>
+            <!-- edit object -->
+            <xsl:if test="$objectEditing//li/a">
+              <div class="col-sm-4 col-xs-2">
+                <div class="dropdown dropdown-menu-right pull-right jp-layout-object-editing-container">
+                  <button class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown" />
+                  <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
+                    <xsl:copy-of select="$objectEditing/*" />
+                  </ul>
+                </div>
+              </div>
+             </xsl:if>
           </div>
         </form>
       </xsl:if>
