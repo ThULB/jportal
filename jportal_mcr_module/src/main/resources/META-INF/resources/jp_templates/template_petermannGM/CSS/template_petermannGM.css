@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+
+#logoDate{
+	position: relative;
+	left: 215px;
+    top: 3px;
+    font-size: medium;
+    width: 809px;
+}
+
+#logoTitle{
+	position: relative;
+	left: 215px;
+    top: 11px;
+    font-size: large;
+    width: 450px; 
+}
+
+@media (min-width: 501px) and (max-width: 767px){
+	#logo #logoTitle {
+    	word-break: break-all; 
+		width: 55%;
+	}
+}
+
+@media (max-width: 500px) {
+	#logo #logoTitle {
+    	word-break: break-all; 
+		width: 99%;
+		padding-right: 10px;
+    	left: 10px;
+	}
+}
