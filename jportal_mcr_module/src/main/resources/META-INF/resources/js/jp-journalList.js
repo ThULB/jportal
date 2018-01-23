@@ -39,6 +39,7 @@ jp.az = {
         });
         */
 
+
         var searchResultsStream = Rx.Observable.fromPromise($.getJSON(url));
         var journalsStream =  searchResultsStream.flatMap(searchResult => searchResult.response.docs);
         var facetsStream =  searchResultsStream.flatMap(searchResult => searchResult.facet_counts.facet_fields.journalType);
@@ -292,6 +293,8 @@ jp.az = {
                 .flatMap(requestURL => Rx.Observable.fromPromise($.getJSON(requestURL)));
         }
 
+        var lookupTableStream = Rx.Observable.fromPromise($.get(jp.baseURL + 'rsc/facets/lookupTable'));
+
         function createFacetObj(journalType) {
             var categID = journalType[0];
             var url = jp.baseURL + 'rsc/facets/label/' + categID;
@@ -302,13 +305,20 @@ jp.az = {
                         "categID": journalType[0],
                         "count": journalType[1]
                     })
-                )
+                ).combineLatest(lookupTableStream, function(journalType, lookup){
+                    var rootID = journalType.categID.split(':')[0];
+                    var parent = lookup[rootID];
+                    console.log('Parent: ' + journalType.categID + ' # ' + parent);
+                    journalType.parent = parent;
+                    return journalType;
+                })
         }
 
         function renderButton(journalType) {
             var button = document.createElement('button');
             button.className = 'clickButton';
             button.dataset.categID = journalType.categID;
+            button.dataset.parent = journalType.parent;
             button.className = "facetButton";
             button.textContent = journalType.label + " (" + journalType.count + ")";
             return button;
@@ -320,20 +330,20 @@ jp.az = {
             listContainer.appendChild(li);
         }
 
-        function createButtonStream(facetsResponseStream) {
+        function createFacetObjStream(facetsResponseStream) {
             return facetsResponseStream
                 .flatMap(response => Rx.Observable.from(response.facet_counts.facet_fields.journalType))
                 .bufferWithCount(2)
                 .filter(journalType => journalType[1] > 0)
-                .flatMap(journalType => createFacetObj(journalType))
-                .map(facet => renderButton(facet));
+                .flatMap(journalType => createFacetObj(journalType));
         }
 
         function createClickStream(containerStream, facetsParam) {
             var facetsRequestStream = createFacetsRequestStream(facetsParam);
             var facetsResponseStream = createFacetsResponseStream(facetsRequestStream);
-            var buttonStream = createButtonStream(facetsResponseStream);
-            return buttonStream
+            var facetObjStream = createFacetObjStream(facetsResponseStream);
+            return facetObjStream
+                .map(facet => renderButton(facet))
                 .flatMap(button => Rx.Observable.fromEvent(button, 'click')
                     .combineLatest(containerStream, function (click, container) {
                         container.innerHTML = "";
@@ -348,10 +358,12 @@ jp.az = {
         var containerStream = Rx.Observable.of(listContainer);
 
         createClickStream(containerStream).subscribe(function (button) {
+            //render selected "root" category first
             renderListElement(button, listContainer);
         })
     },
 
+    //http://stackoverflow.com/a/22367819/3123195
     treeify: function (list, idAttr, parentAttr, childrenAttr) {
         if (!idAttr) idAttr = 'id';
         if (!parentAttr) parentAttr = 'parent';
