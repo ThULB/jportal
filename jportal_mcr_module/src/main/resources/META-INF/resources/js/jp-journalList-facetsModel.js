@@ -1,10 +1,22 @@
 /**
  * Created by chi on 09.10.17.
  */
+var labelsMap = null
+function getLabels(){
+  if(labelsMap == null){
+    var labelsUrl = baseURL + 'rsc/facets/labelsMap';
+    labelsMap = Rx.Observable.fromPromise($.get(labelsUrl))
+        .publishLast();
+
+    labelsMap.connect();
+  }
+
+  return labelsMap;
+}
 function getFacetLabel(facetObj) {
-    var labelsUrl = baseURL + 'rsc/facets/label/' + facetObj.categID;
-    return Rx.Observable.fromPromise($.get(labelsUrl))
-        .map(label => Object.assign({}, facetObj, {label: label}));
+    return getLabels()
+        .map(labels => labels[facetObj.categID])
+        .map(label => Object.assign({}, facetObj, {label: label.label}));
 }
 
 var lookUpTable = null;
