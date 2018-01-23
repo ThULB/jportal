@@ -16,7 +16,7 @@
         <xsl:variable name="facet" select="@name"/>
         <lst name="{@name}">
           <xsl:for-each select="int">
-            <xsl:if test="not(jpxml:isFacetSelected($RequestURL, $facet, @name)) and $numFound != text()">
+            <xsl:if test="not(jpxml:isFacetSelected($RequestURL, $facet, @name)) and ($numFound != text() or $facet = 'journalType')">
               <int name="{@name}">
                 <xsl:value-of select="text()"/>
               </int>
@@ -482,7 +482,7 @@
           <xsl:value-of select="jpxml:removeFacet($RequestURL, $facet, $value)"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat($RequestURL, '&amp;fq=', $facet, ':', $value)"/>
+          <xsl:value-of select="concat($RequestURL, '&amp;fq=', $facet, ':&quot;', $value, '&quot;')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -494,6 +494,9 @@
     <xsl:variable name="text">
       <xsl:variable name="facetSettings" select="$settings/facet[@name=$facet]"/>
       <xsl:choose>
+        <xsl:when test="$facet = 'journalType'">
+          <xsl:value-of select="jpxml:getJournalTypeFacetLabel($value)"/>
+        </xsl:when>
         <xsl:when test="$facetSettings/@translate = 'true'">
           <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $facet, '.', $value))"/>
         </xsl:when>

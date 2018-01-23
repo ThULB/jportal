@@ -254,7 +254,7 @@ public class JPXMLFunctions {
      * @return if the facet with the specific value is selected
      */
     public static boolean isFacetSelected(String requestURL, String facet, String value) {
-        String query = facet + ":" + value;
+        String query = getFacetQuery(facet, value);
         try {
             return new MCRURL(requestURL).getParameterValues("fq").contains(query);
         } catch (Exception exc) {
@@ -263,14 +263,23 @@ public class JPXMLFunctions {
         }
     }
 
+    private static String getFacetQuery(String facet, String value) {
+        return facet + ":%22" + value + "%22";
+    }
+
     public static String removeFacet(String requestURL, String facet, String value) {
-        String query = facet + ":" + value;
+        String query = getFacetQuery(facet, value);
         try {
             return new MCRURL(requestURL).removeParameterValue("fq", query).toString();
         } catch (Exception exc) {
             LOGGER.error("Unable to parse request url " + requestURL, exc);
             return "";
         }
+    }
+
+    public static String getJournalTypeFacetLabel(String categoryId){
+        return ResolverUtil.getClassLabel(categoryId)
+                           .orElse(categoryId + " - no Label!");
     }
 
     /**
