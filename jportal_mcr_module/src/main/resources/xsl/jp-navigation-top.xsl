@@ -135,7 +135,7 @@
         </button>
         <ul id="languageList" role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
           <xsl:for-each select="$languages/lang">
-            <xsl:if test="$CurrentLang != text()">
+            <xsl:if test="$CurrentLang != text() and . != 'ru' and . != 'pl'">
               <li>
 
                 <a class="changeLang text-center">
