@@ -501,6 +501,7 @@ p.jp-layout-metadata-list {
 }
 
 #jp-edit-menu-button {
+	padding-top: 8px;
 	background-color: rgba(255,255,255,0.5);
 }
 

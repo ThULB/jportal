@@ -114,7 +114,7 @@
         <!-- edit object -->
         <div class="col-sm-4 col-xs-2">
           <div class="dropdown dropdown-menu-left pull-left jp-layout-object-editing-container">
-            <button id="jp-edit-menu-button" class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown"/>
+            <button id="jp-edit-menu-button" class="btn btn-default fa fa-bars dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button" data-toggle="dropdown"/>
             <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
               <xsl:copy-of select="$objectEditing/*"/>
             </ul>
