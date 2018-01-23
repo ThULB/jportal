@@ -41,9 +41,9 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}jp_templates/template_thLegislativExekutiv/JS/jquery.highlight.js" />
     <script type="text/javascript">
       $(document).ready(function() {
-        setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');
-        var name = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
-        setMaintitle(truncate(name, 114));
+        <!--setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');-->
+        <!--var name = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';-->
+        <!--setMaintitle(truncate(name, 114));-->
         setSearchLink('<xsl:value-of select="$WebApplicationBaseURL" />');
         highlightLawsText('<xsl:value-of select="$hl" />');
       });
