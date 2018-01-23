@@ -134,7 +134,7 @@ jp.az = {
         var filterRemoveButtonClickStream = Rx.Observable.fromEvent(filterRemoveButton, 'click');
         var facetParamStream = $('#atozFilter').data('facetFilter')
 
-        if(facetParamStream === undefined ){
+        if (facetParamStream === undefined) {
             facetParamStream = Rx.Observable.empty();
         }
 
@@ -151,7 +151,7 @@ jp.az = {
             .subscribe(function (inputVal) {
                 var facetParamStream = $('#atozFilter').data('facetFilter')
 
-                if(facetParamStream === undefined ){
+                if (facetParamStream === undefined) {
                     facetParamStream = Rx.Observable.empty();
                 }
 
@@ -318,14 +318,18 @@ jp.az = {
     ,
 
     createFacetListEntry: function (journalType) {
-        var button = document.createElement('button');
-        button.dataset.categID = journalType.categID;
-        button.dataset.parent = journalType.parent;
-        button.className = "facetButton";
-        button.textContent = journalType.label + " (" + journalType.count + ")";
+        // var button = document.createElement('button');
+        // button.dataset.categID = journalType.categID;
+        // button.dataset.parent = journalType.parent;
+        // button.className = "facetButton";
+        // button.textContent = journalType.label + " (" + journalType.count + ")";
         var li = document.createElement('li');
-        li.appendChild(button);
-        li.appendChild(button);
+        li.dataset.categID = journalType.categID;
+        li.dataset.parent = journalType.parent;
+        li.className = "facetButton";
+        li.textContent = journalType.label + " (" + journalType.count + ")";
+        // li.appendChild(button);
+        // li.appendChild(button);
         return li;
     }
     ,
@@ -363,12 +367,19 @@ jp.az = {
                 return f;
             }, document.createDocumentFragment())
             .flatMap(fragment => jp.az.renderFacetList(fragment, container))
-            .map(li => li.querySelector('.facetButton'))
             .flatMap(b => Rx.Observable.fromEvent(b, 'click'))
             .map(click => click.target.dataset.categID)
             .map(id => ' %2BjournalType:"' + id + '"%20');
     }
     ,
+
+    createFacetTree(fragment, facet){
+        if(fragment.dataset.lookup == undefined){
+            fragment.dataset.lookup = {};
+        }
+
+        return fragment;
+    },
 
     updateFacets: function (facetObjStream, alreadyUsedFacetFilterStream) {
         var facetsContainer = document.querySelector('#atozFacets');

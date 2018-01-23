@@ -113,3 +113,8 @@
 		top: -1.56em;
 	}
 }
+
+.facetButton:hover {
+	cursor: pointer;
+	color: #008BD0;
+}
