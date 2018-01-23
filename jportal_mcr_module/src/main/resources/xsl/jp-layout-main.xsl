@@ -147,7 +147,7 @@
           <!-- searchbar -->
           <xsl:call-template name="jp.layout.searchbar"/>
 
-          <div id="main">
+          <div id="main" class="container-fluid">
             <xsl:apply-templates/>
             <!-- call dynamic template_*.xsl -->
             <xsl:if test="$template != '' and $journalID != ''">

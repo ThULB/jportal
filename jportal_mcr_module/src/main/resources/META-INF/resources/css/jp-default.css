@@ -500,15 +500,11 @@ p.jp-layout-metadata-list {
 	margin-right: 0px;
 }
 
-#jp-edit-menu-button {
-	background-color: rgba(255,255,255,0.5);
-}
-
 #logo {
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
-	height: 103px;
+	height: 115px;
 	background-position: center;
 }
 
@@ -518,18 +514,6 @@ p.jp-layout-metadata-list {
     height: 115px;
     padding: 0 30px;
     vertical-align: middle;
-}
-
-.logo.container {
-	padding-top: 12%;
-}
-
-.logo.container img {
-	float: none;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	width: 56%;
 }
 
 #searchBar {
@@ -553,24 +537,9 @@ p.jp-layout-metadata-list {
 	background-color: #fff;
 }
 
-.jp-input-with-groupaddon {
+#searchBar #inputField {
 	border-right: none;
-	box-shadow:none;
-}
-
-.jp-input-with-groupaddon:focus {
-	box-shadow: inset 1px 0 1px rgba(0,0,0,.075), -2px 0 2px  rgba(102,175,233,.75);
-}
-
-.jp-input-with-groupaddon:focus + .input-group-addon {
-	border-color: #66afe9;
-	box-shadow: inset -1px 0 1px rgba(0,0,0,.075), 2px 0 2px  rgba(102,175,233,.75);
-}
-
-.jp-input-with-groupaddon + .input-group-addon {
-	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-	-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-	-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	box-shadow: none;
 }
 
 .glyphSearchBar{
@@ -579,8 +548,6 @@ p.jp-layout-metadata-list {
 
 #main {
 	overflow: hidden;
-    padding: 1px 29px 49px;
-	background-color: white;
 }
 
 @media(min-width: 768px) {
@@ -871,6 +838,7 @@ ul.ckeditorButtons li:last-child {
 }
 
 .message-wrapper {
+	background-color: white;
 	padding: 9px;
 }
 
@@ -1095,12 +1063,7 @@ textarea {
 }
 
 /* Extra small devices Phones (<768px) */
-@media (max-width: 767px) {
-	.logo.container img{
-		width: 77%;
-	}
-
-
+@media (max-width: 767px) {	
 	#resultListHeader{
 		border-bottom: 1px solid #A8A9AA;
 		padding: 0 0 10px 0; 
@@ -1195,12 +1158,8 @@ textarea {
 		border-top: 1px solid #A8A9AA;
 	}
 	
-	.jp-navigation-topHeader-DropdownBorder, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
-		transition: background-color ease-in-out .15s,box-shadow ease-in-out .15s;
-	}
 	.jp-navigation-topHeader-DropdownBorder:hover, .jp-navigation-topHeader-DropdownBorder:focus, .jp-navigation-topHeader-DropdownBorder:active, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
-		background-color: rgba(255,255,255, .50) !important;
-		box-shadow: inset 0 0 8px rgba(102,175,233,.6);
+		background-color: #fff !important;
 	}
 		
 	.jp-navigation-topHeader-DropdownMenu{
@@ -1371,16 +1330,17 @@ textarea {
 	color: #615f5f;
 }
 
-#jpNavTop li a {
-	padding: 10px 11px;
-}
-
 #jpNavTop li a:hover {
 	color: black;
 }
 
 body {
 	background-color: white;
+}
+
+#main {
+	background-color: transparent;
+	padding: 0px;
 }
 
 #globalHeader {
@@ -1403,7 +1363,6 @@ body {
 	background-color: transparent;
 	border-color: transparent;
 	margin-bottom: 0px;
-	font-size: small;
 }
 
 #languageMenu .btn-default {
@@ -1422,15 +1381,15 @@ body {
 }
 
 #searchBar .input-group-addon {
-	background: rgba(255,255,255,0.5);
+	background-color: transparent;
 }
 
 #searchBar #inputField {
-	background: rgba(255,255,255,0.5);
+	background-color: transparent;
 }
 
 #searchBar #searchDropDownButton {
-	background: rgba(255,255,255,0.5);
+	background-color: transparent;
 }
 
 .opacity {
@@ -1465,8 +1424,13 @@ body {
 	padding-top: 84px;
 }
 
+.logo.container {
+	width: 704px;
+	padding-top: 120px;
+}
+
 .info.container {
-	width: 80%;
+	width: 770px;
 	font-size: 12pt;
 	text-align: center;
 	padding-top: 45px;
