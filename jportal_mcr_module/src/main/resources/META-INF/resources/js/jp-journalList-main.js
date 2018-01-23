@@ -66,17 +66,17 @@ function update(model) {
         model.selectedTab = "A";
     }
 
-    var justTitlesSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, true);
+    var journalTitlesSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, true);
     var selectedTabSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, false, model.selectedTab);
 
-    var justTitlesStream = Rx.Observable.fromPromise($.getJSON(justTitlesSearchUrl))
+    var journalTitlesStream = Rx.Observable.fromPromise($.getJSON(journalTitlesSearchUrl))
         .flatMap(searchResults => searchResultsToModel(searchResults));
 
     var journalsStream = Rx.Observable.fromPromise($.getJSON(selectedTabSearchUrl))
         .map(searchResults => journalsToModel(searchResults));
 
     return Rx.Observable.merge(
-        justTitlesStream,
+        journalTitlesStream,
         journalsStream
     ).reduce((model, changeFn) => changeFn(model), model);
 }
