@@ -82,8 +82,7 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <div class="inputFields col-sm-8 {$mobileCol}">
-              <div class="opacity form-control"></div>
+            <div class="inputFields col-sm-7 {$mobileCol}">
               <div class="input-group">
 		            
                 <div class="input-group-btn">
@@ -149,7 +148,7 @@
                   <xsl:value-of select="decoder:decode($encodedQry, 'UTF-8')" />
                 </xsl:variable>
 
-                <input class="form-control" type="text" id="inputField" name="qry" value="{$qry}" />
+                <input class="form-control jp-input-with-groupaddon" type="text" id="inputField" name="qry" value="{$qry}" />
                   <span id="searchLoupe" class="input-group-addon">
                     <span class="glyphicon glyphicon-search glyphSearchBar"
                       onclick="$('#searchForm').submit()">

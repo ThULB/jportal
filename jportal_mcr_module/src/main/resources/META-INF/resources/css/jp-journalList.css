@@ -5,6 +5,7 @@
 	list-style: none;
 	padding: 0px;
 	border-bottom: none;
+    margin-left: 5%;
 }
 
 .journalList .tab-panel {
@@ -36,19 +37,18 @@
 .journalList {
 	padding-top: 8px;
 	background-color: white;
-	padding: 1px 29px 49px;
 }
 
 .journalList .atoz {
 	border-bottom: 1px solid #CCCCCC;
-	font-size: 0.9rem;
+	font-size: 0.95rem;
 	font-weight: bold;
-	padding: 10px 0;
+	padding: 0px;
 }
 
 .journalList .tab-nav li {
 	display: inline;
-	padding: 0px 5px;
+	padding: 0px 2px 0px 3px;
 	margin: 2px;
 	cursor: default;
 }
@@ -90,28 +90,26 @@
 	font-style: italic;
 }
 
-/*.jp-layout-atozilter{*/
-	/*padding: 0;*/
-/*} */
+.jp-layout-atozilter{
+	padding: 0px;
+    margin-bottom: 10px;
+}
 
 #atozFilterRemoveIcon{
 	cursor: pointer;
 	visibility: hidden;
 }
-/*#atozFilterRemove {*/
-	/*left: 11em; */
-	/*top: 0.1em;*/
-	/*cursor: pointer; */
-	/*visibility: hidden;*/
-	/*color: #666;*/
-/*}*/
+
+#atozFilterRemoveButton {
+	background-color: transparent;
+}
 
 @media(max-width: 992px){
-	/*.jp-layout-atozilter{*/
-		/*max-height: 2em;*/
-	/*}*/
-	/*#atozFilterRemove {*/
-		/*left: 8.3em;*/
-		/*top: -1.56em;*/
-	/*}*/
+	.jp-layout-atozilter{
+		max-height: 2em;
+	}
+	#atozFilterRemove {
+		left: 8.3em;
+		top: -1.56em;
+	}
 }

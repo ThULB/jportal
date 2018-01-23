@@ -504,7 +504,7 @@ p.jp-layout-metadata-list {
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
-	height: 115px;
+	height: 103px;
 	background-position: center;
 }
 
@@ -537,9 +537,24 @@ p.jp-layout-metadata-list {
 	background-color: #fff;
 }
 
-#searchBar #inputField {
+.jp-input-with-groupaddon {
 	border-right: none;
-	box-shadow: none;
+	box-shadow:none;
+}
+
+.jp-input-with-groupaddon:focus {
+	box-shadow: inset 1px 0 1px rgba(0,0,0,.075), -2px 0 2px  rgba(102,175,233,.75);
+}
+
+.jp-input-with-groupaddon:focus + .input-group-addon {
+	border-color: #66afe9;
+	box-shadow: inset -1px 0 1px rgba(0,0,0,.075), 2px 0 2px  rgba(102,175,233,.75);
+}
+
+.jp-input-with-groupaddon + .input-group-addon {
+	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
 .glyphSearchBar{
@@ -548,6 +563,8 @@ p.jp-layout-metadata-list {
 
 #main {
 	overflow: hidden;
+    padding: 1px 29px 49px;
+	background-color: white;
 }
 
 @media(min-width: 768px) {
@@ -1158,8 +1175,12 @@ textarea {
 		border-top: 1px solid #A8A9AA;
 	}
 	
+	.jp-navigation-topHeader-DropdownBorder, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
+		transition: background-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	}
 	.jp-navigation-topHeader-DropdownBorder:hover, .jp-navigation-topHeader-DropdownBorder:focus, .jp-navigation-topHeader-DropdownBorder:active, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
-		background-color: #fff !important;
+		background-color: rgba(255,255,255, .50) !important;
+		box-shadow: inset 0 0 8px rgba(102,175,233,.6);
 	}
 		
 	.jp-navigation-topHeader-DropdownMenu{
@@ -1330,17 +1351,16 @@ textarea {
 	color: #615f5f;
 }
 
+#jpNavTop li a {
+	padding: 10px 11px;
+}
+
 #jpNavTop li a:hover {
 	color: black;
 }
 
 body {
 	background-color: white;
-}
-
-#main {
-	background-color: transparent;
-	padding: 0px;
 }
 
 #globalHeader {
@@ -1363,6 +1383,7 @@ body {
 	background-color: transparent;
 	border-color: transparent;
 	margin-bottom: 0px;
+	font-size: small;
 }
 
 #languageMenu .btn-default {
