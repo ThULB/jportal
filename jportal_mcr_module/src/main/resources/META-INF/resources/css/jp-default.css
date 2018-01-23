@@ -59,7 +59,6 @@ html, body {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 0.9rem;
 	font-weight: 400;
-	padding-bottom: 5px;
 	color: #333;
 	overflow-x: hidden;
 }
@@ -189,7 +188,11 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 .jp-layout-footer {
 	text-align: center;
 	margin-top: 15px;
+	background-color: #DBDBDB;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
+
 .jp-layout-footer .logo {
 	height: 30px;
     background-position: center center;
