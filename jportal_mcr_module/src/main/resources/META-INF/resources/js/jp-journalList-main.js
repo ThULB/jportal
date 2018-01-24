@@ -96,7 +96,7 @@ var facetsCheckboxChangeEvents = new Rx.Subject()
 var tabNavClickEvents = new Rx.Subject()
     .map(event => model => {
         model.selectedTab = event.target.textContent;
-        location.hash = model.selectedTab;
+        location.hash = fixHashTab(model.selectedTab);
 
         return model;
     });
@@ -145,12 +145,24 @@ function checkSelectedTab(model){
 
 function getLocationHash(model) {
   if (location.hash != undefined && location.hash != null && location.hash != "") {
-    model.selectedTab = location.hash.substring(1, 2).toUpperCase();
+    model.selectedTab = fixHashTab(location.hash.substring(1, 2).toUpperCase());
   } else {
     model.selectedTab = "A";
   }
 
   return model;
+}
+
+function fixHashTab(c){
+  if(c == '_'){
+    return '#';
+  }
+
+  if(c == '#'){
+    return '_';
+  }
+
+  return c
 }
 
 UIEvents
