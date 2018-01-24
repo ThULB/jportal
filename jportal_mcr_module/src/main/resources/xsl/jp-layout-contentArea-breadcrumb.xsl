@@ -15,21 +15,9 @@
 							<xsl:value-of select="$char" />
 						</xsl:if>
 					</xsl:variable>
-					<xsl:variable name="azList">
-						<xsl:variable name="listType"
-							select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
-						<xsl:choose>
-							<xsl:when test="$listType = 'calendar'">
-								<xsl:value-of select="'calendar'" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="'journal'" />
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
 					<li>
 						<a
-							href="{$WebApplicationBaseURL}content/main/{$azList}List.xml#{$hash}">
+							href="{$WebApplicationBaseURL}content/main/journalList.xml#{$hash}">
 							<xsl:value-of select="'A-Z'" />
 						</a>
 					</li>
