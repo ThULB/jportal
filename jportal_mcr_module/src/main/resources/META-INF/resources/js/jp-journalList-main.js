@@ -1,7 +1,7 @@
 var jp = jp || {};
 var baseURL = jp.baseURL;
 
-var UIModel = {
+let UIModel = {
     activeTabs: new Set(),
     facets: [],
     usedFacets: new Set(),
@@ -10,20 +10,19 @@ var UIModel = {
     journals: []
 };
 
-
 function clear(container) {
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
 }
 
-var filterInput = document.getElementById("atozFilter");
-var titleFilter = Rx.Observable.fromEvent(filterInput, "input")
+let filterInput = document.getElementById("atozFilter");
+let titleFilter = Rx.Observable.fromEvent(filterInput, "input")
     .debounceTime(500)
     .map(event => model => Object.assign({}, model, {titleFilter: event.target.value}));
 
-var clearFilterButton = document.getElementById("atozFilterRemoveButton");
-var clearFilter = Rx.Observable.fromEvent(clearFilterButton, "click")
+let clearFilterButton = document.getElementById("atozFilterRemoveButton");
+let clearFilter = Rx.Observable.fromEvent(clearFilterButton, "click")
     .map(event => model => Object.assign({}, model, {titleFilter: ""}));
 
 function searchResultsToModel(searchResult) {
@@ -47,21 +46,21 @@ function getSearchURL(/*List*/ facets, titleFilter, /*boolean*/ justTitles, tabL
     let qry = '';
     if (tabLetter === '#') {
         qry = ' -maintitle_sort:[a TO z] -maintitle_sort:z*';
-    } else if (tabLetter != undefined && tabLetter != "") {
+    } else if (tabLetter != null && tabLetter !== "") {
         qry = ' %2Bmaintitle_sort:' + tabLetter.toLowerCase() + '*';
     }
 
     let facetParams = "";
     facets.forEach(id => facetParams = facetParams + ' %2BjournalType:"' + id + '"%20');
-    titleFilter = titleFilter != "" ? "&fq=maintitle_sort:*" + titleFilter + "*" : "";
+    titleFilter = titleFilter !== "" ? "&fq=maintitle_sort:*" + titleFilter + "*" : "";
 
     return searchURL + qry + facetParams + titlesFlag + '&facet.field=journalType&facet=true' + titleFilter;
 }
 
 function getTabsChar(model) {
-  var journalTitlesSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, true);
+  let journalTitlesSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, true);
 
-  var journalTitlesStream = Rx.Observable.fromPromise($.getJSON(journalTitlesSearchUrl))
+  let journalTitlesStream = Rx.Observable.fromPromise($.getJSON(journalTitlesSearchUrl))
       .flatMap(searchResults => searchResultsToModel(searchResults));
 
   return journalTitlesStream.reduce((m, changeFn) => changeFn(m), model);
@@ -76,11 +75,11 @@ function getResultList(model) {
   return journalsStream.reduce((m, changeFn) => changeFn(m), model);
 }
 
-var facetsContainer = document.getElementById("document_type");
-var tabNavContainer = document.getElementById("tabNav");
-var resultListContainer = document.getElementById("objectList");
+let facetsContainer = document.getElementById("document_type");
+let tabNavContainer = document.getElementById("tabNav");
+let resultListContainer = document.getElementById("objectList");
 
-var facetsCheckboxChangeEvents = new Rx.Subject()
+let facetsCheckboxChangeEvents = new Rx.Subject()
     .map(event => model => {
         let row = event.currentTarget.closest(".jp-journalList-facet-row");
         if(row == null) {
@@ -101,27 +100,27 @@ var facetsCheckboxChangeEvents = new Rx.Subject()
         } else {
             model.usedFacets.delete(categID);
         }
+        updateLocationHash(model);
         return model;
     });
 
-var tabNavClickEvents = new Rx.Subject()
+let tabNavClickEvents = new Rx.Subject()
     .map(event => model => {
         model.selectedTab = event.target.textContent;
-        location.hash = fixHashTab(model.selectedTab);
-
+        updateLocationHash(model);
         return model;
     });
 
-var facetCheckboxEventHandler = input => Rx.Observable.fromEvent(input, "click")
+let facetCheckboxEventHandler = input => Rx.Observable.fromEvent(input, "click")
     .subscribe(event => facetsCheckboxChangeEvents.next(event));
 
 
-var tabNavEventHandler = tab => Rx.Observable.fromEvent(tab, "click")
+let tabNavEventHandler = tab => Rx.Observable.fromEvent(tab, "click")
     .subscribe(event => tabNavClickEvents.next(event));
 
-var clearFilterButtonIcon = document.getElementById("atozFilterRemoveIcon");
+let clearFilterButtonIcon = document.getElementById("atozFilterRemoveIcon");
 
-var UIEvents = Rx.Observable.merge(
+let UIEvents = Rx.Observable.merge(
     facetsCheckboxChangeEvents,
     tabNavClickEvents,
     titleFilter,
@@ -148,31 +147,41 @@ function checkSelectedTab(model){
         .min()
         .subscribe(min => model.selectedTab = min)
   }
-
-  location.hash = model.selectedTab;
-
+  updateLocationHash(model);
   return model;
 }
 
 function getLocationHash(model) {
-  if (location.hash != null && location.hash !== "") {
-    model.selectedTab = fixHashTab(location.hash.substring(1, 2).toUpperCase());
-  } else {
-    model.selectedTab = "A";
-  }
-  return model;
+    let tab = "A";
+    if (location.hash != null && location.hash !== "") {
+        tab = fixHashTab(location.hash.substring(1, 2).toUpperCase());
+        let facetsAsString = location.hash.substring(3);
+        facetsAsString.split("&").forEach(facet => {
+            if(facet !== "") {
+                model.usedFacets.add(facet);
+            }
+        });
+    }
+    model.selectedTab = tab;
+    return model;
 }
 
-function fixHashTab(c){
-  if(c === '_'){
-    return '#';
-  }
+function updateLocationHash(model) {
+    let tab = fixHashTab(model.selectedTab);
+    let facets = Array.from(model.usedFacets).join("&");
+    location.hash = tab + (facets !== "" ? ("/" + facets) : "");
+}
 
-  if(c === '#'){
-    return '_';
-  }
+function fixHashTab(c) {
+    if (c === '_') {
+        return '#';
+    }
 
-  return c
+    if (c === '#') {
+        return '_';
+    }
+
+    return c;
 }
 
 UIEvents

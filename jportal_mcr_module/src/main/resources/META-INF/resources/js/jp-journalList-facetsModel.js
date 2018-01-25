@@ -45,7 +45,7 @@ function getLookupTable(){
     return lookUpTable;
 }
 function getFacetParent(facetObj) {
-    var rootID = facetObj.categID.split(':')[0];
+    let rootID = facetObj.categID.split(':')[0];
     return getLookupTable()
         .map(lookup => lookup[rootID])
         .map(parent => Object.assign({}, facetObj, {parent: parent}));

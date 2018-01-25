@@ -3,19 +3,19 @@
 .journalList .tab-nav {
 	display: inline-block;
 	list-style: none;
-	padding: 0px;
+	padding: 0;
 	border-bottom: none;
     margin-left: 5%;
 }
 
 .journalList .tab-panel {
 	display: block;
-	padding: 10px 0px;
+	padding: 10px 0;
 	clear: both;
 }
 
 .journalList .tab-panel>ul {
-	padding: 0px;
+	padding: 0;
 }
 
 .journalList .tab-panel .publisher a {
@@ -43,13 +43,13 @@
 	border-bottom: 1px solid #CCCCCC;
 	font-size: 0.95rem;
 	font-weight: bold;
-	padding: 0px;
+	padding: 0;
 	margin-bottom: 0.5em;
 }
 
 .journalList .tab-nav li {
 	display: inline;
-	padding: 0px 2px 0px 3px;
+	padding: 0 2px 0 3px;
 	margin: 2px;
 	cursor: default;
 }
@@ -77,7 +77,7 @@
 	font-size: 0.8rem;
 	padding: 3px 19px 3px 3px;
 	width: 125px;
-	height: 24px; 
+	height: 24px;
 	margin-top: -2px;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .jp-layout-atozilter{
-	padding: 0px;
+	padding: 0;
     margin-bottom: 10px;
 }
 
@@ -115,21 +115,36 @@
 	}
 }
 
-.facetButton, .facetCount {
-	transition: 250ms background-color linear,250ms color linear,250ms opacity linear;
+#atozFacetsItems > .jp-journalList-facet-row {
+	margin: 0 0 8px;
+}
+
+.jp-journalList-facet-row {
+	margin: 3px 0 0 18px;
+}
+
+.jp-journalList-facet-entry {
+	display: flex;
+	justify-content: space-between;
+
+	transition: 100ms background-color linear, 50ms color linear, 100ms opacity linear;
 	border-radius: 8px;
-	padding-left: 5px;
-	padding-right: 5px;
-	box-decoration-break: clone;
+	padding: 1px 5px 2px;
+	margin: -1px -5px -2px;
 }
 
-.facetCheckBox:hover {
+.jp-journalList-facet-entry:hover {
 	cursor: pointer;
-}
-
-.facetCheckBox:hover + .facetButton, .facetCheckBox:hover + .facetButton + .facetCount{
 	background-color: #615f5f;
 	color: white;
+}
+
+.jp-journalList-facet-linkContainer {
+	display: flex;
+}
+
+.jp-journalList-facet-entry input {
+	margin-right: 5px;
 }
 
 #document_type ul {
@@ -142,18 +157,14 @@
 }
 
 #atozFacets {
-	padding-left: 0px;
+	padding-left: 0;
 }
 #atozFacetsItems {
-	padding: 0px;
+	padding: 0;
 }
 
 #atozFacetsItems > li {
 	margin-bottom: 10px;
-}
-
-#atozFacetsItems input[type='checkbox']{
-	margin-right: 5px;
 }
 
 #atozFacets h5 {
