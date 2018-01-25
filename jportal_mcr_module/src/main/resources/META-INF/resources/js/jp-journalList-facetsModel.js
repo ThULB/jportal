@@ -1,10 +1,10 @@
 /**
  * Created by chi on 09.10.17.
  */
-var labelsMap = null
+var labelsMap = null;
 function getLabels(){
   if(labelsMap == null){
-    var labelsUrl = baseURL + 'rsc/facets/labelsMap';
+      let labelsUrl = baseURL + 'rsc/facets/labelsMap';
     labelsMap = Rx.Observable.fromPromise($.get(labelsUrl))
         .publishLast();
 
@@ -17,7 +17,7 @@ function getLabels(){
 
 function checkFacetLabel(label, facetObj) {
   if(label === undefined){
-    var labelsUrl = baseURL + 'rsc/facets/label/' + facetObj.categID;
+    let labelsUrl = baseURL + 'rsc/facets/label/' + facetObj.categID;
     return Rx.Observable.fromPromise($.get(labelsUrl));
   }
 
@@ -35,7 +35,7 @@ function getFacetLabel(facetObj) {
 var lookUpTable = null;
 function getLookupTable(){
     if(lookUpTable == null){
-        var lookupTableUrl = baseURL + 'rsc/facets/lookupTable';
+        let lookupTableUrl = baseURL + 'rsc/facets/lookupTable';
         lookUpTable = Rx.Observable.fromPromise($.get(lookupTableUrl))
             .publishLast();
 

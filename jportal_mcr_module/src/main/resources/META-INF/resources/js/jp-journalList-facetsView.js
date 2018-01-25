@@ -2,34 +2,43 @@
  * Created by chi on 09.10.17.
  */
 function renderFacetListEntry(facetObj, /*function*/ usedFacets, /*function*/ eventHandler) {
-    var li = document.createElement('li');
-    li.dataset.categID = facetObj.categID;
-    li.dataset.parent = facetObj.parent;
-    // li.classList.add("list-group-item")
-    var label = document.createElement('span');
-    label.className = "facetButton";
-    label.textContent = facetObj.label;
-    var count = document.createElement('span');
-    count.classList.add("pull-right")
-    count.classList.add("facetCount")
-    count.textContent = facetObj.count;
-    var input = document.createElement('input');
-    input.type = "checkbox";
-    input.className = "facetCheckBox";
+    let row = document.createElement("div");
+    row.className = "jp-journalList-facet-row";
+    row.dataset.id = facetObj.categID;
+    row.dataset.parent = facetObj.parent;
 
+    let entry = document.createElement("div");
+    entry.className = "jp-journalList-facet-entry";
+
+    let linkContainer = document.createElement("div");
+    linkContainer.className = "jp-journalList-facet-linkContainer";
+
+    let input = document.createElement("input");
+    input.className = "jp-journalList-facet-checkbox";
+    input.type = "checkbox";
+
+    let label = document.createElement("div");
+    label.className = "jp-journalList-facet-label";
+    label.textContent = facetObj.label;
+
+    let count = document.createElement("div");
+    count.className = "jp-journalList-facet-count";
+    count.textContent = facetObj.count;
+
+    linkContainer.appendChild(input);
+    linkContainer.appendChild(label);
+    entry.appendChild(linkContainer);
+    entry.appendChild(count);
+    row.appendChild(entry);
 
     if (usedFacets.has(facetObj.categID)) {
         input.checked = true;
     }
 
-    li.appendChild(input);
-    li.appendChild(label);
-    li.appendChild(count);
-
-    if (eventHandler != null && eventHandler != undefined) {
-        eventHandler(input);
+    if (eventHandler != null) {
+        eventHandler(entry);
     }
-    return li;
+    return row;
 }
 
 function renderFacetList(model, container, facetCheckboxEventHandler) {
@@ -41,12 +50,11 @@ function renderFacetList(model, container, facetCheckboxEventHandler) {
         }, [])
         .map(treeifyFacets)
         .subscribe(f => {
-            var newList = document.createElement('ul');
+            let newList = document.createElement("div");
             newList.id = 'atozFacetsItems';
-            // newList.classList.add("list-group");
             newList.appendChild(f);
 
-            var currentList = container.querySelector('#' + newList.id);
+            let currentList = container.querySelector('#' + newList.id);
             if (currentList != null) {
                 currentList.replaceWith(newList);
             } else {
@@ -56,33 +64,19 @@ function renderFacetList(model, container, facetCheckboxEventHandler) {
 }
 
 function treeifyFacets(list) {
-    var fragment = document.createDocumentFragment();
-    var lookup = {};
+    let fragment = document.createDocumentFragment();
+    let lookup = {};
 
-    list.forEach(function (li) {
-        lookup[li.dataset.categID] = li;
+    list.forEach(function (row) {
+        lookup[row.dataset.id] = row;
     });
-    list.forEach(function (li) {
-        if (li.dataset.parent != "null") {
-            var parent = lookup[li.dataset.parent];
-            if (parent != null) {
-                var listOfChildNodes = parent.getElementsByTagName('ul')
-
-                var childNodes;
-                if (listOfChildNodes.length > 0) {
-                    childNodes = listOfChildNodes[0];
-                } else {
-                    childNodes = document.createElement('ul');
-                    parent.appendChild(childNodes);
-                }
-                var nodeWithParent = lookup[li.dataset.categID]
-                childNodes.appendChild(nodeWithParent);
-            }
+    list.forEach(function (row) {
+        let parent = lookup[row.dataset.parent];
+        if (row.dataset.parent !== "null" && parent !== null) {
+            parent.appendChild(lookup[row.dataset.id]);
         } else {
-            var nodeWithNoParent = lookup[li.dataset.categID];
-            fragment.appendChild(nodeWithNoParent);
+            fragment.appendChild(lookup[row.dataset.id]);
         }
     });
-
     return fragment;
 }

@@ -32,7 +32,7 @@ function renderJournalPublished(journal) {
         }
     }
 
-    published.textContent = publishedStr
+    published.textContent = publishedStr;
 
     return published;
 }
@@ -84,7 +84,7 @@ function renderResultList(model, container) {
         Rx.Observable.from(model.journals)
             .flatMap(renderResultListEntry)
             .reduce((ul, li) => {
-                ul.appendChild(li)
+                ul.appendChild(li);
                 return ul;
             }, document.createElement("ul"))
             .subscribe(ul => container.appendChild(ul));
