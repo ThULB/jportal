@@ -2,6 +2,7 @@ package fsu.jportal.resources;
 
 import com.google.gson.JsonObject;
 import fsu.jportal.util.ResolverUtil;
+import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -76,10 +77,8 @@ public class FacetsResource {
                                            .map(CategLabels::new)
                                            .collect(JsonObject::new, accu, (j1, j2) -> {});
             return Response.ok(jsonObject.toString()).build();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (JDOMException | IOException e) {
+            LogManager.getLogger().error("Unable to get facetes labels", e);
         }
 
         return Response.serverError().build();
@@ -117,10 +116,8 @@ public class FacetsResource {
                     .collect(JsonObject::new, accu, (j1, j2) -> {});
 
             return Response.ok(jsonObject.toString()).build();
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (JDOMException | IOException e) {
+            LogManager.getLogger().error("Unable to lookupTable", e);
         }
 
         return Response.serverError().build();

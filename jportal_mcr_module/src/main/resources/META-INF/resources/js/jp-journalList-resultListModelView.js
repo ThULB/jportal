@@ -2,7 +2,9 @@
  * Created by chi on 10.10.17.
  */
 function journalsToModel(searchResult) {
-    return model => Object.assign({}, model, {journals: searchResult.response.docs});
+    return model => Object.assign({}, model, {
+        journals: searchResult.response.docs
+    });
 }
 
 function renderJournalTitle(journal) {
@@ -47,7 +49,7 @@ function renderJournalPublisher(journal, solrKey, caption) {
         for (var i = 0; i < publisherList.length; i++) {
             var publisher = publisherList[i];
             var indexOfHash = publisher.indexOf('#');
-            if (indexOfHash == -1) {
+            if (indexOfHash === -1) {
                 console.log("Invalid publisher format for '" + publisher + "'.");
                 continue;
             }

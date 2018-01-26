@@ -5,7 +5,8 @@
 	list-style: none;
 	padding: 0;
 	border-bottom: none;
-    margin-left: 5%;
+    margin-left: 4%;
+	font-size: 1.1rem;
 }
 
 .journalList .tab-panel {
@@ -48,24 +49,23 @@
 }
 
 .journalList .tab-nav li {
+    color: #BBB;
 	display: inline;
-	padding: 0 2px 0 3px;
-	margin: 2px;
+	padding: 0 6px;
+	margin: 4px 1px;
 	cursor: default;
-}
-
-.journalList .tab-nav li.selected-tab {
-	border: 1px solid;
-}
-
-.journalList .tab-nav li {
-	border: 1px solid transparent;
-	color: #BBB;
+    border-radius: 15px;
 }
 
 .journalList .tab-nav li.active {
 	cursor: pointer;
 	color: #333;
+	transition: 100ms background-color linear, 50ms color linear, 100ms opacity linear;
+}
+
+.journalList .tab-nav li.active:hover, .journalList .tab-nav li.selected-tab {
+	background-color: #615f5f;
+	color: white;
 }
 
 .journalList .tab-panel li {
@@ -91,9 +91,13 @@
 	font-style: italic;
 }
 
-.jp-layout-atozilter{
+.jp-layout-atozilter {
 	padding: 0;
     margin-bottom: 10px;
+}
+
+.jp-layout-atozilter input {
+	height: 2rem;
 }
 
 #atozFilterRemoveIcon{
@@ -168,6 +172,8 @@
 }
 
 #atozFacets h5 {
-	padding-bottom: 1.2em;
+	padding-bottom: 1rem;
 	border-bottom: 1px solid #CCCCCC;
+	font-weight: bold;
+	font-size: 1.1rem;
 }

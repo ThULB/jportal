@@ -7,7 +7,8 @@ let UIModel = {
     usedFacets: new Set(),
     titleFilter: "",
     selectedTab: "",
-    journals: []
+    journals: [],
+    numFound: 0
 };
 
 function clear(container) {
@@ -29,7 +30,10 @@ function searchResultsToModel(searchResult) {
     return Rx.Observable.merge(
         getActiveTabs(searchResult),
         getFacetObjStream(searchResult),
-        getUsedFacetObjStream(searchResult)
+        getUsedFacetObjStream(searchResult),
+        Rx.Observable.of(searchResult)
+            .map(r => r.response.numFound)
+            .map(numFound => model => Object.assign({}, model, {numFound: numFound}))
     );
 }
 
@@ -75,6 +79,7 @@ function getResultList(model) {
   return journalsStream.reduce((m, changeFn) => changeFn(m), model);
 }
 
+let hitCountContainer = document.getElementById("document_hits");
 let facetsContainer = document.getElementById("document_type");
 let tabNavContainer = document.getElementById("tabNav");
 let resultListContainer = document.getElementById("objectList");
@@ -175,13 +180,15 @@ function updateLocationHash(model) {
 function fixHashTab(c) {
     if (c === '_') {
         return '#';
-    }
-
-    if (c === '#') {
+    } else if (c === '#') {
         return '_';
     }
-
     return c;
+}
+
+function renderHitCount(model, container) {
+    let text = model.numFound === 1 ? "Periodikum" : "Periodika";
+    container.innerHTML = model.numFound + " " + text;
 }
 
 UIEvents
@@ -191,6 +198,8 @@ UIEvents
     .map(checkSelectedTab)
     .flatMap(getResultList)
     .subscribe(model => {
+        renderHitCount(model, hitCountContainer);
+
         renderFacetList(model, facetsContainer, facetCheckboxEventHandler);
 
         renderTabNav(model, tabNavContainer, tabNavEventHandler);

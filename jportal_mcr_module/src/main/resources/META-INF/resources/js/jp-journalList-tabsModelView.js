@@ -22,7 +22,7 @@ function renderTabNav(model, container, /*function*/ eventHandler) {
         .map(i => String.fromCharCode(i))
         .startWith("#")
         .map(c => {
-            var li = document.createElement("li");
+            let li = document.createElement("li");
             li.textContent = c;
             if (model.activeTabs.has(c)) {
                 li.classList.add("active");
@@ -40,7 +40,7 @@ function renderTabNav(model, container, /*function*/ eventHandler) {
             return fragment;
         }, document.createDocumentFragment())
         .subscribe(fragment => {
-            clear(container)
+            clear(container);
             container.appendChild(fragment)
         });
 }

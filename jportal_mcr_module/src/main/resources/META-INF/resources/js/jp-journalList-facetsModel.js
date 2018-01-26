@@ -1,7 +1,7 @@
 /**
  * Created by chi on 09.10.17.
  */
-var labelsMap = null;
+let labelsMap = null;
 function getLabels(){
   if(labelsMap == null){
       let labelsUrl = baseURL + 'rsc/facets/labelsMap';
@@ -32,7 +32,7 @@ function getFacetLabel(facetObj) {
         .map(label => Object.assign({}, facetObj, {label: label}));
 }
 
-var lookUpTable = null;
+let lookUpTable = null;
 function getLookupTable(){
     if(lookUpTable == null){
         let lookupTableUrl = baseURL + 'rsc/facets/lookupTable';
@@ -73,6 +73,13 @@ function getFacetObjStream(searchResult) {
             categID: journalType[0],
             count: journalType[1]
         }))
+        .filter(facet => {
+            if(!jp.isGuest) {
+                return true;
+            }
+            // TODO: this should be configurable - we don't want to show online and pflicht facets for users
+            return !facet.categID.startsWith("jportal_class_00000210");
+        })
         .flatMap(getFacetLabel)
         .flatMap(getFacetParent)
         .reduce((array, facet) => {

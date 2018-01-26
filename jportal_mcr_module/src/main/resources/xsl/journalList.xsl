@@ -27,7 +27,7 @@
       </div>
         <div class="row container-fluid" id="resultList">
             <div id="atozFacets" class="col-sm-3">
-                <h5>Dokumenttyp</h5>
+                <h5 id="document_hits"></h5>
                 <div id="document_type"></div>
             </div>
             <div class="col-sm-9 jp-layout-hits">
