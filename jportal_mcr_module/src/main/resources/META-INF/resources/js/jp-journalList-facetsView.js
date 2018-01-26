@@ -73,7 +73,7 @@ function treeifyFacets(list) {
     });
     list.forEach(function (row) {
         let parent = lookup[row.dataset.parent];
-        if (row.dataset.parent !== "null" && parent !== null) {
+        if (parent != null && row.dataset.parent !== "null") {
             parent.appendChild(lookup[row.dataset.id]);
         } else {
             fragment.appendChild(lookup[row.dataset.id]);
