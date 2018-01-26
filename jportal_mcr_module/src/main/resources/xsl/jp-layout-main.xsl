@@ -143,13 +143,14 @@
       </head>
       <body>
         <div class="background">
+          <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage"/>
+
           <div id="header" class="container-fluid">
 
             <div id="globalHeader">
               <xsl:call-template name="jp.navigation.top"/>
             </div>
 
-            <xsl:apply-templates select="document('getData:config/jp-globalmessage.xml')/globalmessage"/>
             <div id="logo"></div>
             <!-- searchbar -->
             <xsl:call-template name="jp.layout.searchbar"/>
