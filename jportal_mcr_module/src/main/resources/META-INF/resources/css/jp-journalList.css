@@ -105,6 +105,10 @@
 	visibility: hidden;
 }
 
+#atozFilterRemoveButton:hover {
+	cursor: pointer;
+}
+
 #atozFilterRemoveButton {
 	background-color: transparent;
 }
