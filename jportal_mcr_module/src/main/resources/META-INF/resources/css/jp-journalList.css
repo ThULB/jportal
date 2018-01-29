@@ -51,10 +51,11 @@
 .journalList .tab-nav li {
     color: #BBB;
 	display: inline;
-	padding: 0 6px;
 	margin: 4px 1px;
 	cursor: default;
     border-radius: 15px;
+	width: 23px;
+	text-align: center;
 }
 
 .journalList .tab-nav li.active {
