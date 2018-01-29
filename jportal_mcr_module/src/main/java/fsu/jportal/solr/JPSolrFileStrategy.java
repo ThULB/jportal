@@ -19,11 +19,10 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.solr.index.strategy.MCRSolrFileStrategy;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * JP implementation of which files should be send to solr.
+ * JPortal implementation of which files should be send to solr.
  *
  * <ul>
  *     <li>no image/*</li>
@@ -52,11 +51,11 @@ public class JPSolrFileStrategy implements MCRSolrFileStrategy {
         if (IGNORE_PATTERN.matcher(mimeType).matches()) {
             return false;
         }
-        if (!XML_MIME_TYPES.contains(mimeType)) {
-            return false;
+        if (XML_MIME_TYPES.contains(mimeType)) {
+            Optional<String> rootName = getRootName(path);
+            return !IGNORE_XML_FILES.contains(rootName.orElse("").toLowerCase());
         }
-        Optional<String> rootName = getRootName(path);
-        return !IGNORE_XML_FILES.contains(rootName.orElse("").toLowerCase());
+        return true;
     }
 
     private static Optional<String> getRootName(Path path) {
@@ -78,8 +77,7 @@ public class JPSolrFileStrategy implements MCRSolrFileStrategy {
     private static class ProbeXMLHandler extends DefaultHandler {
 
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes)
-                throws SAXException {
+        public void startElement(String uri, String localName, String qName, Attributes attributes) {
             throw new ProbeXMLException(qName);
         }
 
