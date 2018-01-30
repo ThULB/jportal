@@ -508,7 +508,7 @@ public class DerivateTools {
 
         MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivID);
         try {
-            MCRPersistentIdentifier urn = dnburnGranular.fullRegister(derivate, path);
+            MCRPersistentIdentifier urn = dnburnGranular.register(derivate, path);
             return urn.asString();
         } catch (MCRAccessException | MCRActiveLinkException | MCRPersistentIdentifierException e) {
             LOGGER.error("Unable to add URN to file " + path);
