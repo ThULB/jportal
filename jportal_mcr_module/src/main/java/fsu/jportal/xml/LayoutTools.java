@@ -15,11 +15,15 @@ import org.jdom2.JDOMException;
 import org.jdom2.output.DOMOutputter;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.pi.MCRPIRegistrationService;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.w3c.dom.Node;
 
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,15 +92,31 @@ public abstract class LayoutTools {
         return JPComponentUtil.getListType(mcrID).orElse("");
     }
 
+    public static String getJournalPublished(String journalID) {
+        return JPComponentUtil
+                .getPeriodical(MCRObjectID.getInstance(journalID))
+                .map(c -> c.getDate("published")
+                           .map(MCRMetaISO8601Date::getISOString)
+                           .orElse(c.getDate("published_from")
+                                    .map(MCRMetaISO8601Date::getISOString)
+                                    .flatMap(pf -> c.getDate("published_until")
+                                                    .map(MCRMetaISO8601Date::getISOString)
+                                                    .map(pu -> pf + " - " + pu)
+
+                                    ).orElse("")
+                           )
+                ).orElse("");
+    }
+
     public static String getDerivateDisplay(String derivateID) {
         JPInfoProvider infoProvider = new JPInfoProvider(derivateID,
-            "/mycorederivate/derivate[not(@display) or @display!='false']");
+                                                         "/mycorederivate/derivate[not(@display) or @display!='false']");
         return infoProvider.get(new DerivateDisplay()).toString();
     }
 
     public static Node getDatesInfo(String journalID) {
         JPInfoProvider infoProvider = new JPInfoProvider(journalID, "/mycoreobject/metadata/dates",
-            "/mycoreobject/metadata/hidden_genhiddenfields1");
+                                                         "/mycoreobject/metadata/hidden_genhiddenfields1");
         return infoProvider.get(new DatesInfo());
     }
 
@@ -115,7 +135,7 @@ public abstract class LayoutTools {
         return legalEntity.map(le -> le.getId(type).orElse(null)).orElse(null);
     }
 
-    public static boolean hasURNAssigned(String derivID){
+    public static boolean hasURNAssigned(String derivID) {
         MCRPIRegistrationService<MCRPersistentIdentifier> urnServiceManager = URNTools.getURNServiceManager();
         MCRObjectID derivObjID = MCRObjectID.getInstance(derivID);
 

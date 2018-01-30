@@ -5,55 +5,19 @@
 
   <xsl:template name="template_date">
     <xsl:param name="mcrObj"/>
-    <xsl:apply-templates select="$mcrObj" mode="template_date" />
-  </xsl:template>
-
-  <xsl:template match="/mycoreobject" mode="template_date">
-    <!-- get template ID from java -->
-    <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
-
-    <xsl:variable name="published">
-      <xsl:value-of select="$journal//date[@type='published']" />
-    </xsl:variable>
-    <xsl:variable name="published_from">
-      <xsl:value-of select="$journal//date[@type='published_from']" />
-    </xsl:variable>
-    <xsl:variable name="published_until">
-      <xsl:value-of select="$journal//date[@type='published_until']" />
-    </xsl:variable>
-    <xsl:variable name="pubYear">
-      <xsl:choose>
-        <xsl:when test="$published != ''">
-          <xsl:value-of select="$published"/>
-        </xsl:when>
-        <xsl:when test="($published_from != '') and ($published_until != '')">
-          <xsl:value-of select="concat($published_from, ' - ', $published_until)"/>
-        </xsl:when>
-      </xsl:choose>
-    </xsl:variable>
-
     <script type="text/javascript">
       $(document).ready(function() {
-      $('#logo').prepend('<div class="logoDate"><xsl:value-of select="$pubYear"/></div>');
+      var pubYear = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getJournalPublished($journalID))" />'
+      $('#logo').prepend('<div class="logoDate">' + pubYear + '</div>');
       });
     </script>
   </xsl:template>
 
   <xsl:template name="template_maintitle">
     <xsl:param name="mcrObj"/>
-    <xsl:variable name="mainTitle">
-      <xsl:choose>
-        <xsl:when test="$mcrObj/metadata/maintitles/maintitle[@inherited = 0]">
-          <xsl:value-of select="$mcrObj/metadata/maintitles/maintitle[@inherited = 0]"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="layoutTools:getMaintitle($journalID)"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
     <script type="text/javascript">
       $(document).ready(function() {
-      var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript($mainTitle)" />';
+      var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
 
       $('#logo').append('<div class="logoTitle">' + truncate(maintitle, 96) + '</div>');
 
