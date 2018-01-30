@@ -41,19 +41,25 @@
 
   <xsl:template name="template_maintitle">
     <xsl:param name="mcrObj"/>
-    <xsl:apply-templates select="$mcrObj/metadata/maintitles/maintitle[@inherited = 0]" mode="template_maintitle" />
-  </xsl:template>
-
-  <xsl:template match="maintitle[@inherited = 0]" mode="template_maintitle">
+    <xsl:variable name="mainTitle">
+      <xsl:choose>
+        <xsl:when test="$mcrObj/metadata/maintitles/maintitle[@inherited = 0]">
+          <xsl:value-of select="$mcrObj/metadata/maintitles/maintitle[@inherited = 0]"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="layoutTools:getMaintitle($journalID)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <script type="text/javascript">
       $(document).ready(function() {
-        var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(.)" />';
+      var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript($mainTitle)" />';
 
-        $('#logo').append('<div class="logoTitle">' + truncate(maintitle, 96) + '</div>');
+      $('#logo').append('<div class="logoTitle">' + truncate(maintitle, 96) + '</div>');
 
-        if (maintitle.length > 40) {
-          $('#logoTitle').css('font-size', 'large');
-        }
+      if (maintitle.length > 40) {
+      $('#logoTitle').css('font-size', 'large');
+      }
       });
     </script>
   </xsl:template>
