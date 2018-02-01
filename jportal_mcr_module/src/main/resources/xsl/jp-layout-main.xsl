@@ -130,7 +130,7 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/jquery/2.1.4/dist/jquery.min.js"/>
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/js/bootstrap.min.js"/>
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap-dialog/1.34.6/dist/js/bootstrap-dialog.min.js"/>
-        <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/mustachejs/0.8.2/mustache.js"></script>
+        <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/mustachejs/0.8.2/mustache.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js"/>
 
         <!-- Piwik -->

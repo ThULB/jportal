@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -31,6 +29,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -87,12 +89,12 @@ public class JPXMLFunctions {
             if (date != null && !date.equals("")) {
                 String split[] = date.split("-");
                 switch (split.length) {
-                    case 1:
-                        return MCRTranslation.translate("metaData.dateYear");
-                    case 2:
-                        return MCRTranslation.translate("metaData.dateYearMonth");
-                    case 3:
-                        return MCRTranslation.translate("metaData.dateYearMonthDay");
+                case 1:
+                    return MCRTranslation.translate("metaData.dateYear");
+                case 2:
+                    return MCRTranslation.translate("metaData.dateYearMonth");
+                case 3:
+                    return MCRTranslation.translate("metaData.dateYearMonthDay");
                 }
             }
             return MCRTranslation.translate("metaData.date");
@@ -123,7 +125,7 @@ public class JPXMLFunctions {
 
     /**
      * Checks if the given path exists.
-     * 
+     *
      * @param webResource the resource to check
      * @return true if the resource is found otherwise false
      */
@@ -158,7 +160,7 @@ public class JPXMLFunctions {
     /**
      * Tries to format the date string to a valid solr date string. If the given
      * date could not be formatted an empty string is returned.
-     * 
+     *
      * @param date date to format
      * @return date in solr format (YYYY-MM-DDThh:mm:ssZ)
      */
@@ -216,7 +218,7 @@ public class JPXMLFunctions {
 
     /**
      * Checks if the given derivate contains a ENMAP mets file.
-     * 
+     *
      * @param derivateId the derivate to check for the mets.xml
      * @return true if its a ENMAP mets.xml
      */
@@ -224,7 +226,7 @@ public class JPXMLFunctions {
         try {
             org.jdom2.Document mets = MetsUtil.getMetsXMLasDocument(derivateId);
             return MetsUtil.isENMAP(mets);
-        } catch(FileNotFoundException fnfe) {
+        } catch (FileNotFoundException fnfe) {
             return false;
         } catch (Exception exc) {
             LOGGER.error("Unable to check if " + derivateId + " contains an ENMAP profile mets.xml.", exc);
@@ -253,7 +255,7 @@ public class JPXMLFunctions {
 
     /**
      * Checks if a fq request parameter for the specified facet exist.
-     * 
+     *
      * @param requestURL the request url
      * @param facet the facet to check
      * @param value the value of the facet
@@ -273,17 +275,12 @@ public class JPXMLFunctions {
         try {
             URL url = new URL(requestURL);
             String query = url.getQuery();
-            if(query.contains("&start=")){
+            if (query.contains("&start=")) {
                 String[] queryArray = query.split("&");
-                String queryRmStartParam = Arrays.asList(queryArray)
-                                       .stream()
-                                       .filter(q -> !q.startsWith("start="))
-                                       .collect(Collectors.joining("&"));
+                String queryRmStartParam = Arrays.stream(queryArray).filter(q -> !q.startsWith("start="))
+                                                 .collect(Collectors.joining("&"));
 
-                return new URL(url.getProtocol(),
-                               url.getHost(),
-                               url.getPort(),
-                               url.getPath() + "?" + queryRmStartParam)
+                return new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getPath() + "?" + queryRmStartParam)
                         .toString();
             }
             return requestURL;
@@ -306,14 +303,13 @@ public class JPXMLFunctions {
         }
     }
 
-    public static String getJournalTypeFacetLabel(String categoryId){
-        return ResolverUtil.getClassLabel(categoryId)
-                           .orElse(categoryId + " - no Label!");
+    public static String getJournalTypeFacetLabel(String categoryId) {
+        return ResolverUtil.getClassLabel(categoryId).orElse(categoryId + " - no Label!");
     }
 
     /**
      * Returns the label of the given classID.
-     * 
+     *
      * @param classID classification identifier
      * @return label of the classification or "undefined"
      */
@@ -352,9 +348,9 @@ public class JPXMLFunctions {
     /**
      * Returns the best published date of a dates container. The type of the date has
      * to be equals 'published' or 'published_from' and has the lowest inherited value.
-     * 
+     *
      * @param id mycore object identifier
-     * @return  a ISO 8601 conform String using the current set format.
+     * @return a ISO 8601 conform String using the current set format.
      */
     public static String getPublishedISODate(String id) {
         try {
@@ -366,8 +362,9 @@ public class JPXMLFunctions {
                 if (!periodical.isPresent()) {
                     continue;
                 }
-                MCRMetaISO8601Date published = periodical.get().getDate("published").orElse(
-                        periodical.get().getDate("published_from").orElse(null));
+                MCRMetaISO8601Date published = periodical.get().getDate("published")
+                                                         .orElse(periodical.get().getDate("published_from")
+                                                                           .orElse(null));
                 if (published == null) {
                     continue;
                 }
@@ -416,11 +413,11 @@ public class JPXMLFunctions {
 
     public static String getAccessRights(String id) {
         try {
-            if(MCRXMLFunctions.isWorldReadableComplete(id)) {
+            if (MCRXMLFunctions.isWorldReadableComplete(id)) {
                 return "info:eu-repo/semantics/openAccess";
             }
             return "info:eu-repo/semantics/restrictedAccess";
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             LOGGER.error("Unable to retrieve access rights of " + id, exc);
             return null;
         }
@@ -450,7 +447,7 @@ public class JPXMLFunctions {
      * <p>
      * Looks like "jportal_jpjournal_00000001/jportal_jpvolume_00000001/jportal_jpvolume_00000002/"
      * </p>
-     * 
+     *
      * @param id id of the object
      * @return path to the ancestor
      */
@@ -468,10 +465,10 @@ public class JPXMLFunctions {
             return null;
         }
     }
-    
+
     /**
      * Return the position in parent for the given id.
-     * 
+     *
      * @param id the object identifier
      * @return the order
      */
@@ -488,6 +485,48 @@ public class JPXMLFunctions {
             LOGGER.error("Unable to retrieve the order of " + id, exc);
             return 0;
         }
+    }
+
+    /**
+     * Returns the marc relator identifier for a given jportal role.
+     *
+     * @param role the jportal role, ('author' would return 'aut')
+     * @return the closet marc relator id
+     */
+    public static String getMarcRelatorID(String role) {
+        try {
+            return getMarcRelatorCategoryLabel(role).map(MCRLabel::getText).orElse("oth");
+        } catch (Throwable t) {
+            LOGGER.error("Unable to retrieve the marc relator id of " + role, t);
+            return "oth";
+        }
+    }
+
+    /**
+     * Returns the marc relator text for a given jportal role.
+     *
+     * @param role the jportal role, e.g. ('author' would return 'Author')
+     * @return the closet marc relator text
+     */
+    public static String getMarcRelatorText(String role) {
+        try {
+            return getMarcRelatorCategoryLabel(role).map(MCRLabel::getDescription).orElse("Other");
+        } catch (Throwable t) {
+            LOGGER.error("Unable to retrieve the marc relator text of " + role, t);
+            return "Other";
+        }
+    }
+
+    /**
+     * Heler method to parse the jportal_class_00000007 and returning the mrl label.
+     *
+     * @param role the jportal role
+     * @return the label
+     */
+    private static Optional<MCRLabel> getMarcRelatorCategoryLabel(String role) {
+        MCRCategoryID categoryID = MCRCategoryID.fromString("jportal_class_00000007:" + role);
+        MCRCategory category = MCRCategoryDAOFactory.getInstance().getCategory(categoryID, 0);
+        return category.getLabel("mrl");
     }
 
 }

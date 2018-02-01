@@ -4,8 +4,9 @@
                 xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
-                exclude-result-prefixes="xalan jpxml">
+                exclude-result-prefixes="xalan jpxml xlink">
 
   <xsl:param name="WebApplicationBaseURL" />
 
@@ -20,6 +21,7 @@
       <xsl:call-template name="type" />
       <xsl:call-template name="creator" />
       <xsl:call-template name="publisher"/>
+      <xsl:call-template name="contributor" />
       <xsl:call-template name="published"/>
       <xsl:call-template name="language" />
       <xsl:call-template name="coverage"/>
@@ -107,6 +109,18 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template name="contributor">
+    <xsl:for-each select="metadata/participants/participant">
+      <xsl:if test="not(@type = 'mainAuthor' or @type = 'author' or @type = 'mainPublisher' or @type = 'publisher')">
+        <xsl:variable name="name" select="jpxml:getTitle(@xlink:href)" />
+        <xsl:variable name="role" select="jpxml:getMarcRelatorText(@type)" />
+        <dc:contributor>
+          <xsl:value-of select="concat($name, ' (', $role, ')')" />
+        </dc:contributor>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template name="published">
     <xsl:variable name="published" select="jpxml:getPublishedISODate(@ID)"/>
     <xsl:if test="$published">
@@ -142,7 +156,7 @@
     <xsl:variable name="type" select="substring-before(substring-after(@ID,'_'),'_')"/>
     <xsl:if test="$type != 'jpjournal'">
       <dc:relation>
-        <xsl:value-of select="concat('IsPartOf ', metadata/maintitles/maintitle[last()])"/>
+        <xsl:value-of select="concat('IsPartOf ', concat($WebApplicationBaseURL, 'receive/', metadata/hidden_jpjournalsID/hidden_jpjournalID))"/>
       </dc:relation>
     </xsl:if>
   </xsl:template>

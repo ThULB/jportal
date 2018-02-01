@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRISO8601Date;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
@@ -138,9 +137,8 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      *
      * @param derivate the derivate to set
      * @param href     the image which should be linked
-     * @throws MCRActiveLinkException when the link couldn't be set
      */
-    public void setDerivateLink(MCRDerivate derivate, String href) throws MCRActiveLinkException, MCRAccessException {
+    public void setDerivateLink(MCRDerivate derivate, String href) throws MCRAccessException {
         String pathOfImage = derivate.getId().toString() + "/" + href;
         DerivateLinkUtil.setLink(object, pathOfImage);
     }
@@ -355,7 +353,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
-     * Returns the person or institution who created this component. This is usally the author or publisher.
+     * Returns the person or institution who created this component. This is usually the author or publisher.
      *
      * @return optional legal entity
      */

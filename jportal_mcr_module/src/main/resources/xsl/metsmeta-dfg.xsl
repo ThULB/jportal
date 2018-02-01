@@ -294,7 +294,7 @@
       <xsl:if test="@type">
         <mods:role>
           <mods:roleTerm type="code" authority="marcrelator">
-            <xsl:apply-templates select="@type" mode="marcrelator" />
+            <xsl:value-of select="jpxml:getMarcRelatorID(@type)" />
           </mods:roleTerm>
         </mods:role>
       </xsl:if>
@@ -366,68 +366,6 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="'journal'" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="participant/@type" mode="marcrelator">
-    <!-- http://www.loc.gov/marc/relators/relacode.html -->
-    <xsl:choose>
-      <xsl:when test=". = 'author'">
-        <xsl:value-of select="'aut'" />
-      </xsl:when>
-      <xsl:when test=". = 'printer'">
-        <xsl:value-of select="'prt'" />
-      </xsl:when>
-      <xsl:when test=". = 'other'">
-        <xsl:value-of select="'oth'" />
-      </xsl:when>
-      <xsl:when test=". = 'employer'">
-        <!-- Auftraggeber -> Applicant -->
-        <xsl:value-of select="'app'" />
-      </xsl:when>
-      <xsl:when test=". = 'person_charge'">
-        <!-- Bearbeiter -> Editor -->
-        <xsl:value-of select="'edt'" />
-      </xsl:when>
-      <xsl:when test=". = 'owner'">
-        <!-- Besitzer -> owner -->
-        <xsl:value-of select="'own'" />
-      </xsl:when>
-      <xsl:when test=". = 'previous_owner'">
-        <!-- Besitzer -> former owner -->
-        <xsl:value-of select="'fmo'" />
-      </xsl:when>
-      <xsl:when test=". = 'recipient'">
-        <!-- Empfänger -> recipient -->
-        <xsl:value-of select="'rcp'" />
-      </xsl:when>
-      <xsl:when test=". = 'artist'">
-        <!-- Künstler -> artist -->
-        <xsl:value-of select="'art'" />
-      </xsl:when>
-      <xsl:when test=". = 'writer'">
-        <!-- Schreiber -> inscriber -->
-        <xsl:value-of select="'ins'" />
-      </xsl:when>
-      <xsl:when test=". = 'translator'">
-        <!-- Übersetzer -> translator -->
-        <xsl:value-of select="'trl'" />
-      </xsl:when>
-      <xsl:when test=". = 'corporation'">
-        <!-- Institution -> owner -->
-        <xsl:value-of select="'own'" />
-      </xsl:when>
-      <xsl:when test=". = 'previous_organisation'">
-        <!-- Vorbesitzende Institution -> former owner -->
-        <xsl:value-of select="'fmo'" />
-      </xsl:when>
-      <xsl:when test=". = 'patron'">
-        <!-- Förderer -> parton -->
-        <xsl:value-of select="'pat'" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="'asn'" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
