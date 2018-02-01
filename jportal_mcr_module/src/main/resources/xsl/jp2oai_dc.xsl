@@ -19,6 +19,7 @@
       <xsl:call-template name="subject"/>
       <xsl:call-template name="description" />
       <xsl:call-template name="type" />
+      <xsl:call-template name="format" />
       <xsl:call-template name="creator" />
       <xsl:call-template name="publisher"/>
       <xsl:call-template name="contributor" />
@@ -88,6 +89,15 @@
         <xsl:when test="$type='jparticle'">article</xsl:when>
       </xsl:choose>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="format">
+    <xsl:variable name="type" select="substring-before(substring-after(@ID,'_'),'_')"/>
+    <xsl:if test="$type = 'jparticle'">
+      <xsl:element name="dc:format">
+        <xsl:value-of select="concat('SizeOrDuration ', metadata/sizes/size)" />
+      </xsl:element>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="creator">
