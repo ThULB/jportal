@@ -3,9 +3,10 @@
   Contains jportal specific layout functions.
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-                xmlns:math="xalan://java.lang.Math" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xalan math jpxml">
+                xmlns:math="xalan://java.lang.Math" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+                xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xalan math jpxml">
 
-  <xsl:param name="RequestURL"/>
+<xsl:param name="RequestURL"/>
   <xsl:param name="MCR.Piwik.baseurl"/>
   <xsl:param name="MCR.Piwik.enable"/>
   <xsl:param name="MCR.Piwik.id" select="'1'"/>
@@ -62,6 +63,32 @@
           <xsl:with-param name="node" select="$node"/>
           <xsl:with-param name="pos" select="$pos + 1"/>
         </xsl:call-template>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- *************************************************** -->
+  <!-- * IDENTIFIER -->
+  <!-- *************************************************** -->
+  <xsl:template mode="jp.metadata.identis.link" match="@type">
+    <xsl:choose>
+      <xsl:when test=". = 'ppn'">
+        <xsl:value-of select="concat('http://gso.gbv.de/DB=2.1/PPNSET?PPN=', ../text())" />
+      </xsl:when>
+      <xsl:when test=". = 'vd-17'">
+        <xsl:value-of select="concat('http://gso.gbv.de/DB=1.28/PPNSET?PPN=', ../text())" />
+      </xsl:when>
+      <xsl:when test=". = 'bvb'">
+        <xsl:value-of select="concat('http://gateway-bayern.de/', ../text())" />
+      </xsl:when>
+      <xsl:when test=". = 'gnd'">
+        <xsl:value-of select="concat('http://d-nb.info/gnd/', ../text())" />
+      </xsl:when>
+      <xsl:when test=". = 'nbn'">
+        <xsl:value-of select="concat('https://nbn-resolving.org/', ../text())" />
+      </xsl:when>
+      <xsl:when test=". = 'doi'">
+        <xsl:value-of select="../text()"/>
       </xsl:when>
     </xsl:choose>
   </xsl:template>

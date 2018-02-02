@@ -10,6 +10,8 @@
 
   <xsl:param name="WebApplicationBaseURL" />
 
+  <xsl:include href="coreFunctions.xsl"/>
+  <xsl:include href="jp-layout-functions.xsl"/>
   <xsl:include href="object2record.xsl" />
 
   <xsl:template match="mycoreobject" mode="metadata">
@@ -32,23 +34,27 @@
   </xsl:template>
 
   <xsl:template name="identifier">
-    <xsl:choose>
-      <xsl:when test="metadata/identis/identi">
-        <xsl:for-each select="metadata/identis/identi">
-          <dc:identifier>
+    <dc:identifier>
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'receive/', @ID)" />
+    </dc:identifier>
+    <xsl:for-each select="metadata/identis/identi">
+      <dc:identifier>
+        <xsl:variable name="identifierURL">
+          <xsl:apply-templates select="@type" mode="jp.metadata.identis.link"/>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$identifierURL != ''">
+            <xsl:value-of select="$identifierURL" />
+          </xsl:when>
+          <xsl:otherwise>
             <xsl:if test="@type">
-              <xsl:value-of select="concat(@type, ' : ')" />
+              <xsl:value-of select="concat(@type, ': ')" />
             </xsl:if>
             <xsl:value-of select="." />
-          </dc:identifier>
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:otherwise>
-        <dc:identifier>
-          <xsl:value-of select="concat($WebApplicationBaseURL, 'receive/', @ID)" />
-        </dc:identifier>
-      </xsl:otherwise>
-    </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+      </dc:identifier>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="title">

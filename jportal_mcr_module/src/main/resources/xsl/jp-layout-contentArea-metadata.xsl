@@ -143,25 +143,19 @@
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLangText']">
     <xsl:if test="@inherited='0'">
       <p class="jp-layout-metadata-list">
-			  <xsl:variable name="externUrl">
-	  			<xsl:choose>
-	  				<xsl:when test="@type = 'ppn'">http://gso.gbv.de/DB=2.1/PPNSET?PPN=</xsl:when>
-	  				<xsl:when test="@type = 'vd-17'">http://gso.gbv.de/DB=1.28/PPNSET?PPN=</xsl:when>
-	  				<xsl:when test="@type = 'bvb'">http://gateway-bayern.de/</xsl:when>
-            <xsl:when test="@type = 'gnd'">http://d-nb.info/gnd/</xsl:when>
-            <xsl:when test="@type = 'nbn'">https://nbn-resolving.org/</xsl:when>
-	  			</xsl:choose>
-	  		</xsl:variable>
-	  		<xsl:choose>
-	  			<xsl:when test="$externUrl != '' or @type = 'doi'">
-	  				<a href="{$externUrl}{text()}">
-          		<xsl:value-of select="text()" />
-        		</a>
-	  			</xsl:when>
-	  			<xsl:otherwise>
-		        <xsl:value-of select="text()" />
-	  			</xsl:otherwise>
-	  		</xsl:choose>
+        <xsl:variable name="identifierURL">
+          <xsl:apply-templates select="@type" mode="jp.metadata.identis.link" />
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$identifierURL != ''">
+            <a href="{$identifierURL}">
+              <xsl:value-of select="text()"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="text()"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </p>
     </xsl:if>
   </xsl:template>
