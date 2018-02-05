@@ -32,8 +32,8 @@
     <xsl:if test="$journalID != ''">
       <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
       <xsl:choose>
-        <xsl:when test="$journal/metadata/participants/participant[@type='partner']">
-          <xsl:call-template name="jp.footer.print.partner">
+        <xsl:when test="$journal/metadata/participants/participant[@type='owner' or @type='partner']">
+          <xsl:call-template name="jp.footer.print.ownerAndPartner">
             <xsl:with-param name="journal" select="$journal" />
           </xsl:call-template>
         </xsl:when>
@@ -44,9 +44,10 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="jp.footer.print.partner">
+  <xsl:template name="jp.footer.print.ownerAndPartner">
     <xsl:param name="journal" />
     <ul>
+      <xsl:apply-templates select="$journal/metadata/participants/participant[@type='owner']" mode="footer" />
       <xsl:apply-templates select="$journal/metadata/participants/participant[@type='partner']" mode="footer" />
       <li>
         <xsl:call-template name="jp.footer.print.small" />
