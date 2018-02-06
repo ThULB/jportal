@@ -5,8 +5,9 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mets="http://www.loc.gov/METS/"
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:iview2="iview2://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="xalan i18n acl mcrxml iview2">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+  exclude-result-prefixes="xalan i18n acl mcrxml jpxml">
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="ThumbnailBaseURL" select="concat($ServletsBaseURL,'MCRDFGThumbnail/')" />
   <xsl:param name="ImageBaseURL" select="concat($ServletsBaseURL,'MCRDFGServlet/')"/>
@@ -48,51 +49,9 @@
       <xsl:if test="./metadata/derivateLinks/derivateLink or ./structure/derobjects/derobject">
         <mets:fileSec>
           <mets:fileGrp USE="DEFAULT">
-            <xsl:variable name="derivateID">
-              <xsl:choose>
-                <xsl:when test="./metadata/derivateLinks/derivateLink">
-                  <xsl:value-of select="substring-before(./metadata/derivateLinks/derivateLink/@xlink:href, '/')" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="./structure/derobjects/derobject/@xlink:href" />
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <xsl:variable name="file">
-              <xsl:choose>
-                <xsl:when test="./metadata/derivateLinks/derivateLink">
-                  <xsl:value-of select="./metadata/derivateLinks/derivateLink/@xlink:href" />
-                </xsl:when>
-                <xsl:when test="./structure/derobjects/derobject and iview2:getSupportedMainFile($derivateID) != ''">
-                  <xsl:value-of select="concat($derivateID, '/', iview2:getSupportedMainFile($derivateID))" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="document(concat('mcrobject:',$derivateID))/mycorederivate/derivate/internals/internal/@maindoc" />
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <xsl:variable name="fileMimeType" select="mcrxml:getMimeType($file)" />
-            <xsl:variable name="mimeType">
-              <xsl:choose>
-                <!-- we use the tile combine servlet which gives us always jpegs -->
-                <xsl:when test="starts-with($fileMimeType, 'image/')">
-                  <xsl:value-of select="'image/jpeg'" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="$fileMimeType" />
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <xsl:variable name="url">
-              <xsl:choose>
-                <xsl:when test="starts-with($mimeType, 'image/')">
-                  <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRTileCombineServlet/MID/', $file)" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivateID, '/',$file)" />
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
+            <xsl:variable name="mainFile" select="jpxml:getMainFile(@ID)" />
+            <xsl:variable name="mimeType" select="jpxml:getMimeTypeForThumbnail($mainFile)" />
+            <xsl:variable name="url" select="jpxml:getThumbnail(@ID, 'MID')" />
             <mets:file ID="FILE_0000_DEFAULT" MIMETYPE="{$mimeType}">
               <xsl:element name="mets:FLocat">
                 <xsl:attribute name="LOCTYPE">URL</xsl:attribute>

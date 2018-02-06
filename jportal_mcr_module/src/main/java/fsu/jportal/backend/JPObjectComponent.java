@@ -128,11 +128,11 @@ public abstract class JPObjectComponent implements JPComponent {
      * 
      * @return the first derivate component
      */
-    public JPDerivateComponent getFirstDerivate() {
+    public Optional<JPDerivateComponent> getFirstDerivate() {
         if (derivates.size() > 0) {
-            return derivates.get(0);
+            return Optional.of(derivates.get(0));
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

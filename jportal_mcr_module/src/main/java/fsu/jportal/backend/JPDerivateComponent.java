@@ -123,6 +123,26 @@ public class JPDerivateComponent implements JPComponent {
     }
 
     /**
+     * Returns the main document. The main document is always returned without a leading slash.
+     *
+     * @return the derivate/internals/internal/@maindoc
+     */
+    public String getMainDoc() {
+        String mainDoc = this.derivate.getDerivate().getInternals().getMainDoc();
+        mainDoc = mainDoc.startsWith("/") ? mainDoc.substring(1) : mainDoc;
+        return mainDoc;
+    }
+
+    /**
+     * Returns the main document with the derivate id as link e.g. jportal_derivate_00000001/first.tif
+     *
+     * @return main document as link
+     */
+    public String getMainDocAsLink() {
+        return this.getId() + "/" + getMainDoc();
+    }
+
+    /**
      * Sets the visibality of this derivate.
      * 
      * @param visible true = derivate is visible otherwise its hidden

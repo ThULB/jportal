@@ -55,6 +55,12 @@
         </xsl:choose>
       </dc:identifier>
     </xsl:for-each>
+    <xsl:variable name="previewImage" select="jpxml:getThumbnail(@ID,'MID')" />
+    <xsl:if test="$previewImage != ''">
+      <dc:identifier>
+        <xsl:value-of select="$previewImage" />
+      </dc:identifier>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="title">

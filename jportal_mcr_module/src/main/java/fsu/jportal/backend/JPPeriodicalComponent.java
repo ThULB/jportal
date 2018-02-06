@@ -77,6 +77,19 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
         super(mcrObject);
     }
 
+    /**
+     * Returns the parent of this periodical component.
+     *
+     * @return optional parent
+     */
+    public Optional<JPPeriodicalComponent> getParent() {
+        MCRObjectID parent = getObject().getParent();
+        if(parent == null) {
+            return Optional.empty();
+        }
+        return JPComponentUtil.getPeriodical(parent);
+    }
+
     @Override
     public String getTitle() {
         Optional<MCRMetaLangText> maintitle = getMaintitle();

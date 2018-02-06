@@ -20,6 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPPeriodicalComponent;
@@ -40,6 +41,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.MCRURL;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
@@ -530,13 +532,81 @@ public class JPXMLFunctions {
         return category.getLabel("mrl");
     }
 
-    public static boolean isExcludedFacet(String classID){
-        String[] classIDs = MCRConfiguration.instance().getString("JP.Exclude.Facet", "")
-                                         .split(",");
-
-        return Stream.of(classIDs)
-              .filter(classID::contains)
-              .findAny()
-              .isPresent();
+    /**
+     * Checks if the given classID is excluded by the property JP.Exclude.Facet.
+     *
+     * @param classID the classification identifier to check
+     * @return true if its excluded, otherwise false
+     */
+    public static boolean isExcludedFacet(String classID) {
+        try {
+            String[] classIDs = MCRConfiguration.instance().getString("JP.Exclude.Facet", "").split(",");
+            return Stream.of(classIDs).anyMatch(classID::contains);
+        } catch (Throwable t) {
+            LOGGER.error("Unable to if facet is excluded " + classID, t);
+            return false;
+        }
     }
+
+    /**
+     * Returns the image/pdf link for a given periodical object. This is either a derivate link or the mainDoc
+     * of the derivate. The returned string is a combination between the derivate '/' maindoc e.g.
+     * jportal_derivate_00000001/myimage.tif
+     *
+     * @param id the mycore object id.
+     * @return the main derivate file
+     */
+    public static String getMainFile(String id) {
+        try {
+            Optional<JPPeriodicalComponent> periodicalOptional = JPComponentUtil.getPeriodical(MCRObjectID.getInstance(id));
+            if(!periodicalOptional.isPresent()) {
+                return "";
+            }
+            JPPeriodicalComponent periodical = periodicalOptional.get();
+            String link = periodical.getDerivateLink();
+            if(link == null) {
+                link = periodical.getFirstDerivate().map(JPDerivateComponent::getMainDocAsLink).orElse(null);
+            }
+            return link;
+        } catch (Throwable t) {
+            LOGGER.error("Unable to get main file of " + id, t);
+        }
+        return "";
+    }
+
+    /**
+     * Returns a link to the MCRTileCombineServlet for the given object in the given resolution.
+     *
+     * @param id the mycore object identifier
+     * @param resolution MIN | MID | MAX
+     * @return link to the MCRTileCombineServlet with the preview picture
+     */
+    public static String getThumbnail(String id, String resolution) {
+        try {
+            String mainFile = getMainFile(id);
+            String mimeType = getMimeTypeForThumbnail(mainFile);
+            String baseURL = MCRFrontendUtil.getBaseURL();
+
+            if(mimeType.startsWith("image/")) {
+                return baseURL + "servlets/MCRTileCombineServlet/" + resolution + "/" + mainFile;
+            }
+            return baseURL + "servlets/MCRFileNodeServlet/" + mainFile;
+        } catch (Throwable t) {
+            LOGGER.error("Unable to get thumbnail of " + id, t);
+        }
+        return "";
+    }
+
+    /**
+     * Returns the appropriate mime type for the given file. For image's this will always return "image/jpeg"
+     * because the MCRTileCombineServlet will serve them.
+     *
+     * @param file the file to check in the format of jportal_derivate_00000001/image.tif
+     * @return the mime type
+     */
+    public static String getMimeTypeForThumbnail(String file) {
+        String mimeType = MCRXMLFunctions.getMimeType(file);
+        return mimeType.startsWith("image/") ? "image/jpeg" : mimeType;
+    }
+
 }
