@@ -58,7 +58,7 @@
   </xsl:template>
 
   <!-- category -->
-  <xsl:template match="*[@class='MCRMetaClassification']/*" mode="jportal.category">
+  <xsl:template match="*[@class='MCRMetaClassification' and not(name(.) = 'journalTypes')]/*" mode="jportal.category">
     <field name="category">
       <xsl:value-of select="concat(@classid, ':', @categid)"/>
     </field>
@@ -101,6 +101,12 @@
   <xsl:template match="journalTypes/journalType" mode="jportal.metadata">
     <field name="journalType">
       <xsl:value-of select="concat(@classid, ':', @categid)"/>
+    </field>
+    <field name="category">
+      <xsl:value-of select="concat(@classid, ':', @categid)"/>
+    </field>
+    <field name="classification">
+      <xsl:value-of select="@classid"/>
     </field>
   </xsl:template>
 
