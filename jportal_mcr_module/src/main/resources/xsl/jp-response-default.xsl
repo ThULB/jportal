@@ -8,6 +8,7 @@
   <xsl:param name="returnID"/>
   <xsl:param name="returnName"/>
 
+
   <!-- facets without selected -->
   <xsl:variable name="filteredFacetsXML">
     <xsl:variable name="numFound" select="/response/result/@numFound"/>
@@ -16,10 +17,13 @@
         <xsl:variable name="facet" select="@name"/>
         <lst name="{@name}">
           <xsl:for-each select="int">
-            <xsl:if test="not(jpxml:isFacetSelected($RequestURL, $facet, @name)) and ($numFound != text() or $facet = 'journalType')">
-              <int name="{@name}">
-                <xsl:value-of select="text()"/>
-              </int>
+            <xsl:if test="not(jpxml:isFacetSelected($RequestURL, $facet, @name))
+                          and ($numFound != text() or $facet = 'journalType')">
+              <xsl:if test="not(mcrxml:isCurrentUserGuestUser() and jpxml:isExcludedFacet(@name))">
+                <int name="{@name}">
+                  <xsl:value-of select="text()"/>
+                </int>
+              </xsl:if>
             </xsl:if>
           </xsl:for-each>
         </lst>

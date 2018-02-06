@@ -44,6 +44,30 @@ function getLookupTable(){
 
     return lookUpTable;
 }
+
+let excludedFacets = null;
+function getExcludedFacets(){
+  if(excludedFacets == null){
+    let lookupTableUrl = baseURL + 'rsc/facets/excluded';
+    excludedFacets = Rx.Observable.fromPromise($.get(lookupTableUrl))
+        .publishLast();
+
+    excludedFacets.connect();
+  }
+
+  return excludedFacets.flatMap(array => Rx.Observable.from(array));
+}
+
+function isExcludedFacets(classID){
+  let isExcluded = false;
+
+  getExcludedFacets().first(id => classID.indexOf(id) !== -1, undefined, false)
+  .map(val => !!val)
+  .subscribe(val => isExcluded = val);
+
+  return isExcluded;
+}
+
 function getFacetParent(facetObj) {
     let rootID = facetObj.categID.split(':')[0];
     return getLookupTable()
@@ -77,8 +101,8 @@ function getFacetObjStream(searchResult) {
             if(!jp.isGuest) {
                 return true;
             }
-            // TODO: this should be configurable - we don't want to show online and pflicht facets for users
-            return !facet.categID.startsWith("jportal_class_00000210");
+
+            return !isExcludedFacets(facet.categID);
         })
         .flatMap(getFacetLabel)
         .flatMap(getFacetParent)

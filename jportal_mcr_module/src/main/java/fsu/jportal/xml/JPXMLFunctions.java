@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -529,4 +530,13 @@ public class JPXMLFunctions {
         return category.getLabel("mrl");
     }
 
+    public static boolean isExcludedFacet(String classID){
+        String[] classIDs = MCRConfiguration.instance().getString("JP.Exclude.Facet", "")
+                                         .split(",");
+
+        return Stream.of(classIDs)
+              .filter(classID::contains)
+              .findAny()
+              .isPresent();
+    }
 }

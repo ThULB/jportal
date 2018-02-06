@@ -1,5 +1,6 @@
 package fsu.jportal.resources;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fsu.jportal.util.ResolverUtil;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +13,7 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.config.MCRConfiguration;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -26,6 +28,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Huu Chi Vu on 15.06.17.
@@ -38,6 +41,22 @@ public class FacetsResource {
         return ResolverUtil.getClassLabel(categID)
                            .orElse("undefined:" + categID);
     }
+
+    @GET
+    @Path("excluded")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response excluded() {
+        String[] classIDs = MCRConfiguration.instance().getString("JP.Exclude.Facet", "")
+                                            .split(",");
+        JsonArray jsonArray = new JsonArray(classIDs.length);
+
+        for (int i = 0; i < classIDs.length; i++) {
+            jsonArray.add(classIDs[i]);
+        }
+
+        return Response.ok(jsonArray.toString()).build();
+    }
+
 
     @GET
     @Path("labelsMap")
