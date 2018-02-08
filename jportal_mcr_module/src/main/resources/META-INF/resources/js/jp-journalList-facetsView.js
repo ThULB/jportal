@@ -44,6 +44,7 @@ function renderFacetListEntry(facetObj, /*function*/ usedFacets, /*function*/ ev
 function renderFacetList(model, container, facetCheckboxEventHandler) {
     let sortedFacets = model.facets.sort((f1, f2) => f1.label.localeCompare(f2.label));
     Rx.Observable.from(sortedFacets)
+        .filter(f => !(jp.isGuest && f.excluded))
         .map(f => renderFacetListEntry(f, model.usedFacets, facetCheckboxEventHandler))
         .reduce((array, f) => {
             array.push(f);

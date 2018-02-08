@@ -58,14 +58,10 @@ function getExcludedFacets(){
   return excludedFacets.flatMap(array => Rx.Observable.from(array));
 }
 
-function isExcludedFacets(classID){
-  let isExcluded = false;
-
-  getExcludedFacets().first(id => classID.indexOf(id) !== -1, undefined, false)
-  .map(val => !!val)
-  .subscribe(val => isExcluded = val);
-
-  return isExcluded;
+function checkExcludedFacets(facetObj){
+  return getExcludedFacets().first(id => facetObj.categID.indexOf(id) !== -1, undefined, false)
+    .map(val => !!val)
+    .map(val => Object.assign({}, facetObj, {excluded: val}));
 }
 
 function getFacetParent(facetObj) {
@@ -97,13 +93,7 @@ function getFacetObjStream(searchResult) {
             categID: journalType[0],
             count: journalType[1]
         }))
-        .filter(facet => {
-            if(!jp.isGuest) {
-                return true;
-            }
-
-            return !isExcludedFacets(facet.categID);
-        })
+        .flatMap(checkExcludedFacets)
         .flatMap(getFacetLabel)
         .flatMap(getFacetParent)
         .reduce((array, facet) => {
