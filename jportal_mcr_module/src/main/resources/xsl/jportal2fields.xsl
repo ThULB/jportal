@@ -125,7 +125,6 @@
         <xsl:value-of select="$published"/>
       </field>
     </xsl:if>
-    <!--<xsl:apply-templates select="date[@inherited='0']" mode="jportal.metadata.date" />-->
     <xsl:variable name="inheritedVal" select="math:min(date/@inherited)"/>
     <xsl:apply-templates select="date[@inherited=$inheritedVal]" mode="jportal.metadata.dates"/>
     <xsl:if test="$inheritedVal = 0">

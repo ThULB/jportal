@@ -9,6 +9,7 @@
                 exclude-result-prefixes="xalan jpxml xlink">
 
   <xsl:param name="WebApplicationBaseURL" />
+  <xsl:param name="JP.Site.Owner.label" />
 
   <xsl:include href="coreFunctions.xsl"/>
   <xsl:include href="jp-layout-functions.xsl"/>
@@ -129,11 +130,18 @@
         <xsl:value-of select="$publisher"/>
       </dc:publisher>
     </xsl:if>
+    <xsl:variable name="repositoryOwner" select="$JP.Site.Owner.label" />
+    <xsl:if test="not($publisher) or $publisher != $repositoryOwner">-->
+      <dc:publisher>
+        <xsl:value-of select="$repositoryOwner"/>
+      </dc:publisher>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="contributor">
+    <xsl:variable name="objectType" select="substring-before(substring-after(@ID,'_'),'_')"/>
     <xsl:for-each select="metadata/participants/participant">
-      <xsl:if test="not(@type = 'mainAuthor' or @type = 'author' or @type = 'mainPublisher' or @type = 'publisher')">
+      <xsl:if test="($objectType = 'jparticle' and not(@type = 'mainAuthor' or @type = 'author')) or ($objectType = 'jpvolume' or $objectType = 'jpjournal' and not(@type = 'mainPublisher' or @type = 'publisher'))">
         <xsl:variable name="name" select="jpxml:getTitle(@xlink:href)" />
         <xsl:variable name="role" select="jpxml:getMarcRelatorText(@type)" />
         <dc:contributor>
