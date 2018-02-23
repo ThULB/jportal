@@ -181,24 +181,26 @@
           <xsd:attribute use="optional" type="xsd:boolean" name="notinherit" />
         </xsd:complexType>
       </xsd:element>
-      <xsd:element maxOccurs="1" minOccurs="0" name="dates">
+      <xsd:element name="dates" minOccurs="0" maxOccurs="1">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element maxOccurs="2" minOccurs="1" name="date">
+            <xsd:element name="date" minOccurs="0" maxOccurs="unbounded">
               <xsd:complexType>
                 <xsd:simpleContent>
                   <xsd:extension base="xsd:string">
-                    <xsd:attribute type="mcrdefaulttype" use="optional" name="type" />
-                    <xsd:attribute type="mcrdateformat" use="optional" name="format" />
-                    <xsd:attribute type="xsd:integer" use="optional" name="inherited" />
+                    <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
+                    <xsd:attribute name="date" use="optional" type="mcrdateformat" />
+                    <xsd:attribute name="from" use="optional" type="mcrdateformat" />
+                    <xsd:attribute name="until" use="optional" type="mcrdateformat" />
+                    <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
                   </xsd:extension>
                 </xsd:simpleContent>
               </xsd:complexType>
             </xsd:element>
           </xsd:sequence>
-          <xsd:attribute fixed="MCRMetaISO8601Date" use="required" type="xsd:string" name="class" />
-          <xsd:attribute use="optional" type="xsd:boolean" name="heritable" />
-          <xsd:attribute use="optional" type="xsd:boolean" name="notinherit" />
+          <xsd:attribute name="class" type="xsd:string" use="required" fixed="JPMetaDate" />
+          <xsd:attribute name="heritable" type="xsd:boolean" use="optional" />
+          <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
         </xsd:complexType>
       </xsd:element>
       <xsd:element maxOccurs="1" minOccurs="0" name="traditions">

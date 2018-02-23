@@ -1,18 +1,19 @@
 package fsu.jportal.frontend;
 
+import java.time.temporal.ChronoField;
+import java.util.Optional;
+
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.*;
-
-import java.time.Year;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import org.mycore.datamodel.metadata.JPMetaDate;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 
 public class DynamicLayoutTemplateDetector {
 
@@ -39,19 +40,14 @@ public class DynamicLayoutTemplateDetector {
     private static String getJournalTemplateID(String journalID) {
         JPJournal journal = new JPJournal(journalID);
         // collect all inherited == 0 dates
-        List<MCRMetaISO8601Date> dates = StreamSupport.stream(journal.getDates().spliterator(), false)
-            .filter(d -> d.getInherited() == 0).collect(Collectors.toList());
+        Optional<JPMetaDate> published = journal.getDate(JPPeriodicalComponent.DateType.published);
         // get the from date
-        Optional<MCRMetaISO8601Date> from = StreamSupport.stream(dates.spliterator(), false)
-            .filter(d -> d.getType().equals(JPPeriodicalComponent.DateType.published.name())
-                || d.getType().equals(JPPeriodicalComponent.DateType.published_from.name()))
-            .findFirst();
         // is there a from date?
-        if (!from.isPresent()) {
+        if (!published.isPresent()) {
             throw new MCRException(
-                "No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return empty string.");
+                "No /mycoreobject/metadata/dates/date[@type='published'] can be found, return empty string.");
         }
-        Integer yearOfJournal = Year.from(from.get().getMCRISO8601Date().getDt()).getValue();
+        Integer yearOfJournal = published.get().getDateOrFrom().get(ChronoField.YEAR);
         // get template
         MCRConfiguration mcrConfig = MCRConfiguration.instance();
         String template = "";

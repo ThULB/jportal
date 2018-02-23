@@ -22,7 +22,7 @@
   <xsl:key name="links" match="link[@inherited='0']" use="@type" />
 
   <xsl:variable name="simpleType"
-    select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress MCRMetaLink'" />
+    select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress MCRMetaLink JPMetaDate'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*">
   </xsl:template>
@@ -104,9 +104,10 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldLabel"
-    match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date' or ../@class='MCRMetaLink']">
-    <xsl:variable name="tagName" select="name()" />
-    <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
+                match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date' or
+                         ../@class='MCRMetaLink']">
+    <xsl:variable name="tagName" select="name()"/>
+    <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])"/>
   </xsl:template>
 
   <xsl:template mode="metadataFieldLabel" match="names[@class='MCRMetaInstitutionName']/name/*">
@@ -123,7 +124,11 @@
     <xsl:value-of select="i18n:translate($settings/i18n[@tag='address'])" />
   </xsl:template>
 
-  <xsl:template mode="metadataFieldLabel" match="*[@type and not(../@class='MCRMetaXML') and name()!='identifier']">
+  <xsl:template mode="metadataFieldLabel" match="dates[@class='JPMetaDate']/date">
+    <xsl:value-of select="i18n:translate(concat('metaData.date.', @type))" />
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldLabel" match="*[@type and not(../@class='MCRMetaXML' or ../@class='JPMetaDate') and name()!='identifier']">
     <xsl:variable name="currentTagName" select="name()" />
     <xsl:variable name="datamodel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
     <xsl:variable name="classID" select="$settings/datamodel[contains(@type, $datamodel)]/class[@tag=$currentTagName]" />
@@ -197,32 +202,34 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaISO8601Date']">
-    <xsl:variable name="format">
-      <xsl:choose>
-        <xsl:when test="string-length(normalize-space(.)) = 4">
-          <xsl:value-of select="i18n:translate('metaData.dateYear')" />
-        </xsl:when>
-        <xsl:when test="string-length(normalize-space(.)) = 7">
-          <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
-        </xsl:when>
-        <xsl:when test="string-length(normalize-space(.)) = 10">
-          <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
-        </xsl:when>
-        <xsl:when test="string-length(normalize-space(.)) = 5">
-          <xsl:value-of select="'y G'" />
-        </xsl:when>
-        <xsl:when test="string-length(normalize-space(.)) = 11">
-          <xsl:value-of select="'d. MMMM y G'" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="i18n:translate('metaData.dateTime')" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:call-template name="formatISODate">
+    <xsl:call-template name="jp.date.print">
       <xsl:with-param name="date" select="." />
-      <xsl:with-param name="format" select="$format" />
     </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldValue" match="*[../@class='JPMetaDate']">
+    <xsl:choose>
+      <xsl:when test="@date">
+        <xsl:call-template name="jp.date.print">
+          <xsl:with-param name="date" select="@date" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="jp.date.print">
+          <xsl:with-param name="date" select="@from" />
+        </xsl:call-template>
+        <xsl:value-of select="concat(' ', i18n:translate('metaData.date.until'))" />
+        <xsl:if test="@until">
+          <xsl:value-of select="' '" />
+          <xsl:call-template name="jp.date.print">
+            <xsl:with-param name="date" select="@until" />
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="text()">
+      <xsl:value-of select="concat(' (', text(), ')')" />
+    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink' and @xlink:title]">

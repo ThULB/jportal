@@ -33,12 +33,10 @@ public abstract class Marc21Converter {
         addShared(journal, marcFactory, fields, null, "mainPublisher");
 
         // 260 Publication, Distribution, etc. (Imprint)
-        journal.getDate(JPJournal.DateType.published_from.name()).ifPresent(from -> {
-            final StringBuilder date = new StringBuilder(from.getISOString()).append(" -");
+        addPublishedDate(journal, marcFactory, fields);
+
+        journal.getDate(JPPeriodicalComponent.DateType.published).ifPresent(date -> {
             DataField dataField = marcFactory.newDataField("260", '#', '#');
-            journal.getDate(JPJournal.DateType.published_until.name()).ifPresent(until -> {
-                date.append(" ").append(until.getISOString());
-            });
             dataField.addSubfield(marcFactory.newSubfield('c', date.toString()));
             fields.add(dataField);
         });
@@ -196,10 +194,9 @@ public abstract class Marc21Converter {
 
     private static void addPublishedDate(JPPeriodicalComponent component, MarcFactory marcFactory, List<DataField> fields) {
         // 260 Publication, Distribution, etc. (Imprint)
-        component.getDate(JPArticle.DateType.published.name()).ifPresent(date -> {
-            String dateAsString = date.getISOString();
+        component.getDate(JPPeriodicalComponent.DateType.published).ifPresent(date -> {
             DataField dataField = marcFactory.newDataField("260", '#', '#');
-            dataField.addSubfield(marcFactory.newSubfield('c', dateAsString));
+            dataField.addSubfield(marcFactory.newSubfield('c', date.toString()));
             fields.add(dataField);
         });
     }

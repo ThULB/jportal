@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+
+    <section title="Schreibschutz" xml:lang="de"/>
+    <section title="Read only" xml:lang="en"/>
+
+    <section xml:lang="de">
+        <h1>Schreibschutz!</h1>
+        <p>
+            Auf der Webseite ist zurzeit der Schreibschutz aktiviert. Es ist nicht möglich Dokumente zu erstellen, zu
+            editieren oder zu löschen.
+        </p>
+    </section>
+
+    <section xml:lang="en">
+        <h1>Read only mode!</h1>
+        <p>
+            The website is currently in read only mode. It is not possible to create/edit/delete documents.
+        </p>
+    </section>
+
+</MyCoReWebPage>

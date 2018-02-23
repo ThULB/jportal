@@ -1,8 +1,6 @@
 package fsu.jportal.backend;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalAccessor;
+import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,16 +8,16 @@ import java.util.stream.Stream;
 
 import fsu.jportal.util.DerivateLinkUtil;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPDateUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRISO8601Date;
+import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -36,7 +34,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     static Logger LOGGER = LogManager.getLogger(JPPeriodicalComponent.class);
 
     public enum DateType {
-        published, published_from, published_until
+        published, reviewedWork, reportingPeriod
     }
 
     public enum SubtitleType {
@@ -84,7 +82,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      */
     public Optional<JPPeriodicalComponent> getParent() {
         MCRObjectID parent = getObject().getParent();
-        if(parent == null) {
+        if (parent == null) {
             return Optional.empty();
         }
         return JPComponentUtil.getPeriodical(parent);
@@ -130,8 +128,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * @return list of subtitles
      */
     public List<MCRMetaLangText> getSubtitles() {
-        return metadataStreamNotInherited("subtitles", MCRMetaLangText.class)
-                .collect(Collectors.toList());
+        return metadataStreamNotInherited("subtitles", MCRMetaLangText.class).collect(Collectors.toList());
     }
 
     /**
@@ -179,33 +176,64 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
-     * Sets the date for the component. If until is null, it will be ignored and only from is set.
-     * If from is null, the date will be removed. From and until should be in the form of YYYY-MM-DD
-     * or YYYY-MM or YYYY.
+     * Sets a specific date.
      *
-     * @param from  from as string
-     * @param until until as string
+     * @param dateString the date to set
+     * @param type the type of the date e.g. published or reviewedWork
      */
-    public void setDate(String from, String until) {
-        if (from == null) {
-            object.getMetadata().removeMetadataElement("dates");
-            return;
+    public void setDate(String dateString, String type) {
+        JPMetaDate jpDate = getOrCreateDate(type);
+        jpDate.setFrom(null);
+        jpDate.setUntil(null);
+        jpDate.setDate(JPDateUtil.parse(dateString));
+    }
+
+    /**
+     * Sets a date range.
+     *
+     * @param fromString date range start
+     * @param untilString date range end
+     * @param type the type of the date e.g. published or reviewedWork
+     */
+    public void setDate(String fromString, String untilString, String type) {
+        JPMetaDate jpDate = getOrCreateDate(type);
+        jpDate.setFrom(JPDateUtil.parse(fromString));
+        jpDate.setUntil(JPDateUtil.parse(untilString));
+        jpDate.setDate(null);
+    }
+
+    /**
+     * Creates a jpdate with the given type if does not exists yet.
+     *
+     * @param type the type of the date e.g. published or reviewedWork
+     * @return the date
+     */
+    protected JPMetaDate getOrCreateDate(String type) {
+        MCRMetaElement dates = object.getMetadata().getMetadataElement("dates");
+        if (dates == null) {
+            dates = new MCRMetaElement(JPMetaDate.class, "dates", false, false, null);
+            object.getMetadata().setMetadataElement(dates);
         }
-        MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", true, false, null);
-        String fromType = until == null ? DateType.published.name() : DateType.published_from.name();
-        MCRMetaISO8601Date fromIsoDate = buildISODate("date", from, fromType);
-        if (fromIsoDate == null) {
-            LOGGER.error("Unable to add published date cause '" + from + "' couldn't be parsed.");
-            return;
+        Optional<JPMetaDate> oldDate = getDate(type);
+        JPMetaDate jpDate;
+        if(oldDate.isPresent()) {
+            jpDate = oldDate.get();
+        } else {
+            jpDate = new JPMetaDate("date", type, 0);
+            dates.addMetaObject(jpDate);
         }
-        dates.addMetaObject(fromIsoDate);
-        if (until != null) {
-            MCRMetaISO8601Date untilIsoDate = buildISODate("date", until, DateType.published_until.name());
-            if (untilIsoDate != null) {
-                dates.addMetaObject(untilIsoDate);
-            }
-        }
-        object.getMetadata().setMetadataElement(dates);
+        return jpDate;
+    }
+
+    /**
+     * Removes the specific date.
+     *
+     * @param type type of the date to be removed e.g. published
+     */
+    public void removeDate(String type) {
+        object.getMetadata().findFirst("dates", type, 0).ifPresent((date) -> {
+            object.getMetadata().getMetadataElement("dates").removeMetaObject(date);
+        });
     }
 
     /**
@@ -213,8 +241,8 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      *
      * @return list of dates.
      */
-    public List<MCRMetaISO8601Date> getDates() {
-        return metadataStream("dates", MCRMetaISO8601Date.class).collect(Collectors.toList());
+    public List<JPMetaDate> getDates() {
+        return metadataStream("dates", JPMetaDate.class).collect(Collectors.toList());
     }
 
     /**
@@ -223,61 +251,49 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * @param type the type of the date. e.g. published
      * @return the date object
      */
-    public Optional<MCRMetaISO8601Date> getDate(String type) {
-        return metadataStreamNotInherited("dates", MCRMetaISO8601Date.class).filter(d -> {
-            if (d.getType() == null) {
+    public Optional<JPMetaDate> getDate(DateType type) {
+        return getDate(type.name());
+    }
+
+    /**
+     * Returns the first not inherited date based on the given type.
+     *
+     * @param type the type of the date. e.g. published
+     * @return the date object
+     */
+    public Optional<JPMetaDate> getDate(String type) {
+        return metadataStreamNotInherited("dates", JPMetaDate.class).filter(date -> {
+            if (date.getType() == null) {
                 LOGGER.error("Invalid dates/date metadata at '" + getObject().getId() + "'. Missing type attribute.");
                 return false;
             }
-            return d.getType().equals(type);
+            return date.getType().equals(type);
         }).findFirst();
     }
 
     /**
-     * Returns the {@link TemporalAccessor} for the published date.
+     * Returns the {@link Temporal} for the published date of this object. Be aware that this method does not go through
+     * the ancestors to find the most likley published date.
      *
      * @return optional of the temporal accessor
      */
-    public Optional<TemporalAccessor> getPublishedTemporalAccessor() {
-        Optional<MCRMetaISO8601Date> published = getDate(DateType.published.name());
-        Optional<MCRMetaISO8601Date> publishedFrom = getDate(DateType.published_from.name());
-        return Optional.ofNullable(published.orElse(publishedFrom.orElse(null)))
-                .map(MCRMetaISO8601Date::getMCRISO8601Date)
-                .map(MCRISO8601Date::getDt);
+    public Optional<Temporal> getPublishedTemporal() {
+        Optional<JPMetaDate> published = getDate(DateType.published.name());
+        return published.map(JPMetaDate::getDateOrFrom);
     }
 
     /**
-     * Returns the published date of this periodical component. Be aware that this local date
-     * is not necessarily the original published temporal accessor.
-     * See {@link #buildLocalDate(TemporalAccessor)} for more information.
+     * Returns the published date. This method will go through all the ancestors if this component does not have an
+     * own published date to return the closest published date available.
      *
-     * @return optional of the published date
+     * @return the published date
      */
-    public Optional<LocalDate> getPublishedDate() {
-        return getPublishedTemporalAccessor().map(dt -> {
-            try {
-                return LocalDate.from(dt);
-            } catch (Exception exc) {
-                return buildLocalDate(dt);
-            }
-        });
-    }
-
-    /**
-     * Helper method to build a {@link LocalDate} out of a {@link TemporalAccessor}.
-     * If the month or day are not present, they are set to 1.
-     *
-     * @param dt the temporal accessor
-     * @return a local date
-     */
-    private LocalDate buildLocalDate(TemporalAccessor dt) {
-        if (!dt.isSupported(ChronoField.YEAR)) {
-            return null;
+    public Optional<JPMetaDate> getPublishedDate() {
+        Optional<JPMetaDate> published = getDate(DateType.published.name());
+        if(published.isPresent()) {
+            return published;
         }
-        int year = dt.get(ChronoField.YEAR);
-        int month = dt.isSupported(ChronoField.MONTH_OF_YEAR) ? dt.get(ChronoField.MONTH_OF_YEAR) : 1;
-        int day = dt.isSupported(ChronoField.DAY_OF_MONTH) ? dt.get(ChronoField.DAY_OF_MONTH) : 1;
-        return LocalDate.of(year, month, day);
+        return getParent().flatMap(JPPeriodicalComponent::getPublishedDate);
     }
 
     /**
@@ -325,13 +341,12 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      */
     public List<MCRObjectID> getParticipants(JPObjectType objectType) {
         if (!(objectType.equals(JPObjectType.person) || objectType.equals(JPObjectType.jpinst))) {
-            throw new IllegalArgumentException("Invalid object type for participants " + objectType.name() +
-                    ". Only person or jpinst is allowed.");
+            throw new IllegalArgumentException("Invalid object type for participants " + objectType.name()
+                    + ". Only person or jpinst is allowed.");
         }
         return metadataStreamNotInherited("participants", MCRMetaLinkID.class)
                 .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name()))
-                .map(MCRMetaLinkID::getXLinkHrefID)
-                .collect(Collectors.toList());
+                .map(MCRMetaLinkID::getXLinkHrefID).collect(Collectors.toList());
     }
 
     /**
@@ -344,14 +359,12 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      */
     public List<MCRObjectID> getParticipants(JPObjectType objectType, String role) {
         if (!(objectType.equals(JPObjectType.person) || objectType.equals(JPObjectType.jpinst))) {
-            throw new IllegalArgumentException("Invalid object type for participants " + objectType.name() +
-                    ". Only person or jpinst is allowed.");
+            throw new IllegalArgumentException("Invalid object type for participants " + objectType.name()
+                    + ". Only person or jpinst is allowed.");
         }
         return metadataStreamNotInherited("participants", MCRMetaLinkID.class)
-                .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name()))
-                .filter(typeFilter(role))
-                .map(MCRMetaLinkID::getXLinkHrefID)
-                .collect(Collectors.toList());
+                .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name())).filter(typeFilter(role))
+                .map(MCRMetaLinkID::getXLinkHrefID).collect(Collectors.toList());
     }
 
     /**
@@ -426,9 +439,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      */
     public String getJournalIdAsString() {
         Stream<MCRMetaLangText> stream = metadataStream("hidden_jpjournalsID", MCRMetaLangText.class);
-        return stream.map(MCRMetaLangText::getText)
-                .findFirst()
-                .orElse(null);
+        return stream.map(MCRMetaLangText::getText).findFirst().orElse(null);
     }
 
     /**

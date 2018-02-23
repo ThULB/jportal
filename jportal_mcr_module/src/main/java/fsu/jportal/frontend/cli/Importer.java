@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import fsu.jportal.backend.JPComponent.StoreOption;
 import fsu.jportal.backend.JPDerivateComponent;
+import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
 import fsu.jportal.backend.io.HttpImportSource;
 import fsu.jportal.backend.io.ImportSink;
@@ -368,7 +369,7 @@ public class Importer {
             try {
                 JPVolume volume = new JPVolume();
                 volume.setTitle(title);
-                volume.setDate(date, null);
+                volume.setDate(date, JPPeriodicalComponent.DateType.published.name());
                 volume.setParent(targetID);
                 volume.store();
 
@@ -404,7 +405,7 @@ public class Importer {
             try {
                 JPVolume day = new JPVolume();
                 day.setTitle(title);
-                day.setDate(dyear + "-" + dmonth + "-" + dday, null);
+                day.setDate(dyear + "-" + dmonth + "-" + dday, JPPeriodicalComponent.DateType.published.name());
                 day.setParent(targetID);
                 day.store();
                 String altoPath = Paths.get(ocrPath).resolve(monthFolder).resolve(ocrFolder).toString();

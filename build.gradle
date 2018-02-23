@@ -131,6 +131,7 @@ project(':jportal_mcr_module') {
         compile "org.mycore:mycore-pi:$mcrVersion"
         compile "org.mycore:mycore-iiif:$mcrVersion"
         compile "org.mycore:mycore-migration:$mcrVersion"
+        compile "org.mycore:mycore-xeditor:$mcrVersion"
 
         // mycore external
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'

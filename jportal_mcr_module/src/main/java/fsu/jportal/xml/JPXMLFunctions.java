@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -25,8 +23,10 @@ import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPDateUtil;
 import fsu.jportal.util.MetsUtil;
 import fsu.jportal.util.ResolverUtil;
+import net.sf.cglib.core.Local;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
@@ -35,8 +35,8 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -61,48 +61,11 @@ public class JPXMLFunctions {
         }
     });
 
-    public static String formatISODate(String isoDate, String iso639Language) {
-        try {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("isoDate=" + isoDate + ", iso649Language=" + iso639Language);
-            }
-            Locale locale = new Locale(iso639Language);
-            SimpleDateFormat df = new SimpleDateFormat(getFormat(isoDate), locale);
-            MCRMetaISO8601Date mcrdate = new MCRMetaISO8601Date();
-            mcrdate.setDate(isoDate);
-            Date date = mcrdate.getDate();
-            return (date == null) ? "?" + isoDate + "?" : df.format(date);
-        } catch (Exception exc) {
-            LOGGER.error("While formating date " + isoDate + " with language " + iso639Language + ".", exc);
-            return "?" + isoDate + "?";
-        }
-    }
-
     public static String getUserID() {
         try {
             return MCRUserManager.getCurrentUser().getUserID();
         } catch (Exception exc) {
             LOGGER.error("Unable to get user id of current session.", exc);
-            return "";
-        }
-    }
-
-    public static String getFormat(String date) {
-        try {
-            if (date != null && !date.equals("")) {
-                String split[] = date.split("-");
-                switch (split.length) {
-                case 1:
-                    return MCRTranslation.translate("metaData.dateYear");
-                case 2:
-                    return MCRTranslation.translate("metaData.dateYearMonth");
-                case 3:
-                    return MCRTranslation.translate("metaData.dateYearMonthDay");
-                }
-            }
-            return MCRTranslation.translate("metaData.date");
-        } catch (Exception exc) {
-            LOGGER.error("Unable to format date " + date + ".", exc);
             return "";
         }
     }
@@ -157,37 +120,6 @@ public class JPXMLFunctions {
         } catch (Exception exc) {
             LOGGER.error("unable to format date " + date + " to century.");
             return 18; // return default 18 century
-        }
-    }
-
-    /**
-     * Tries to format the date string to a valid solr date string. If the given
-     * date could not be formatted an empty string is returned.
-     *
-     * @param date date to format
-     * @return date in solr format (YYYY-MM-DDThh:mm:ssZ)
-     */
-    public static String formatDate(String date) {
-        if (date == null) {
-            return "";
-        }
-        try {
-            SimpleDateFormat format;
-            if (date.length() == 4) {
-                // 4 digit year
-                format = new SimpleDateFormat("yyyy");
-            } else if (date.length() == 7) {
-                // 7 digit year-month
-                format = new SimpleDateFormat("yyyy-MM");
-            } else {
-                format = new SimpleDateFormat("yyyy-MM-dd");
-            }
-            Date solrDate = format.parse(date);
-            SimpleDateFormat solrDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            return solrDateFormat.format(solrDate);
-        } catch (Exception exc) {
-            LOGGER.warn("Unable to formate date " + date);
-            return "";
         }
     }
 
@@ -280,7 +212,8 @@ public class JPXMLFunctions {
             String query = url.getQuery();
             if (query.contains("&start=")) {
                 String[] queryArray = query.split("&");
-                String queryRmStartParam = Arrays.stream(queryArray).filter(q -> !q.startsWith("start="))
+                String queryRmStartParam = Arrays.stream(queryArray)
+                                                 .filter(q -> !q.startsWith("start="))
                                                  .collect(Collectors.joining("&"));
 
                 return new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getPath() + "?" + queryRmStartParam)
@@ -336,47 +269,91 @@ public class JPXMLFunctions {
     }
 
     /**
-     * Returns the best published date of a dates container. The type of the date has
-     * to be equals 'published' or 'published_from' and has the lowest inherited value.
-     * <p>
-     * This date comes in UTC and is YYYY-MM-DDThh:mm:ssZ formated. Its Solr compatible.
-     * </p>
-     * @param id mycore object identifier
-     * @return the published date or null
-     */
-    public static String getPublishedDate(String id) {
-        return formatDate(getPublishedISODate(id));
-    }
-
-    /**
-     * Returns the best published date of a dates container. The type of the date has
-     * to be equals 'published' or 'published_from' and has the lowest inherited value.
+     * Returns the best published date of a dates container in ISO format. The type of the date has to be equals
+     * 'published'.
      *
      * @param id mycore object identifier
-     * @return a ISO 8601 conform String using the current set format.
+     * @return a ISO 8601 conform string or null
      */
     public static String getPublishedISODate(String id) {
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
-            List<MCRObject> ancestorsAndSelf = MCRObjectUtils.getAncestorsAndSelf(mcrObj);
-            for (MCRObject obj : ancestorsAndSelf) {
-                Optional<JPPeriodicalComponent> periodical = JPComponentUtil.getPeriodical(obj.getId());
-                if (!periodical.isPresent()) {
-                    continue;
-                }
-                MCRMetaISO8601Date published = periodical.get().getDate("published")
-                                                         .orElse(periodical.get().getDate("published_from")
-                                                                           .orElse(null));
-                if (published == null) {
-                    continue;
-                }
-                return published.getISOString();
-            }
+            return JPComponentUtil.getPeriodical(mcrId)
+                                  .flatMap(JPPeriodicalComponent::getPublishedDate)
+                                  .map(JPMetaDate::getDateOrFrom)
+                                  .map(JPDateUtil::format)
+                                  .orElse(null);
         } catch (Exception exc) {
             LOGGER.error("Unable to retrieve published date of " + id, exc);
         }
         return null;
+    }
+
+    /**
+     * Returns the best published date of an object in the solr.DateRangeField format. The type of the date has to
+     * be equals 'published'.
+     *
+     * @param id mycore object identifier
+     * @return a solr.DateRangeField format or null
+     */
+    public static String getPublishedSolrDateRange(String id) {
+        try {
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            return JPComponentUtil.getPeriodical(mcrId).flatMap(JPPeriodicalComponent::getPublishedDate).map(jpDate -> {
+                if (jpDate.getDate() != null) {
+                    return JPDateUtil.format(jpDate.getDate());
+                } else if (jpDate.getUntil() != null) {
+                    return String.format("[%s TO %s]", JPDateUtil.format(jpDate.getFrom()),
+                            JPDateUtil.format(jpDate.getUntil()));
+                }
+                return JPDateUtil.format(jpDate.getFrom());
+            }).orElse(null);
+        } catch (Throwable t) {
+            LOGGER.error("Unable to retrieve published date of " + id, t);
+            return null;
+        }
+    }
+
+    /**
+     * Formats a solr.DateRangeField date to human readable format.
+     *
+     * @param solrDate the solr date
+     * @param iso639Language the language
+     * @return human readable formatted date
+     */
+    public static String formatSolrDate(String solrDate, String iso639Language) {
+        try {
+            if (!solrDate.contains("TO")) {
+                return formatDate(solrDate, iso639Language);
+            }
+            String split[] = solrDate.split(" TO ");
+            String from = split[0].substring(1);
+            String until = split[1].substring(0, split[1].length() - 1);
+            Locale locale = new Locale(iso639Language);
+            String untilText = MCRTranslation.translate("metaData.date.until", locale);
+            return String.format("%s %s %s", formatDate(from, iso639Language), untilText,
+                    formatDate(until, iso639Language));
+        } catch (Throwable t) {
+            LOGGER.error("Unable to format solr date " + solrDate, t);
+            return "";
+        }
+    }
+
+    /**
+     * Formats the given iso date with the given language.
+     *
+     * @param isoDate the date to format e.g. 2010-11-01
+     * @param iso639Language the language
+     * @return formatted date
+     */
+    public static String formatDate(String isoDate, String iso639Language) {
+        try {
+            String format = JPDateUtil.getFormat(isoDate);
+            return MCRXMLFunctions.formatISODate(isoDate, format, iso639Language);
+        } catch (Throwable t) {
+            LOGGER.error("Unable to format date " + isoDate + " with language " + iso639Language, t);
+            return "";
+        }
     }
 
     /**
@@ -558,13 +535,14 @@ public class JPXMLFunctions {
      */
     public static String getMainFile(String id) {
         try {
-            Optional<JPPeriodicalComponent> periodicalOptional = JPComponentUtil.getPeriodical(MCRObjectID.getInstance(id));
-            if(!periodicalOptional.isPresent()) {
+            Optional<JPPeriodicalComponent> periodicalOptional = JPComponentUtil.getPeriodical(
+                    MCRObjectID.getInstance(id));
+            if (!periodicalOptional.isPresent()) {
                 return "";
             }
             JPPeriodicalComponent periodical = periodicalOptional.get();
             String link = periodical.getDerivateLink();
-            if(link == null) {
+            if (link == null) {
                 link = periodical.getFirstDerivate().map(JPDerivateComponent::getMainDocAsLink).orElse(null);
             }
             return link;
@@ -587,7 +565,7 @@ public class JPXMLFunctions {
             String mimeType = getMimeTypeForThumbnail(mainFile);
             String baseURL = MCRFrontendUtil.getBaseURL();
 
-            if(mimeType.startsWith("image/")) {
+            if (mimeType.startsWith("image/")) {
                 return baseURL + "servlets/MCRTileCombineServlet/" + resolution + "/" + mainFile;
             }
             return baseURL + "servlets/MCRFileNodeServlet/" + mainFile;

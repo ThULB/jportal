@@ -91,13 +91,12 @@
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">
           <xsl:variable name="fields">
-            <field name="participant.author" label="Autor" />
-            <field name="date.published" label="Erschienen" />
-            <field name="date.published_Original" label="Erscheinungsjahr des rez. Werkes" />
-            <field name="date.published_Original_From" label="Erscheinungsbeginn der rez. Werke" />
-            <field name="date.published_Original_Till" label="Erscheinungsende der rez. Werke" />
-            <field name="size" label="Seitenbereich" />
-            <field name="rubric" label="Rubrik" />
+            <field name="participant.author" i18n="editormask.labels.author" />
+            <field name="date.published" i18n="metaData.date.published" />
+            <field name="date.reviewedWork" i18n="metaData.date.reviewedWork" />
+            <field name="date.reportingPeriod" i18n="metaData.date.reportingPeriod" />
+            <field name="size" i18n="editormask.labels.size" />
+            <field name="rubric" i18n="editormask.labels.rubric" />
           </xsl:variable>
           <xsl:variable name="doc" select="." />
           <div class="jp-objectlist-object">
@@ -113,7 +112,6 @@
                       <xsl:value-of select="str[@name='maintitle']" />
                   </xsl:otherwise>
                 </xsl:choose>
-
               </div>
               <xsl:variable name="link" select="arr[@name='derivateLink']" />
               <xsl:value-of select="$link"/>
@@ -136,7 +134,7 @@
                   <xsl:if test="$doc/*[@name = $fieldName]">
                     <li>
                       <span class="jp-layout-label">
-                        <xsl:value-of select="@label" />
+                        <xsl:value-of select="i18n:translate(@i18n)"/>
                       </span>
                       <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
                     </li>

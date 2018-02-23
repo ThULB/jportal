@@ -1,11 +1,21 @@
 package fsu.jportal.mets;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.temporal.ChronoField;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
 import fsu.jportal.util.MetsUtil;
 import org.jdom2.Document;
@@ -26,14 +36,6 @@ import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.SmLink;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
 
 /**
  * Some utility methods for the mets import.
@@ -59,14 +61,6 @@ public class MetsImportUtils {
                                     .put(11, "November")
                                     .put(12, "Dezember")
                                     .build();
-    }
-
-    enum MONTH {
-        Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember;
-
-        MONTH() {
-
-        }
     }
 
     public enum METS_TYPE {
@@ -121,8 +115,11 @@ public class MetsImportUtils {
     }
 
     public static void setPublishedDate(int monthIndex, JPVolume volume, JPContainer parent) {
-        parent.getPublishedDate().ifPresent(date -> {
-            volume.setDate(date.getYear() + "-" + String.format("%02d", monthIndex), null);
+        parent.getDate(JPPeriodicalComponent.DateType.published).ifPresent(jpDate -> {
+            int year = jpDate.getDateOrFrom().get(ChronoField.YEAR);
+            String yearAsString = String.format("%04d", year);
+            String monthAsString = String.format("%02d", monthIndex);
+            volume.setDate(yearAsString + "-" + monthAsString, JPPeriodicalComponent.DateType.published.name());
         });
     }
 
@@ -165,8 +162,8 @@ public class MetsImportUtils {
      * Creates the json error object for a block reference exception (It was not
      * possible to resolve the coordinates for one or more logical div's). 
      *
-     * @param message
-     * @param ids
+     * @param message the error message
+     * @param ids list of logical div identifiers
      * @param doc the mets.xml
      * @return the error object as json
      */

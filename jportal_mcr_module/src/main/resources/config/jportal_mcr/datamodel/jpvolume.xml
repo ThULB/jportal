@@ -71,7 +71,7 @@
 
         <!-- date -->
         <element name="dates" minOccurs='0' maxOccurs='1'>
-            <mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='0' maxOccurs='unbounded' />
+            <jpmetadate name="date" class="JPMetaDate" minOccurs='1' maxOccurs='unbounded' />
         </element>
         <!-- tradition / calendar extension -->
         <element name="traditions" minOccurs='0' maxOccurs='1'>

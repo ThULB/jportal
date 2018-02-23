@@ -30,14 +30,6 @@
                 <xsl:value-of select="$JP.Site.Parent.label"/>
               </a>
             </li>
-            <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'gast'">
-              <li>
-                <span class="webWriteProtection">
-                  <xsl:value-of select="websiteWriteProtection:getMessage()"/>
-                </span>
-              </li>
-            </xsl:if>
-
             <li>
               <xsl:variable name="imprintHref">
                 <xsl:choose>

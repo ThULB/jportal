@@ -10,20 +10,10 @@
 			<label xml:lang="en" text="Published"/>
 			<label xml:lang="pl" text="Wydano"/>
 		</category>
-		<category ID="published_Original">
+		<category ID="reviewedWork">
 			<label xml:lang="de" text="Erscheinungsjahr des rez. Werkes"></label>
 			<label xml:lang="en" text="Reviewed work published"/>
 			<label xml:lang="pl" text="Rok wydania dzieła recenzowanego"/>
-		</category>
-		<category ID="published_Original_From">
-			<label xml:lang="de" text="Erscheinungsbeginn der rez. Werke"/>
-			<label xml:lang="en" text="Reviewed work published from"/>
-			<label xml:lang="pl" text="Wydanie dzieła recenzowanego od"/>
-		</category>
-		<category ID="published_Original_Till">
-			<label xml:lang="de" text="Erscheinungsende der rez. Werke"/>
-			<label xml:lang="en" text="Reviewed work published to"/>
-			<label xml:lang="pl" text="Wydanie dzieła recenzowanego do"/>
 		</category>
 	</categories>
 </mycoreclass>

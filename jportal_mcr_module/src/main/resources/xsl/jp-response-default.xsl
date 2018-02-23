@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan"
-                xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
-                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
+                xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+                exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
 
-  <xsl:param name="returnURL"/>
+<xsl:param name="returnURL"/>
   <xsl:param name="returnHash"/>
   <xsl:param name="returnID"/>
   <xsl:param name="returnName"/>
@@ -210,22 +214,17 @@
     </field>
     <field name="date.published">
       <xsl:attribute name="label">
-        <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')"/>
+        <xsl:value-of select="i18n:translate('metaData.date.published')"/>
       </xsl:attribute>
     </field>
-    <field name="date.published_from">
+    <field name="date.reviewedWork">
       <xsl:attribute name="label">
-        <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')"/>
+        <xsl:value-of select="i18n:translate('metaData.date.reviewedWork')"/>
       </xsl:attribute>
     </field>
-    <field name="date.published_Original">
+    <field name="date.reportingPeriod">
       <xsl:attribute name="label">
-        <xsl:value-of select="i18n:translate('editormask.labels.coverage')"/>
-      </xsl:attribute>
-    </field>
-    <field name="date.published_Original_From">
-      <xsl:attribute name="label">
-        <xsl:value-of select="i18n:translate('editormask.labels.coverage')"/>
+        <xsl:value-of select="i18n:translate('metaData.date.reportingPeriod')"/>
       </xsl:attribute>
     </field>
     <field name="size">
@@ -337,6 +336,13 @@
     </span>
   </xsl:template>
 
+  <xsl:template mode="searchHitDataField" match="str[contains(@name, 'date.')]">
+    <span class="jp-layout-inList">
+      <xsl:value-of select="jpxml:formatSolrDate(text(), $CurrentLang)" />
+    </span>
+  </xsl:template>
+
+<!--
   <xsl:template mode="searchHitDataField" match="str[@name='date.published_from']">
     <span class="jp-layout-inList">
       <xsl:value-of select="."/>
@@ -345,6 +351,7 @@
       </xsl:if>
     </span>
   </xsl:template>
+-->
 
   <xsl:template mode="searchHitDataField" match="arr[@name='participant.author']/str">
     <span class="jp-layout-inList">

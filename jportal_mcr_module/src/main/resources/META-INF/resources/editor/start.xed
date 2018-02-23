@@ -5,6 +5,7 @@
     <xed:form>
       <xed:load-resource name="acl" uri="acl:{$id}:{$action}-{$type}" />
       <xed:cleanup-rule xpath="//*[@inherited]" relevant-if="@inherited = '0'" />
+      <xed:post-processor class="fsu.jportal.frontend.xeditor.JPPostProcessor" />
       <xed:choose>
         <xed:when test="$acl/@permission = 'true'">
           <link href="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />

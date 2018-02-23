@@ -334,3 +334,11 @@ label.editorText {
 	margin: 0 auto 2.1em;
 	height: 80%;
 }
+
+.jpdate-group .form-control[type=text] {
+	margin-top: 4px;
+}
+
+.jpdate-group > label {
+	margin-right: 12px;
+}

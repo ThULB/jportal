@@ -59,7 +59,7 @@
   <!-- 1 line is split into 3 parts: 1. title, 2. input (input, textArea, 
   	select) and 3. buttons -->
   <!-- Form: titel | input | buttons -->
-  <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|logoThumbnail|subselect', @name)]">
+  <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|jpdate_select|logoThumbnail|subselect', @name)]">
     <div class="row">
       <xsl:if test="@small">
         <xsl:attribute name="class"></xsl:attribute>
@@ -93,7 +93,7 @@
         <xed:bind xpath="{@xpath}">
           <xsl:apply-templates select="jp:template[@name='textInput']" />
           <xsl:apply-templates select="jp:template[@name='selectInput']" />
-          <xsl:if test="@name!='textInputSm' and @name!='date_select'">
+          <xsl:if test="@name!='textInputSm' and @name!='date_select' and @name!='jpdate_select'">
             <div>
               <xsl:attribute name="class">form-group {$xed-validation-marker}</xsl:attribute>
               <xsl:if test="contains(@inputClass, 'date-field')">
@@ -112,6 +112,16 @@
           <xsl:if test="@name='date_select'">
             <div class="form-group">
               <xsl:apply-templates select="jp:template[@type='date']" mode="date_select" />
+            </div>
+          </xsl:if>
+          <xsl:if test="@name='jpdate_select'">
+            <div class="form-group jpdate-group" id="jpdate-group-{@id}">
+              <input type="radio" name="date_type_select-{@id}" value="date" id="jpdate-type-date-{@id}" />
+              <label for="jpdate-type-date-{@id}"> Datum</label>
+              <input type="radio" name="date_type_select-{@id}" value="range"  id="jpdate-type-range-{@id}" />
+              <label for="jpdate-type-range-{@id}"> Datumsbereich</label>
+              <xsl:apply-templates select="jp:template[@type='date']" mode="jpdate_select" />
+              <xsl:apply-templates select="jp:template[@type='textInput']" mode="jpdate_select" />
             </div>
           </xsl:if>
         </xed:bind>
@@ -448,6 +458,29 @@
         </span>
       </xsl:if>
     </div>
+  </xsl:template>
+
+  <xsl:template match="jp:template[@type='date']" mode="jpdate_select">
+    <div>
+      <xsl:attribute name="class">
+        <xsl:value-of select="@class" />
+      </xsl:attribute>
+      <xed:bind xpath="{@xpath}">
+        <input class="form-control date-field" type="text" placeholder="yyyy-MM-dd" maxlength="10">
+        </input>
+      </xed:bind>
+      <xsl:if test="@seperator='true'">
+        <span id="dateSeperator" class="input-group-addon hidden-xs jp-layout-sharpBorderRight">-</span>
+      </xsl:if>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="jp:template[@type='textInput']" mode="jpdate_select">
+    <xed:bind xpath="{@xpath}">
+      <xsl:call-template name="jp-editor-textInput">
+        <xsl:with-param name="maxlength" select="'256'" />
+      </xsl:call-template>
+    </xed:bind>
   </xsl:template>
 
  <!-- DYNAMIC CLASSIFICATION'S -->

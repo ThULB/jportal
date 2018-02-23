@@ -1,9 +1,9 @@
 package fsu.jportal.backend.sort;
 
-import fsu.jportal.backend.JPPeriodicalComponent;
-
-import java.time.LocalDate;
 import java.util.Comparator;
+
+import fsu.jportal.backend.JPPeriodicalComponent;
+import org.mycore.datamodel.metadata.JPMetaDate;
 
 /**
  * Orders the children by their published date.
@@ -15,8 +15,8 @@ public class JPPublishedSorter implements JPSorter {
     @Override
     public Comparator<? super JPPeriodicalComponent> getSortComparator(Order order) {
         return (child1, child2) -> {
-            LocalDate publishedDate1 = child1.getPublishedDate().orElse(null);
-            LocalDate publishedDate2 = child2.getPublishedDate().orElse(null);
+            JPMetaDate publishedDate1 = child1.getDate(JPPeriodicalComponent.DateType.published).orElse(null);
+            JPMetaDate publishedDate2 = child2.getDate(JPPeriodicalComponent.DateType.published).orElse(null);
             if (isOneNull(publishedDate1, publishedDate2)) {
                 return handleNull(publishedDate1, publishedDate2);
             }

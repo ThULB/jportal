@@ -14,6 +14,7 @@
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true" />
     <fieldType name="long" class="solr.LongPointField" docValues="true" omitNorms="true" positionIncrementGap="0" />
     <fieldType name="date" class="solr.DatePointField" docValues="true" omitNorms="true" positionIncrementGap="0" />
+    <fieldType name="dateRange" class="solr.DateRangeField" />
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
 
     <!-- for indexing id#label value pairs. provides searches on field:id but returns the whole value as text
@@ -194,15 +195,11 @@
     <field name="roles" type="string" multiValued="true" />
     <field name="rubric" type="string" indexed="false" multiValued="true" />
     <field name="rubricText" type="text_de" multiValued="true" />
+    <field name="dates" type="string" multiValued="true" />
 
-    <field name="date.published" type="string" />
-    <field name="date.published_from" type="string" />
-    <field name="date.published_until" type="string" />
-    <field name="date.published_Original" type="string" indexed="false" />
-    <field name="date.published_Original_From" type="string" indexed="false" />
-    <field name="date.published_Original_Till" type="string" indexed="false" />
-
+    <dynamicField name="date.*" type="dateRange" />
     <dynamicField name="participant.*" type="idLabelPair" indexed="true" stored="true" multiValued="true" />
+    <copyField source="date.*" dest="dates" />
 
     <field name="derivateLink" type="string" multiValued="true" />
 
@@ -231,8 +228,7 @@
     <field name="heading" type="text" />
     <field name="alternatives" type="text" multiValued="true" stored="false" />
     <field name="participants" type="text" multiValued="true" stored="false" />
-    <field name="dates" type="text" multiValued="true" stored="false" />
-    <field name="published" type="date" sortMissingLast="true" />
+    <field name="published" type="dateRange" sortMissingLast="true" />
     <field name="size" type="string" />
 
     <field name="titles_de" type="text_de" multiValued="true" stored="false" />

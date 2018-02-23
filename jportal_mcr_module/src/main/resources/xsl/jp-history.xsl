@@ -102,9 +102,8 @@
               </xsl:if>
             </td>
             <td class="@date">
-              <xsl:call-template name="formatISODate">
+              <xsl:call-template name="jp.date.print">
                 <xsl:with-param name="date" select="@date" />
-                <xsl:with-param name="format" select="i18n:translate('metaData.dateTime')" />
               </xsl:call-template>
             </td>
             <td class="user">

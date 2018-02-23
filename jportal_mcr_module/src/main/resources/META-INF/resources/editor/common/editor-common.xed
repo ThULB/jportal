@@ -11,8 +11,10 @@
   </xed:template>
 
   <xed:template id="button_create">
-    <input type="submit" xed:target="servlet" xed:href="CreateObjectServlet" value="{i18n:common.button.save}"
-      class="btn btn-primary" />
+    <!--<input type="submit" xed:target="servlet" xed:href="CreateObjectServlet" value="{i18n:common.button.save}"
+      class="btn btn-primary" />-->
+      <input type="submit" xed:target="debug" value="{i18n:common.button.save}"
+            class="btn btn-primary" />
   </xed:template>
 
   <xed:template id="button_update">
@@ -60,12 +62,15 @@
         option="true" noXpath="dateSelect" noPleaseSelect="true" bottom="littleSpace">
         	<option i18n="metaData.jpjournal.date.published" value="published" />
         	<option i18n="metaData.jpjournal.date.published_from_until" value="published_from" />
+        	<option i18n="metaData.jpjournal.date.period_under_review" value="period_under_review" />
     </jp:template>
   
-	  <jp:template name="date_select" xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']">
-		    <jp:template type="date" id_container="dateContainer" class="input-group" id_input="publshDate" span_date="after" xpath="date[@inherited='0'][@type='published']" />
-		    <jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 pull-left" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_from']" seperator="true" />
-		    <jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="untilDate" xpath="date[@inherited='0'][@type='published_until']" />
-	  </jp:template>
+	<jp:template name="date_select" xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']">
+        <jp:template type="date" id_container="dateContainer" class="input-group" id_input="publshDate" span_date="after" xpath="date[@inherited='0'][@type='published']" />
+        <jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 pull-left" span_date="before" id_input="fromDate" xpath="date[@inherited='0'][@type='published_from']" seperator="true" />
+        <jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="untilDate" xpath="date[@inherited='0'][@type='published_until']" />
+        <jp:template type="date" id_container="fromDateContainer" class="input-group col-sm-6 pull-left" span_date="before" id_input="underReviewFrom" xpath="date[@inherited='0'][@type='period_under_review_from']" seperator="true" />
+        <jp:template type="date" id_container="untilDateContainer" class="input-group col-sm-6" span_date="after" id_input="underReviewUntil" xpath="date[@inherited='0'][@type='period_under_review_until']" />
+	</jp:template>
   </xed:template>
 </xed:template>

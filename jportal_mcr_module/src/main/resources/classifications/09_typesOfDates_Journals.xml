@@ -20,5 +20,13 @@
 			<label xml:lang="en" text="Published to"/>
 			<label xml:lang="pl" text="Wydano do"/>
 		</category>
+		<category ID="period_under_review_from">
+			<label xml:lang="de" text="Berichtszeitraum von"/>
+			<label xml:lang="en" text="Period under review from"/>
+		</category>
+		<category ID="period_under_review_until">
+			<label xml:lang="de" text="Berichtszeitraum bis"/>
+			<label xml:lang="en" text="Period under review to"/>
+		</category>
 	</categories>
 </mycoreclass>

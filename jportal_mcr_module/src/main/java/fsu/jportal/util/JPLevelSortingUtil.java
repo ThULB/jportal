@@ -22,6 +22,7 @@ import org.mycore.solr.search.MCRSolrSearchUtils;
 import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.time.temporal.ChronoField;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.Map.Entry;
@@ -238,7 +239,7 @@ public abstract class JPLevelSortingUtil {
     }
 
     private static void analyzeVolume(JPVolume volume, JPLevelSorting levelSorting) {
-        Optional<TemporalAccessor> publishedAccessor = volume.getPublishedTemporalAccessor();
+        Optional<Temporal> publishedAccessor = volume.getPublishedTemporal();
         if (publishedAccessor.isPresent()) {
             try {
                 publishedAccessor.get().get(ChronoField.MONTH_OF_YEAR);

@@ -1,13 +1,10 @@
 package fsu.jportal.backend;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.mycore.datamodel.common.MCRISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -21,10 +18,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     public static String TYPE = JPObjectType.jparticle.name();
-
-    public enum RecensionDateType {
-        published_Original, published_Original_From, published_Original_Till
-    }
 
     /**
      * Creates a new jportal article.
@@ -63,29 +56,6 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     @Override
     public String getType() {
         return TYPE;
-    }
-
-    /**
-     * Articles can have recension dates. Use this method when you want to set a
-     * recension date instead of a default published date. Be aware that articles
-     * can have only one date, either recension or published.
-     * 
-     * @param from from recension
-     * @param until until recension
-     */
-    public void setRecensionDate(String from, String until) {
-        if (from == null) {
-            object.getMetadata().removeMetadataElement("dates");
-            return;
-        }
-        MCRMetaElement dates = new MCRMetaElement(MCRMetaISO8601Date.class, "dates", true, false, null);
-        String fromType = until == null ? RecensionDateType.published_Original.name()
-            : RecensionDateType.published_Original_From.name();
-        dates.addMetaObject(buildISODate("date", from, fromType));
-        if (until != null) {
-            dates.addMetaObject(buildISODate("date", until, RecensionDateType.published_Original_Till.name()));
-        }
-        object.getMetadata().setMetadataElement(dates);
     }
 
     /**
@@ -167,13 +137,6 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
     public List<String> getKeywords() {
         return metadataStream("keywords", MCRMetaLangText.class).map(MCRMetaLangText::getText)
                                                                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Optional<LocalDate> getPublishedDate() {
-        return getDate(DateType.published.name()).map(MCRMetaISO8601Date::getMCRISO8601Date)
-                                                 .map(MCRISO8601Date::getDt)
-                                                 .map(LocalDate::from);
     }
 
     /**

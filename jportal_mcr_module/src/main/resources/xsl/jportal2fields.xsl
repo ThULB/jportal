@@ -119,29 +119,34 @@
 
   <!-- dates -->
   <xsl:template match="dates" mode="jportal.metadata">
-    <xsl:variable name="published" select="jpxml:getPublishedDate(../../@ID)"/>
+    <xsl:variable name="published" select="jpxml:getPublishedSolrDateRange(../../@ID)"/>
     <xsl:if test="$published">
       <field name="published">
         <xsl:value-of select="$published"/>
       </field>
     </xsl:if>
-    <xsl:variable name="inheritedVal" select="math:min(date/@inherited)"/>
-    <xsl:apply-templates select="date[@inherited=$inheritedVal]" mode="jportal.metadata.dates"/>
-    <xsl:if test="$inheritedVal = 0">
-      <xsl:apply-templates select="date[@inherited=$inheritedVal]" mode="jportal.metadata.date"/>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="date" mode="jportal.metadata.dates">
-    <field name="dates">
-      <xsl:value-of select="text()"/>
-    </field>
+    <xsl:apply-templates select="date" mode="jportal.metadata.date"/>
   </xsl:template>
 
   <xsl:template match="date" mode="jportal.metadata.date">
     <field name="date.{@type}">
-      <xsl:value-of select="text()"/>
+      <xsl:choose>
+        <xsl:when test="@date != ''">
+          <xsl:value-of select="@date" />
+        </xsl:when>
+        <xsl:when test="@from != '' and @until != ''">
+          <xsl:value-of select="concat('[', @from, ' TO ', @until, ']')" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@from" />
+        </xsl:otherwise>
+      </xsl:choose>
     </field>
+    <xsl:if test="text()">
+      <field name="dates">
+        <xsl:value-of select="text()" />
+      </field>
+    </xsl:if>
   </xsl:template>
 
   <!-- rubric -->

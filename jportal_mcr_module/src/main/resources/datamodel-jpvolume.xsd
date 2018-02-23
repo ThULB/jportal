@@ -416,14 +416,16 @@
                 <xsd:simpleContent>
                   <xsd:extension base="xsd:string">
                     <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
-                    <xsd:attribute name="format" use="optional" type="mcrdateformat" />
+                    <xsd:attribute name="date" use="optional" type="mcrdateformat" />
+                    <xsd:attribute name="from" use="optional" type="mcrdateformat" />
+                    <xsd:attribute name="until" use="optional" type="mcrdateformat" />
                     <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
                   </xsd:extension>
                 </xsd:simpleContent>
               </xsd:complexType>
             </xsd:element>
           </xsd:sequence>
-          <xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaISO8601Date" />
+          <xsd:attribute name="class" type="xsd:string" use="required" fixed="JPMetaDate" />
           <xsd:attribute name="heritable" type="xsd:boolean" use="optional" />
           <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
         </xsd:complexType>

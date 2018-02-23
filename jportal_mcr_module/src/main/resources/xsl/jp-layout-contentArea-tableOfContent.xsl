@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:mcr="http://www.mycore.org/" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:decoder="xalan://java.net.URLDecoder"
-  exclude-result-prefixes="xalan encoder mcr mcrxml solrxml i18n decoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:mcr="http://www.mycore.org/"
+                xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
+                xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:decoder="xalan://java.net.URLDecoder"
+                xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+                exclude-result-prefixes="xalan encoder mcr mcrxml solrxml i18n decoder jpxml">
 
-  <xsl:param name="referer" />
+<xsl:param name="referer" />
   <xsl:param name="vol.start" />
   <xsl:param name="art.start" />
   <xsl:param name="q" />
@@ -93,13 +97,12 @@
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">
         <xsl:variable name="fields">
-          <field name="participant.author" label="Autor" />
-          <field name="date.published" label="Erschienen" />
-          <field name="date.published_Original" label="Erscheinungsjahr des rez. Werkes" />
-          <field name="date.published_Original_From" label="Erscheinungsbeginn der rez. Werke" />
-          <field name="date.published_Original_Till" label="Erscheinungsende der rez. Werke" />
-          <field name="size" label="Seitenbereich" />
-          <field name="rubric" label="Rubrik" />
+          <field name="participant.author" i18n="editormask.labels.author" />
+          <field name="date.published" i18n="metaData.date.published" />
+          <field name="date.reviewedWork" i18n="metaData.date.reviewedWork" />
+          <field name="date.reportingPeriod" i18n="metaData.date.reportingPeriod" />
+          <field name="size" i18n="editormask.labels.size" />
+          <field name="rubric" i18n="editormask.labels.rubric" />
         </xsl:variable>
         <xsl:variable name="doc" select="." />
         <div class="row jp-objectlist-object">
@@ -123,7 +126,7 @@
                 <xsl:if test="$doc/*[@name = $fieldName]">
                   <li>
                     <span class="jp-layout-label">
-                      <xsl:value-of select="@label" />
+                      <xsl:value-of select="i18n:translate(@i18n)"/>
                     </span>
                     <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
                   </li>
@@ -165,6 +168,12 @@
     </span>
   </xsl:template>
 
+  <xsl:template mode="artEntryFields" match="str[contains(@name, 'date.')]">
+    <span class="jp-layout-inList">
+      <xsl:value-of select="jpxml:formatSolrDate(text(), $CurrentLang)" />
+    </span>
+  </xsl:template>
+
   <xsl:template mode="jp.printListEntryContent" match="doc">
     <xsl:variable name="mcrId" select="str[@name='id']" />
     <xsl:choose>
@@ -185,18 +194,12 @@
 
   <xsl:template mode="jp.toc.published" match="str">
   </xsl:template>
+
   <xsl:template mode="jp.toc.published" match="str[@name='date.published']">
     <!-- only apply date when the main title is not equal this date -->
     <xsl:if test="../str[@name='maintitle']/text() != text()">
-      <xsl:value-of select="concat(' (', text(), ')')" />
+      <xsl:value-of select="concat(' (', jpxml:formatSolrDate(text(), $CurrentLang), ')')" />
     </xsl:if>
-  </xsl:template>
-  <xsl:template mode="jp.toc.published" match="str[@name='date.published_from']">
-    <xsl:value-of select="concat(' (', text())" />
-    <xsl:if test="../str[@name='date.published_until']">
-      <xsl:value-of select="concat(' - ', ../str[@name='date.published_until'])" />
-    </xsl:if>
-    <xsl:value-of select="')'" />
   </xsl:template>
 
 </xsl:stylesheet>

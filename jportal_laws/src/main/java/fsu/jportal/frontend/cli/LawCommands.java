@@ -2,6 +2,7 @@ package fsu.jportal.frontend.cli;
 
 import java.io.InputStream;
 
+import fsu.jportal.backend.JPPeriodicalComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -101,7 +102,7 @@ public class LawCommands {
         }
         // dates
         if (erlass != null) {
-            article.setDate(erlass, null);
+            article.setDate(erlass, JPPeriodicalComponent.DateType.published.name());
         }
         // Note
         StringBuilder sb = new StringBuilder();

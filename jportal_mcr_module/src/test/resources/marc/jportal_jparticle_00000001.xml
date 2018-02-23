@@ -24,8 +24,8 @@
                          xlink:title="Thüringer Universitäts- und Landesbibliothek Jena"
                          xlink:href="jportal_jpinst_00000001"/>
         </participants>
-        <dates class="MCRMetaISO8601Date" heritable="false" notinherit="true">
-            <date type="published" inherited="0">2001-10-10</date>
+        <dates class="JPMetaDate" heritable="false" notinherit="false">
+            <date type="published" inherited="0" date="2001-10-10"></date>
         </dates>
         <identis class="MCRMetaLangText" heritable="false" notinherit="true">
             <identi type="zdb-id" inherited="0" form="plain">4231245123</identi>

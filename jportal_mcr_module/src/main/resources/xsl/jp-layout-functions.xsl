@@ -155,6 +155,46 @@
   </xsl:template>
 
   <!-- *************************************************** -->
+  <!-- * DATES -->
+  <!-- *************************************************** -->
+  <xsl:template name="jp.date.format">
+    <xsl:param name="date" />
+    <xsl:choose>
+      <xsl:when test="string-length(normalize-space($date)) = 4">
+        <xsl:value-of select="i18n:translate('metaData.dateYear')" />
+      </xsl:when>
+      <xsl:when test="string-length(normalize-space($date)) = 7">
+        <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
+      </xsl:when>
+      <xsl:when test="string-length(normalize-space($date)) = 10">
+        <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
+      </xsl:when>
+      <xsl:when test="string-length(normalize-space($date)) = 5">
+        <xsl:value-of select="'y G'" />
+      </xsl:when>
+      <xsl:when test="string-length(normalize-space($date)) = 11">
+        <xsl:value-of select="'d. MMMM y G'" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="i18n:translate('metaData.dateTime')" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="jp.date.print">
+    <xsl:param name="date" />
+    <xsl:variable name="format">
+      <xsl:call-template name="jp.date.format">
+        <xsl:with-param name="date" select="$date" />
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:call-template name="formatISODate">
+      <xsl:with-param name="date" select="$date" />
+      <xsl:with-param name="format" select="$format" />
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- *************************************************** -->
   <!-- * PAGINATION -->
   <!-- *************************************************** -->
   <xsl:template name="jp.pagination.getResultInfoXML">

@@ -1,5 +1,8 @@
 package fsu.jportal.xml;
 
+import java.util.List;
+import java.util.Optional;
+
 import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.resolver.LogoResolver;
@@ -15,17 +18,11 @@ import org.jdom2.JDOMException;
 import org.jdom2.output.DOMOutputter;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.pi.MCRPIRegistrationService;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.w3c.dom.Node;
-
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 public abstract class LayoutTools {
 
@@ -34,11 +31,7 @@ public abstract class LayoutTools {
     private static class DerivateDisplay implements JPObjectInfo<Boolean> {
         @Override
         public Boolean getInfo(List<Object> node) {
-            if (node.size() == 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return node.size() != 0;
         }
     }
 
@@ -67,8 +60,7 @@ public abstract class LayoutTools {
 
     public static String getNameOfTemplate(String id) {
         try {
-            Optional<JPPeriodicalComponent> periodical = JPComponentUtil.getPeriodical(MCRObjectID.getInstance(id));
-            return periodical.get().getNameOfTemplate();
+            return JPComponentUtil.getPeriodical(MCRObjectID.getInstance(id)).get().getNameOfTemplate();
         } catch (Exception exc) {
             LOGGER.error("Unable to get name of template for object " + id + ". Return default template.", exc);
             return "template_default";
@@ -95,17 +87,9 @@ public abstract class LayoutTools {
     public static String getJournalPublished(String journalID) {
         return JPComponentUtil
                 .getPeriodical(MCRObjectID.getInstance(journalID))
-                .map(c -> c.getDate("published")
-                           .map(MCRMetaISO8601Date::getISOString)
-                           .orElse(c.getDate("published_from")
-                                    .map(MCRMetaISO8601Date::getISOString)
-                                    .flatMap(pf -> c.getDate("published_until")
-                                                    .map(MCRMetaISO8601Date::getISOString)
-                                                    .map(pu -> pf + " - " + pu)
-
-                                    ).orElse("")
-                           )
-                ).orElse("");
+                .flatMap(journal -> journal.getDate(JPPeriodicalComponent.DateType.published))
+                .map(JPMetaDate::toString)
+                .orElse("");
     }
 
     public static String getDerivateDisplay(String derivateID) {
