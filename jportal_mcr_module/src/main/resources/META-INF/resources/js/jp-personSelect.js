@@ -113,7 +113,7 @@ $(document).ready(function () {
 			conn.getPersonSelect($("#personSelect-searchBar input[name='qry']").val(), $("select[name='sort']").val().replace(" ", "+"), 0, changeModal);
 		});
   	
-		parent.on("click", "#personSelect-select ul.pagination > li:not(.active)", function(event) {
+		parent.on("click", "#personSelect-select ul.jp-pagination > li:not(.active)", function(event) {
 			event.preventDefault();
   		var link = $(this).find("a").attr("href").split("start=");
   		if (link.length == 2){
