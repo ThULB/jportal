@@ -11,10 +11,8 @@
   </xed:template>
 
   <xed:template id="button_create">
-    <!--<input type="submit" xed:target="servlet" xed:href="CreateObjectServlet" value="{i18n:common.button.save}"
-      class="btn btn-primary" />-->
-      <input type="submit" xed:target="debug" value="{i18n:common.button.save}"
-            class="btn btn-primary" />
+    <input type="submit" xed:target="servlet" xed:href="CreateObjectServlet" value="{i18n:common.button.save}"
+      class="btn btn-primary" />
   </xed:template>
 
   <xed:template id="button_update">
