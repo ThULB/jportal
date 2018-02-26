@@ -243,7 +243,11 @@ label.editorText {
 }
 
 #personSelect-modal-body{
-	padding-bottom: 0px;
+	padding-bottom: 0;
+}
+
+#personSelect-select.container-fluid {
+	padding: 0;
 }
 
 #personSelect-select .popover-content{

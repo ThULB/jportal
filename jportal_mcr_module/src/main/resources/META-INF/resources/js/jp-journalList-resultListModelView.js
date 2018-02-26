@@ -15,7 +15,7 @@ function renderJournalTitle(journal) {
     title.appendChild(titleLink);
 
     titleLink.textContent = journal.maintitle;
-    titleLink.setAttribute("href", baseURL + 'receive/' + journal.id)
+    titleLink.setAttribute("href", baseURL + 'receive/' + journal.id);
 
     return title;
 }
