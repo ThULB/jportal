@@ -23,10 +23,10 @@ import org.mycore.frontend.xeditor.MCRXEditorPostProcessor;
  */
 public class JPPostProcessor implements MCRXEditorPostProcessor {
 
-    private static final XPathExpression<Element> DATE_EXP;
+    private static final XPathExpression<Element> DATES_EXP;
 
     static {
-        DATE_EXP = XPathFactory.instance().compile("metadata/dates", Filters.element());
+        DATES_EXP = XPathFactory.instance().compile("metadata/dates", Filters.element());
     }
 
     public Document process(Document xml) {
@@ -40,7 +40,10 @@ public class JPPostProcessor implements MCRXEditorPostProcessor {
     }
 
     private void handleDates(Element rootElement) {
-        Element datesElement = DATE_EXP.evaluateFirst(rootElement);
+        Element datesElement = DATES_EXP.evaluateFirst(rootElement);
+        if(datesElement == null) {
+            return;
+        }
         List<Element> dates = datesElement.getChildren();
         Map<String, Element> typeMap = new HashMap<>();
         for (Element date : dates) {
