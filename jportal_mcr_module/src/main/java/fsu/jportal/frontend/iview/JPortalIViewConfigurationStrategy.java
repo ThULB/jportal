@@ -19,6 +19,8 @@ public class JPortalIViewConfigurationStrategy extends MCRViewerDefaultConfigura
         config.addCSS(baseURL + "css/jp-iview.css");
 
         if (!isPDF(request)) {
+            // dfg viewer link
+            config.addLocalScript("dfg-viewer-module.js");
             // derivate link
             if (!MCRSessionMgr.getCurrentSession().getUserInformation()
                 .equals(MCRSystemUserInformation.getGuestInstance())) {

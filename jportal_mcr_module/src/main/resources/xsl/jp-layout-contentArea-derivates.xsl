@@ -49,12 +49,6 @@
           <xsl:with-param name="file" select="$file" />
           <xsl:with-param name="query" select="$query" />
         </xsl:call-template>
-        <xsl:if test="$mode = 'metadata'">
-          <xsl:call-template name="dfgViewerLink">
-            <xsl:with-param name="derivID" select="$derivID" />
-            <xsl:with-param name="file" select="$file" />
-          </xsl:call-template>
-        </xsl:if>
         <xsl:if test="$mode = 'metadata' and $editable = 'true' and $deleteLink">
           <div class="objectEditingButton unlinkImage" data-object="{$objID}" data-image="{@xlink:href}">
             <xsl:value-of select="'Verlinkung löschen'" />
@@ -92,11 +86,6 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:if test="$mode = 'metadata' and $iviewFile != ''">
-          <xsl:call-template name="dfgViewerLink">
-            <xsl:with-param name="derivID" select="@xlink:href" />
-          </xsl:call-template>
-        </xsl:if>
         <xsl:if test="$mode = 'metadata' and $editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
           <ul class="edit">
             <li>
@@ -224,26 +213,6 @@
         </xsl:if>
       </div>
     </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="dfgViewerLink">
-    <xsl:param name="derivID" />
-    <xsl:param name="file" select="''" />
-    <div class="dfg-viewer">
-      <xsl:variable name="encodedURL">
-        <xsl:variable name="url">
-          <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRMETSServlet/', $derivID, '/')" />
-          <xsl:if test="$file != ''">
-            <xsl:value-of select="$file" />
-          </xsl:if>
-          <xsl:value-of select="'?XSL.Style=dfg'" />
-        </xsl:variable>
-        <xsl:value-of select="encoder:encode($url)" />
-      </xsl:variable>
-      <a href="http://dfg-viewer.de/demo/viewer/?set[mets]={$encodedURL}" target="_blank">
-        <xsl:value-of select="'alternativ im DFG-Viewer anzeigen'" />
-      </a>
-    </div>
   </xsl:template>
 
   <xsl:template name="iview2Entry">
