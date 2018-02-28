@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
-  xmlns:mcr="http://www.mycore.org/" xmlns:imprint="xalan://fsu.jportal.util.ImprintUtil" exclude-result-prefixes="imprint layoutTools acl mcrxml mcr">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+                xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
+                xmlns:mcr="http://www.mycore.org/" xmlns:imprint="xalan://fsu.jportal.util.ImprintUtil"
+                exclude-result-prefixes="imprint layoutTools acl mcrxml mcr">
 
-  <xsl:param name="WebApplicationBaseURL" />
+<xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
   <xsl:param name="q" />
 
@@ -25,9 +29,9 @@
   <xsl:variable name="isPartOfCalendar" select="$listType = 'calendar'" />
   <xsl:variable name="isPartOfOnlineJournal" select="$listType = 'online'" />
   <xsl:variable name="isJournal" select="$currentType = 'jpjournal'" />
-
-  <xsl:variable name="showMetadataAndDerivate"
-    select="not($hasChildren) or (not($isJournal) and ($isPartOfOnlineJournal or $isPartOfCalendar)) or $updatePerm = 'true' or $deletePerm = 'true'" />
+  <xsl:variable name="isVolume" select="$currentType = 'jpvolume'" />
+  <xsl:variable name="isArticle" select="$currentType = 'jparticle'" />
+  <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
 
   <xsl:template priority="9" match="/mycoreobject">
 
@@ -72,62 +76,87 @@
       </xsl:if>
 
       <!-- metadata & derivate -->
-      <xsl:if test="$showMetadataAndDerivate">
-        <div class="jp-content-block row">
-          <div class="row">
-            <xsl:if test="structure/derobjects or metadata/derivateLinks">
-              <div class="col-sm-4 jp-content-thumbnail">
-                <xsl:apply-templates select="." mode="derivateDisplay">
-                  <xsl:with-param name="query" select="$q" />
-                </xsl:apply-templates>
-              </div>
-            </xsl:if>
-            <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
-              <dl class="col-sm-8 jp-layout-metadataList">
-                <xsl:if test="not(structure/derobjects or metadata/derivateLinks)">
-                  <xsl:attribute name="class">col-sm-10 col-sm-offset-1 jp-layout-metadataList</xsl:attribute>
-                </xsl:if>
-                <xsl:variable name="ignore" select="'maintitles def.heading names logo autosort'" />
-                  <xsl:variable name="elements">
-                    <xsl:choose>
-                      <xsl:when test="$currentType = 'jpinst'">
-                      	names|alternatives|placesOfActivity|timesOfActivity|links|addresses|phones|urls|emails|notes|functions|identifiers|logo|def.doubletOf
-                      </xsl:when>
-                      <xsl:when test="$currentType = 'person'">
-                      	def.heading|def.alternative|def.peerage|def.gender|def.contact|def.role|def.placeOfActivity|def.dateOfBirth|def.placeOfBirth|def.dateOfDeath|def.placeOfDeath|def.note|def.link|def.identifier|def.doubletOf
-                      </xsl:when>
-                      <xsl:when test="$currentType = 'jpjournal'">
-                      	maintitles|subtitles|participants|dates|traditions|identis|languages|rights|predeces|successors|ddcs|abstracts|notes|contentClassis1|contentClassis2|contentClassis3|contentClassis4|contentClassis5|contentClassis6|contentClassis7|maintitlesForSorting|autosort
-                      </xsl:when>
-                      <xsl:when test="$currentType = 'jpvolume'">
-                      	maintitles|subtitles|participants|dates|traditions|identis|collationNotes|volContentClassis1|volContentClassis2|volContentClassis3|volContentClassis4|volContentClassis5|volContentClassis6|abstracts|notes|people|publicationNotes|normedPubLocations|footNotes|bibEvidences|indexFields|autosort
-                      </xsl:when>
-                      <xsl:when test="$currentType = 'jparticle'">
-                      	maintitles|subtitles|participants|dates|refs|identis|sizes|keywords|abstracts|notes|types|rubrics|classispub|classispub2|classispub3|classispub4
-                      </xsl:when>
-                  </xsl:choose>
-                </xsl:variable>
-														
-                <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" >
-                  <xsl:sort order="ascending" select="string-length(substring-before($elements, name()))" data-type="number" />
-                </xsl:apply-templates>
-                <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
-                  <xsl:apply-templates mode="linkedArticles" select="." />
-                  <xsl:apply-templates mode="linkedCalendar" select="." />
-                </xsl:if>
+      <xsl:variable name="showDerivate"
+                    select="(not($hasChildren) or (not($isJournal) and ($isPartOfOnlineJournal or $isPartOfCalendar)) or $updatePerm = 'true' or $deletePerm = 'true') and
+                    (structure/derobjects or metadata/derivateLinks)" />
+
+      <div class="jp-content-block row">
+        <div class="row">
+          <xsl:if test="$showDerivate">
+            <div class="col-sm-4 jp-content-thumbnail">
+              <xsl:apply-templates select="." mode="derivateDisplay">
+                <xsl:with-param name="query" select="$q" />
+              </xsl:apply-templates>
+            </div>
+          </xsl:if>
+          <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
+            <dl class="col-sm-8 jp-layout-metadataList">
+              <xsl:if test="not($showDerivate)">
+                <xsl:attribute name="class">col-sm-10 col-sm-offset-1 jp-layout-metadataList</xsl:attribute>
+              </xsl:if>
+              <xsl:variable name="ignore" select="'maintitles def.heading names logo autosort'" />
+              <xsl:variable name="ignoreGuestJournal" select="'traditions notes rights predeces successors contentClassis1 contentClassis2 contentClassis3 contentClassis4 contentClassis5 contentClassis6 contentClassis7 maintitlesForSorting'" />
+              <xsl:variable name="ignoreGuestVolume" select="'traditions notes collationNotes volContentClassis1 volContentClassis2 volContentClassis3 volContentClassis4 volContentClassis5 volContentClassis6 people indexFields'" />
+              <xsl:variable name="ignoreGuestArticle" select="''" />
+              <xsl:variable name="elements">
                 <xsl:choose>
-                  <xsl:when test="metadata/derivateLinks/derivateLink">
-                    <xsl:apply-templates mode="metadataURN" select="metadata/derivateLinks/derivateLink" />
+                  <xsl:when test="$currentType = 'jpinst'">
+                    names|alternatives|placesOfActivity|timesOfActivity|links|addresses|phones|urls|emails|notes|functions|identifiers|logo|def.doubletOf
                   </xsl:when>
-                  <xsl:when test="structure/derobjects/derobject">
-                    <xsl:apply-templates mode="metadataURN" select="structure/derobjects/derobject" />
+                  <xsl:when test="$currentType = 'person'">
+                    def.heading|def.alternative|def.peerage|def.gender|def.contact|def.role|def.placeOfActivity|def.dateOfBirth|def.placeOfBirth|def.dateOfDeath|def.placeOfDeath|def.note|def.link|def.identifier|def.doubletOf
+                  </xsl:when>
+                  <xsl:when test="$isJournal">
+                    maintitles|subtitles|participants|dates|traditions|identis|languages|rights|predeces|successors|ddcs|abstracts|notes|contentClassis1|contentClassis2|contentClassis3|contentClassis4|contentClassis5|contentClassis6|contentClassis7|maintitlesForSorting|autosort
+                  </xsl:when>
+                  <xsl:when test="$isVolume">
+                    maintitles|subtitles|participants|dates|traditions|identis|collationNotes|volContentClassis1|volContentClassis2|volContentClassis3|volContentClassis4|volContentClassis5|volContentClassis6|abstracts|notes|people|publicationNotes|normedPubLocations|footNotes|bibEvidences|indexFields|autosort
+                  </xsl:when>
+                  <xsl:when test="$isArticle">
+                    maintitles|subtitles|participants|dates|refs|identis|sizes|keywords|abstracts|notes|types|rubrics|classispub|classispub2|classispub3|classispub4
                   </xsl:when>
                 </xsl:choose>
-              </dl>
-            </xsl:if>
-          </div>
+              </xsl:variable>
+
+              <xsl:choose>
+                <xsl:when test="$isGuest and $isJournal">
+                  <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and not(contains($ignoreGuestJournal, name())) and */@inherited='0']" >
+                    <xsl:sort select="string-length(substring-before($elements, name()))" data-type="number" />
+                  </xsl:apply-templates>
+                </xsl:when>
+                <xsl:when test="$isGuest and $isVolume">
+                  <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and not(contains($ignoreGuestVolume, name())) and */@inherited='0']" >
+                    <xsl:sort select="string-length(substring-before($elements, name()))" data-type="number" />
+                  </xsl:apply-templates>
+                </xsl:when>
+                <xsl:when test="$isGuest and $isArticle">
+                  <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and not(contains($ignoreGuestArticle, name())) and */@inherited='0']" >
+                    <xsl:sort select="string-length(substring-before($elements, name()))" data-type="number" />
+                  </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" >
+                    <xsl:sort select="string-length(substring-before($elements, name()))" data-type="number" />
+                  </xsl:apply-templates>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
+                <xsl:apply-templates mode="linkedArticles" select="." />
+                <xsl:apply-templates mode="linkedCalendar" select="." />
+              </xsl:if>
+              <xsl:choose>
+                <xsl:when test="metadata/derivateLinks/derivateLink">
+                  <xsl:apply-templates mode="metadataURN" select="metadata/derivateLinks/derivateLink" />
+                </xsl:when>
+                <xsl:when test="structure/derobjects/derobject">
+                  <xsl:apply-templates mode="metadataURN" select="structure/derobjects/derobject" />
+                </xsl:when>
+              </xsl:choose>
+            </dl>
+          </xsl:if>
         </div>
-      </xsl:if>
+      </div>
       <xsl:if test="$updatePerm = 'true'">
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-upload.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}rsc/derivatebrowser/gui/js/derivatebrowser-tools.js" />

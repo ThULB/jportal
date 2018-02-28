@@ -141,7 +141,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
     margin: 0;
 }
 .jp-layout-mainContent {
-	padding: 1px 29px 49px;
+	padding: 0 0 49px;
 	background-color: white;
 }
 .jp-layout-titlewrap{
@@ -215,8 +215,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 
 #jp-breadcrumb-container {
 	font-size: 11px;
-	padding-right: 29px;
-	padding-left: 29px;
+	padding: 0 1px;
 	background-color: white;
 }
 
@@ -297,6 +296,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 .jp-layout-metadataList dt {
 	clear: left;
 	margin-bottom: 10px;
+	padding: 0 1px;
 }
 
 .jp-layout-metadataList dd > a:not(:last-child):after{
@@ -333,6 +333,13 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	float: left;
 	list-style: none outside none;
 	overflow: hidden;
+}
+
+@media(max-width: 768px) {
+	.jp-layout-metadataList {
+		margin-top: 1em;
+		width: 100%;
+	}
 }
 
 .jp-layout-metadataList li span {
@@ -677,13 +684,13 @@ p.jp-layout-metadata-list {
 
 #main .jp-content-block ~ .jp-content-block {
 	border-top: 1px solid #dbdbdb;
-	padding-top: 15px;
-	margin-top: 15px;
+	padding-top: 1em;
+	margin-top: 3em;
 }
 
 .jp-layout-derivateList .jp-layout-derivate .edit {
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	list-style: none;
 }
 
@@ -697,6 +704,10 @@ p.jp-layout-metadata-list {
 
 .jp-content-thumbnail {
 	
+}
+
+.jp-layout-tableOfContent .jp-layout-derivate a.thumbnail {
+	margin: 9px 0 0;
 }
 
 .jp-content-thumbnail .jp-layout-derivate a.thumbnail > img {
