@@ -95,7 +95,7 @@
                 <xsl:attribute name="class">col-sm-10 col-sm-offset-1 jp-layout-metadataList</xsl:attribute>
               </xsl:if>
               <xsl:variable name="ignore" select="'maintitles def.heading names logo autosort'" />
-              <xsl:variable name="ignoreGuestJournal" select="'traditions notes rights predeces successors contentClassis1 contentClassis2 contentClassis3 contentClassis4 contentClassis5 contentClassis6 contentClassis7 maintitlesForSorting'" />
+              <xsl:variable name="ignoreGuestJournal" select="'journalTypes traditions notes rights predeces successors contentClassis1 contentClassis2 contentClassis3 contentClassis4 contentClassis5 contentClassis6 contentClassis7 maintitlesForSorting'" />
               <xsl:variable name="ignoreGuestVolume" select="'traditions notes collationNotes volContentClassis1 volContentClassis2 volContentClassis3 volContentClassis4 volContentClassis5 volContentClassis6 people indexFields'" />
               <xsl:variable name="ignoreGuestArticle" select="''" />
               <xsl:variable name="elements">
