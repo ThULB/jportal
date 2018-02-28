@@ -56,24 +56,25 @@
     </xsl:for-each>
 
     <!-- Origin Info -->
-    <xsl:if test="./metadata/dates/date">
+    <xsl:if test="./metadata/dates/date[@type='published']">
       <mods:originInfo eventType="publication">
-        <xsl:for-each select="./metadata/dates/date[@inherited=0]">
-            <mods:dateIssued>
-              <xsl:if test="@type='published_from'">
-                <xsl:attribute name="point"><xsl:value-of select="'start'" /></xsl:attribute>
-              </xsl:if>
-              <xsl:if test="@type='published_until'">
-                <xsl:attribute name="point"><xsl:value-of select="'end'" /></xsl:attribute>
-              </xsl:if>
-              <xsl:value-of select="text()" />
+        <xsl:choose>
+          <xsl:when test="./metadata/dates/date[@type='published']/@date">
+            <mods:dateIssued encoding="iso8601">
+              <xsl:value-of select="./metadata/dates/date[@type='published']/@date" />
             </mods:dateIssued>
-        </xsl:for-each>
-        <xsl:if test="not(./metadata/dates/date[@inherited=0])">
-          <mods:dateIssued>
-            <xsl:value-of select="jpxml:getPublishedISODate(@ID)" />
-          </mods:dateIssued>
-        </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <mods:dateIssued point="start" encoding="iso8601">
+              <xsl:value-of select="./metadata/dates/date[@type='published']/@from" />
+            </mods:dateIssued>
+            <xsl:if test="./metadata/dates/date[@type='published']/@until">
+              <mods:dateIssued point="end" encoding="iso8601">
+                <xsl:value-of select="./metadata/dates/date[@type='published']/@until" />
+              </mods:dateIssued>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
       </mods:originInfo>
     </xsl:if>
 
