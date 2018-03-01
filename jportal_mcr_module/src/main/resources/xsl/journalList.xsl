@@ -22,33 +22,54 @@
           </div>
         </div>
         <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1">
-
+          <li>#</li>
+          <li>A</li>
+          <li>B</li>
+          <li>C</li>
+          <li>D</li>
+          <li>E</li>
+          <li>F</li>
+          <li>G</li>
+          <li>H</li>
+          <li>I</li>
+          <li>J</li>
+          <li>K</li>
+          <li>L</li>
+          <li>M</li>
+          <li>N</li>
+          <li>O</li>
+          <li>P</li>
+          <li>Q</li>
+          <li>R</li>
+          <li>S</li>
+          <li>T</li>
+          <li>U</li>
+          <li>V</li>
+          <li>W</li>
+          <li>X</li>
+          <li>Y</li>
+          <li>Z</li>
         </ul>
       </div>
-        <div class="row container-fluid" id="resultList">
-            <div id="atozFacets" class="col-sm-3">
-                <h5 id="document_hits"></h5>
-                <div id="document_type"></div>
-            </div>
-            <div class="col-sm-9 jp-layout-hits">
-                <div class="jp-layout-triangle hidden-xs"></div>
-                <div class="jp-layout-triangle hidden-xs"></div>
-                <div id="objectList" class="tab-panel"></div>
-            </div>
+      <div class="row container-fluid" id="resultList">
+        <div id="atozFacets" class="col-sm-3">
+          <h5 id="document_hits"></h5>
+          <div id="document_type"></div>
         </div>
+        <div class="col-sm-9 jp-layout-hits">
+          <div class="jp-layout-triangle hidden-xs"></div>
+          <div class="jp-layout-triangle hidden-xs"></div>
+          <div id="objectList" class="tab-panel"></div>
+        </div>
+      </div>
     </div>
 
-    <script src="https://unpkg.com/rxjs@5.4.3/bundles/Rx.min.js"></script>
-    <script src="{$WebApplicationBaseURL}js/jp-journalList-facetsModel.js"></script>
-    <script src="{$WebApplicationBaseURL}js/jp-journalList-facetsView.js"></script>
-    <script src="{$WebApplicationBaseURL}js/jp-journalList-resultListModelView.js"></script>
-    <script src="{$WebApplicationBaseURL}js/jp-journalList-tabsModelView.js"></script>
     <script src="{$WebApplicationBaseURL}js/jp-journalList-main.js"></script>
-      <script type="text/javascript">
-          $(document).ready(function() {
-          importCSS();
-          });
-      </script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+      importCSS();
+      });
+    </script>
   </xsl:template>
 
   <!-- =================================================================== -->

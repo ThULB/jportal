@@ -1,57 +1,72 @@
 var jp = jp || {};
-var baseURL = jp.baseURL;
 
-let UIModel = {
-    activeTabs: new Set(),
-    facets: [],
-    usedFacets: new Set(),
-    titleFilter: "",
-    selectedTab: "",
-    journals: [],
-    numFound: 0
-};
+jp.journalList = {
+  activeTabs: [],
+  facets: [],
+  usedFacets: [],
+  titleFilter: "",
+  selectedTab: "",
+  numFound: 0,
+  excludedFacets: [],
+  labelsMap: {},
+  lookupTable: {},
 
-function clear(container) {
-    while (container.firstChild) {
-        container.removeChild(container.firstChild);
+  init: function () {
+    jp.journalList.getLocationHash();
+
+    $.getJSON(jp.baseURL + 'rsc/facets/initData')
+        .then(data => {
+          jp.journalList.labelsMap = data.labelsMap;
+          jp.journalList.lookupTable = data.lookupTable;
+          jp.journalList.excludedFacets = data.excludedFacets;
+        })
+        .then(() => jp.journalList.update())
+  },
+
+  getLocationHash: function () {
+    let tab = "A";
+    if (location.hash !== undefined && location.hash !== null && location.hash !== "") {
+      tab = jp.journalList.fixHashTab(location.hash.substring(1, 2).toUpperCase());
+
+      jp.journalList.usedFacets = [];
+      location.hash.substring(3)
+          .split("&")
+          .filter((v, i, array) => array.indexOf(v) === i)// remove duplicates in Array;
+          .filter(f => f !== "")
+          .forEach(f => {
+            if (f.indexOf("titleFilter:") > -1) {
+              jp.journalList.titleFilter = f.replace("titleFilter:", "");
+            } else {
+              jp.journalList.usedFacets.push(f)
+            }
+
+          });
     }
-}
+    jp.journalList.selectedTab = tab;
+  },
 
-let filterInput = document.getElementById("atozFilter");
-let titleFilter = Rx.Observable.fromEvent(filterInput, "input")
-    .debounceTime(500)
-    .map(event => model => Object.assign({}, model, {titleFilter: event.target.value}));
+  fixHashTab: function (c) {
+    if (c === '_') {
+      return '#';
+    } else if (c === '#') {
+      return '_';
+    }
+    return c;
+  },
 
-let clearFilterButton = document.getElementById("atozFilterRemoveButton");
-let clearFilter = Rx.Observable.fromEvent(clearFilterButton, "click")
-    .map(event => model => Object.assign({}, model, {titleFilter: ""}));
-
-function searchResultsToModel(searchResult) {
-    return Rx.Observable.merge(
-        getActiveTabs(searchResult),
-        getFacetObjStream(searchResult),
-        getUsedFacetObjStream(searchResult),
-        Rx.Observable.of(searchResult)
-            .map(r => r.response.numFound)
-            .map(numFound => model => Object.assign({}, model, {numFound: numFound}))
-    );
-}
-
-function getSearchURL(/*List*/ facets, titleFilter, /*boolean*/ justTitles, tabLetter) {
-    // var additionalQuery = $('#firstLetterTab').attr('additionalQuery');
+  getSearchURL: function (/*List*/ facets, titleFilter, /*boolean*/ justTitles, tabLetter) {
     let additionalQuery = "%2BobjectType:jpjournal";
-    let searchURL = baseURL + 'servlets/solr/select?wt=json&sort=maintitle_sort asc&rows=9999&q=' + additionalQuery;
+    let searchURL = jp.baseURL
+        + 'servlets/solr/select?wt=json&sort=maintitle_sort asc&rows=9999&q='
+        + additionalQuery;
 
-    let titlesFlag = "";
-    if (justTitles) {
-        titlesFlag = "&fl=maintitle";
-    }
+    let titlesFlag = justTitles ? "&fl=maintitle" : "";
 
     let qry = '';
     if (tabLetter === '#') {
-        qry = ' -maintitle_sort:[a TO z] -maintitle_sort:z*';
-    } else if (tabLetter != null && tabLetter !== "") {
-        qry = ' %2Bmaintitle_sort:' + tabLetter.toLowerCase() + '*';
+      qry = ' -maintitle_sort:[a TO z] -maintitle_sort:z*';
+    } else if (tabLetter !== undefined && tabLetter !== null && tabLetter !== "") {
+      qry = ' %2Bmaintitle_sort:' + tabLetter.toLowerCase() + '*';
     }
 
     let facetParams = "";
@@ -59,158 +74,399 @@ function getSearchURL(/*List*/ facets, titleFilter, /*boolean*/ justTitles, tabL
     titleFilter = titleFilter !== "" ? "&fq=maintitle_sort:*" + titleFilter + "*" : "";
 
     return searchURL + qry + facetParams + titlesFlag + '&facet.field=journalType&facet=true' + titleFilter;
+  },
+
+  getJournalTitles: function () {
+    let model = jp.journalList;
+    let journalTitlesSearchUrl = jp.journalList.getSearchURL(model.usedFacets, model.titleFilter, true);
+    return $.getJSON(journalTitlesSearchUrl);
+  },
+
+  getResultList: function () {
+    let model = jp.journalList;
+    let selectedTabSearchUrl = jp.journalList.getSearchURL(model.usedFacets, model.titleFilter, false, model.selectedTab);
+    return $.getJSON(selectedTabSearchUrl);
+  },
+
+  bufferCount: function (array, count) {
+    let bufferCount = [];
+    for (i = 0; i < array.length; i = i + count) {
+      bufferCount.push(array.slice(i, i + count));
+    }
+
+    return bufferCount;
+  },
+
+  update: function () {
+    jp.journalList.getJournalTitles()
+        .then(jp.journalList.updateModel)
+        .then(() => jp.journalList.updateResultList())
+  },
+
+  updateResultList: function () {
+    return jp.journalList.getResultList()
+        .then(searchResults => jp.journalList.view.renderResultList(searchResults.response.docs))
+  },
+
+  updateTabs: function (searchResult) {
+    let activeTabs = searchResult.response.docs
+        .map(doc => doc.maintitle)
+        .filter(title => title !== undefined && title !== null && title.length > 0)
+        .map(title => title[0].toUpperCase())
+        .map(char => (char.charCodeAt(0) < 65 || char.charCodeAt(0) > 90) ? "#" : char)
+        .filter((v, i, array) => array.indexOf(v) === i) // remove duplicates in Array
+        .sort();
+
+    if (activeTabs.length > 0 && activeTabs.indexOf(jp.journalList.selectedTab) === -1) {
+      let i = 0;
+      if (activeTabs[i].indexOf('#') > -1 && activeTabs.length > 1) {
+        i = 1;
+      }
+
+      jp.journalList.selectedTab = activeTabs[i];
+    }
+
+    jp.journalList.activeTabs = activeTabs;
+  },
+
+  updateFacets: function (searchResult) {
+    let usedFacets = searchResult.responseHeader.params.q
+        .split(' ')
+        .filter(q => q.startsWith('+journalType'))
+        .map(q => q.replace('+journalType:', ''))
+        .map(q => q.replace(/"/g, ''))
+        .filter((v, i, array) => array.indexOf(v) === i)// remove duplicates in Array;
+        .filter(f => f !== "");
+
+    let facetsFields = searchResult.facet_counts.facet_fields.journalType;
+    let facets = jp.journalList.bufferCount(facetsFields, 2)
+        .filter(journalType => journalType[1] > 0)
+        .map(journalType => ({
+          categID: journalType[0],
+          count: journalType[1],
+          label: jp.journalList.labelsMap[journalType[0]].label,
+          parent: jp.journalList.lookupTable[journalType[0].split(':')[0]],
+          excluded: !!jp.journalList.excludedFacets.filter(ex => journalType[0].indexOf(ex) > -1).pop(),
+          inUse: usedFacets.indexOf(journalType[0]) > -1
+        }))
+
+    jp.journalList.usedFacets = usedFacets;
+    jp.journalList.facets = facets;
+  },
+
+  updateNumFound: function (searchResult) {
+    jp.journalList.numFound = searchResult.response.numFound;
+  },
+
+  updateLocationHash: function () {
+    let tab = jp.journalList.fixHashTab(jp.journalList.selectedTab);
+    let facets = jp.journalList.usedFacets;
+
+    if (jp.journalList.titleFilter !== undefined && jp.journalList.titleFilter !== "") {
+      facets = facets.concat("titleFilter:" + jp.journalList.titleFilter);
+    }
+
+    facets = facets.join("&");
+
+    location.hash = tab + (facets !== "" ? ("/" + facets) : "");
+  },
+
+  updateModel: function (searchResult) {
+    jp.journalList.updateTabs(searchResult)
+    jp.journalList.updateFacets(searchResult)
+    jp.journalList.updateNumFound(searchResult)
+    jp.journalList.updateLocationHash()
+
+    let model = jp.journalList;
+    jp.journalList.view.renderHitCount(model.numFound)
+    jp.journalList.view.renderFacetList(model.facets, model.handleFacetClick)
+    jp.journalList.view.renderTabNav(model.activeTabs, model.selectedTab, model.handleTabClick)
+    jp.journalList.view.renderFilterInput(model.titleFilter, model.handleFilterInput)
+  },
+
+  handleTabClick: function (tab) {
+    jp.journalList.selectedTab = tab;
+    jp.journalList.updateResultList()
+        .then(() => jp.journalList.updateLocationHash())
+    ;
+  },
+
+  handleFilterInput: function (value) {
+    jp.journalList.titleFilter = value;
+    jp.journalList.update();
+  },
+
+  handleFacetClick: function (facet) {
+    if (facet.add) {
+      jp.journalList.usedFacets.push(facet.add);
+    } else if (facet.delete) {
+      let index = jp.journalList.usedFacets.indexOf(facet.delete);
+      jp.journalList.usedFacets.splice(index, 1);
+    }
+
+    jp.journalList.update();
+  },
 }
 
-function getTabsChar(model) {
-  let journalTitlesSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, true);
+jp.journalList.view = {
+  hitCount: document.getElementById("document_hits"),
+  facets: document.getElementById("document_type"),
+  tabs: document.getElementById("tabNav").getElementsByTagName("li"),
+  selectedTab: undefined,
+  resultList: document.getElementById("objectList"),
+  filter: document.getElementById("atozFilter"),
+  clearFilterButton: document.getElementById("atozFilterRemoveButton"),
+  clearFilterButtonIcon: document.getElementById("atozFilterRemoveIcon"),
 
-  let journalTitlesStream = Rx.Observable.fromPromise($.getJSON(journalTitlesSearchUrl))
-      .flatMap(searchResults => searchResultsToModel(searchResults));
+  renderHitCount: function (num) {
+    let text = num === 1 ? "Periodikum" : "Periodika";
+    jp.journalList.view.hitCount.innerHTML = num + " " + text;
+  },
 
-  return journalTitlesStream.reduce((m, changeFn) => changeFn(m), model);
-}
+  treeifyFacets: function (list) {
+    let fragment = document.createDocumentFragment();
+    let lookup = {};
 
-function getResultList(model) {
-  let selectedTabSearchUrl = getSearchURL(model.usedFacets, model.titleFilter, false, model.selectedTab);
-
-  let journalsStream = Rx.Observable.fromPromise($.getJSON(selectedTabSearchUrl))
-      .map(searchResults => journalsToModel(searchResults));
-
-  return journalsStream.reduce((m, changeFn) => changeFn(m), model);
-}
-
-let hitCountContainer = document.getElementById("document_hits");
-let facetsContainer = document.getElementById("document_type");
-let tabNavContainer = document.getElementById("tabNav");
-let resultListContainer = document.getElementById("objectList");
-
-let facetsCheckboxChangeEvents = new Rx.Subject()
-    .map(event => model => {
-        let row = event.currentTarget.closest(".jp-journalList-facet-row");
-        if(row == null) {
-            console.warn("Unable to find parent .jp-journalList-facet-row");
-            return model;
-        }
-        let checkbox = row.querySelector("input");
-        if(event.target !== checkbox) {
-            checkbox.checked = !checkbox.checked;
-        }
-        let categID = row.dataset.id;
-        if(categID == null) {
-            console.warn("Unable to find data-id of .jp-journalList-facet-row");
-            return model;
-        }
-        if (checkbox.checked) {
-            model.usedFacets.add(categID);
-        } else {
-            model.usedFacets.delete(categID);
-        }
-        updateLocationHash(model);
-        return model;
+    list.forEach(function (row) {
+      lookup[row.dataset.id] = row;
     });
-
-let tabNavClickEvents = new Rx.Subject()
-    .map(event => model => {
-        model.selectedTab = event.target.textContent;
-        updateLocationHash(model);
-        return model;
+    list.forEach(function (row) {
+      let parent = lookup[row.dataset.parent];
+      if (parent !== undefined && parent !== null && row.dataset.parent !== "null") {
+        parent.appendChild(lookup[row.dataset.id]);
+      } else {
+        fragment.appendChild(lookup[row.dataset.id]);
+      }
     });
+    return fragment;
+  },
 
-let facetCheckboxEventHandler = input => Rx.Observable.fromEvent(input, "click")
-    .subscribe(event => facetsCheckboxChangeEvents.next(event));
+  renderFilterInput: function (titleFilter, eventHandler) {
+    function toggleClearFilterButton() {
+      let valueIsEmpty = jp.journalList.view.filter.value === "";
 
+      jp.journalList.view.clearFilterButtonIcon.style.visibility = valueIsEmpty ? "hidden" : "visible";
+      jp.journalList.view.clearFilterButton.style.cursor = valueIsEmpty ? "default" : "pointer";
+      jp.journalList.view.clearFilterButton.onclick = valueIsEmpty ? undefined : filterButtonClick;
+    }
 
-let tabNavEventHandler = tab => Rx.Observable.fromEvent(tab, "click")
-    .subscribe(event => tabNavClickEvents.next(event));
+    function filterButtonClick(e) {
+      jp.journalList.view.filter.value = "";
+      toggleClearFilterButton();
+      eventHandler(jp.journalList.view.filter.value);
+    };
 
-let clearFilterButtonIcon = document.getElementById("atozFilterRemoveIcon");
+    if (titleFilter !== undefined && titleFilter !== "") {
+      jp.journalList.view.filter.value = titleFilter;
+      toggleClearFilterButton();
+    }
 
-let UIEvents = Rx.Observable.merge(
-    facetsCheckboxChangeEvents,
-    tabNavClickEvents,
-    titleFilter,
-    clearFilter
-).scan((model, changeFn) => changeFn(model), UIModel);
+    jp.journalList.view.filter.oninput = e => {
+      let saveOnInput = e.target.oninput;
+      e.target.oninput = undefined;
+      setTimeout(() => {
+        toggleClearFilterButton();
+        eventHandler(e.target.value)
+        e.target.oninput = saveOnInput;
+      }, 500);
+    };
+  },
+
+  renderFacetListEntry: function (facetObj, /*function*/ eventHandler) {
+    let row = document.createElement("div");
+    row.className = "jp-journalList-facet-row";
+    row.dataset.id = facetObj.categID;
+    row.dataset.parent = facetObj.parent;
+
+    let entry = document.createElement("div");
+    entry.className = "jp-journalList-facet-entry";
+
+    let linkContainer = document.createElement("div");
+    linkContainer.className = "jp-journalList-facet-linkContainer";
+
+    let input = document.createElement("input");
+    input.className = "jp-journalList-facet-checkbox";
+    input.type = "checkbox";
+
+    let label = document.createElement("div");
+    label.className = "jp-journalList-facet-label";
+    label.textContent = facetObj.label;
+
+    let count = document.createElement("div");
+    count.className = "jp-journalList-facet-count";
+    count.textContent = facetObj.count;
+
+    linkContainer.appendChild(input);
+    linkContainer.appendChild(label);
+    entry.appendChild(linkContainer);
+    entry.appendChild(count);
+    row.appendChild(entry);
+
+    if (facetObj.inUse) {
+      input.checked = true;
+    }
+
+    function onclick(e) {
+      if (eventHandler !== undefined && eventHandler !== null) {
+        let operation = facetObj.inUse ? "delete" : "add";
+        let event = JSON.parse('{"' + operation + '":"' + facetObj.categID + '"}');
+        eventHandler(event)
+      }
+    }
+
+    entry.onclick = onclick;
+    input.onclick = onclick;
+
+    return row;
+  },
+
+  renderFacetList: function (facets, facetCheckboxEventHandler) {
+    let sortedFacets = facets.sort((f1, f2) => f1.label.localeCompare(f2.label))
+    let facetsEntries = sortedFacets.filter(f => !(jp.isGuest && f.excluded))
+        .map(f => jp.journalList.view.renderFacetListEntry(f, facetCheckboxEventHandler));
+
+    let newList = document.createElement("div");
+    newList.id = 'atozFacetsItems';
+    newList.appendChild(jp.journalList.view.treeifyFacets(facetsEntries));
+
+    jp.journalList.view.facets.innerHTML = "";
+    jp.journalList.view.facets.appendChild(newList);
+
+  },
+
+  renderTabNav: function (activeTabs, selectedTab, eventHandler) {
+    let tabs = jp.journalList.view.tabs;
+    for (i = 0; i < tabs.length; i++) {
+      let tab = tabs.item(i);
+
+      if (activeTabs.indexOf(tab.textContent) > -1) {
+        tab.classList.add("active");
+        tab.onclick = e => {
+          jp.journalList.view.setSelectedTab(tab);
+          eventHandler(e.target.textContent)
+        };
+      } else {
+        tab.classList.remove("active");
+        tab.onclick = undefined;
+      }
+
+      if (tab.textContent === selectedTab) {
+        jp.journalList.view.setSelectedTab(tab);
+      }
+    }
+  },
+
+  setSelectedTab: function (tab) {
+    if (jp.journalList.view.selectedTab !== undefined) {
+      jp.journalList.view.selectedTab.classList.remove("selected-tab");
+    }
+
+    tab.classList.add("selected-tab");
+    jp.journalList.view.selectedTab = tab;
+  },
+
+  renderJournalTitle: function (journal) {
+    var titleLink = document.createElement("a");
+    var title = document.createElement("h3");
+
+    title.classList.add("journal-title");
+    title.appendChild(titleLink);
+
+    titleLink.textContent = journal.maintitle;
+    titleLink.setAttribute("href", jp.baseURL + 'receive/' + journal.id)
+
+    return title;
+  },
+
+  renderJournalPublished: function (journal) {
+    var publishedStr = 'Erscheinungsverlauf: ';
+    var published = document.createElement("div");
+    published.classList.add("journal-published");
+
+    if (journal["date.published"]) {
+      publishedStr += journal["date.published"];
+    } else if (journal["date.published_from"]) {
+      publishedStr += journal["date.published_from"] + ' - ';
+      if (journal["date.published_until"]) {
+        publishedStr = publishedStr + journal["date.published_until"];
+      }
+    }
+
+    published.textContent = publishedStr;
+
+    return published;
+  },
+
+  renderJournalPublisher: function (journal, solrKey, caption) {
+    var div = document.createElement("div");
+    div.classList.add("publisher");
+
+    var publisherList = journal[solrKey];
+    if (publisherList) {
+      var pusblisherStr = caption + ': ';
+      for (var i = 0; i < publisherList.length; i++) {
+        var publisher = publisherList[i];
+        var indexOfHash = publisher.indexOf('#');
+        if (indexOfHash === -1) {
+          console.log("Invalid publisher format for '" + publisher + "'.");
+          continue;
+        }
+        var publisherID = publisher.substring(0, indexOfHash);
+        var publisherText = publisher.substring(indexOfHash + 1);
+        var publisherLink = "<a href='" + jp.baseURL + 'receive/' + publisherID + "'>" + publisherText + "</a>";
+        pusblisherStr += publisherLink;
+        if (i + 1 < publisherList.length) {
+          pusblisherStr += "; ";
+        }
+      }
+      div.insertAdjacentHTML("afterbegin", pusblisherStr);
+    }
+
+    return div;
+  },
+
+  renderResultListEntry: function (journal) {
+    let journalTitle = jp.journalList.view.renderJournalTitle(journal);
+    let journalPublished = jp.journalList.view.renderJournalPublished(journal);
+    let publisher = jp.journalList.view.renderJournalPublisher(journal, "participant.mainPublisher", "Herausgeber");
+    let author = jp.journalList.view.renderJournalPublisher(journal, "participant.author", "Autor");
+
+    let li = document.createElement("li");
+    li.appendChild(journalTitle);
+    li.appendChild(journalPublished);
+    li.appendChild(publisher);
+    li.appendChild(author);
+    return li;
+  },
+
+  renderResultList: function (resultList) {
+    jp.journalList.view.resultList.textContent = "";
+
+    if (resultList.length > 0) {
+      let fragment = document.createElement("ul");
+      resultList.map(jp.journalList.view.renderResultListEntry)
+          .forEach(entry => fragment.appendChild(entry));
+
+      jp.journalList.view.resultList.appendChild(fragment);
+    } else {
+      jp.journalList.view.resultList
+          .insertAdjacentHTML('afterbegin', '<span class="ui-msg">Keine Einträge unter dieser Katgorie.</span>');
+    }
+  }
+}
+
+jp.journalList.init();
 
 function importCSS() {
-    if (document.createStyleSheet) {
-        document.createStyleSheet(baseURL + 'css/jp-journalList.css');
-    } else {
-        let link = $('<link>').attr({
-            type: 'text/css',
-            rel: 'stylesheet',
-            href: jp.baseURL + 'css/jp-journalList.css',
-            'class': 'myStyle'
-        });
-        $('head').append(link);
-    }
-}
-
-function checkSelectedTab(model){
-  if(!model.activeTabs.has(model.selectedTab)){
-    Rx.Observable.from(model.activeTabs)
-        .min()
-        .subscribe(min => model.selectedTab = min)
-  }
-  updateLocationHash(model);
-  return model;
-}
-
-function getLocationHash(model) {
-    let tab = "A";
-    if (location.hash != null && location.hash !== "") {
-        tab = fixHashTab(location.hash.substring(1, 2).toUpperCase());
-        let facetsAsString = location.hash.substring(3);
-        facetsAsString.split("&").forEach(facet => {
-            if(facet !== "") {
-                model.usedFacets.add(facet);
-            }
-        });
-    }
-    model.selectedTab = tab;
-    return model;
-}
-
-function updateLocationHash(model) {
-    let tab = fixHashTab(model.selectedTab);
-    let facets = Array.from(model.usedFacets).join("&");
-    location.hash = tab + (facets !== "" ? ("/" + facets) : "");
-}
-
-function fixHashTab(c) {
-    if (c === '_') {
-        return '#';
-    } else if (c === '#') {
-        return '_';
-    }
-    return c;
-}
-
-function renderHitCount(model, container) {
-    let text = model.numFound === 1 ? "Periodikum" : "Periodika";
-    container.innerHTML = model.numFound + " " + text;
-}
-
-UIEvents
-    .startWith(UIModel)
-    .map(getLocationHash)
-    .flatMap(getTabsChar)
-    .map(checkSelectedTab)
-    .flatMap(getResultList)
-    .subscribe(model => {
-        renderHitCount(model, hitCountContainer);
-
-        renderFacetList(model, facetsContainer, facetCheckboxEventHandler);
-
-        renderTabNav(model, tabNavContainer, tabNavEventHandler);
-
-        filterInput.value = model.titleFilter;
-
-        if (model.titleFilter !== "") {
-            clearFilterButtonIcon.style.visibility = "visible";
-        } else {
-            clearFilterButtonIcon.style.visibility = "";
-        }
-
-        renderResultList(model, resultListContainer);
+  if (document.createStyleSheet) {
+    document.createStyleSheet(baseURL + 'css/jp-journalList.css');
+  } else {
+    let link = $('<link>').attr({
+      type: 'text/css',
+      rel: 'stylesheet',
+      href: jp.baseURL + 'css/jp-journalList.css',
+      'class': 'myStyle'
     });
+    $('head').append(link);
+  }
+}

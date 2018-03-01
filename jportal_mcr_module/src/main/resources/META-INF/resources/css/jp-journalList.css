@@ -101,17 +101,17 @@
 	height: 2rem;
 }
 
-#atozFilterRemoveIcon{
-	cursor: pointer;
-	visibility: hidden;
-}
 
-#atozFilterRemoveButton:hover {
-	cursor: pointer;
+#atozFilterRemoveIcon{
+	visibility: hidden;
 }
 
 #atozFilterRemoveButton {
 	background-color: transparent;
+}
+
+#atozFilter::-ms-clear {
+	display: none;
 }
 
 @media(max-width: 992px){

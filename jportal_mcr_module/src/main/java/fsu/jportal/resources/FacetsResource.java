@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -56,7 +57,6 @@ public class FacetsResource {
 
         return Response.ok(jsonArray.toString()).build();
     }
-
 
     @GET
     @Path("labelsMap")
@@ -93,8 +93,8 @@ public class FacetsResource {
                     .add(l.id, l.labelJson);
 
             JsonObject jsonObject = resultList.stream()
-                                           .map(CategLabels::new)
-                                           .collect(JsonObject::new, accu, (j1, j2) -> {});
+                                              .map(CategLabels::new)
+                                              .collect(JsonObject::new, accu, (j1, j2) -> {});
             return Response.ok(jsonObject.toString()).build();
         } catch (JDOMException | IOException e) {
             LogManager.getLogger().error("Unable to get facetes labels", e);
@@ -137,6 +137,76 @@ public class FacetsResource {
             return Response.ok(jsonObject.toString()).build();
         } catch (JDOMException | IOException e) {
             LogManager.getLogger().error("Unable to lookupTable", e);
+        }
+
+        return Response.serverError().build();
+    }
+
+    @GET
+    @Path("initData")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response initData() {
+        String currentLang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
+        InputStream layoutSettingsXML = this.getClass().getResourceAsStream("/xml/layoutDefaultSettings.xml");
+        SAXBuilder saxBuilder = new SAXBuilder();
+
+        try {
+            Document layoutSettingsDoc = saxBuilder.build(layoutSettingsXML);
+            XPathFactory xPathFactory = XPathFactory.instance();
+            XPathExpression<Element> facetsClassXpath = xPathFactory
+                    .compile("/layoutSettings/editor/jpjournal/bind/row", Filters.element());
+
+            JsonObject lookupTable = new JsonObject();
+            StringJoiner classIDOr = new StringJoiner(" or ");
+
+            facetsClassXpath
+                    .evaluate(layoutSettingsDoc)
+                    .forEach(elem -> {
+                        String classID = elem.getAttributeValue("class");
+                        String parentID = elem.getAttributeValue("on");
+                        lookupTable.addProperty(classID, parentID);
+
+                        classIDOr.add("c.classid = '" + classID + "'");
+                    });
+
+            String query = "SELECT c.classid, c.categid, l.text, l.lang "
+                    + "FROM mcrcategory c INNER JOIN mcrcategorylabels l "
+                    + "on c.internalid = l.category WHERE l.lang='" + currentLang + "' "
+                    + "and (" + classIDOr.toString() + ");";
+
+            EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
+            Query joinQuery = em.createNativeQuery(query);
+
+            JsonObject labelsMap = new JsonObject();
+            List<Object[]> resultList = joinQuery.getResultList();
+            resultList.forEach(obj -> {
+                String id = obj[1].toString().equals("") ?
+                        obj[0].toString() :
+                        obj[0].toString() + ":" + obj[1].toString();
+                JsonObject labelJson = new JsonObject();
+                labelJson.addProperty("label", obj[2].toString());
+                labelJson.addProperty("lang", obj[3].toString());
+
+                labelsMap.add(id, labelJson);
+            });
+
+            String[] classIDs = MCRConfiguration.instance()
+                                                .getString("JP.Exclude.Facet", "")
+                                                .split(",");
+            JsonArray excludedFacets = new JsonArray(classIDs.length);
+
+            for (int i = 0; i < classIDs.length; i++) {
+                excludedFacets.add(classIDs[i]);
+            }
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("lookupTable", lookupTable);
+            jsonObject.add("labelsMap", labelsMap);
+            jsonObject.add("excludedFacets", excludedFacets);
+
+            return Response.ok(jsonObject.toString()).build();
+        } catch (JDOMException | IOException e) {
+            LogManager.getLogger().error("Unable to get facetes labels", e);
         }
 
         return Response.serverError().build();
