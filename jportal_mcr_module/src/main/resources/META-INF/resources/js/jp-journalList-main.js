@@ -140,7 +140,7 @@ jp.journalList = {
 
     let facetsFields = searchResult.facet_counts.facet_fields.journalType;
     let facets = jp.journalList.bufferCount(facetsFields, 2)
-        .filter(journalType => journalType[1] > 0)
+        .filter(journalType => journalType[1] > 0 || usedFacets.indexOf(journalType[0]) > -1)
         .map(journalType => ({
           categID: journalType[0],
           count: journalType[1],
