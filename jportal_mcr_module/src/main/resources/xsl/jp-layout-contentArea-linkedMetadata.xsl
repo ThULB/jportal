@@ -16,10 +16,10 @@
   </xsl:template>
 
   <xsl:template mode="linkedObjects.result" match="/response[result/@numFound &gt; 0]">
-    <dt class="col-sm-4">
+    <dt class="col-sm-3">
       <xsl:apply-templates mode="linkedObjects.result.label" select="lst[@name = 'responseHeader']/lst[@name = 'params']" />
     </dt>
-    <dd class="col-sm-8 linked">
+    <dd class="col-sm-9 linked">
       <ul>
         <xsl:apply-templates mode="linkedObjects.result.list" select="result/doc" />
         <xsl:apply-templates mode="linkedObjects.result.more" select="." />

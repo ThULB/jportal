@@ -202,7 +202,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 .jp-layout-footer ul {
 	list-style: none;
-	padding: 0px;
+	padding: 0;
 }
 .jp-layout-footer ul li {
 	display: inline-block;
@@ -247,7 +247,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 .jp-layout-hit-breadcrumb li:first-child {
-	padding-left: 0px;
+	padding-left: 0;
 }
 
 .jp-layout-menu-dropdown:nth-last-child(4):hover>menu.jp-layout-submenu-dropdown {
@@ -296,7 +296,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 .jp-layout-metadataList dt {
 	clear: left;
 	margin-bottom: 10px;
-	padding: 0 1px;
+	padding: 0;
 }
 
 .jp-layout-metadataList dd > a:not(:last-child):after{
@@ -310,7 +310,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 .jp-layout-metadataList dd {
 	float: left;
 	margin-bottom: 10px;
-	padding-left: 10px;
+	padding: 0 0 0 10px;
 }
 .jp-layout-metadataList .address dt {
 	width: 90px;
@@ -478,6 +478,7 @@ p.jp-layout-metadata-list {
 
 .jp-layout-tableOfContent > ul {
 	display: block;
+	padding-left: 16px;
 }
 
 .jp-layout-tableOfContent > ul li{
@@ -1251,8 +1252,7 @@ textarea {
 /* Small devices Tablets (≥768px) */
 @media (min-width: 768px) {	
 	.jp-layout-metadataList > dt:not(:first-child),.jp-layout-metadataList > dd:not(:nth-child(2)) {
-		border-top: 1px solid #dbdbdb;
-		padding-top: 5px;
+		padding-top: 2px;
 	}
 	
 	.jp-layout-searchResult-style{

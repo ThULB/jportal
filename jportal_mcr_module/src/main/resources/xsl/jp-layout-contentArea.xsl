@@ -92,10 +92,10 @@
           <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
             <dl class="col-sm-8 jp-layout-metadataList">
               <xsl:if test="not($showDerivate)">
-                <xsl:attribute name="class">col-sm-10 col-sm-offset-1 jp-layout-metadataList</xsl:attribute>
+                <xsl:attribute name="class">col-sm-12 jp-layout-metadataList</xsl:attribute>
               </xsl:if>
               <xsl:variable name="ignore" select="'maintitles def.heading names logo autosort'" />
-              <xsl:variable name="ignoreGuestJournal" select="'journalTypes traditions notes rights predeces successors contentClassis1 contentClassis2 contentClassis3 contentClassis4 contentClassis5 contentClassis6 contentClassis7 maintitlesForSorting'" />
+              <xsl:variable name="ignoreGuestJournal" select="'journalTypes languages traditions notes rights dataModelCoverages predeces successors contentClassis1 contentClassis2 contentClassis3 contentClassis4 contentClassis5 contentClassis6 contentClassis7 maintitlesForSorting'" />
               <xsl:variable name="ignoreGuestVolume" select="'traditions notes collationNotes volContentClassis1 volContentClassis2 volContentClassis3 volContentClassis4 volContentClassis5 volContentClassis6 people indexFields'" />
               <xsl:variable name="ignoreGuestArticle" select="''" />
               <xsl:variable name="elements">
