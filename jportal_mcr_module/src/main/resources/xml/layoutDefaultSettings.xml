@@ -72,7 +72,7 @@
   <i18n tag="successor">editormask.labels.successor</i18n>
   <i18n tag="function">editormask.labels.function</i18n>
 
-  <numPerPage for="volume">10</numPerPage>
+  <numPerPage for="volume">40</numPerPage>
   <numPerPage for="article">5</numPerPage>
   <title allowHTML="false" />
 

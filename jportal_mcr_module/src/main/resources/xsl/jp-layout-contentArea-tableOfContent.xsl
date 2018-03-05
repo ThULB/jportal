@@ -45,6 +45,25 @@
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <div id="jp-tableOfContent" class="jp-layout-tableOfContent jp-content-block row">
         <ul>
+          <xsl:variable name="docSize" select="count($volumes/response/result/doc)" />
+          <xsl:attribute name="style">
+            <xsl:value-of select="'column-count: '" />
+            <xsl:choose>
+              <xsl:when test="$docSize &gt; 31">
+                <xsl:value-of select="'4'" />
+              </xsl:when>
+              <xsl:when test="$docSize &gt; 21">
+                <xsl:value-of select="'3'" />
+              </xsl:when>
+              <xsl:when test="$docSize &gt; 11">
+                <xsl:value-of select="'2'" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="'1'" />
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="';'" />
+          </xsl:attribute>
           <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/response/result/doc" />
         </ul>
         <xsl:apply-templates mode="jp.pagination" select="$volumes/response">

@@ -478,11 +478,14 @@ p.jp-layout-metadata-list {
 
 .jp-layout-tableOfContent > ul {
 	display: block;
-	padding-left: 16px;
+	padding: 0;
+    list-style: none;
 }
 
-.jp-layout-tableOfContent > ul li{
-	margin-bottom: 2px;
+.jp-layout-tableOfContent > ul li {
+	margin-bottom: .5em;
+	list-style: disc;
+	margin-left: 15px;
 }
 
 .resultPaginator {
