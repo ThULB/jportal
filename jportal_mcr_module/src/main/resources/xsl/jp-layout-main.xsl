@@ -104,6 +104,9 @@
           <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow&amp;subset=latin-ext,cyrillic" rel="stylesheet" type="text/css"/>
         </xsl:if>
 
+        <!-- css -->
+        <xsl:apply-templates select="/*/css/text()" mode="jp-import-css"/>
+
         <xsl:if test="$template != ''">
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
             <style type="text/css">
@@ -211,4 +214,9 @@
   <xsl:template match="noEditor">
     <xsl:copy-of select="*"/>
   </xsl:template>
+
+  <xsl:template match="text()" mode="jp-import-css">
+    <link href="{$WebApplicationBaseURL}{.}" rel="stylesheet" type="text/css"/>
+  </xsl:template>
+
 </xsl:stylesheet>
