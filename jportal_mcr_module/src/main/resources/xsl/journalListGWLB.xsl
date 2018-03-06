@@ -22,6 +22,7 @@
         </div>
         <div id="resultList" class="tab-panel"></div>
       </div>
+      <script src="{$WebApplicationBaseURL}js/jp-util.js"></script>
       <script src="{$WebApplicationBaseURL}js/jp-journalList.js"></script>
       <script type="text/javascript">
         $(document).ready(function() {

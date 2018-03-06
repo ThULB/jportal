@@ -69,7 +69,7 @@
 
     <!-- javascript & css imports -->
     <link href="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css"/>
-    <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/js/bootstrap-datetimepicker.js"/>
     <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/highstock/2.0.4/highstock.src.js"/>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-facetDateQuery.js"/>

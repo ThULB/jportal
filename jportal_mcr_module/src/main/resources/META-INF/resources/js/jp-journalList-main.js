@@ -10,17 +10,24 @@ jp.journalList = {
   excludedFacets: [],
   labelsMap: {},
   lookupTable: {},
+  translation: {},
 
   init: function () {
+    moment.locale(jp.lang);
     jp.journalList.getLocationHash();
 
-    $.getJSON(jp.baseURL + 'rsc/facets/initData')
-        .then(data => {
-          jp.journalList.labelsMap = data.labelsMap;
-          jp.journalList.lookupTable = data.lookupTable;
-          jp.journalList.excludedFacets = data.excludedFacets;
-        })
-        .then(() => jp.journalList.update())
+    let dataPromise = Promise.resolve($.getJSON(jp.baseURL + 'rsc/facets/initData')
+      .then(data => {
+        jp.journalList.labelsMap = data.labelsMap;
+        jp.journalList.lookupTable = data.lookupTable;
+        jp.journalList.excludedFacets = data.excludedFacets;
+      }));
+    let translatePromise = jp.util.translate("jp.journallist.*").then(data => {
+        jp.journalList.translation = data;
+    });
+    Promise.all([dataPromise, translatePromise]).then(() => {
+      jp.journalList.update();
+    });
   },
 
   getLocationHash: function () {
@@ -98,12 +105,14 @@ jp.journalList = {
   },
 
   update: function () {
-    jp.journalList.getJournalTitles()
+    jp.journalList.view.renderResultListSpinner();
+    return jp.journalList.getJournalTitles()
         .then(jp.journalList.updateModel)
-        .then(() => jp.journalList.updateResultList())
+        .then(() => jp.journalList.updateResultList());
   },
 
   updateResultList: function () {
+    jp.journalList.view.renderResultListSpinner();
     return jp.journalList.getResultList()
         .then(searchResults => jp.journalList.view.renderResultList(searchResults.response.docs))
   },
@@ -148,7 +157,7 @@ jp.journalList = {
           parent: jp.journalList.lookupTable[journalType[0].split(':')[0]],
           excluded: !!jp.journalList.excludedFacets.filter(ex => journalType[0].indexOf(ex) > -1).pop(),
           inUse: usedFacets.indexOf(journalType[0]) > -1
-        }))
+        }));
 
     jp.journalList.usedFacets = usedFacets;
     jp.journalList.facets = facets;
@@ -172,23 +181,22 @@ jp.journalList = {
   },
 
   updateModel: function (searchResult) {
-    jp.journalList.updateTabs(searchResult)
-    jp.journalList.updateFacets(searchResult)
-    jp.journalList.updateNumFound(searchResult)
-    jp.journalList.updateLocationHash()
+    jp.journalList.updateTabs(searchResult);
+    jp.journalList.updateFacets(searchResult);
+    jp.journalList.updateNumFound(searchResult);
+    jp.journalList.updateLocationHash();
 
     let model = jp.journalList;
-    jp.journalList.view.renderHitCount(model.numFound)
-    jp.journalList.view.renderFacetList(model.facets, model.handleFacetClick)
-    jp.journalList.view.renderTabNav(model.activeTabs, model.selectedTab, model.handleTabClick)
-    jp.journalList.view.renderFilterInput(model.titleFilter, model.handleFilterInput)
+    jp.journalList.view.renderHitCount(model.numFound);
+    jp.journalList.view.renderFacetList(model.facets, model.handleFacetClick);
+    jp.journalList.view.renderTabNav(model.activeTabs, model.selectedTab, model.handleTabClick);
+    jp.journalList.view.renderFilterInput(model.titleFilter, model.handleFilterInput);
   },
 
   handleTabClick: function (tab) {
     jp.journalList.selectedTab = tab;
     jp.journalList.updateResultList()
-        .then(() => jp.journalList.updateLocationHash())
-    ;
+        .then(() => jp.journalList.updateLocationHash());
   },
 
   handleFilterInput: function (value) {
@@ -206,7 +214,7 @@ jp.journalList = {
 
     jp.journalList.update();
   },
-}
+};
 
 jp.journalList.view = {
   hitCount: document.getElementById("document_hits"),
@@ -219,7 +227,8 @@ jp.journalList.view = {
   clearFilterButtonIcon: document.getElementById("atozFilterRemoveIcon"),
 
   renderHitCount: function (num) {
-    let text = num === 1 ? "Periodikum" : "Periodika";
+    let text = num === 1 ? jp.journalList.translation["jp.journallist.periodical"] :
+                           jp.journalList.translation["jp.journallist.periodicals"];
     jp.journalList.view.hitCount.innerHTML = num + " " + text;
   },
 
@@ -254,7 +263,7 @@ jp.journalList.view = {
       jp.journalList.view.filter.value = "";
       toggleClearFilterButton();
       eventHandler(jp.journalList.view.filter.value);
-    };
+    }
 
     if (titleFilter !== undefined && titleFilter !== "") {
       jp.journalList.view.filter.value = titleFilter;
@@ -266,7 +275,7 @@ jp.journalList.view = {
       e.target.oninput = undefined;
       setTimeout(() => {
         toggleClearFilterButton();
-        eventHandler(e.target.value)
+        eventHandler(e.target.value);
         e.target.oninput = saveOnInput;
       }, 500);
     };
@@ -321,7 +330,7 @@ jp.journalList.view = {
   },
 
   renderFacetList: function (facets, facetCheckboxEventHandler) {
-    let sortedFacets = facets.sort((f1, f2) => f1.label.localeCompare(f2.label))
+    let sortedFacets = facets.sort((f1, f2) => f1.label.localeCompare(f2.label));
     let facetsEntries = sortedFacets.filter(f => !(jp.isGuest && f.excluded))
         .map(f => jp.journalList.view.renderFacetListEntry(f, facetCheckboxEventHandler));
 
@@ -331,7 +340,6 @@ jp.journalList.view = {
 
     jp.journalList.view.facets.innerHTML = "";
     jp.journalList.view.facets.appendChild(newList);
-
   },
 
   renderTabNav: function (activeTabs, selectedTab, eventHandler) {
@@ -366,55 +374,55 @@ jp.journalList.view = {
   },
 
   renderJournalTitle: function (journal) {
-    var titleLink = document.createElement("a");
-    var title = document.createElement("h3");
+    let titleLink = document.createElement("a");
+    let title = document.createElement("h3");
 
     title.classList.add("journal-title");
     title.appendChild(titleLink);
 
     titleLink.textContent = journal.maintitle;
-    titleLink.setAttribute("href", jp.baseURL + 'receive/' + journal.id)
+    titleLink.setAttribute("href", jp.baseURL + 'receive/' + journal.id);
 
     return title;
   },
 
   renderJournalPublished: function (journal) {
-    var publishedStr = 'Erscheinungsverlauf: ';
-    var published = document.createElement("div");
-    published.classList.add("journal-published");
-
-    if (journal["date.published"]) {
-      publishedStr += journal["date.published"];
-    } else if (journal["date.published_from"]) {
-      publishedStr += journal["date.published_from"] + ' - ';
-      if (journal["date.published_until"]) {
-        publishedStr = publishedStr + journal["date.published_until"];
-      }
+    let publishedDiv = document.createElement("div");
+    publishedDiv.classList.add("journal-published");
+    let dateFormat = "Do MMM YYYY";
+    let publishedStr = jp.journalList.translation["jp.journallist.published"] + ': ';
+    let publishedValue = journal["date.published"];
+    let toIndex = publishedValue.indexOf(" TO ");
+    if(toIndex > 0) {
+      let from = publishedValue.substring(1, toIndex);
+      let until = publishedValue.substring(toIndex + 4, publishedValue.length - 1);
+      publishedStr += moment(from, "YYYY-MM-DD").format(dateFormat);
+      publishedStr += " - ";
+      publishedStr += moment(until, "YYYY-MM-DD").format(dateFormat);
+    } else {
+        publishedStr += moment(publishedValue, "YYYY-MM-DD").format(dateFormat);
     }
-
-    published.textContent = publishedStr;
-
-    return published;
+    publishedDiv.textContent = publishedStr;
+    return publishedDiv;
   },
 
   renderJournalPublisher: function (journal, solrKey, caption) {
-    var div = document.createElement("div");
+    let div = document.createElement("div");
     div.classList.add("publisher");
 
-    var publisherList = journal[solrKey];
+    let publisherList = journal[solrKey];
     if (publisherList) {
-      var pusblisherStr = caption + ': ';
-      for (var i = 0; i < publisherList.length; i++) {
-        var publisher = publisherList[i];
-        var indexOfHash = publisher.indexOf('#');
+      let pusblisherStr = caption + ': ';
+      for (let i = 0; i < publisherList.length; i++) {
+        let publisher = publisherList[i];
+        let indexOfHash = publisher.indexOf('#');
         if (indexOfHash === -1) {
           console.log("Invalid publisher format for '" + publisher + "'.");
           continue;
         }
-        var publisherID = publisher.substring(0, indexOfHash);
-        var publisherText = publisher.substring(indexOfHash + 1);
-        var publisherLink = "<a href='" + jp.baseURL + 'receive/' + publisherID + "'>" + publisherText + "</a>";
-        pusblisherStr += publisherLink;
+        let publisherID = publisher.substring(0, indexOfHash);
+        let publisherText = publisher.substring(indexOfHash + 1);
+        pusblisherStr += "<a href='" + jp.baseURL + 'receive/' + publisherID + "'>" + publisherText + "</a>";
         if (i + 1 < publisherList.length) {
           pusblisherStr += "; ";
         }
@@ -428,8 +436,10 @@ jp.journalList.view = {
   renderResultListEntry: function (journal) {
     let journalTitle = jp.journalList.view.renderJournalTitle(journal);
     let journalPublished = jp.journalList.view.renderJournalPublished(journal);
-    let publisher = jp.journalList.view.renderJournalPublisher(journal, "participant.mainPublisher", "Herausgeber");
-    let author = jp.journalList.view.renderJournalPublisher(journal, "participant.author", "Autor");
+    let publisher = jp.journalList.view.renderJournalPublisher(journal, "participant.mainPublisher",
+        jp.journalList.translation["jp.journallist.publisher"]);
+    let author = jp.journalList.view.renderJournalPublisher(journal, "participant.author",
+        jp.journalList.translation["jp.journallist.author"]);
 
     let li = document.createElement("li");
     li.appendChild(journalTitle);
@@ -452,21 +462,12 @@ jp.journalList.view = {
       jp.journalList.view.resultList
           .insertAdjacentHTML('afterbegin', '<span class="ui-msg">Keine Einträge unter dieser Katgorie.</span>');
     }
+  },
+
+  renderResultListSpinner: function() {
+      jp.journalList.view.resultList.innerHTML = "<i class=\"fa fa-spinner fa-spin fa-2x jp-journalList-spinner\"></i>";
   }
-}
+
+};
 
 jp.journalList.init();
-
-function importCSS() {
-  if (document.createStyleSheet) {
-    document.createStyleSheet(baseURL + 'css/jp-journalList.css');
-  } else {
-    let link = $('<link>').attr({
-      type: 'text/css',
-      rel: 'stylesheet',
-      href: jp.baseURL + 'css/jp-journalList.css',
-      'class': 'myStyle'
-    });
-    $('head').append(link);
-  }
-}

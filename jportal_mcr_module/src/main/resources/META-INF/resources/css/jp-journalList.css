@@ -182,3 +182,10 @@
 	font-weight: bold;
 	font-size: 1.1rem;
 }
+
+.jp-journalList-spinner {
+	text-align: center;
+	margin-top: 1em;
+	display: inline-block;
+	width: 100%;
+}

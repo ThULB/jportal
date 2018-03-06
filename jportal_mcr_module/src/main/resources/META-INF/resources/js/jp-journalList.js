@@ -44,7 +44,7 @@ jp.az = {
 	},
 
 	load: function() {
-		jp.az.importCSS();
+		jp.util.importCSS("jp-journalList.css");
 		jp.az.printTabNav();
 		jp.az.printFilter();
 
@@ -53,20 +53,6 @@ jp.az = {
 		tab = (tab == "" || tab == null) ? "A" : tab; 
 		jp.az.setTab(tab);
 		jp.az.updateJournals();
-	},
-
-	importCSS: function() {
-	    if (document.createStyleSheet) {
-	        document.createStyleSheet(jp.baseURL + 'css/jp-journalList.css');
-	    } else {
-	        var link = $('<link>').attr({
-	            type : 'text/css',
-	            rel : 'stylesheet',
-	            href : jp.baseURL + 'css/jp-journalList.css',
-	            'class' : 'myStyle'
-	        });
-	        $('head').append(link);
-	    }
 	},
 
 	printTabNav: function() {
