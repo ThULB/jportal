@@ -465,7 +465,13 @@ jp.journalList.view = {
   },
 
   renderResultListSpinner: function() {
-      jp.journalList.view.resultList.innerHTML = "<i class=\"fa fa-spinner fa-spin fa-2x jp-journalList-spinner\"></i>";
+    let firstChild = jp.journalList.view.resultList.firstElementChild;
+    if(firstChild != null && firstChild.tagName.toLocaleLowerCase() === "i") {
+      return;
+    }
+    let spinner = document.createElement("i");
+    spinner.classList.add("fa", "fa-circle-o-notch", "fa-spin", "fa-2x", "jp-journalList-spinner");
+    jp.journalList.view.resultList.insertBefore(spinner, jp.journalList.view.resultList.firstChild);
   }
 
 };

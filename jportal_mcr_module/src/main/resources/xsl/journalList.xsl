@@ -55,14 +55,14 @@
         <div id="atozFacets" class="col-sm-3">
           <h5 id="document_hits"></h5>
           <div id="document_type">
-            <i class="fa fa-spinner fa-spin fa-2x jp-journalList-spinner"></i>
+            <i class="fa fa-circle-o-notch fa-spin fa-2x jp-journalList-spinner"></i>
           </div>
         </div>
         <div class="col-sm-9 jp-layout-hits">
           <div class="jp-layout-triangle hidden-xs"></div>
           <div class="jp-layout-triangle hidden-xs"></div>
           <div id="objectList" class="tab-panel">
-            <i class="fa fa-spinner fa-spin fa-2x jp-journalList-spinner"></i>
+            <i class="fa fa-circle-o-notch fa-spin fa-2x jp-journalList-spinner"></i>
           </div>
         </div>
       </div>

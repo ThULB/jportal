@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 	// load css stuff
-	$('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', baseURL +  'webjars/font-awesome/4.4.0/css/font-awesome.min.css') );
+	$('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', baseURL +  'webjars/font-awesome/4.7.0/css/font-awesome.min.css') );
 
 	// load js stuff
 	$.getScript(baseURL + "webjars/bootstrap-dialog/1.34.6/dist/js/bootstrap-dialog.min.js");
