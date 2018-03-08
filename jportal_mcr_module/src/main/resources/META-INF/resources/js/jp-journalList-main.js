@@ -11,11 +11,13 @@ jp.journalList = {
   labelsMap: {},
   lookupTable: {},
   translation: {},
+  showSpinner: true,
 
   init: function () {
     moment.locale(jp.lang);
     jp.journalList.getLocationHash();
 
+    let checkInternetSpeedStartTime = moment().valueOf();
     let dataPromise = jp.util.getJSON(jp.baseURL + "rsc/facets/initData")
       .then(data => {
         jp.journalList.labelsMap = data.labelsMap;
@@ -26,6 +28,7 @@ jp.journalList = {
         jp.journalList.translation = data;
     });
     Promise.all([dataPromise, translatePromise]).then(() => {
+      jp.journalList.showSpinner = moment().valueOf() - checkInternetSpeedStartTime > 300;
       jp.journalList.update();
     });
   },
@@ -465,6 +468,9 @@ jp.journalList.view = {
   },
 
   renderResultListSpinner: function() {
+    if(!jp.journalList.showSpinner) {
+      return;
+    }
     let firstChild = jp.journalList.view.resultList.firstElementChild;
     if(firstChild != null && firstChild.tagName.toLocaleLowerCase() === "i") {
       return;
