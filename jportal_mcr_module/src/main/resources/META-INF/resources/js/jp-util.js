@@ -16,7 +16,7 @@ jp.util = {
         }
     },
 
-    translate: function (prefix) {
+    getJSON: function(url) {
         return new Promise((resolve, reject) => {
             let request = new XMLHttpRequest();
             request.onload = () => {
@@ -35,9 +35,13 @@ jp.util = {
                     statusText: xhr.statusText
                 });
             };
-            request.open('GET', jp.baseURL + "rsc/locale/translate/" + jp.lang + "/" + prefix);
+            request.open('GET', url);
             request.send();
         });
+    },
+
+    translate: function (prefix) {
+        return jp.util.getJSON(jp.baseURL + "rsc/locale/translate/" + jp.lang + "/" + prefix);
     }
 
 };

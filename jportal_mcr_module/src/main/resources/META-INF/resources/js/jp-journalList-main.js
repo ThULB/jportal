@@ -16,12 +16,12 @@ jp.journalList = {
     moment.locale(jp.lang);
     jp.journalList.getLocationHash();
 
-    let dataPromise = Promise.resolve($.getJSON(jp.baseURL + 'rsc/facets/initData')
+    let dataPromise = jp.util.getJSON(jp.baseURL + "rsc/facets/initData")
       .then(data => {
         jp.journalList.labelsMap = data.labelsMap;
         jp.journalList.lookupTable = data.lookupTable;
         jp.journalList.excludedFacets = data.excludedFacets;
-      }));
+      });
     let translatePromise = jp.util.translate("jp.journallist.*").then(data => {
         jp.journalList.translation = data;
     });
@@ -37,17 +37,17 @@ jp.journalList = {
 
       jp.journalList.usedFacets = [];
       location.hash.substring(3)
-          .split("&")
-          .filter((v, i, array) => array.indexOf(v) === i)// remove duplicates in Array;
-          .filter(f => f !== "")
-          .forEach(f => {
-            if (f.indexOf("titleFilter:") > -1) {
-              jp.journalList.titleFilter = f.replace("titleFilter:", "");
-            } else {
-              jp.journalList.usedFacets.push(f)
-            }
+        .split("&")
+        .filter((v, i, array) => array.indexOf(v) === i)// remove duplicates in Array;
+        .filter(f => f !== "")
+        .forEach(f => {
+          if (f.indexOf("titleFilter:") > -1) {
+            jp.journalList.titleFilter = f.replace("titleFilter:", "");
+          } else {
+            jp.journalList.usedFacets.push(f)
+          }
 
-          });
+        });
     }
     jp.journalList.selectedTab = tab;
   },
@@ -86,13 +86,13 @@ jp.journalList = {
   getJournalTitles: function () {
     let model = jp.journalList;
     let journalTitlesSearchUrl = jp.journalList.getSearchURL(model.usedFacets, model.titleFilter, true);
-    return $.getJSON(journalTitlesSearchUrl);
+    return jp.util.getJSON(journalTitlesSearchUrl);
   },
 
   getResultList: function () {
     let model = jp.journalList;
     let selectedTabSearchUrl = jp.journalList.getSearchURL(model.usedFacets, model.titleFilter, false, model.selectedTab);
-    return $.getJSON(selectedTabSearchUrl);
+    return jp.util.getJSON(selectedTabSearchUrl);
   },
 
   bufferCount: function (array, count) {
