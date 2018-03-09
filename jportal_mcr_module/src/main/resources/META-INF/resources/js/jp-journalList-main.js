@@ -23,9 +23,16 @@ jp.journalList = {
         jp.journalList.labelsMap = data.labelsMap;
         jp.journalList.lookupTable = data.lookupTable;
         jp.journalList.excludedFacets = data.excludedFacets;
+      })
+      .catch(error => {
+        console.log("Error while retrieving '" + jp.baseURL + "rsc/facets/initData'");
+        console.log(error);
       });
     let translatePromise = jp.util.translate("jp.journallist.*").then(data => {
-        jp.journalList.translation = data;
+      jp.journalList.translation = data;
+    }).catch(error => {
+      console.log("Error while translating 'jp.journallist.*'");
+      console.log(error);
     });
     Promise.all([dataPromise, translatePromise]).then(() => {
       jp.journalList.showSpinner = moment().valueOf() - checkInternetSpeedStartTime > 300;
