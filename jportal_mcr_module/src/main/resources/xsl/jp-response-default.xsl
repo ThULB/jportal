@@ -47,12 +47,14 @@
       <!-- returnName = if no id then give a name, like advanced search or law search (only i18n format)-->
       <xsl:with-param name="returnName" select="$returnName"/>
     </xsl:call-template>
+
     <div id="resultListContainer" class="col-md-12 jp-layout-mainContent">
-      <xsl:if test="$selectedFacets/lst/lst/int">
+      <!--<xsl:if test="$selectedFacets/lst/lst/int">-->
+      <xsl:if test="$facetsWithParentNodes/lst/lst/int">
         <!-- hack for responsive -->
         <div id="resultListHeader" class="row">
           <div class="list-group jp-list-group-special visible-xs">
-            <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int"/>
+            <xsl:apply-templates mode="facetTree" select="$facetsWithParentNodes/lst"/>
           </div>
         </div>
       </xsl:if>
@@ -144,7 +146,7 @@
     <xsl:apply-templates mode="jp.response.navigation" select="."/>
 
     <div class="jp-layout-search-sidebar-group">
-      <xsl:apply-templates mode="facetTree" select="xalan:nodeset($facetsWithParent)/lst"/>
+      <xsl:apply-templates mode="facetTree" select="$facetsWithParentNodes/lst"/>
       <xsl:apply-templates mode="facetRanges" select="$filteredFacets/lst[@name='facet_ranges']/lst"/>
     </div>
   </xsl:template>
@@ -474,6 +476,7 @@
     <xsl:apply-templates mode="addFacetParent"
                          select="/response/lst[@name='facet_counts']/lst[@name='facet_fields']/lst[int]"/>
   </xsl:variable>
+  <xsl:variable name="facetsWithParentNodes" select="xalan:nodeset($facetsWithParent)"/>
 
   <xsl:variable name="usedFacets"
                 select="/response/lst[@name='responseHeader']/lst[@name='params']/arr[@name='fq']/str
