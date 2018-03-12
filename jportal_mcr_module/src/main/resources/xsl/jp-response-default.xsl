@@ -7,7 +7,7 @@
                 xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
                 exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
 
-<xsl:param name="returnURL"/>
+  <xsl:param name="returnURL"/>
   <xsl:param name="returnHash"/>
   <xsl:param name="returnID"/>
   <xsl:param name="returnName"/>
@@ -70,7 +70,7 @@
 
     <!-- javascript & css imports -->
     <link href="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css"/>
-    <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js"/>
     <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/js/bootstrap-datetimepicker.js"/>
     <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/highstock/2.0.4/highstock.src.js"/>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-facetDateQuery.js"/>
@@ -184,15 +184,15 @@
 
     <div class="jp-layout-search-sidebar-group">
       <!--<h2 class="jp-layout-resultLCaption">-->
-        <!--<xsl:value-of select="i18n:translate('jp.metadata.search.narrow')"/>-->
+      <!--<xsl:value-of select="i18n:translate('jp.metadata.search.narrow')"/>-->
       <!--</h2>-->
 
       <!--<div class="list-group jp-list-group-special hidden-xs">-->
-        <!--<xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int"/>-->
+      <!--<xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int"/>-->
       <!--</div>-->
 
       <!--<div>-->
-        <!--<xsl:copy-of select="$facetTree"/>-->
+      <!--<xsl:copy-of select="$facetTree"/>-->
       <!--</div>-->
       <!--<xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst"/>-->
       <xsl:apply-templates mode="facetTree" select="xalan:nodeset($facetsWithParent)/lst"/>
@@ -343,20 +343,20 @@
 
   <xsl:template mode="searchHitDataField" match="str[contains(@name, 'date.')]">
     <span class="jp-layout-inList">
-      <xsl:value-of select="jpxml:formatSolrDate(text(), $CurrentLang)" />
+      <xsl:value-of select="jpxml:formatSolrDate(text(), $CurrentLang)"/>
     </span>
   </xsl:template>
 
-<!--
-  <xsl:template mode="searchHitDataField" match="str[@name='date.published_from']">
-    <span class="jp-layout-inList">
-      <xsl:value-of select="."/>
-      <xsl:if test="../str[@name='date.published_until']">
-        <xsl:value-of select="concat(' - ', ../str[@name='date.published_until'])"/>
-      </xsl:if>
-    </span>
-  </xsl:template>
--->
+  <!--
+    <xsl:template mode="searchHitDataField" match="str[@name='date.published_from']">
+      <span class="jp-layout-inList">
+        <xsl:value-of select="."/>
+        <xsl:if test="../str[@name='date.published_until']">
+          <xsl:value-of select="concat(' - ', ../str[@name='date.published_until'])"/>
+        </xsl:if>
+      </span>
+    </xsl:template>
+  -->
 
   <xsl:template mode="searchHitDataField" match="arr[@name='participant.author']/str">
     <span class="jp-layout-inList">
@@ -606,8 +606,9 @@
                          select="/response/lst[@name='facet_counts']/lst[@name='facet_fields']/lst"/>
   </xsl:variable>
 
-  <xsl:variable name="usedFacet"
-                select="/response/lst[@name='responseHeader']/lst[@name='params']/arr[@name='fq']/str"/>
+  <xsl:variable name="usedFacets"
+                select="/response/lst[@name='responseHeader']/lst[@name='params']/arr[@name='fq']/str
+                |/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='fq']"/>
 
   <xsl:template mode="addFacetParent" match="lst">
     <xsl:copy>
@@ -635,9 +636,9 @@
   </xsl:template>
 
   <!--<xsl:variable name="facetTree">-->
-    <!--<tree>-->
-      <!--<xsl:apply-templates mode="facetTree" select="xalan:nodeset($facetsWithParent)/lst"/>-->
-    <!--</tree>-->
+  <!--<tree>-->
+  <!--<xsl:apply-templates mode="facetTree" select="xalan:nodeset($facetsWithParent)/lst"/>-->
+  <!--</tree>-->
   <!--</xsl:variable>-->
 
   <xsl:template mode="facetTree" match="lst">
@@ -665,54 +666,74 @@
     <xsl:variable name="id" select="@name"/>
     <xsl:variable name="facetCheckboxClass">
       <xsl:choose>
-        <xsl:when test="$usedFacet[starts-with(.,$groupName) and contains(., $id)]">
-            <xsl:value-of select="'jp-facet-checkbox checked'"/>
+        <xsl:when test="$usedFacets[starts-with(.,$groupName) and contains(., $id)]">
+          <xsl:value-of select="'jp-facet-checkbox checked'"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="'jp-facet-checkbox'"/>
+          <xsl:value-of select="'jp-facet-checkbox'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="facetHrefLink">
+      <xsl:choose>
+        <xsl:when test="$usedFacets[starts-with(.,$groupName) and contains(., $id)]">
+          <xsl:apply-templates mode="facetHrefLink" select="$usedFacets[not(contains(., $id))]/text()"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="addFacet" select="xalan:nodeset(concat($groupName,':&quot;',$id,'&quot;'))"/>
+          <xsl:apply-templates mode="facetHrefLink" select="$usedFacets|$addFacet"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
     <div class="jp-facet-row" data-id="{$id}" data-type="{$groupName}">
-      <div class="jp-facet-entry">
-        <div class="jp-facet-linkContainer">
-          <!--<input class="jp-facet-checkbox" type="checkbox">-->
+      <xsl:comment>
+        <xsl:value-of select="$RequestURL"/>
+      </xsl:comment>
+      <a href="{concat(substring-before($RequestURL, '&amp;fq'),$facetHrefLink)}">
+        <div class="jp-facet-entry">
+          <div class="jp-facet-linkContainer">
+            <!--<input class="jp-facet-checkbox" type="checkbox">-->
             <!--<xsl:if test="$usedFacet[starts-with(.,$groupName) and contains(., $id)]">-->
-              <!--<xsl:attribute name="checked">-->
-                <!--<xsl:value-of select="'true'"/>-->
-              <!--</xsl:attribute>-->
+            <!--<xsl:attribute name="checked">-->
+            <!--<xsl:value-of select="'true'"/>-->
+            <!--</xsl:attribute>-->
             <!--</xsl:if>-->
-          <!--</input>-->
-          <label class="{$facetCheckboxClass}"/>
-          <div class="jp-facet-label">
-            <xsl:variable name="facetSettings" select="$settings/facet[@name=$groupName]"/>
-            <xsl:choose>
-              <xsl:when test="$group/@name = 'journalType'">
-                <xsl:value-of select="jpxml:getJournalTypeFacetLabel($id)"/>
-              </xsl:when>
-              <xsl:when test="$facetSettings/@translate = 'true'">
-                <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $groupName, '.', $id))"/>
-              </xsl:when>
-              <xsl:when test="$facetSettings/@mcrid = 'true'">
-                <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $id))/mycoreobject"/>
-                <xsl:apply-templates mode="printTitle"
-                                     select="$mcrObj/metadata/maintitles/maintitle[@inherited='0']|$mcrObj/metadata/def.heading/heading|$mcrObj/metadata/names[@class='MCRMetaInstitutionName']/name"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="$id"/>
-              </xsl:otherwise>
-            </xsl:choose>
+            <!--</input>-->
+            <label class="{$facetCheckboxClass}"/>
+            <div class="jp-facet-label">
+              <xsl:variable name="facetSettings" select="$settings/facet[@name=$groupName]"/>
+              <xsl:choose>
+                <xsl:when test="$group/@name = 'journalType'">
+                  <xsl:value-of select="jpxml:getJournalTypeFacetLabel($id)"/>
+                </xsl:when>
+                <xsl:when test="$facetSettings/@translate = 'true'">
+                  <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $groupName, '.', $id))"/>
+                </xsl:when>
+                <xsl:when test="$facetSettings/@mcrid = 'true'">
+                  <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $id))/mycoreobject"/>
+                  <xsl:apply-templates mode="printTitle"
+                                       select="$mcrObj/metadata/maintitles/maintitle[@inherited='0']|$mcrObj/metadata/def.heading/heading|$mcrObj/metadata/names[@class='MCRMetaInstitutionName']/name"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$id"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </div>
+          </div>
+          <div class="jp-facet-count">
+            <xsl:value-of select="."/>
           </div>
         </div>
-        <div class="jp-facet-count">
-          <xsl:value-of select="."/>
-        </div>
-      </div>
+      </a>
       <xsl:if test="$group/int[@parent=$id]">
         <xsl:apply-templates mode="facetTree" select="$group/int[@parent=$id]"/>
       </xsl:if>
     </div>
+  </xsl:template>
+  <xsl:template mode="facetHrefLink" match="text()">
+    <xsl:value-of select="concat('&amp;fq=',.)"/>
   </xsl:template>
   <!-- End tree view facet -->
 

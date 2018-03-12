@@ -11,8 +11,8 @@
                          select="/response/lst[@name='facet_counts']/lst[@name='facet_fields']/lst"/>
   </xsl:variable>
 
-  <xsl:variable name="usedFacet"
-                select="/response/lst[@name='responseHeader']/lst[@name='params']/arr[@name='fq']/str"/>
+  <xsl:variable name="usedFacets"
+                select="/response/lst[@name='responseHeader']/lst[@name='params']/arr[@name='fq']/str|/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='fq']"/>
 
   <xsl:template mode="addFacetParent" match="lst">
     <xsl:copy>
@@ -57,9 +57,12 @@
     <xsl:variable name="groupName" select="$group/@name"/>
     <xsl:variable name="id" select="@name"/>
 
+    <xsl:variable name="RequestURL"
+                  select="'http://zs.thulb.uni-jena.de/servlets/solr/find?qry=&amp;lang=de&amp;fq=journalType:&quot;jportal_class_00000215:literatureAndArt&quot;&amp;fq=journalType:&quot;jportal_class_00000215:socialScience&quot;&amp;fq=objectType:&quot;jparticle&quot;'"/>
+
     <xsl:variable name="facetCheckboxClass">
       <xsl:choose>
-        <xsl:when test="$usedFacet[starts-with(.,$groupName) and contains(., $id)]">
+        <xsl:when test="$usedFacets[starts-with(.,$groupName) and contains(., $id)]">
           <xsl:value-of select="'jp-facet-checkbox checked'"/>
         </xsl:when>
         <xsl:otherwise>
@@ -68,19 +71,21 @@
       </xsl:choose>
     </xsl:variable>
 
+
     <xsl:variable name="facetHrefLink">
       <xsl:choose>
-        <xsl:when test="$usedFacet[starts-with(.,$groupName) and contains(., $id)]">
-          <xsl:apply-templates mode="facetHrefLink" select="$usedFacet[not(contains(., $id))]/text()"/>
+        <xsl:when test="$usedFacets[starts-with(.,$groupName) and contains(., $id)]">
+          <xsl:apply-templates mode="facetHrefLink" select="$usedFacets[not(contains(., $id))]/text()"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates mode="facetHrefLink" select="$usedFacet|$id"/>
+          <xsl:variable name="addFacet" select="xalan:nodeset(concat($groupName,':&quot;',$id,'&quot;'))"/>
+          <xsl:apply-templates mode="facetHrefLink" select="$usedFacets|$addFacet"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
     <div class="jp-journalList-facet-row" data-id="{$id}" data-parent="{@parent}">
-      <a href="{$facetHrefLink}">
+      <a href="{concat(substring-before($RequestURL, '&amp;fq'),$facetHrefLink)}">
         <div class="jp-journalList-facet-entry">
           <div class="jp-journalList-facet-linkContainer">
             <!--<input class="jp-journalList-facet-checkbox" type="checkbox">-->
@@ -90,6 +95,7 @@
             <!--</xsl:attribute>-->
             <!--</xsl:if>-->
             <!--</input>-->
+            <!--<div><xsl:value-of select="substring-before($RequestURL, '&amp;')"/></div>-->
             <label class="{$facetCheckboxClass}"/>
             <div class="jp-journalList-facet-label">
               <xsl:choose>
@@ -131,9 +137,9 @@
       <!--<tree>-->
       <xsl:copy-of select="$facetTree"/>
       <!--</tree>-->
-      <!--<used>-->
-      <!--<xsl:copy-of select="$usedFacets"/>-->
-      <!--</used>-->
+      <used>
+      <xsl:copy-of select="$usedFacets"/>
+      </used>
     </html>
   </xsl:template>
   
