@@ -1591,3 +1591,63 @@ body {
 	color: white;
 	cursor: pointer;
 }
+
+
+/* Facets */
+.jp-facet-list > .jp-facet-row {
+	margin: 0 0 8px;
+}
+
+.jp-facet-row {
+	margin: 3px 0 0 18px;
+}
+
+.jp-facet-entry {
+	display: flex;
+	justify-content: space-between;
+
+	transition: 100ms background-color linear, 50ms color linear, 100ms opacity linear;
+	border-radius: 8px;
+	padding: 1px 5px 2px;
+	margin: -1px -5px -2px;
+}
+
+.jp-facet-entry:hover {
+	cursor: pointer;
+	background-color: #615f5f;
+	color: white;
+}
+
+.jp-facet-linkContainer {
+	display: flex;
+}
+
+.jp-facet-entry input {
+	margin-right: 5px;
+}
+
+label.jp-facet-checkbox {
+	width: 12px;
+	height: 12px;
+	border: solid 1px gray;
+	margin-right: 5px;
+	margin-bottom: 0px;
+	display: inline-block;
+	line-height: normal;
+	margin-top: 3px;
+	background-color: white;
+	border-radius: 2px;
+	font-size: 9px;
+	vertical-align: middle;
+	text-align: center;
+	line-height: 12px;
+}
+label.jp-facet-checkbox.checked{
+	border: solid 1px rgb(59,153,252);
+	background-color: rgb(59,153,252);
+	color: white;
+}
+
+label.jp-facet-checkbox.checked:before{
+	content: "\2714";
+}

@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+
+  <lst name="responseHeader">
+    <int name="status">0</int>
+    <int name="QTime">1384</int>
+    <lst name="params">
+      <arr name="fq">
+        <str>journalType:"jportal_class_00000215:literatureAndArt"</str>
+        <str>journalType:"jportal_class_00000215:socialScience"</str>
+        <str>objectType:"jparticle"</str>
+      </arr>
+      <str name="XSL.Style">xml</str>
+      <str name="version">4.5</str>
+    </lst>
+  </lst>
+  <result name="response" numFound="58" start="0">
+    <doc>
+      <str name="id">jportal_jparticle_00153653</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00066959</str>
+      <long name="order">1</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066959/</str>
+      <str name="maintitle">Nachricht des Verlegers</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <arr name="participant.author">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <str name="size">*004 - 007</str>
+      <str name="indexPosition">*004 - 007</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164009/GNK_1764_Bd02_%200004.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-08-06T10:57:17.093Z</date>
+      <date name="modified">2013-11-14T09:01:07.953Z</date>
+      <long name="_version_">1593324163222732800</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00143834</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00071454</str>
+      <long name="order">0</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066957/jportal_jpvolume_00071454/</str>
+      <str name="maintitle">Abhandlung von der Aehnlichkeit, die sich zwischen den Erscheinungen bey dem Donner und der Elektricität findet / [Denis] Barberet. - Aus d. Franz. übers.</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <arr name="participant.author">
+        <str>jportal_person_00061018#Barberet, Denis</str>
+      </arr>
+      <str name="size">001-028</str>
+      <str name="indexPosition">001-028</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164004/GNK_1763_Bd01_0017.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-02-17T14:41:01.299Z</date>
+      <date name="modified">2013-11-14T09:00:42.639Z</date>
+      <long name="_version_">1593324148740849664</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00144524</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00071454</str>
+      <long name="order">1</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066957/jportal_jpvolume_00071454/</str>
+      <str name="maintitle">Aufrichtige und vollständige Beschreibung der Art wie die Zitsen in Indien gemacht werden. -
+        (Aus Savary Dict. univ. de Commerce, Th. IV., S. 798 u. f. d. neuesten Genfer Ausg.)</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <str name="size">029-057</str>
+      <str name="indexPosition">029-057</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164004/GNK_1763_Bd01_0045.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-02-24T15:16:35.065Z</date>
+      <date name="modified">2013-11-14T09:00:43.118Z</date>
+      <long name="_version_">1593324149271429120</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00146526</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00071457</str>
+      <long name="order">0</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066957/jportal_jpvolume_00071457/</str>
+      <str name="maintitle">Inhalt</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <str name="size">127</str>
+      <str name="indexPosition">127</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164004/GNK_1763_Bd01_0147.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-03-24T15:15:10.463Z</date>
+      <date name="modified">2013-11-14T09:00:46.508Z</date>
+      <long name="_version_">1593324152325931009</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00148225</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00071458</str>
+      <long name="order">4</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066957/jportal_jpvolume_00071458/</str>
+      <str name="maintitle">Nachricht von den harlemer Bleichen. - (Aus d. Journal oeconomique, Fevr. 1751, S. 128 u. f. übers.)</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <str name="size">340-345</str>
+      <str name="indexPosition">340-345</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164004/GNK_1763_Bd01_0358.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-04-21T11:46:57.766Z</date>
+      <date name="modified">2013-11-14T09:00:50.148Z</date>
+      <long name="_version_">1593324154919059456</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00148477</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00071459</str>
+      <long name="order">1</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066957/jportal_jpvolume_00071459/</str>
+      <str name="maintitle">Pflanzung der Maulbeerbäume in Sand- und Heide- oder schlechtes Land. - (Aus d. Journal oeconomique, Nov. 1751, S. 52 u. f. übers.)</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <str name="size">367-380</str>
+      <str name="indexPosition">367-380</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164004/GNK_1763_Bd01_0387.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-04-28T15:36:01.603Z</date>
+      <date name="modified">2013-11-14T09:00:52.591Z</date>
+      <long name="_version_">1593324155023917056</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00148243</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00071458</str>
+      <long name="order">6</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066957/jportal_jpvolume_00071458/</str>
+      <str name="maintitle">Gebrauch des Bleyes / Jacob Lind. - (Aus d. Journal oeconomique, Oct. 1754, S. 171 u. f. übers.)</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <arr name="participant.author">
+        <str>jportal_person_00062444#Lind, Jacob</str>
+      </arr>
+      <str name="size">358-364</str>
+      <str name="indexPosition">358-364</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164004/GNK_1763_Bd01_0376.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-04-21T13:57:51.545Z</date>
+      <date name="modified">2013-11-14T09:00:51.039Z</date>
+      <long name="_version_">1593324155542962176</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00155554</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00066959</str>
+      <long name="order">10</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066959/</str>
+      <str name="maintitle">Taf. 3.,4.</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <str name="size">[834]</str>
+      <str name="indexPosition">[834]</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164009/GNK_1764_Bd02_%200851.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-09-01T15:35:44.428Z</date>
+      <date name="modified">2013-11-14T09:01:11.324Z</date>
+      <long name="_version_">1593324166045499392</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00155553</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00066959</str>
+      <long name="order">9</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066959/</str>
+      <str name="maintitle">Taf. 1.,2.</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <str name="size">[833]</str>
+      <str name="indexPosition">[833]</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164009/GNK_1764_Bd02_%200850.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-09-01T15:33:48.206Z</date>
+      <date name="modified">2013-11-14T09:01:10.990Z</date>
+      <long name="_version_">1593324166046547968</long></doc>
+    <doc>
+      <str name="id">jportal_jparticle_00155540</str>
+      <str name="objectType">jparticle</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00066959</str>
+      <long name="order">8</long>
+      <str name="ancestorPath">jportal_jpjournal_00000084/jportal_jpvolume_00066959/</str>
+      <str name="maintitle">Chymische Grundsätze des Ackerbaues / Joh[an] Gottschalk Wallerius. Aus d. Lat. übers. u. mit Anmerk. erläutert von Jo[hann] Ge[org] Krünitz</str>
+      <str name="journalTitle">Gemeinnütziges Natur- und Kunstmagazin oder Abhandlungen zur Beförderung der Naturkunde, der Künste, Manufacturen und Fabriken</str>
+      <arr name="participant.author">
+        <str>jportal_person_00017885#Wallerius, Johan Gottschalk</str>
+      </arr>
+      <arr name="participant.translator">
+        <str>jportal_person_00014013#Krünitz, Johann Georg</str>
+      </arr>
+      <str name="size">579-829</str>
+      <str name="indexPosition">579-829</str>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164009/GNK_1764_Bd02_%200596.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000084</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+        <str>virtuellLibrary18thCentury</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00041311#Wever, Arnold</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="category">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>jportal_class_00000215:socialScience</str>
+      </arr>
+      <arr name="classification">
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+      </arr>
+      <date name="created">2009-09-01T14:54:29.453Z</date>
+      <date name="modified">2013-11-14T09:01:10.579Z</date>
+      <long name="_version_">1593324166057033728</long></doc>
+  </result>
+  <lst name="facet_counts">
+    <lst name="facet_queries"/>
+    <lst name="facet_fields">
+      <lst name="objectType">
+        <int name="jparticle">58</int>
+      </lst>
+      <lst name="journalType">
+        <int name="jportal_class_00000200:magazines">58</int>
+        <int name="jportal_class_00000215:literatureAndArt">58</int>
+        <int name="jportal_class_00000215:naturalScience">58</int>
+        <int name="jportal_class_00000215:socialScience">58</int>
+      </lst>
+    </lst>
+    <lst name="facet_ranges"/>
+    <lst name="facet_intervals"/>
+    <lst name="facet_heatmaps"/>
+  </lst>
+</response>
