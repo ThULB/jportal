@@ -12,27 +12,8 @@
   <xsl:param name="returnID"/>
   <xsl:param name="returnName"/>
 
-
   <!-- facets without selected -->
   <xsl:variable name="filteredFacetsXML">
-    <xsl:variable name="numFound" select="/response/result/@numFound"/>
-    <lst name="facet_fields">
-      <xsl:for-each select="/response/lst[@name='facet_counts']/lst[@name='facet_fields']/lst">
-        <xsl:variable name="facet" select="@name"/>
-        <lst name="{@name}">
-          <xsl:for-each select="int">
-            <xsl:if test="not(jpxml:isFacetSelected($RequestURL, $facet, @name))
-                          and ($numFound != text() or $facet = 'journalType')">
-              <xsl:if test="not(mcrxml:isCurrentUserGuestUser() and jpxml:isExcludedFacet(@name))">
-                <int name="{@name}">
-                  <xsl:value-of select="text()"/>
-                </int>
-              </xsl:if>
-            </xsl:if>
-          </xsl:for-each>
-        </lst>
-      </xsl:for-each>
-    </lst>
     <lst name="facet_ranges">
       <!-- hard coded published sort -->
       <lst name="published">
@@ -45,26 +26,6 @@
     </lst>
   </xsl:variable>
   <xsl:variable name="filteredFacets" select="xalan:nodeset($filteredFacetsXML)"/>
-
-  <!-- selected facets -->
-  <xsl:variable name="selectedFacetsXML">
-    <lst name="facet_fields">
-      <xsl:for-each select="/response/lst[@name='facet_counts']/lst['facet_fields']/lst">
-        <xsl:variable name="facet" select="@name"/>
-        <lst name="{@name}">
-          <xsl:for-each select="int">
-            <xsl:if test="jpxml:isFacetSelected($RequestURL, $facet, @name)">
-              <int name="{@name}">
-                <xsl:value-of select="text()"/>
-              </int>
-            </xsl:if>
-          </xsl:for-each>
-        </lst>
-      </xsl:for-each>
-    </lst>
-  </xsl:variable>
-  <xsl:variable name="selectedFacets" select="xalan:nodeset($selectedFacetsXML)"/>
-
 
   <xsl:template match="/response">
 
@@ -183,18 +144,6 @@
     <xsl:apply-templates mode="jp.response.navigation" select="."/>
 
     <div class="jp-layout-search-sidebar-group">
-      <!--<h2 class="jp-layout-resultLCaption">-->
-      <!--<xsl:value-of select="i18n:translate('jp.metadata.search.narrow')"/>-->
-      <!--</h2>-->
-
-      <!--<div class="list-group jp-list-group-special hidden-xs">-->
-      <!--<xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int"/>-->
-      <!--</div>-->
-
-      <!--<div>-->
-      <!--<xsl:copy-of select="$facetTree"/>-->
-      <!--</div>-->
-      <!--<xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst"/>-->
       <xsl:apply-templates mode="facetTree" select="xalan:nodeset($facetsWithParent)/lst"/>
       <xsl:apply-templates mode="facetRanges" select="$filteredFacets/lst[@name='facet_ranges']/lst"/>
     </div>
@@ -462,86 +411,6 @@
   <!-- *************************************************** -->
   <!-- * FACET -->
   <!-- *************************************************** -->
-  <xsl:template mode="facetGroup" match="lst">
-  </xsl:template>
-
-  <xsl:template mode="filteredFacetGroup" match="lst">
-  </xsl:template>
-
-  <xsl:template mode="facetGroup" match="lst[count(*) &gt; 0]">
-    <div>
-      <a class="dt-collapse" data-toggle="collapse">
-        <xsl:attribute name="data-target">
-          <xsl:value-of select="concat('#', @name)"/>
-        </xsl:attribute>
-        <span class="jp-layout-facet-group-head">
-          <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))"/>
-        </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
-      </a>
-      <div class="collapse in list-group jp-list-group-special" id="{@name}">
-        <xsl:apply-templates select="int" mode="facetField"/>
-      </div>
-    </div>
-  </xsl:template>
-
-  <xsl:template mode="facetField" match="int">
-    <xsl:variable name="value" select="@name"/>
-    <xsl:variable name="count" select="text()"/>
-    <xsl:variable name="facet" select="../@name"/>
-    <xsl:variable name="requestURLNoStartParam" select="jpxml:rmStartParam($RequestURL)"/>
-    <xsl:variable name="selected" select="jpxml:isFacetSelected($requestURLNoStartParam, $facet, $value)"/>
-
-    <xsl:variable name="href">
-      <xsl:choose>
-        <xsl:when test="$selected">
-          <xsl:value-of select="jpxml:removeFacet($requestURLNoStartParam, $facet, $value)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="concat($requestURLNoStartParam, '&amp;fq=', $facet, ':&quot;', $value, '&quot;')"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="class">
-      <xsl:if test="$selected">
-        <xsl:value-of select="'selected'"/>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:variable name="text">
-      <xsl:variable name="facetSettings" select="$settings/facet[@name=$facet]"/>
-      <xsl:choose>
-        <xsl:when test="$facet = 'journalType'">
-          <xsl:value-of select="jpxml:getJournalTypeFacetLabel($value)"/>
-        </xsl:when>
-        <xsl:when test="$facetSettings/@translate = 'true'">
-          <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $facet, '.', $value))"/>
-        </xsl:when>
-        <xsl:when test="$facetSettings/@mcrid = 'true'">
-          <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $value))/mycoreobject"/>
-          <xsl:apply-templates mode="printTitle"
-                               select="$mcrObj/metadata/maintitles/maintitle[@inherited='0']|$mcrObj/metadata/def.heading/heading|$mcrObj/metadata/names[@class='MCRMetaInstitutionName']/name"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$value"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
-    <a class="list-group-item {$class}" href="{$href}">
-      <i class="icon {$class}"></i>
-      <span class="text">
-        <xsl:value-of select="$text"/>
-      </span>
-      <span class="pull-right">
-        <xsl:if test="$selected">
-          <xsl:attribute name="class">pull-right hidden-xs</xsl:attribute>
-        </xsl:if>
-        <xsl:value-of select="$count"/>
-      </span>
-    </a>
-  </xsl:template>
-
   <!-- FACET RANGE -->
   <xsl:template mode="facetRanges" match="lst">
     <div>
@@ -603,7 +472,7 @@
 
   <xsl:variable name="facetsWithParent">
     <xsl:apply-templates mode="addFacetParent"
-                         select="/response/lst[@name='facet_counts']/lst[@name='facet_fields']/lst"/>
+                         select="/response/lst[@name='facet_counts']/lst[@name='facet_fields']/lst[int]"/>
   </xsl:variable>
 
   <xsl:variable name="usedFacets"
@@ -635,12 +504,6 @@
     </xsl:copy>
   </xsl:template>
 
-  <!--<xsl:variable name="facetTree">-->
-  <!--<tree>-->
-  <!--<xsl:apply-templates mode="facetTree" select="xalan:nodeset($facetsWithParent)/lst"/>-->
-  <!--</tree>-->
-  <!--</xsl:variable>-->
-
   <xsl:template mode="facetTree" match="lst">
     <div>
       <a class="dt-collapse" data-toggle="collapse">
@@ -664,6 +527,7 @@
     <xsl:variable name="group" select=".."/>
     <xsl:variable name="groupName" select="$group/@name"/>
     <xsl:variable name="id" select="@name"/>
+
     <xsl:variable name="facetCheckboxClass">
       <xsl:choose>
         <xsl:when test="$usedFacets[starts-with(.,$groupName) and contains(., $id)]">
@@ -688,19 +552,10 @@
     </xsl:variable>
 
     <div class="jp-facet-row" data-id="{$id}" data-type="{$groupName}">
-      <xsl:comment>
-        <xsl:value-of select="$RequestURL"/>
-      </xsl:comment>
-      <a href="{concat(substring-before($RequestURL, '&amp;fq'),$facetHrefLink)}">
+      <xsl:variable name="_requsetURL" select="concat($RequestURL, '&amp;fq')"/>
+      <a href="{concat(substring-before($_requsetURL, '&amp;fq'),$facetHrefLink)}">
         <div class="jp-facet-entry">
           <div class="jp-facet-linkContainer">
-            <!--<input class="jp-facet-checkbox" type="checkbox">-->
-            <!--<xsl:if test="$usedFacet[starts-with(.,$groupName) and contains(., $id)]">-->
-            <!--<xsl:attribute name="checked">-->
-            <!--<xsl:value-of select="'true'"/>-->
-            <!--</xsl:attribute>-->
-            <!--</xsl:if>-->
-            <!--</input>-->
             <label class="{$facetCheckboxClass}"/>
             <div class="jp-facet-label">
               <xsl:variable name="facetSettings" select="$settings/facet[@name=$groupName]"/>

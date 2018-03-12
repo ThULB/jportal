@@ -41,7 +41,7 @@
 
   <xsl:variable name="facetTree">
     <tree>
-      <xsl:apply-templates mode="facetTree" select="xalan:nodeset($facetsWithParent)/lst"/>
+      <xsl:apply-templates mode="facetTree" select="xalan:nodeset($facetsWithParent)/lst[int]"/>
     </tree>
   </xsl:variable>
 
@@ -85,7 +85,8 @@
     </xsl:variable>
 
     <div class="jp-journalList-facet-row" data-id="{$id}" data-parent="{@parent}">
-      <a href="{concat(substring-before($RequestURL, '&amp;fq'),$facetHrefLink)}">
+      <xsl:variable name="_requsetURL" select="concat($RequestURL, '&amp;fq')"/>
+      <a href="{concat(substring-before($_requsetURL, '&amp;fq'),$facetHrefLink)}">
         <div class="jp-journalList-facet-entry">
           <div class="jp-journalList-facet-linkContainer">
             <!--<input class="jp-journalList-facet-checkbox" type="checkbox">-->

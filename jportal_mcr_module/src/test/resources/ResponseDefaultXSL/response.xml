@@ -3,150 +3,135 @@
 
   <lst name="responseHeader">
     <int name="status">0</int>
-    <int name="QTime">4</int>
+    <int name="QTime">1</int>
     <lst name="params">
-      <str name="fq">journalType:"jportal_class_00000200:magazines"</str>
+      <str name="fq">objectType:"person"</str>
       <str name="lang">de</str>
       <str name="XSL.Style">xml</str>
       <str name="version">4.5</str>
     </lst>
   </lst>
-  <result name="response" numFound="4" start="0">
+  <result name="response" numFound="7" start="0">
     <doc>
-      <str name="id">jportal_jpvolume_00000005</str>
-      <str name="objectType">jpvolume</str>
-      <str name="objectProject">jportal</str>
-      <long name="derivateCount">1</long>
-      <long name="childrenCount">0</long>
-      <str name="parent">jportal_jpjournal_00000289</str>
-      <long name="order">0</long>
-      <str name="ancestorPath">jportal_jpjournal_00000289/</str>
-      <str name="maintitle">Band1</str>
-      <str name="journalTitle">akruetzel</str>
-      <str name="journalID">jportal_jpjournal_00000289</str>
-      <arr name="participant.author">
-        <str>jportal_person_00000001#Muster, Max</str>
-      </arr>
-      <arr name="journalType">
-        <str>jportal_class_00000200:magazines</str>
-        <str>jportal_class_00000210:legalDeposit</str>
-      </arr>
-      <arr name="category">
-        <str>jportal_class_00000200:magazines</str>
-        <str>jportal_class_00000210:legalDeposit</str>
-      </arr>
-      <arr name="classification">
-        <str>jportal_class_00000200</str>
-        <str>jportal_class_00000210</str>
-      </arr>
-      <date name="modified">2018-02-28T09:40:52.148Z</date>
-      <date name="created">2018-01-18T10:18:35.052Z</date>
-      <long name="_version_">1593637184174292992</long></doc>
-    <doc>
-      <str name="id">jportal_jpjournal_00000264</str>
-      <str name="objectType">jpjournal</str>
+      <str name="id">jportal_person_00000001</str>
+      <str name="objectType">person</str>
       <str name="objectProject">jportal</str>
       <long name="derivateCount">0</long>
-      <long name="childrenCount">1</long>
-      <str name="maintitle">jalz</str>
-      <str name="journalTitle">jalz</str>
-      <arr name="participant.author">
-        <str>jportal_person_00000001#Muster, Max</str>
-      </arr>
-      <date name="published">2017-01-01T00:00:00Z</date>
-      <str name="date.published">2017-01-01</str>
-      <str name="journalID">jportal_jpjournal_00000264</str>
-      <arr name="journalType">
-        <str>jportal_class_00000200:magazines</str>
-        <str>jportal_class_00000215:literatureAndArt</str>
-      </arr>
+      <str name="heading_base">Muster, Max</str>
+      <str name="heading">Muster, Max</str>
       <arr name="category">
-        <str>jportal_class_00000200:magazines</str>
-        <str>jportal_class_00000215:literatureAndArt</str>
-        <str>jportal_class_00000004:de</str>
+        <str>urmel_class_00000001:male</str>
       </arr>
       <arr name="classification">
-        <str>jportal_class_00000200</str>
-        <str>jportal_class_00000215</str>
-        <str>jportal_class_00000004</str>
+        <str>urmel_class_00000001</str>
       </arr>
-      <date name="modified">2018-01-24T13:59:35.816Z</date>
-      <date name="created">2017-12-06T13:20:38.460Z</date>
-      <long name="_version_">1593463162172080129</long></doc>
+      <date name="modified">2017-11-16T16:33:01.158Z</date>
+      <date name="created">2017-11-16T16:33:01.160Z</date>
+      <long name="_version_">1593463162222411780</long></doc>
     <doc>
-      <str name="id">jportal_jpjournal_00000289</str>
-      <str name="objectType">jpjournal</str>
+      <str name="id">jportal_person_00000002</str>
+      <str name="objectType">person</str>
       <str name="objectProject">jportal</str>
       <long name="derivateCount">0</long>
-      <long name="childrenCount">1</long>
-      <str name="maintitle">akruetzel</str>
-      <str name="journalTitle">akruetzel</str>
-      <arr name="participant.author">
-        <str>jportal_person_00000001#Muster, Max</str>
-      </arr>
-      <date name="published">2017-01-01T00:00:00Z</date>
-      <str name="date.published">2017-01-01</str>
-      <str name="journalID">jportal_jpjournal_00000289</str>
-      <arr name="journalType">
-        <str>jportal_class_00000200:magazines</str>
-        <str>jportal_class_00000210:legalDeposit</str>
-      </arr>
+      <str name="heading_base">Marge, Simpson</str>
+      <str name="heading">Marge, Simpson</str>
       <arr name="category">
-        <str>jportal_class_00000200:magazines</str>
-        <str>jportal_class_00000210:legalDeposit</str>
-        <str>jportal_class_00000004:de</str>
+        <str>urmel_class_00000001:female</str>
       </arr>
       <arr name="classification">
-        <str>jportal_class_00000200</str>
-        <str>jportal_class_00000210</str>
-        <str>jportal_class_00000004</str>
+        <str>urmel_class_00000001</str>
       </arr>
-      <date name="modified">2018-02-06T14:01:15.870Z</date>
-      <date name="created">2017-12-06T13:20:38.460Z</date>
-      <long name="_version_">1593463162143768576</long></doc>
+      <date name="modified">2018-02-26T11:37:33.974Z</date>
+      <date name="created">2018-02-26T11:37:33.974Z</date>
+      <long name="_version_">1593463332725063680</long></doc>
     <doc>
-      <str name="id">jportal_jpvolume_00000006</str>
-      <str name="objectType">jpvolume</str>
+      <str name="id">jportal_person_00000003</str>
+      <str name="objectType">person</str>
       <str name="objectProject">jportal</str>
       <long name="derivateCount">0</long>
-      <long name="childrenCount">0</long>
-      <str name="parent">jportal_jpjournal_00000264</str>
-      <long name="order">0</long>
-      <str name="ancestorPath">jportal_jpjournal_00000264/</str>
-      <str name="maintitle">Band 1</str>
-      <str name="journalTitle">jalz</str>
-      <str name="journalID">jportal_jpjournal_00000264</str>
-      <arr name="participant.author">
-        <str>jportal_person_00000001#Muster, Max</str>
-      </arr>
-      <arr name="journalType">
-        <str>jportal_class_00000200:magazines</str>
-        <str>jportal_class_00000215:literatureAndArt</str>
-      </arr>
+      <str name="heading_base">Simpson, Bart</str>
+      <str name="heading">Simpson, Bart</str>
       <arr name="category">
-        <str>jportal_class_00000200:magazines</str>
-        <str>jportal_class_00000215:literatureAndArt</str>
+        <str>urmel_class_00000001:male</str>
       </arr>
       <arr name="classification">
-        <str>jportal_class_00000200</str>
-        <str>jportal_class_00000215</str>
+        <str>urmel_class_00000001</str>
       </arr>
-      <date name="modified">2018-02-28T09:40:51.614Z</date>
-      <date name="created">2018-01-24T13:59:35.717Z</date>
-      <long name="_version_">1593637183622742016</long></doc>
+      <date name="modified">2018-02-26T11:37:57.875Z</date>
+      <date name="created">2018-02-26T11:37:57.875Z</date>
+      <long name="_version_">1593463357271179264</long></doc>
+    <doc>
+      <str name="id">jportal_person_00000005</str>
+      <str name="objectType">person</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <str name="heading_base">Simpson, Maggie</str>
+      <str name="heading">Simpson, Maggie</str>
+      <arr name="category">
+        <str>urmel_class_00000001:female</str>
+      </arr>
+      <arr name="classification">
+        <str>urmel_class_00000001</str>
+      </arr>
+      <date name="modified">2018-02-26T11:38:34.608Z</date>
+      <date name="created">2018-02-26T11:38:34.608Z</date>
+      <long name="_version_">1593463395772792832</long></doc>
+    <doc>
+      <str name="id">jportal_person_00000004</str>
+      <str name="objectType">person</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <str name="heading_base">Simpson, Lisa</str>
+      <str name="heading">Simpson, Lisa</str>
+      <arr name="category">
+        <str>urmel_class_00000001:female</str>
+      </arr>
+      <arr name="classification">
+        <str>urmel_class_00000001</str>
+      </arr>
+      <date name="modified">2018-02-26T11:38:17.783Z</date>
+      <date name="created">2018-02-26T11:38:17.783Z</date>
+      <long name="_version_">1593463378124210176</long></doc>
+    <doc>
+      <str name="id">jportal_person_00000006</str>
+      <str name="objectType">person</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <str name="heading_base">Kent, Clark</str>
+      <str name="heading">Kent, Clark</str>
+      <arr name="category">
+        <str>urmel_class_00000001:male</str>
+      </arr>
+      <arr name="classification">
+        <str>urmel_class_00000001</str>
+      </arr>
+      <date name="modified">2018-02-26T11:39:14.359Z</date>
+      <date name="created">2018-02-26T11:39:14.359Z</date>
+      <long name="_version_">1593463437451591680</long></doc>
+    <doc>
+      <str name="id">jportal_person_00000007</str>
+      <str name="objectType">person</str>
+      <str name="objectProject">jportal</str>
+      <long name="derivateCount">0</long>
+      <str name="heading_base">Stark, Tony</str>
+      <str name="heading">Stark, Tony</str>
+      <arr name="category">
+        <str>urmel_class_00000001:male</str>
+      </arr>
+      <arr name="classification">
+        <str>urmel_class_00000001</str>
+      </arr>
+      <date name="modified">2018-02-26T11:40:32.789Z</date>
+      <date name="created">2018-02-26T11:40:32.789Z</date>
+      <long name="_version_">1593463519680921600</long></doc>
   </result>
   <lst name="facet_counts">
     <lst name="facet_queries"/>
     <lst name="facet_fields">
       <lst name="objectType">
-        <int name="jpjournal">2</int>
-        <int name="jpvolume">2</int>
+        <int name="person">7</int>
       </lst>
-      <lst name="journalType">
-        <int name="jportal_class_00000200:magazines">4</int>
-        <int name="jportal_class_00000210:legalDeposit">2</int>
-        <int name="jportal_class_00000215:literatureAndArt">2</int>
-      </lst>
+      <lst name="journalType"/>
     </lst>
     <lst name="facet_ranges"/>
     <lst name="facet_intervals"/>

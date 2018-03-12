@@ -1014,6 +1014,10 @@ textarea {
 	border-top: none;
 }
 
+.jp-layout-search-sidebar-group>div:first-child {
+	margin-top: 20px;
+}
+
 .dt-collapse i, .dt-collapse span, .jp-layout-resultLCaption {
 	color: #008CC9;
 }
@@ -1594,6 +1598,10 @@ body {
 
 
 /* Facets */
+.jp-facet-list {
+	margin-top: 10px;
+}
+
 .jp-facet-list > .jp-facet-row {
 	margin: 0 0 8px;
 }
