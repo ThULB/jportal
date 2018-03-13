@@ -482,6 +482,9 @@
                 select="/response/lst[@name='responseHeader']/lst[@name='params']/arr[@name='fq']/str
                 |/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='fq']"/>
 
+  <xsl:variable name="journalIDParam"
+                select="/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='journalID']"/>
+
   <xsl:template mode="addFacetParent" match="lst">
     <xsl:copy>
       <xsl:apply-templates mode="addFacetParent" select="@*|node()"/>
@@ -552,6 +555,9 @@
           <xsl:apply-templates mode="facetHrefLink" select="$usedFacets|$addFacet"/>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:if test="$journalIDParam">
+        <xsl:value-of select="concat('&amp;journalID=',$journalIDParam)"/>
+      </xsl:if>
     </xsl:variable>
 
     <div class="jp-facet-row" data-id="{$id}" data-type="{$groupName}">

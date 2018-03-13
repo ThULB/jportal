@@ -3,135 +3,208 @@
 
   <lst name="responseHeader">
     <int name="status">0</int>
-    <int name="QTime">1</int>
+    <int name="QTime">310</int>
     <lst name="params">
-      <str name="fq">objectType:"person"</str>
-      <str name="lang">de</str>
+      <str name="journalID">jportal_jpjournal_00000024</str>
+      <str name="qry">schiller</str>
+      <str name="fq">journalID:jportal_jpjournal_00000024</str>
       <str name="XSL.Style">xml</str>
       <str name="version">4.5</str>
     </lst>
   </lst>
-  <result name="response" numFound="7" start="0">
+  <result name="response" numFound="3" start="0">
     <doc>
-      <str name="id">jportal_person_00000001</str>
-      <str name="objectType">person</str>
+      <str name="id">jportal_jparticle_00106028</str>
+      <str name="objectType">jparticle</str>
       <str name="objectProject">jportal</str>
       <long name="derivateCount">0</long>
-      <str name="heading_base">Muster, Max</str>
-      <str name="heading">Muster, Max</str>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00031298</str>
+      <long name="order">0</long>
+      <str name="ancestorPath">jportal_jpjournal_00000024/jportal_jpvolume_00031288/jportal_jpvolume_00031298/</str>
+      <str name="maintitle">Von.
+        Klopstock hätt` es verschmäht, als ein griechisches "A privatium. Hätt es doch Hippel gewollt, Schiller und Göthe gethan!</str>
+      <str name="journalTitle">Isis : encyclopädische Zeitschrift, vorzügl. für Naturgeschichte, vergleichende Anatomie u. Physiologie</str>
+      <str name="size">Sp. 0521 - 0522</str>
+      <str name="indexPosition">Sp. 0521 - 0522</str>
+      <arr name="rubric">
+        <str>jportal_class_00000047#00013000</str>
+      </arr>
+      <arr name="rubricText">
+        <str>Kategoriale Einordnung fehlt</str>
+      </arr>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00164079/ISIS_1820_Bd01_0270.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000024</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00029866#Oken, Lorenz</str>
+      </arr>
+      <arr name="participant.partner">
+        <str>jportal_jpinst_00019123#Universitätsbibliothek Johann Christian Senckenberg Frankfurt, Main</str>
+        <str>jportal_jpinst_00019124#Universität Jena (FSU), Institut für Geschichte der Medizin, Naturwissenschaft und Technik "Ernst-Haeckel-Haus" (BRD)</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+      </arr>
       <arr name="category">
-        <str>urmel_class_00000001:male</str>
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000046:00005000</str>
+        <str>jportal_class_00000047:00013000</str>
+        <str>jportal_class_00000049:00001000</str>
       </arr>
       <arr name="classification">
-        <str>urmel_class_00000001</str>
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+        <str>jportal_class_00000046</str>
+        <str>jportal_class_00000047</str>
+        <str>jportal_class_00000049</str>
       </arr>
-      <date name="modified">2017-11-16T16:33:01.158Z</date>
-      <date name="created">2017-11-16T16:33:01.160Z</date>
-      <long name="_version_">1593463162222411780</long></doc>
+      <date name="created">2008-08-20T14:29:22.256Z</date>
+      <date name="modified">2014-01-18T10:47:45.424Z</date>
+      <long name="_version_">1593324090801782784</long></doc>
     <doc>
-      <str name="id">jportal_person_00000002</str>
-      <str name="objectType">person</str>
+      <str name="id">jportal_jparticle_00246883</str>
+      <str name="objectType">jparticle</str>
       <str name="objectProject">jportal</str>
       <long name="derivateCount">0</long>
-      <str name="heading_base">Marge, Simpson</str>
-      <str name="heading">Marge, Simpson</str>
+      <long name="childrenCount">0</long>
+      <str name="parent">jportal_jpvolume_00031382</str>
+      <long name="order">4</long>
+      <str name="ancestorPath">jportal_jpjournal_00000024/jportal_jpvolume_00031372/jportal_jpvolume_00031382/</str>
+      <str name="maintitle">Gallerie zu Schillers Werken, 100 Blatt in 25 Lieferungen.
+        Gallerie zu Göthens Werken, 100 Blatt in 25 Lieferungen.</str>
+      <str name="journalTitle">Isis : encyclopädische Zeitschrift, vorzügl. für Naturgeschichte, vergleichende Anatomie u. Physiologie</str>
+      <str name="size">Sp. 0871 - 0872</str>
+      <str name="indexPosition">Sp. 0871 - 0872</str>
+      <arr name="rubric">
+        <str>jportal_class_00000047#00013000</str>
+      </arr>
+      <arr name="rubricText">
+        <str>Kategoriale Einordnung fehlt</str>
+      </arr>
+      <arr name="derivateLink">
+        <str>jportal_derivate_00166562/Isis_1826_Bd02_0118.tif</str>
+      </arr>
+      <str name="journalID">jportal_jpjournal_00000024</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00029866#Oken, Lorenz</str>
+      </arr>
+      <arr name="participant.partner">
+        <str>jportal_jpinst_00019123#Universitätsbibliothek Johann Christian Senckenberg Frankfurt, Main</str>
+        <str>jportal_jpinst_00019124#Universität Jena (FSU), Institut für Geschichte der Medizin, Naturwissenschaft und Technik "Ernst-Haeckel-Haus" (BRD)</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+      </arr>
       <arr name="category">
-        <str>urmel_class_00000001:female</str>
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+        <str>jportal_class_00000046:00015000</str>
+        <str>jportal_class_00000047:00013000</str>
+        <str>jportal_class_00000049:00001000</str>
       </arr>
       <arr name="classification">
-        <str>urmel_class_00000001</str>
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
+        <str>jportal_class_00000046</str>
+        <str>jportal_class_00000047</str>
+        <str>jportal_class_00000049</str>
       </arr>
-      <date name="modified">2018-02-26T11:37:33.974Z</date>
-      <date name="created">2018-02-26T11:37:33.974Z</date>
-      <long name="_version_">1593463332725063680</long></doc>
+      <date name="modified">2014-01-18T10:58:29.412Z</date>
+      <date name="created">2011-12-02T09:46:28.076Z</date>
+      <long name="_version_">1593324334333558786</long></doc>
     <doc>
-      <str name="id">jportal_person_00000003</str>
-      <str name="objectType">person</str>
+      <str name="id">jportal_jpvolume_00031288</str>
+      <str name="objectType">jpvolume</str>
       <str name="objectProject">jportal</str>
-      <long name="derivateCount">0</long>
-      <str name="heading_base">Simpson, Bart</str>
-      <str name="heading">Simpson, Bart</str>
+      <long name="derivateCount">2</long>
+      <long name="childrenCount">16</long>
+      <str name="parent">jportal_jpjournal_00000024</str>
+      <long name="order">3</long>
+      <str name="ancestorPath">jportal_jpjournal_00000024/</str>
+      <str name="maintitle">1820</str>
+      <str name="journalTitle">Isis : encyclopädische Zeitschrift, vorzügl. für Naturgeschichte, vergleichende Anatomie u. Physiologie</str>
+      <str name="published">1820</str>
+      <str name="date.published">1820</str>
+      <arr name="dates">
+        <str>1820</str>
+      </arr>
+      <str name="indexPosition">004</str>
+      <str name="journalID">jportal_jpjournal_00000024</str>
+      <arr name="contentClassi1">
+        <str>historical</str>
+      </arr>
+      <arr name="contentClassi2">
+        <str>sfb-482</str>
+      </arr>
+      <arr name="contentClassi3">
+        <str>thulb</str>
+      </arr>
+      <arr name="contentClassi6">
+        <str>z</str>
+      </arr>
+      <arr name="participant.mainPublisher">
+        <str>jportal_person_00029866#Oken, Lorenz</str>
+      </arr>
+      <arr name="participant.partner">
+        <str>jportal_jpinst_00019123#Universitätsbibliothek Johann Christian Senckenberg Frankfurt, Main</str>
+        <str>jportal_jpinst_00019124#Universität Jena (FSU), Institut für Geschichte der Medizin, Naturwissenschaft und Technik "Ernst-Haeckel-Haus" (BRD)</str>
+      </arr>
+      <arr name="journalType">
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
+      </arr>
       <arr name="category">
-        <str>urmel_class_00000001:male</str>
+        <str>jportal_class_00000200:magazines</str>
+        <str>jportal_class_00000215:naturalScience</str>
       </arr>
       <arr name="classification">
-        <str>urmel_class_00000001</str>
+        <str>jportal_class_00000200</str>
+        <str>jportal_class_00000215</str>
       </arr>
-      <date name="modified">2018-02-26T11:37:57.875Z</date>
-      <date name="created">2018-02-26T11:37:57.875Z</date>
-      <long name="_version_">1593463357271179264</long></doc>
-    <doc>
-      <str name="id">jportal_person_00000005</str>
-      <str name="objectType">person</str>
-      <str name="objectProject">jportal</str>
-      <long name="derivateCount">0</long>
-      <str name="heading_base">Simpson, Maggie</str>
-      <str name="heading">Simpson, Maggie</str>
-      <arr name="category">
-        <str>urmel_class_00000001:female</str>
-      </arr>
-      <arr name="classification">
-        <str>urmel_class_00000001</str>
-      </arr>
-      <date name="modified">2018-02-26T11:38:34.608Z</date>
-      <date name="created">2018-02-26T11:38:34.608Z</date>
-      <long name="_version_">1593463395772792832</long></doc>
-    <doc>
-      <str name="id">jportal_person_00000004</str>
-      <str name="objectType">person</str>
-      <str name="objectProject">jportal</str>
-      <long name="derivateCount">0</long>
-      <str name="heading_base">Simpson, Lisa</str>
-      <str name="heading">Simpson, Lisa</str>
-      <arr name="category">
-        <str>urmel_class_00000001:female</str>
-      </arr>
-      <arr name="classification">
-        <str>urmel_class_00000001</str>
-      </arr>
-      <date name="modified">2018-02-26T11:38:17.783Z</date>
-      <date name="created">2018-02-26T11:38:17.783Z</date>
-      <long name="_version_">1593463378124210176</long></doc>
-    <doc>
-      <str name="id">jportal_person_00000006</str>
-      <str name="objectType">person</str>
-      <str name="objectProject">jportal</str>
-      <long name="derivateCount">0</long>
-      <str name="heading_base">Kent, Clark</str>
-      <str name="heading">Kent, Clark</str>
-      <arr name="category">
-        <str>urmel_class_00000001:male</str>
-      </arr>
-      <arr name="classification">
-        <str>urmel_class_00000001</str>
-      </arr>
-      <date name="modified">2018-02-26T11:39:14.359Z</date>
-      <date name="created">2018-02-26T11:39:14.359Z</date>
-      <long name="_version_">1593463437451591680</long></doc>
-    <doc>
-      <str name="id">jportal_person_00000007</str>
-      <str name="objectType">person</str>
-      <str name="objectProject">jportal</str>
-      <long name="derivateCount">0</long>
-      <str name="heading_base">Stark, Tony</str>
-      <str name="heading">Stark, Tony</str>
-      <arr name="category">
-        <str>urmel_class_00000001:male</str>
-      </arr>
-      <arr name="classification">
-        <str>urmel_class_00000001</str>
-      </arr>
-      <date name="modified">2018-02-26T11:40:32.789Z</date>
-      <date name="created">2018-02-26T11:40:32.789Z</date>
-      <long name="_version_">1593463519680921600</long></doc>
+      <date name="created">2006-10-20T10:17:42.920Z</date>
+      <date name="modified">2016-09-09T18:00:06.699Z</date>
+      <long name="_version_">1593323452061712384</long></doc>
   </result>
   <lst name="facet_counts">
     <lst name="facet_queries"/>
     <lst name="facet_fields">
       <lst name="objectType">
-        <int name="person">7</int>
+        <int name="jparticle">2</int>
+        <int name="jpvolume">1</int>
       </lst>
-      <lst name="journalType"/>
+      <lst name="journalType">
+        <int name="jportal_class_00000200:magazines">3</int>
+        <int name="jportal_class_00000215:naturalScience">3</int>
+      </lst>
     </lst>
     <lst name="facet_ranges"/>
     <lst name="facet_intervals"/>
