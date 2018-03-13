@@ -415,53 +415,51 @@
   <!-- *************************************************** -->
   <!-- FACET RANGE -->
   <xsl:template mode="facetRanges" match="lst">
-    <div>
-      <a class="dt-collapse" data-toggle="collapse">
-        <xsl:attribute name="data-target">
-          <xsl:value-of select="concat('#', @name)"/>
-        </xsl:attribute>
-        <span class="jp-layout-facet-group-head">
-          <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))"/>
-        </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
-      </a>
-      <div class="collapse in list-group jp-list-group-special" id="{@name}">
-        <div style="display: flex;">
-          <div style="display: flex; flex-direction: column; justify-content: space-between; margin-right: 8px;">
-            <a id="{@name}_accept_button" href="javascript:void(0)" type="button"
-               class="btn btn-xs btn-primary disabled" role="button">
-              <i class="fa fa-check"></i>
-            </a>
-            <a id="{@name}_popup_button" href="javascript:void(0)" type="button"
-               class="btn btn-xs btn-default" role="button">
-              <i class="fa fa-bar-chart"></i>
-            </a>
-            <a id="{@name}_cancel_button" href="javascript:void(0)" type="button"
-               class="btn btn-xs btn-danger disabled" role="button">
-              <i class="fa fa-times"></i>
-            </a>
+    <a class="dt-collapse jp-facet-header" data-toggle="collapse">
+      <xsl:attribute name="data-target">
+        <xsl:value-of select="concat('#', @name)"/>
+      </xsl:attribute>
+      <span class="jp-layout-facet-group-head">
+        <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))"/>
+      </span>
+      <i class="fa fa-sort-asc"></i>
+      <i class="fa fa-sort-desc"></i>
+    </a>
+    <div class="collapse in list-group jp-list-group-special" id="{@name}">
+      <div style="display: flex;">
+        <div style="display: flex; flex-direction: column; justify-content: space-between; margin-right: 8px;">
+          <a id="{@name}_accept_button" href="javascript:void(0)" type="button"
+             class="btn btn-xs btn-primary disabled" role="button">
+            <i class="fa fa-check"></i>
+          </a>
+          <a id="{@name}_popup_button" href="javascript:void(0)" type="button"
+             class="btn btn-xs btn-default" role="button">
+            <i class="fa fa-bar-chart"></i>
+          </a>
+          <a id="{@name}_cancel_button" href="javascript:void(0)" type="button"
+             class="btn btn-xs btn-danger disabled" role="button">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+        <div>
+          <div class='input-group date' id='{@name}_from'>
+            <input type='text' class="form-control"/>
+            <span
+                    class="input-group-addon">
+              <span
+                      class="glyphicon glyphicon-calendar"></span>
+            </span>
           </div>
-          <div>
-            <div class='input-group date' id='{@name}_from'>
-              <input type='text' class="form-control"/>
+          <div class="text-center">
+            <i class="fa fa-angle-down"></i>
+          </div>
+          <div class='input-group date' id='{@name}_to'>
+            <input type='text' class="form-control"/>
+            <span
+                    class="input-group-addon">
               <span
-                      class="input-group-addon">
-                <span
-                        class="glyphicon glyphicon-calendar"></span>
-              </span>
-            </div>
-            <div class="text-center">
-              <i class="fa fa-angle-down"></i>
-            </div>
-            <div class='input-group date' id='{@name}_to'>
-              <input type='text' class="form-control"/>
-              <span
-                      class="input-group-addon">
-                <span
-                        class="glyphicon glyphicon-calendar"></span>
-              </span>
-            </div>
+                      class="glyphicon glyphicon-calendar"></span>
+            </span>
           </div>
         </div>
       </div>
@@ -511,21 +509,19 @@
   </xsl:template>
 
   <xsl:template mode="facetTree" match="lst">
-    <div>
-      <a class="dt-collapse" data-toggle="collapse">
-        <xsl:attribute name="data-target">
-          <xsl:value-of select="concat('#', @name)"/>
-        </xsl:attribute>
-        <span class="jp-layout-facet-group-head">
-          <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))"/>
-        </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
-      </a>
-      <div class="collapse in list-group jp-list-group-special jp-facet-list" id="{@name}">
-        <!-- select int nodes where parent attribute is not present-->
-        <xsl:apply-templates mode="facetTree" select="int[not(@parent)]"/>
-      </div>
+    <a class="dt-collapse jp-facet-header" data-toggle="collapse">
+      <xsl:attribute name="data-target">
+        <xsl:value-of select="concat('#', @name)"/>
+      </xsl:attribute>
+      <span class="jp-layout-facet-group-head">
+        <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))"/>
+      </span>
+      <i class="fa fa-sort-asc"></i>
+      <i class="fa fa-sort-desc"></i>
+    </a>
+    <div class="collapse in list-group jp-list-group-special jp-facet-list" id="{@name}">
+      <!-- select int nodes where parent attribute is not present-->
+      <xsl:apply-templates mode="facetTree" select="int[not(@parent)]"/>
     </div>
   </xsl:template>
 

@@ -1000,12 +1000,6 @@ textarea {
 	font-size: 1.2em;
 }
 
-.jp-layout-searchList .dt-collapse{
-	width: 100%;
-	padding-left: 0.1em;
-	cursor: pointer;
-}
-
 .jp-layout-search-sidebar-group {
 	border-top: 1px solid #A8A9AA;
 	margin-top: 10px;
@@ -1014,34 +1008,22 @@ textarea {
 	border-top: none;
 }
 
-.jp-layout-search-sidebar-group>div:first-child {
-	margin-top: 20px;
-}
-
 .dt-collapse i, .dt-collapse span, .jp-layout-resultLCaption {
 	color: #008CC9;
 }
 
 .dt-collapse .fa-sort-asc{
 	float: right;
-	padding-right: 0.7em;	
 	padding-top: 7px;
-}
-
-@media (min-width: 768px) and (max-width: 792px){
-	.dt-collapse .fa-sort-asc, .dt-collapse .fa-sort-desc{
-		padding-right: 0;
-	}
 }
 
 .dt-collapse.collapsed .fa-sort-asc, .dt-collapse .fa-sort-desc{
 	display: none;	
 }
 
-.dt-collapse.collapsed .fa-sort-desc{
+.dt-collapse.collapsed .fa-sort-desc {
 	display: inline-block;
 	float: right; 
-	padding-right: 0.7em;
 }
 
 .jp-layout-searchResult-style{
@@ -1210,10 +1192,6 @@ textarea {
 		border-bottom: 1px solid #A8A9AA;
 	}
 
-	.dt-collapse .fa-sort-asc{
-		padding-right: 0.5em;
-	}
-	
 	#resultListHeader > .jp-list-group-special.list-group.visible-xs{
 		margin-top: 10px;
 	}
@@ -1599,8 +1577,15 @@ body {
 
 
 /* Facets */
+.jp-facet-header {
+    width: 100%;
+    cursor: pointer;
+    display: inline-block;
+    margin: 10px 0 6px;
+}
+
 .jp-facet-list {
-	margin-top: 10px;
+    margin: 0;
 }
 
 .jp-facet-list > .jp-facet-row {
