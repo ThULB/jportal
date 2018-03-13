@@ -46,13 +46,21 @@
       <div id="jp-tableOfContent" class="jp-layout-tableOfContent jp-content-block row">
         <ul>
           <xsl:variable name="docSize" select="count($volumes/response/result/doc)" />
+          <xsl:variable name="maxCharacters">
+            <xsl:for-each select="$volumes/response/result/doc/str[@name='maintitle']">
+              <xsl:sort select="string-length(text())" data-type="number" order="descending"/>
+              <xsl:if test="position() = 1">
+                <xsl:value-of select="string-length(text())" />
+              </xsl:if>
+            </xsl:for-each>
+          </xsl:variable>
           <xsl:attribute name="style">
             <xsl:value-of select="'column-count: '" />
             <xsl:choose>
-              <xsl:when test="$docSize &gt; 31">
+              <xsl:when test="$docSize &gt; 31 and $maxCharacters &lt; 35">
                 <xsl:value-of select="'4'" />
               </xsl:when>
-              <xsl:when test="$docSize &gt; 21">
+              <xsl:when test="$docSize &gt; 21 and $maxCharacters &lt; 50">
                 <xsl:value-of select="'3'" />
               </xsl:when>
               <xsl:when test="$docSize &gt; 11">
