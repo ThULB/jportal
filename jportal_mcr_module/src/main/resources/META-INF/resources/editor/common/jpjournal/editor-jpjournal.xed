@@ -9,9 +9,6 @@
 
       <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed" ref="participants" />
 
-<!--
-      <xed:include uri="xslStyle:jp-editor-template?xedIncParam=jportal_class_00000009:webapp:/editor/common/editor-common.xed" ref="dates" />
--->
       <xed:repeat xpath="dates[@class='JPMetaDate']/date" min="0" max="10">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.date_label" option="true" buttons="true" noPleaseSelect="true" bottom="littleSpace">
           <option i18n="metaData.date.published" value="published" />

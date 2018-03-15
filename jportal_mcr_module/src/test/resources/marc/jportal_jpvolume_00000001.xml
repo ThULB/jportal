@@ -11,9 +11,8 @@
         </children>
     </structure>
     <metadata>
-        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+        <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
             <maintitle inherited="0" form="plain">Test Band</maintitle>
-            <maintitle inherited="1" form="plain">Test Zeitschrift</maintitle>
         </maintitles>
         <hidden_jpjournalsID class="MCRMetaLangText" heritable="true" notinherit="false">
             <hidden_jpjournalID inherited="1" form="plain">jportal_jpjournal_00000001</hidden_jpjournalID>

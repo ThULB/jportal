@@ -8,9 +8,8 @@
     </derobjects>
   </structure>
   <metadata>
-    <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+    <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
       <maintitle inherited="0" form="plain">1855</maintitle>
-      <maintitle inherited="1" form="plain">Mittheilungen aus Justus Perthes' Geographischer Anstalt ...</maintitle>
     </maintitles>
     <hidden_positions class="MCRMetaLangText" heritable="false" notinherit="false">
       <hidden_position inherited="0" form="plain">001</hidden_position>

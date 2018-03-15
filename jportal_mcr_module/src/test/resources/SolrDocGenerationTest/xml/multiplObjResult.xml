@@ -13,10 +13,8 @@
         </parents>
       </structure>
       <metadata>
-        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+        <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
           <maintitle type="main" inherited="0" form="plain">Nr. III</maintitle>
-          <maintitle inherited="1" form="plain">1824</maintitle>
-          <maintitle inherited="2" form="plain">ISIS</maintitle>
         </maintitles>
         <hidden_positions class="MCRMetaLangText" heritable="false" notinherit="false">
           <hidden_position inherited="0" form="plain">003</hidden_position>
@@ -72,10 +70,8 @@
         </parents>
       </structure>
       <metadata>
-        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+        <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
           <maintitle type="main" inherited="0" form="plain">Nr. III</maintitle>
-          <maintitle inherited="1" form="plain">1824</maintitle>
-          <maintitle inherited="2" form="plain">ISIS</maintitle>
         </maintitles>
         <hidden_positions class="MCRMetaLangText" heritable="false" notinherit="false">
           <hidden_position inherited="0" form="plain">003</hidden_position>
@@ -131,10 +127,8 @@
         </parents>
       </structure>
       <metadata>
-        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+        <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
           <maintitle type="main" inherited="0" form="plain">Nr. III</maintitle>
-          <maintitle inherited="1" form="plain">1824</maintitle>
-          <maintitle inherited="2" form="plain">ISIS</maintitle>
         </maintitles>
         <hidden_positions class="MCRMetaLangText" heritable="false" notinherit="false">
           <hidden_position inherited="0" form="plain">003</hidden_position>

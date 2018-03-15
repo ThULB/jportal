@@ -6,7 +6,7 @@
         </children>
     </structure>
     <metadata>
-        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+        <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
             <maintitle inherited="0" form="plain">Test Zeitschrift</maintitle>
         </maintitles>
         <languages class="MCRMetaClassification" heritable="false" notinherit="true">

@@ -5,7 +5,7 @@
               xsi:noNamespaceSchemaLocation="datamodel-jpjournal.xsd">
     <structure />
     <metadata>
-        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+        <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
             <maintitle inherited="0" form="plain">TEst2</maintitle>
         </maintitles>
         <participants class="MCRMetaLinkID" heritable="false" notinherit="false">

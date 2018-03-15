@@ -9,15 +9,8 @@
         </parents>
       </structure>
       <metadata>
-        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+        <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
           <maintitle inherited="0" form="plain">Bl. A1 recto</maintitle>
-          <maintitle inherited="1" form="plain">Ander Theil. Coniectura Astrologica, Nach der Alten Zeit Astrologische Muhtmassung/ Auff
-            das Jahr nach der Gnadenreichen Geburt unsers lieben Herren und Erlösers Jesu Christi MDCLVII. \ ... abgefasset durch
-            Christophorum Richtern/ Görlic. p.t. Diaconum zu Kohren in Meissen</maintitle>
-          <maintitle inherited="2" form="plain">1657</maintitle>
-          <maintitle inherited="3" form="plain">Jahres-Zeiger Schreib-Kalender (Druckort: Leipzig)</maintitle>
-          <maintitle inherited="2" form="plain">1657</maintitle>
-          <maintitle inherited="3" form="plain">Jahres-Zeiger Schreib-Kalender (Druckort: Leipzig)</maintitle>
         </maintitles>
         <volContentClassis1 class="MCRMetaClassification" heritable="false" notinherit="false">
           <volContentClassi1 inherited="0" classid="jportal_class_00000083" categid="Exodus_2. Mose, Kap. 23" />

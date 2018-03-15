@@ -107,7 +107,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
         if (maintitle.isPresent()) {
             maintitle.get().setText(newTitle);
         } else {
-            MCRMetaElement maintitles = new MCRMetaElement(MCRMetaLangText.class, "maintitles", true, false, null);
+            MCRMetaElement maintitles = new MCRMetaElement(MCRMetaLangText.class, "maintitles", false, true, null);
             maintitles.addMetaObject(new MCRMetaLangText("maintitle", null, null, 0, null, newTitle));
             object.getMetadata().setMetadataElement(maintitles);
         }

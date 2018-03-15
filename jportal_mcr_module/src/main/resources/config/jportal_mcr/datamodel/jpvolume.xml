@@ -17,7 +17,7 @@
     <metadata>
         <!-- 01 - Maintitle -->
         <element name="maintitles" minOccurs='1' maxOccurs='1'>
-            <mcrmetalangtext name="maintitle" class="MCRMetaLangText" minOccurs='1' maxOccurs='10' length="1024" />
+            <mcrmetalangtext name="maintitle" class="MCRMetaLangText" minOccurs='1' maxOccurs='1' length="1024" />
         </element>
         <!-- 02 - SubTitles -->
         <!-- types = addtitle | shorttitle | misc. -->

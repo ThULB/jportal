@@ -8,10 +8,8 @@
         </parents>
     </structure>
     <metadata>
-        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+        <maintitles class="MCRMetaLangText" heritable="false" notinherit="false">
             <maintitle inherited="0" form="plain">Test Artikel</maintitle>
-            <maintitle inherited="1" form="plain">Test Band</maintitle>
-            <maintitle inherited="2" form="plain">Test Zeitschrift</maintitle>
         </maintitles>
         <subtitles class="MCRMetaLangText" heritable="false" notinherit="true">
             <subtitle type="short" inherited="0" form="plain">Kurztitel</subtitle>
