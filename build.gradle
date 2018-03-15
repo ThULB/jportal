@@ -148,6 +148,7 @@ project(':jportal_mcr_module') {
         compile "org.glassfish.jersey.test-framework:jersey-test-framework-core:$jerseyVersion"
         compile "org.glassfish.jersey.core:jersey-server:$jerseyVersion"
         compile "org.glassfish.jersey.core:jersey-client:$jerseyVersion"
+        compile "org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion"
         compile 'org.easymock:easymock:3.2'
         compile 'xmlunit:xmlunit:1.3'
         compile 'javax.xml.bind:jaxb-api:2.2.1'
