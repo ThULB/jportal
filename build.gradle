@@ -243,9 +243,8 @@ project(':jportal_webapp') {
         runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.mycore:mycore-acl-editor2:$mcrVersion"
         runtime "org.mycore:mycore-ifs:$mcrVersion"
-		runtime "com.zaxxer:HikariCP:2.4.5"
+		runtime "com.zaxxer:HikariCP:2.7.8"
 		runtime "org.hibernate:hibernate-hikaricp:$hibernateVersion"
-        runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
 
         runtime project(':jportal_laws')
         runtime project(':jportal_derivate_browser')
