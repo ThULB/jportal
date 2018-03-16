@@ -116,10 +116,12 @@
           </xsl:if>
           <xsl:if test="@name='jpdate_select'">
             <div class="form-group jpdate-group" id="jpdate-group-{@id}">
-              <input type="radio" name="date_type_select-{@id}" value="date" id="jpdate-type-date-{@id}" />
-              <label for="jpdate-type-date-{@id}"> Datum</label>
-              <input type="radio" name="date_type_select-{@id}" value="range"  id="jpdate-type-range-{@id}" />
-              <label for="jpdate-type-range-{@id}"> Datumsbereich</label>
+              <div>
+                <input type="radio" name="date_type_select-{@id}" value="date" id="jpdate-type-date-{@id}" />
+                <label for="jpdate-type-date-{@id}"> Datum</label>
+                <input type="radio" name="date_type_select-{@id}" value="range"  id="jpdate-type-range-{@id}" />
+                <label for="jpdate-type-range-{@id}"> Datumsbereich</label>
+              </div>
               <xsl:apply-templates select="jp:template[@type='date']" mode="jpdate_select" />
               <xsl:apply-templates select="jp:template[@type='textInput']" mode="jpdate_select" />
             </div>

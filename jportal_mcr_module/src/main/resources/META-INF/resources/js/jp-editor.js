@@ -43,13 +43,13 @@ $(document).ready(function() {
             let dateInput = dateInputGroup.find("input.date-field");
             let fromInput = fromInputGroup.find("input.date-field");
             let untilInput = untilInputGroup.find("input.date-field");
-            let date = dateInput.val();
+            let dateFrom = fromInput.val();
 
             // init dates on start
-            if(date !== null && date !== undefined && date !== "") {
-                dateSelect.prop("checked", true).change();
-            } else {
+            if(dateFrom !== null && dateFrom !== undefined && dateFrom !== "") {
                 rangeSelect.prop("checked", true).change();
+            } else {
+                dateSelect.prop("checked", true).change();
             }
 
             // clear dates before submit
