@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
-  xmlns:layoutDetector="xalan://fsu.jportal.frontend.DynamicLayoutTemplateDetector" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
-  xmlns:escapeUtils="org.apache.commons.lang.StringEscapeUtils" xmlns:xalan="http://xml.apache.org/xalan"
-  exclude-result-prefixes="jpxml xalan layoutTools escapeUtils">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+                xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
+                xmlns:escapeUtils="org.apache.commons.lang.StringEscapeUtils" xmlns:xalan="http://xml.apache.org/xalan"
+                exclude-result-prefixes="jpxml xalan layoutTools escapeUtils">
 
-  <xsl:template match="/template[@id='template_petermannGM']" mode="template">
+<xsl:template match="/template[@id='template_petermannGM']" mode="template">
     <xsl:param name="mcrObj" />
     <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
     <xsl:apply-templates select="$journal" mode="template_petermannGM" />
