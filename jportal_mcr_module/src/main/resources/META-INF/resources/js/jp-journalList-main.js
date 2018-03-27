@@ -107,7 +107,7 @@ jp.journalList = {
 
   bufferCount: function (array, count) {
     let bufferCount = [];
-    for (i = 0; i < array.length; i = i + count) {
+    for (let i = 0; i < array.length; i = i + count) {
       bufferCount.push(array.slice(i, i + count));
     }
 
@@ -160,15 +160,19 @@ jp.journalList = {
     let facetsFields = searchResult.facet_counts.facet_fields.journalType;
     let facets = jp.journalList.bufferCount(facetsFields, 2)
         .filter(journalType => journalType[1] > 0 || usedFacets.indexOf(journalType[0]) > -1)
-        .map(journalType => ({
-          categID: journalType[0],
-          count: journalType[1],
-          label: jp.journalList.labelsMap[journalType[0]].label,
-          parent: jp.journalList.lookupTable[journalType[0].split(':')[0]],
-          excluded: !!jp.journalList.excludedFacets.filter(ex => journalType[0].indexOf(ex) > -1).pop(),
-          inUse: usedFacets.indexOf(journalType[0]) > -1
-        }));
-
+        .map(journalType => {
+          let categID = journalType[0];
+          let count = journalType[1];
+          let label = jp.journalList.labelsMap[categID] != null ? jp.journalList.labelsMap[categID].label : "undefined";
+          return {
+            categID: categID,
+            count: count,
+            label: label,
+            parent: jp.journalList.lookupTable[categID.split(':')[0]],
+            excluded: !!jp.journalList.excludedFacets.filter(ex => categID.indexOf(ex) > -1).pop(),
+            inUse: usedFacets.indexOf(categID) > -1
+          }
+        });
     jp.journalList.usedFacets = usedFacets;
     jp.journalList.facets = facets;
   },
