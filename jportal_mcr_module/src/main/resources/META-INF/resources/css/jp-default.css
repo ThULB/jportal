@@ -1545,11 +1545,10 @@ body {
 .jp-pagination {
 	list-style-type: none;
 	float: none;
-	display: block;
+	display: inline-block;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 1.5em;
-	width: 50%;
 }
 
 .jp-pagination li {
