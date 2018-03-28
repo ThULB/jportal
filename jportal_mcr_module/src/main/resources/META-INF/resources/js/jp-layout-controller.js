@@ -252,6 +252,22 @@ function updateSearchbar() {
 
 }
 
+// LOAD IMAGES
+$(document).ready(function () {
+  $(".jp-thumbnail").each((index, link) => {
+    let img = new Image();
+    img.onload = () => {
+      for(let spinner of link.querySelectorAll(".jp-thumbnail-spinner")) {
+        spinner.remove();
+      }
+      link.appendChild(img);
+      img.style.display = "none";
+      $(img).fadeIn(200);
+    };
+    img.src = link.dataset.img;
+  });
+});
+
 // IVIEW 2
 $(document).ready(function () {
   $('div.jp-layout-derivate .thumbnail').on({

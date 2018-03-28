@@ -228,9 +228,10 @@
         <xsl:value-of select="concat('&amp;q=', $query)" />
       </xsl:if>
     </xsl:variable>
-    <a href="{$href}" class="thumbnail">
-      <div class="jp-layout-hidden-Button"></div>
-      <img src="{$WebApplicationBaseURL}servlets/MCRTileCombineServlet/MIN/{$derivID}/{$file}?centerThumb=no" />
+    <a href="{$href}" class="jp-thumbnail thumbnail"
+       data-img="{$WebApplicationBaseURL}servlets/MCRTileCombineServlet/MIN/{$derivID}/{$file}?centerThumb=no">
+      <div class="jp-layout-hidden-Button" />
+      <i class='fa fa-circle-o-notch fa-spin jp-thumbnail-spinner' />
     </a>
   </xsl:template>
 
@@ -245,22 +246,25 @@
         <xsl:with-param name="string" select="mcrxml:regexp($maindoc, '.*\.', '')" />
       </xsl:call-template>
     </xsl:variable>
-    <a href="{$derivbase}{$encodedMaindoc}" class="thumbnail">
-      <div class="jp-layout-hidden-Button"></div>
-      <xsl:choose>
-        <xsl:when test="$fileType = 'PDF'">
-          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$derivID}/{$encodedMaindoc}" />
-        </xsl:when>
-        <xsl:when test="$fileType = 'XML'">
-          <img src="{$WebApplicationBaseURL}images/xml-logo.svg" />
-        </xsl:when>
-        <xsl:when test="$fileType = 'SVG'">
-          <img src="{$derivbase}{$encodedMaindoc}" />
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="{$WebApplicationBaseURL}images/file-logo.svg" />
-        </xsl:otherwise>
-      </xsl:choose>
+    <a href="{$derivbase}{$encodedMaindoc}" class="jp-thumbnail thumbnail">
+      <xsl:attribute name="data-img">
+        <xsl:choose>
+          <xsl:when test="$fileType = 'PDF'">
+            <xsl:value-of select="concat($WebApplicationBaseURL, 'img/pdfthumb/', $derivID, '/', $encodedMaindoc)" />
+          </xsl:when>
+          <xsl:when test="$fileType = 'XML'">
+            <xsl:value-of select="concat($WebApplicationBaseURL, 'images/xml-logo.svg')" />
+          </xsl:when>
+          <xsl:when test="$fileType = 'SVG'">
+            <xsl:value-of select="concat($derivbase, $encodedMaindoc)" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat($WebApplicationBaseURL, 'images/file-logo.svg')" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <div class="jp-layout-hidden-Button" />
+      <i class='fa fa-circle-o-notch fa-spin jp-thumbnail-spinner' />
     </a>
   </xsl:template>
 

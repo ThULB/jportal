@@ -710,8 +710,18 @@ p.jp-layout-metadata-list {
 	
 }
 
-.jp-layout-tableOfContent .jp-layout-derivate a.thumbnail {
+.jp-layout-tableOfContent .jp-layout-derivate a.jp-thumbnail {
 	margin: 9px 0 0;
+	width: 90px;
+	text-align: center;
+}
+
+.jp-layout-derivate .jp-thumbnail-spinner {
+	margin: 33px;
+}
+
+.jp-content-thumbnail .jp-layout-derivate .jp-thumbnail-spinner {
+	margin: 135px;
 }
 
 .jp-content-thumbnail .jp-layout-derivate a.thumbnail > img {
