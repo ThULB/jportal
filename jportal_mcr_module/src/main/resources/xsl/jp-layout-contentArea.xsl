@@ -142,6 +142,7 @@
               </xsl:choose>
 
               <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
+                <xsl:apply-templates mode="linkedJournals" select="." />
                 <xsl:apply-templates mode="linkedArticles" select="." />
                 <xsl:apply-templates mode="linkedCalendar" select="." />
               </xsl:if>

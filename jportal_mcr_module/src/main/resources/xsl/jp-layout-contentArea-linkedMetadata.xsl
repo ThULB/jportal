@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="encoder i18n">
 
+  <!-- mode parameter in solr query is used for i18n in linkedObjects.result.label templates -->
   <xsl:template mode="linkedArticles" match="mycoreobject">
     <xsl:variable name="q" select="encoder:encode(concat('+objectType:jparticle +link:', @ID))" />
     <xsl:apply-templates select="document(concat('solr:q=',$q,'&amp;rows=6&amp;ref=', @ID, '&amp;mode=article'))/response" mode="linkedObjects.result" />
@@ -10,6 +11,11 @@
   <xsl:template mode="linkedCalendar" match="mycoreobject">
     <xsl:variable name="q" select="encoder:encode(concat('+objectType:jpjournal +contentClassi1:calendar +link:', @ID))" />
     <xsl:apply-templates select="document(concat('solr:q=',$q,'&amp;rows=6&amp;ref=', @ID, '&amp;mode=calendar'))/response" mode="linkedObjects.result" />
+  </xsl:template>
+
+  <xsl:template mode="linkedJournals" match="mycoreobject">
+    <xsl:variable name="q" select="encoder:encode(concat('+objectType:jpjournal -contentClassi1:calendar +link:', @ID))" />
+    <xsl:apply-templates select="document(concat('solr:q=',$q,'&amp;rows=6&amp;ref=', @ID, '&amp;mode=journal'))/response" mode="linkedObjects.result" />
   </xsl:template>
 
   <xsl:template mode="linkedObjects.result" match="/response[result/@numFound = 0]">
@@ -32,7 +38,7 @@
   </xsl:template>
 
   <xsl:template mode="linkedObjects.result.label" match="lst[contains(str[@name='ref'], '_jpinst_')]">
-    <xsl:value-of select="i18n:translate('metaData.jpinst.linked')" />
+    <xsl:value-of select="i18n:translate(concat('metaData.jpinst.linked.', str[@name='mode']))" />
   </xsl:template>
 
   <xsl:template mode="linkedObjects.result.list" match="doc">
