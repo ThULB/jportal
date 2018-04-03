@@ -4,17 +4,28 @@ import static fsu.jportal.frontend.SolrToc.buildQuery;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.util.JPComponentUtil;
+import org.apache.logging.log4j.LogManager;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.common.params.ModifiableSolrParams;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
+import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
+import org.mycore.mets.model.struct.SmLink;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
@@ -30,8 +41,19 @@ import org.mycore.solr.search.MCRSolrSearchUtils;
  */
 public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
 
-    public JPMetsHierarchyGenerator() {
-        super();
+    protected Map<String, String> sizeMap;
+
+    @Override
+    protected void setup(String derivateId) {
+        super.setup(derivateId);
+        this.sizeMap = new HashMap<>();
+    }
+
+    @Override
+    public synchronized Mets generate() throws MCRException {
+        Mets mets = super.generate();
+        enhanceOrderLabels(mets);
+        return mets;
     }
 
     protected String getType(MCRObject obj) {
@@ -66,6 +88,59 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
             String id = (String) doc.getFieldValue("id");
             return MCRObjectID.getInstance(id);
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    protected void newLogicalStructMap(MCRObject parentObject, LogicalDiv parentLogicalDiv) {
+        super.newLogicalStructMap(parentObject, parentLogicalDiv);
+        buildSizeMap(parentObject, parentLogicalDiv);
+    }
+
+    /**
+     * In jportal we use the "sizes" element in an article to set up order. We can use this information to enhance
+     * the mets.xml's phyisical structMap. We respect existing @ORDERLABEL's and do not overwrite them.
+     *
+     * <p>This method is responsible to gather the size information while building the logical struct map. We cannot add
+     * the ORDERLABEL yet, cause the link between the physical structure and the logical structure is not build. But at
+     * this point we have access to the mcrObject, which will be lost later. So we build an id/size map here for later
+     * usage.</p>
+     *
+     * @param mcrObject the object to get the size information
+     * @param logicalDiv the logical div
+     */
+    private void buildSizeMap(MCRObject mcrObject, LogicalDiv logicalDiv) {
+        if (!JPComponentUtil.is(mcrObject.getId(), JPObjectType.jparticle)) {
+            return;
+        }
+        JPComponentUtil.get(mcrObject.getId(), JPArticle.class)
+                       .flatMap(JPArticle::getSize)
+                       .ifPresent(size -> this.sizeMap.put(logicalDiv.getId(), size));
+    }
+
+    /**
+     * Uses the sizeMap to enhance the @ORDERLABEL's of the physical struct map. See {@link #buildSizeMap}.
+     *
+     * @param mets the mets to enhance
+     */
+    private void enhanceOrderLabels(Mets mets) {
+        this.sizeMap.forEach((logicalDivId, size) -> {
+            List<SmLink> linkList = mets.getStructLink().getSmLinkByFrom(logicalDivId);
+            if (linkList.isEmpty()) {
+                return;
+            }
+            SmLink firstLink = linkList.get(0);
+            String physicalDivId = firstLink.getTo();
+            PhysicalSubDiv physicalDiv = mets.getPhysicalStructMap().getDivContainer().get(physicalDivId);
+            if (physicalDiv.getOrderLabel() != null && !"".equals(physicalDiv.getOrderLabel().trim())) {
+                return;
+            }
+            try {
+                size = size.split("-")[0].trim();
+                physicalDiv.setOrderLabel(size);
+            } catch (Exception exc) {
+                LogManager.getLogger().warn("Unable to set ORDERLABEL=" + size + " to " + physicalDivId);
+            }
+        });
     }
 
     protected String getEnclosingDerivateLinkName() {

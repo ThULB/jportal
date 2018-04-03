@@ -42,7 +42,7 @@ public abstract class JPComponentUtil {
         private String[] xpathList;
 
         public JPInfoProvider(String id, String xpath) {
-            this(id, new String[]{xpath});
+            this(id, new String[] { xpath });
         }
 
         public JPInfoProvider(String id, String... xpath) {
@@ -137,8 +137,9 @@ public abstract class JPComponentUtil {
         return infoProvider.get(new JPSimpleAttribute());
     }
 
-    public static <T extends JPComponent> T of(InputStream is, Class<T> type) throws JDOMException, IOException,
-            NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static <T extends JPComponent> T of(InputStream is, Class<T> type)
+            throws JDOMException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+            InstantiationException {
         SAXBuilder builder = new SAXBuilder();
         Document document = builder.build(is);
         MCRObject mcrObject = new MCRObject(document);
@@ -306,6 +307,17 @@ public abstract class JPComponentUtil {
      */
     public static boolean is(MCRObjectID id, String type) {
         return id.getTypeId().equals(type);
+    }
+
+    /**
+     * Checks if the given id is of the type.
+     *
+     * @param id   the id to check
+     * @param type the type e.g. jparticle, person, jpinst
+     * @return true if its the same type
+     */
+    public static boolean is(MCRObjectID id, JPObjectType type) {
+        return is(id, type.toString());
     }
 
     /**
