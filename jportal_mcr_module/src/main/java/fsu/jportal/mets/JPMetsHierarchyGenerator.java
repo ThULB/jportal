@@ -24,6 +24,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.SmLink;
 import org.mycore.solr.MCRSolrClientFactory;
@@ -123,6 +125,7 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
      * @param mets the mets to enhance
      */
     private void enhanceOrderLabels(Mets mets) {
+        // put the sizes for each available physical div
         this.sizeMap.forEach((logicalDivId, size) -> {
             List<SmLink> linkList = mets.getStructLink().getSmLinkByFrom(logicalDivId);
             if (linkList.isEmpty()) {
@@ -141,6 +144,56 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
                 LogManager.getLogger().warn("Unable to set ORDERLABEL=" + size + " to " + physicalDivId);
             }
         });
+        // try to interpolate between the physical div's who has no ORDERLABEL's yet
+        interpolateOrderLabels(mets);
+    }
+
+    protected void interpolateOrderLabels(Mets mets) {
+        PhysicalStructMap physicalStructMap = mets.getPhysicalStructMap();
+        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
+        String lastOrderLabel = null;
+        int count = 0;
+        for(PhysicalSubDiv div : divContainer.getChildren()) {
+            // respect existing orderlabel's
+            if(div.getOrderLabel() != null && !"".equals(div.getOrderLabel())) {
+                lastOrderLabel = div.getOrderLabel();
+                count = 0;
+                continue;
+            }
+            if(lastOrderLabel == null) {
+                continue;
+            }
+            count++;
+            // order label is null or unset -> try to interpolate from last one
+            String newOrderLabel = interpolateOrderLabel(lastOrderLabel, count);
+            if(newOrderLabel != null) {
+                div.setOrderLabel(newOrderLabel);
+            }
+        }
+    }
+
+    protected String interpolateOrderLabel(String baseOrderLabel, int count) {
+        try {
+            // normal numbers
+            Integer baseInteger = Integer.valueOf(baseOrderLabel);
+            return String.valueOf(baseInteger + count);
+        } catch(Exception exc) {
+            try {
+                // recto verso
+                if (baseOrderLabel.contains("v")) {
+                    String base = baseOrderLabel.replace("v", "");
+                    Integer number = Integer.valueOf(base);
+                    return count % 2 == 0 ? number + (count / 2) + "v" : number + ((count - 1) / 2) + "r";
+                } else if (baseOrderLabel.contains("r")) {
+                    String base = baseOrderLabel.replace("r", "");
+                    Integer number = Integer.valueOf(base);
+                    return count % 2 == 0 ? (number + count / 2) + "r" : number + (count / 2 + 1) + "v";
+                }
+            } catch(Exception exc2) {
+                // do not handle -> just return null
+            }
+        }
+        return null;
     }
 
     protected String getEnclosingDerivateLinkName() {
