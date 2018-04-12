@@ -20,7 +20,7 @@ import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.pi.MCRPIRegistrationService;
+import org.mycore.pi.MCRPIService;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.w3c.dom.Node;
 
@@ -120,7 +120,7 @@ public abstract class LayoutTools {
     }
 
     public static boolean hasURNAssigned(String derivID) {
-        MCRPIRegistrationService<MCRPersistentIdentifier> urnServiceManager = URNTools.getURNServiceManager();
+        MCRPIService<MCRPersistentIdentifier> urnServiceManager = URNTools.getURNServiceManager();
         MCRObjectID derivObjID = MCRObjectID.getInstance(derivID);
 
         return urnServiceManager.isCreated(derivObjID, "");

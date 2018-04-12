@@ -1,5 +1,18 @@
 package fsu.jportal.urn;
 
+import java.nio.file.Files;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,13 +23,18 @@ import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRFileMetadata;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectDerivate;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.pi.MCRPIManager;
 import org.mycore.pi.MCRPIRegistrationInfo;
-import org.mycore.pi.MCRPIRegistrationService;
-import org.mycore.pi.MCRPIRegistrationServiceManager;
+import org.mycore.pi.MCRPIService;
+import org.mycore.pi.MCRPIServiceManager;
 import org.mycore.pi.MCRPersistentIdentifier;
-import org.mycore.pi.MCRPersistentIdentifierManager;
 import org.mycore.pi.backend.MCRPI;
 import org.mycore.pi.backend.MCRPI_;
 import org.mycore.pi.urn.MCRDNBURN;
@@ -24,18 +42,6 @@ import org.mycore.pi.urn.rest.MCRDNBURNRestClient;
 import org.mycore.pi.urn.rest.MCRDerivateURNUtils;
 import org.mycore.pi.urn.rest.MCREpicurLite;
 import org.w3c.dom.NodeList;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class URNTools {
     private static Logger LOGGER = LogManager.getLogger();
@@ -127,9 +133,7 @@ public class URNTools {
 
     public static MCRPI getURNForFile(MCRObjectID derivID, String additional) {
         try {
-            return MCRPersistentIdentifierManager
-                    .getInstance()
-                    .get(SERVICEID, derivID.toString(), additional);
+            return MCRPIManager.getInstance().get(SERVICEID, derivID.toString(), additional);
         } catch (NoResultException e) {
             return null;
         }
@@ -173,9 +177,8 @@ public class URNTools {
                                    .setCredentials(credentials);
     }
 
-    public static MCRPIRegistrationService<MCRPersistentIdentifier> getURNServiceManager() {
-        return MCRPIRegistrationServiceManager
-                .getInstance().getRegistrationService(SERVICEID);
+    public static MCRPIService<MCRPersistentIdentifier> getURNServiceManager() {
+        return MCRPIServiceManager.getInstance().getRegistrationService(SERVICEID);
     }
 
     public static boolean hasURNAssigned(String derivID) {
@@ -188,7 +191,7 @@ public class URNTools {
     }
 
     public static List<MCRPIRegistrationInfo> getURNsForDerivate(MCRObjectID derivateID) {
-        return MCRPersistentIdentifierManager.getInstance().getRegistered(MCRMetadataManager.retrieveMCRObject(derivateID));
+        return MCRPIManager.getInstance().getRegistered(MCRMetadataManager.retrieveMCRObject(derivateID));
     }
 
     public static List<MCRPIRegistrationInfo> getURNsForDerivateAndPath(MCRObjectID derivateID, String path) {
@@ -223,20 +226,18 @@ public class URNTools {
      * @return Stream of registerd and not registered URNs
      */
     public static Stream<MCRPI> registerURNs(MCRObjectID derivateID) {
-        MCRDNBURNRestClient urnRestClient = getUsernamePassword()
-                .map(URNTools::getEpicureProvider)
-                .map(MCRDNBURNRestClient::new)
-                .orElseThrow(() -> new MCRException("Could not create URN Rest client."));
+        MCRDNBURNRestClient urnRestClient = getUsernamePassword().map(URNTools::getEpicureProvider)
+                                                                 .map(MCRDNBURNRestClient::new)
+                                                                 .orElseThrow(() -> new MCRException(
+                                                                         "Could not create URN Rest client."));
 
-        return MCRPersistentIdentifierManager.getInstance()
-                                             .getCreatedIdentifiers(derivateID, MCRDNBURN.TYPE, SERVICEID)
-                                             .stream()
-                                             .map(MCRPI.class::cast)
-                                             .map(pi -> urnRestClient.register(pi)
-                                                                     .map(date -> {
-                                                                         pi.setRegistered(date);
-                                                                         return pi;
-                                                                     })
-                                                                     .orElse(pi));
+        return MCRPIManager.getInstance()
+                           .getCreatedIdentifiers(derivateID, MCRDNBURN.TYPE, SERVICEID)
+                           .stream()
+                           .map(MCRPI.class::cast)
+                           .map(pi -> urnRestClient.register(pi).map(date -> {
+                               pi.setRegistered(date);
+                               return pi;
+                           }).orElse(pi));
     }
 }

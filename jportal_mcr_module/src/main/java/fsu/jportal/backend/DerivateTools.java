@@ -47,8 +47,8 @@ import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.iview2.frontend.MCRIView2Commands;
 import org.mycore.iview2.services.MCRIView2Tools;
-import org.mycore.pi.MCRPIRegistrationService;
-import org.mycore.pi.MCRPIRegistrationServiceManager;
+import org.mycore.pi.MCRPIService;
+import org.mycore.pi.MCRPIServiceManager;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.backend.MCRPI;
 import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
@@ -503,8 +503,9 @@ public class DerivateTools {
     }
 
     public static String addURNToFile(MCRObjectID derivID, String path) {
-        MCRPIRegistrationService<MCRPersistentIdentifier> dnburnGranular = MCRPIRegistrationServiceManager
-            .getInstance().getRegistrationService(URNTools.SERVICEID);
+        MCRPIService<MCRPersistentIdentifier> dnburnGranular = MCRPIServiceManager.getInstance()
+                                                                                  .getRegistrationService(
+                                                                                          URNTools.SERVICEID);
 
         MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivID);
         try {

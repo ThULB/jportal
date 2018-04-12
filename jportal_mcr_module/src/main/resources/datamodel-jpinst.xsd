@@ -223,6 +223,24 @@
           <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
         </xsd:complexType>
       </xsd:element>
+      <xsd:element name="geographicCoordinates" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="geographicCoordinate" minOccurs="1" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="lat" use="required" type="xsd:string" />
+                <xsd:attribute name="lng" use="required" type="xsd:string" />
+                <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
+                <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
+                <xsd:attribute ref="xml:lang" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLatLng" />
+          <xsd:attribute name="heritable" type="xsd:boolean" use="optional" />
+          <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
+        </xsd:complexType>
+      </xsd:element>
       <xsd:element name="phones" minOccurs="0" maxOccurs="1">
         <xsd:complexType>
           <xsd:sequence>
