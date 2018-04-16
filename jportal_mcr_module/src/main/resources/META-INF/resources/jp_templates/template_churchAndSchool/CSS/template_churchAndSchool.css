@@ -1,32 +1,4 @@
 @CHARSET "UTF-8";
-#logo {
-	background-image: url("../IMAGES/logo.png");
-}
-
 #logo .logoTitle {
-	padding: 10px 190px;
-	height: 95px;
-	font-size: 26px;
-}
-
-@media (max-width: 767px) {
-	#logo .logoTitle {
-    	word-break: break-all; 
-    	font-size: 1.7em;
-    	padding: 0.5em 0.5em 0.5em 1.1em;
-	}
-}
-
-#header {
-	background-position: center;
-	padding-left: 0px;
-	padding-right: 0px;
-}
-
-#logo {
-	margin-bottom: 0px;
-}
-
-#searchBar {
-	background-color: #859198;
+	color: white;
 }

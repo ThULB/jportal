@@ -8,12 +8,12 @@
 
   <xsl:template match="template[@id='template_churchAndSchool']" mode="template">
     <xsl:param name="mcrObj" />
-    <script type="text/javascript">
-      $(document).ready(function() {
-        var name = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
-        $('#logo').prepend('<h1 class="logoTitle">' + truncate(name, 90) + '</h1>');
-      });
-    </script>
+    <xsl:call-template name="template_date">
+      <xsl:with-param name="mcrObj" select="$mcrObj"/>
+    </xsl:call-template>
+    <xsl:call-template name="template_maintitle">
+      <xsl:with-param name="mcrObj" select="$mcrObj"/>
+    </xsl:call-template>
   </xsl:template>
 
 </xsl:stylesheet>
