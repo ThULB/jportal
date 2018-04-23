@@ -19,6 +19,9 @@
         <element name="addresses" minOccurs='0' maxOccurs='1'>
             <mcrmetaaddress name="address" class="MCRMetaAddress" minOccurs='1' maxOccurs='unbounded' length="64" />
         </element>
+        <element name="geographicCoordinates" minOccurs='0' maxOccurs='1'>
+            <mcrmetaaddress name="geographicCoordinate" class="MCRMetaSpatial" minOccurs='1' maxOccurs='unbounded' length="64" />
+        </element>
         <!-- 04 - Phones -->
         <element name="phones" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="phone" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="32" />

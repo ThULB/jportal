@@ -5,6 +5,8 @@
     <xed:form>
       <xed:load-resource name="acl" uri="acl:{$id}:{$action}-{$type}" />
       <xed:cleanup-rule xpath="//*[@inherited]" relevant-if="@inherited = '0'" />
+      <xed:cleanup-rule xpath="//*[@inherited='0']" relevant-if="@*[local-name()!='inherited'] or * or (string-length(text()) > 0)" />
+      <xed:cleanup-rule xpath="//*[@class]" relevant-if="*" />
       <xed:post-processor class="fsu.jportal.frontend.xeditor.JPPostProcessor" />
       <xed:choose>
         <xed:when test="$acl/@permission = 'true'">
@@ -12,7 +14,7 @@
           <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" class="jp-db-load"></script>
           <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/Eonasdan-bootstrap-datetimepicker/4.15.35/js/bootstrap-datetimepicker.min.js" class="jp-db-load"></script>
           <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-insertField.js" class="jp-db-load"></script>
-	        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js" class="jp-db-load jp-db-reload"></script>
+	      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js" class="jp-db-load jp-db-reload"></script>
 
           <script type="text/javascript">
               $(function () {
@@ -27,6 +29,7 @@
           </span>
           <xed:if test="$type = 'jpinst'">
           	<script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-logoSelect.js" class="jp-db-load"></script>
+          	<script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-geo-select.js" class="jp-db-load jp-db-reload"></script>
           </xed:if>
           <span id="currentType" style="display:none">
               <xed:output value="$type" />

@@ -55,6 +55,13 @@
       </xed:bind>
     </jp:section>
 
+    <jp:section title="{i18n:metaData.headlines.jpinst.geoCoordinates}">
+      <jp:template name="title" i18n="metaData.headlines.jpinst.geoCoordinates" />
+      <jp:template name="geo_subselect" i18n="metaData.headlines.jpinst.geoCoordinates"
+                   subselectClass="jp-coordinates-select" myClass="col-md-8"
+                   xpath="geographicCoordinates[@class='MCRMetaSpatial']/geographicCoordinate" />
+    </jp:section>
+
     <jp:section title="{i18n:metaData.headlines.jpinst.contact}">
       <jp:template name="title" i18n="metaData.headlines.jpinst.contact" />
 
@@ -115,6 +122,7 @@
       </xed:bind>
         
     </jp:section>
-    <jp:template name="modal"/>
+    <jp:template name="modal" type="person" />
+    <jp:template name="modal-geo" type="geo"/>
   </xed:template>
 </xed:template>

@@ -9,8 +9,7 @@ jp.util = {
             let link = $('<link>').attr({
                 type: 'text/css',
                 rel: 'stylesheet',
-                href: jp.baseURL + 'css/' + cssFile,
-                'class': 'myStyle'
+                href: jp.baseURL + 'css/' + cssFile
             });
             $('head').append(link);
         }

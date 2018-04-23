@@ -59,7 +59,7 @@
   <!-- 1 line is split into 3 parts: 1. title, 2. input (input, textArea, 
   	select) and 3. buttons -->
   <!-- Form: titel | input | buttons -->
-  <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|jpdate_select|logoThumbnail|subselect', @name)]">
+  <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|jpdate_select|logoThumbnail|subselect|geo_subselect', @name)]">
     <div class="row">
       <xsl:if test="@small">
         <xsl:attribute name="class"></xsl:attribute>
@@ -405,21 +405,69 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="jp:template[@name='geo_subselect']" mode="input">
+    <div class="jp-geo-input">
+      <div class="jp-geo-coordinates-display"></div>
+      <xed:bind xpath=".">
+        <input type="text" style="display:none" class="jp-geo-input-data" />
+      </xed:bind>
+    </div>
+    <div class="form-group">
+      <button type="button" tabindex="1">
+        <xsl:attribute name="class">
+          <xsl:value-of select="concat('btn btn-default ', @subselectClass)" />
+        </xsl:attribute>
+        <xed:output i18n="jp.editor.inst.geoCoordinates" />
+      </button>
+    </div>
+  </xsl:template>
+
   <xsl:template match="jp:template[@name='modal']">
-    <div class="modal fade" id="personSelect-modal" tabindex="-1" role="dialog" aria-labelledby="personSelect-modal-title" aria-hidden="true">
+    <div class="modal fade jp-modal" id="{@type}Select-modal" tabindex="-1" role="dialog" aria-labelledby="{@type}Select-modal-title" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close personSelect-cancel" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close {@type}Select-cancel" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">x</span>
             </button>
-            <h4 class="modal-title" id="personSelect-modal-title"></h4>
+            <h4 class="modal-title" id="{@type}Select-modal-title"></h4>
           </div>
-          <div id="personSelect-modal-body" class="modal-body">
+          <div id="{@type}Select-modal-body" class="modal-body">
           </div>
           <div class="modal-footer">
-            <button id="personSelect-cancel-button" type="button" class="btn btn-danger personSelect-cancel" data-dismiss="modal"></button>
-            <button id="personSelect-send" type="button" class="btn btn-primary" disabled="disabled"></button>
+            <button id="{@type}Select-cancel-button" type="button" class="btn btn-danger {@type}Select-cancel" data-dismiss="modal"></button>
+            <button id="{@type}Select-send" type="button" class="btn btn-primary" disabled="disabled"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="jp:template[@name='modal-geo']">
+    <div class="modal fade jp-modal" id="geo-select-modal" tabindex="-1" role="dialog" aria-labelledby="geo-select-modal-title" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close geo-select-modal-cancel" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">x</span>
+            </button>
+            <h4 class="modal-title" id="geo-select-modal-title"></h4>
+          </div>
+          <div class="modal-body geo-select-modal-body">
+            <div class="input-group">
+              <input class="form-control geo-select-modal-search" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default geo-select-modal-search-button">Suche</button>
+              </span>
+            </div>
+            <div class="geo-select-modal-map-container">
+              <div class="geo-select-modal-search-results">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger geo-select-modal-cancel" data-dismiss="modal">Abbrechen</button>
+            <button type="button" class="btn btn-primary geo-select-modal-send" disabled="disabled">Übernehmen</button>
           </div>
         </div>
       </div>
