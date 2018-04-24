@@ -240,13 +240,13 @@ jp.journalList.view = {
   clearFilterButton: document.getElementById("atozFilterRemoveButton"),
   clearFilterButtonIcon: document.getElementById("atozFilterRemoveIcon"),
 
-  renderHitCount: function (num) {
+  renderHitCount: (num) => {
     let text = num === 1 ? jp.journalList.translation["jp.journallist.periodical"] :
                            jp.journalList.translation["jp.journallist.periodicals"];
     jp.journalList.view.hitCount.innerHTML = num + " " + text;
   },
 
-  treeifyFacets: function (list) {
+  treeifyFacets: (list) => {
     let fragment = document.createDocumentFragment();
     let lookup = {};
 
@@ -264,7 +264,7 @@ jp.journalList.view = {
     return fragment;
   },
 
-  renderFilterInput: function (titleFilter, eventHandler) {
+  renderFilterInput: (titleFilter, eventHandler) => {
     function toggleClearFilterButton() {
       let valueIsEmpty = jp.journalList.view.filter.value === "";
 
@@ -295,7 +295,7 @@ jp.journalList.view = {
     };
   },
 
-  renderFacetListEntry: function (facetObj, /*function*/ eventHandler) {
+  renderFacetListEntry: (facetObj, /*function*/ eventHandler) => {
     let row = document.createElement("div");
     row.className = "jp-journalList-facet-row";
     row.dataset.id = facetObj.categID;
@@ -343,7 +343,7 @@ jp.journalList.view = {
     return row;
   },
 
-  renderFacetList: function (facets, facetCheckboxEventHandler) {
+  renderFacetList: (facets, facetCheckboxEventHandler) => {
     let sortedFacets = facets.sort((f1, f2) => f1.label.localeCompare(f2.label));
     let facetsEntries = sortedFacets.filter(f => !(jp.isGuest && f.excluded))
         .map(f => jp.journalList.view.renderFacetListEntry(f, facetCheckboxEventHandler));
@@ -356,7 +356,7 @@ jp.journalList.view = {
     jp.journalList.view.facets.appendChild(newList);
   },
 
-  renderTabNav: function (activeTabs, selectedTab, eventHandler) {
+  renderTabNav: (activeTabs, selectedTab, eventHandler) => {
     let tabs = jp.journalList.view.tabs;
     for (i = 0; i < tabs.length; i++) {
       let tab = tabs.item(i);
@@ -378,7 +378,7 @@ jp.journalList.view = {
     }
   },
 
-  setSelectedTab: function (tab) {
+  setSelectedTab: (tab) => {
     if (jp.journalList.view.selectedTab !== undefined) {
       jp.journalList.view.selectedTab.classList.remove("selected-tab");
     }
@@ -387,7 +387,7 @@ jp.journalList.view = {
     jp.journalList.view.selectedTab = tab;
   },
 
-  renderJournalTitle: function (journal) {
+  renderJournalTitle: (journal) => {
     let titleLink = document.createElement("a");
     let title = document.createElement("h3");
 
@@ -400,7 +400,7 @@ jp.journalList.view = {
     return title;
   },
 
-  renderJournalPublished: function (journal) {
+  renderJournalPublished: (journal) => {
     let publishedDiv = document.createElement("div");
     publishedDiv.classList.add("journal-published");
     let publishedValue = journal["date.published"];
@@ -413,17 +413,25 @@ jp.journalList.view = {
     if(toIndex > 0) {
       let from = publishedValue.substring(1, toIndex);
       let until = publishedValue.substring(toIndex + 4, publishedValue.length - 1);
-      publishedStr += moment(from, "YYYY-MM-DD").format(dateFormat);
+      publishedStr += jp.journalList.view.renderDate(from, dateFormat);
       publishedStr += " - ";
-      publishedStr += moment(until, "YYYY-MM-DD").format(dateFormat);
+      publishedStr += jp.journalList.view.renderDate(until, dateFormat);
     } else {
-        publishedStr += moment(publishedValue, "YYYY-MM-DD").format(dateFormat);
+        publishedStr += jp.journalList.view.renderDate(publishedValue, dateFormat);
     }
     publishedDiv.textContent = publishedStr;
     return publishedDiv;
   },
 
-  renderJournalPublisher: function (journal, solrKey, caption) {
+  renderDate: (date, dateFormat) => {
+    if(date.length === 4) {
+      return date;
+    } else {
+      return moment(date, "YYYY-MM-DD").format(dateFormat)
+    }
+  },
+
+  renderJournalPublisher: (journal, solrKey, caption) => {
     let div = document.createElement("div");
     div.classList.add("publisher");
 
@@ -450,7 +458,7 @@ jp.journalList.view = {
     return div;
   },
 
-  renderResultListEntry: function (journal) {
+  renderResultListEntry: (journal) => {
     let journalTitle = jp.journalList.view.renderJournalTitle(journal);
     let journalPublished = jp.journalList.view.renderJournalPublished(journal);
     let publisher = jp.journalList.view.renderJournalPublisher(journal, "participant.mainPublisher",
@@ -466,7 +474,7 @@ jp.journalList.view = {
     return li;
   },
 
-  renderResultList: function (resultList) {
+  renderResultList: (resultList) => {
     jp.journalList.view.resultList.textContent = "";
 
     if (resultList.length > 0) {
@@ -481,7 +489,7 @@ jp.journalList.view = {
     }
   },
 
-  renderResultListSpinner: function() {
+  renderResultListSpinner: () => {
     if(!jp.journalList.showSpinner) {
       return;
     }
