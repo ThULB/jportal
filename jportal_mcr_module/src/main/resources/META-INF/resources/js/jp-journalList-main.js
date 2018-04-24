@@ -403,9 +403,12 @@ jp.journalList.view = {
   renderJournalPublished: function (journal) {
     let publishedDiv = document.createElement("div");
     publishedDiv.classList.add("journal-published");
+    let publishedValue = journal["date.published"];
+    if(publishedValue == null) {
+      return publishedDiv;
+    }
     let dateFormat = "Do MMM YYYY";
     let publishedStr = jp.journalList.translation["jp.journallist.published"] + ': ';
-    let publishedValue = journal["date.published"];
     let toIndex = publishedValue.indexOf(" TO ");
     if(toIndex > 0) {
       let from = publishedValue.substring(1, toIndex);
