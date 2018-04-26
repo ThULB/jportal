@@ -19,10 +19,10 @@ jp.util = {
     return new Promise((resolve, reject) => {
       let request = new XMLHttpRequest();
       request.onload = () => {
-        if (this.status < 200 || this.status >= 300) {
+        if (request.status < 200 || request.status >= 300) {
           reject({
-            status: this.status,
-            statusText: xhr.statusText
+            status: request.status,
+            statusText: request.statusText
           });
           return;
         }
@@ -30,8 +30,8 @@ jp.util = {
       };
       request.onerror = function () {
         reject({
-          status: this.status,
-          statusText: xhr.statusText
+          status: request.status,
+          statusText: request.statusText
         });
       };
       request.open('GET', url);
