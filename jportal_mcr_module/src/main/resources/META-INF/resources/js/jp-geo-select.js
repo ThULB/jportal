@@ -52,7 +52,9 @@ $(document).ready(function () {
         const lat = dataSplit.length > 0 ? data.split(",")[0] : "";
         const lng = dataSplit.length > 0 ? data.split(",")[1] : "";
         if (map == null) {
-            initOSM(modal, lat, lng);
+            jp.util.initLeaflet().then(() => {
+              startOSM(modal, lat, lng);
+            });
         } else if(lat !== "" && lng !== "") {
             map.setView([parseFloat(lat), parseFloat(lng)], 17);
             setMarker(lat, lng);
@@ -112,35 +114,7 @@ $(document).ready(function () {
         }
     }
 
-    function initOSM(modal, lat, lng) {
-        // css
-        let leafletCSS = $("<link>").attr({
-            type: "text/css",
-            rel: "stylesheet",
-            href: "https://unpkg.com/leaflet@1.3.1/dist/leaflet.css",
-            crossorigin: "",
-            integrity: "sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
-        });
-        $("head").append(leafletCSS);
-        // script
-        let leafletJS = $("<script>").attr({
-            src: "https://unpkg.com/leaflet@1.3.1/dist/leaflet.js",
-            crossorigin: "",
-            integrity: "sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
-        });
-        $("body").append(leafletJS);
-
-        // add to modal
-        startOSM(modal, lat, lng);
-    }
-
     function startOSM(modal, lat, lng) {
-        if (window.L == null) {
-            setTimeout(function () {
-                startOSM(modal, lat, lng);
-            }, 100);
-            return;
-        }
         const mapContainer = modal.find(".geo-select-modal-map-container")[0];
         const isLatLngGiven = lat !== "" && lng !== "";
         const fLat = isLatLngGiven ? parseFloat(lat) : 50.92878;

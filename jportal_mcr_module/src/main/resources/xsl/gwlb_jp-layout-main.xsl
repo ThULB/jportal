@@ -159,7 +159,7 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/js/bootstrap.min.js" />
         <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
-          <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap-dialog/1.34.6/dist/js/bootstrap-dialog.min.js" />
+          <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap3-dialog/1.35.4/dist/js/bootstrap-dialog.min.js" />
         </xsl:if>
 
         <!-- Piwik -->

@@ -1654,3 +1654,7 @@ label.jp-facet-checkbox.checked{
 label.jp-facet-checkbox.checked:before{
 	content: "\2714";
 }
+
+.jp-modal-map-container {
+	height: 400px;
+}

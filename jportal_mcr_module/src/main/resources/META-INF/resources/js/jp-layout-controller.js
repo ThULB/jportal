@@ -719,3 +719,57 @@ $(document).ready(function () {
   }
 
 });
+
+// SPATIAL MODAL
+$(document).ready(function () {
+  const button = $(".jp-spatial-view-show-modal-button");
+
+  let modal = null;
+  let map = null;
+
+  button.on("click", (e) => {
+    const title = e.target.dataset.modalTitle;
+    const content = e.target.dataset.content;
+    if (modal == null) {
+      modal = initModal(title, content);
+    }
+    modal.open();
+  });
+
+  function initModal(title, content) {
+    return new BootstrapDialog({
+      title: title,
+      message: function (dialog) {
+        return $("<div class='jp-modal-map-container'></div>");
+      },
+      onshow: function (dialog) {
+        if (map != null) {
+          return;
+        }
+        jp.util.initLeaflet().then(() => {
+          const mapContainer = dialog.$modal.find(".jp-modal-map-container")[0];
+          const split = content.split(",");
+          const fLat = parseFloat(split[0]);
+          const fLng = parseFloat(split[1]);
+          const zoom = 17;
+          // create map
+          map = L.map(mapContainer).setView([fLat, fLng], zoom);
+          L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+            attribution: 'Daten von <a href="http://www.openstreetmap.org/">OpenStreetMap</a> -' +
+            ' Veröffentlicht unter <a href="http://opendatacommons.org/licenses/odbl/">ODbL</a>',
+            maxZoom: 18
+          }).addTo(map);
+          // set marker
+          L.marker([fLat, fLng]).addTo(map);
+        });
+      },
+      buttons: [{
+        label: 'Schließen',
+        action: function (dialog) {
+          dialog.close();
+        }
+      }]
+    });
+  }
+
+});

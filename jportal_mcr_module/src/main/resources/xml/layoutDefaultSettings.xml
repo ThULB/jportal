@@ -47,6 +47,7 @@
   <i18n tag="property">metaData.jpinst.property</i18n>
   <i18n tag="nickname">metaData.jpinst.nickname</i18n>
   <i18n tag="address">metaData.headlines.jpinst.address</i18n>
+  <i18n tag="geographicCoordinate">metaData.headlines.jpinst.geoCoordinates</i18n>
   <i18n tag="country">editormask.labels.AAddressCountry</i18n>
   <i18n tag="city">editormask.labels.AAddressCity</i18n>
   <i18n tag="zipcode">editormask.labels.AAddressZIP</i18n>

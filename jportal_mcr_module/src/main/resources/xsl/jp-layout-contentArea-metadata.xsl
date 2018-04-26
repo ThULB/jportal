@@ -20,9 +20,10 @@
   <xsl:key name="abstracts" match="abstract[@inherited='0']" use="@type" />
   <xsl:key name="people" match="person[@inherited='0']" use="@type" />
   <xsl:key name="links" match="link[@inherited='0']" use="@type" />
+  <xsl:key name="geographicCoordinates" match="link[@inherited='0']" use="@type" />
 
   <xsl:variable name="simpleType"
-    select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress MCRMetaLink JPMetaDate'" />
+    select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress MCRMetaLink MCRMetaSpatial JPMetaDate'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*">
   </xsl:template>
@@ -104,7 +105,7 @@
 
   <xsl:template mode="metadataFieldLabel"
                 match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date' or
-                         ../@class='MCRMetaLink']">
+                         ../@class='MCRMetaLink' or ../@class='MCRMetaSpatial']">
     <xsl:variable name="tagName" select="name()"/>
     <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])"/>
   </xsl:template>
@@ -274,6 +275,14 @@
     <dd>
       <xsl:value-of select="." />
     </dd>
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaSpatial']">
+    <xsl:variable name="modalTitle" select="i18n:translate('metaData.headlines.jpinst.geoCoordinates')" />
+    <button class="btn btn-default jp-spatial-view-show-modal-button"
+            data-modal-title="{$modalTitle}" data-content="{text()}" >
+      <xsl:value-of select="i18n:translate('metaData.showSpatial')" />
+    </button>
   </xsl:template>
 
 </xsl:stylesheet>

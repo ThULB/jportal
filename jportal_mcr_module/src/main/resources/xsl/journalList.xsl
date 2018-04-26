@@ -69,7 +69,6 @@
     </div>
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" />
-    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-util.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalList-main.js" />
   </xsl:template>
 

@@ -4,7 +4,7 @@ $(document).ready(function() {
 	$('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', baseURL +  'webjars/font-awesome/4.7.0/css/font-awesome.min.css') );
 
 	// load js stuff
-	$.getScript(baseURL + "webjars/bootstrap-dialog/1.34.6/dist/js/bootstrap-dialog.min.js");
+	$.getScript(baseURL + "webjars/bootstrap3-dialog/1.35.4/dist/js/bootstrap-dialog.min.js");
 
 	// add sync button when angular has build the html content
 	observeElementReady("mets-editor-toolbar-state-controls", onReady);
