@@ -35,6 +35,10 @@ subprojects {
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
 
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
     eclipse {
         jdt {
             sourceCompatibility = javaVersion
