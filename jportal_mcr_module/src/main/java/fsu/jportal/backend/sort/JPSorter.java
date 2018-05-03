@@ -1,21 +1,20 @@
 package fsu.jportal.backend.sort;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.util.JPComponentUtil;
-import org.apache.logging.log4j.LogManager;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 /**
  * Base interface for sorting children of journals and volumes.
- * 
+ *
  * @author Matthias Eichner
  */
 public interface JPSorter {
@@ -26,11 +25,12 @@ public interface JPSorter {
 
     /**
      * Does the children order for the given container component.
-     * 
+     *
      * @param component the component
      * @param order ascending | descending
+     * @throws JPSortException component is unable to be sorted
      */
-    default void sort(JPContainer component, Order order) {
+    default void sort(JPContainer component, Order order) throws JPSortException {
         MCRObject mcrObject = component.getObject();
         MCRObjectStructure structure = mcrObject.getStructure();
         List<MCRMetaLinkID> children = new ArrayList<>(structure.getChildren());
@@ -48,9 +48,9 @@ public interface JPSorter {
                     .map(MCRObject::getId)
                     .map(id -> new MCRMetaLinkID("child", id, null, null))
                     .forEachOrdered(structure::addChild);
-        } catch(Exception exc) {
-            LogManager.getLogger().error("Unable to sort " + component.getId(), exc);
+        } catch (Exception exc) {
             children.forEach(structure::addChild);
+            throw new JPSortException("Unable to sort " + component.getId(), exc);
         }
     }
 
@@ -77,7 +77,7 @@ public interface JPSorter {
 
     /**
      * Returns a Comparator to sort {@link JPPeriodicalComponent}.
-     * 
+     *
      * @param order the order
      * @return a comparator to sort
      */
