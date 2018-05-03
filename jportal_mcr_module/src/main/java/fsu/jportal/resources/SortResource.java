@@ -17,6 +17,7 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
+import org.mycore.solr.index.MCRSolrIndexer;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Resource to handle jportal sorting. 
@@ -64,7 +66,7 @@ public class SortResource {
     public void sortByUpdate(@PathParam("id") String id, @QueryParam("sorter") String sorterClass,
         @QueryParam("order") String orderString) {
         JPContainer jpContainer = get(id);
-        Order order = null;
+        Order order;
         try {
             order = Order.valueOf(orderString.toUpperCase());
         } catch (Exception exc) {
@@ -174,9 +176,13 @@ public class SortResource {
         // set new children
         MCRObjectStructure structure = container.getObject().getStructure();
         structure.clearChildren();
-        newChildren.stream().map(childId -> {
-            return new MCRMetaLinkID("child", childId, null, null);
-        }).forEachOrdered(structure::addChild);
+        newChildren.stream()
+                   .map(childId -> new MCRMetaLinkID("child", childId, null, null))
+                   .forEachOrdered(structure::addChild);
+
+        // reindex
+        MCRSolrIndexer.rebuildMetadataIndex(
+                mcrChildren.stream().map(MCRObjectID::toString).collect(Collectors.toList()));
     }
 
     /**
