@@ -127,7 +127,7 @@ public class SortResource {
             container.setSortBy(null, null);
         } catch (Exception exc) {
             throw new WebApplicationException(exc,
-                Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to remove sorter for " + id).build());
+                    Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to remove sorter for " + id).build());
         }
         resort(container, new JsonParser().parse(data).getAsJsonArray());
         try {
@@ -135,6 +135,8 @@ public class SortResource {
         } catch (Exception exc) {
             throwInternalServerError(exc, "Unable to store object " + id + ".");
         }
+        MCRSolrIndexer.rebuildMetadataIndex(
+                container.getChildren().stream().map(MCRObjectID::toString).collect(Collectors.toList()));
     }
 
     /**
@@ -179,10 +181,6 @@ public class SortResource {
         newChildren.stream()
                    .map(childId -> new MCRMetaLinkID("child", childId, null, null))
                    .forEachOrdered(structure::addChild);
-
-        // reindex
-        MCRSolrIndexer.rebuildMetadataIndex(
-                mcrChildren.stream().map(MCRObjectID::toString).collect(Collectors.toList()));
     }
 
     /**
