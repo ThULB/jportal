@@ -3,6 +3,7 @@ package fsu.jportal.backend.sort;
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.util.JPComponentUtil;
+import org.apache.logging.log4j.LogManager;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public interface JPSorter {
 
-    public static enum Order {
+    enum Order {
         ASCENDING, DESCENDING
     }
 
@@ -29,7 +30,7 @@ public interface JPSorter {
      * @param component the component
      * @param order ascending | descending
      */
-    default public void sort(JPContainer component, Order order) {
+    default void sort(JPContainer component, Order order) {
         MCRObject mcrObject = component.getObject();
         MCRObjectStructure structure = mcrObject.getStructure();
         List<MCRMetaLinkID> children = new ArrayList<>(structure.getChildren());
@@ -37,28 +38,31 @@ public interface JPSorter {
             return;
         }
         structure.clearChildren();
-        children.stream()
-                .map(MCRMetaLinkID::getXLinkHrefID)
-                .map(MCRMetadataManager::retrieveMCRObject)
-                .map(JPComponentUtil::getPeriodical)
-                .sorted(getSortComparator(order))
-                .map(JPPeriodicalComponent::getObject)
-                .map(MCRObject::getId)
-                .map(id -> {
-                    return new MCRMetaLinkID("child", id, null, null);
-                })
-                .forEachOrdered(structure::addChild);
+        try {
+            children.stream()
+                    .map(MCRMetaLinkID::getXLinkHrefID)
+                    .map(MCRMetadataManager::retrieveMCRObject)
+                    .map(JPComponentUtil::getPeriodical)
+                    .sorted(getSortComparator(order))
+                    .map(JPPeriodicalComponent::getObject)
+                    .map(MCRObject::getId)
+                    .map(id -> new MCRMetaLinkID("child", id, null, null))
+                    .forEachOrdered(structure::addChild);
+        } catch(Exception exc) {
+            LogManager.getLogger().error("Unable to sort " + component.getId(), exc);
+            children.forEach(structure::addChild);
+        }
     }
 
-    default public int getOrder(Order order) {
+    default int getOrder(Order order) {
         return Order.DESCENDING.equals(order) ? -1 : 1;
     }
 
-    default public boolean isOneNull(Object a, Object b) {
+    default boolean isOneNull(Object a, Object b) {
         return a == null || b == null;
     }
 
-    default public Integer handleNull(Object a, Object b) {
+    default Integer handleNull(Object a, Object b) {
         if (a == null && b == null) {
             return 0;
         }
@@ -77,6 +81,6 @@ public interface JPSorter {
      * @param order the order
      * @return a comparator to sort
      */
-    public Comparator<? super JPPeriodicalComponent> getSortComparator(Order order);
+    Comparator<? super JPPeriodicalComponent> getSortComparator(Order order);
 
 }
