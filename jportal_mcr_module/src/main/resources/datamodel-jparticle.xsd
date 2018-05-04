@@ -182,6 +182,27 @@
           <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
         </xsd:complexType>
       </xsd:element>
+      <xsd:element name="linkedLocations" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="linkedLocation" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:simpleContent>
+                  <xsd:extension base="xsd:string">
+                    <xsd:attribute name="id" use="optional" type="mcrdefaulttype" />
+                    <xsd:attribute name="label" use="optional" type="mcrdefaulttype" />
+                    <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
+                    <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
+                  </xsd:extension>
+                </xsd:simpleContent>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="class" type="xsd:string" use="required" fixed="JPMetaLocation" />
+          <xsd:attribute name="heritable" type="xsd:boolean" use="optional" />
+          <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
+        </xsd:complexType>
+      </xsd:element>
       <xsd:element name="keywords" minOccurs="0" maxOccurs="1">
         <xsd:complexType>
           <xsd:sequence>

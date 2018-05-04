@@ -354,7 +354,14 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 p.jp-layout-metadata-list {
-	margin-top: 0px;
+	margin-top: 0;
+}
+
+.jp-layout-metadataList button {
+	margin-right: 1rem;
+}
+.jp-layout-metadataList button:last-child {
+	margin-right: 0;
 }
 
 .jp-layout-tableOfContent {

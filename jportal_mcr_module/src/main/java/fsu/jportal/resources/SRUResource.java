@@ -8,6 +8,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRException;
+import org.mycore.common.MCRJSONManager;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -38,6 +39,18 @@ public class SRUResource {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("get/{gnd}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response get(@PathParam("gnd") String gnd) {
+        PicaRecord picaRecord = getPicaRecord(gnd);
+        if (picaRecord == null) {
+            return Response.status(Status.NOT_FOUND).entity("Catalog entry with " + gnd + " not found.").build();
+        }
+        String recordAsString = MCRJSONManager.instance().createGson().toJson(picaRecord);
+        return Response.ok().entity(recordAsString).build();
+    }
+
     private Response renderXML(Document mcrObjectXML) {
         try {
             Element returnElement = new Element("sruobjects");
@@ -46,7 +59,7 @@ public class SRUResource {
             return Response.ok(out.outputString(returnElement), MediaType.APPLICATION_XML).build();
         } catch (Exception exc) {
             throw new WebApplicationException(new MCRException("unable to parse pica record"),
-                Status.INTERNAL_SERVER_ERROR);
+                    Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -58,7 +71,7 @@ public class SRUResource {
                 LOGGER.debug(picaRecord);
             }
             throw new WebApplicationException(new MCRException("unable to parse pica record"),
-                Status.INTERNAL_SERVER_ERROR);
+                    Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -69,12 +82,13 @@ public class SRUResource {
         } catch (Exception exc) {
             throw new WebApplicationException(exc, Response.status(Status.INTERNAL_SERVER_ERROR)
                                                            .entity("unable to retrieve pica record (" + gnd
-                                                               + ") from sru interface")
+                                                                   + ") from sru interface")
                                                            .build());
         }
         if (picaRecord == null) {
             throw new WebApplicationException(
-                new MCRException("unable to retrieve pica record (" + gnd + ") from sru interface"), Status.NOT_FOUND);
+                    new MCRException("unable to retrieve pica record (" + gnd + ") from sru interface"),
+                    Status.NOT_FOUND);
         }
         return picaRecord;
     }

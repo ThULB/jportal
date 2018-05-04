@@ -59,7 +59,7 @@
   <!-- 1 line is split into 3 parts: 1. title, 2. input (input, textArea, 
   	select) and 3. buttons -->
   <!-- Form: titel | input | buttons -->
-  <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|jpdate_select|logoThumbnail|subselect|geo_subselect', @name)]">
+  <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea|date_select|jpdate_select|logoThumbnail|subselect|geo_subselect|gnd_location', @name)]">
     <div class="row">
       <xsl:if test="@small">
         <xsl:attribute name="class"></xsl:attribute>
@@ -418,6 +418,26 @@
           <xsl:value-of select="concat('btn btn-default ', @subselectClass)" />
         </xsl:attribute>
         <xed:output i18n="jp.editor.inst.geoCoordinates" />
+      </button>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="jp:template[@name='gnd_location']" mode="input">
+    <div class="jp-gnd-location-input">
+      <div class="jp-gnd-location-input-display"></div>
+      <xed:bind xpath=".">
+        <input type="text" style="display:none" class="jp-gnd-location-input-data" />
+      </xed:bind>
+      <xed:bind xpath="@id">
+        <input type="text" style="display:none" class="jp-gnd-location-input-id" />
+      </xed:bind>
+      <xed:bind xpath="@label">
+        <input type="text" style="display:none" class="jp-gnd-location-input-label" />
+      </xed:bind>
+    </div>
+    <div class="form-inline jp-gnd-location-form">
+      <button type="button" tabindex="1" class="btn btn-default jp-gnd-location-select">
+        <xed:output i18n="metaData.jparticle.linkedLocations.apply" />
       </button>
     </div>
   </xsl:template>

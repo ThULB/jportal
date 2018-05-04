@@ -29,6 +29,10 @@
         <element name="dates" minOccurs='0' maxOccurs='1'>
             <jpmetadate name="date" class="JPMetaDate" minOccurs='1' maxOccurs='unbounded' />
         </element>
+        <!-- linked location -->
+        <element name="linkedLocations" minOccurs='0' maxOccurs='1'>
+            <jpmetalocation name="linkedLocation" class="JPMetaLocation" minOccurs='0' maxOccurs='unbounded' />
+        </element>
         <!-- 05 - keywords -->
         <element name="keywords" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="keyword" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />

@@ -726,17 +726,28 @@ $(document).ready(function () {
 
   let modal = null;
   let map = null;
+  let marker = null;
 
   button.on("click", (e) => {
     const title = e.target.dataset.modalTitle;
     const content = e.target.dataset.content;
+    const split = content.split(",");
+    const lat = parseFloat(split[0]);
+    const lng = parseFloat(split[1]);
+    const zoom = parseInt(e.target.dataset.zoom);
     if (modal == null) {
-      modal = initModal(title, content);
+      modal = initModal(title, lat, lng, zoom);
+    } else {
+      $(modal.$modalHeader).find(".bootstrap-dialog-title").html(title);
+      if(map != null) {
+        map.setView([lat, lng], zoom);
+        setMarker(lat, lng);
+      }
     }
     modal.open();
   });
 
-  function initModal(title, content) {
+  function initModal(title, lat, lng, zoom) {
     return new BootstrapDialog({
       title: title,
       message: function (dialog) {
@@ -748,19 +759,15 @@ $(document).ready(function () {
         }
         jp.util.initLeaflet().then(() => {
           const mapContainer = dialog.$modal.find(".jp-modal-map-container")[0];
-          const split = content.split(",");
-          const fLat = parseFloat(split[0]);
-          const fLng = parseFloat(split[1]);
-          const zoom = 17;
           // create map
-          map = L.map(mapContainer).setView([fLat, fLng], zoom);
+          map = L.map(mapContainer).setView([lat, lng], zoom);
           L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
             attribution: 'Daten von <a href="http://www.openstreetmap.org/">OpenStreetMap</a> -' +
             ' Veröffentlicht unter <a href="http://opendatacommons.org/licenses/odbl/">ODbL</a>',
             maxZoom: 18
           }).addTo(map);
           // set marker
-          L.marker([fLat, fLng]).addTo(map);
+          setMarker(lat, lng);
         });
       },
       buttons: [{
@@ -768,8 +775,16 @@ $(document).ready(function () {
         action: function (dialog) {
           dialog.close();
         }
-      }]
+      }],
+      autodestroy: false
     });
+  }
+
+  function setMarker(lat, lng) {
+    if (marker != null) {
+      map.removeLayer(marker);
+    }
+    marker = L.marker([parseFloat(lat), parseFloat(lng)]).addTo(map);
   }
 
 });

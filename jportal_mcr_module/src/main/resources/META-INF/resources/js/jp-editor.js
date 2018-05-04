@@ -192,3 +192,88 @@ $(document).ready(function() {
     }
 
 });
+
+// jparticle - gnd location
+$(document).ready(function () {
+  $(".jp-gnd-location-form").each(function () {
+    const form = $(this);
+    const searchInput = $("<input type='text' class='form-control' maxlength='32' placeholder='GND ID' />");
+    form.prepend(searchInput);
+    loadData(form, searchInput);
+    form.find("button").on("click", () => {
+      let id = searchInput.val();
+      jp.util.getJSON(jp.baseURL + "rsc/sru/get/" + id).then((data) => {
+        let label = getValue("029@", "a", null, null, data.fields);
+        if(label == null) {
+          return;
+        }
+        let lat = getValue("037H", "f", "A", "dgx", data.fields);
+        if(lat == null) {
+          return;
+        }
+        let lng = getValue("037H", "d", "A", "dgx", data.fields);
+        if(lng == null) {
+          return;
+        }
+        lat = parseFloat(lat.substring(1));
+        lng = parseFloat(lng.substring(1));
+        setData(id, label, lat, lng, form);
+      }).catch((error) => {
+        console.log(error);
+      })
+    });
+  });
+
+  function loadData(form, searchInput) {
+    const inputDiv = form.prev(".jp-gnd-location-input");
+    const id = inputDiv.find(".jp-gnd-location-input-id").val();
+    const label = inputDiv.find(".jp-gnd-location-input-label").val();
+    const data = inputDiv.find(".jp-gnd-location-input-data").val();
+    if (id !== "") {
+      searchInput.val(id);
+    }
+    if(label !== "") {
+      inputDiv.find(".jp-gnd-location-input-display").html(label + " (" + data + ")");
+    }
+  }
+
+  function setData(id, label, lat, lng, form) {
+    const inputDiv = form.prev(".jp-gnd-location-input");
+    inputDiv.find(".jp-gnd-location-input-id").val(id);
+    inputDiv.find(".jp-gnd-location-input-label").val(label);
+    inputDiv.find(".jp-gnd-location-input-data").val(lat + "," + lng);
+    inputDiv.find(".jp-gnd-location-input-display").html(label + " (" + lat + "," + lng + ")");
+  }
+
+  function getValue(name, code, reqCode, reqValue, fields) {
+    for (let i = 0; i < fields.length; i++) {
+      if (fields[i].name === name) {
+        let subfields = fields[i].subfields;
+        if(!checkSubfieldCode(reqCode, reqValue, subfields)) {
+          continue;
+        }
+        for (let j = 0; j < subfields.length; j++) {
+          if (subfields[j].code === code) {
+            return subfields[j].value;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  function checkSubfieldCode(reqCode, reqValue, subfields) {
+    if (reqCode == null) {
+      return true;
+    }
+    for (let i = 0; i < subfields.length; i++) {
+      if (subfields[i].code === reqCode) {
+        if (reqValue == null || reqValue === subfields[i].value) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+});
