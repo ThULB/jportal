@@ -89,6 +89,7 @@ $(document).ready(function () {
                     updateResults();
                 })
                 .fail((jqxhr, textStatus, error) => {
+                    BootstrapDialog.alert('Unable to get Open Street Map search result: ' + textStatus);
                     console.log(jqxhr);
                 })
         });

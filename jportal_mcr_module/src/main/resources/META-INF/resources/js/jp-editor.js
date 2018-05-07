@@ -205,20 +205,25 @@ $(document).ready(function () {
       jp.util.getJSON(jp.baseURL + "rsc/sru/get/" + id).then((data) => {
         let label = getValue("029@", "a", null, null, data.fields);
         if(label == null) {
+          BootstrapDialog.alert('No title field "@029 a" for this record!');
           return;
         }
         let lat = getValue("037H", "f", "A", "dgx", data.fields);
         if(lat == null) {
+          BootstrapDialog.alert('No latitude field "037H f A dgx" for this record!');
           return;
         }
         let lng = getValue("037H", "d", "A", "dgx", data.fields);
         if(lng == null) {
+          BootstrapDialog.alert('No longitude field "037H d A dgx" for this record!');
           return;
         }
         lat = parseFloat(lat.substring(1));
         lng = parseFloat(lng.substring(1));
         setData(id, label, lat, lng, form);
       }).catch((error) => {
+        BootstrapDialog.alert('Error while getting record data from server. If you think this is an error please' +
+          ' contact your administrator!');
         console.log(error);
       })
     });
