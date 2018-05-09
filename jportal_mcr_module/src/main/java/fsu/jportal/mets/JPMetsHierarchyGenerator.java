@@ -1,7 +1,5 @@
 package fsu.jportal.mets;
 
-import static fsu.jportal.frontend.SolrToc.buildQuery;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -71,25 +69,7 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
         if (parentObject.getId().getTypeId().equals("jparticle")) {
             return Collections.emptyList();
         }
-        List<MCRObject> children = new ArrayList<>();
-        getChildren(parentObject, "jpvolume").stream()
-                                             .map(MCRMetadataManager::retrieveMCRObject)
-                                             .forEach(children::add);
-        getChildren(parentObject, "jparticle").stream()
-                                              .map(MCRMetadataManager::retrieveMCRObject)
-                                              .forEach(children::add);
-        return children;
-    }
-
-    protected List<MCRObjectID> getChildren(MCRObject parentObject, String objectType) {
-        String parentID = parentObject.getId().toString();
-        ModifiableSolrParams solrParams = buildQuery(parentID, objectType, "order asc");
-        solrParams.set("fl", "id objectType");
-        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
-        return MCRSolrSearchUtils.stream(solrClient, solrParams).map(doc -> {
-            String id = (String) doc.getFieldValue("id");
-            return MCRObjectID.getInstance(id);
-        }).collect(Collectors.toList());
+        return super.getChildren(parentObject);
     }
 
     @Override
@@ -153,20 +133,20 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
         PhysicalDiv divContainer = physicalStructMap.getDivContainer();
         String lastOrderLabel = null;
         int count = 0;
-        for(PhysicalSubDiv div : divContainer.getChildren()) {
+        for (PhysicalSubDiv div : divContainer.getChildren()) {
             // respect existing orderlabel's
-            if(div.getOrderLabel() != null && !"".equals(div.getOrderLabel())) {
+            if (div.getOrderLabel() != null && !"".equals(div.getOrderLabel())) {
                 lastOrderLabel = div.getOrderLabel();
                 count = 0;
                 continue;
             }
-            if(lastOrderLabel == null) {
+            if (lastOrderLabel == null) {
                 continue;
             }
             count++;
             // order label is null or unset -> try to interpolate from last one
             String newOrderLabel = interpolateOrderLabel(lastOrderLabel, count);
-            if(newOrderLabel != null) {
+            if (newOrderLabel != null) {
                 div.setOrderLabel(newOrderLabel);
             }
         }
@@ -177,7 +157,7 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
             // normal numbers
             Integer baseInteger = Integer.valueOf(baseOrderLabel);
             return String.valueOf(baseInteger + count);
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             try {
                 // recto verso
                 if (baseOrderLabel.contains("v")) {
@@ -189,7 +169,7 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
                     Integer number = Integer.valueOf(base);
                     return count % 2 == 0 ? (number + count / 2) + "r" : number + (count / 2 + 1) + "v";
                 }
-            } catch(Exception exc2) {
+            } catch (Exception exc2) {
                 // do not handle -> just return null
             }
         }

@@ -37,12 +37,16 @@
   <i18n tag="heading">metaData.person.heading</i18n>
   <i18n tag="peerage">metaData.person.peerage</i18n>
   <i18n tag="role">metaData.person.role</i18n>
+  <i18n tag="author">editormask.labels.author</i18n>
   <i18n tag="placeOfActivity">metaData.person.placeOfActivity</i18n>
   <i18n tag="timeOfActivity">metaData.jpinst.timeOfActivity</i18n>
   <i18n tag="dateOfBirth">metaData.person.dateOfBirth</i18n>
   <i18n tag="dateOfDeath">metaData.person.dateOfDeath</i18n>
   <i18n tag="placeOfBirth">metaData.person.placeOfBirth</i18n>
   <i18n tag="placeOfDeath">metaData.person.placeOfDeath</i18n>
+  <i18n tag="published">metaData.date.published</i18n>
+  <i18n tag="reviewedWork">metaData.date.reviewedWork</i18n>
+  <i18n tag="reportingPeriod">metaData.date.reportingPeriod</i18n>
   <i18n tag="gender">metaData.author.gender</i18n>
   <i18n tag="property">metaData.jpinst.property</i18n>
   <i18n tag="nickname">metaData.jpinst.nickname</i18n>

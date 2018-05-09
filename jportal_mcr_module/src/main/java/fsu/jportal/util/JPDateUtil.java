@@ -6,9 +6,12 @@ import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
+import java.util.Locale;
 
 import org.apache.logging.log4j.LogManager;
 import org.mycore.common.MCRException;
+import org.mycore.common.xml.MCRXMLFunctions;
+import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.services.i18n.MCRTranslation;
 
 /**
@@ -44,6 +47,23 @@ public abstract class JPDateUtil {
     }
 
     /**
+     * Helper method to build a {@link LocalDate} out of a {@link Temporal}.
+     * If the month or day are not present, they are set to 1.
+     *
+     * @param temporal the temporal accessor
+     * @return a local date
+     */
+    public static LocalDate startOf(Temporal temporal) {
+        if (!temporal.isSupported(ChronoField.YEAR)) {
+            return null;
+        }
+        int year = temporal.get(ChronoField.YEAR);
+        int month = temporal.isSupported(ChronoField.MONTH_OF_YEAR) ? temporal.get(ChronoField.MONTH_OF_YEAR) : 1;
+        int day = temporal.isSupported(ChronoField.DAY_OF_MONTH) ? temporal.get(ChronoField.DAY_OF_MONTH) : 1;
+        return LocalDate.of(year, month, day);
+    }
+
+    /**
      * Converts a temporal to a string. Supports the following ChronoFields:
      *
      * <ul>
@@ -66,23 +86,6 @@ public abstract class JPDateUtil {
             }
         }
         return dateAsString;
-    }
-
-    /**
-     * Helper method to build a {@link LocalDate} out of a {@link Temporal}.
-     * If the month or day are not present, they are set to 1.
-     *
-     * @param temporal the temporal accessor
-     * @return a local date
-     */
-    public static LocalDate startOf(Temporal temporal) {
-        if (!temporal.isSupported(ChronoField.YEAR)) {
-            return null;
-        }
-        int year = temporal.get(ChronoField.YEAR);
-        int month = temporal.isSupported(ChronoField.MONTH_OF_YEAR) ? temporal.get(ChronoField.MONTH_OF_YEAR) : 1;
-        int day = temporal.isSupported(ChronoField.DAY_OF_MONTH) ? temporal.get(ChronoField.DAY_OF_MONTH) : 1;
-        return LocalDate.of(year, month, day);
     }
 
     /**
@@ -116,7 +119,7 @@ public abstract class JPDateUtil {
      * @param date the date e.g. 2010-11
      * @return the format
      */
-    public static String getFormat(String date) {
+    public static String getSimpleFormat(String date) {
         if (date != null && !date.equals("")) {
             String split[] = date.split("-");
             switch (split.length) {
@@ -129,6 +132,43 @@ public abstract class JPDateUtil {
             }
         }
         return MCRTranslation.translate("metaData.date");
+    }
+
+    /**
+     * Returns a "pretty" date string for the given temporal.
+     *
+     * @param temporal the temporal to format
+     * @param iso639Language the language
+     * @return pretty date
+     */
+    public static String prettify(Temporal temporal, String iso639Language) {
+        String isoDate = format(temporal);
+        String format = getSimpleFormat(isoDate);
+        try {
+            return MCRXMLFunctions.formatISODate(isoDate, format, iso639Language);
+        } catch (Exception exc) {
+            LogManager.getLogger().error("Unable to format " + isoDate, exc);
+            return isoDate;
+        }
+    }
+
+    /**
+     * Prettifies a JPMetaDate.
+     *
+     * @param metaDate the meta date
+     * @param iso639Language the language
+     * @return prettified date
+     */
+    public static String prettify(JPMetaDate metaDate, String iso639Language) {
+        if (metaDate.getFrom() != null && metaDate.getUntil() != null) {
+            Locale locale = new Locale(iso639Language);
+            String from = prettify(metaDate.getFrom(), iso639Language);
+            String until = prettify(metaDate.getUntil(), iso639Language);
+            String separator = MCRTranslation.translate("metaData.date.until", locale);
+            return String.format("%s %s %s", from, separator, until);
+        } else {
+            return prettify(metaDate.getDate(), iso639Language);
+        }
     }
 
     /**

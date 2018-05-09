@@ -18,15 +18,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPLegalEntity;
+import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPDateUtil;
 import fsu.jportal.util.MetsUtil;
 import fsu.jportal.util.ResolverUtil;
-import net.sf.cglib.core.Local;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
@@ -348,7 +349,7 @@ public class JPXMLFunctions {
      */
     public static String formatDate(String isoDate, String iso639Language) {
         try {
-            String format = JPDateUtil.getFormat(isoDate);
+            String format = JPDateUtil.getSimpleFormat(isoDate);
             return MCRXMLFunctions.formatISODate(isoDate, format, iso639Language);
         } catch (Throwable t) {
             LOGGER.error("Unable to format date " + isoDate + " with language " + iso639Language, t);
@@ -371,6 +372,24 @@ public class JPXMLFunctions {
             LOGGER.error("Unable to retrieve language of " + id, exc);
             return null;
         }
+    }
+
+    /**
+     * Returns the name of the template for the given periodical object identifier.
+     *
+     * @param id the mycore object identifier
+     * @return name of the template
+     */
+    public static String getNameOfTemplate(String id) {
+        try {
+            Optional<JPPeriodicalComponent> periodical = JPComponentUtil.getPeriodical(MCRObjectID.getInstance(id));
+            if (periodical.isPresent()) {
+                return periodical.get().getNameOfTemplate();
+            }
+        } catch (Exception exc) {
+            LOGGER.error("Unable to get name of template for object " + id + ". Return default template.", exc);
+        }
+        return "template_default";
     }
 
     /**
@@ -465,6 +484,26 @@ public class JPXMLFunctions {
             LOGGER.error("Unable to retrieve the order of " + id, exc);
             return 0;
         }
+    }
+
+    /**
+     * Returns the page which should be selected when going back from an object to its parent view.
+     *
+     * @param parentID the parent object
+     * @param objectType the object type e.g. jparticle or jpvolume
+     * @param referer the referer mycore object identifier
+     * @param rows the amount of rows
+     * @return the page to select
+     */
+    public static int getRefererStart(String parentID, String objectType, String referer, int rows) {
+        Optional<JPContainer> containerOptional = JPComponentUtil.getContainer(MCRObjectID.getInstance(parentID));
+        if (containerOptional.isPresent()) {
+            JPContainer container = containerOptional.get();
+            List<MCRObjectID> children = container.getChildren(JPObjectType.valueOf(objectType));
+            int positionInParent = children.indexOf(MCRObjectID.getInstance(referer));
+            return (int) Math.floor(positionInParent / rows) * rows;
+        }
+        return 0;
     }
 
     /**

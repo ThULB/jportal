@@ -1,9 +1,18 @@
 package fsu.jportal.backend;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.mycore.common.MCRClassTools;
+import org.mycore.common.MCRTextResolver;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
@@ -12,7 +21,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Simple java abstraction of a jportal article. This class is not complete at all.
- * 
+ *
  * @author Matthias Eichner
  */
 public class JPArticle extends JPPeriodicalComponent implements Cloneable {
@@ -28,7 +37,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     /**
      * Creates a new JPArticle container for the given mcrId.
-     * 
+     *
      * @param mcrId a mycore object id
      */
     public JPArticle(String mcrId) {
@@ -37,7 +46,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     /**
      * Creates a new JPArticle container for the given mcrId.
-     * 
+     *
      * @param mcrId a mycore object id
      */
     public JPArticle(MCRObjectID mcrId) {
@@ -46,7 +55,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     /**
      * Creates a new JPArticle container for the mycore object.
-     * 
+     *
      * @param mcrObject the mycore object
      */
     public JPArticle(MCRObject mcrObject) {
@@ -60,7 +69,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     /**
      * Sets the parent of this component.
-     * 
+     *
      * @param parentId a mycore object id
      */
     public void setParent(String parentId) {
@@ -69,7 +78,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     /**
      * Sets the parent of this component.
-     * 
+     *
      * @param parentId a mycore object id
      */
     public void setParent(MCRObjectID parentId) {
@@ -100,7 +109,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     /**
      * Adds a note to the article.
-     * 
+     *
      * @param note the note to add
      * @param publicNote if its public or not
      */
@@ -122,7 +131,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     /**
      * Adds a keyword to the article.
-     * 
+     *
      * @param keyword the keyword to add
      */
     public void addKeyword(String keyword) {
@@ -131,12 +140,38 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
 
     /**
      * Returns a list of keywords. The list is empty if there are no keywords.
-     * 
+     *
      * @return list of keywords
      */
     public List<String> getKeywords() {
         return metadataStream("keywords", MCRMetaLangText.class).map(MCRMetaLangText::getText)
                                                                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the rubrics for this article.
+     *
+     * @return list of rubrics
+     */
+    public List<MCRMetaClassification> getRubrics() {
+        return metadataStreamNotInherited("rubrics", MCRMetaClassification.class).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a list of already resolved rubrics for the given language.
+     *
+     * @param iso639Language the language
+     * @return list of rubrics
+     */
+    public List<String> getRubrics(String iso639Language) {
+        MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
+        return getRubrics().stream().map(metaClassification -> {
+            String classId = metaClassification.getClassId();
+            String categId = metaClassification.getCategId();
+            MCRCategoryID id = new MCRCategoryID(classId, categId);
+            MCRCategory category = DAO.getCategory(id, 0);
+            return category.getLabel(iso639Language);
+        }).filter(Optional::isPresent).map(Optional::get).map(MCRLabel::getText).collect(Collectors.toList());
     }
 
     /**
@@ -153,7 +188,7 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
                 clone.setDerivateLink(derivateLink);
             } catch (Exception exc) {
                 throw new RuntimeException(
-                    "Unable to set derivate link " + derivateLink + " to object " + clone.getObject().getId(), exc);
+                        "Unable to set derivate link " + derivateLink + " to object " + clone.getObject().getId(), exc);
             }
         }
         // TODO: rubrics (heading)
@@ -162,4 +197,5 @@ public class JPArticle extends JPPeriodicalComponent implements Cloneable {
         }
         return clone;
     }
+
 }

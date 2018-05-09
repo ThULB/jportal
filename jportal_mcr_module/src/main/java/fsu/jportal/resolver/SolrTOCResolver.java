@@ -1,10 +1,14 @@
 package fsu.jportal.resolver;
 
-import fsu.jportal.frontend.SolrToc;
-
 import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
+
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.frontend.toc.JPTocResults;
+import fsu.jportal.xml.JPXMLFunctions;
+import org.jdom2.Element;
+import org.jdom2.transform.JDOMSource;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Created by chi on 08.09.15.
@@ -12,31 +16,39 @@ import javax.xml.transform.URIResolver;
  */
 @URIResolverSchema(schema = "toc")
 public class SolrTOCResolver implements URIResolver {
+
     /*
      * toc:parentID:objectType:rows:start
      */
     @Override
-    public Source resolve(String href, String base) throws TransformerException {
+    public Source resolve(String href, String base) {
         String[] uriParts = href.split(":");
         if (uriParts.length < 5) {
             throw new IllegalArgumentException("Invalid format of uri given to resolve: " + href);
         }
-
         String parentID = uriParts[1];
         String objectType = uriParts[2];
         int rows = Integer.valueOf(uriParts[3]);
-        String startStr = uriParts[4];
+        int start = getStart(href, parentID, objectType, rows, uriParts[4]);
 
-        int start = 0;
-        if(startStr.startsWith("ref=")){
+        MCRObjectID objectId = MCRObjectID.getInstance(parentID);
+        JPObjectType type = JPObjectType.valueOf(objectType);
+        JPTocResults tocResult = new JPTocResults(objectId, type, start, rows);
+        Element resultsElement = tocResult.toXML();
+
+        return new JDOMSource(resultsElement);
+    }
+
+    private int getStart(String href, String parentID, String objectType, int rows, String startStr) {
+        if (startStr.startsWith("ref=")) {
             String refID = startStr.substring(4);
-            if(refID.equals("")){
+            if (refID.equals("")) {
                 throw new IllegalArgumentException("Invalid format of of referer: " + href);
             }
-            start = SolrToc.getRefererStart(parentID, objectType, refID, rows);
-        }else{
-            start = Integer.valueOf(startStr);
+            return JPXMLFunctions.getRefererStart(parentID, objectType, refID, rows);
+        } else {
+            return Integer.valueOf(startStr);
         }
-        return SolrToc.getToc(parentID, objectType, start, rows);
     }
+
 }

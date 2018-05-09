@@ -26,7 +26,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Component that can contain other components as children.
- * 
+ *
  * @author Matthias Eichner
  */
 public abstract class JPContainer extends JPPeriodicalComponent {
@@ -53,7 +53,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
 
     /**
      * Adds a new child.
-     * 
+     *
      * @param child the child to add
      */
     public void addChild(JPObjectComponent child) {
@@ -65,7 +65,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     /**
      * Removes the child by the given id. If there is no such child
      * nothing happens.
-     * 
+     *
      * @param id the child to remove
      */
     public void removeAddedChild(MCRObjectID id) {
@@ -79,7 +79,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      * Returns a unmodifiable collection of all children which are added
      * (due the {@link #addChild(JPObjectComponent)} method) and most
      * likely (not 100% safe) not stored to the system yet.
-     * 
+     *
      * @return collection of added children
      */
     public Collection<JPComponent> getAddedChildren() {
@@ -89,7 +89,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     /**
      * Returns a list of the children of this container. Changes to this
      * list are not reflected to the mycore object.
-     * 
+     *
      * @return list of mycore object identifiers
      */
     public List<MCRObjectID> getChildren() {
@@ -97,6 +97,22 @@ public abstract class JPContainer extends JPPeriodicalComponent {
                           .getChildren()
                           .stream()
                           .map(MCRMetaLinkID::getXLinkHrefID)
+                          .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a list of the children of the given type of this container. Changes to this
+     * list are not reflected to the mycore object.
+     *
+     * @param type the object type to return e.g. volume or article
+     * @return list of mycore object identifiers
+     */
+    public List<MCRObjectID> getChildren(JPObjectType type) {
+        return getObject().getStructure()
+                          .getChildren()
+                          .stream()
+                          .map(MCRMetaLinkID::getXLinkHrefID)
+                          .filter(linkId -> linkId.getTypeId().equals(type.name()))
                           .collect(Collectors.toList());
     }
 
@@ -114,10 +130,10 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     /**
      * Returns the {@link JPSorter} and its {@link Order}. This is used for automatic
      * sorting of the components children.
-     * 
+     *
      * @see #sort()
      * @see AutoSortHandler
-     * 
+     *
      * @return a pair of JPSorter and Order
      */
     public Optional<Pair<JPSorter, Order>> getSortBy() {
@@ -141,7 +157,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     /**
      * Sets the autosort for this container. If the sorter is null,
      * the autosort is removed.
-     * 
+     *
      * @param sorterClass class of the JPSorter
      * @param order ascending or descending
      */
@@ -164,7 +180,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
 
     /**
      * Sorts the children of this container by its {@link JPSorter} and {@link Order}.
-     * 
+     *
      * @see AutoSortHandler
      */
     public void sort() {

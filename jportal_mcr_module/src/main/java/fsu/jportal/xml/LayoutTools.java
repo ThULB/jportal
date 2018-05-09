@@ -35,38 +35,6 @@ public abstract class LayoutTools {
         }
     }
 
-    private static class DatesInfo implements JPObjectInfo<Node> {
-        @Override
-        public Node getInfo(List<Object> nodes) {
-            Element root = new Element("datesInfo");
-            Document datesDoc = new Document(root);
-
-            for (Object node : nodes) {
-                node.getClass().getCanonicalName();
-                if (node instanceof Element) {
-                    root.addContent(((Element) node).detach());
-                }
-            }
-
-            DOMOutputter domOutputter = new DOMOutputter();
-            try {
-                return domOutputter.output(datesDoc).getFirstChild();
-            } catch (JDOMException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
-    public static String getNameOfTemplate(String id) {
-        try {
-            return JPComponentUtil.getPeriodical(MCRObjectID.getInstance(id)).get().getNameOfTemplate();
-        } catch (Exception exc) {
-            LOGGER.error("Unable to get name of template for object " + id + ". Return default template.", exc);
-            return "template_default";
-        }
-    }
-
     public static String getJournalID(String mcrID) {
         String journalID = JPComponentUtil.getJournalID(MCRObjectID.getInstance(mcrID));
         if (journalID == null) {
@@ -96,12 +64,6 @@ public abstract class LayoutTools {
         JPInfoProvider infoProvider = new JPInfoProvider(derivateID,
                                                          "/mycorederivate/derivate[not(@display) or @display!='false']");
         return infoProvider.get(new DerivateDisplay()).toString();
-    }
-
-    public static Node getDatesInfo(String journalID) {
-        JPInfoProvider infoProvider = new JPInfoProvider(journalID, "/mycoreobject/metadata/dates",
-                                                         "/mycoreobject/metadata/hidden_genhiddenfields1");
-        return infoProvider.get(new DatesInfo());
     }
 
     public static String getUserName() {

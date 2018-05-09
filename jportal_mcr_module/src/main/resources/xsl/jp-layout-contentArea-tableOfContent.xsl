@@ -13,6 +13,8 @@
   <xsl:param name="art.start" />
   <xsl:param name="q" />
 
+  <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
+
   <xsl:template name="tableOfContent">
     <xsl:param name="id" />
     <xsl:call-template name="jp.toc.printVolumes">
@@ -40,41 +42,18 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="volumes" select="document(concat('toc:', $parentID, ':jpvolume:', $rows, ':', $start))" />
+    <xsl:variable name="volumes" select="document(concat('toc:', $parentID, ':jpvolume:', $rows, ':', $start))/results" />
 
-    <xsl:if test="$volumes/response/result/@numFound &gt; 0">
+    <xsl:if test="$volumes/@total &gt; 0">
       <div id="jp-tableOfContent" class="jp-layout-tableOfContent jp-content-block row">
         <ul>
-          <xsl:variable name="docSize" select="count($volumes/response/result/doc)" />
-          <xsl:variable name="maxCharacters">
-            <xsl:for-each select="$volumes/response/result/doc/str[@name='maintitle']">
-              <xsl:sort select="string-length(text())" data-type="number" order="descending"/>
-              <xsl:if test="position() = 1">
-                <xsl:value-of select="string-length(text())" />
-              </xsl:if>
-            </xsl:for-each>
-          </xsl:variable>
           <xsl:attribute name="style">
-            <xsl:value-of select="'column-count: '" />
-            <xsl:choose>
-              <xsl:when test="$docSize &gt; 31 and $maxCharacters &lt; 35">
-                <xsl:value-of select="'4'" />
-              </xsl:when>
-              <xsl:when test="$docSize &gt; 21 and $maxCharacters &lt; 50">
-                <xsl:value-of select="'3'" />
-              </xsl:when>
-              <xsl:when test="$docSize &gt; 11">
-                <xsl:value-of select="'2'" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="'1'" />
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:value-of select="';'" />
+            <xsl:value-of select="concat('column-count: ', $volumes/@columns, ';')" />
           </xsl:attribute>
-          <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/response/result/doc" />
+          <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/result" />
         </ul>
-        <xsl:apply-templates mode="jp.pagination" select="$volumes/response">
+
+        <xsl:apply-templates mode="jp.pagination" select="$volumes">
           <xsl:with-param name="startParam" select="'XSL.vol.start'" />
         </xsl:apply-templates>
       </div>
@@ -98,135 +77,80 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="articles" select="document(concat('toc:', $parentID, ':jparticle:', $rows, ':', $start))" />
+    <xsl:variable name="articles" select="document(concat('toc:', $parentID, ':jparticle:', $rows, ':', $start))/results" />
 
-    <xsl:if test="$articles/response/result/@numFound &gt; 0">
+    <xsl:if test="$articles/@total &gt; 0">
       <div id="jp-tableOfContent" class="jp-layout-tableOfContent container-fluid jp-objectlist jp-content-block row">
-        <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
-        <xsl:apply-templates mode="jp.pagination" select="$articles/response">
+        <xsl:apply-templates mode="artList" select="$articles/result" />
+
+        <xsl:apply-templates mode="jp.pagination" select="$articles">
           <xsl:with-param name="startParam" select="'XSL.art.start'" />
         </xsl:apply-templates>
       </div>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="jp.toc.getRefererStart">
-    <xsl:param name="q" />
-    <xsl:param name="sort" />
-    <xsl:param name="rows" />
-    <xsl:variable name="xml" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999&amp;fl=id'))" />
-    <xsl:variable name="positionInParent" select="count($xml/response/result/doc[str[@name] = $referer]/preceding-sibling::*)" />
-    <xsl:value-of select="floor($positionInParent div $rows) * $rows" />
+  <xsl:template mode="artList" match="result">
+    <div class="row jp-objectlist-object">
+      <div class="jp-objectlist-thumbnail">
+        <xsl:variable name="mcrObj" select="document(concat('mcrobject:', @id))/mycoreobject" />
+        <xsl:apply-templates select="$mcrObj" mode="derivateDisplay">
+          <xsl:with-param name="mode" select="'preview'" />
+          <xsl:with-param name="editable" select="'false'" />
+          <xsl:with-param name="query" select="$q" />
+        </xsl:apply-templates>
+      </div>
+      <div class="jp-objectlist-metadata">
+        <h3 class="jp-layout-clickLabel">
+          <a href="{$WebApplicationBaseURL}receive/{@id}" class="title">
+            <xsl:value-of select="title" />
+          </a>
+        </h3>
+        <ul class="jp-layout-metadaInSearchResults">
+          <xsl:for-each select="author | size | date | rubric">
+            <li>
+              <span class="jp-layout-label">
+                <xsl:variable name="i18n">
+                  <xsl:choose>
+                    <xsl:when test="@type">
+                      <xsl:value-of select="@type" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="name()" />
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <xsl:value-of select="i18n:translate($settings/i18n[@tag=$i18n])" />
+              </span>
+              <span class="jp-layout-inList">
+                <xsl:apply-templates select="." mode="artEntryValue" />
+              </span>
+            </li>
+          </xsl:for-each>
+        </ul>
+      </div>
+    </div>
   </xsl:template>
 
-  <xsl:template mode="artList" match="doc">
-    <xsl:variable name="mcrId" select="str[@name='id']" />
-    <xsl:choose>
-      <xsl:when test="mcrxml:exists($mcrId)">
-        <xsl:variable name="fields">
-          <field name="participant.author" i18n="editormask.labels.author" />
-          <field name="date.published" i18n="metaData.date.published" />
-          <field name="date.reviewedWork" i18n="metaData.date.reviewedWork" />
-          <field name="date.reportingPeriod" i18n="metaData.date.reportingPeriod" />
-          <field name="size" i18n="editormask.labels.size" />
-          <field name="rubric" i18n="editormask.labels.rubric" />
-        </xsl:variable>
-        <xsl:variable name="doc" select="." />
-        <div class="row jp-objectlist-object">
-          <div class="jp-objectlist-thumbnail">
-            <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-            <xsl:apply-templates select="$mcrObj" mode="derivateDisplay">
-              <xsl:with-param name="mode" select="'preview'" />
-              <xsl:with-param name="editable" select="'false'" />
-              <xsl:with-param name="query" select="$q" />
-            </xsl:apply-templates>
-          </div>
-          <div class="jp-objectlist-metadata">
-            <h3 class="jp-layout-clickLabel">
-              <a href="{$WebApplicationBaseURL}receive/{$mcrId}" class="title">
-                <xsl:value-of select="str[@name='maintitle']" />
-              </a>
-            </h3>
-            <ul class="jp-layout-metadaInSearchResults">
-              <xsl:for-each select="xalan:nodeset($fields)/field">
-                <xsl:variable name="fieldName" select="@name" />
-                <xsl:if test="$doc/*[@name = $fieldName]">
-                  <li>
-                    <span class="jp-layout-label">
-                      <xsl:value-of select="i18n:translate(@i18n)"/>
-                    </span>
-                    <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
-                  </li>
-                </xsl:if>
-              </xsl:for-each>
-            </ul>
-          </div>
-        </div>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- object doesn't exist in mycore -> delete it in solr -->
-        <xsl:value-of select="solrxml:delete($mcrId)" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template mode="artEntryFields" match="str">
+  <xsl:template mode="artEntryValue" match="size | date | rubric">
     <xsl:value-of select="." />
   </xsl:template>
 
-  <xsl:template mode="artEntryFields" match="arr[@name='rubric']/str">
-    <xsl:variable name="category">
-      <categ classid="{substring-before(.,'#')}" categid="{substring-after(.,'#')}" />
-    </xsl:variable>
-    <span class="jp-layout-inList">
-      <xsl:call-template name="printClass">
-        <xsl:with-param name="nodes" select="xalan:nodeset($category)/categ" />
-        <xsl:with-param name="host" select="'local'" />
-        <xsl:with-param name="next" select="', '" />
-      </xsl:call-template>
-    </span>
+  <xsl:template mode="artEntryValue" match="author">
+    <a href="{$WebApplicationBaseURL}receive/{@id}">
+      <xsl:value-of select="." />
+    </a>
   </xsl:template>
 
-  <xsl:template mode="artEntryFields" match="arr[@name='participant.author']/str">
-    <span class="jp-layout-inList">
-      <a href="{$WebApplicationBaseURL}receive/{substring-before(., '#')}">
-        <xsl:value-of select="substring-after(., '#')" />
+  <xsl:template mode="jp.printListEntryContent" match="result">
+    <li>
+      <a href="{$WebApplicationBaseURL}receive/{@id}">
+        <xsl:value-of select="title" />
+        <xsl:if test="date[@type = 'published']">
+          <xsl:value-of select="concat(' (', date[@type = 'published']/text(), ')')" />
+        </xsl:if>
       </a>
-    </span>
-  </xsl:template>
-
-  <xsl:template mode="artEntryFields" match="str[contains(@name, 'date.')]">
-    <span class="jp-layout-inList">
-      <xsl:value-of select="jpxml:formatSolrDate(text(), $CurrentLang)" />
-    </span>
-  </xsl:template>
-
-  <xsl:template mode="jp.printListEntryContent" match="doc">
-    <xsl:variable name="mcrId" select="str[@name='id']" />
-    <xsl:choose>
-      <xsl:when test="mcrxml:exists($mcrId)">
-        <li>
-          <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
-            <xsl:value-of select="str[@name='maintitle']" />
-            <xsl:apply-templates mode="jp.toc.published" select="str" />
-          </a>
-        </li>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- object doesn't exist in mycore -> delete it in solr -->
-        <xsl:value-of select="solrxml:delete($mcrId)" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template mode="jp.toc.published" match="str">
-  </xsl:template>
-
-  <xsl:template mode="jp.toc.published" match="str[@name='date.published']">
-    <!-- only apply date when the main title is not equal this date -->
-    <xsl:if test="../str[@name='maintitle']/text() != text()">
-      <xsl:value-of select="concat(' (', jpxml:formatSolrDate(text(), $CurrentLang), ')')" />
-    </xsl:if>
+    </li>
   </xsl:template>
 
 </xsl:stylesheet>
