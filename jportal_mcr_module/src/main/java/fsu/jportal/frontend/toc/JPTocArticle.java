@@ -1,11 +1,11 @@
 package fsu.jportal.frontend.toc;
 
 import java.util.List;
-import java.util.StringJoiner;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.backend.JPLegalEntity;
+import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.metadata.JPMetaDate;
@@ -47,17 +47,21 @@ public class JPTocArticle extends JPTocResult {
     @Override
     public Element toXML() {
         Element element = super.toXML();
-        if (getSize() != null) {
-            element.addContent(new Element("size").setText(getSize()));
-        }
-        if (getAuthor() != null) {
-            element.addContent(toElement("author", getAuthor()));
-        }
-        for (JPMetaDate date : getDates()) {
-            element.addContent(toElement(date));
-        }
-        if (getRubrics() != null) {
-            element.addContent(new Element("rubric").setText(getRubrics()));
+        try {
+            if (getSize() != null) {
+                element.addContent(new Element("size").setText(getSize()));
+            }
+            if (getAuthor() != null) {
+                element.addContent(toElement("author", getAuthor()));
+            }
+            if (getRubrics() != null) {
+                element.addContent(new Element("rubric").setText(getRubrics()));
+            }
+            for (JPMetaDate date : getDates()) {
+                element.addContent(toElement(date));
+            }
+        } catch (Exception exc) {
+            LogManager.getLogger().error("Unable to format article " + getId(), exc);
         }
         return element;
     }
