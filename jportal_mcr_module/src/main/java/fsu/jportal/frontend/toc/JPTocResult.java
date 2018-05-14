@@ -3,6 +3,7 @@ package fsu.jportal.frontend.toc;
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.util.JPDateUtil;
+import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.metadata.JPMetaDate;
@@ -24,11 +25,16 @@ public abstract class JPTocResult {
     }
 
     public Element toXML() {
-        Element e = new Element("result").setAttribute("id", getId().toString());
-        if (getTitle() != null) {
-            e.addContent(new Element("title").setText(getTitle()));
+        Element element = new Element("result");
+        try {
+            element.setAttribute("id", getId().toString());
+            if (getTitle() != null) {
+                element.addContent(new Element("title").setText(getTitle()));
+            }
+        } catch (Exception exc) {
+            LogManager.getLogger().error("Unable to create TOC element for " + getId() + " to XML", exc);
         }
-        return e;
+        return element;
     }
 
     public abstract JPComponent getComponent();
