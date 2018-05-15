@@ -30,6 +30,7 @@ import fsu.jportal.util.MetsUtil;
 import fsu.jportal.util.ResolverUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.input.DOMBuilder;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.classifications2.MCRCategory;
@@ -353,6 +354,26 @@ public class JPXMLFunctions {
             return MCRXMLFunctions.formatISODate(isoDate, format, iso639Language);
         } catch (Throwable t) {
             LOGGER.error("Unable to format date " + isoDate + " with language " + iso639Language, t);
+            return "";
+        }
+    }
+
+    /**
+     * Formats the given jpmetadate node with the given language.
+     *
+     * @param node the jp meta date node
+     * @param iso639Language the language
+     * @return formatted date
+     */
+    public static String formatJPMetaDate(org.w3c.dom.Node node, String iso639Language) {
+        try {
+            DOMBuilder domBuilder = new DOMBuilder();
+            org.jdom2.Element dateElement = domBuilder.build((Element) node);
+            JPMetaDate metaDate = new JPMetaDate();
+            metaDate.setFromDOM(dateElement);
+            return JPDateUtil.prettify(metaDate, iso639Language);
+        } catch (Throwable t) {
+            LOGGER.error("Unable to format date", t);
             return "";
         }
     }

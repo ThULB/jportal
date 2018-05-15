@@ -135,14 +135,13 @@ public abstract class JPDateUtil {
     }
 
     /**
-     * Returns a "pretty" date string for the given temporal.
+     * Returns a "pretty" date string for the given isoDate.
      *
-     * @param temporal the temporal to format
+     * @param isoDate a string in the format of YYYY, YYYY-MM or YYYY-MM-DD
      * @param iso639Language the language
      * @return pretty date
      */
-    public static String prettify(Temporal temporal, String iso639Language) {
-        String isoDate = format(temporal);
+    private static String prettify(String isoDate, String iso639Language) {
         String format = getSimpleFormat(isoDate);
         try {
             return MCRXMLFunctions.formatISODate(isoDate, format, iso639Language);
@@ -153,6 +152,18 @@ public abstract class JPDateUtil {
     }
 
     /**
+     * Returns a "pretty" date string for the given temporal.
+     *
+     * @param temporal the temporal to format
+     * @param iso639Language the language
+     * @return pretty date
+     */
+    public static String prettify(Temporal temporal, String iso639Language) {
+        String isoDate = format(temporal);
+        return prettify(isoDate, iso639Language);
+    }
+
+    /**
      * Prettifies a JPMetaDate.
      *
      * @param metaDate the meta date
@@ -160,12 +171,17 @@ public abstract class JPDateUtil {
      * @return prettified date
      */
     public static String prettify(JPMetaDate metaDate, String iso639Language) {
-        if (metaDate.getFrom() != null && metaDate.getUntil() != null) {
+        if (metaDate.getFrom() != null) {
             Locale locale = new Locale(iso639Language);
             String from = prettify(metaDate.getFrom(), iso639Language);
-            String until = prettify(metaDate.getUntil(), iso639Language);
-            String separator = MCRTranslation.translate("metaData.date.until", locale);
-            return String.format("%s %s %s", from, separator, until);
+            if (metaDate.getUntil() != null) {
+                String until = prettify(metaDate.getUntil(), iso639Language);
+                String separator = MCRTranslation.translate("metaData.date.until", locale);
+                return String.format("%s %s %s", from, separator, until);
+            } else {
+                String since = MCRTranslation.translate("metaData.date.since", locale);
+                return String.format("%s %s", since, from);
+            }
         } else {
             return prettify(metaDate.getDate(), iso639Language);
         }

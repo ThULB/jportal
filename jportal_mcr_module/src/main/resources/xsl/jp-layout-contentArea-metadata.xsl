@@ -208,28 +208,7 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='JPMetaDate']">
-    <xsl:choose>
-      <xsl:when test="@date">
-        <xsl:call-template name="jp.date.print">
-          <xsl:with-param name="date" select="@date" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="jp.date.print">
-          <xsl:with-param name="date" select="@from" />
-        </xsl:call-template>
-        <xsl:value-of select="concat(' ', i18n:translate('metaData.date.until'))" />
-        <xsl:if test="@until">
-          <xsl:value-of select="' '" />
-          <xsl:call-template name="jp.date.print">
-            <xsl:with-param name="date" select="@until" />
-          </xsl:call-template>
-        </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="text()">
-      <xsl:value-of select="concat(' (', text(), ')')" />
-    </xsl:if>
+    <xsl:value-of select="jpxml:formatJPMetaDate(., $CurrentLang)" />
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink' and @xlink:title]">
