@@ -45,6 +45,12 @@
                 <xsl:value-of select="i18n:translate('jp.site.imprint')"/>
               </a>
             </li>
+            <li>
+              <a href="{concat($WebApplicationBaseURL, 'jp-dsgvo.xml')}">
+                <xsl:value-of select="i18n:translate('jp.site.privacy')"/>
+
+              </a>
+            </li>
             <xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">
               <li>
                 <a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">

@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+    <head>
+        <top>
+            <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+        </top>
+        <bottom>
+            <style type="text/css">
+                #jp-dsgvo .lst-kix_list_2-6 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_2-7 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-0 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo .lst-kix_list_2-4 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_2-5 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_2-8 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_3-0 > li:before {
+                content: "\0025cf "
+                }
+
+                #jp-dsgvo .lst-kix_list_3-1 > li:before {
+                content: "o "
+                }
+
+                #jp-dsgvo .lst-kix_list_3-2 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-7 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-8 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-3 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-1 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo .lst-kix_list_3-5 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-4 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-2 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-1 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo .lst-kix_list_3-4 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-2 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-0 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-7 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo .lst-kix_list_3-3 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-5 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-8 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-6 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-5 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-3 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_1-6 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_3-4 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo .lst-kix_list_3-8 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_3-6 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_3-7 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-8 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-2 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo .lst-kix_list_1-0 > li:before {
+                content: "\0025cf "
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-3 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-0 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-1 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-6 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo .lst-kix_list_1-1 > li:before {
+                content: "o "
+                }
+
+                #jp-dsgvo .lst-kix_list_1-2 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-7 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-4 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo ul.lst-kix_list_2-5 {
+                list-style-type: none
+                }
+
+                #jp-dsgvo .lst-kix_list_1-3 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_1-4 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_1-7 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_1-5 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_1-6 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_2-0 > li:before {
+                content: "\0025cf "
+                }
+
+                #jp-dsgvo .lst-kix_list_2-1 > li:before {
+                content: "o "
+                }
+
+                #jp-dsgvo .lst-kix_list_1-8 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_2-2 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo .lst-kix_list_2-3 > li:before {
+                content: "\0025aa "
+                }
+
+                #jp-dsgvo ol {
+                margin: 0;
+                padding: 0
+                }
+
+                #jp-dsgvo table td, table th {
+                padding: 0
+                }
+
+                #jp-dsgvo .c4 {
+                margin-left: 36pt;
+                padding-top: 0pt;
+                padding-left: 0pt;
+                padding-bottom: 12pt;
+                line-height: 1.0;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo .c1 {
+                color: #000000;
+                font-weight: 400;
+                text-decoration: none;
+                vertical-align: baseline;
+                font-size: 12pt;
+                font-family: "Arial";
+                font-style: normal
+                }
+
+                #jp-dsgvo .c5 {
+                padding-top: 0pt;
+                padding-bottom: 0pt;
+                line-height: 1.0;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo .c10 {
+                padding-top: 0pt;
+                padding-bottom: 12pt;
+                line-height: 1.0;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo .c11 {
+                padding-top: 0pt;
+                padding-bottom: 10pt;
+                line-height: 1.1500000000000001;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo .c7 {
+                padding-top: 0pt;
+                padding-bottom: 0pt;
+                line-height: 1.0;
+                orphans: 2;
+                widows: 2;
+                text-align: center
+                }
+
+                #jp-dsgvo .c6 {
+                color: #000000;
+                text-decoration: none;
+                vertical-align: baseline;
+                font-style: normal
+                }
+
+                #jp-dsgvo .c2 {
+                -webkit-text-decoration-skip: none;
+                color: #1155cc;
+                text-decoration: underline;
+                text-decoration-skip-ink: none
+                }
+
+                #jp-dsgvo.c13 {
+                background-color: #ffffff;
+                max-width: 723.6pt;
+                padding: 70.8pt 70.8pt 56.7pt 70.8pt
+                }
+
+                #jp-dsgvo .c12 {
+                font-weight: 400;
+                font-size: 11pt;
+                font-family: "Arial"
+                }
+
+                #jp-dsgvo .c3 {
+                font-size: 12pt;
+                font-family: "Arial";
+                font-weight: 400
+                }
+
+                #jp-dsgvo .c0 {
+                font-size: 12pt;
+                font-family: "Arial";
+                font-weight: 700
+                }
+
+                #jp-dsgvo .c8 {
+                color: inherit;
+                text-decoration: inherit
+                }
+
+                #jp-dsgvo .c9 {
+                padding: 0;
+                margin: 0
+                }
+
+                #jp-dsgvo .title {
+                padding-top: 24pt;
+                color: #000000;
+                font-weight: 700;
+                font-size: 36pt;
+                padding-bottom: 6pt;
+                font-family: "Arial";
+                line-height: 1.1500000000000001;
+                page-break-after: avoid;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo .subtitle {
+                padding-top: 18pt;
+                color: #666666;
+                font-size: 24pt;
+                padding-bottom: 4pt;
+                font-family: "Georgia";
+                line-height: 1.1500000000000001;
+                page-break-after: avoid;
+                font-style: italic;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo li {
+                color: #000000;
+                font-size: 11pt;
+                font-family: "Arial"
+                }
+
+                #jp-dsgvo p {
+                margin: 0;
+                color: #000000;
+                font-size: 11pt;
+                font-family: "Arial"
+                }
+
+                #jp-dsgvo h1 {
+                padding-top: 24pt;
+                color: #000000;
+                font-weight: 700;
+                font-size: 24pt;
+                padding-bottom: 6pt;
+                font-family: "Arial";
+                line-height: 1.1500000000000001;
+                page-break-after: avoid;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo h2 {
+                padding-top: 18pt;
+                color: #000000;
+                font-weight: 700;
+                font-size: 18pt;
+                padding-bottom: 4pt;
+                font-family: "Arial";
+                line-height: 1.1500000000000001;
+                page-break-after: avoid;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo h3 {
+                padding-top: 14pt;
+                color: #000000;
+                font-weight: 700;
+                font-size: 14pt;
+                padding-bottom: 4pt;
+                font-family: "Arial";
+                line-height: 1.1500000000000001;
+                page-break-after: avoid;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo h4 {
+                padding-top: 12pt;
+                color: #000000;
+                font-weight: 700;
+                font-size: 12pt;
+                padding-bottom: 2pt;
+                font-family: "Arial";
+                line-height: 1.1500000000000001;
+                page-break-after: avoid;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo h5 {
+                padding-top: 11pt;
+                color: #000000;
+                font-weight: 700;
+                font-size: 11pt;
+                padding-bottom: 2pt;
+                font-family: "Arial";
+                line-height: 1.1500000000000001;
+                page-break-after: avoid;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+
+                #jp-dsgvo h6 {
+                padding-top: 10pt;
+                color: #000000;
+                font-weight: 700;
+                font-size: 10pt;
+                padding-bottom: 2pt;
+                font-family: "Arial";
+                line-height: 1.1500000000000001;
+                page-break-after: avoid;
+                orphans: 2;
+                widows: 2;
+                text-align: left
+                }
+            </style>
+        </bottom>
+    </head>
+    <section xml:lang="all">
+        <div id="jp-dsgvo" class="c13">
+            <p class="c7">
+                <span class="c0">Datenschutzinformation</span>
+            </p>
+            <p class="c5">
+                <span class="c3">
+                    <br/>
+                    <br/>Wir freuen uns über Ihren Besuch auf dieser Webseite. Datenschutz und Datensicherheit für
+                    unsere Kunden und Nutzer haben bei uns eine hohe Priorität. Wir beachten die
+                    datenschutzrechtlichen Vorschriften, insbesondere der EU Datenschutz-Grundverordnung (
+                </span>
+                <span
+                        class="c2 c0">
+                    <a class="c8"
+                       href="https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:32016R0679&amp;from=DE">"DSGVO"
+                    </a>
+                </span>
+                <span
+                        class="c3">), des Bundesdatenschutzgesetzes ("
+                </span>
+                <span class="c0">BDSG</span>
+                <span class="c3">") und des Telemediengesetzes ("</span>
+                <span
+                        class="c0">TMG
+                </span>
+                <span class="c3">").
+                    <br/>
+                    <br/>In dieser Datenschutzinformation erläutern wir Ihnen, welche Informationen (einschließlich
+                    personenbezogener Daten) während Ihres Besuchs und Ihrer Nutzung unseres vorgenannten
+                    Internetangebots ("
+                </span>
+                <span
+                        class="c0">Webseite
+                </span>
+                <span class="c3">") von uns verarbeitet werden.
+                    <br/>
+                </span>
+                <span class="c0"><br/>I. Wer ist für die Datenverarbeitung verantwortlich?
+                </span>
+                <span
+                        class="c3">
+                    <br/>
+                    <br/>Datenschutzrechtlich Verantwortlicher für die Verarbeitung personenbezogener Daten und
+                    Diensteanbieter im Sinne des TMG ist die Thüringer Universitäts- und Landesbibliothek Jena
+                    (im folgenden mit
+                </span>
+                <span
+                        class="c0 c2">
+                    <a class="c8"
+                       href="http://www.thulb.uni-jena.de">"ThULB"
+                    </a>
+                </span>
+                <span
+                        class="c3">&#160;abgekürzt), Bibliotheksplatz 2, 07743 Jena; Tel. +49 3641 9-40100. Soweit
+                    in dieser Datenschutzinformation von "wir" oder "uns" die Rede ist, bezieht sich
+                    dies jeweils auf die vorgenannte Institution.
+                    <br/>
+                    <br/>
+                </span>
+                <span
+                        class="c0">II. Welche Grundsätze beachten wir?
+                </span>
+                <span class="c3">
+                    <br/>
+                    <br/>Unter Beachtung der datenschutzrechtlichen Vorschriften verarbeiten wir Ihre personenbezogenen
+                    Daten nur, wenn uns eine gesetzliche Vorschrift dies erlaubt oder wenn Sie Ihre Einwilligung erklärt
+                    haben. Dies gilt auch bei der Verarbeitung personenbezogener Daten zu Werbe- und Marketingzwecken.
+                    <br/>
+                    <br/>Auf dieser Webseite können wir auch Informationen erfassen, die uns für sich genommen
+                    keine direkten Rückschlüsse auf Ihre Person erlauben. In bestimmten Fällen -
+                    insbesondere bei Kombination mit anderen Daten - können diese Informationen gleichwohl
+                    als "personenbezogene Daten" im datenschutzrechtlichen Sinne gelten. Ferner können
+                    wir auf dieser Webseite auch solche Informationen erfassen, aufgrund derer wir Sie weder unmittelbar
+                    noch mittelbar identifizieren können; dies ist z.B. bei zusammengefassten Informationen über
+                    alle Nutzer dieser Webseite der Fall.
+                    <br/>
+                    <br/>
+                </span>
+                <span
+                        class="c0">III. Welche Daten verarbeiten wir?
+                </span>
+                <span class="c3">
+                    <br/>
+                    <br/>Sie können auf unsere Webseite zugreifen, ohne direkt personenbezogene Daten (wie etwa
+                    Ihren Namen, Ihre Postanschrift oder Ihre E-Mail-Adresse) anzugeben. Auch in diesem Fall müssen
+                    wir bestimmte Informationen erheben und speichern, um Ihnen den Zugriff auf unsere Webseite zu ermöglichen.
+                    <br/>
+                    <br/>
+                </span>
+                <span
+                        class="c0">1. Logdateien:
+                </span>
+                <span class="c1"><br/>Wenn Sie diese Webseite besuchen, speichert unser Webserver automatisch den
+                    Domain-Namen bzw. die IP-Adresse des anfragenden Rechners (in der Regel Ihres
+                    Internet-Zugangsanbieters) einschließlich des Datums, der Uhrzeit und der Dauer Ihres
+                    Besuches, die Unterseiten/URLs, die Sie besuchen sowie Informationen über die/den von Ihnen zur
+                    Ansicht unserer Seiten eingesetzte/-n Anwendungen und Endgeräte.
+                </span>
+            </p>
+            <p class="c11">
+                <span class="c3">
+                    <br/>
+                </span>
+                <span class="c0">2. Cookies:</span>
+                <span class="c3"><br/>Um unser Angebot so nutzerfreundlich wie möglich zu gestalten, verwenden
+                    wir - wie viele namhafte Unternehmen - sogenannte Cookies. Cookies sind kleine
+                    Textdateien, die in dem von Ihnen verwendeten Internetbrowser gespeichert werden. Diese Dateien
+                    helfen uns dabei, bestimmte Präferenzen unserer Besucher beim Surfen zu erkennen und unsere
+                    Seite entsprechend zu gestalten. Die meisten der von uns verwendeten Cookies sind so genannte
+                    Session-Cookies. Sie werden nach Ende Ihres Besuchs automatisch gelöscht. Wir setzen aber auch
+                    permanente Cookies ein. Diese dienen dazu, die Benutzerführung zu verbessern. Unsere Cookies
+                    erheben keine personenbezogenen Daten und sind nicht dazu geeignet, Sie auf Webseiten Dritter zu
+                    identifizieren. Sie können Ihren Browser so einstellen, dass er Sie über die Platzierung
+                    von Cookies informiert. Auf diese Weise wird der Gebrauch von Cookies für Sie transparent. Sie
+                    können auch über Ihre Browsereinstellungen die Annahme von Cookies prinzipiell verweigern.
+                    Allerdings kann dies unter Umständen dazu führen, dass sie nicht sämtliche Funktionen
+                    der Webseite nutzen können.
+                    <br/>
+                    <br/>
+                </span>
+                <span
+                        class="c0">3. Webseitenanalyse über Matomo (ehemals Piwik):
+                </span>
+                <span class="c1"><br/>Wir setzen auf unserer Webseite zudem Matomo Open Analytics ein, eine Webanalyse
+                    Sofware der InnoCraft Ltd., 150 Willis St. 6011 Wellington, New Zealand, um unsere Webseite
+                    kontinuierlich zu verbessern. Matomo verwendet ebenfalls Cookies, die auf Ihrem Computer gespeichert
+                    werden, um die Analyse der Benutzung der Webseite zu ermöglichen. Die durch Cookies erzeugten
+                    Informationen über ihre Benutzung dieser Webseite werden in der Regel an einen Matomo Server
+                    der ThULB gesendet. Die IP-Adresse ihres Endgerätes wird dabei anonymisiert und auf diesem
+                    Server so gespeichert, dass Rückschlüsse auf die nutzende &#160;Person ausgeschlossen
+                    sind. Die gesammelten Informationen werden benutzt, um Ihre Nutzung der Webseite auszuwerten, um
+                    Reports über die Webseitenaktivitäten zusammenzustellen.
+                </span>
+            </p>
+            <p class="c11">
+                <span class="c1">&#160;
+                    <iframe
+                            style="border: 0; height: 200px; width: 600px;"
+                            src="https://piwik.thulb.uni-jena.de/index.php?module=CoreAdminHome&amp;action=optOut&amp;language=de&amp;backgroundColor=&amp;fontColor=000000&amp;fontSize=11pt&amp;fontFamily=Arial"
+                    ></iframe>
+                </span>
+            </p>
+            <p class="c5" id="h.x1bm6buv0ahl">
+                <span class="c3">
+                    <br/>
+                </span>
+                <span class="c0">4. Registrierung / Nutzerkonto&#160;/ Abonnenten
+                    <br/>
+                </span>
+                <span
+                        class="c3">Bei der Anmeldung als registrierter Nutzer - insbesondere beim Anlegen eines
+                    Benutzerkontos - erheben wir den Namen und die Email-Adresse als personenbezogene Daten. Für
+                    ein Abonnement speichern wir die IP bzw. einen IP-Bereich und den Namen des/der Abonnenten/in. Wir können
+                    die erneute Eingabe von bereits bei der Registrierung erhobenen Daten (insbesondere zu Ihrer
+                    Identifizierung) verlangen und weitere personenbezogene Daten erheben, wenn Sie bestimmte Inhalte
+                    auf unserer Webseite nutzen möchten.
+                    <br/>
+                    <br/>
+                </span>
+                <span
+                        class="c0">5. Kommunikation&#160;
+                </span>
+                <span class="c3"><br/>Um die Kommunikation mit unseren Nutzer gewährleisten zu können,
+                    verarbeiten wir sämtliche Informationen, die Sie uns bei der Kontaktaufnahme mitgeteilt haben
+                    bzw. die wir von Ihnen erfragt haben (z. B. Ihren Namen, Ihre Anschrift und sonstige Kontaktdaten);
+                    darüber hinaus speichern wir den Grund der Kontaktaufnahme.
+                    <br/>
+                    <br/>
+                </span>
+                <span
+                        class="c0">IV. Für welche Zwecke und auf welchen Rechtsgrundlagen verarbeiten wir Ihre
+                    Daten?
+                </span>
+                <span
+                        class="c3">
+                    <br/>
+                    <br/>1. Die Verarbeitung der in den Logdateien ggf. enthaltenen personenbezogenen Daten erfolgt, um
+                    Ihnen die Nutzung unserer Webseite zu ermöglichen; dies erfolgt auf Grundlage von &#167; 15
+                    Abs. 1 TMG.
+                    <br/>
+                    <br/>2. Die Verarbeitung der über Cookies (einschließlich der Webanalyse mit Matomo)
+                    erhobenen Daten und der pseudonymen Nutzungsprofile erfolgt für Zwecke des Betrieb,
+                    Verbesserung und der bedarfsgerechten Gestaltung unserer Webseite auf Grundlage von &#167; 15 Abs. 3
+                    TMG.
+                    <br/>
+                    <br/>3. Wir können die im Zusammenhang mit der Nutzung unserer Webseite und die zum Zwecke der
+                    Kommunikation gespeicherten Daten auch zur Erfüllung von rechtlichen Verpflichtungen denen wir
+                    unterliegen verarbeiten, dies erfolgt auf Grundlage von Artikel 6 Absatz 1 c) DSGVO.
+                    <br/>
+                    <br/>4. Soweit erforderlich verarbeiten wir Ihre Daten über vorgenannten Zwecke hinaus auch zur
+                    Wahrung unserer berechtigten Interessen oder der Interessen von Dritten; dies erfolgt auf Grundlage
+                    von Artikel 6&#160;Absatz 1 f) DSGVO. Zu unseren berechtigten Interessen gehören insbesondere
+                    <br/>a) die Geltendmachung rechtlicher Ansprüche und die Verteidigung bei rechtlichen
+                    Streitigkeiten;<br/>b) die Gewährleistung eine verbraucherfreundlichen Kommunikation in den Fällen
+                    von III.9;<br/>c) die Verhinderung und Aufklärung von Straftaten;<br/>d) die Steuerung und
+                    Weiterentwicklung unserer Geschäftstätigkeit einschließlich der Risikosteuerung.<br/>&#160;<br/>
+                </span>
+                <span
+                        class="c0">V. Bin ich verpflichtet, Daten bereitzustellen?
+                </span>
+                <span class="c1">
+                    <br/>
+                    <br/>Um eine benutzerfreundliche Kommunikation sicherstellen zu können, sind mindestens Ihr Name
+                    und Ihre Email Adresse notwendig.
+                    <br/>
+                    <br/>Wenn wir darüber hinaus personenbezogene Daten bei Ihnen erheben, teilen wir Ihnen bei der
+                    Erhebung mit, ob die Bereitstellung dieser Informationen gesetzlich oder vertraglich vorgeschrieben
+                    ist. Dabei kennzeichnen wir in der Regel diejenigen Informationen, deren Bereitstellung freiwillig
+                    erfolgt und nicht auf einer der vorgenannten Verpflichtungen beruht.
+                    <br/>
+                    <br/>
+                </span>
+            </p>
+            <p class="c5" id="h.gjdgxs">
+                <span class="c0">VI. Wer erhält meine Daten?
+                    <br/>
+                </span>
+                <span class="c1"><br/>Ihre personenbezogenen Daten werden grundsätzlich innerhalb unserer Systeme
+                    verarbeitet. Abhängig von der Art der personenbezogenen Daten, haben nur bestimmte Abteilungen
+                    / Organisationseinheiten Zugriff auf Ihre personenbezogenen Daten. Hierzu gehören insbesondere
+                    die mit der Bereitstellung unserer digitalen Angebote (z.B. Webseiten) befassten Fachabteilungen und
+                    unsere IT-Abteilung. Durch ein Rollen- und Berechtigungskonzept ist der Zugriff innerhalb der ThULB
+                    auf diejenigen Funktionen und denjenigen Umfang beschränkt, der für den jeweiligen Zweck
+                    der Verarbeitung erforderlich ist.
+                    <br/>
+                    <br/>Wir können Ihre personenbezogenen Daten im rechtlich zulässigen Umfang auch an Dritte
+                    außerhalb der ThULB übermitteln. Zu diesen externen Empfängern können
+                    insbesondere zählen
+                    <br/>
+                </span>
+            </p>
+            <ul class="c9 lst-kix_list_1-0 start">
+                <li class="c4">
+                    <span class="c1">verbundene Institutionen, an die wir personenbezogene Daten für interne
+                        Verwaltungszwecke übermitteln;
+                    </span>
+                </li>
+                <li class="c4">
+                    <span class="c1">die von uns eingeschalteten Dienstleister, die für uns auf gesonderter
+                        vertraglicher Grundlage Leistungen erbringen, die auch die Verarbeitung personenbezogener Daten
+                        umfassen können, sowie die mit unserer Zustimmung eingeschalteten Subunternehmer unserer
+                        Dienstleister;
+                    </span>
+                </li>
+                <li class="c4">
+                    <span class="c1">nichtöffentliche und öffentliche Stellen, soweit wir aufgrund von
+                        rechtlichen Verpflichtungen zur übermittlung Ihrer personenbezogenen Daten verpflichtet
+                        sind.
+                    </span>
+                </li>
+            </ul>
+            <p class="c5">
+                <span class="c3">&#160;<br/>
+                </span>
+                <span class="c0 c6">VII. Wird eine automatisierte Entscheidungsfindung eingesetzt?</span>
+            </p>
+            <p class="c5">
+                <span class="c1"><br/>Im Zusammenhang mit dem Betrieb unserer Webseite benutzen wir grundsätzlich
+                    keine automatisierte Entscheidungsfindung (einschließlich Profiling) im Sinne von Art. 22
+                    DSGVO. Sofern wir derartige Verfahren in Einzelfällen einsetzen, werden wir Sie hierüber
+                    im rechtlich vorgesehenen Umfang gesondert informieren.
+                </span>
+            </p>
+            <p class="c5">
+                <span class="c3">
+                    <br/>
+                </span>
+                <span class="c0">VIII. Werden Daten in Länder außerhalb der EU / des EWR übermittelt?
+                </span>
+                <span
+                        class="c3">
+                    <br/>
+                    <br/>Die Verarbeitung Ihrer personenbezogenen Daten erfolgt grundsätzlich innerhalb der EU bzw.
+                    des Europäischen Wirtschaftsraums.
+                    <br/>
+                    <br/>
+                </span>
+                <span
+                        class="c0">IX. Wie lange werden meine Daten gespeichert?
+                </span>
+                <span class="c1">
+                    <br/>
+                    <br/>Wir speichern Ihre personenbezogenen Daten grundsätzlich, solange wir an dieser Speicherung
+                    ein berechtigtes Interesse haben und Ihre Interessen an der Nichtfortführung der Speicherung
+                    nicht überwiegen.
+                    <br/>
+                    <br/>Auch ohne ein berechtigtes Interesse können wir die Daten weiterhin speichern, wenn wir
+                    hierzu gesetzlich (etwa zur Erfüllung von Aufbewahrungspflichten) verpflichtet sind. Wir löschen
+                    Ihre personenbezogenen Daten auch ohne Ihr Zutun, sobald deren Kenntnis zur Erfüllung des
+                    Zweckes der Verarbeitung nicht mehr notwendig ist oder die Speicherung sonst rechtlich unzulässig
+                    ist.
+                    <br/>
+                    <br/>In der Regel werden
+                </span>
+            </p>
+            <ul class="c9 lst-kix_list_2-0 start">
+                <li class="c4">
+                    <span class="c1">die Logdaten innerhalb von 30 Tagen gelöscht, sofern eine weitere Speicherung
+                        nicht für gesetzlich vorgesehene Zwecke wie etwa die Aufdeckung von Missbrauch und die
+                        Erkennung und Beseitigung technischer Störungen erforderlich ist;
+                    </span>
+                </li>
+                <li class="c4">
+                    <span class="c1">die im Zusammenhang mit einer Registrierung als Nutzer verarbeiteten Daten nach
+                        Beendigung der Registrierung oder mit dem Löschen des Benutzerkontos gelöscht.
+                        Diejenigen personenbezogenen Daten, die wir zur Erfüllung von Aufbewahrungspflichten
+                        speichern müssen, werden bis zum Ende der jeweiligen Aufbewahrungspflicht gespeichert.
+                        Soweit wir personenbezogene Daten ausschließlich zur Erfüllung von
+                        Aufbewahrungspflichten speichern, werden diese in der Regel gesperrt, so dass nur dann darauf
+                        zugegriffen werden kann, wenn die im Hinblick auf den Zweck der Aufbewahrungspflicht
+                        erforderlich ist.
+                    </span>
+                </li>
+            </ul>
+            <p class="c5">
+                <span class="c3">
+                    <br/>
+                </span>
+                <span class="c0">X. Welche Rechte habe ich?</span>
+                <span class="c1">
+                    <br/>
+                    <br/>Sie haben als betroffene Person das Recht
+                </span>
+            </p>
+            <ul class="c9 lst-kix_list_3-0 start">
+                <li class="c4">
+                    <span class="c1">auf Auskunft zu den über Sie gespeicherten personenbezogenen Daten, Art. 15
+                        DSGVO;
+                    </span>
+                </li>
+                <li class="c4">
+                    <span class="c1">auf Berichtigung unrichtiger oder unvollständiger Daten, Art. 16 DSGVO;</span>
+                </li>
+                <li class="c4">
+                    <span class="c1">auf Löschung personenbezogener Daten, Art. 17 DSGVO;</span>
+                </li>
+                <li class="c4">
+                    <span class="c1">auf Einschränkung der Verarbeitung, Art. 18 DSGVO; &#160;auf Datenübertragbarkeit,
+                        Art. 20 DSGVO, und
+                    </span>
+                </li>
+                <li class="c4">
+                    <span class="c1">auf Widerspruch gegen die Verarbeitung der Sie betreffenden personenbezogenen
+                        Daten, Art. 21 DSGVO.
+                    </span>
+                </li>
+            </ul>
+            <p class="c10">
+                <span class="c3">Zur Ausübung dieser Rechte können Sie sich jederzeit - z.B. über
+                    einen der am Anfang dieser Datenschutzinformation angegebenen Kontaktwege - an uns wenden.
+                    <br/>
+                    <br/>Bei Fragen zur Verarbeitung Ihrer Daten können Sie auch an unseren Datenschutzbeauftragten
+                    wenden.
+                    <br/>
+                    <br/>Sie sind zudem berechtigt, eine Beschwerde bei einer zuständigen Aufsichtsbehörde für
+                    den Datenschutz einzulegen, Art. 77 DSGVO.
+                </span>
+            </p>
+        </div>
+    </section>
+</MyCoReWebPage>
