@@ -17,12 +17,12 @@
 	      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-personSelect.js" class="jp-db-load jp-db-reload"></script>
 
           <script type="text/javascript">
-              $(function () {
-              	var newDocTitle = $("#xeditor-title").text().trim() + " ";
-				if (document.title.indexOf(newDocTitle) == -1){
-					document.title = newDocTitle + document.title;					
-				}
-              });
+            $(function () {
+              var newDocTitle = $("#xeditor-title").text().trim() + " ";
+              if (document.title.indexOf(newDocTitle) == -1){
+                  document.title = newDocTitle + document.title;
+              }
+            });
           </script>
           <span id="hiddenLanguage" style="display:none">
             <xed:output value="$CurrentLang" />

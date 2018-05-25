@@ -1,5 +1,17 @@
 package fsu.jportal.frontend.cli;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
 import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.util.DerivateLinkUtil;
 import org.apache.logging.log4j.LogManager;
@@ -16,21 +28,17 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessException;
 import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRBase;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.xml.sax.SAXException;
-
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 @MCRCommandGroup(name = "JP Commands")
 public class JPortalCommands {
@@ -44,10 +52,8 @@ public class JPortalCommands {
         try {
             xo.output(objXML, new FileOutputStream(new File(file)));
             LOGGER.info("exported blob of object " + objectID + " to " + file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOGGER.error("Unable to export blob " + objectID + " to file " + file, e);
         }
     }
 
@@ -56,18 +62,15 @@ public class JPortalCommands {
         Document objXML = null;
         try {
             objXML = new SAXBuilder().build(new File(file));
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new MCRException("Unable to parse file " + file);
         }
         String id = objXML.getRootElement().getAttributeValue("ID");
         try {
             MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(id), objXML, new Date());
             LOGGER.info("Imported object " + id + " to blob from " + file);
-        } catch (IOException e) {
-            LOGGER.error("Failed import object " + id + " to blob from " + file);
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOGGER.error("Failed import object " + id + " to blob from " + file, e);
         }
     }
 
@@ -222,11 +225,9 @@ public class JPortalCommands {
                 MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(keyMCRFrom), faultyObjDoc, new Date());
                 // XML holen, fehlerhafte Links löschen
                 LOGGER.info(maintitle.toString() + ": " + keyMCRFrom + " link with " + keyMCRTo);
-            } catch (IOException e) {
-                LOGGER.error("Failed link " + maintitle.toString() + " from " + keyMCRFrom + " with " + keyMCRTo);
-                e.printStackTrace();
+            } catch (Exception e) {
+                LOGGER.error("Failed link " + maintitle.toString() + " from " + keyMCRFrom + " with " + keyMCRTo, e);
             }
-
         }
     }
 }

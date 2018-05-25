@@ -1,5 +1,22 @@
 package fsu.jportal.frontend.cli;
 
+import static fsu.jportal.util.ImprintUtil.getJournalConf;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamSource;
+
 import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.resolver.JournalFilesResolver;
@@ -35,22 +52,6 @@ import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static fsu.jportal.util.ImprintUtil.getJournalConf;
 
 @MCRCommandGroup(name = "JP Migrating Commands")
 public class MigratingCMDs {
@@ -212,9 +213,8 @@ public class MigratingCMDs {
                 try {
                     xmlMetaManager.update(mcrid, migratedMcrObjXML, new Date());
                     LOGGER.info("Replace ':' in categID for " + mcrid);
-                } catch (IOException e) {
-                    LOGGER.error("Failed replace ':' in categID for " + mcrid);
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    LOGGER.error("Failed replace ':' in categID for " + mcrid, e);
                 }
             } else {
                 LOGGER.info("Nothing to replace for " + mcrid);

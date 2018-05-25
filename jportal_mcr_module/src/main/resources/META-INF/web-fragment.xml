@@ -12,20 +12,9 @@
   <!-- **************************************************************** -->
 
   <servlet>
-    <servlet-name>OAIURNProvider</servlet-name>
-    <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>OAIURNProvider</servlet-name>
-    <url-pattern>/oai</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>OAIJPortalProvider</servlet-name>
     <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>OAIJPortalProvider</servlet-name>
     <url-pattern>/oai2</url-pattern>
@@ -35,7 +24,6 @@
     <servlet-name>OAIJPortalDFGProvider</servlet-name>
     <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>OAIJPortalDFGProvider</servlet-name>
     <url-pattern>/oaidfg</url-pattern>
@@ -45,10 +33,18 @@
     <servlet-name>OAIJPortalAllProvider</servlet-name>
     <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>OAIJPortalAllProvider</servlet-name>
     <url-pattern>/oaiall</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>OAIJPortalKPProvider</servlet-name>
+    <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OAIJPortalKPProvider</servlet-name>
+    <url-pattern>/oaikp</url-pattern>
   </servlet-mapping>
 
   <servlet>
