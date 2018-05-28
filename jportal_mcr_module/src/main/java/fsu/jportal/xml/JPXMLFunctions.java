@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -645,6 +647,31 @@ public class JPXMLFunctions {
     public static String getMimeTypeForThumbnail(String file) {
         String mimeType = MCRXMLFunctions.getMimeType(file);
         return mimeType.startsWith("image/") ? "image/jpeg" : mimeType;
+    }
+
+    /**
+     * Returns the version of this jportal installation.
+     *
+     * @return "artifact id" "version" "timestamp"
+     */
+    public static String getJPortalVersion() {
+        try {
+            String className = JPXMLFunctions.class.getSimpleName() + ".class";
+            String classPath = JPXMLFunctions.class.getResource(className).toString();
+            if (!classPath.startsWith("jar")) {
+                return "unable to determine jportal version";
+            }
+            String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+            Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+            Attributes attr = manifest.getMainAttributes();
+            String artifact = attr.getValue("MCR-Artifact-Id");
+            String version = attr.getValue("version");
+            String timestamp = attr.getValue("timestamp");
+            return String.format("%s %s %s", artifact, version, timestamp);
+        } catch (Exception exc) {
+            LOGGER.error("unable to determine jportal version", exc);
+        }
+        return "unable to determine jportal version";
     }
 
 }

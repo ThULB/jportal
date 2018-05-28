@@ -630,6 +630,7 @@ p.jp-layout-metadata-list {
 	overflow: hidden;
     padding: 1px 29px 49px;
 	background-color: white;
+	position: relative;
 }
 
 @media(min-width: 768px) {
@@ -776,6 +777,11 @@ p.jp-layout-metadata-list {
 }
 .jp-layout-admin > h1 {
 	margin-left: 0.5em;
+}
+.jp-layout-admin .jp-admin-footer {
+	position: absolute;
+	bottom: 0;
+	right: 40px;
 }
 
 #jp-layout-globalmessage-editor #message {

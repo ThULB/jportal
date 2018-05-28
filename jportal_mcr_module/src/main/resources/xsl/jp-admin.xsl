@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
                 xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-                xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="i18n mcrxml acl">
+                xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+                xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="i18n mcrxml jpxml acl">
 
   <xsl:template match="jpadmin">
     <div class="jp-layout-admin">
@@ -111,5 +112,8 @@
         </div>
       </div>
     </xsl:if>
+    <div class="jp-admin-footer">
+      <xsl:value-of select="jpxml:getJPortalVersion()" />
+    </div>
   </xsl:template>
 </xsl:stylesheet>
