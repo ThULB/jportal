@@ -655,23 +655,37 @@ public class JPXMLFunctions {
      * @return "artifact id" "version" "timestamp"
      */
     public static String getJPortalVersion() {
+        return getVersion(JPXMLFunctions.class, "MCR-Artifact-Id", "version", "timestamp");
+    }
+
+    /**
+     * Returns the version of this mycore installation.
+     *
+     * @return "artifact id" "version" "timestamp"
+     */
+    public static String getMCRVersion() {
+        return getVersion(MCRObject.class, "MCR-Artifact-Id", "Implementation-Version", null);
+    }
+
+    public static String getVersion(Class<?> clazz, String artifactKey, String versionKey, String timestampKey) {
+        String errorMessage = "unable to determine version of " + clazz.getSimpleName();
         try {
-            String className = JPXMLFunctions.class.getSimpleName() + ".class";
-            String classPath = JPXMLFunctions.class.getResource(className).toString();
+            String className = clazz.getSimpleName() + ".class";
+            String classPath = clazz.getResource(className).toString();
             if (!classPath.startsWith("jar")) {
-                return "unable to determine jportal version";
+                return errorMessage;
             }
             String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
             Manifest manifest = new Manifest(new URL(manifestPath).openStream());
             Attributes attr = manifest.getMainAttributes();
-            String artifact = attr.getValue("MCR-Artifact-Id");
-            String version = attr.getValue("version");
-            String timestamp = attr.getValue("timestamp");
+            String artifact = artifactKey != null ? attr.getValue(artifactKey) : "";
+            String version = versionKey != null ? attr.getValue(versionKey) : "";
+            String timestamp = timestampKey != null ? attr.getValue(timestampKey) : "";
             return String.format("%s %s %s", artifact, version, timestamp);
         } catch (Exception exc) {
-            LOGGER.error("unable to determine jportal version", exc);
+            LOGGER.error(errorMessage, exc);
         }
-        return "unable to determine jportal version";
+        return errorMessage;
     }
 
 }

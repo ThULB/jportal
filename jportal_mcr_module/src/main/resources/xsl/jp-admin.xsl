@@ -113,7 +113,10 @@
       </div>
     </xsl:if>
     <div class="jp-admin-footer">
-      <xsl:value-of select="jpxml:getJPortalVersion()" />
+      <ul>
+        <li><xsl:value-of select="concat('JPortal: ', jpxml:getJPortalVersion())" /></li>
+        <li><xsl:value-of select="concat('MyCoRe: ', jpxml:getMCRVersion())" /></li>
+      </ul>
     </div>
   </xsl:template>
 </xsl:stylesheet>
