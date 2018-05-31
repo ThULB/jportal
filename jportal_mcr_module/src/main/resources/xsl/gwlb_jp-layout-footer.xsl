@@ -20,7 +20,7 @@
     </xsl:template>
 
     <xsl:template name="jp.footer.print.default">
-        <div class="container" id="footer">
+        <div id="footer">
         <div class="mainWrapperFooter">
             <a class="VZG" href="{$JP.Site.Footer.Logo.url}">
                 <img src="{concat(frontend:getBaseURL(), 'images/gwlb/VZG.png')}" class="logo" />

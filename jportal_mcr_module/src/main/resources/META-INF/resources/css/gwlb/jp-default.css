@@ -235,7 +235,6 @@ p {
   a.DFG {
     margin-top: 36px;
     float: right;
-    margin-right: 90px;
     text-decoration: none;
     color: black;
     font-size: 7px;
@@ -262,7 +261,6 @@ p {
   a.VZG {
     display: inline-block;
     margin-top: 48px;
-    margin-left: 60px;
   }
 }
 @media (min-width: 401px) and (max-width: 767px) {

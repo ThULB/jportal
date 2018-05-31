@@ -29,7 +29,7 @@
                   <b>Anmeldung</b>
                   eintragen und diese E-Mail an <a href="mailto:cma-newsletter@gbv.de">cma-newsletter@gbv.de</a> versenden
                 </p>
-                <p>Sie können das entsprechende Formularfeld auf dieser Seite benutzen und dort Ihre E-Mail-Adresse eintagen</p>
+                <p>Sie können das entsprechende Formularfeld auf dieser Seite benutzen und dort Ihre E-Mail-Adresse eintragen</p>
               </div>
               <xed:bind xpath="email">
                 <input type="hidden" name="xsl" value="copynodes" />

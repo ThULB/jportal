@@ -212,7 +212,7 @@
     <xsl:variable name="q" select="encoder:encode(concat('+parent:', $id, ' +objectType:jparticle'))" />
     <xsl:variable name="articles" select="document(concat('solr:q=', $q))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
-      <xsl:variable name="rubricCat" select="$articles/response/result/doc/arr[@name='rubric']" />
+      <xsl:variable name="rubricCat" select="normalize-space($articles/response/result/doc/arr[@name='rubric']/str/text())" />
       <xsl:variable name="classID" select="substring-before($rubricCat,'#')" />
       <div class="content">
         <a class="dt-collapse" data-toggle="collapse" data-target="#jp-journal-child-list">
