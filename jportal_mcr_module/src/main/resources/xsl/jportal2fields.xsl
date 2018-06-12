@@ -117,6 +117,10 @@
       <field name="published">
         <xsl:value-of select="$published"/>
       </field>
+      <xsl:variable name="published_sort" select="jpxml:getPublishedSolrDate(../../@ID)"/>
+      <field name="published_sort">
+        <xsl:value-of select="$published_sort"/>
+      </field>
     </xsl:if>
     <xsl:apply-templates select="date" mode="jportal.metadata.date"/>
   </xsl:template>

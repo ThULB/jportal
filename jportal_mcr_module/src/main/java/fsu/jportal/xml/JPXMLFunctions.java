@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +38,7 @@ import fsu.jportal.util.ResolverUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.input.DOMBuilder;
+import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.classifications2.MCRCategory;
@@ -291,6 +297,32 @@ public class JPXMLFunctions {
             LOGGER.error("Unable to retrieve published date of " + id, exc);
         }
         return null;
+    }
+
+    /**
+     * Returns the best published date for the given object. The type of the date has to be 'published'.
+     * <p>
+     * This date comes in UTC and is YYYY-MM-DDThh:mm:ssZ formatted. Its Solr compatible.
+     * </p>
+     * @param id mycore object identifier
+     * @return the published date or null
+     */
+    public static String getPublishedSolrDate(String id) {
+        try {
+            MCRObjectID mcrId = MCRObjectID.getInstance(id);
+            return JPComponentUtil.getPeriodical(mcrId).flatMap(JPPeriodicalComponent::getPublishedDate).map(jpDate -> {
+                Temporal temporal = jpDate.getDateOrFrom();
+                LocalDate localDate = JPDateUtil.startOf(temporal);
+                if (localDate == null) {
+                    throw new MCRException("Unable to retrieve published date of " + id + " cause there is no YEAR.");
+                }
+                ZonedDateTime zonedDateTime = localDate.atStartOfDay().atZone(ZoneId.systemDefault());
+                return DateTimeFormatter.ISO_INSTANT.format(zonedDateTime);
+            }).orElse(null);
+        } catch (Throwable t) {
+            LOGGER.error("Unable to retrieve published date of " + id, t);
+            return null;
+        }
     }
 
     /**

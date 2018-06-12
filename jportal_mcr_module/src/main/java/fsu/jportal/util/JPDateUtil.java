@@ -47,23 +47,6 @@ public abstract class JPDateUtil {
     }
 
     /**
-     * Helper method to build a {@link LocalDate} out of a {@link Temporal}.
-     * If the month or day are not present, they are set to 1.
-     *
-     * @param temporal the temporal accessor
-     * @return a local date
-     */
-    public static LocalDate startOf(Temporal temporal) {
-        if (!temporal.isSupported(ChronoField.YEAR)) {
-            return null;
-        }
-        int year = temporal.get(ChronoField.YEAR);
-        int month = temporal.isSupported(ChronoField.MONTH_OF_YEAR) ? temporal.get(ChronoField.MONTH_OF_YEAR) : 1;
-        int day = temporal.isSupported(ChronoField.DAY_OF_MONTH) ? temporal.get(ChronoField.DAY_OF_MONTH) : 1;
-        return LocalDate.of(year, month, day);
-    }
-
-    /**
      * Converts a temporal to a string. Supports the following ChronoFields:
      *
      * <ul>
@@ -86,6 +69,23 @@ public abstract class JPDateUtil {
             }
         }
         return dateAsString;
+    }
+
+    /**
+     * Helper method to build a {@link LocalDate} out of a {@link Temporal}.
+     * If the month or day are not present, they are set to 1.
+     *
+     * @param temporal the temporal accessor
+     * @return a local date
+     */
+    public static LocalDate startOf(Temporal temporal) {
+        if (!temporal.isSupported(ChronoField.YEAR)) {
+            return null;
+        }
+        int year = temporal.get(ChronoField.YEAR);
+        int month = temporal.isSupported(ChronoField.MONTH_OF_YEAR) ? temporal.get(ChronoField.MONTH_OF_YEAR) : 1;
+        int day = temporal.isSupported(ChronoField.DAY_OF_MONTH) ? temporal.get(ChronoField.DAY_OF_MONTH) : 1;
+        return LocalDate.of(year, month, day);
     }
 
     /**
