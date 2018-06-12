@@ -23,16 +23,16 @@ public class SRUResource {
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_XML)
-    public Response query(@QueryParam("q") String query) {
-        PicaRecord picaRecord = getPicaRecord(query);
+    public Response query(@QueryParam("q") String query, @QueryParam("fields") String requiredFields) {
+        PicaRecord picaRecord = getPicaRecord(query, requiredFields);
         Document mcrObjectXML = toMCRObjectDocument(picaRecord);
         return renderXML(mcrObjectXML);
     }
 
     @GET
     @Path("check/{gnd}")
-    public Response check(@PathParam("gnd") String gnd) {
-        PicaRecord picaRecord = getPicaRecord(gnd);
+    public Response check(@PathParam("gnd") String gnd, @QueryParam("fields") String requiredFields) {
+        PicaRecord picaRecord = getPicaRecord(gnd, requiredFields);
         if (picaRecord == null) {
             return Response.status(Status.NOT_FOUND).entity("Catalog entry with " + gnd + " not found.").build();
         }
@@ -42,8 +42,8 @@ public class SRUResource {
     @GET
     @Path("get/{gnd}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response get(@PathParam("gnd") String gnd) {
-        PicaRecord picaRecord = getPicaRecord(gnd);
+    public Response get(@PathParam("gnd") String gnd, @QueryParam("fields") String requiredFields) {
+        PicaRecord picaRecord = getPicaRecord(gnd, requiredFields);
         if (picaRecord == null) {
             return Response.status(Status.NOT_FOUND).entity("Catalog entry with " + gnd + " not found.").build();
         }
@@ -75,10 +75,12 @@ public class SRUResource {
         }
     }
 
-    private PicaRecord getPicaRecord(String gnd) {
-        PicaRecord picaRecord = null;
+    private PicaRecord getPicaRecord(String gnd, String requiredFields) {
+        PicaRecord picaRecord;
         try {
-            picaRecord = GndUtil.retrieveFromSRU(gnd);
+            picaRecord = requiredFields == null ?
+                    GndUtil.retrieveFromSRU(gnd) :
+                    GndUtil.retrieveFromSRU(gnd, requiredFields);
         } catch (Exception exc) {
             throw new WebApplicationException(exc, Response.status(Status.INTERNAL_SERVER_ERROR)
                                                            .entity("unable to retrieve pica record (" + gnd

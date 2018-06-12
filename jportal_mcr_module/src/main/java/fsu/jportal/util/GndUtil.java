@@ -30,8 +30,10 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class GndUtil {
@@ -39,7 +41,7 @@ public class GndUtil {
     /**
      * Returns the mycore object with the given gnd id. Returns null if there
      * is no such object. Uses solr gnd.id as query.
-     * 
+     *
      * @param gndId gnd id
      * @return mycore object with the given id
      * @throws SolrServerException if a solr error occur
@@ -59,28 +61,27 @@ public class GndUtil {
 
     /**
      * Returns the gnd identifier of a mycore object.
-     * 
+     *
      * @param mcrObject
      * @return
      */
     public static Optional<String> getGND(MCRObject mcrObject) {
         return StreamSupport.stream(mcrObject.getMetadata().spliterator(), false)
-            .filter(me -> me.getTag().equals("def.identifier"))
-            .flatMap(me -> StreamSupport.stream(me.spliterator(), false))
-            .filter(meta -> meta instanceof MCRMetaLangText)
-            .map(meta -> (MCRMetaLangText)meta)
-            .filter(meta -> Optional
-                                .ofNullable(meta.getType())
-                                .filter(s -> s.toLowerCase(Locale.ROOT).equals("gnd"))
-                                .isPresent())
-            .map(MCRMetaLangText::getText)
-            .findFirst();
+                            .filter(me -> me.getTag().equals("def.identifier"))
+                            .flatMap(me -> StreamSupport.stream(me.spliterator(), false))
+                            .filter(meta -> meta instanceof MCRMetaLangText)
+                            .map(meta -> (MCRMetaLangText) meta)
+                            .filter(meta -> Optional.ofNullable(meta.getType())
+                                                    .filter(s -> s.toLowerCase(Locale.ROOT).equals("gnd"))
+                                                    .isPresent())
+                            .map(MCRMetaLangText::getText)
+                            .findFirst();
     }
 
     /**
      * Returns the mycore object id of the given gnd id. Returns null if there
      * is no such object. Uses solr gnd.id as query.
-     * 
+     *
      * @param gndId gnd id
      * @return mcr id or null
      * @throws SolrServerException if a solr error occur
@@ -92,7 +93,7 @@ public class GndUtil {
 
     /**
      * Checks if a mycore object with the given gnd id exists. Returns true if so.
-     * 
+     *
      * @param gndId gnd id to check
      * @return true if an mycore object exists, otherwise false
      * @throws SolrServerException if a solr error occur
@@ -111,17 +112,57 @@ public class GndUtil {
      * @throws ConnectException is thrown when cannot connect to gbv sru interface
      */
     public static PicaRecord retrieveFromSRU(String gndId) throws ConnectException {
+        Document xml = retrieveFromSRU("num " + gndId, 1);
+        return xml != null ? getPicaRecord(xml.getRootElement()) : null;
+    }
+
+    /**
+     * For whatever reason, it is possible that the http://sru.gbv.de/gbvcat interface can return multiple results
+     * when searching with a gnd identifier. This is basically the same as {@link #retrieveFromSRU(String)} but it
+     * returns the record which has the required fields. E.g. 065A.
+     *
+     * <p>
+     *     <a href="http://sru.gbv.de/gbvcat?query=pica.num+%3D+"4037680-1"&version=1.1&operation=searchRetrieve&recordSchema=picaxml&recordPacking=xml&maximumRecords=2&startRecord=1">
+     *         double record example</a>
+     * </p>
+     *
+     * @param gndId gnd identifier
+     * @param requiredFields list of fields which are required to be in the record
+     * @return a <code>PicaRecord</code> instance or null when there is no such record
+     * @throws ConnectException is thrown when cannot connect to gbv sru interface
+     */
+    public static PicaRecord retrieveFromSRU(String gndId, String... requiredFields) throws ConnectException {
+        Document xml = retrieveFromSRU("num " + gndId, 10);
+        if (xml == null) {
+            return null;
+        }
+        List<PicaRecord> picaRecords = getPicaRecords(xml.getRootElement());
+        for (PicaRecord record : picaRecords) {
+            boolean isValid = true;
+            for (String requiredField : requiredFields) {
+                if (record.getDatafieldsByName(requiredField).isEmpty()) {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid) {
+                return record;
+            }
+        }
+        return null;
+    }
+
+    private static Document retrieveFromSRU(String query, int numRecords) throws ConnectException {
         SRUQueryParser queryParser = new SRUQueryParser(GBVKeywordStore.getInstance());
         SRUConnector connector = SRUConnectorFactory.getSRUConnector(SRUConnectorFactory.GBV_SRU_STANDARD_CONNECTION,
-            queryParser.parse("num " + gndId));
-        connector.setMaximumRecords(1);
-        Document xml = connector.getDocument();
-        return getPicaRecord(xml);
+                queryParser.parse(query));
+        connector.setMaximumRecords(numRecords);
+        return connector.getDocument();
     }
 
     /**
      * Converts the given pica record to mycore object.
-     * 
+     *
      * @param picaRecord the pica record to convert
      * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      * @return new mycore object
@@ -132,7 +173,7 @@ public class GndUtil {
 
     /**
      * Converts the given pica record to a mycore xml object.
-     * 
+     *
      * @param picaRecord the pica record to convert
      * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      * @return jdom2 document
@@ -155,22 +196,29 @@ public class GndUtil {
         return picaObjectType.charAt(0) == 'T' && picaObjectType.charAt(1) == 'b';
     }
 
-    // copy from fsu.archiv.mycore.sru.impex.pica.model.provider.SRURecordProvider
-    public static PicaRecord getPicaRecord(Document source) {
-        if (source == null) {
-            return null;
+    public static List<PicaRecord> getPicaRecords(Element source) {
+        XPathExpression<Element> xp = getPicaRecordXPathExpression();
+        List<Element> recordList = xp.evaluate(source);
+        if (recordList.isEmpty()) {
+            return new ArrayList<>();
         }
-        Document doc = (Document) source;
-        ArrayList<Namespace> namespaces = new ArrayList<Namespace>();
-        namespaces.add(Namespace.getNamespace("zs", "http://www.loc.gov/zing/srw/"));
-        namespaces.add(Namespace.getNamespace("pica", "info:srw/schema/5/picaXML-v1.0"));
-        XPathExpression<Element> xp = XPathFactory.instance().compile("//pica:record", Filters.element(), null,
-            namespaces);
-        Element recordElement = xp.evaluateFirst(doc);
-        if(recordElement == null) {
+        return recordList.stream().map(GndUtil::convertToPica).collect(Collectors.toList());
+    }
+
+    public static PicaRecord getPicaRecord(Element source) {
+        XPathExpression<Element> xp = getPicaRecordXPathExpression();
+        Element recordElement = xp.evaluateFirst(source);
+        if (recordElement == null) {
             return null;
         }
         return convertToPica(recordElement);
+    }
+
+    private static XPathExpression<Element> getPicaRecordXPathExpression() {
+        ArrayList<Namespace> namespaces = new ArrayList<Namespace>();
+        namespaces.add(Namespace.getNamespace("zs", "http://www.loc.gov/zing/srw/"));
+        namespaces.add(Namespace.getNamespace("pica", "info:srw/schema/5/picaXML-v1.0"));
+        return XPathFactory.instance().compile("//pica:record", Filters.element(), null, namespaces);
     }
 
     private static PicaRecord convertToPica(Element record) {

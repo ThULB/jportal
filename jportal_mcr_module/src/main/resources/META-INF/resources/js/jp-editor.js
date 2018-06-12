@@ -202,7 +202,8 @@ $(document).ready(function () {
     loadData(form, searchInput);
     form.find("button").on("click", () => {
       let id = searchInput.val();
-      jp.util.getJSON(jp.baseURL + "rsc/sru/get/" + id).then((data) => {
+      const url = jp.baseURL + "rsc/sru/get/" + id + "?fields=065A";
+      jp.util.getJSON(url).then((data) => {
         const label = getValue("065A", "a", null, null, data.fields);
         if(label == null) {
           BootstrapDialog.alert('There is no pica+ field "065A a" for this record!');

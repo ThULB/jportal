@@ -7,7 +7,7 @@ import org.jdom2.Element;
 import org.mycore.common.MCRException;
 
 /**
- * Location metadata of jportal. Stores an id (can be a gnd), a text and latitude longitude values for georgraphic
+ * Location metadata of jportal. Stores an id (can be a gnd), a text and latitude longitude values for geographic
  * references. This class is extends MCRMetaSpatial.
  *
  * @author Matthias Eichner
