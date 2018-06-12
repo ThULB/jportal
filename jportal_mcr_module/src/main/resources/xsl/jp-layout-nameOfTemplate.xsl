@@ -6,8 +6,8 @@
                 xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
                 xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan layoutTools jpxml mcrxml xlink">
 
-<xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response|/journalList|/mcr_directory" />
-<!--   <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response" /> -->
+  <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response|/journalList|/mcr_directory" />
+  <xsl:variable name="tagsWithObjectInfo" select="/mycoreobject" />
   <xsl:variable name="tagsWithSearchModeInfo" select="/response|/MyCoReWebPage" />
 
   <!-- *************************************************** -->
@@ -32,6 +32,30 @@
     <xsl:if test="$journalID != ''">
       <xsl:value-of select="jpxml:getNameOfTemplate($journalID)" />
     </xsl:if>
+  </xsl:template>
+
+  <!-- *************************************************** -->
+  <!-- * Object ID -->
+  <!-- *************************************************** -->
+  <xsl:template name="jp.getObjectID">
+    <xsl:variable name="urlObjectID">
+      <xsl:call-template name="UrlGetParam">
+        <xsl:with-param name="url" select="$RequestURL" />
+        <xsl:with-param name="par" select="'objectID'" />
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$urlObjectID != ''">
+        <xsl:value-of select="$urlObjectID" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="objectID" select="$tagsWithObjectInfo" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template mode="objectID" match="mycoreobject">
+    <xsl:value-of select="@ID" />
   </xsl:template>
 
   <!-- *************************************************** -->

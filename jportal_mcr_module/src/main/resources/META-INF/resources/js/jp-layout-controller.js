@@ -177,7 +177,7 @@ function truncate(/* String */string, /* int */maxCharacters) {
 }
 
 function updateQueryStringParameter(uri, key, value) {
-  var re = new RegExp("([?|&])" + key + "=.*?(&|$)", "i");
+  const re = new RegExp("([?|&])" + key + "=.*?(&|$)", "i");
   separator = uri.indexOf('?') !== -1 ? "&" : "?";
   if (uri.match(re)) {
     return uri.replace(re, '$1' + key + "=" + value + '$2');
@@ -188,34 +188,43 @@ function updateQueryStringParameter(uri, key, value) {
 
 // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript/21152762#21152762
 function getUrlParameter() {
-  var qd = {};
+  const qd = {};
   location.search.substr(1).split("&").forEach(function (item) {
-    var s = item.split("="),
+    const s = item.split("="),
         k = s[0],
         v = s[1] && decodeURIComponent(s[1]);
     (k in qd) ? qd[k].push(v) : qd[k] = [v]
-  })
+  });
   return qd;
 }
 
 // SEARCHBAR
 function updateSearchbar() {
-  var searchForm = $("#searchForm");
-  var searchField = $("#inputField");
-  var searchDropDownButton = $("#searchDropDownButton");
-  var journalSearchOption = $("#journalSearchOption");
-  var globalSearchOption = $("#globalSearchOption");
-  var journalSearchLabel = $("#journalSearchLabel").text();
-  var globalSearchLabel = $("#globalSearchLabel").text();
+  const searchForm = $("#searchForm");
+  const searchField = $("#inputField");
+  const searchDropDownButton = $("#searchDropDownButton");
+  const journalSearchOption = $("#journalSearchOption");
+  const volumeSearchOption = $("#volumeSearchOption");
+  const globalSearchOption = $("#globalSearchOption");
+  const journalSearchLabel = $("#journalSearchLabel").text();
+  const volumeSearchLabel = $("#volumeSearchLabel").text();
+  const globalSearchLabel = $("#globalSearchLabel").text();
+  const isInSearchResults = location.pathname.endsWith("solr/find");
 
   journalSearchOption.on("click", activateJournalSearch);
-  globalSearchOption.on("click", activateGlobalSearch);
+  volumeSearchOption.on("click", activateVolumeSearch);
+  globalSearchOption.on("click", activateGlobalSearch());
 
   journalSearchOption.append(journalSearchLabel);
+  volumeSearchOption.append(volumeSearchLabel);
   globalSearchOption.append(globalSearchLabel);
 
   if (jp.journalID != null) {
-    activateJournalSearch();
+    if(jp.objectID !== null && isInSearchResults) {
+      activateVolumeSearch();
+    } else {
+      activateJournalSearch();
+    }
   } else {
     activateGlobalSearch();
   }
@@ -230,23 +239,38 @@ function updateSearchbar() {
   function activateJournalSearch() {
     searchField.attr("placeholder", journalSearchLabel);
     searchField.attr("title", journalSearchLabel);
+    setDrowDownIcon("fa-newspaper-o");
+    removeHiddenFields();
+    appendJournalSearchFields();
+  }
+
+  function activateVolumeSearch() {
+    searchField.attr("placeholder", volumeSearchLabel);
+    searchField.attr("title", volumeSearchLabel);
     setDrowDownIcon("fa-book");
     removeHiddenFields();
-    appendHiddenFields();
+    appendVolumeSearchFields();
   }
 
   function removeHiddenFields() {
-    $("#searchForm input[name='fq']").remove();
-    $("#searchForm input[name='journalID']").remove();
+    searchForm.find("input[name='fq']").remove();
+    searchForm.find("input[name='journalID']").remove();
+    searchForm.find("input[name='objectID']").remove();
   }
 
-  function appendHiddenFields() {
+  function appendJournalSearchFields() {
     searchForm.append("<input type='hidden' name='fq' value='journalID:" + jp.journalID + "' />");
     searchForm.append("<input type='hidden' name='journalID' value='" + jp.journalID + "' />");
   }
 
+  function appendVolumeSearchFields() {
+    searchForm.append("<input type='hidden' name='fq' value='ancestorPath:*/" + jp.objectID + "/*' />");
+    searchForm.append("<input type='hidden' name='journalID' value='" + jp.journalID + "' />");
+    searchForm.append("<input type='hidden' name='objectID' value='" + jp.objectID + "' />");
+  }
+
   function setDrowDownIcon(iconClass) {
-    $("#searchDropDownButton i").remove();
+    searchDropDownButton.find("i").remove();
     searchDropDownButton.prepend("<i class='fa fa-fw " + iconClass + "'></i>");
   }
 

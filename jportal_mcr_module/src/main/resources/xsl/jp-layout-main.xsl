@@ -47,6 +47,9 @@
   <xsl:variable name="journalID">
     <xsl:call-template name="jp.getJournalID"/>
   </xsl:variable>
+  <xsl:variable name="objectID">
+    <xsl:call-template name="jp.getObjectID"/>
+  </xsl:variable>
   <xsl:variable name="template">
     <xsl:variable name="tmp">
       <xsl:call-template name="jp.getNameOfTemplate"/>
@@ -111,7 +114,7 @@
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
             <style type="text/css">
               #header {
-              background-image: url(<xsl:value-of select="concat($templateWebURL, 'IMAGES/logo.png')"/>);
+                background-image: url(<xsl:value-of select="concat($templateWebURL, 'IMAGES/logo.png')"/>);
               }
             </style>
           </xsl:if>
@@ -126,7 +129,9 @@
           var jp = jp || {};
           jp.baseURL = '<xsl:value-of select="$WebApplicationBaseURL"/>';
           jp.journalID = '<xsl:value-of select="$journalID"/>';
-          jp.journalID = jp.journalID != '' ? jp.journalID : null;
+          jp.journalID = jp.journalID !== '' ? jp.journalID : null;
+          jp.objectID = '<xsl:value-of select="$objectID"/>';
+          jp.objectID = jp.objectID !== '' ? jp.objectID : null;
           jp.lang = '<xsl:value-of select="i18n:getCurrentLocale()"/>';
           jp.isGuest ='<xsl:value-of select="mcrxml:isCurrentUserGuestUser()" />' !== "false";
         </script>

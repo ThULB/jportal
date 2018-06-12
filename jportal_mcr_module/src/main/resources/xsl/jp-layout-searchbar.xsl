@@ -72,19 +72,8 @@
       <xsl:if test="$showSearchBar = 'true'">
         <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find">
           <div class="row">
-            <xsl:variable name="mobileCol">
-              <xsl:choose>
-                <xsl:when test="$objectEditing//li/a">
-                  <xsl:value-of select="'col-xs-10'" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="'col-xs-12'" />
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <div class="inputFields col-sm-7 {$mobileCol}">
+            <div class="inputFields col-sm-7 col-xs-12">
               <div class="input-group">
-		            
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchDropDownButton">
                     <span class="caret"></span>
@@ -99,9 +88,16 @@
                       </li>
                       <li>
                         <a href="javascript:void(0)" id="journalSearchOption">
-                          <i class="fa fa-fw fa-book" />
+                          <i class="fa fa-fw fa-newspaper-o" />
                         </a>
                       </li>
+                      <xsl:if test="$objectID != '' and contains($objectID, '_jpvolume_')">
+                        <li>
+                          <a href="javascript:void(0)" id="volumeSearchOption">
+                            <i class="fa fa-fw fa-book" />
+                          </a>
+                        </li>
+                      </xsl:if>
                     </xsl:if>
                     <li>
                       <xsl:choose>
@@ -148,25 +144,27 @@
                   <xsl:value-of select="decoder:decode($encodedQry, 'UTF-8')" />
                 </xsl:variable>
 
-                <input class="form-control jp-input-with-groupaddon" type="text" id="inputField" name="qry" value="{$qry}" />
-                  <span id="searchLoupe" class="input-group-addon">
-                    <span class="glyphicon glyphicon-search glyphSearchBar"
-                      onclick="$('#searchForm').submit()">
-                      <xsl:attribute name="title">
-                  <xsl:value-of select="i18n:translate('jp.metadata.search.search')" />
-                </xsl:attribute>
-                    </span>
+                <input class="form-control jp-input-with-groupaddon" type="text" id="inputField" name="qry"
+                       value="{$qry}" />
+                <span id="searchLoupe" class="input-group-addon">
+                  <span class="glyphicon glyphicon-search glyphSearchBar"
+                        onclick="$('#searchForm').submit()">
+                    <xsl:attribute name="title">
+                      <xsl:value-of select="i18n:translate('jp.metadata.search.search')" />
+                    </xsl:attribute>
                   </span>
-  
-              </div><!-- input-group-btn  -->
-                <div class="hidden">
-                  <span id="globalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" /></span> 
-                  <span id="journalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" /></span> 
-                </div>
-  
-                <xsl:if test="$sort != ''">
-                  <input type="hidden" name="sort" value="{$sort}" />
-                </xsl:if>
+                </span>
+              </div>
+
+              <div class="hidden">
+                <span id="globalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" /></span>
+                <span id="journalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" /></span>
+                <span id="volumeSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_volume')" /></span>
+              </div>
+
+              <xsl:if test="$sort != ''">
+                <input type="hidden" name="sort" value="{$sort}" />
+              </xsl:if>
             </div>
           </div>
         </form>
