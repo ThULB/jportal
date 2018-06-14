@@ -299,7 +299,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	padding: 0;
 }
 
-.jp-layout-metadataList dd > a:not(:last-child):after{
+.jp-layout-metadataList dd .jp-layout-metadata-separated-list:not(:last-child):after {
 	content: ", ";
 }
 

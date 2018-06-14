@@ -212,13 +212,13 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink' and @xlink:title]">
-    <a href="{@xlink:href}">
+    <a href="{@xlink:href}" class="jp-layout-metadata-separated-list">
       <xsl:value-of select="@xlink:title" />
     </a>
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink']">
-    <a href="{@xlink:href}">
+    <a href="{@xlink:href}" class="jp-layout-metadata-separated-list">
       <xsl:value-of select="@xlink:href" />
     </a>
   </xsl:template>
@@ -265,11 +265,28 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='JPMetaLocation']">
-    <xsl:variable name="modalTitle" select="concat(@label, ' (', @id, ')')" />
-    <button class="btn btn-default jp-spatial-view-show-modal-button" data-zoom="13"
-            data-modal-title="{$modalTitle}" data-content="{text()}" >
-      <xsl:value-of select="@label" />
-    </button>
+    <span class="jp-layout-metadata-separated-list">
+      <xsl:choose>
+        <xsl:when test="not(string(.))">
+          <xsl:value-of select="concat(@label, ' (')" />
+          <a href="https://d-nb.info/gnd/{@id}" target="_blank">
+            <xsl:value-of select="@id" />
+          </a>
+          <xsl:value-of select="')'" />
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="javascript:void(0)" class="jp-spatial-view-show-modal-button" data-zoom="13"
+             data-modal-title="{concat(@label, ' (', @id, ')')}" data-content="{text()}">
+            <xsl:value-of select="@label" />
+          </a>
+          <xsl:value-of select="' ('" />
+          <a href="https://d-nb.info/gnd/{@id}" target="_blank">
+            <xsl:value-of select="@id" />
+          </a>
+          <xsl:value-of select="')'" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </span>
   </xsl:template>
 
 </xsl:stylesheet>

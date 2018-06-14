@@ -210,17 +210,11 @@ $(document).ready(function () {
           return;
         }
         let lat = getValue("037H", "f", "A", "dgx", data.fields);
-        if(lat == null) {
-          BootstrapDialog.alert('No latitude pica+ field "037H f A dgx" for this record!');
-          return;
-        }
         let lng = getValue("037H", "d", "A", "dgx", data.fields);
-        if(lng == null) {
-          BootstrapDialog.alert('No longitude pica+ field "037H d A dgx" for this record!');
-          return;
+        if(lat !== null && lng !== null) {
+          lat = parseFloat(lat.substring(1));
+          lng = parseFloat(lng.substring(1));
         }
-        lat = parseFloat(lat.substring(1));
-        lng = parseFloat(lng.substring(1));
         setData(id, label, lat, lng, form);
       }).catch((error) => {
         BootstrapDialog.alert('Error while getting record data from server. If you think this is an error please' +
@@ -247,8 +241,13 @@ $(document).ready(function () {
     const inputDiv = form.prev(".jp-gnd-location-input");
     inputDiv.find(".jp-gnd-location-input-id").val(id);
     inputDiv.find(".jp-gnd-location-input-label").val(label);
-    inputDiv.find(".jp-gnd-location-input-data").val(lat + "," + lng);
-    inputDiv.find(".jp-gnd-location-input-display").html(label + " (" + lat + "," + lng + ")");
+    if(lat !== null && lng !== null) {
+      inputDiv.find(".jp-gnd-location-input-data").val(lat + "," + lng);
+      inputDiv.find(".jp-gnd-location-input-display").html(label + " (" + lat + "," + lng + ")");
+    } else {
+      inputDiv.find(".jp-gnd-location-input-data").val(null);
+      inputDiv.find(".jp-gnd-location-input-display").html(label + " (keine Koordinaten gefunden!)");
+    }
   }
 
   function getValue(name, code, reqCode, reqValue, fields) {
