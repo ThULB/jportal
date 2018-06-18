@@ -1,7 +1,26 @@
 package fsu.jportal.resources;
 
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.mets.MetsVersionStore;
 import fsu.jportal.util.JPComponentUtil;
@@ -18,16 +37,13 @@ import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.mets.misc.StructLinkGenerator;
 import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.struct.IDiv;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
+import org.mycore.mets.model.struct.PhysicalStructMap;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
+import org.mycore.mets.model.struct.SmLink;
 import org.mycore.mets.model.struct.StructLink;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.nio.file.Files;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -35,11 +51,11 @@ import java.util.stream.Collectors;
  * Generates the mets.xml for the given derivate.
  * This will overwrite the existing mets.xml.
  * </p>
- * 
+ *
  * <p>
  * <b>Synchronize:</b><br />
  * Synchronize the mets.xml of a derivate with the jportal object structure.
- * 
+ *
  * <ul>
  *  <li>Syncs the label's of the logical divs with the corresponding mycore object titles.
  *  (this does only work when the identifier of an logical div is an mycore object id)</li>
@@ -55,7 +71,7 @@ public class METSBaseResource {
 
     /**
      * Generates the mets.xml for the given derivate. This will overwrite the existing mets.xml.
-     * 
+     *
      * @param derivateId where to generate the mets.xml
      * @return the json response object {status = 'ok'}
      */
@@ -86,7 +102,7 @@ public class METSBaseResource {
     /**
      * Synchronizes the mets.xml with the object structure.
      * Returns a json object containing the number of changed logical div's.
-     * 
+     *
      * @param derivateId the derivate
      * @return json object
      */
@@ -101,10 +117,10 @@ public class METSBaseResource {
         Mets mets = getMets(derivateId);
 
         // do the sync
-        List<LogicalDiv> logicalDivList = getLogicalDivs(mets);
-        List<LogicalDiv> updatedList = new ArrayList<>();
-        Map<LogicalDiv, String> errorMap = new HashMap<>();
-        updateMaintitlesOfLogicalDivs(logicalDivList, updatedList, errorMap);
+        List<IDiv> updatedList = new ArrayList<>();
+        Map<IDiv, String> errorMap = new HashMap<>();
+        updateLogicalDivs(mets, updatedList, errorMap);
+        updatePhysicalDivs(mets, updatedList, errorMap);
 
         boolean structLinkSynced = syncStructLink(mets);
 
@@ -134,7 +150,7 @@ public class METSBaseResource {
 
     /**
      * Stores the old mets.xml using the {@link MetsVersionStore}.
-     * 
+     *
      * @param derivateId the derivate
      */
     private void storeOldMets(MCRObjectID derivateId) {
@@ -149,7 +165,7 @@ public class METSBaseResource {
 
     /**
      * Synchronizes the struct link section of the given mets.
-     * 
+     *
      * @param mets the mets to sync
      * @return true if the struct link section of the mets changed, otherwise false
      */
@@ -161,18 +177,16 @@ public class METSBaseResource {
                 mets.setStructLink(newStructLink);
                 return true;
             }
-            return false;
         } catch (Exception exc) {
-            JsonObject json = new JsonObject();
-            json.addProperty("errorMsg", "unable to generate struct link: " + exc.getMessage());
-            throw new WebApplicationException(exc, Response.ok().entity(json.toString()).build());
+            LOGGER.warn("Unable to create or sync the struct link, leave the old one..., exc");
         }
+        return false;
     }
 
     /**
      * Returns the mets.xml of the given derivate. If there is no mets.xml or an exception occur
      * while getting, a web application exception is thrown.
-     * 
+     *
      * @param derivateId the derivate
      * @return the mets as java object
      */
@@ -189,7 +203,7 @@ public class METSBaseResource {
 
     /**
      * Returns a list of all logical div's of the given mets.
-     * 
+     *
      * @param mets the mets
      * @return a list of logical div's
      */
@@ -214,13 +228,14 @@ public class METSBaseResource {
      * Runs through all logical divs and tries to update them. If their ID attribute
      * is an mycore object id, then the corresponding mycore object is retrieved. The title
      * of this mycore object will be written into the LABEL attribute of the logical div.
-     * 
-     * @param logicalDivList a list of logical divs
+     *
+     * @param mets the mets object
      * @param updateList an empty list where the updated divs are stored
      * @param errorMap an empty map where the errors are stored (div, reason)
      */
-    private void updateMaintitlesOfLogicalDivs(List<LogicalDiv> logicalDivList, List<LogicalDiv> updateList,
-        Map<LogicalDiv, String> errorMap) {
+    private void updateLogicalDivs(Mets mets, List<IDiv> updateList, Map<IDiv, String> errorMap) {
+        List<LogicalDiv> logicalDivList = getLogicalDivs(mets);
+
         for (LogicalDiv div : logicalDivList) {
             String divId = div.getId();
             try {
@@ -233,9 +248,7 @@ public class METSBaseResource {
                     LOGGER.warn("LogicalStructMap @ID '" + mcrId + "' does not exists on system.");
                     continue;
                 }
-                Optional<String> maintitle = JPComponentUtil.getPeriodical(mcrId).map(JPPeriodicalComponent::getTitle);
-                if (maintitle.isPresent() && !Objects.equals(maintitle.get(), div.getLabel())) {
-                    div.setLabel(maintitle.get());
+                if (updateMaintitle(div, mcrId)) {
                     updateList.add(div);
                 }
             } catch (Exception exc) {
@@ -245,9 +258,55 @@ public class METSBaseResource {
         }
     }
 
+    private void updatePhysicalDivs(Mets mets, List<IDiv> updateList, Map<IDiv, String> errorMap) {
+        PhysicalStructMap physicalStructMap = mets.getPhysicalStructMap();
+        boolean sizeUpdated = false;
+        for (PhysicalSubDiv physicalDiv : physicalStructMap.getDivContainer().getChildren()) {
+            try {
+                List<SmLink> links = mets.getStructLink().getSmLinkByTo(physicalDiv.getId());
+                if (links.isEmpty()) {
+                    continue;
+                }
+                SmLink smLink = links.get(0);
+                String from = smLink.getFrom();
+                if (!MCRObjectID.isValid(from)) {
+                    continue;
+                }
+                MCRObjectID mcrId = MCRObjectID.getInstance(from);
+                if (updateSize(physicalDiv, mcrId)) {
+                    updateList.add(physicalDiv);
+                    sizeUpdated = true;
+                }
+            } catch (Exception exc) {
+                errorMap.put(physicalDiv, "Unknown error for " + physicalDiv.getId());
+                LOGGER.error("Unable to get size of " + physicalDiv.getId(), exc);
+            }
+        }
+        if (sizeUpdated) {
+            MetsUtil.interpolateOrderLabels(mets);
+        }
+    }
+
+    private boolean updateMaintitle(LogicalDiv logicalDiv, MCRObjectID mcrId) {
+        Optional<String> maintitle = JPComponentUtil.getPeriodical(mcrId).map(JPPeriodicalComponent::getTitle);
+        if (maintitle.isPresent() && !Objects.equals(maintitle.get(), logicalDiv.getLabel())) {
+            logicalDiv.setLabel(maintitle.get());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean updateSize(PhysicalSubDiv physicalDiv, MCRObjectID mcrId) {
+        if (!mcrId.getTypeId().equals("jparticle")) {
+            return false;
+        }
+        Optional<String> size = new JPArticle(mcrId).getSize();
+        return size.filter(s -> MetsUtil.setOrderLabel(physicalDiv, s, true)).isPresent();
+    }
+
     /**
      * Writes the document as /mets.xml to the derivate.
-     * 
+     *
      * @param doc the mets.xml to store
      * @param derivateId the derivate
      */

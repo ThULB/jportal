@@ -1,33 +1,22 @@
 package fsu.jportal.mets;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
-import org.mycore.mets.model.struct.PhysicalDiv;
-import org.mycore.mets.model.struct.PhysicalStructMap;
-import org.mycore.mets.model.struct.PhysicalSubDiv;
-import org.mycore.mets.model.struct.SmLink;
-import org.mycore.solr.MCRSolrClientFactory;
-import org.mycore.solr.search.MCRSolrSearchUtils;
 
 /**
  * Uses the mycore mets hierarchy generator and adds the support for ALTO files. This includes
@@ -101,79 +90,21 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
 
     /**
      * Uses the sizeMap to enhance the @ORDERLABEL's of the physical struct map. See {@link #buildSizeMap}.
+     * If a physical div already has an @ORDERLABEL the original value is kept and will not be overwritten.
      *
      * @param mets the mets to enhance
      */
     private void enhanceOrderLabels(Mets mets) {
         // put the sizes for each available physical div
         this.sizeMap.forEach((logicalDivId, size) -> {
-            List<SmLink> linkList = mets.getStructLink().getSmLinkByFrom(logicalDivId);
-            if (linkList.isEmpty()) {
-                return;
-            }
-            SmLink firstLink = linkList.get(0);
-            String physicalDivId = firstLink.getTo();
-            PhysicalSubDiv physicalDiv = mets.getPhysicalStructMap().getDivContainer().get(physicalDivId);
-            if (physicalDiv.getOrderLabel() != null && !"".equals(physicalDiv.getOrderLabel().trim())) {
-                return;
-            }
             try {
-                size = size.split("-")[0].trim();
-                physicalDiv.setOrderLabel(size);
+                MetsUtil.setOrderlabel(mets, logicalDivId, size, false);
             } catch (Exception exc) {
-                LogManager.getLogger().warn("Unable to set ORDERLABEL=" + size + " to " + physicalDivId);
+                LogManager.getLogger().warn("Unable to set ORDERLABEL=" + size + " to " + logicalDivId);
             }
         });
         // try to interpolate between the physical div's who has no ORDERLABEL's yet
-        interpolateOrderLabels(mets);
-    }
-
-    protected void interpolateOrderLabels(Mets mets) {
-        PhysicalStructMap physicalStructMap = mets.getPhysicalStructMap();
-        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
-        String lastOrderLabel = null;
-        int count = 0;
-        for (PhysicalSubDiv div : divContainer.getChildren()) {
-            // respect existing orderlabel's
-            if (div.getOrderLabel() != null && !"".equals(div.getOrderLabel())) {
-                lastOrderLabel = div.getOrderLabel();
-                count = 0;
-                continue;
-            }
-            if (lastOrderLabel == null) {
-                continue;
-            }
-            count++;
-            // order label is null or unset -> try to interpolate from last one
-            String newOrderLabel = interpolateOrderLabel(lastOrderLabel, count);
-            if (newOrderLabel != null) {
-                div.setOrderLabel(newOrderLabel);
-            }
-        }
-    }
-
-    protected String interpolateOrderLabel(String baseOrderLabel, int count) {
-        try {
-            // normal numbers
-            Integer baseInteger = Integer.valueOf(baseOrderLabel);
-            return String.valueOf(baseInteger + count);
-        } catch (Exception exc) {
-            try {
-                // recto verso
-                if (baseOrderLabel.contains("v")) {
-                    String base = baseOrderLabel.replace("v", "");
-                    Integer number = Integer.valueOf(base);
-                    return count % 2 == 0 ? number + (count / 2) + "v" : number + ((count - 1) / 2) + "r";
-                } else if (baseOrderLabel.contains("r")) {
-                    String base = baseOrderLabel.replace("r", "");
-                    Integer number = Integer.valueOf(base);
-                    return count % 2 == 0 ? (number + count / 2) + "r" : number + (count / 2 + 1) + "v";
-                }
-            } catch (Exception exc2) {
-                // do not handle -> just return null
-            }
-        }
-        return null;
+        MetsUtil.interpolateOrderLabels(mets);
     }
 
     protected String getEnclosingDerivateLinkName() {

@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import fsu.jportal.mets.MetsVersionStore;
@@ -31,10 +32,15 @@ import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.MCRMETSGeneratorFactory;
 import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
+import org.mycore.mets.model.struct.SmLink;
 
 /**
  * Util class for mets.xml handling.
- * 
+ *
  * @author Matthias Eichner
  */
 public abstract class MetsUtil {
@@ -52,7 +58,7 @@ public abstract class MetsUtil {
 
     /**
      * Returns the mets.xml as java object.
-     * 
+     *
      * @param derivateId the derivate where to get the mets.xml
      * @throws FileNotFoundException when there is no mets.xml
      * @throws IOException when the mets.xml couldn't be read by the io
@@ -99,7 +105,7 @@ public abstract class MetsUtil {
 
     /**
      * Returns the mets.xml as an input stream.
-     * 
+     *
      * @throws FileNotFoundException when there is no mets.xml
      * @throws IOException when the mets.xml couldn't be read by the io
      * @param derivateId the derivate where to get the mets.xml
@@ -121,7 +127,7 @@ public abstract class MetsUtil {
     /**
      * Checks the if the root element name is equals 'mets' and the
      * PROFILE is 'ENMAP'.
-     * 
+     *
      * @param metsDocument the document to check
      * @return true if the document is an ENMAP mets.xml
      */
@@ -149,7 +155,7 @@ public abstract class MetsUtil {
     /**
      * Checks if this derivate can have a generated mets.xml. The following conditions
      * have to be true:
-     * 
+     *
      * <ul>
      * <li>the derivate does exist</li>
      * <li>the owner object does exist</li>
@@ -157,7 +163,7 @@ public abstract class MetsUtil {
      * <li>an existing mets.xml is not of the PROFILE 'ENMAP'</li>
      * <li>the derivate contains at least one image</li>
      * </ul>
-     * 
+     *
      * @param derivateId the mycore derivateId to check
      * @return true if a mets.xml can be generated for this derivate
      * @throws IOException the derivate files couldn't be read
@@ -186,7 +192,7 @@ public abstract class MetsUtil {
                     return probeContentType.startsWith("image/");
                 } catch (Exception exc) {
                     LOGGER.warn("Unable to probe content of " + path.toAbsolutePath().toString()
-                        + " while checking for mets.xml generation.");
+                            + " while checking for mets.xml generation.");
                     return false;
                 }
             })) {
@@ -217,7 +223,7 @@ public abstract class MetsUtil {
     /**
      * Does the same as {@link #generate(MCRObjectID)} but stores the old mets.xml
      * in the {@link MetsVersionStore} and replace the old one with the new one.
-     * 
+     *
      * @param derivateId the derivate to generate the mets.xml for
      * @throws IOException mets.xml couldn't be generated due I/O error
      */
@@ -241,6 +247,127 @@ public abstract class MetsUtil {
         try (InputStream is = newMetsContent.getInputStream()) {
             Files.copy(is, metsPath, StandardCopyOption.REPLACE_EXISTING);
         }
+    }
+
+    /**
+     * Sets the @ORDERLABEL to the size for the physical div which is linked with the given logical div.
+     *
+     * @param mets the mets object
+     * @param logicalDivId logical div @ID
+     * @param size jparticle size value
+     * @param overwrite the @ORDERLABEL is already set, overwrite anyway? true = overwrite, false = keep old value
+     * @return true if the order label was changed, otherwise false
+     */
+    public static boolean setOrderlabel(Mets mets, String logicalDivId, String size, boolean overwrite) {
+        PhysicalSubDiv physicalDiv = getPhysicalDiv(mets, logicalDivId);
+        return physicalDiv != null && setOrderLabel(physicalDiv, size, overwrite);
+    }
+
+    /**
+     * Sets the @ORDERLABEL to the size for the physical div.
+     *
+     * @param physicalDiv the physical div
+     * @param size jparticle size value
+     * @param overwrite the @ORDERLABEL is already set, overwrite anyway? true = overwrite, false = keep old value
+     * @return true if the order label was changed, otherwise false
+     */
+    public static boolean setOrderLabel(PhysicalSubDiv physicalDiv, String size, boolean overwrite) {
+        if (physicalDiv.getOrderLabel() != null && !"".equals(physicalDiv.getOrderLabel().trim()) && !overwrite) {
+            return false;
+        }
+        size = size.split("-")[0].trim();
+        if (size.equals(physicalDiv.getOrderLabel())) {
+            return false;
+        }
+        physicalDiv.setOrderLabel(size);
+        return true;
+    }
+
+    /**
+     * Returns the first linked physical div to the given logical div identifier.
+     *
+     * @param mets the mets object
+     * @param logicalDivId the logical div
+     * @return the physical div or null
+     */
+    public static PhysicalSubDiv getPhysicalDiv(Mets mets, String logicalDivId) {
+        List<SmLink> linkList = mets.getStructLink().getSmLinkByFrom(logicalDivId);
+        if (linkList.isEmpty()) {
+            return null;
+        }
+        SmLink firstLink = linkList.get(0);
+        String physicalDivId = firstLink.getTo();
+        return mets.getPhysicalStructMap().getDivContainer().get(physicalDivId);
+    }
+
+    /**
+     * Tries to interpolate @ORDERLABEL values for all phyiscal div's.
+     *
+     * <pre>
+     * &lt;mets:div ID="phys_1" TYPE="page" ORDERLABEL="1"&gt;
+     *   &lt;mets:fptr FILEID="MASTER_1"/&gt;
+     *   &lt;mets:fptr FILEID="ALTO_1"/&gt;
+     * &lt;/mets:div&gt;
+     * &lt;mets:div ID="phys_2" TYPE="page"&gt;
+     *   &lt;mets:fptr FILEID="MASTER_2"/&gt;
+     *   &lt;mets:fptr FILEID="ALTO_2"/&gt;
+     * &lt;/mets:div&gt;
+     * &lt;mets:div ID="phys_3" TYPE="page" ORDERLABEL="3"&gt;
+     *   &lt;mets:fptr FILEID="MASTER_3"/&gt;
+     *   &lt;mets:fptr FILEID="ALTO_3"/&gt;
+     * &lt;/mets:div&gt;
+     * </pre>
+     *
+     * Using this method the phys_2 div would get an @ORDERLABEL="2". Existing @ORDERLABEL's will be respected.
+     *
+     * @param mets the mets object
+     */
+    public static void interpolateOrderLabels(Mets mets) {
+        PhysicalStructMap physicalStructMap = mets.getPhysicalStructMap();
+        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
+        String lastOrderLabel = null;
+        int count = 0;
+        for (PhysicalSubDiv div : divContainer.getChildren()) {
+            // respect existing orderlabel's
+            if (div.getOrderLabel() != null && !"".equals(div.getOrderLabel())) {
+                lastOrderLabel = div.getOrderLabel();
+                count = 0;
+                continue;
+            }
+            if (lastOrderLabel == null) {
+                continue;
+            }
+            count++;
+            // order label is null or unset -> try to interpolate from last one
+            String newOrderLabel = interpolateOrderLabel(lastOrderLabel, count);
+            if (newOrderLabel != null) {
+                div.setOrderLabel(newOrderLabel);
+            }
+        }
+    }
+
+    public static String interpolateOrderLabel(String baseOrderLabel, int count) {
+        try {
+            // normal numbers
+            Integer baseInteger = Integer.valueOf(baseOrderLabel);
+            return String.valueOf(baseInteger + count);
+        } catch (Exception exc) {
+            try {
+                // recto verso
+                if (baseOrderLabel.contains("v")) {
+                    String base = baseOrderLabel.replace("v", "");
+                    Integer number = Integer.valueOf(base);
+                    return count % 2 == 0 ? number + (count / 2) + "v" : number + ((count - 1) / 2) + "r";
+                } else if (baseOrderLabel.contains("r")) {
+                    String base = baseOrderLabel.replace("r", "");
+                    Integer number = Integer.valueOf(base);
+                    return count % 2 == 0 ? (number + count / 2) + "r" : number + (count / 2 + 1) + "v";
+                }
+            } catch (Exception exc2) {
+                // do not handle -> just return null
+            }
+        }
+        return null;
     }
 
 }
