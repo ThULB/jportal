@@ -1,6 +1,25 @@
 package fsu.jportal.frontend.cli;
 
-import fsu.jportal.backend.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import fsu.jportal.backend.io.ImportSink;
+import fsu.jportal.backend.io.ImportSource;
+import fsu.jportal.backend.io.LocalExportSink;
+import fsu.jportal.backend.io.LocalExportSource;
+import fsu.jportal.backend.io.RecursiveImporter;
 import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSink;
 import fsu.jportal.frontend.RecursiveObjectExporter.ExporterSource;
 import fsu.jportal.mets.MetsVersionStore;
@@ -18,29 +37,33 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.iview2.frontend.MCRIView2Commands;
-
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Paths;
-import java.util.*;
+import org.mycore.mets.servlets.MCRMETSServlet;
 
 @MCRCommandGroup(name = "JP Object Commands")
 public class ObjectTools {
     private static Logger LOGGER = LogManager.getLogger(ObjectTools.class.getName());
 
-    @MCRCommand(help = "export import [objectID].", syntax = "export import object {0}")
+    @MCRCommand(help = "export import [objectID].",
+                syntax = "export import object {0}")
     public static void exportImport(String objectID)
-            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+            throws MCRPersistenceException, MCRAccessException {
         MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
         MCRMetadataManager.update(mcrObject);
     }
 
-    @MCRCommand(help = "export object and children and their derivate from [objectID] to [destination].", syntax = "export object recursiv from {0} to {1}")
+    @MCRCommand(help = "export object and children and their derivate from [objectID] to [destination].",
+                syntax = "export object recursiv from {0} to {1}")
     public static void exportObject(String objectID, String dest) {
         ImportSource importSource = new ExporterSource(objectID);
         ImportSink importSink = new ExporterSink(Paths.get(dest));
@@ -48,7 +71,8 @@ public class ObjectTools {
         recursiveImporter.start();
     }
 
-    @MCRCommand(help = "export recursive derivate from [objectID] to [destination].", syntax = "exportDerivates from {0} to {1}")
+    @MCRCommand(help = "export recursive derivate from [objectID] to [destination].",
+                syntax = "exportDerivates from {0} to {1}")
     public static void exportPics(String objectID, String dest) {
         ImportSource importSource = new LocalExportSource(objectID);
         ImportSink importSink = new LocalExportSink(Paths.get(dest));
@@ -57,18 +81,20 @@ public class ObjectTools {
     }
 
     // dataModelCoverage: browse, fully
-    @MCRCommand(help = "cp(n) [source ID] [n times]", syntax = "cp(n) {0} {1}")
+    @MCRCommand(help = "cp(n) [source ID] [n times]",
+                syntax = "cp(n) {0} {1}")
     public static List<String> cp(String sourceID, int times) {
-        List<String> cmd = new ArrayList<String>();
+        List<String> cmd = new ArrayList<>();
         for (int i = 0; i < times; i++) {
             cmd.add("cp " + sourceID);
         }
         return cmd;
     }
 
-    @MCRCommand(help = "merge several derivates", syntax = "merge derivates {0}")
+    @MCRCommand(help = "merge several derivates",
+                syntax = "merge derivates {0}")
     public static List<String> mergeDerivates(String derivateIDs) throws IOException, MCRAccessException {
-        List<String> executeMoreCMDs = new ArrayList<String>();
+        List<String> executeMoreCMDs = new ArrayList<>();
         String[] derivateIdArray = derivateIDs.split(",");
 
         if (derivateIdArray.length > 1) {
@@ -87,9 +113,10 @@ public class ObjectTools {
         return executeMoreCMDs;
     }
 
-    @MCRCommand(help = "move file abs. path to abs. path", syntax = "move file {0} to {1}")
+    @MCRCommand(help = "move file abs. path to abs. path",
+                syntax = "move file {0} to {1}")
     public static List<String> moveFile(String sourcePath, String destPath) throws IOException {
-        List<String> executeMoreCMDs = new ArrayList<String>();
+        List<String> executeMoreCMDs = new ArrayList<>();
         MCRFilesystemNode sourceNode = getFileSystemNode(sourcePath);
 
         MCRFilesystemNode destNode;
@@ -111,7 +138,8 @@ public class ObjectTools {
         return executeMoreCMDs;
     }
 
-    @MCRCommand(help = "cp [sourceID]", syntax = "cp {0}")
+    @MCRCommand(help = "cp [sourceID]",
+                syntax = "cp {0}")
     public static void cp(String sourceMcrIdStr) throws Exception {
         MCRObjectID sourceMcrId = MCRObjectID.getInstance(sourceMcrIdStr);
         Document mcrOrigObjXMLDoc = MCRXMLMetadataManager.instance().retrieveXML(sourceMcrId);
@@ -128,7 +156,7 @@ public class ObjectTools {
         mcrOrigObjXMLDoc.getRootElement().setAttribute("ID", newMcrID.toString());
 
         // set maintitle
-        Element maintitleElem = null;
+        Element maintitleElem;
         String mainTitlePath = "/mycoreobject/metadata/maintitles/maintitle";
         maintitleElem = getElementWithXpath(mcrOrigObjXMLDoc, mainTitlePath);
         if (maintitleElem != null) {
@@ -137,7 +165,7 @@ public class ObjectTools {
 
         // set hidden journal id for journal's
         if (newMcrID.getTypeId().equals("jpjournal")) {
-            Element hidden_jpjournalIDElem = null;
+            Element hidden_jpjournalIDElem;
             String hidden_jpjournalIDPath = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID";
             hidden_jpjournalIDElem = getElementWithXpath(mcrOrigObjXMLDoc, hidden_jpjournalIDPath);
             if (hidden_jpjournalIDElem != null) {
@@ -156,7 +184,7 @@ public class ObjectTools {
     }
 
     private static MCRFilesystemNode getFileSystemNode(String sourcePath) {
-        String ownerID = getOwnerID(sourcePath);
+        String ownerID = MCRMETSServlet.getOwnerID(sourcePath);
         MCRFilesystemNode root = MCRFilesystemNode.getRootNode(ownerID);
         int beginIndex = sourcePath.indexOf('/', 1) + 1;
         String filename = sourcePath.substring(beginIndex).trim();
@@ -166,23 +194,8 @@ public class ObjectTools {
         return root;
     }
 
-    private static String getOwnerID(String path) {
-        StringBuffer ownerID = new StringBuffer(path.length());
-        boolean running = true;
-        for (int i = (path.charAt(0) == '/') ? 1 : 0; (i < path.length() && running); i++) {
-            switch (path.charAt(i)) {
-                case '/':
-                    running = false;
-                    break;
-                default:
-                    ownerID.append(path.charAt(i));
-                    break;
-            }
-        }
-        return ownerID.toString();
-    }
-
-    @MCRCommand(help = "adds one ore more derivates to an object.", syntax = "add derivates {0} to object {1}")
+    @MCRCommand(help = "adds one ore more derivates to an object.",
+                syntax = "add derivates {0} to object {1}")
     public static void addDerivatesToObject(String derivateIds, String objectId) throws Exception {
         String[] derivateIdArray = derivateIds.split(",");
         for (String derId : derivateIdArray) {
@@ -197,12 +210,13 @@ public class ObjectTools {
         }
     }
 
-    @MCRCommand(help = "merges all descendants derivates of the given object to the given layer. @see collapse command", syntax = "layer collapse {0} {1}")
+    @MCRCommand(help = "merges all descendants derivates of the given object to the given layer. @see collapse command",
+                syntax = "layer collapse {0} {1}")
     public static List<String> layerCollapse(String objectId, String layerAsString) {
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
         List<String> layerIds = getLayerIds(mcrObj, Integer.valueOf(layerAsString));
 
-        List<String> cmdList = new ArrayList<String>();
+        List<String> cmdList = new ArrayList<>();
         for (String id : layerIds) {
             cmdList.add("collapse " + id);
         }
@@ -213,7 +227,7 @@ public class ObjectTools {
         if (layer < 0) {
             throw new IllegalArgumentException("Layer cannot be lower than zero. " + layer);
         }
-        List<String> ids = new ArrayList<String>();
+        List<String> ids = new ArrayList<>();
         if (layer == 0) {
             ids.add(mcrObj.getId().toString());
             return ids;
@@ -231,7 +245,8 @@ public class ObjectTools {
         return ids;
     }
 
-    @MCRCommand(help = "merges all descendants derivates to the given object (a new derivate is created)", syntax = "collapse {0}")
+    @MCRCommand(help = "merges all descendants derivates to the given object (a new derivate is created)",
+                syntax = "collapse {0}")
     public static List<String> collapse(String objectId) {
         MCRObjectID mcrObjId = MCRObjectID.getInstance(objectId);
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
@@ -239,7 +254,7 @@ public class ObjectTools {
         // get all derivates in descendants
         Map<MCRDerivate, MCRObject> derivateMap = getDescendants(mcrObj);
 
-        List<String> cmdList = new ArrayList<String>();
+        List<String> cmdList = new ArrayList<>();
         if (derivateMap.isEmpty()) {
             return cmdList;
         }
@@ -268,31 +283,34 @@ public class ObjectTools {
             MCRDerivate mcrChildDer = entry.getKey();
             MCRObject mcrChildObj = entry.getValue();
             String mainDoc = mcrChildDer.getDerivate().getInternals().getMainDoc();
-            cmdList.add("set derivate link to " + mcrChildObj.getId().toString() + " with path " + mvDerivate.getId()
-                + "/" + mainDoc);
+            cmdList.add(
+                    "set derivate link to " + mcrChildObj.getId().toString() + " with path " + mvDerivate.getId() + "/"
+                            + mainDoc);
         }
         return cmdList;
     }
 
-    @MCRCommand(help = "creates a new derivate link", syntax = "set derivate link to {0} with path {1}")
+    @MCRCommand(help = "creates a new derivate link",
+                syntax = "set derivate link to {0} with path {1}")
     public static void setDerivateLink(String objectId, String path) throws MCRActiveLinkException, MCRAccessException {
         DerivateLinkUtil.setLink(MCRObjectID.getInstance(objectId), path);
     }
 
-    @MCRCommand(help = "removes all derivate links of derivate", syntax = "remove derivate links of object {0} of derivate {1}")
+    @MCRCommand(help = "removes all derivate links of derivate",
+                syntax = "remove derivate links of object {0} of derivate {1}")
     public static void removeDerivateLinks(String objectId, String derivateId) throws Exception {
         DerivateLinkUtil.removeLinks(MCRObjectID.getInstance(objectId), MCRObjectID.getInstance(derivateId));
     }
 
     private static Map<MCRDerivate, MCRObject> getDescendants(MCRObject mcrObj) {
-        Map<MCRDerivate, MCRObject> idMap = new HashMap<MCRDerivate, MCRObject>();
+        Map<MCRDerivate, MCRObject> idMap = new HashMap<>();
         List<MCRMetaLinkID> linkList = mcrObj.getStructure().getChildren();
         for (MCRMetaLinkID link : linkList) {
             MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(link.getXLinkHref()));
             List<MCRMetaLinkID> derivateLinkList = mcrChild.getStructure().getDerivates();
             for (MCRMetaLinkID derivateLink : derivateLinkList) {
-                MCRDerivate mcrDer = MCRMetadataManager
-                    .retrieveMCRDerivate(MCRObjectID.getInstance(derivateLink.getXLinkHref()));
+                MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(
+                        MCRObjectID.getInstance(derivateLink.getXLinkHref()));
                 idMap.put(mcrDer, mcrChild);
             }
             idMap.putAll(getDescendants(mcrChild));
@@ -300,7 +318,8 @@ public class ObjectTools {
         return idMap;
     }
 
-    @MCRCommand(help = "selects all mcr objects in the given file. every object should be in a new line", syntax = "select from file {0}")
+    @MCRCommand(help = "selects all mcr objects in the given file. every object should be in a new line",
+                syntax = "select from file {0}")
     public static void selectFromFile(String filename) throws FileNotFoundException, IOException {
         List<String> selectedList = new ArrayList<String>();
         InputStream fis;
@@ -316,7 +335,8 @@ public class ObjectTools {
         MCRObjectCommands.setSelectedObjectIDs(selectedList);
     }
 
-    @MCRCommand(help = "goes through the hierarchy and rewrites the hidden journal id of every object", syntax = "fix hidden journal id for {0}")
+    @MCRCommand(help = "goes through the hierarchy and rewrites the hidden journal id of every object",
+                syntax = "fix hidden journal id for {0}")
     public static List<String> fixHiddenJournalId(String objectId) throws MCRActiveLinkException, MCRAccessException {
         MCRObjectID mcrId = MCRObjectID.getInstance(objectId);
         if (!MCRMetadataManager.exists(mcrId)) {
@@ -335,7 +355,8 @@ public class ObjectTools {
         return fixHiddenJournalId(objectId, journal.getId().toString());
     }
 
-    @MCRCommand(help = "goes through the hierarchy and rewrites the hidden journal id of every object", syntax = "internal fix hidden journal id for {0} {1}")
+    @MCRCommand(help = "goes through the hierarchy and rewrites the hidden journal id of every object",
+                syntax = "internal fix hidden journal id for {0} {1}")
     public static List<String> fixHiddenJournalId(String objectId, String hiddenJournalID)
             throws MCRActiveLinkException, MCRAccessException {
         MCRObjectID mcrId = MCRObjectID.getInstance(objectId);
@@ -352,12 +373,14 @@ public class ObjectTools {
         return commandList;
     }
 
-    @MCRCommand(help = "restores the mets.xml in the given derivate with the version selected", syntax = "restore mets.xml of {0} to {1}")
+    @MCRCommand(help = "restores the mets.xml in the given derivate with the version selected",
+                syntax = "restore mets.xml of {0} to {1}")
     public static void restoreMets(String derivateId, int version) throws IOException {
         MetsVersionStore.restore(MCRObjectID.getInstance(derivateId), version);
     }
 
-    @MCRCommand(help = "list all the versions of the mets store for a given derivate", syntax = "list mets.xml revisions of {0}")
+    @MCRCommand(help = "list all the versions of the mets store for a given derivate",
+                syntax = "list mets.xml revisions of {0}")
     public static void listMetsRevisions(String derivateId) throws IOException {
         StringBuilder msg = new StringBuilder("Revisions:");
         MetsVersionStore.list(MCRObjectID.getInstance(derivateId)).forEach(r -> msg.append("\n").append(r));
@@ -386,7 +409,7 @@ public class ObjectTools {
     }
 
     public static List<MCRObject> getAncestors(MCRObject mcrObject) {
-        List<MCRObject> ancestorList = new ArrayList<MCRObject>();
+        List<MCRObject> ancestorList = new ArrayList<>();
         while (mcrObject.hasParent()) {
             MCRObjectID parentID = mcrObject.getStructure().getParentID();
             MCRObject parent = MCRMetadataManager.retrieveMCRObject(parentID);
