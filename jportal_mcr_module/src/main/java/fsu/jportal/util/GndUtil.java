@@ -1,5 +1,15 @@
 package fsu.jportal.util;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import fsu.archiv.mycore.sru.GBVKeywordStore;
 import fsu.archiv.mycore.sru.SRUQueryParser;
 import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
@@ -26,16 +36,6 @@ import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.sru.SRUConnector;
 import org.mycore.sru.SRUConnectorFactory;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 public class GndUtil {
 
     /**
@@ -47,7 +47,7 @@ public class GndUtil {
      * @throws SolrServerException if a solr error occur
      */
     public static SolrDocument getMCRObject(String gndId) throws SolrServerException, IOException {
-        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrClient solrClient = MCRSolrClientFactory.getSolrMainClient();
         ModifiableSolrParams p = new ModifiableSolrParams();
         p.set("q", "id.gnd:" + gndId);
         p.set("rows", 1);
@@ -62,8 +62,8 @@ public class GndUtil {
     /**
      * Returns the gnd identifier of a mycore object.
      *
-     * @param mcrObject
-     * @return
+     * @param mcrObject the mycore object
+     * @return optional string of the gnd identifier
      */
     public static Optional<String> getGND(MCRObject mcrObject) {
         return StreamSupport.stream(mcrObject.getMetadata().spliterator(), false)
@@ -215,7 +215,7 @@ public class GndUtil {
     }
 
     private static XPathExpression<Element> getPicaRecordXPathExpression() {
-        ArrayList<Namespace> namespaces = new ArrayList<Namespace>();
+        ArrayList<Namespace> namespaces = new ArrayList<>();
         namespaces.add(Namespace.getNamespace("zs", "http://www.loc.gov/zing/srw/"));
         namespaces.add(Namespace.getNamespace("pica", "info:srw/schema/5/picaXML-v1.0"));
         return XPathFactory.instance().compile("//pica:record", Filters.element(), null, namespaces);
@@ -244,15 +244,13 @@ public class GndUtil {
     private static Datafield parseDatafield(Element dfElem) {
         String tag = dfElem.getAttributeValue("tag");
         String occ = dfElem.getAttributeValue("occurrence");
-        Datafield df = new Datafield(tag, occ);
-        return df;
+        return new Datafield(tag, occ);
     }
 
     private static Subfield parseSubfield(Element sfElem) {
         String code = sfElem.getAttributeValue("code");
         String value = sfElem.getText();
-        Subfield sf = new Subfield(code, value);
-        return sf;
+        return new Subfield(code, value);
     }
 
 }

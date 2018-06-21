@@ -1,6 +1,6 @@
 package fsu.jportal.solr;
 
-import static org.mycore.solr.MCRSolrConstants.CONFIG_PREFIX;
+import static org.mycore.solr.MCRSolrConstants.SOLR_CONFIG_PREFIX;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -41,7 +41,7 @@ public class JPSolrFileStrategy implements MCRSolrFileStrategy {
     private final static List<String> IGNORE_XML_FILES = Arrays.asList("alto", "mets");
 
     static {
-        String acceptPattern = MCRConfiguration.instance().getString(CONFIG_PREFIX + "MimeTypeStrategy.Pattern");
+        String acceptPattern = MCRConfiguration.instance().getString(SOLR_CONFIG_PREFIX + "MimeTypeStrategy.Pattern");
         IGNORE_PATTERN = Pattern.compile(acceptPattern);
     }
 

@@ -203,8 +203,8 @@ public class Importer {
      * the index position for each level. The list starts with the root element
      * index. 
      * 
-     * @param fromDiv
-     * @param hierarchy
+     * @param fromDiv where to start
+     * @param hierarchy index hierarchy
      */
     private static void buildDivHierarchy(LogicalDiv fromDiv, List<Integer> hierarchy) {
         LogicalDiv parent = fromDiv.getParent();
@@ -301,7 +301,7 @@ public class Importer {
         String yearId;
         String yearQuery = "+parent:jportal_jpjournal_00000109 +date.published:" + year;
         try {
-            List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(), yearQuery);
+            List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrMainClient(), yearQuery);
             if (ids.isEmpty()) {
                 LOGGER.error("unable to find volume for year " + year);
                 return Lists.newArrayList();
@@ -419,7 +419,7 @@ public class Importer {
 
     @MCRCommand(syntax = "jvbUpload {0} {1} {2}", help = "uploads the files to a number. {target mycore object} {path to alto files} {path to img files}")
     public static void jvbUpload(String targetID, String altoPath, String imgPath)
-        throws IOException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws IOException, MCRPersistenceException, MCRAccessException {
         JPDerivateComponent derivate = new JPDerivateComponent();
         MCRMarkManager.instance().mark(derivate.getId(), MCRMarkManager.Operation.IMPORT);
         try (DirectoryStream<Path> altoStream = Files.newDirectoryStream(Paths.get(altoPath), "*.xml")) {

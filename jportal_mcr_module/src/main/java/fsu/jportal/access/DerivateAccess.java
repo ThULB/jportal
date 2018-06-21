@@ -26,7 +26,7 @@ public class DerivateAccess {
         if ("klostermann".equals(accessClassName)) {
             try {
                 String query = "+id:" + id + " +published:[NOW-1YEAR TO NOW]";
-                SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+                SolrClient solrClient = MCRSolrClientFactory.getSolrMainClient();
                 SolrDocument solrArticle = MCRSolrSearchUtils.first(solrClient, query);
                 if (solrArticle != null) {
                     return checkPerm(id, journalID);
@@ -66,4 +66,5 @@ public class DerivateAccess {
 
         return MCRAccessManager.checkPermission("default", permission);
     }
+
 }

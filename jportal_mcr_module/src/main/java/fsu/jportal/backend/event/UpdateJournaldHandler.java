@@ -68,7 +68,7 @@ public class UpdateJournaldHandler extends MCREventHandlerBase {
         @Override
         public void run() {
             try {
-                SolrClient client = MCRSolrClientFactory.getConcurrentSolrClient();
+                SolrClient client = MCRSolrClientFactory.getConcurrentSolrMainClient();
                 List<String> descendants = MCRSolrSearchUtils.listIDs(client, "journalID:" + journalId.toString());
                 descendants = descendants.stream()
                                          .filter(id -> !id.equals(journalId.toString()))

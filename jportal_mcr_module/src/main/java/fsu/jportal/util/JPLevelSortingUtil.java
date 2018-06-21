@@ -1,7 +1,24 @@
 package fsu.jportal.util;
 
-import fsu.jportal.backend.*;
+import java.io.IOException;
+import java.text.DateFormatSymbols;
+import java.time.temporal.ChronoField;
+import java.time.temporal.Temporal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent.StoreOption;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPObjectConfiguration;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
 import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.backend.sort.JPLevelSorting.Level;
 import fsu.jportal.backend.sort.JPMagicSorter;
@@ -14,19 +31,14 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.common.MCRMarkManager.Operation;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.index.MCRSolrIndexer;
 import org.mycore.solr.search.MCRSolrSearchUtils;
-
-import java.io.IOException;
-import java.text.DateFormatSymbols;
-import java.time.temporal.ChronoField;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAccessor;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 /**
  * Helper class to support level sorting on journals.
@@ -132,9 +144,8 @@ public abstract class JPLevelSortingUtil {
      * 
      * @param objectID the object to reapply the level sorting
      * @throws IOException journal configuration couldn't be loaded
-     * @throws SolrServerException the descendants couldn't be selected
      */
-    public static void reapply(MCRObjectID objectID) throws IOException, SolrServerException {
+    public static void reapply(MCRObjectID objectID) throws IOException {
         JPLevelSorting levelSorting = JPLevelSortingUtil.load(objectID);
         JPLevelSortingUtil.apply(objectID, levelSorting);
     }
@@ -145,13 +156,11 @@ public abstract class JPLevelSortingUtil {
      * 
      * @param objectID the object to apply the level sorting at
      * @param levelSorting the level sorting to apply
-     * 
-     * @throws SolrServerException the descendants couldn't be selected
      */
-    public static void apply(MCRObjectID objectID, JPLevelSorting levelSorting) throws SolrServerException {
+    public static void apply(MCRObjectID objectID, JPLevelSorting levelSorting) {
         LOGGER.info("apply level sorting for journal " + objectID + "...");
         // mark all descendants as IMPORTED
-        List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrClient(),
+        List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrMainClient(),
             "journalID:" + objectID.toString());
         descendantAndSelfIds.forEach(childId -> {
             MCRMarkManager.instance().mark(MCRObjectID.getInstance(childId), Operation.IMPORT);

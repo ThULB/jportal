@@ -47,15 +47,13 @@ public class RedundancyCommands{
     public static List<String> cleanUp(String type) {
         // get all objects of specific type where doubletOf is not empty
         SolrDocumentList results = getDoubletObjsOfType(type);
-        ArrayList<String> commandList = new ArrayList<String>();
-        
+        ArrayList<String> commandList = new ArrayList<>();
+
         for (SolrDocument hit : results) {
             String doublet = (String) hit.getFieldValue("id");
             String doubletOf = (String) hit.getFieldValue("doubletOf");
             if (!doublet.equals(doubletOf)) {
-                StringBuffer replaceCommand = new StringBuffer("internal replace links and remove ");
-                replaceCommand.append(doublet).append(" ").append(doubletOf);
-                commandList.add(replaceCommand.toString());
+                commandList.add("internal replace links and remove " + doublet + " " + doubletOf);
             }
         }
         
@@ -65,12 +63,9 @@ public class RedundancyCommands{
     public static SolrDocumentList getDoubletObjsOfType(String type) {
         try {
             SolrQuery q = new SolrQuery("+doubletOf:* +objectType:"+type);
-            SolrDocumentList solrResultList = MCRSolrClientFactory.getSolrClient().query(q).getResults();
-            return solrResultList;
-        } catch (SolrServerException e) {
+            return MCRSolrClientFactory.getSolrMainClient().query(q).getResults();
+        } catch (SolrServerException | IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -78,8 +73,8 @@ public class RedundancyCommands{
     }
 
     @MCRCommand(help = "internal command for replacing links and removing the doublet", syntax = "internal replace links and remove {0} {1}")
-    public static List<String> replaceAndRemove(String doublet, String doubletOf) throws Exception {
-        boolean validDoubletOf = true;
+    public static List<String> replaceAndRemove(String doublet, String doubletOf) {
+        boolean validDoubletOf;
         try {
             validDoubletOf = MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf));
         } catch (Exception exc) {
@@ -89,7 +84,7 @@ public class RedundancyCommands{
             throw new MCRException("'" + doublet + "' is defined as a doublet of the nonexistent object or invalid identifier '"
                 + doubletOf + "'!" + " The doublet is not removed!");
         }
-        ArrayList<String> commandList = new ArrayList<String>();
+        ArrayList<String> commandList = new ArrayList<>();
         Collection<String> list = MCRLinkTableManager.instance().getSourceOf(doublet, "reference");
         for (String source : list) {
             if (!MCRMetadataManager.exists(MCRObjectID.getInstance(source))) {
@@ -99,16 +94,13 @@ public class RedundancyCommands{
                 continue;
             }
             // add replace command
-            StringBuffer command = new StringBuffer("internal replace links ");
-            command.append(source).append(" ");
-            command.append(doublet).append(" ");
-            command.append(doubletOf);
-            commandList.add(command.toString());
+            String command = "internal replace links " + source + " " + doublet + " " + doubletOf;
+            commandList.add(command);
             commandList.add("fix title of " + source + " for link " + doubletOf);
 
         }
         // add delete command
-        commandList.add(new StringBuffer("delete object ").append(doublet).toString());
+        commandList.add("delete object " + doublet);
         return commandList;
     }
 
@@ -128,7 +120,7 @@ public class RedundancyCommands{
         MCRObject sourceMCRObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(sourceId));
 
         // ArrayList for equal elements
-        ArrayList<Element> equalElements = new ArrayList<Element>();
+        ArrayList<Element> equalElements = new ArrayList<>();
 
         Namespace ns = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
         MCRAttributeValueFilter oldLinkFilter = new MCRAttributeValueFilter("href", ns, oldLink);

@@ -1,9 +1,15 @@
 package fsu.jportal.util;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
@@ -12,18 +18,16 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRXMLFunctions;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
-
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Collection of util methods for {@link MCRMetaDerivateLink}.
@@ -81,8 +85,10 @@ public abstract class DerivateLinkUtil {
         if (derLinks == null) {
             return Collections.emptyList();
         }
-        return StreamSupport.stream(derLinks.spliterator(), false).map(c -> (MCRMetaDerivateLink) c)
-            .map(MCRMetaDerivateLink::getXLinkHref).collect(Collectors.toList());
+        return StreamSupport.stream(derLinks.spliterator(), false)
+                            .map(c -> (MCRMetaDerivateLink) c)
+                            .map(MCRMetaDerivateLink::getXLinkHref)
+                            .collect(Collectors.toList());
     }
 
     /**
@@ -92,8 +98,10 @@ public abstract class DerivateLinkUtil {
      * @return list of linked derivate id's
      */
     public static List<String> getLinkedDerivates(MCRObject mcrObj) {
-        return getLinks(mcrObj).stream().map(link -> link.substring(0, link.indexOf('/'))).distinct()
-            .collect(Collectors.toList());
+        return getLinks(mcrObj).stream()
+                               .map(link -> link.substring(0, link.indexOf('/')))
+                               .distinct()
+                               .collect(Collectors.toList());
     }
 
     public static void setLinks(List<MCRObjectID> idList, MCRPath pathOfImage) throws MCRAccessException {
@@ -102,17 +110,11 @@ public abstract class DerivateLinkUtil {
 
     public static void setLinks(List<MCRObjectID> idList, String pathOfImage) throws MCRAccessException {
         for (MCRObjectID id : idList) {
-            try {
-                setLink(id, pathOfImage);
-            } catch (MCRActiveLinkException exc) {
-                LOGGER.error("unable to set derivate link of object " + id + " and file " + pathOfImage, exc);
-            }
+            setLink(id, pathOfImage);
         }
     }
 
-    public static void setLink(MCRObjectID mcrObjId, String pathOfImage)
-        throws MCRActiveLinkException, MCRAccessException {
-        // create derivateLinks
+    public static void setLink(MCRObjectID mcrObjId, String pathOfImage) throws MCRAccessException {
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
         if (!MCRAccessManager.checkPermission(mcrObjId, "writedb")) {
             return;
@@ -128,15 +130,16 @@ public abstract class DerivateLinkUtil {
      * @throws MCRPersistenceException cannot set link due I/O error
      * @throws MCRAccessException if the write permission is missing
      */
-    public static void setLink(MCRObject mcrObj, String pathOfImage) throws MCRPersistenceException, MCRAccessException {
+    public static void setLink(MCRObject mcrObj, String pathOfImage)
+            throws MCRPersistenceException, MCRAccessException {
         /*
          * This is for debugging purposes only. There is a bug where mets.xml derivate links are randomly
          * added to objects. Check if the path ends with mets.xml and then throw an exception.
          */
         if (pathOfImage.endsWith("mets.xml")) {
             // THIS SHOULD NEVER HAPPEN!
-            throw new MCRException("try to add a mets.xml derivate link to " + mcrObj.getId() +
-                    " which is not supposed to happen!");
+            throw new MCRException(
+                    "try to add a mets.xml derivate link to " + mcrObj.getId() + " which is not supposed to happen!");
         }
 
         // set the link
@@ -162,16 +165,14 @@ public abstract class DerivateLinkUtil {
         }
     }
 
-    public static void removeLink(MCRObjectID mcrObjId, String pathOfImage)
-        throws MCRActiveLinkException, MCRAccessException {
+    public static void removeLink(MCRObjectID mcrObjId, String pathOfImage) throws MCRAccessException {
         // get link
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
         MCRMetaDerivateLink linkToRemove = getLink(derLinks, pathOfImage);
         if (linkToRemove == null) {
-            LOGGER.warn(
-                "Couldn't remove link of " + mcrObjId + " with image " + pathOfImage + ". The link couldn't be found.",
-                new NullPointerException());
+            LOGGER.warn("Couldn't remove link of " + mcrObjId + " with image " + pathOfImage
+                    + ". The link couldn't be found.", new NullPointerException());
             return;
         }
         // remove link
@@ -183,8 +184,7 @@ public abstract class DerivateLinkUtil {
         MCRMetadataManager.update(mcrObj);
     }
 
-    public static void removeLinks(MCRObjectID mcrObjId, MCRObjectID derivateId)
-        throws MCRActiveLinkException, MCRAccessException {
+    public static void removeLinks(MCRObjectID mcrObjId, MCRObjectID derivateId) throws MCRAccessException {
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
         List<MCRMetaDerivateLink> linkList = getLinks(derLinks, derivateId.toString());
@@ -202,32 +202,24 @@ public abstract class DerivateLinkUtil {
      * method uses solr! It cannot be guaranteed that all links are found!
      *
      * @param der where to delete the derivate links
-     * @throws SolrServerException solr exception
-     * @throws MCRAccessException if the permission is missing
      */
-    public static void deleteDerivateLinks(MCRDerivate der)
-        throws SolrServerException, MCRAccessException {
-        MCRSolrSearchUtils
-                .listIDs(MCRSolrClientFactory.getSolrClient(), "derivateLink:" + der.getId() + "*")
-                .stream()
-                .map(MCRObjectID::getInstance)
-                .forEach(id -> {
-                    try {
-                        DerivateLinkUtil.removeLinks(id, der.getId());
-                    } catch (Exception exc) {
-                        LOGGER.error("unable to delete derivate link of object " + id +
-                                " and derivate " + der.getId(), exc);
-                    }
-                });
+    public static void deleteDerivateLinks(MCRDerivate der) {
+        MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrMainClient(), "derivateLink:" + der.getId() + "*")
+                          .stream()
+                          .map(MCRObjectID::getInstance)
+                          .forEach(id -> {
+                              try {
+                                  DerivateLinkUtil.removeLinks(id, der.getId());
+                              } catch (Exception exc) {
+                                  LOGGER.error("unable to delete derivate link of object " + id + " and derivate " + der
+                                          .getId(), exc);
+                              }
+                          });
     }
 
     public static void deleteFileLinks(List<MCRObjectID> idList, MCRPath pathOfImg) throws MCRAccessException {
         for (MCRObjectID id : idList) {
-            try {
-                removeLink(id, pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
-            } catch (MCRActiveLinkException exc) {
-                LOGGER.error("unable to delete derivate link of object " + id + " and file " + pathOfImg, exc);
-            }
+            removeLink(id, pathOfImg.getOwner() + pathOfImg.getOwnerRelativePath());
         }
     }
 
@@ -240,7 +232,7 @@ public abstract class DerivateLinkUtil {
         for (MCRObjectID id : idList) {
             try {
                 DerivateLinkUtil.removeLink(id, pathOfImg);
-            } catch (MCRException | MCRActiveLinkException exc) {
+            } catch (MCRException exc) {
                 LOGGER.error("unable to delete derivate link of object " + id + " and file " + pathOfImg, exc);
             }
         }
@@ -251,7 +243,7 @@ public abstract class DerivateLinkUtil {
     }
 
     public static List<MCRObjectID> getLinks(String pathOfImg) {
-        SolrClient solrClient = MCRSolrClientFactory.getSolrClient();
+        SolrClient solrClient = MCRSolrClientFactory.getSolrMainClient();
         ModifiableSolrParams params = new ModifiableSolrParams();
         params.add("q", "derivateLink:\"" + pathOfImg + "\"");
         params.set("rows", 100);
