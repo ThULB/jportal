@@ -8,6 +8,8 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrUtils;
 import org.mycore.solr.index.MCRSolrIndexer;
 
 import java.util.ArrayList;
@@ -93,7 +95,7 @@ public class SolrOrderHandler extends MCREventHandlerBase {
             List<String> reindexList = ids.stream().filter(id -> {
                 return MCRMetadataManager.exists(id) && !mm.isMarkedForDeletion(id);
             }).map(MCRObjectID::toString).collect(Collectors.toList());
-            MCRSolrIndexer.rebuildMetadataIndex(reindexList);
+            MCRSolrIndexer.rebuildMetadataIndex(reindexList, MCRSolrClientFactory.getMainConcurrentSolrClient());
         }
 
     }

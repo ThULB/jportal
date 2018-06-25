@@ -237,7 +237,7 @@ public class MigratingCMDs {
                 syntax = "fix children of journal {0}")
     public static List<String> fixJournalChildren(String journalId) throws SolrServerException {
         String query = "+journalID:" + journalId + " +objectType:jpvolume";
-        SolrClient solrClient = MCRSolrClientFactory.getSolrMainClient();
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         return MCRSolrSearchUtils.listIDs(solrClient, query)
                                  .stream()
                                  .map(id -> "fix children of volume " + id)
@@ -278,7 +278,7 @@ public class MigratingCMDs {
     @MCRCommand(help = "analyzes the structure of all journals and adds level sorting",
                 syntax = "add level sorting")
     public static List<String> addLevelSorting() throws Exception {
-        List<String> journalIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrMainClient(),
+        List<String> journalIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getMainSolrClient(),
                 "objectType:jpjournal");
         return journalIds.stream().map(id -> "_add level sorting for journal " + id).collect(Collectors.toList());
     }
@@ -299,7 +299,7 @@ public class MigratingCMDs {
     @MCRCommand(help = "apply level sorting on all journals",
                 syntax = "apply level sorting")
     public static List<String> applyLevelSorting() throws Exception {
-        List<String> journalIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrMainClient(),
+        List<String> journalIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getMainSolrClient(),
                 "objectType:jpjournal");
         return journalIds.stream().map(id -> "_apply level sorting for journal " + id).collect(Collectors.toList());
     }

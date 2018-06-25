@@ -20,11 +20,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
 import fsu.jportal.backend.JPComponent.StoreOption;
@@ -48,7 +46,6 @@ import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -78,7 +75,8 @@ public class Importer {
 
     static Logger LOGGER = LogManager.getLogger(Importer.class);
 
-    @MCRCommand(syntax = "importObj {0} {1}", help = "importObj webappURL id")
+    @MCRCommand(syntax = "importObj {0} {1}",
+                help = "importObj webappURL id")
     public static void importObj(String urlStr, String id) {
         HttpImportSource httpImportSource = new HttpImportSource(urlStr, id);
         ImportSink localSystem = new LocalSystemSink(urlStr);
@@ -87,12 +85,13 @@ public class Importer {
 
     /**
      * Does a mets.xml import.
-     * 
+     *
      * @param derivateId the derivate requires a mets.xml inside
      * @param importerClassName the mets importer class
      * @throws Exception something went wrong
      */
-    @MCRCommand(syntax = "importMets {0} {1}", help = "importMets {derivateId} {fully qualified classname of the importer}")
+    @MCRCommand(syntax = "importMets {0} {1}",
+                help = "importMets {derivateId} {fully qualified classname of the importer}")
     public static void importMets(String derivateId, String importerClassName) throws Exception {
         MetsImportUtils.checkPermission(derivateId);
 
@@ -107,7 +106,8 @@ public class Importer {
         MetsImportUtils.importMets(derivateId, mets, importer);
     }
 
-    @MCRCommand(syntax = "fixLLZ {0} {1}", help = "fixLLZ {mycore object id} {path to the mets with the coordination}")
+    @MCRCommand(syntax = "fixLLZ {0} {1}",
+                help = "fixLLZ {mycore object id} {path to the mets with the coordination}")
     public static void fixLLZ(String targetID, String pathToCoordsMets) throws Exception {
         // get object
         MCRObjectID objId = MCRObjectID.getInstance(targetID);
@@ -202,7 +202,7 @@ public class Importer {
      * Builds the hierarchy for the given fromDiv. The hierarchy list contains
      * the index position for each level. The list starts with the root element
      * index. 
-     * 
+     *
      * @param fromDiv where to start
      * @param hierarchy index hierarchy
      */
@@ -220,18 +220,6 @@ public class Importer {
             div = div.getChildren().get(indexOf);
         }
         return div;
-    }
-
-    /**
-     * https://bugs.openjdk.java.net/browse/JDK-8050820
-     * 
-     * TODO: remove in jdk 9
-     * 
-     * @param optional the optional to convert to a stream
-     * @return stream of the optional
-     */
-    public static <T> Stream<T> optionalToStream(Optional<T> optional) {
-        return optional.map(Stream::of).orElse(Stream.empty());
     }
 
     private static String getDayTitle(Integer year, Integer month, Integer dayOfMonth, Integer nr) {
@@ -258,8 +246,9 @@ public class Importer {
 
     }
 
-    @MCRCommand(syntax = "jvbEasyImport {0} {1} {2}", help = "Imports a whole jvb year more easy." + " {year} (1890)"
-        + " {goobiId} (25636)" + " {mntPath} (where the goobi id will be mounted locally)")
+    @MCRCommand(syntax = "jvbEasyImport {0} {1} {2}",
+                help = "Imports a whole jvb year more easy." + " {year} (1890)" + " {goobiId} (25636)"
+                        + " {mntPath} (where the goobi id will be mounted locally)")
     public static List<String> jvbEasyImport(String year, String goobiId, String mntPath) throws Exception {
         // unmount always
         try {
@@ -272,7 +261,7 @@ public class Importer {
         // mount
         try {
             String mntCommand = "sshfs root@141.35.20.232:/opt/digiverso/goobi/metadata/" + goobiId + " " + mntPath
-                + " -o allow_root";
+                    + " -o allow_root";
             Process mount = Runtime.getRuntime().exec(mntCommand);
             if (!mount.waitFor(1, TimeUnit.MINUTES)) {
                 LOGGER.error("timeout while mount '" + mntCommand + "'");
@@ -287,7 +276,7 @@ public class Importer {
         Path imagesPath = Paths.get(mntPath).resolve("images");
         if (!Files.exists(imagesPath)) {
             throw new FileNotFoundException(
-                "there should be an images folder " + imagesPath.toAbsolutePath().toString());
+                    "there should be an images folder " + imagesPath.toAbsolutePath().toString());
         }
         Path ocrPath = imagesPath.resolve("OCRausInnsbruck/" + year);
         if (!Files.exists(ocrPath)) {
@@ -301,7 +290,7 @@ public class Importer {
         String yearId;
         String yearQuery = "+parent:jportal_jpjournal_00000109 +date.published:" + year;
         try {
-            List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrMainClient(), yearQuery);
+            List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getMainSolrClient(), yearQuery);
             if (ids.isEmpty()) {
                 LOGGER.error("unable to find volume for year " + year);
                 return Lists.newArrayList();
@@ -347,17 +336,17 @@ public class Importer {
         }
         // fire import command
         String jvbImport = "jvbImport " + yearId + " " + ocrPath.toAbsolutePath().toString() + " mcraltok "
-            + tifPath.toAbsolutePath().toString();
+                + tifPath.toAbsolutePath().toString();
         return Lists.newArrayList(jvbImport);
     }
 
-    @MCRCommand(syntax = "jvbImport {0} {1} {2} {3}", help = "Imports a whole jvb year."
-        + " {target mycore object} (jportal_jpvolume_00134247)"
-        + " {base path to the JVB_* folders (/mcr/jp/tmp/mnt/images/OCRausInnsbruck/1890)}"
-        + " {ocr folder (mcralto|mcraltok)}"
-        + " {image path (/mcr/jp/tmp/mnt/images/Jenaer_Volksblatt_1890_167758667_JVB_tif)}")
+    @MCRCommand(syntax = "jvbImport {0} {1} {2} {3}",
+                help = "Imports a whole jvb year." + " {target mycore object} (jportal_jpvolume_00134247)"
+                        + " {base path to the JVB_* folders (/mcr/jp/tmp/mnt/images/OCRausInnsbruck/1890)}"
+                        + " {ocr folder (mcralto|mcraltok)}"
+                        + " {image path (/mcr/jp/tmp/mnt/images/Jenaer_Volksblatt_1890_167758667_JVB_tif)}")
     public static List<String> jvbImport(String targetID, String ocrPath, String ocrFolder, String imgPath)
-        throws IOException {
+            throws IOException {
         List<String> commands = new ArrayList<>();
 
         Path base = Paths.get(ocrPath);
@@ -374,8 +363,8 @@ public class Importer {
                 volume.store();
 
                 String objId = volume.getObject().getId().toString();
-                String command = "jvbImportMonth " + objId + " " + monthIndex + " " + ocrPath + " " + ocrFolder + " "
-                    + imgPath;
+                String command =
+                        "jvbImportMonth " + objId + " " + monthIndex + " " + ocrPath + " " + ocrFolder + " " + imgPath;
                 commands.add(command);
             } catch (Exception exc) {
                 LOGGER.error("unable to import jvb month " + title, exc);
@@ -384,9 +373,10 @@ public class Importer {
         return commands;
     }
 
-    @MCRCommand(syntax = "jvbImportMonth {0} {1} {2} {3} {4}", help = "Imports the nr of a single month. {target mycore object} {month} {path to the innsbruck folder} {ocr folder} {image path}")
+    @MCRCommand(syntax = "jvbImportMonth {0} {1} {2} {3} {4}",
+                help = "Imports the nr of a single month. {target mycore object} {month} {path to the innsbruck folder} {ocr folder} {image path}")
     public static List<String> jvbImportMonth(String targetID, String month, String ocrPath, String ocrFolder,
-        String imgPath) throws IOException {
+            String imgPath) throws IOException {
         List<String> commands = new ArrayList<>();
         Path base = Paths.get(ocrPath);
         getNrs(base).stream().map(Path::getFileName).map(Path::toString).forEach(monthFolder -> {
@@ -401,7 +391,7 @@ public class Importer {
                 return;
             }
             String title = getDayTitle(Integer.valueOf(dyear), Integer.valueOf(dmonth), Integer.valueOf(dday),
-                Integer.valueOf(nr));
+                    Integer.valueOf(nr));
             try {
                 JPVolume day = new JPVolume();
                 day.setTitle(title);
@@ -417,14 +407,15 @@ public class Importer {
         return commands;
     }
 
-    @MCRCommand(syntax = "jvbUpload {0} {1} {2}", help = "uploads the files to a number. {target mycore object} {path to alto files} {path to img files}")
+    @MCRCommand(syntax = "jvbUpload {0} {1} {2}",
+                help = "uploads the files to a number. {target mycore object} {path to alto files} {path to img files}")
     public static void jvbUpload(String targetID, String altoPath, String imgPath)
-        throws IOException, MCRPersistenceException, MCRAccessException {
+            throws IOException, MCRPersistenceException, MCRAccessException {
         JPDerivateComponent derivate = new JPDerivateComponent();
         MCRMarkManager.instance().mark(derivate.getId(), MCRMarkManager.Operation.IMPORT);
         try (DirectoryStream<Path> altoStream = Files.newDirectoryStream(Paths.get(altoPath), "*.xml")) {
             String mainDoc = null;
-            for(Path alto : altoStream) {
+            for (Path alto : altoStream) {
                 String altoFileName = alto.getFileName().toString();
                 String imgFileName = altoFileName.replaceAll(".xml", ".tif");
                 if (mainDoc == null) {

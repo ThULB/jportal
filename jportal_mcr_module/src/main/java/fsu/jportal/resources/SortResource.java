@@ -1,5 +1,24 @@
 package fsu.jportal.resources;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,21 +36,12 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
+import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.index.MCRSolrIndexer;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Resource to handle jportal sorting. 
- * 
+ *
  * The following endpoints are available:
  * <ul>
  * <li>the auto or manual sorting of objects
@@ -48,7 +58,7 @@ import java.util.stream.Collectors;
  *  </ul>
  * </li>
  * </ul>
- * 
+ *
  * @author Matthias Eichner
  */
 @Path("sort")
@@ -56,7 +66,7 @@ public class SortResource {
 
     /**
      * Sets a new sort by for the given object.
-     * 
+     *
      * @param id the object identifier
      * @param sorterClass the new sorter class 
      * @param orderString the order ascending|descending
@@ -64,7 +74,7 @@ public class SortResource {
     @POST
     @Path("sortby/{id}")
     public void sortByUpdate(@PathParam("id") String id, @QueryParam("sorter") String sorterClass,
-        @QueryParam("order") String orderString) {
+            @QueryParam("order") String orderString) {
         JPContainer jpContainer = get(id);
         Order order;
         try {
@@ -77,16 +87,15 @@ public class SortResource {
             jpContainer.setSortBy(sorter, order);
             jpContainer.store(StoreOption.metadata);
         } catch (Exception exc) {
-            throw new WebApplicationException(exc,
-                Response.status(Status.INTERNAL_SERVER_ERROR)
-                        .entity("Unable to set sorter " + sorterClass + " for " + id)
-                        .build());
+            throw new WebApplicationException(exc, Response.status(Status.INTERNAL_SERVER_ERROR)
+                                                           .entity("Unable to set sorter " + sorterClass + " for " + id)
+                                                           .build());
         }
     }
 
     /**
      * Removes the sort by for the given object
-     * 
+     *
      * @param id the object identifier
      */
     @DELETE
@@ -101,7 +110,7 @@ public class SortResource {
             jpContainer.store(StoreOption.metadata);
         } catch (Exception exc) {
             throw new WebApplicationException(exc,
-                Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to remove sorter for " + id).build());
+                    Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to remove sorter for " + id).build());
         }
     }
 
@@ -109,12 +118,12 @@ public class SortResource {
      * Does a resorting of the given object. This also removes the
      * sortby element of the container (because manual sort have
      * to be applied for resorting - same as {@link #sortByDelete(String)}).
-     * 
+     *
      * @param id the object identifier
      * @param data the json array containing all children on a specific position
      * <pre>
      * {@code
-     *   
+     *
      * }
      * </pre>
      */
@@ -136,14 +145,15 @@ public class SortResource {
             throwInternalServerError(exc, "Unable to store object " + id + ".");
         }
         MCRSolrIndexer.rebuildMetadataIndex(
-                container.getChildren().stream().map(MCRObjectID::toString).collect(Collectors.toList()));
+                container.getChildren().stream().map(MCRObjectID::toString).collect(Collectors.toList()),
+                MCRSolrClientFactory.getMainConcurrentSolrClient());
     }
 
     /**
      * Resorts the given container with an array of children. The json array
      * must have the same size as the current children of the container.
      * And each object in the array has to be already a child of the container.
-     * 
+     *
      * @param container the container to resort
      * @param jsonArray array of children
      */
@@ -152,8 +162,9 @@ public class SortResource {
 
         // check size
         if (jsonArray.size() != mcrChildren.size()) {
-            throwUnprocessableEntity("The json array contains " + jsonArray.size() + " children but the object has "
-                + mcrChildren.size() + ".");
+            throwUnprocessableEntity(
+                    "The json array contains " + jsonArray.size() + " children but the object has " + mcrChildren.size()
+                            + ".");
         }
         // check each object
         List<MCRObjectID> newChildren = new ArrayList<>();
@@ -192,7 +203,7 @@ public class SortResource {
      * sorting structure is auto generated. The journal structure
      * was analyzed and a good sample starting point is returned.
      * </p>
-     * 
+     *
      * <pre>{@code
      * {
      *   "isNew": true|false,
@@ -202,7 +213,7 @@ public class SortResource {
      *   ]
      * }
      * </pre>
-     * 
+     *
      * @return the level sorting as json array
      */
     @GET
@@ -242,7 +253,7 @@ public class SortResource {
             throwInternalServerError(exc, "Unable to store level sorting for " + id + ". One sorter is invalid.");
         } catch (IOException exc) {
             throwInternalServerError(exc,
-                "Unable to store level sorting for " + id + ". Couldn't store on filesystem.");
+                    "Unable to store level sorting for " + id + ". Couldn't store on filesystem.");
         } catch (Exception exc) {
             throwInternalServerError(exc, "Unable to store level sorting for " + id + ".");
         }
@@ -261,9 +272,9 @@ public class SortResource {
         MCRJerseyUtil.checkPermission(mcrId, MCRAccessManager.PERMISSION_WRITE);
         // orElseThrow -> https://bugs.openjdk.java.net/browse/JDK-8054569
         Optional<JPContainer> container = JPComponentUtil.getContainer(mcrId);
-        if(!container.isPresent()) {
+        if (!container.isPresent()) {
             throw new WebApplicationException(new MCRException("Invalid object " + id + ". It is not a JPContainer."),
-                Status.BAD_REQUEST);
+                    Status.BAD_REQUEST);
         }
         return container.get();
     }

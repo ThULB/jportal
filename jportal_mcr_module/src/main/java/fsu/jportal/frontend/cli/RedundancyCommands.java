@@ -63,7 +63,7 @@ public class RedundancyCommands{
     public static SolrDocumentList getDoubletObjsOfType(String type) {
         try {
             SolrQuery q = new SolrQuery("+doubletOf:* +objectType:"+type);
-            return MCRSolrClientFactory.getSolrMainClient().query(q).getResults();
+            return MCRSolrClientFactory.getMainSolrClient().query(q).getResults();
         } catch (SolrServerException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

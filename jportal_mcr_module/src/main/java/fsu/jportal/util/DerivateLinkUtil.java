@@ -204,7 +204,7 @@ public abstract class DerivateLinkUtil {
      * @param der where to delete the derivate links
      */
     public static void deleteDerivateLinks(MCRDerivate der) {
-        MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrMainClient(), "derivateLink:" + der.getId() + "*")
+        MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getMainSolrClient(), "derivateLink:" + der.getId() + "*")
                           .stream()
                           .map(MCRObjectID::getInstance)
                           .forEach(id -> {
@@ -243,7 +243,7 @@ public abstract class DerivateLinkUtil {
     }
 
     public static List<MCRObjectID> getLinks(String pathOfImg) {
-        SolrClient solrClient = MCRSolrClientFactory.getSolrMainClient();
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();
         params.add("q", "derivateLink:\"" + pathOfImg + "\"");
         params.set("rows", 100);

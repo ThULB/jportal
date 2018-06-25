@@ -47,7 +47,7 @@ public class GndUtil {
      * @throws SolrServerException if a solr error occur
      */
     public static SolrDocument getMCRObject(String gndId) throws SolrServerException, IOException {
-        SolrClient solrClient = MCRSolrClientFactory.getSolrMainClient();
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         ModifiableSolrParams p = new ModifiableSolrParams();
         p.set("q", "id.gnd:" + gndId);
         p.set("rows", 1);

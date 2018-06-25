@@ -68,12 +68,12 @@ public class UpdateJournaldHandler extends MCREventHandlerBase {
         @Override
         public void run() {
             try {
-                SolrClient client = MCRSolrClientFactory.getConcurrentSolrMainClient();
+                SolrClient client = MCRSolrClientFactory.getMainConcurrentSolrClient();
                 List<String> descendants = MCRSolrSearchUtils.listIDs(client, "journalID:" + journalId.toString());
                 descendants = descendants.stream()
                                          .filter(id -> !id.equals(journalId.toString()))
                                          .collect(Collectors.toList());
-                MCRSolrIndexer.rebuildMetadataIndex(descendants);
+                MCRSolrIndexer.rebuildMetadataIndex(descendants, client);
             } catch (Exception exc) {
                 LOGGER.error("Unable to update descedants for " + journalId.toString(), exc);
             }

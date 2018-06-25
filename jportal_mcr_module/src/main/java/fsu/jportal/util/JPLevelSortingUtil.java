@@ -27,7 +27,7 @@ import fsu.jportal.backend.sort.JPSorter;
 import fsu.jportal.backend.sort.JPSorter.Order;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.SolrClient;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.common.MCRMarkManager.Operation;
@@ -42,7 +42,7 @@ import org.mycore.solr.search.MCRSolrSearchUtils;
 
 /**
  * Helper class to support level sorting on journals.
- * 
+ *
  * @author Matthias Eichner
  */
 public abstract class JPLevelSortingUtil {
@@ -53,7 +53,7 @@ public abstract class JPLevelSortingUtil {
 
     /**
      * Loads the level sorting of the given journal id.
-     * 
+     *
      * @param objectID the journal identifier
      * @return a level sorting object
      * @throws IOException journal configuration couldn't be loaded
@@ -68,17 +68,24 @@ public abstract class JPLevelSortingUtil {
         })).forEach((level, value) -> {
             // level
             // name
-            String name = value.stream().filter(e -> {
-                return e.getKey().endsWith(".name");
-            }).map(Entry::getValue).findAny().orElse("unknown");
+            String name = value.stream()
+                               .filter(e -> e.getKey().endsWith(".name"))
+                               .map(Entry::getValue)
+                               .findAny()
+                               .orElse("unknown");
             // sorter
-            String sorter = value.stream().filter(e -> {
-                return e.getKey().endsWith(".sorter");
-            }).map(Entry::getValue).findAny().orElse(null);
+            String sorter = value.stream()
+                                 .filter(e -> e.getKey().endsWith(".sorter"))
+                                 .map(Entry::getValue)
+                                 .findAny()
+                                 .orElse(null);
             // order
-            Order order = value.stream().filter(e -> {
-                return e.getKey().endsWith(".order");
-            }).map(Entry::getValue).map(Order::valueOf).findAny().orElse(null);
+            Order order = value.stream()
+                               .filter(e -> e.getKey().endsWith(".order"))
+                               .map(Entry::getValue)
+                               .map(Order::valueOf)
+                               .findAny()
+                               .orElse(null);
             Unthrow.wrapProc(() -> {
                 Class<? extends JPSorter> sorterClass = sorter != null ? getSorterClassByName(sorter) : null;
                 levelSorting.set(level, name, sorterClass, order);
@@ -89,7 +96,7 @@ public abstract class JPLevelSortingUtil {
 
     /**
      * Returns the sorter class by its fully qualified class name.
-     * 
+     *
      * @param className the fully qualified class name
      * @return the class
      * @throws ClassNotFoundException if the class could not be found
@@ -104,10 +111,10 @@ public abstract class JPLevelSortingUtil {
 
     /**
      * Saves the level sorting for the given journal on the file store.
-     * 
+     *
      * @param objectID the journal id
      * @param levelSorting the level sorting object to store
-     * 
+     *
      * @throws IOException loading or storing the journal configuration failed
      */
     public static void store(MCRObjectID objectID, JPLevelSorting levelSorting) throws IOException {
@@ -130,7 +137,7 @@ public abstract class JPLevelSortingUtil {
 
     /**
      * Returns the level of the object. The journal is level zero.
-     * 
+     *
      * @param object the object
      * @return level as number
      */
@@ -141,7 +148,7 @@ public abstract class JPLevelSortingUtil {
     /**
      * Reapply the level sorting for the given object. You can call this method if something
      * on your sorting implementation has changed.
-     * 
+     *
      * @param objectID the object to reapply the level sorting
      * @throws IOException journal configuration couldn't be loaded
      */
@@ -153,24 +160,23 @@ public abstract class JPLevelSortingUtil {
     /**
      * Runs through all descendants of the object and applies the sorters defined
      * in the given level sorting object.
-     * 
+     *
      * @param objectID the object to apply the level sorting at
      * @param levelSorting the level sorting to apply
      */
     public static void apply(MCRObjectID objectID, JPLevelSorting levelSorting) {
         LOGGER.info("apply level sorting for journal " + objectID + "...");
         // mark all descendants as IMPORTED
-        List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getSolrMainClient(),
-            "journalID:" + objectID.toString());
-        descendantAndSelfIds.forEach(childId -> {
-            MCRMarkManager.instance().mark(MCRObjectID.getInstance(childId), Operation.IMPORT);
-        });
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        List<String> descendantAndSelfIds = MCRSolrSearchUtils.listIDs(solrClient, "journalID:" + objectID.toString());
+        descendantAndSelfIds.forEach(
+                childId -> MCRMarkManager.instance().mark(MCRObjectID.getInstance(childId), Operation.IMPORT));
         try {
             apply(objectID, levelSorting, 0);
         } finally {
             // unmark all descendants
             descendantAndSelfIds.forEach(childId -> MCRMarkManager.instance().remove(MCRObjectID.getInstance(childId)));
-            MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds);
+            MCRSolrIndexer.rebuildMetadataIndex(descendantAndSelfIds, solrClient);
         }
     }
 
@@ -185,9 +191,10 @@ public abstract class JPLevelSortingUtil {
             if (children.isEmpty()) {
                 return;
             }
-            children.stream().map(MCRMetaLinkID::getXLinkHref).map(MCRObjectID::getInstance).forEach(id -> {
-                apply(id, levelSorting, levelPosition + 1);
-            });
+            children.stream()
+                    .map(MCRMetaLinkID::getXLinkHref)
+                    .map(MCRObjectID::getInstance)
+                    .forEach(id -> apply(id, levelSorting, levelPosition + 1));
         } catch (Exception exc) {
             throw new MCRException("Unable to apply level sorting for " + objectID.toString(), exc);
         }
@@ -195,7 +202,7 @@ public abstract class JPLevelSortingUtil {
 
     /**
      * Helper method to apply a sorter and an order to the given object.
-     * 
+     *
      * @param objectID the object
      * @param sorter the sorter
      * @param order the order
@@ -206,9 +213,8 @@ public abstract class JPLevelSortingUtil {
             try {
                 container.store(StoreOption.metadata);
             } catch (Exception exc) {
-                LOGGER.error(
-                    "Unable to store " + container.getObject().getId() + " while applying sorter " + sorter.getName(),
-                    exc);
+                LOGGER.error("Unable to store " + container.getObject().getId() + " while applying sorter "
+                        + sorter.getName(), exc);
             }
         });
     }
@@ -216,7 +222,7 @@ public abstract class JPLevelSortingUtil {
     /**
      * Analyzes the journal and returns a good starting point for the
      * level sorting structure.
-     * 
+     *
      * @param journalID the journal id
      */
     public static JPLevelSorting analyze(MCRObjectID journalID) {
@@ -264,9 +270,8 @@ public abstract class JPLevelSortingUtil {
             levelSorting.add("Jahrgang", JPPublishedSorter.class, Order.ASCENDING);
             return;
         }
-        if (Arrays.stream(DateFormatSymbols.getInstance(Locale.GERMAN).getMonths()).anyMatch(month -> {
-            return !month.isEmpty() && title.toLowerCase().contains(month.toLowerCase());
-        })) {
+        if (Arrays.stream(DateFormatSymbols.getInstance(Locale.GERMAN).getMonths())
+                  .anyMatch(month -> !month.isEmpty() && title.toLowerCase().contains(month.toLowerCase()))) {
             levelSorting.add("Monat", JPPublishedSorter.class, Order.ASCENDING);
             return;
         }

@@ -70,7 +70,7 @@ public class InitHandler extends MCRInitHandler {
 
     private void initCLI() {
         info("init CLI....");
-        StringBuffer cliClassName = new StringBuffer();
+        StringBuilder cliClassName = new StringBuilder();
         try {
             String packageName = "fsu.jportal.frontend.cli";
             Enumeration<URL> resources = getClass().getClassLoader().getResources(packageName.replace('.', '/'));
@@ -82,7 +82,10 @@ public class InitHandler extends MCRInitHandler {
                     String className = path.getFileName().toString();
                     if (!className.contains("$") && !Files.isDirectory(path)) {
                         info("found CLI: " + className);
-                        cliClassName.append("," + packageName + "." + className.replace(".class", ""));
+                        cliClassName.append(",")
+                                    .append(packageName)
+                                    .append(".")
+                                    .append(className.replace(".class", ""));
                     }
                 }
             }
@@ -127,13 +130,7 @@ public class InitHandler extends MCRInitHandler {
 
                 resource.close();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MCRException e) {
-            e.printStackTrace();
-        } catch (SAXParseException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
+        } catch (IOException | MCRException | URISyntaxException | SAXParseException e) {
             e.printStackTrace();
         }
     }
@@ -191,7 +188,7 @@ public class InitHandler extends MCRInitHandler {
         /**
          * Checks if the solr server has already indexed the classifications.
          *
-         * @return
+         * @return true if solr is initialized (if we could find documents)
          * @throws SolrServerException
          */
         private boolean isInitialized(SolrClient solrClient) throws IOException, SolrServerException {
@@ -205,12 +202,12 @@ public class InitHandler extends MCRInitHandler {
         /**
          * Rebuilds the classification index.
          *
-         * @param solrClient
+         * @param solrClient the classification client to index to
          */
         private void index(SolrClient solrClient) {
             Session session = MCRHIBConnection.instance().getSession();
             Transaction transaction = session.beginTransaction();
-            MCRSolrClassificationUtil.rebuildIndex();
+            MCRSolrClassificationUtil.rebuildIndex(solrClient);
             transaction.commit();
             session.close();
         }
