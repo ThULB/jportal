@@ -32,6 +32,7 @@
   <xsl:param name="object"/>
   <xsl:param name="layout"/>
   <xsl:param name="MCR.NameOfProject"/>
+  <xsl:param name="User-Agent"/>
 
   <!-- user -->
   <xsl:variable name="user" select="jpxml:getUserID()"/>
@@ -92,6 +93,7 @@
         <meta content="{$JP.Site.HTML.Head.Meta.Keywords.en}" lang="en" name="keywords"/>
         <meta content="MyCoRe" lang="de" name="generator"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
         <!-- add html stuff to head for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/head/top/*"/>
         <link href="{$WebApplicationBaseURL}webjars/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
@@ -139,8 +141,21 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/js/bootstrap.min.js"/>
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap3-dialog/1.35.4/dist/js/bootstrap-dialog.min.js"/>
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/mustachejs/0.8.2/mustache.js" />
-        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-util.js"/>
-        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js"/>
+
+        <xsl:choose>
+          <xsl:when test="contains($User-Agent, 'Trident')">
+            <!-- es5 scripts -->
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/es5/jp-util-es5.js"/>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/es5/jp-layout-controller-es5.js"/>
+            <!-- polyfill -->
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/polyfill/promise.min.js"/>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/polyfill/jp-polyfill.js"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-util.js"/>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js"/>
+          </xsl:otherwise>
+        </xsl:choose>
 
         <!-- Piwik -->
         <xsl:call-template name="jp.piwik"/>

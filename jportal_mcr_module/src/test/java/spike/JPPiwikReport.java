@@ -199,12 +199,12 @@ public class JPPiwikReport {
         }
 
         JPPiwikReport report = new JPPiwikReport(args[0]);
-        Collection<PiwikResult> results = report.getPiwikResults(2016);
-        results = JPPiwikReport
-                .filter(results, "+journalType:jportal_class_00000200\\:parliamentDocuments +objectType:jpjournal");
+        Collection<PiwikResult> results = report.getPiwikResults(2017);
+        /*results = JPPiwikReport
+                .filter(results, "+journalType:jportal_class_00000200\\:parliamentDocuments +objectType:jpjournal");*/
         JPPiwikReport.updateJournalLabels(results);
 
-        String header = "Zusammenfassung Thüringen Legislativ & Exekutiv 2016";
+        String header = "2017";
         String footer =
                 "\"Besuche: Wenn ein Besucher zum ersten Mal die Webseite besucht oder seit dem letzten Seitenaufruf"
                         + " mehr als 30 Minuten vergangen sind, wird dies als neuer Besuch gewertet.\"\n"

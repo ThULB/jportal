@@ -69,7 +69,16 @@
     </div>
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" />
-    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalList-main.js" />
+    <xsl:choose>
+      <xsl:when test="contains($User-Agent, 'Trident')">
+        <!-- es5 scripts -->
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/es5/jp-journalList-main-es5.js" />
+      </xsl:when>
+      <xsl:otherwise>
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalList-main.js" />
+      </xsl:otherwise>
+    </xsl:choose>
+
   </xsl:template>
 
   <!-- =================================================================== -->

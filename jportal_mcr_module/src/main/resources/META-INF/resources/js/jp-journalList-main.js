@@ -358,7 +358,7 @@ jp.journalList.view = {
 
   renderTabNav: (activeTabs, selectedTab, eventHandler) => {
     let tabs = jp.journalList.view.tabs;
-    for (i = 0; i < tabs.length; i++) {
+    for (let i = 0; i < tabs.length; i++) {
       let tab = tabs.item(i);
 
       if (activeTabs.indexOf(tab.textContent) > -1) {
