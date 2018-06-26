@@ -18,18 +18,19 @@
           <xed:cleanup-rule xpath="//alternative" relevant-if="(string-length(name/text()) > 0)" />
       </xed:repeat>
     </jp:section>
-    
+
     <jp:section title="{i18n:metaData.headlines.jpinst.historyData}">
       <jp:template name="title" i18n="metaData.headlines.jpinst.historyData" />
 
       <xed:repeat xpath="placesOfActivity[@class='MCRMetaLangText']/placeOfActivity[@inherited='0']" min="0" max="10">
         <jp:template name="textInput" xpath="." i18n="metaData.jpinst.placeOfActivity"
-          buttons="true" />
+                     buttons="true" />
       </xed:repeat>
-      
+
       <jp:template name="textInput"
-        xpath="timesOfActivity[@class='MCRMetaLangText']/timeOfActivity[@inherited='0']" i18n="metaData.jpinst.timeOfActivity"
-        maxlength="10" />
+                   xpath="timesOfActivity[@class='MCRMetaLangText']/timeOfActivity[@inherited='0']"
+                   i18n="metaData.jpinst.timeOfActivity"
+                   maxlength="128" />
     </jp:section>
     
     <jp:section title="{i18n:metaData.headlines.jpinst.otherInst}">
