@@ -46,7 +46,7 @@
     <xsl:param name="type" select="'owner'" />
     <urmel:entity type="{$type}" xlink:type="extended" xlink:title="{$JP.Site.Owner.label}">
       <urmel:site xlink:type="locator" xlink:href="{$JP.Site.Owner.url}" />
-      <urmel:logo xlink:type="resource" xlink:href="{$JP.Site.Owner.logo}" />
+      <urmel:logo xlink:type="resource" xlink:href="{concat($WebApplicationBaseURL, $JP.Site.Owner.logo)}" />
     </urmel:entity>
   </xsl:template>
 

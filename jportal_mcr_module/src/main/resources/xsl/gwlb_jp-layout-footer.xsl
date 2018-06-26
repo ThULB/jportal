@@ -36,7 +36,7 @@
 
     <xsl:template name="jp.footer.print.small">
         <a href="{$JP.Site.Footer.Logo.url}">
-            <img src="{$JP.Site.Footer.Logo.small}" class="logo" />
+            <img src="{concat(frontend:getBaseURL(), $JP.Site.Footer.Logo.small)}" class="logo" />
         </a>
 
         <a class="DFG" href="http://www.dfg.de">

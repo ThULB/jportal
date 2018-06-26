@@ -22,7 +22,7 @@
             <xsl:call-template name="addDvRights">
               <xsl:with-param name="owner" select="$JP.Site.Owner.label" />
               <xsl:with-param name="contact" select="concat('mailto:', $MCR.Mail.Sender)" />
-              <xsl:with-param name="logo" select="$JP.Site.Parent.logo" />
+              <xsl:with-param name="logo" select="concat($WebApplicationBaseURL, $JP.Site.Parent.logo)" />
               <xsl:with-param name="url" select="$JP.Site.Owner.url" />
             </xsl:call-template>
           </mets:xmlData>

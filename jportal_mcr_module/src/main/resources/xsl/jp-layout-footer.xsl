@@ -18,13 +18,13 @@
 
   <xsl:template name="jp.footer.print.default">
     <a href="{$JP.Site.Footer.Logo.url}">
-      <img src="{$JP.Site.Footer.Logo.default}" class="logo" />
+      <img src="{concat($WebApplicationBaseURL, $JP.Site.Footer.Logo.default)}" class="logo" />
     </a>
   </xsl:template>
 
   <xsl:template name="jp.footer.print.small">
     <a href="{$JP.Site.Footer.Logo.url}">
-      <img src="{$JP.Site.Footer.Logo.small}" class="logo" />
+      <img src="{concat($WebApplicationBaseURL, $JP.Site.Footer.Logo.small)}" class="logo" />
     </a>
   </xsl:template>
 

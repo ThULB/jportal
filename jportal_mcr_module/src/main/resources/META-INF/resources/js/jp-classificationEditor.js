@@ -17,7 +17,7 @@ function startClassificationEditor() {
 function includeClassificationEditor(onReady) {
   require(["dojo/ready", "dojo/promise/all", "mycore/util/DOMUtil"], function(ready, all, domUtil) {
     ready(function() {
-      all([domUtil.loadCSS("http://ajax.googleapis.com/ajax/libs/dojo/"+classeditor.dojoVersion +"/dijit/themes/claro/claro.css"),
+      all([domUtil.loadCSS("//ajax.googleapis.com/ajax/libs/dojo/"+classeditor.dojoVersion +"/dijit/themes/claro/claro.css"),
            domUtil.loadCSS(classeditor.settings.cssURL + "/classificationEditor.css"),
            domUtil.loadCSS(classeditor.settings.cssURL + "/mycore.dojo.css")]).then(function() {
         require([
