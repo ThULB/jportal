@@ -213,7 +213,7 @@ function updateSearchbar() {
 
   journalSearchOption.on("click", activateJournalSearch);
   volumeSearchOption.on("click", activateVolumeSearch);
-  globalSearchOption.on("click", activateGlobalSearch());
+  globalSearchOption.on("click", activateGlobalSearch);
 
   journalSearchOption.append(journalSearchLabel);
   volumeSearchOption.append(volumeSearchLabel);
