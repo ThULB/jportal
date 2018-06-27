@@ -300,6 +300,9 @@
           <mods:roleTerm type="code" authority="marcrelator">
             <xsl:value-of select="jpxml:getMarcRelatorID(@type)" />
           </mods:roleTerm>
+          <mods:roleTerm type="code" authority="jportal">
+            <xsl:value-of select="@type" />
+          </mods:roleTerm>
         </mods:role>
       </xsl:if>
 
