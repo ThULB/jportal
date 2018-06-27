@@ -1,16 +1,16 @@
 package fsu.jportal.backend.pica;
 
-import java.io.IOException;
 import java.util.List;
 
-import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
-import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
-import fsu.archiv.mycore.sru.impex.pica.producer.CorporationProducer;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaXML;
+
+import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
+import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
+import fsu.archiv.mycore.sru.impex.pica.producer.CorporationProducer;
 
 public class JPInstitutionProducer extends CorporationProducer {
 
@@ -19,7 +19,7 @@ public class JPInstitutionProducer extends CorporationProducer {
     }
 
     @Override
-    protected Element createMetadataElement() throws IOException {
+    protected Element createMetadataElement() {
         Element metadata = new Element("metadata");
         metadata.setAttribute("lang", "de", Namespace.XML_NAMESPACE);
         Element meta;
@@ -52,11 +52,11 @@ public class JPInstitutionProducer extends CorporationProducer {
             metadata.addContent(meta);
         }
 
-/*
+        /*
         if ((meta = createDefRoleElement()) != null) {
             metadata.addContent(meta);
         }
-*/
+        */
         if ((meta = createNotesElement()) != null) {
             metadata.addContent(meta);
         }
@@ -78,6 +78,14 @@ public class JPInstitutionProducer extends CorporationProducer {
         parent.addContent(nameElement);
         String fullname = this.record.getValue("029A", "a");
         if (fullname != null) {
+            String b = this.record.getValue("029A", "b");
+            if (b != null) {
+                fullname += ". " + b;
+            }
+            String g = this.record.getValue("029A", "g");
+            if (g != null) {
+                fullname += " (" + g + ")";
+            }
             nameElement.addContent(new Element("fullname").setText(fullname));
         }
         String nickname = this.record.getValue("029@", "a", "4", "abku");
@@ -98,11 +106,20 @@ public class JPInstitutionProducer extends CorporationProducer {
 
     protected void createMetaXMLNameElement(Element defElement, String fieldName) {
         List<Datafield> datafields = this.record.getDatafieldsByName(fieldName);
-        for(Datafield datafield : datafields) {
-            List<Subfield> subfields = datafield.getSubfieldsByCode("a");
-            if (!subfields.isEmpty()) {
+        for (Datafield datafield : datafields) {
+            Subfield subfield = datafield.getFirstSubfieldByCode("a");
+            if (subfield != null) {
                 Element childElement = new Element("alternative").setAttribute("inherited", "0");
-                Element nameElement = new Element("name").setText(subfields.get(0).getValue());
+                String name = subfield.getValue();
+                Subfield b = datafield.getFirstSubfieldByCode("b");
+                if (b != null && !"".equals(b.getValue())) {
+                    name += ". " + b.getValue();
+                }
+                Subfield g = datafield.getFirstSubfieldByCode("g");
+                if (g != null && !"".equals(g.getValue())) {
+                    name += " (" + g.getValue() + ")";
+                }
+                Element nameElement = new Element("name").setText(name);
                 defElement.addContent(childElement.addContent(nameElement));
             }
         }
@@ -124,7 +141,8 @@ public class JPInstitutionProducer extends CorporationProducer {
         }
         String value = start + (end != null ? " - " + end : "");
         Element timesOfActivity = generateDefElement("timesOfActivity", MCRMetaLangText.class, false, true);
-        Element timeOfActivity = generateSubElement("timeOfActivity", null, 0, null, "plain", null, null).setText(value);
+        Element timeOfActivity = generateSubElement("timeOfActivity", null, 0, null, "plain", null, null)
+            .setText(value);
         timesOfActivity.addContent(timeOfActivity);
         return timesOfActivity;
     }
@@ -135,7 +153,8 @@ public class JPInstitutionProducer extends CorporationProducer {
             return null;
         }
         Element placesOfActivity = generateDefElement("placesOfActivity", MCRMetaLangText.class, false, true);
-        Element placeOfActivity = generateSubElement("placeOfActivity", null, 0, null, "plain", null, null).setText(name);
+        Element placeOfActivity = generateSubElement("placeOfActivity", null, 0, null, "plain", null, null)
+            .setText(name);
         placesOfActivity.addContent(placeOfActivity);
         return placesOfActivity;
     }
