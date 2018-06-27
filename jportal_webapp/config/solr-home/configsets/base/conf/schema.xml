@@ -104,7 +104,7 @@
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
         <filter class="solr.SnowballPorterFilterFactory" language="German2" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
-        <filter class="solr.LengthFilterFactory" min="3" max="30" />
+        <filter class="solr.LengthFilterFactory" min="1" max="30" />
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.ICUTokenizerFactory" />
@@ -114,7 +114,7 @@
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
         <filter class="solr.SnowballPorterFilterFactory" language="German2" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
-        <filter class="solr.LengthFilterFactory" min="3" max="30" />
+        <filter class="solr.LengthFilterFactory" min="1" max="30" />
       </analyzer>
       <similarity class="solr.BM25SimilarityFactory"/>
     </fieldType>

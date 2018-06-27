@@ -10,11 +10,11 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class SolrOrderHandlerTest extends MCRTestCase {
+public class SolrOrderTest extends MCRTestCase {
 
     @Test
     public void calcIndexList() {
-        SolrOrderHandler handler = new SolrOrderHandler();
+        SolrHandler handler = new SolrHandler();
         assertEquals(0, handler.calcIndexList(buildList(new int[] { 1, 2, 3 }), buildList(new int[] { 1, 2, 3 })).size());
         assertEquals(0, handler.calcIndexList(buildList(new int[] { 1, 3 }), buildList(new int[] { 1, 2, 3 })).size());
         assertEquals(2, handler.calcIndexList(buildList(new int[] { 3, 1 }), buildList(new int[] { 1, 2, 3 })).size());
