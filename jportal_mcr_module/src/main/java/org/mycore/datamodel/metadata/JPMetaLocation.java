@@ -1,17 +1,19 @@
 package org.mycore.datamodel.metadata;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import fsu.jportal.backend.gnd.GNDLocation;
+
 /**
- * Location metadata of jportal. Stores an id (can be a gnd), a text and latitude longitude values for geographic
- * references.
+ * Location metadata of jportal. Stores an id (can be a gnd), a label, a latitude longitude values for geographic
+ * references and an area code.
  *
  * <p>Be aware that the geographic reference, in difference to the MCRMetaSpatial, is not required. An id
  * or label is enough.</p>
@@ -23,6 +25,8 @@ public class JPMetaLocation extends MCRMetaDefault {
     protected String id;
 
     protected String label;
+
+    protected String areaCode;
 
     protected MCRMetaSpatial spatial;
 
@@ -50,6 +54,14 @@ public class JPMetaLocation extends MCRMetaDefault {
         return label;
     }
 
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
     /**
      * Returns the spatial data. Two entries build a point. The first is always the latitude and the second one
      * is always the longitude value.
@@ -57,7 +69,10 @@ public class JPMetaLocation extends MCRMetaDefault {
      * @return list of the spatial data
      */
     public List<BigDecimal> getData() {
-        return this.spatial != null ? this.spatial.getData() : new ArrayList<>();
+        if (this.spatial == null) {
+            this.spatial = new MCRMetaSpatial("temp", null, null, 0);
+        }
+        return this.spatial.getData();
     }
 
     public void setData(List<BigDecimal> data) {
@@ -74,6 +89,7 @@ public class JPMetaLocation extends MCRMetaDefault {
         }
         this.id = element.getAttributeValue("id");
         this.label = element.getAttributeValue("label");
+        this.areaCode = element.getAttributeValue("areaCode");
     }
 
     /**
@@ -98,6 +114,9 @@ public class JPMetaLocation extends MCRMetaDefault {
         if (this.label != null) {
             json.addProperty("label", this.label);
         }
+        if (this.areaCode != null) {
+            json.addProperty("areaCode", this.areaCode);
+        }
         if (this.spatial != null) {
             JsonArray dataArray = new JsonArray();
             getData().forEach(dataArray::add);
@@ -115,6 +134,9 @@ public class JPMetaLocation extends MCRMetaDefault {
         if (this.label != null) {
             xml.setAttribute("label", this.label);
         }
+        if (this.areaCode != null) {
+            xml.setAttribute("areaCode", this.areaCode);
+        }
         if (this.spatial != null) {
             xml.setText(this.spatial.createXML().getText());
         }
@@ -127,7 +149,27 @@ public class JPMetaLocation extends MCRMetaDefault {
         location.setData(this.getData());
         location.setId(this.getId());
         location.setLabel(this.getLabel());
+        location.setAreaCode(this.getAreaCode());
         return location;
+    }
+
+    /**
+     * Creates a new JPMetaLocation using the GNDLocation class.
+     *
+     * @param subTag the subtag to use e.g. linkedLocation
+     * @param gndLocation the gnd location as source
+     * @return a new meta location object
+     */
+    public static JPMetaLocation of(String subTag, GNDLocation gndLocation) {
+        JPMetaLocation metaLocation = new JPMetaLocation(subTag, null, null, 0);
+        metaLocation.setId(gndLocation.getId());
+        gndLocation.getLabel().ifPresent(metaLocation::setLabel);
+        gndLocation.getAreaCode().ifPresent(metaLocation::setAreaCode);
+        gndLocation.getLocation().ifPresent(locationPair -> {
+            metaLocation.getData().add(locationPair.getKey());
+            metaLocation.getData().add(locationPair.getValue());
+        });
+        return metaLocation;
     }
 
 }

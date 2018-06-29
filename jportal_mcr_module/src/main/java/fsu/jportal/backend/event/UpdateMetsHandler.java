@@ -1,25 +1,20 @@
 package fsu.jportal.backend.event;
 
-import fsu.jportal.mets.MetsAutoGenerator;
-import fsu.jportal.util.DerivateLinkUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.events.MCREvent;
-import org.mycore.common.events.MCREventHandlerBase;
-import org.mycore.common.inject.MCRInjectorConfig;
-import org.mycore.datamodel.common.MCRMarkManager;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
-import org.mycore.datamodel.niofs.MCRPath;
-import org.mycore.mets.tools.MCRMetsSave;
-
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.mycore.common.events.MCREvent;
+import org.mycore.common.events.MCREventHandlerBase;
+import org.mycore.common.inject.MCRInjectorConfig;
+import org.mycore.datamodel.common.MCRMarkManager;
+import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.mets.tools.MCRMetsSave;
+
+import fsu.jportal.mets.MetsAutoGenerator;
+import fsu.jportal.util.DerivateLinkUtil;
 
 /**
  * Checks if it is required to rebuild the corresponding mets.xml. Uses
@@ -28,8 +23,6 @@ import java.util.stream.Collectors;
  * @author Matthias Eichner
  */
 public class UpdateMetsHandler extends MCREventHandlerBase {
-
-    private static final Logger LOGGER = LogManager.getLogger(UpdateMetsHandler.class);
 
     private MetsAutoGenerator metsAutoGenerator;
 
@@ -87,10 +80,10 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
 
         // fetch all derivates
         getDerivateLinks(object).stream()
-                                .map(MCRObjectID::getInstance)
-                                .filter(der -> !MCRMarkManager.instance().isMarkedForDeletion(der))
-                                .distinct()
-                                .forEach(metsAutoGenerator::add);
+            .map(MCRObjectID::getInstance)
+            .filter(der -> !MCRMarkManager.instance().isMarkedForDeletion(der))
+            .distinct()
+            .forEach(metsAutoGenerator::add);
     }
 
     private void handleDerivate(MCRDerivate derivate) {
@@ -106,12 +99,12 @@ public class UpdateMetsHandler extends MCREventHandlerBase {
      */
     private void handlePath(Path path) {
         MCRPath mcrPath = MCRPath.toMCRPath(path);
-        if(!MCRObjectID.isValid(mcrPath.getOwner())) {
+        if (!MCRObjectID.isValid(mcrPath.getOwner())) {
             return;
         }
         MCRObjectID derivateId = MCRObjectID.getInstance(mcrPath.getOwner());
         Path fileNamePath = mcrPath.getFileName();
-        if(fileNamePath == null) {
+        if (fileNamePath == null) {
             return;
         }
         String fileName = fileNamePath.toString();

@@ -202,20 +202,13 @@ $(document).ready(function () {
     loadData(form, searchInput);
     form.find("button").on("click", () => {
       let id = searchInput.val();
-      const url = jp.baseURL + "rsc/sru/get/" + id + "?fields=065A";
+      const url = jp.baseURL + "rsc/gnd/location/" + id;
       jp.util.getJSON(url).then((data) => {
-        const label = getValue("065A", "a", null, null, data.fields);
-        if(label == null) {
+        if(data.label == null) {
           BootstrapDialog.alert('There is no pica+ field "065A a" for this record!');
           return;
         }
-        let lat = getValue("037H", "f", "A", "dgx", data.fields);
-        let lng = getValue("037H", "d", "A", "dgx", data.fields);
-        if(lat !== null && lng !== null) {
-          lat = parseFloat(lat.substring(1));
-          lng = parseFloat(lng.substring(1));
-        }
-        setData(id, label, lat, lng, form);
+        setData(id, data.label, data.latitude, data.longitude, data.areaCode, form);
       }).catch((error) => {
         BootstrapDialog.alert('Error while getting record data from server. If you think this is an error please' +
           ' contact your administrator!');
@@ -228,19 +221,25 @@ $(document).ready(function () {
     const inputDiv = form.prev(".jp-gnd-location-input");
     const id = inputDiv.find(".jp-gnd-location-input-id").val();
     const label = inputDiv.find(".jp-gnd-location-input-label").val();
+    const areaCode = inputDiv.find(".jp-gnd-location-input-areaCode").val();
     const data = inputDiv.find(".jp-gnd-location-input-data").val();
     if (id !== "") {
       searchInput.val(id);
     }
     if(label !== "") {
-      inputDiv.find(".jp-gnd-location-input-display").html(label + " (" + data + ")");
+      let display = label + " (" + data + ")";
+      if(areaCode !== "") {
+        display += " [" + areaCode +"]"
+      }
+      inputDiv.find(".jp-gnd-location-input-display").html(display);
     }
   }
 
-  function setData(id, label, lat, lng, form) {
+  function setData(id, label, lat, lng, areaCode, form) {
     const inputDiv = form.prev(".jp-gnd-location-input");
     inputDiv.find(".jp-gnd-location-input-id").val(id);
     inputDiv.find(".jp-gnd-location-input-label").val(label);
+    inputDiv.find(".jp-gnd-location-input-areaCode").val(areaCode);
     if(lat !== null && lng !== null) {
       inputDiv.find(".jp-gnd-location-input-data").val(lat + "," + lng);
       inputDiv.find(".jp-gnd-location-input-display").html(label + " (" + lat + "," + lng + ")");
@@ -248,37 +247,6 @@ $(document).ready(function () {
       inputDiv.find(".jp-gnd-location-input-data").val(null);
       inputDiv.find(".jp-gnd-location-input-display").html(label + " (keine Koordinaten gefunden!)");
     }
-  }
-
-  function getValue(name, code, reqCode, reqValue, fields) {
-    for (let i = 0; i < fields.length; i++) {
-      if (fields[i].name === name) {
-        let subfields = fields[i].subfields;
-        if(!checkSubfieldCode(reqCode, reqValue, subfields)) {
-          continue;
-        }
-        for (let j = 0; j < subfields.length; j++) {
-          if (subfields[j].code === code) {
-            return subfields[j].value;
-          }
-        }
-      }
-    }
-    return null;
-  }
-
-  function checkSubfieldCode(reqCode, reqValue, subfields) {
-    if (reqCode == null) {
-      return true;
-    }
-    for (let i = 0; i < subfields.length; i++) {
-      if (subfields[i].code === reqCode) {
-        if (reqValue == null || reqValue === subfields[i].value) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
 });

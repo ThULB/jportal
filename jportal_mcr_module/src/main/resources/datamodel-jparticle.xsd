@@ -191,6 +191,7 @@
                   <xsd:extension base="xsd:string">
                     <xsd:attribute name="id" use="optional" type="mcrdefaulttype" />
                     <xsd:attribute name="label" use="optional" type="mcrdefaulttype" />
+                    <xsd:attribute name="areaCode" use="optional" type="mcrdefaulttype" />
                     <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
                     <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
                   </xsd:extension>

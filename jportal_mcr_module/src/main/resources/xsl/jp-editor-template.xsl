@@ -434,6 +434,9 @@
       <xed:bind xpath="@label">
         <input type="text" style="display:none" class="jp-gnd-location-input-label" />
       </xed:bind>
+      <xed:bind xpath="@areaCode">
+        <input type="text" style="display:none" class="jp-gnd-location-input-areaCode" />
+      </xed:bind>
     </div>
     <div class="form-inline jp-gnd-location-form">
       <button type="button" tabindex="1" class="btn btn-default jp-gnd-location-select">

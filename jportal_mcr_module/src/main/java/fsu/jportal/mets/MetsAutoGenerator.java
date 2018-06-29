@@ -14,13 +14,13 @@ public interface MetsAutoGenerator {
      * 
      * @param derivateId the derivate identifier
      */
-    public void add(MCRObjectID derivateId);
+    void add(MCRObjectID derivateId);
 
     /**
      * Removes a derivate from the auto generator.
      * 
      * @param derivateId the derivate identifier
      */
-    public void remove(MCRObjectID derivateId);
+    void remove(MCRObjectID derivateId);
 
 }
