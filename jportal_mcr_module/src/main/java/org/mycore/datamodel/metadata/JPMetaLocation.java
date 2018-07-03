@@ -1,6 +1,8 @@
 package org.mycore.datamodel.metadata;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jdom2.Element;
@@ -26,7 +28,7 @@ public class JPMetaLocation extends MCRMetaDefault {
 
     protected String label;
 
-    protected String areaCode;
+    protected List<String> areaCodes;
 
     protected MCRMetaSpatial spatial;
 
@@ -36,6 +38,7 @@ public class JPMetaLocation extends MCRMetaDefault {
 
     public JPMetaLocation(String subtag, String defaultLanguage, String type, Integer inherited) {
         super(subtag, defaultLanguage, type, inherited);
+        this.areaCodes = new ArrayList<>();
     }
 
     public void setId(String id) {
@@ -54,12 +57,12 @@ public class JPMetaLocation extends MCRMetaDefault {
         return label;
     }
 
-    public void setAreaCode(String areaCode) {
-        this.areaCode = areaCode;
+    public void addAreaCode(String areaCode) {
+        this.areaCodes.add(areaCode);
     }
 
-    public String getAreaCode() {
-        return areaCode;
+    public List<String> getAreaCodes() {
+        return this.areaCodes;
     }
 
     /**
@@ -89,7 +92,10 @@ public class JPMetaLocation extends MCRMetaDefault {
         }
         this.id = element.getAttributeValue("id");
         this.label = element.getAttributeValue("label");
-        this.areaCode = element.getAttributeValue("areaCode");
+        String areaCodeString = element.getAttributeValue("areaCode");
+        if (areaCodeString != null) {
+            this.areaCodes = Arrays.asList(areaCodeString.split(" "));
+        }
     }
 
     /**
@@ -100,7 +106,8 @@ public class JPMetaLocation extends MCRMetaDefault {
      *   {
      *     id: 4028557-1,
      *     label: Jena,
-     *     data: [50.92878, 11.5899]
+     *     data: [50.92878, 11.5899],
+     *     areaCode: [XB-IN, XB-PK]
      *   }
      * </pre>
      *
@@ -114,8 +121,10 @@ public class JPMetaLocation extends MCRMetaDefault {
         if (this.label != null) {
             json.addProperty("label", this.label);
         }
-        if (this.areaCode != null) {
-            json.addProperty("areaCode", this.areaCode);
+        if (!this.areaCodes.isEmpty()) {
+            JsonArray areaCodeArray = new JsonArray();
+            this.areaCodes.forEach(areaCodeArray::add);
+            json.add("areaCode", areaCodeArray);
         }
         if (this.spatial != null) {
             JsonArray dataArray = new JsonArray();
@@ -134,8 +143,8 @@ public class JPMetaLocation extends MCRMetaDefault {
         if (this.label != null) {
             xml.setAttribute("label", this.label);
         }
-        if (this.areaCode != null) {
-            xml.setAttribute("areaCode", this.areaCode);
+        if (!this.areaCodes.isEmpty()) {
+            xml.setAttribute("areaCode", String.join(" ", this.areaCodes));
         }
         if (this.spatial != null) {
             xml.setText(this.spatial.createXML().getText());
@@ -149,7 +158,7 @@ public class JPMetaLocation extends MCRMetaDefault {
         location.setData(this.getData());
         location.setId(this.getId());
         location.setLabel(this.getLabel());
-        location.setAreaCode(this.getAreaCode());
+        this.getAreaCodes().forEach(location::addAreaCode);
         return location;
     }
 
@@ -164,7 +173,7 @@ public class JPMetaLocation extends MCRMetaDefault {
         JPMetaLocation metaLocation = new JPMetaLocation(subTag, null, null, 0);
         metaLocation.setId(gndLocation.getId());
         gndLocation.getLabel().ifPresent(metaLocation::setLabel);
-        gndLocation.getAreaCode().ifPresent(metaLocation::setAreaCode);
+        gndLocation.getAreaCodes().forEach(metaLocation::addAreaCode);
         gndLocation.getLocation().ifPresent(locationPair -> {
             metaLocation.getData().add(locationPair.getKey());
             metaLocation.getData().add(locationPair.getValue());

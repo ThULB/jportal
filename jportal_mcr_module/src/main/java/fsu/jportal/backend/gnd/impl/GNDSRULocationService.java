@@ -30,7 +30,7 @@ public class GNDSRULocationService implements GNDLocationService {
             } else {
                 LogManager.getLogger().warn("Unable to get label (065A a) of {}", gndId);
             }
-            location.setAreaCode(picaRecord.getValue("042B", "a"));
+            picaRecord.getValues("042B", "a").forEach(location::addAreaCode);
             String latString = picaRecord.getValue("037H", "f", "A", "dgx");
             String lngString = picaRecord.getValue("037H", "d", "A", "dgx");
             if (latString != null && lngString != null) {

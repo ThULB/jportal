@@ -1,6 +1,8 @@
 package fsu.jportal.backend.gnd;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -17,7 +19,7 @@ public class GNDLocation {
 
     private String label;
 
-    private String areaCode;
+    private List<String> areaCodes;
 
     private BigDecimal latitude;
 
@@ -25,14 +27,15 @@ public class GNDLocation {
 
     public void setId(String id) {
         this.id = id;
+        this.areaCodes = new ArrayList<>();
     }
 
     public void setLabel(String label) {
         this.label = label;
     }
 
-    public void setAreaCode(String areaCode) {
-        this.areaCode = areaCode;
+    public void addAreaCode(String areaCode) {
+        this.areaCodes.add(areaCode);
     }
 
     public void setLatitude(BigDecimal latitude) {
@@ -51,8 +54,8 @@ public class GNDLocation {
         return Optional.ofNullable(label);
     }
 
-    public Optional<String> getAreaCode() {
-        return Optional.ofNullable(areaCode);
+    public List<String> getAreaCodes() {
+        return this.areaCodes;
     }
 
     public Optional<BigDecimal> getLatitude() {

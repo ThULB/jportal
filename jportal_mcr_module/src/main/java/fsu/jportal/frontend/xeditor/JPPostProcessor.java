@@ -2,7 +2,6 @@ package fsu.jportal.frontend.xeditor;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
@@ -87,7 +86,7 @@ public class JPPostProcessor implements MCRXEditorPostProcessor {
             .filter(Objects::nonNull).collect(Collectors.toSet());
         // get corresponding area codes for the gnd ids
         Set<String> areaCodes = gndIds.stream().map(locationService::get).filter(Objects::nonNull)
-            .map(GNDLocation::getAreaCode).flatMap(code -> code.map(Stream::of).orElseGet(Stream::empty))
+            .flatMap(location -> location.getAreaCodes().stream())
             .collect(Collectors.toSet());
         // use the gnd areaCodesService to get all parent gnd's for the area codes
         Set<String> areaCodeGndIds = areaCodesService.get(areaCodes);
