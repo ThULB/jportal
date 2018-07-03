@@ -273,7 +273,7 @@ label.editorText {
 	height: 125px;
 }
 
-.editor-logoSelect-container > a > svg{
+.editor-logoSelect-container > a > img{
 	height: 80%;
 }
 
@@ -310,7 +310,7 @@ label.editorText {
 	align-items: center;
 }
 
-#thumbLogoPlain > p, #thumbLogoText > p, .editor-logoSelect-container > a > svg {
+#thumbLogoPlain > p, #thumbLogoText > p, .editor-logoSelect-container > a > img {
 	width: 100%;
 }
 
@@ -329,7 +329,7 @@ label.editorText {
   padding-top: 5px;
 }
 
-#thumbLogoPlain > svg, #thumbLogoText > svg, .editor-logoSelect-container > svg {
+#thumbLogoPlain > img, #thumbLogoText > img, .editor-logoSelect-container > img {
 	margin: 0 auto 2.1em;
 	height: 80%;
 }
