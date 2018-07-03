@@ -1,7 +1,11 @@
 package fsu.jportal.backend.gnd.impl;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
+import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
+import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
 import org.apache.logging.log4j.LogManager;
 
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
@@ -24,7 +28,7 @@ public class GNDSRULocationService implements GNDLocationService {
             }
             GNDLocation location = new GNDLocation();
             location.setId(gndId);
-            String label = picaRecord.getValue("065A", "a");
+            String label = getLabel(picaRecord);
             if (label != null) {
                 location.setLabel(label);
             } else {
@@ -41,6 +45,27 @@ public class GNDSRULocationService implements GNDLocationService {
         } catch (Exception exc) {
             throw new GNDLocationServiceException("Unable to retrieve " + gndId, exc);
         }
+    }
+
+    private String getLabel(PicaRecord picaRecord) {
+        List<Datafield> geographicFields = picaRecord.getDatafieldsByName("065A");
+        if (geographicFields.isEmpty()) {
+            return null;
+        }
+        final Datafield datafield = geographicFields.get(0);
+        final StringBuffer label = new StringBuffer(get(datafield, "a").orElse(""));
+        if (label.length() == 0) {
+            return null;
+        }
+        get(datafield, "g").ifPresent(additional -> label.append(" (").append(additional).append(")"));
+        get(datafield, "x").ifPresent(generalSubset -> label.append(" / ").append(generalSubset));
+        get(datafield, "z").ifPresent(geographicSubset -> label.append(" (").append(geographicSubset).append(")"));
+        return label.toString();
+    }
+
+    private Optional<String> get(Datafield datafield, String code) {
+        Subfield subfield = datafield.getFirstSubfieldByCode(code);
+        return subfield == null ? Optional.empty() : Optional.of(subfield.getValue());
     }
 
 }
