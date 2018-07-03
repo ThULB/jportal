@@ -13,12 +13,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-@Path("logo")
+@Path("proxy")
 public class LogoResource {
     private static Logger LOGGER = LogManager.getLogger(LogoResource.class);
 
     @GET
-    @Path("get/{path:.*}")
+    @Path("logo/{path:.*}")
     public Response get(@PathParam("path") String path) {
         String urlString = getLogoURL();
         if (urlString == null) {
@@ -26,6 +26,10 @@ public class LogoResource {
         } else {
             urlString = urlString + "/" + path;
         }
+        return resolveURL(urlString);
+    }
+
+    private Response resolveURL(String urlString) {
         try {
             URL url = new URL(urlString);
             URLConnection connection = url.openConnection();
@@ -41,8 +45,16 @@ public class LogoResource {
     }
 
     @GET
-    @Path("getLogoURLBase")
+    @Path("logoURLBase")
     public String getLogoURL() {
-        return MCRConfiguration.instance().getString("JP.Site.Logo.url", null);
+        return getProperty("JP.Site.Logo.url");
+    }
+
+    public String getPDFCreatorURL() {
+        return getProperty("MCR.Viewer.PDFCreatorURI");
+    }
+
+    private String getProperty(String property) {
+        return MCRConfiguration.instance().getString(property, null);
     }
 }

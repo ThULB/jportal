@@ -1,9 +1,9 @@
 $(function() {
-	var logoURLBase = "";
+	var logoURLBase = jp.baseURL + "rsc/proxy/logo/";
 	checkIfEdit();
-	getBaseURL(function(url){
-		logoURLBase = url;
-	});
+	// getBaseURL(function(url){
+	// 	logoURLBase = url;
+	// });
 	
 	$("#thumbLogoPlain, #thumbLogoText").click(function() {
 		var thumbnailId = $(this).attr("id");
@@ -122,32 +122,31 @@ $(function() {
 		$("#personSelect-modal-body > .editor-logoSelect-container").empty();
 		$(".modal-header > a").remove();
 		var list = $(data).find("a");
+
 		$(list).each(function() {
 			var href = $(this).attr("href");
-			var logoAdress = logoURLBase + "/" + subfolder + href;
+			var val = this.innerText;
+
 			if(href.indexOf(".svg") > -1) {
+				var logoAdress = subfolder + href;
 				var inputBase = '<a class="list-group-item thumbnail text-center" value="' + logoAdress + '" ><h5>' + decodeURIComponent(href) + '</h5></a>';
 				$("#personSelect-modal-body > .editor-logoSelect-container").append(inputBase);
-				loadElement(encodeURIComponent(logoAdress.substring(41)), function(data){
+				loadElement(encodeURIComponent(logoAdress), function(data){
 					$("a[value='" + logoAdress + "']").prepend($(data).find("svg"));
 	  		});
-			} else {
-				if(href.charAt(href.length - 1) == "/" && href != "/") {
-					if(href == "/logos/") {
+			} else if(val === 'Parent Directory') {
 						var inputBase = '<a class="list-group-item thumbnail glyphicon glyphicon-folder-open text-center" value="" ><p>zurück</p></a>';
 						$(".modal-header").append(inputBase);
-					} else {
+			} else if(val !== 'Parent Directory' && href.charAt(href.length - 1) === "/"){
 						var inputBase = '<a class="list-group-item thumbnail glyphicon glyphicon-folder-open text-center" value="' + href + '" ><p>' + href + '</p></a>';
 						$(".modal-header").append(inputBase);
-					}
-				}
 			}
 		});
 	};
 	
 	function loadElement(path, callback){
 		$.ajax({
-			url: jp.baseURL + "rsc/logo/get/" + path,
+			url: logoURLBase + path,
 			type: "GET",
 			success: function(data) {
 				callback(data, path);
@@ -160,7 +159,7 @@ $(function() {
 
 	function getBaseURL(callback) {
 		$.ajax({
-			url: jp.baseURL + "rsc/logo/getLogoURLBase",
+			url: jp.baseURL + "rsc/proxy/logoURLBase",
 			type: "GET",
 			success: function(data) {
 				callback(data);
