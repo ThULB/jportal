@@ -387,8 +387,6 @@
         <input type="text" style="display:none" />
       </xed:bind>
     </div>
-
-  <!-- button to select institution _ subselect -->
     <div class="form-group">
       <button type="button" tabindex="1">
         <xsl:attribute name="class">
