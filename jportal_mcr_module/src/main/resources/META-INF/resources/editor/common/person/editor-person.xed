@@ -85,13 +85,13 @@
 
       <jp:template name="textInput"
         xpath="def.dateOfBirth[@class='MCRMetaISO8601Date']/dateOfBirth[@inherited='0']" i18n="editormask.person.LdateOfBirth"
-        maxlength="10" inputClass="form-control date-field" containerId="dateOfBirthCon" />
+        maxlength="11" inputClass="form-control date-field" containerId="dateOfBirthCon" />
       <jp:template name="textInput"
         xpath="def.placeOfBirth[@class='MCRMetaLangText']/placeOfBirth[@inherited='0'][@form='plain']"
         i18n="editormask.person.LplaceOfBirth" />
       <jp:template name="textInput"
         xpath="def.dateOfDeath[@class='MCRMetaISO8601Date']/dateOfDeath[@inherited='0']" i18n="editormask.person.LdateOfDeath"
-        maxlength="10" inputClass="form-control date-field" containerId="dateOfDeathCon" />
+        maxlength="11" inputClass="form-control date-field" containerId="dateOfDeathCon" />
       <jp:template name="textInput"
         xpath="def.placeOfDeath[@class='MCRMetaLangText']/placeOfDeath[@inherited='0'][@form='plain']"
         i18n="editormask.person.LplaceOfDeath" />

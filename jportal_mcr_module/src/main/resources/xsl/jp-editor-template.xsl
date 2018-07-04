@@ -192,14 +192,8 @@
           <xsl:value-of select="@generateID" />
         </xsl:attribute>
       </xsl:if>
-      <xsl:if test="contains(@inputClass, 'date-field')">
-        <span class="input-group-addon btn btn-default jp-layout-white">
-          <span class="glyphicon glyphicon-calendar"></span>
-        </span>
-      </xsl:if>
     </input>
   </xsl:template>
-
 
   <xsl:template match="jp:template" mode="buttons">
     <xsl:if test="@buttons">
@@ -505,11 +499,6 @@
       <xsl:attribute name="class">
         <xsl:value-of select="@class" />
       </xsl:attribute>
-      <xsl:if test="@span_date = 'before'">
-        <span class="input-group-addon btn btn-default jp-layout-white">
-          <span class="glyphicon-calendar glyphicon"></span>
-        </span>
-      </xsl:if>
       <xed:bind xpath="{@xpath}">
         <input class="form-control date-field" type="text" placeholder="yyyy-MM-dd" maxlength="10">
           <xsl:attribute name="id">
@@ -524,11 +513,6 @@
       </xed:bind>
       <xsl:if test="@seperator='true'">
         <span id="dateSeperator" class="input-group-addon hidden-xs jp-layout-sharpBorderRight">-</span>
-      </xsl:if>
-      <xsl:if test="@span_date = 'after'">
-        <span class="input-group-addon btn btn-default jp-layout-white">
-          <span class="glyphicon-calendar glyphicon"></span>
-        </span>
       </xsl:if>
     </div>
   </xsl:template>

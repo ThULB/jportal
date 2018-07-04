@@ -85,23 +85,6 @@ $(document).ready(function() {
 
         elements.each(function (index, dateInput) {
 
-            let dateInputJq = jQuery(dateInput);
-
-            /* original input hidden */
-            dateInputJq.css({
-                "display": "none"
-            });
-
-            let formsData = {
-                "Tag": "dd",
-                "Monat": "MM",
-                "Jahr": "yyyy"
-            };
-
-            let forms = {};
-
-            let inputBase = '<input class="form-control" style="width: 33.3%;">';
-
             /*
              * error if yyyy-_-dd or _-mm-dd
              * error by letters, day 01 - 31, month 01 - 12
@@ -110,70 +93,70 @@ $(document).ready(function() {
              *
              * */
             let combineDate = function () {
-                if (forms["Jahr"].val() !== "") {
-                    dateInputJq.val("");
-                    if (forms["Jahr"].val().match(/[^0-9]/g) != null) {
-                        errorOutput("Bitte Achten Sie darauf das sie nur Zahlen eingeben. Bsp: 1990, 1500, 0100, 100, 10", forms["Tag"]);
-                    } else {
-                        if (forms["Jahr"].val().length < 4) {
-                            for (let i = forms["Jahr"].val().length; i < 4; i++) {
-                                dateInputJq.val(dateInputJq.val() + "0");
-                            }
-                        }
-                        dateInputJq.val(dateInputJq.val() + forms["Jahr"].val());
-                        killError(forms["Jahr"]);
+                const year = forms["Jahr"].val();
+                const month = forms["Monat"].val();
+                const day = forms["Tag"].val();
 
-                        if (forms["Monat"].val() !== "") {
-                            // check right month input
-                            if (forms["Monat"].val() > "12" || forms["Monat"].val() < "01") {
-                                errorOutput("Die Monatsangabe muss zwischen 01 und 12 liegen.", forms["Tag"]);
-                            } else {
-                                let extraNul = "";
-                                if (forms["Monat"].val().length < 2) extraNul = "0";
-                                dateInputJq.val(dateInputJq.val() + "-" + extraNul + forms["Monat"].val());
-
-                                if (forms["Tag"].val() !== "") {
-                                    // check right day input
-                                    if (forms["Tag"].val() > "31" || forms["Tag"].val() < "01") {
-                                        errorOutput("Die Tagesangabe muss zwischen 01 und 31 liegen.", forms["Tag"]);
-                                    } else {
-                                        extraNul = "";
-                                        if (forms["Tag"].val().length < 2) extraNul = "0";
-                                        dateInputJq.val(dateInputJq.val() + "-" + extraNul + forms["Tag"].val());
-                                    }
-                                }
-                            }
-                        } else {
-                            if (forms["Tag"].val() !== "") {
-                                errorOutput("Die Monatsangabe fehlt!", forms["Tag"]);
-                            }
-                        }
-                    }
-                } else {
-                    if (forms["Monat"].val() !== "" || forms["Tag"].val() !== "") {
-                        errorOutput("Die Jahresangabe fehlt!", forms["Tag"]);
-                    } else {
-                        killError(forms["Monat"]);
-                    }
-                    dateInputJq.val("");
+                // error handling
+                const errorTargetDiv = forms["Tag"];
+                killError(errorTargetDiv);
+                if(year === "" && (month !== "" || day !== "")) {
+                    errorOutput("Die Jahresangabe fehlt!", errorTargetDiv);
+                    return;
+                } else if(month === "" && day !== "") {
+                    errorOutput("Die Monatsangabe fehlt!", errorTargetDiv);
+                    return;
+                } else if(year.match(/[^-][^\d]/g) != null) {
+                    errorOutput("Bitte Achten Sie darauf das sie nur Zahlen eingeben. Bsp: 1990, 1500, 50, -50", errorTargetDiv);
+                    return;
+                } else if(parseInt(month) < 1 || parseInt(month) > 12) {
+                    errorOutput("Die Monatsangabe muss zwischen 1 und 12 liegen.", errorTargetDiv);
+                    return;
+                } else if(parseInt(day) < 1 || parseInt(day) > 31) {
+                    errorOutput("Die Tagesangabe muss zwischen 1 und 31 liegen.", errorTargetDiv);
+                    return;
                 }
+
+                // set date
+                let format = "YYYY";
+                const newDate = moment({
+                    year: parseInt(year)
+                });
+                if(month !== "") {
+                    newDate.month(parseInt(month) + 1);
+                    format += "-MM";
+                }
+                if(day !== "") {
+                    newDate.date(parseInt(day));
+                    format += "-DD";
+                }
+                dateInputJq.val(newDate.format(format));
             };
 
-            let content = dateInputJq.val().split("-");
-            let zaehler = 2;
-
-            /* settings for the input */
-            for (let placeHolder in formsData) {
-                let maxlength = formsData[placeHolder].length;
+            let addForm = function (placeHolder, maxlength, value) {
                 forms[placeHolder] = jQuery(inputBase);
                 forms[placeHolder].attr("placeholder", placeHolder);
                 forms[placeHolder].attr("maxlength", maxlength);
                 forms[placeHolder].attr("title", "Eingabe nur als Zahl möglich!");
-                forms[placeHolder].val(content[zaehler]);
+                forms[placeHolder].val(value);
                 forms[placeHolder].on("keyup click", combineDate);
                 forms[placeHolder].insertAfter(dateInputJq);
-                zaehler--;
-            }
+            };
+
+            const dateInputJq = jQuery(dateInput);
+            /* original input hidden */
+            dateInputJq.css({
+                "display": "none"
+            });
+            const forms = {};
+            const inputBase = '<input class="form-control" style="width: 33.3%;">';
+            const originalDate = dateInputJq.val();
+            const isBC = originalDate.startsWith("-");
+            const splitDate = isBC ? originalDate.substring(1).split("-") : originalDate.split("-");
+
+            addForm("Tag", 2, splitDate[2]);
+            addForm("Monat", 2, splitDate[1]);
+            addForm("Jahr", 5, (isBC ? "-" : "") + splitDate[0]);
         });
     };
 
