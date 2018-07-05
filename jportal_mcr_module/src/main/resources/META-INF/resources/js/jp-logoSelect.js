@@ -133,7 +133,8 @@ $(function() {
 
 	function newLogoImg(logoAdress){
     let img = document.createElement("img");
-    img.setAttribute("src", logoURLBase + encodeURIComponent(logoAdress));
+    img.setAttribute("src", logoURLBase + logoAdress);
+    // img.setAttribute("src", logoURLBase + encodeURIComponent(logoAdress));
 
 		return img;
   }
@@ -150,7 +151,7 @@ $(function() {
     a.appendChild(newLogoImg(logoAdress));
 
     let h5 = document.createElement("h5");
-    h5.innerText = decodeURIComponent(href)
+    h5.innerText = href
     a.appendChild(h5);
 
     return a;
