@@ -80,8 +80,8 @@ $(function() {
 	});
 	
 	function checkIfEdit() {
-		loadPic("thumbLogoText","input[name='/mycoreobject/metadata/logo/url']");
-		loadPic("thumbLogoPlain", "input[name='/mycoreobject/metadata/logo/url[2]']");
+		loadPic("thumbLogoPlain", "input[name='/mycoreobject/metadata/logo/url']");
+		loadPic("thumbLogoText","input[name='/mycoreobject/metadata/logo/url[2]']");
 	};
 
 	function loadPic(anchorID, inputSelector) {

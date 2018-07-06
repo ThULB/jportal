@@ -23,7 +23,7 @@ public class ProxyResource {
     @GET
     @Path("logo/{path:.*}")
     public Response get(@PathParam("path") String path) {
-        return resolveURL(getProperty("JP.Site.Logo.url"), url -> url + "/" + path);
+        return resolveURL(getProperty("JP.Site.Logo.url"), url -> url + "/" + path.replaceAll(" ", "%20"));
     }
 
     @GET

@@ -5,6 +5,7 @@
   <xsl:param name="JP.Site.Footer.Logo.url" />
   <xsl:param name="JP.Site.Footer.Logo.default" />
   <xsl:param name="JP.Site.Footer.Logo.small" />
+  <xsl:param name="JP.Site.Logo.Proxy.url" />
 
   <xsl:template name="jp.layout.footer">
     <div class="jp-layout-footer">
@@ -57,16 +58,19 @@
 
   <xsl:template match="participant" mode="footer">
     <xsl:variable name="participant" select="document(concat('mcrobject:', @xlink:href))/mycoreobject" />
+    <xsl:variable name="imgURL" select="concat($WebApplicationBaseURL,
+    $JP.Site.Logo.Proxy.url,
+    $participant/metadata/logo/url[@type='logoPlain'])" />
     <xsl:if test="$participant/metadata/logo/url[@type='logoPlain']">
       <li>
         <xsl:choose>
           <xsl:when test="$participant/metadata/urls/url">
             <a href="{$participant/metadata/urls/url/@xlink:href}">
-              <img src="{$participant/metadata/logo/url[@type='logoPlain']}" alt="{@xlink:title}" class="logo" />
+              <img src="{$imgURL}" alt="{@xlink:title}" class="logo" />
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <img src="{$participant/metadata/logo/url[@type='logoPlain']}" alt="{@xlink:title}" class="logo" />
+            <img src="{$imgURL}" alt="{@xlink:title}" class="logo" />
           </xsl:otherwise>
         </xsl:choose>
       </li>
