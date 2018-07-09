@@ -9,14 +9,15 @@ $(function() {
 	});
 
 	function initModal(inputTag, thumbnailId) {
-		let logoPath = inputTag.hasAttribute("value") ? inputTag.getAttribute("value").replace(/\/*\w+.svg/, "") : "";
+		let logoPath = inputTag.hasAttribute("value") ? inputTag.getAttribute("value") : "";
+		let logoDir = logoPath.replace(/\/*\w+.svg/, "");
 		showLogos();
 		selectLogo();
 		
 		function showLogos() {
 			initBody();
 			
-			loadElement(logoPath, buildList);
+			loadElement(logoDir, buildList);
 			$("#personSelect-modal").modal("show");
 		};
 		
