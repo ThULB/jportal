@@ -123,7 +123,7 @@ $(document).ready(function() {
                     year: parseInt(year)
                 });
                 if(month !== "") {
-                    newDate.month(parseInt(month) + 1);
+                    newDate.month(parseInt(month) - 1);
                     format += "-MM";
                 }
                 if(day !== "") {
