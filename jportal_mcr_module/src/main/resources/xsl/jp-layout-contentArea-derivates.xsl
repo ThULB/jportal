@@ -223,7 +223,7 @@
 
     <xsl:variable name="href">
       <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/viewer/', $derivID, '/', $file)" />
-      <xsl:value-of select="concat('?div=', $ID)" />
+      <xsl:value-of select="concat('?logicalDiv=', $ID)" />
       <xsl:if test="$query != ''">
         <xsl:value-of select="concat('&amp;q=', $query)" />
       </xsl:if>
