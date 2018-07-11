@@ -1,6 +1,7 @@
 package fsu.jportal.backend.pica;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -76,17 +77,18 @@ public class JPInstitutionProducer extends CorporationProducer {
     protected void createInstitutionNameElement(Element parent) {
         Element nameElement = new Element("name").setAttribute("inherited", "0");
         parent.addContent(nameElement);
-        String fullname = this.record.getValue("029A", "a");
+        StringBuilder fullname = Optional.ofNullable(this.record.getValue("029A", "a")).map(StringBuilder::new)
+            .orElse(null);
         if (fullname != null) {
-            String b = this.record.getValue("029A", "b");
-            if (b != null) {
-                fullname += ". " + b;
+            List<String> bList = this.record.getValues("029A", "b");
+            for (String b : bList) {
+                fullname.append(". ").append(b);
             }
-            String g = this.record.getValue("029A", "g");
-            if (g != null) {
-                fullname += " (" + g + ")";
+            List<String> gList = this.record.getValues("029A", "g");
+            for (String g : gList) {
+                fullname.append(" (").append(g).append(")");
             }
-            nameElement.addContent(new Element("fullname").setText(fullname));
+            nameElement.addContent(new Element("fullname").setText(fullname.toString()));
         }
         String nickname = this.record.getValue("029@", "a", "4", "abku");
         if (nickname != null) {
@@ -110,16 +112,20 @@ public class JPInstitutionProducer extends CorporationProducer {
             Subfield subfield = datafield.getFirstSubfieldByCode("a");
             if (subfield != null) {
                 Element childElement = new Element("alternative").setAttribute("inherited", "0");
-                String name = subfield.getValue();
-                Subfield b = datafield.getFirstSubfieldByCode("b");
-                if (b != null && !"".equals(b.getValue())) {
-                    name += ". " + b.getValue();
+                StringBuilder name = new StringBuilder(subfield.getValue());
+                List<Subfield> bList = datafield.getSubfieldsByCode("b");
+                for (Subfield b : bList) {
+                    if (!"".equals(b.getValue())) {
+                        name.append(". ").append(b.getValue());
+                    }
                 }
-                Subfield g = datafield.getFirstSubfieldByCode("g");
-                if (g != null && !"".equals(g.getValue())) {
-                    name += " (" + g.getValue() + ")";
+                List<Subfield> gList = datafield.getSubfieldsByCode("g");
+                for (Subfield g : gList) {
+                    if (!"".equals(g.getValue())) {
+                        name.append(" (").append(g.getValue()).append(")");
+                    }
                 }
-                Element nameElement = new Element("name").setText(name);
+                Element nameElement = new Element("name").setText(name.toString());
                 defElement.addContent(childElement.addContent(nameElement));
             }
         }
