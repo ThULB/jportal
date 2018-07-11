@@ -27,12 +27,11 @@ public class ProxyResource {
     }
 
     @GET
-    @Path("pdf/{path:.*}")
+    @Path("pdf{path:.*}")
     public Response getPDFCreatorURL(@PathParam("path") String path, @Context UriInfo info) {
         Function<String,String> urlModifier = url -> {
             String query = info.getRequestUri().getQuery();
-            String p = !path.equals("") ? "/" + path : path;
-            return url + p + "?" + query;
+            return url + path + "?" + query;
         };
 
         return resolveURL(getProperty("JP.Viewer.PDFCreatorURI"), urlModifier);
