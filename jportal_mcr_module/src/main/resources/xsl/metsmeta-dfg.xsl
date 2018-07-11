@@ -210,6 +210,10 @@
               <xsl:value-of select="text()" />
             </xsl:element>
           </xsl:for-each>
+          <!-- template -->
+          <xsl:element name="template">
+            <xsl:value-of select="./metadata/hidden_templates/hidden_template/text()" />
+          </xsl:element>
         </jportal>
       </mods:extension>
     </xsl:if>
