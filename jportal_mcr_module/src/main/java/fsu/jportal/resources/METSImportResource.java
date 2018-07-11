@@ -1,9 +1,18 @@
 package fsu.jportal.resources;
 
-import com.google.gson.JsonObject;
-import fsu.jportal.mets.*;
-import fsu.jportal.mets.MetsImportUtils.METS_TYPE;
-import fsu.jportal.util.MetsUtil;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.xml.transform.TransformerException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -15,13 +24,19 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
-import javax.xml.transform.TransformerException;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.List;
+import com.google.gson.JsonObject;
+
+import fsu.jportal.mets.BlockReferenceException;
+import fsu.jportal.mets.ConvertException;
+import fsu.jportal.mets.ENMAPConverter;
+import fsu.jportal.mets.JVBMetsImporter;
+import fsu.jportal.mets.LLZMetsImporter;
+import fsu.jportal.mets.MetsImportException;
+import fsu.jportal.mets.MetsImportUtils;
+import fsu.jportal.mets.MetsImportUtils.METS_TYPE;
+import fsu.jportal.mets.MetsImporter;
+import fsu.jportal.mets.PerthesMetsImporter;
+import fsu.jportal.util.MetsUtil;
 
 @Path("mets/import")
 public class METSImportResource {
@@ -49,8 +64,7 @@ public class METSImportResource {
         try {
             doc = MetsUtil.getMetsXMLasDocument(derivateId);
         } catch (Exception exc) {
-            LOGGER.error("Unable to check mets.xml for derivate " + derivateId);
-            throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
+            throw new InternalServerErrorException("Unable to check mets.xml for derivate " + derivateId, exc);
         }
         METS_TYPE type = MetsImportUtils.determineType(doc);
         if (!type.equals(METS_TYPE.unknown)) {
@@ -88,7 +102,7 @@ public class METSImportResource {
             importer = new JVBMetsImporter();
         } else if (type.equals(METS_TYPE.llz)) {
             importer = new LLZMetsImporter();
-        } else if(type.equals(METS_TYPE.perthes)) {
+        } else if (type.equals(METS_TYPE.perthes)) {
             importer = new PerthesMetsImporter();
         } else {
             throw new MetsImportException("Unable to get importer class due type is not supported: " + type);
@@ -151,7 +165,7 @@ public class METSImportResource {
         List<ValidationException> exceptionList = validator.validate();
         if (!exceptionList.isEmpty()) {
             for (Exception exc : exceptionList) {
-                LOGGER.error("while validating mets.xml of derivate " + derivateId, exc);
+                LOGGER.error("while validating mets.xml of derivate {}", derivateId, exc);
             }
             throw exceptionList.get(0);
         }

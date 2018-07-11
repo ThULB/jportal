@@ -87,7 +87,7 @@ public class ObjectResource {
                                     .flatMap(Collection::stream)
                                     .collect(Collectors.toList());
             JsonArray activeLinks = new JsonArray();
-            sources.forEach(source -> activeLinks.add(source));
+            sources.forEach(activeLinks::add);
             o.add("activeLinks", activeLinks);
             Gson gson = MCRJSONManager.instance().createGson();
             return Response.status(Status.BAD_REQUEST).entity(gson.toJson(o)).build();
@@ -106,7 +106,7 @@ public class ObjectResource {
             Document doc = builder.build(new StringReader(xml));
             obj = new MCRObject(doc);
         } catch (Exception exc) {
-            LOGGER.error("unable to build xml or mcr object: " + xml);
+            LOGGER.error("unable to build xml or mcr object: {}", xml, exc);
             return Response.status(Status.BAD_REQUEST).entity("invalid xml data").build();
         }
         String objectType = obj.getId().getTypeId();
@@ -115,8 +115,7 @@ public class ObjectResource {
         try {
             MCRMetadataManager.create(obj);
         } catch (MCRAccessException e) {
-            LOGGER.error("unable to create mcr object: " + xml);
-            e.printStackTrace();
+            LOGGER.error("unable to create mcr object: {}", xml, e);
         }
         return Response.ok(obj.getId().toString()).build();
     }
@@ -132,8 +131,7 @@ public class ObjectResource {
         } catch (MCRPersistenceException pExc) {
             MCRJerseyUtil.throwException(Status.NOT_FOUND, "There is no mycore object with that revision.");
         } catch (Exception exc) {
-            MCRJerseyUtil.throwException(Status.INTERNAL_SERVER_ERROR,
-                "Unable to revert mycore object to revision " + revision + ".");
+            throw new InternalServerErrorException("Unable to revert mycore object to revision " + revision + ".", exc);
         }
         return Response.ok().build();
     }

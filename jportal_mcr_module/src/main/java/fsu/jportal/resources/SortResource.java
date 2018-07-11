@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -74,7 +75,7 @@ public class SortResource {
     @POST
     @Path("sortby/{id}")
     public void sortByUpdate(@PathParam("id") String id, @QueryParam("sorter") String sorterClass,
-            @QueryParam("order") String orderString) {
+        @QueryParam("order") String orderString) {
         JPContainer jpContainer = get(id);
         Order order;
         try {
@@ -87,9 +88,7 @@ public class SortResource {
             jpContainer.setSortBy(sorter, order);
             jpContainer.store(StoreOption.metadata);
         } catch (Exception exc) {
-            throw new WebApplicationException(exc, Response.status(Status.INTERNAL_SERVER_ERROR)
-                                                           .entity("Unable to set sorter " + sorterClass + " for " + id)
-                                                           .build());
+            throwInternalServerError("Unable to set sorter " + sorterClass + " for " + id, exc);
         }
     }
 
@@ -109,8 +108,7 @@ public class SortResource {
             jpContainer.setSortBy(null, null);
             jpContainer.store(StoreOption.metadata);
         } catch (Exception exc) {
-            throw new WebApplicationException(exc,
-                    Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to remove sorter for " + id).build());
+            throwInternalServerError("Unable to remove sorter for " + id, exc);
         }
     }
 
@@ -135,18 +133,17 @@ public class SortResource {
         try {
             container.setSortBy(null, null);
         } catch (Exception exc) {
-            throw new WebApplicationException(exc,
-                    Response.status(Status.INTERNAL_SERVER_ERROR).entity("Unable to remove sorter for " + id).build());
+            throwInternalServerError("Unable to remove sorter for " + id, exc);
         }
         resort(container, new JsonParser().parse(data).getAsJsonArray());
         try {
             container.store();
         } catch (Exception exc) {
-            throwInternalServerError(exc, "Unable to store object " + id + ".");
+            throwInternalServerError("Unable to store object " + id + ".", exc);
         }
         MCRSolrIndexer.rebuildMetadataIndex(
-                container.getChildren().stream().map(MCRObjectID::toString).collect(Collectors.toList()),
-                MCRSolrClientFactory.getMainConcurrentSolrClient());
+            container.getChildren().stream().map(MCRObjectID::toString).collect(Collectors.toList()),
+            MCRSolrClientFactory.getMainConcurrentSolrClient());
     }
 
     /**
@@ -163,8 +160,8 @@ public class SortResource {
         // check size
         if (jsonArray.size() != mcrChildren.size()) {
             throwUnprocessableEntity(
-                    "The json array contains " + jsonArray.size() + " children but the object has " + mcrChildren.size()
-                            + ".");
+                "The json array contains " + jsonArray.size() + " children but the object has " + mcrChildren.size()
+                    + ".");
         }
         // check each object
         List<MCRObjectID> newChildren = new ArrayList<>();
@@ -190,8 +187,8 @@ public class SortResource {
         MCRObjectStructure structure = container.getObject().getStructure();
         structure.clearChildren();
         newChildren.stream()
-                   .map(childId -> new MCRMetaLinkID("child", childId, null, null))
-                   .forEachOrdered(structure::addChild);
+            .map(childId -> new MCRMetaLinkID("child", childId, null, null))
+            .forEachOrdered(structure::addChild);
     }
 
     /**
@@ -226,7 +223,7 @@ public class SortResource {
         try {
             levelSorting = JPLevelSortingUtil.load(journalId);
         } catch (IOException exc) {
-            throwInternalServerError(exc, "Unable get level configuration for journal " + id + ".");
+            throwInternalServerError("Unable get level configuration for journal " + id + ".", exc);
         }
         boolean isNew = levelSorting.isEmpty();
         levelSorting = isNew ? JPLevelSortingUtil.analyze(journalId) : levelSorting;
@@ -250,12 +247,12 @@ public class SortResource {
                 JPLevelSortingUtil.apply(journalId, levelSorting);
             }
         } catch (ClassNotFoundException exc) {
-            throwInternalServerError(exc, "Unable to store level sorting for " + id + ". One sorter is invalid.");
+            throwInternalServerError("Unable to store level sorting for " + id + ". One sorter is invalid.", exc);
         } catch (IOException exc) {
-            throwInternalServerError(exc,
-                    "Unable to store level sorting for " + id + ". Couldn't store on filesystem.");
+            throwInternalServerError("Unable to store level sorting for " + id + ". Couldn't store on filesystem.",
+                exc);
         } catch (Exception exc) {
-            throwInternalServerError(exc, "Unable to store level sorting for " + id + ".");
+            throwInternalServerError("Unable to store level sorting for " + id + ".", exc);
         }
     }
 
@@ -263,8 +260,8 @@ public class SortResource {
         throw new WebApplicationException(Response.status(422).entity(msg).build());
     }
 
-    private void throwInternalServerError(Exception cause, String msg) {
-        throw new WebApplicationException(cause, Response.status(Status.INTERNAL_SERVER_ERROR).entity(msg).build());
+    private void throwInternalServerError(String msg, Exception cause) {
+        throw new InternalServerErrorException(msg, cause);
     }
 
     private JPContainer get(String id) {
@@ -274,7 +271,7 @@ public class SortResource {
         Optional<JPContainer> container = JPComponentUtil.getContainer(mcrId);
         if (!container.isPresent()) {
             throw new WebApplicationException(new MCRException("Invalid object " + id + ". It is not a JPContainer."),
-                    Status.BAD_REQUEST);
+                Status.BAD_REQUEST);
         }
         return container.get();
     }

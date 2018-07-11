@@ -12,7 +12,18 @@ import java.util.regex.PatternSyntaxException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,15 +32,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.jdom2.Document;
-import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.content.MCRContent;
-import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.content.transformer.MCRContentTransformer;
-import org.mycore.common.content.transformer.MCRParameterizedTransformer;
-import org.mycore.common.xml.MCRLayoutService;
-import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
@@ -43,6 +46,7 @@ import com.google.gson.JsonParser;
 import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.backend.DocumentTools;
 import fsu.jportal.backend.JPUploader;
+import fsu.jportal.backend.MetaDataTools;
 
 @Path("derivatebrowser")
 public class DerivateBrowserResource {
@@ -84,7 +88,8 @@ public class DerivateBrowserResource {
     @Path("compact")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
     public byte[] startCompact() throws Exception {
-        return transform("/META-INF/resources/modules/derivate-browser/gui/derivatebrowserCompact.xml");
+        return MetaDataTools.transformMCRWebPage(request,
+            "/META-INF/resources/modules/derivate-browser/gui/derivatebrowserCompact.xml");
     }
 
     @DELETE
@@ -124,8 +129,7 @@ public class DerivateBrowserResource {
     @POST
     @Path("{derivID}{path:(/.*)*}")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response createFolder(@PathParam("derivID") String derivID, @PathParam("path") String path)
-        throws Exception {
+    public Response createFolder(@PathParam("derivID") String derivID, @PathParam("path") String path) {
         if (!DerivateTools.mkdir(derivID + ":" + path)) {
             throw new WebApplicationException(derivID + ":" + path, Status.CONFLICT);
         }
@@ -195,7 +199,7 @@ public class DerivateBrowserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("exists")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response existsCheck(String data) throws Exception {
+    public Response existsCheck(String data) {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
         JsonArray jsonArray = jsonObject.getAsJsonArray("files");
@@ -237,10 +241,7 @@ public class DerivateBrowserResource {
         try {
             JPUploader.finish(UUID.fromString(uploadID));
         } catch (Exception exc) {
-            throw new WebApplicationException(exc,
-                Response.status(Status.INTERNAL_SERVER_ERROR)
-                        .entity("Unable to finish upload with id " + uploadID)
-                        .build());
+            throw new InternalServerErrorException("Unable to finish upload with id " + uploadID, exc);
         }
         return Response.ok().build();
     }
@@ -277,7 +278,6 @@ public class DerivateBrowserResource {
             }
         }
 
-
         try {
             JPUploader.upload(uuid, filePath, inputStream, filesize);
         } catch (Exception e) {
@@ -299,7 +299,7 @@ public class DerivateBrowserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("addURN")
     @MCRRestrictedAccess(DerivateBrowserPermission.class)
-    public Response addURN(String data) throws Exception {
+    public Response addURN(String data) {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
         JsonArray jsonArray = jsonObject.getAsJsonArray("files");
@@ -395,8 +395,7 @@ public class DerivateBrowserResource {
                 jsonObject.get("pattern").getAsString(), jsonObject.get("newName").getAsString());
 
             JsonArray jsonArray = new JsonArray();
-            for (Map.Entry<String, String> entry : resultMap.entrySet())
-            {
+            for (Map.Entry<String, String> entry : resultMap.entrySet()) {
                 JsonObject renameJson = new JsonObject();
                 renameJson.addProperty("oldName", entry.getKey());
                 renameJson.addProperty("newName", entry.getValue());
@@ -427,16 +426,13 @@ public class DerivateBrowserResource {
             Pattern patternObj = Pattern.compile(pattern);
             Matcher matcher = patternObj.matcher(filename);
             newFilename = matcher.replaceAll(newName);
-            LOGGER.info("The file " + filename + " will be renamed to " + newFilename);
-        }
-        catch (PatternSyntaxException e) {
-            LOGGER.info("The pattern '" + pattern + "' contains errors!");
-        }
-        catch (IndexOutOfBoundsException e) {
-            LOGGER.info("The file " + filename + " can't be renamed to " + newName + ". To many groups!");
-        }
-        catch (IllegalArgumentException e) {
-            LOGGER.info("The new name '" + newName + "' contains illegal characters!");
+            LOGGER.info("The file {} will be renamed to {}", filename, newFilename);
+        } catch (PatternSyntaxException e) {
+            LOGGER.info("The pattern '{}' contains errors!", pattern);
+        } catch (IndexOutOfBoundsException e) {
+            LOGGER.info("The file {} can't be renamed to {}. To many groups!", filename, newName);
+        } catch (IllegalArgumentException e) {
+            LOGGER.info("The new name '{}' contains illegal characters!", newName);
         }
 
         return Response.ok(newFilename).build();
@@ -448,23 +444,4 @@ public class DerivateBrowserResource {
         return Response.ok(DerivateTools.checkFileType(derivID, path)).build();
     }
 
-    protected byte[] transform(String xmlFile) throws Exception {
-        InputStream is = getClass().getResourceAsStream(xmlFile);
-        if (is == null) {
-            LOGGER.error("Unable to locate xmlFile of move object resource");
-            throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).build());
-        }
-        SAXBuilder saxBuilder = new SAXBuilder();
-        Document webPage = saxBuilder.build(is);
-        MCRJDOMContent source = new MCRJDOMContent(webPage);
-        MCRParameterCollector parameter = new MCRParameterCollector(request);
-        MCRContentTransformer transformer = MCRLayoutService.getContentTransformer("MyCoReWebPage", parameter);
-        MCRContent result;
-        if (transformer instanceof MCRParameterizedTransformer) {
-            result = ((MCRParameterizedTransformer) transformer).transform(source, parameter);
-        } else {
-            result = transformer.transform(source);
-        }
-        return result.asByteArray();
-    }
 }
