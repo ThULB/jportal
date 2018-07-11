@@ -1,19 +1,25 @@
 package fsu.jportal.resources;
 
-import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.jportal.util.GndUtil;
+import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRJSONManager;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.jportal.util.GndUtil;
 
 @Path("sru")
 public class SRUResource {
@@ -58,7 +64,7 @@ public class SRUResource {
             XMLOutputter out = new XMLOutputter();
             return Response.ok(out.outputString(returnElement), MediaType.APPLICATION_XML).build();
         } catch (Exception exc) {
-            throw new InternalServerErrorException("unable to parse pica record");
+            throw new InternalServerErrorException("unable to parse pica record", exc);
         }
     }
 
@@ -69,7 +75,7 @@ public class SRUResource {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(picaRecord);
             }
-            throw new InternalServerErrorException("unable to parse pica record");
+            throw new InternalServerErrorException("unable to parse pica record", exc);
         }
     }
 
