@@ -18,7 +18,7 @@ import fsu.jportal.backend.gnd.GNDAreaCodesService;
 /**
  * <p>
  *     Reads and parses the GND GEOGRAPHIC AREA CODES of 
- *     <a href="http://d-nb.info/standards/vocab/gnd/geographic-area-code.rdf">this rdf file</a>
+ *     <a href="https://d-nb.info/standards/vocab/gnd/geographic-area-code.rdf">this rdf file</a>
  * </p>
  * <p>
  *     For more information read:
@@ -33,6 +33,7 @@ public class GNDAreaCodesRTFService implements GNDAreaCodesService {
     @Inject
     public GNDAreaCodesRTFService() {
         this.data = new HashMap<>();
+        prefill();
         try {
             URL rdfURL = new URL("https://d-nb.info/standards/vocab/gnd/geographic-area-code.rdf");
             SAXBuilder saxBuilder = new SAXBuilder();
@@ -55,6 +56,14 @@ public class GNDAreaCodesRTFService implements GNDAreaCodesService {
             LogManager.getLogger()
                 .error("Unable to load or parse 'https://d-nb.info/standards/vocab/gnd/geographic-area-code.rdf'", exc);
         }
+    }
+
+    /**
+     * The RDF file is not complete. There are some links missing between "area code" and "gnd id". This manual prefill
+     * enhances those missing parts.
+     */
+    protected void prefill() {
+        this.data.put("XE", "4044257-3");
     }
 
     @Override
