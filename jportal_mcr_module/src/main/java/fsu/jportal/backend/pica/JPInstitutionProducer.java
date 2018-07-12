@@ -140,17 +140,28 @@ public class JPInstitutionProducer extends CorporationProducer {
     }
 
     protected Element createTimesOfActivity() {
-        String start = this.record.getValue("060R", "a", "4", "datb");
-        String end = this.record.getValue("060R", "b", "4", "datb");
-        if (start == null) {
-            return null;
-        }
-        String value = start + (end != null ? " - " + end : "");
+        List<Datafield> timeFields = this.record.getDatafieldsByName("060R");
         Element timesOfActivity = generateDefElement("timesOfActivity", MCRMetaLangText.class, false, true);
-        Element timeOfActivity = generateSubElement("timeOfActivity", null, 0, null, "plain", null, null)
-            .setText(value);
-        timesOfActivity.addContent(timeOfActivity);
-        return timesOfActivity;
+        for (Datafield timeField : timeFields) {
+            Subfield condition = timeField.getFirstSubfieldByCode("4");
+            if (condition == null || !condition.getValue().equals("datb")) {
+                continue;
+            }
+            Subfield startField = timeField.getFirstSubfieldByCode("a");
+            Subfield endField = timeField.getFirstSubfieldByCode("b");
+            Subfield vField = timeField.getFirstSubfieldByCode("v");
+            if (startField == null && endField == null) {
+                continue;
+            }
+            String value = startField != null ? startField.getValue() + " " : "";
+            value += "- ";
+            value += endField != null ? endField.getValue() : "";
+            value += vField != null ? " (" + vField.getValue() + ")" : "";
+            Element timeOfActivity = generateSubElement("timeOfActivity", null, 0, null, "plain", null, null)
+                .setText(value);
+            timesOfActivity.addContent(timeOfActivity);
+        }
+        return timesOfActivity.getChildren().isEmpty() ? null : timesOfActivity;
     }
 
     protected Element createPlacesOfActivity() {

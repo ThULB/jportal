@@ -141,7 +141,7 @@
       <xsd:element name="timesOfActivity" minOccurs="0" maxOccurs="1">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="timeOfActivity" minOccurs="1" maxOccurs="1">
+            <xsd:element name="timeOfActivity" minOccurs="1" maxOccurs="unbounded">
               <xsd:complexType>
                 <xsd:simpleContent>
                   <xsd:extension base="xsd:string">
