@@ -64,6 +64,7 @@ public class GNDAreaCodesRTFService implements GNDAreaCodesService {
      */
     protected void prefill() {
         this.data.put("XE", "4044257-3");
+        this.data.put("XA-AAAT", "4043271-3");
     }
 
     @Override
