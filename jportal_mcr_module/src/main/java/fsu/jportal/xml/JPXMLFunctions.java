@@ -114,12 +114,12 @@ public class JPXMLFunctions {
                 try {
                     resource.close();
                 } catch (IOException ioExc) {
-                    LOGGER.error("Unable to close resource " + webResource + ".", ioExc);
+                    LOGGER.error("Unable to close resource {}.", webResource, ioExc);
                 }
                 return true;
             }
         } catch (Exception exc) {
-            LOGGER.error("Unable to check if resource " + webResource + " does exists.", exc);
+            LOGGER.error("Unable to check if resource {} does exists.", webResource, exc);
         }
         return false;
     }
@@ -128,7 +128,7 @@ public class JPXMLFunctions {
         try {
             return (Integer.valueOf(date.substring(0, 2)) + 1);
         } catch (Exception exc) {
-            LOGGER.error("unable to format date " + date + " to century.");
+            LOGGER.error("unable to format date {} to century.", date);
             return 18; // return default 18 century
         }
     }
@@ -143,7 +143,7 @@ public class JPXMLFunctions {
         try {
             return MetsUtil.isGeneratable(MCRObjectID.getInstance(derivateId));
         } catch (Exception exc) {
-            LOGGER.error("Unable to check if mets.xml of " + derivateId + " is generatable.", exc);
+            LOGGER.error("Unable to check if mets.xml of {} is generatable.", derivateId, exc);
             return false;
         }
     }
@@ -174,7 +174,7 @@ public class JPXMLFunctions {
         } catch (FileNotFoundException fnfe) {
             return false;
         } catch (Exception exc) {
-            LOGGER.error("Unable to check if " + derivateId + " contains an ENMAP profile mets.xml.", exc);
+            LOGGER.error("Unable to check if {} contains an ENMAP profile mets.xml.", derivateId, exc);
             return false;
         }
     }
@@ -193,7 +193,7 @@ public class JPXMLFunctions {
             MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(ownerID);
             return mcrObject.getStructure().getChildren().size() > 0;
         } catch (Exception exc) {
-            LOGGER.error("Unable to check if the owner of the " + derivateId + " has any children.", exc);
+            LOGGER.error("Unable to check if the owner of the {} has any children.", derivateId, exc);
             return false;
         }
     }
@@ -211,7 +211,7 @@ public class JPXMLFunctions {
         try {
             return new MCRURL(requestURL).getParameterValues("fq").contains(query);
         } catch (Exception exc) {
-            LOGGER.error("Unable to parse request url " + requestURL, exc);
+            LOGGER.error("Unable to parse request url {}", requestURL, exc);
             return false;
         }
     }
@@ -244,7 +244,7 @@ public class JPXMLFunctions {
         try {
             return new MCRURL(requestURL).removeParameterValue("fq", query).toString();
         } catch (Exception exc) {
-            LOGGER.error("Unable to parse request url " + requestURL, exc);
+            LOGGER.error("Unable to parse request url {}", requestURL, exc);
             return "";
         }
     }
@@ -273,7 +273,7 @@ public class JPXMLFunctions {
         try {
             return JPComponentUtil.get(id).map(JPComponent::getTitle).orElse(null);
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve title of " + id, exc);
+            LOGGER.error("Unable to retrieve title of {}", id, exc);
             return null;
         }
     }
@@ -294,7 +294,7 @@ public class JPXMLFunctions {
                                   .map(JPDateUtil::format)
                                   .orElse(null);
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve published date of " + id, exc);
+            LOGGER.error("Unable to retrieve published date of {}", id, exc);
         }
         return null;
     }
@@ -320,7 +320,7 @@ public class JPXMLFunctions {
                 return DateTimeFormatter.ISO_INSTANT.format(zonedDateTime);
             }).orElse(null);
         } catch (Throwable t) {
-            LOGGER.error("Unable to retrieve published date of " + id, t);
+            LOGGER.error("Unable to retrieve published date of {}", id, t);
             return null;
         }
     }
@@ -345,7 +345,7 @@ public class JPXMLFunctions {
                 return JPDateUtil.format(jpDate.getFrom());
             }).orElse(null);
         } catch (Throwable t) {
-            LOGGER.error("Unable to retrieve published date of " + id, t);
+            LOGGER.error("Unable to retrieve published date of {}", id, t);
             return null;
         }
     }
@@ -370,7 +370,7 @@ public class JPXMLFunctions {
             return String.format("%s %s %s", formatDate(from, iso639Language), untilText,
                     formatDate(until, iso639Language));
         } catch (Throwable t) {
-            LOGGER.error("Unable to format solr date " + solrDate, t);
+            LOGGER.error("Unable to format solr date {}", solrDate, t);
             return "";
         }
     }
@@ -387,7 +387,7 @@ public class JPXMLFunctions {
             String format = JPDateUtil.getSimpleFormat(isoDate);
             return MCRXMLFunctions.formatISODate(isoDate, format, iso639Language);
         } catch (Throwable t) {
-            LOGGER.error("Unable to format date " + isoDate + " with language " + iso639Language, t);
+            LOGGER.error("Unable to format date {} with language {}", isoDate, iso639Language, t);
             return "";
         }
     }
@@ -424,7 +424,7 @@ public class JPXMLFunctions {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
             return JPComponentUtil.getPeriodical(mcrId).map(JPPeriodicalComponent::getLanguageCode).orElse(null);
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve language of " + id, exc);
+            LOGGER.error("Unable to retrieve language of {}", id, exc);
             return null;
         }
     }
@@ -442,7 +442,7 @@ public class JPXMLFunctions {
                 return periodical.get().getNameOfTemplate();
             }
         } catch (Exception exc) {
-            LOGGER.error("Unable to get name of template for object " + id + ". Return default template.", exc);
+            LOGGER.error("Unable to get name of template for object {}. Return default template.", id, exc);
         }
         return "template_default";
     }
@@ -460,7 +460,7 @@ public class JPXMLFunctions {
                                                              .flatMap(JPPeriodicalComponent::getCreator);
             return creator.map(JPLegalEntity::getTitle).orElse(null);
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve creator of " + id, exc);
+            LOGGER.error("Unable to retrieve creator of {}", id, exc);
             return null;
         }
     }
@@ -472,7 +472,7 @@ public class JPXMLFunctions {
             }
             return "info:eu-repo/semantics/restrictedAccess";
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve access rights of " + id, exc);
+            LOGGER.error("Unable to retrieve access rights of {}", id, exc);
             return null;
         }
     }
@@ -491,7 +491,7 @@ public class JPXMLFunctions {
                                                                .flatMap(JPJournal::getCreator);
             return publisher.map(JPLegalEntity::getTitle).orElse(null);
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve publisher of " + id, exc);
+            LOGGER.error("Unable to retrieve publisher of {}", id, exc);
             return null;
         }
     }
@@ -515,7 +515,7 @@ public class JPXMLFunctions {
             ancestorsAndSelf.forEach(obj -> path.append(obj.getId()).append("/"));
             return path.toString();
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve anchestors of " + id, exc);
+            LOGGER.error("Unable to retrieve anchestors of {}", id, exc);
             return null;
         }
     }
@@ -531,12 +531,12 @@ public class JPXMLFunctions {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
             Integer order = JPComponentUtil.getOrder(mcrId);
             if (order == null) {
-                LOGGER.error("Unable to retrieve the order of " + id);
+                LOGGER.error("Unable to retrieve the order of {}", id);
                 return 0;
             }
             return order;
         } catch (Exception exc) {
-            LOGGER.error("Unable to retrieve the order of " + id, exc);
+            LOGGER.error("Unable to retrieve the order of {}", id, exc);
             return 0;
         }
     }
@@ -571,7 +571,7 @@ public class JPXMLFunctions {
         try {
             return getMarcRelatorCategoryLabel(role).map(MCRLabel::getText).orElse("oth");
         } catch (Throwable t) {
-            LOGGER.error("Unable to retrieve the marc relator id of " + role, t);
+            LOGGER.error("Unable to retrieve the marc relator id of {}", role, t);
             return "oth";
         }
     }
@@ -586,7 +586,7 @@ public class JPXMLFunctions {
         try {
             return getMarcRelatorCategoryLabel(role).map(MCRLabel::getDescription).orElse("Other");
         } catch (Throwable t) {
-            LOGGER.error("Unable to retrieve the marc relator text of " + role, t);
+            LOGGER.error("Unable to retrieve the marc relator text of {}", role, t);
             return "Other";
         }
     }
@@ -614,7 +614,7 @@ public class JPXMLFunctions {
             String[] classIDs = MCRConfiguration.instance().getString("JP.Exclude.Facet", "").split(",");
             return Stream.of(classIDs).anyMatch(classID::contains);
         } catch (Throwable t) {
-            LOGGER.error("Unable to if facet is excluded " + classID, t);
+            LOGGER.error("Unable to if facet is excluded {}", classID, t);
             return false;
         }
     }
@@ -641,7 +641,7 @@ public class JPXMLFunctions {
             }
             return link;
         } catch (Throwable t) {
-            LOGGER.error("Unable to get main file of " + id, t);
+            LOGGER.error("Unable to get main file of {}", id, t);
         }
         return "";
     }
@@ -664,7 +664,7 @@ public class JPXMLFunctions {
             }
             return baseURL + "servlets/MCRFileNodeServlet/" + mainFile;
         } catch (Throwable t) {
-            LOGGER.error("Unable to get thumbnail of " + id, t);
+            LOGGER.error("Unable to get thumbnail of {}", id, t);
         }
         return "";
     }

@@ -11,6 +11,9 @@
     <xsl:apply-templates mode="jportal.allMeta" select="."/>
     <xsl:apply-templates mode="jportal.link" select="*"/>
     <xsl:apply-templates mode="jportal.category" select="*"/>
+    <xsl:call-template name="jportal.metadata.date.published">
+      <xsl:with-param name="ID" select="../@ID" />
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="text()|@*" mode="jportal.link"/>
@@ -111,21 +114,7 @@
   </xsl:template>
 
   <!-- dates -->
-  <xsl:template match="dates" mode="jportal.metadata">
-    <xsl:variable name="published" select="jpxml:getPublishedSolrDateRange(../../@ID)"/>
-    <xsl:if test="$published">
-      <field name="published">
-        <xsl:value-of select="$published"/>
-      </field>
-      <xsl:variable name="published_sort" select="jpxml:getPublishedSolrDate(../../@ID)"/>
-      <field name="published_sort">
-        <xsl:value-of select="$published_sort"/>
-      </field>
-    </xsl:if>
-    <xsl:apply-templates select="date" mode="jportal.metadata.date"/>
-  </xsl:template>
-
-  <xsl:template match="date" mode="jportal.metadata.date">
+  <xsl:template match="dates/date" mode="jportal.metadata">
     <field name="date.{@type}">
       <xsl:choose>
         <xsl:when test="@date != ''">
@@ -142,6 +131,20 @@
     <xsl:if test="text()">
       <field name="dates">
         <xsl:value-of select="text()" />
+      </field>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="jportal.metadata.date.published">
+    <xsl:param name="ID" />
+    <xsl:variable name="published" select="jpxml:getPublishedSolrDateRange($ID)"/>
+    <xsl:if test="$published">
+      <field name="published">
+        <xsl:value-of select="$published"/>
+      </field>
+      <xsl:variable name="published_sort" select="jpxml:getPublishedSolrDate($ID)"/>
+      <field name="published_sort">
+        <xsl:value-of select="$published_sort"/>
       </field>
     </xsl:if>
   </xsl:template>
