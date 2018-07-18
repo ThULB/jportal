@@ -1,5 +1,11 @@
 import java.nio.file.Files
 import java.nio.file.Paths
+import com.github.jengelman.gradle.plugins.processes.tasks.JavaFork
+
+plugins {
+    id 'org.gretty' version '2.2.0' apply false
+    id 'com.github.johnrengelman.processes' version '0.4.1' apply false
+}
 
 def resourcePaths = new HashSet<File>();
 
@@ -24,6 +30,8 @@ allprojects {
         maven { url sonatypeSnapshotsURL }
 
         maven { url snapshotsURL }
+
+        jcenter()
     }
 }
 
@@ -118,7 +126,7 @@ project(':jportal_mcr_module') {
         // test
         testCompile 'org.mycore:mycore-base:$mcrVersion:tests'
         testCompile 'org.hibernate:hibernate-hikaricp:5.2.2.Final'
-        testCompile 'com.h2database:h2:1.4.192'
+        testCompile 'com.h2database:h2:1.4.197'
 
         // mycore
         compile "org.mycore:mycore-base:$mcrVersion"
@@ -217,16 +225,14 @@ project(':jportal_IT-TestData') {
     }
 }
 
-gradle.addListener new WebTestLifecycleListener()
-
 project(':jportal_webapp') {
     apply plugin: 'war'
+    apply plugin: 'org.gretty'
+    apply plugin: 'com.github.johnrengelman.processes'
 
     configurations {
-        applet
         runtime.exclude group: "org.slf4j", module: "slf4j-nop"
         runtime.exclude group: "com.zaxxer", module: "HikariCP-java6"
-        websocket
     }
 
     configurations.all {
@@ -257,23 +263,9 @@ project(':jportal_webapp') {
         runtime project(':jportal_move_obj_module')
         runtime project(':jportal_acl_ip_editor_module')
         runtime project(':jportal_mcr_module')
-
-        if(project.hasProperty("testdata") && project.property("testdata") == "true"){
-            runtime project(':jportal_dev_helper')
-        }
-
-        applet "org.mycore.fileupload:fileupload-applet:1.3-SNAPSHOT"
-        websocket 'javax.websocket:javax.websocket-api:1.1'
-        websocket "org.eclipse.jetty.websocket:javax-websocket-client-impl:$jettyVersion"
-        websocket "org.eclipse.jetty.websocket:javax-websocket-server-impl:$jettyVersion"
     }
 
     war {
-        from(configurations.applet) {
-            into 'applet'
-            rename 'fileupload-applet(.*).jar', 'upload.jar'
-        }
-
         manifest {
             attributes("Webapp": "$project.name")
             attributes("version": "$project.version")
@@ -285,24 +277,15 @@ project(':jportal_webapp') {
         exclude '**/test'
     }
 
-    task webTests(type: Test, dependsOn: 'test') {
-        outputs.upToDateWhen { false }
-        include '**/test/*'
-        systemProperty "project.build.directory", project.reportsDir
-    }
-
     // Webapp runner tasks
     configurations {
-        jetty
-        jettyStart
         h2db
         printer
     }
 
     dependencies {
-        jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
-        jettyStart "org.eclipse.jetty:jetty-start:$jettyVersion"
-        h2db "com.h2database:h2:1.4.191"
+        h2db "com.h2database:h2:1.4.197"
+        gretty configurations.h2db
     }
 
     ext.appName = "jportal"
@@ -314,89 +297,64 @@ project(':jportal_webapp') {
     ext.jettyStopPort = '8296'
     ext.jettyStopKey = 'StopJetty'
 
-    task deleteAppPath << {
-        delete {
-            appPath
-        }
-    }
-
     def solrBasePath = Paths.get(projectDir.getAbsolutePath(), "solr");
     def solrZipFile = solrBasePath.resolve("solr-${solrVersion}.zip");
     def solrServerPath = solrBasePath.resolve("server");
 
-    task configApp << {
-        // copy config/*
-        copy {
-            from(confDir) {
-                include "**"
-                exclude "jetty/**"
-            }
-            into appPath
-        }
-
-        // handle SOLR
-        // download
-        if(!Files.exists(solrBasePath)) {
-            Files.createDirectory(solrBasePath);
-        }
-        def newVersion = false;
-        if(!Files.exists(solrZipFile)) {
-            def solrZipURL = "http://apache.mirror.iphh.net/lucene/solr/${solrVersion}/solr-${solrVersion}.zip"
-            new URL(solrZipURL).withInputStream { is -> solrZipFile.withOutputStream { it << is } }
-            newVersion = true;
-        }
-
-        // extract
-        if(!Files.exists(solrServerPath) || newVersion) {
-            if(Files.exists(solrServerPath) && newVersion) {
-                println "There is probably a new solr version. Delete old folder..."
-                delete solrServerPath.toAbsolutePath().toString()
-            }
-            println "Solr not installed. Installing into " + solrServerPath + "..."
-            Files.createDirectories(solrServerPath);
-            def ignoreRootDir = 'solr-' + solrVersion
+    task configApp {
+        doLast {
+            // copy config/*
             copy {
-                from zipTree(solrZipFile.toAbsolutePath().toString()).matching {include "$ignoreRootDir/**"}
-                into solrServerPath.toAbsolutePath().toString()
-                eachFile { fcp ->
-                    fcp.path = fcp.path.replaceFirst("^$ignoreRootDir", '')
+                from(confDir) {
+                    include "**"
                 }
-                includeEmptyDirs false
+                into appPath
+            }
+
+            // handle SOLR
+            // download
+            if (!Files.exists(solrBasePath)) {
+                Files.createDirectory(solrBasePath);
+            }
+            def newVersion = false;
+            if (!Files.exists(solrZipFile)) {
+                def solrZipURL = "http://apache.mirror.iphh.net/lucene/solr/${solrVersion}/solr-${solrVersion}.zip"
+                new URL(solrZipURL).withInputStream { is -> solrZipFile.withOutputStream { it << is } }
+                newVersion = true;
+            }
+
+            // extract
+            if (!Files.exists(solrServerPath) || newVersion) {
+                if (Files.exists(solrServerPath) && newVersion) {
+                    println "There is probably a new solr version. Delete old folder..."
+                    delete solrServerPath.toAbsolutePath().toString()
+                }
+                println "Solr not installed. Installing into " + solrServerPath + "..."
+                Files.createDirectories(solrServerPath);
+                def ignoreRootDir = 'solr-' + solrVersion
+                copy {
+                    from zipTree(solrZipFile.toAbsolutePath().toString()).matching { include "$ignoreRootDir/**" }
+                    into solrServerPath.toAbsolutePath().toString()
+                    eachFile { fcp ->
+                        fcp.path = fcp.path.replaceFirst("^$ignoreRootDir", '')
+                    }
+                    includeEmptyDirs false
+                }
             }
         }
     }
 
-    task configWebTests << {
-        configurations {
-            testData {
-                transitive = false
-            }
-        }
-
-        dependencies {
-            testData project(':jportal_IT-TestData')
-        }
-
-        copy {
-            from configurations.testData.singleFile
-            into "$appPath/lib"
-        }
+    task runH2DB(type: JavaFork) {
+        classpath = configurations.h2db
+        main = "org.h2.tools.Server"
+        args = ["-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()]
     }
 
-    task runH2DB(type: JavaProcess) {
-        doFirst {
-            def h2DBPath = Paths.get(appPath, "h2db")
-
-            classpath configurations.h2db
-            main "org.h2.tools.Server"
-            args "-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", h2DBPath.toString()
-        }
-    }
-
-    task stopH2DB(type: JavaProcess) {
-        classpath configurations.h2db
-        main "org.h2.tools.Server"
-        args "-tcpShutdown", "tcp://localhost:9092"
+    task stopH2DB(type: JavaExec) {
+        classpath = configurations.h2db
+        main = "org.h2.tools.Server"
+        args = ["-tcpShutdown", "tcp://localhost:9092"]
+        ignoreExitValue true
     }
 
     task runSolr(type: Exec) {
@@ -413,164 +371,30 @@ project(':jportal_webapp') {
         commandLine './bin/solr', 'stop'
     }
 
-    task runJetty(type: JavaProcess) {
-        doFirst {
-            systemProperties.put("MCR.Home", mcrHome)
-            systemProperties.put("MCR.AppName", "jportal")
-            systemProperties.put("URN.log", "$appPath/urnlog")
-            classpath configurations.jetty, configurations.h2db, configurations.websocket
+    gretty {
+        servletContainer 'tomcat9'
 
-            jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-            jvmArgs '-Xmx4096m'
+        httpPort = Integer.valueOf(grettyPort)
+        contextPath = '/jportal'
+        jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+        jvmArgs '-Xmx4096m'
 
-            main "org.eclipse.jetty.runner.Runner"
-            args '--config', "$project.projectDir/config/jetty/jetty-config.xml"
-            args '--stop-port', jettyStopPort
-            args '--stop-key', jettyStopKey
-            args '--path', '/jportal', war.archivePath
-        }
+        systemProperty "MCR.Home", mcrHome
+        systemProperty "MCR.AppName", "jportal"
+        systemProperty "URN.log", "$appPath/urnlog"
     }
 
-    task stopJetty(type: JavaProcess) {
-        systemProperties.put('STOP.PORT', jettyStopPort)
-        systemProperties.put('STOP.KEY', jettyStopKey)
-        classpath configurations.jettyStart
-        main "org.eclipse.jetty.start.Main"
-        args '--stop'
-    }
-
-    task runApp {
+    task runSystem {
         dependsOn configApp
         dependsOn runH2DB
         dependsOn runSolr
-        dependsOn runJetty
     }
 
-    task stopApp {
-        dependsOn stopJetty
+    task stopSystem {
         dependsOn stopSolr
         dependsOn stopH2DB
     }
-}
 
-class WebTestLifecycleListener implements TaskExecutionListener {
-
-    def servers = [H2DB: 'TCP server running', Solr: 'registerSearcher', Jetty: 'Server:main: Started']
-
-    @Override
-    void beforeExecute(Task task) {
-        if (task.name == 'webTests' || task.name == 'webTestsApp') {
-            def testMCRHome = "${task.project.buildDir}/mcrHome"
-            task.project.mcrHome = testMCRHome
-            task.project.appPath = "${testMCRHome}/${task.project.appName}"
-
-            task.project.'deleteAppPath'.execute()
-            task.project.'configApp'.execute()
-            task.project.'configWebTests'.execute()
-            servers.each { serverName, forMsg ->
-                println "Run $serverName"
-                task.project.tasks."run$serverName".ready forMsg
-                task.project.tasks."run$serverName".execute()
-            }
-        }
-    }
-
-    @Override
-    void afterExecute(Task task, TaskState taskState) {
-        if (task.name == 'webTests') {
-            servers.reverseEach { serverName, forMsg ->
-                println "Stop $serverName"
-                task.project.tasks."stop$serverName".execute()
-            }
-        }
-    }
-}
-
-class JavaProcess extends DefaultTask {
-    def cmd = ["java", "-cp"]
-    def jvmArgs = []
-    def classpath = []
-    def args = []
-    def main = null
-    def wait = false
-    String ready
-
-    def systemProperties = [:]
-
-    def args(Object... obj) {
-        obj.each { o ->
-            args.addAll(o.toString())
-        }
-    }
-
-    def jvmArgs(Object... obj) {
-        obj.each { o ->
-            jvmArgs.add(o.toString())
-        }
-    }
-
-    def classpath(FileCollection... fCol) {
-        fCol.each { f ->
-            classpath.add(f.asPath)
-        }
-    }
-
-    def classpath(File... path) {
-        classpath.addAll(path)
-    }
-
-    def main(name) {
-        main = name
-    }
-
-    def systemProperties() {
-        return systemProperties
-    }
-
-    def wait(boolean wait) {
-        this.wait = wait
-    }
-
-    @TaskAction
-    def run() {
-        cmd.add(classpath.join(File.pathSeparator))
-        cmd.addAll(jvmArgs)
-        systemProperties.each { k, v ->
-            cmd.add("-D$k=$v".toString())
-        }
-        cmd.add(main)
-        cmd.addAll(args)
-        def processBuilder = new ProcessBuilder(cmd)
-
-        if (ready == null) {
-            processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT)
-            processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
-        } else {
-            processBuilder.redirectErrorStream(true)
-        }
-
-        Process process = processBuilder.start()
-
-
-        if (ready != null) {
-            InputStream stdout = process.getInputStream()
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stdout))
-
-            def line
-            while ((line = reader.readLine()) != null) {
-                println line
-                if (line.contains(ready)) {
-                    println "$main is ready"
-                    break;
-                }
-            }
-            process.consumeProcessOutput(System.out, System.err)
-        }
-
-        if (wait) {
-            process.waitForProcessOutput(System.out, System.err)
-        }
-    }
 }
 
 configurations.all {
@@ -580,4 +404,6 @@ configurations.all {
     }
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '2.8' }
+wrapper {
+    gradleVersion = '4.5'
+}

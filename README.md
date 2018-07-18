@@ -32,26 +32,22 @@ We use gradle as our build system. If you checked out jportal the
 first time run the following command. This will build 
 and start solr (search engine), h2 (database) and the web application.
 
-    ./gradlew build runApp
+    ./gradlew build runSystem appRun
 
 After the command is processed you find the application [here](http://localhost:8291/jportal "jportal")
 and solr [here](http://localhost:8391/solr "solr").
 
 To log in use **administrator** as login name and **alleswirdgut** as password.
 
-To stop the whole thing do:
+To stop the application just press ENTER in the command line. Be aware that the database and the solr
+server are still running. To stop those enter
 
-    ./gradlew stopApp
+    ./gradlew stopSystem
 
-To rebuild it do:
+Usually its is not necessary to start and stop solr and the database while developing.
+You can just rebuild the web application.
 
-    ./gradlew stopApp clean build runApp
-
-For developing it is usually not necessary to start/stop solr and the
-database. Its faster to just restart the jetty.
-
-    ./gradlew stopJetty clean build runJetty
-
+    ./gradlew clean build appRun
 
 ### DEPLOY JPORTAL
 After building jportal (see [RUN JPORTAL](#run-jportal)) a *.war file will be created
@@ -69,7 +65,7 @@ with **-DMCR.Home=/path to the mycore home directory**.
 
 #### solr
 If you want to use your own solr you can simply change the url.
-Open the mycore.properties file and change **MCR.Module-solr.ServerURL** to
+Open the mycore.properties file and change **MCR.Solr.ServerURL** to
 your preferred location.
 
 #### database
@@ -97,7 +93,7 @@ Following groups are created by default.
 + admin
   * is allowed to do everything
 
-The groups using a hierarchy system. If a user is in a higher group he has
-also the rights of the lower group. 
+The groups using a hierarchy system. A user in a higher group has
+also the rights of all the lower groups.
 
     admin > supervisor > journalgroup > editorsgroup
