@@ -251,6 +251,17 @@
 
   <xsl:template mode="renderView" match="@data-submit-url[contains(.,'{result.hit.id}')]">
     <xsl:param name="data" />
+    <xsl:variable name="title">
+      <xsl:choose>
+        <xsl:when test="contains('person|jpinst', $subselect.type)">
+          <xsl:value-of select="'heading'"/>
+        </xsl:when>
+        <xsl:when test="contains('jpjournal|jpvolume|jparticle', $subselect.type)">
+          <xsl:value-of select="'maintitle'"/>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:variable name="url">
       <url>
         <xsl:choose>
@@ -261,7 +272,7 @@
             <param name="_xed_submit_return" value="submit" />
             <param name="_xed_session" value="{$_xed_subselect_session}" />
             <param name="@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
-            <param name="@xlink:title" value="{$data/str[@name='heading']}" encode="false" /> <!-- _var_@xlink:title -->
+            <param name="@xlink:title" value="{$data/str[@name=$title]}" encode="false" /> <!-- _var_@xlink:title -->
           </xsl:when>
           <xsl:otherwise>
             <base>
@@ -271,7 +282,7 @@
             <xsl:copy-of select="$subselectParam/subselect/param" />
             <param name="mode" value="prefix" />
             <param name="_var_@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
-            <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" encode="false" /> <!-- _var_@xlink:title -->
+            <param name="_var_@xlink:title" value="{$data/str[@name=$title]}" encode="false" /> <!-- _var_@xlink:title -->
           </xsl:otherwise>
         </xsl:choose>
       </url>

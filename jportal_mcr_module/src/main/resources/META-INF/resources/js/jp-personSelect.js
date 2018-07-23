@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $(".participant_subselect").each(function () {
-        var labelName = $(this).find(".jp-personSelect-name");
+    $(".jp-subSelect").each(function () {
+        var labelName = $(this).find(".jp-subSelect-name");
 
         if (labelName.find("input").filter(":first").val() != "") {
             var title = labelName.find("input").filter(":first").val();
@@ -8,11 +8,11 @@ $(document).ready(function () {
             labelName.find(".jp-name-display").html(title + " " + "<label>( " + href + " )</label>");
         }
 
-        $(this).find(".jp-personSelect-person, .jp-personSelect-inst").each(function () {
+        $(this).find(".jp-subSelect-button").each(function () {
             var that = $(this);
             that.click(function () {
-                var type = that.attr("class").indexOf("-inst") != -1 ? "jpinst" : "person";
-                var namebase = that.parent().prev(".jp-personSelect-name").find("input").filter(":last").attr("name");
+                var type = that.data('type');
+                var namebase = that.parent().prev(".jp-subSelect-name").find("input").filter(":last").attr("name");
                 namebase = namebase.substr(0, namebase.length - 12);
 
                 var conn = connector(type, namebase);

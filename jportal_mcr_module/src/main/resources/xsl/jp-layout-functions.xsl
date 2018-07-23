@@ -108,11 +108,17 @@
   </xsl:template>
 
   <xsl:template mode="jp.metadata.name" match="mycoreobject">
-    <xsl:if test="contains(@ID, '_person_')">
+    <xsl:variable name="tmp" select="substring-after(@ID, 'jportal_')"/>
+    <xsl:variable name="objectType" select="substring-before($tmp, '_')"/>
+
+    <xsl:if test="$objectType = 'person'">
       <xsl:apply-templates mode="jp.metadata.person.name" select="metadata/def.heading/heading"/>
     </xsl:if>
-    <xsl:if test="contains(@ID, '_jpinst_')">
+    <xsl:if test="$objectType = 'jpinst'">
       <xsl:apply-templates mode="jp.metadata.jpinst.name" select="metadata/names"/>
+    </xsl:if>
+    <xsl:if test="contains('jpjournal|jpvolume|jparticle', $objectType)">
+      <xsl:apply-templates mode="jp.metadata.jpinst.name" select="metadata/maintitles/maintitle[@inherited='0']"/>
     </xsl:if>
   </xsl:template>
 

@@ -38,8 +38,14 @@
         <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:bind>
     </jp:section>
-    <jp:template name="textInput" xpath="origins[@class='MCRMetaLink']/origin[@type='origin'][@inherited='0'][@xlink:type='locator']/@xlink:href"
-                 i18n="editormask.labels.volume.origin"/>
+    <xed:bind xpath="references[@class='MCRMetaLink']/reference[@inherited='0'][@xlink:type='locator']">
+      <jp:template name="textInputSm" xpath="@xlink:title" i18n="editormask.labels.reference.source">
+        <jp:template name="textInput" xpath="." i18n="jp.editor.journal.name" placeholder="jp.editor.journal.preNameLink" small="true" />
+      </jp:template>
+      <jp:template name="textInputSm" xpath="@xlink:href">
+        <jp:template name="textInput" xpath="." i18n="jp.editor.journal.link" placeholder="jp.editor.journal.linkSite" small="true" />
+      </jp:template>
+    </xed:bind>
     <jp:section title="{i18n:metaData.headlines.contantdiscr}">
       <jp:template name="title" i18n="metaData.headlines.contantdiscr" />
 

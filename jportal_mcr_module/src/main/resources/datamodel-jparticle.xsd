@@ -342,7 +342,7 @@
               </xsd:complexType>
             </xsd:element>
           </xsd:sequence>
-          <xsd:attribute fixed="MCRMetaLink" use="required" type="xsd:string" name="class" />
+          <xsd:attribute fixed="MCRMetaLinkID" use="required" type="xsd:string" name="class" />
           <xsd:attribute use="optional" type="xsd:boolean" name="heritable" />
           <xsd:attribute use="optional" type="xsd:boolean" name="notinherit" />
         </xsd:complexType>

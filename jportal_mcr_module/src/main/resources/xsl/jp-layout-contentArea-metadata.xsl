@@ -22,6 +22,7 @@
   <xsl:key name="people" match="person[@inherited='0']" use="@type" />
   <xsl:key name="links" match="link[@inherited='0']" use="@type" />
   <xsl:key name="geographicCoordinates" match="link[@inherited='0']" use="@type" />
+  <xsl:key name="references" match="reference[@inherited='0']" use="@xlink:label" />
 
   <xsl:variable name="simpleType"
     select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress MCRMetaLink MCRMetaSpatial JPMetaLocation JPMetaDate'" />
@@ -72,6 +73,26 @@
         </a>
       </dd>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="metadataDisplay" match="metadata/references" priority="1">
+    <xsl:choose>
+      <xsl:when test="reference/@xlink:label">
+        <xsl:for-each select="reference[count(. | key('references', @xlink:label)[1]) = 1]">
+          <xsl:variable name="current-grouping-key" select="@xlink:label"/>
+          <xsl:variable name="current-group" select="key('references', $current-grouping-key)"/>
+
+          <xsl:call-template name="metadataField">
+            <xsl:with-param name="fields" select="$current-group"/>
+          </xsl:call-template>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="metadataField">
+          <xsl:with-param name="fields" select="*" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class)]">
@@ -178,9 +199,27 @@
     <xsl:value-of select="@type" />
   </xsl:template>
 
-  <xsl:template mode="metadataFieldLabel" match="reference[@xlink:label]">
-    <xsl:value-of select="@type" />
-        <xsl:value-of select="i18n:translate(concat('metaData.reference.source.', @xlink:label))" />
+  <xsl:template mode="metadataFieldLabel" match="reference" priority="1">
+    <xsl:variable name="refLabel" select="i18n:translate('metaData.reference.source')" />
+    <xsl:message>
+      <xsl:value-of select="concat('refLabel: ', $refLabel)"/>
+    </xsl:message>
+
+    <xsl:choose>
+      <xsl:when test="@xlink:label">
+        <xsl:variable name="refType" select="i18n:translate(concat('metaData.reference.source.', @xlink:label))" />
+        <xsl:value-of select="concat($refLabel, ' - ', $refType)"/>
+        <xsl:message>
+          <xsl:value-of select="concat('refLabel @xlink:label: ', $refLabel, ' - ', $refType)"/>
+        </xsl:message>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$refLabel"/>
+        <xsl:message>
+          <xsl:value-of select="concat('refLabel otherwise: ', $refLabel)"/>
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="metadataFieldLabel" match="*[../@class='MCRMetaClassification']">
@@ -217,7 +256,7 @@
     <xsl:value-of select="jpxml:formatJPMetaDate(., $CurrentLang)" />
   </xsl:template>
 
-  <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink' and @xlink:title]">
+  <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink' and @xlink:title]" priority="1">
     <a href="{@xlink:href}" class="jp-layout-metadata-separated-list">
       <xsl:value-of select="@xlink:title" />
     </a>

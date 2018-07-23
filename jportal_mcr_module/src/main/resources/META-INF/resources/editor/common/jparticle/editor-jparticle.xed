@@ -66,19 +66,18 @@
           </xed:bind>
         </xed:repeat>
       </xed:if>
-      <xed:repeat xpath="references[@class='MCRMetaLink']/reference[@inherited='0'][@xlink:type='locator']" min="0" max="60">
-        <jp:template name="selectInput" xpath="@label" i18n="editormask.labels.reference.source" option="true" buttons="true" noPleaseSelect="true" bottom="littleSpace">
+      <xed:repeat xpath="references[@class='MCRMetaLinkID']/reference[@inherited='0'][@xlink:type='locator']" min="0" max="60">
+        <jp:template name="selectInput" xpath="@xlink:label" i18n="editormask.labels.reference.source" option="true"
+                     buttons="true" noPleaseSelect="true" bottom="littleSpace" myClass="col-md-8 jp-subSelect">
           <option i18n="metaData.reference.source.original" value="original" />
           <option i18n="metaData.reference.source.reprint" value="reprint" />
           <option i18n="metaData.reference.source.translation" value="translation" />
-        </jp:template>
-        <jp:template name="textInputSm" xpath="@xlink:title">
-          <jp:template name="textInput" xpath="." i18n="jp.editor.journal.name" placeholder="jp.editor.journal.preNameLink" small="true" />
-        </jp:template>
-        <jp:template name="textInputSm" xpath="@xlink:href">
-          <jp:template name="textInput" xpath="." i18n="jp.editor.journal.link" placeholder="jp.editor.journal.linkSite" small="true" />
+
+          <jp:template type="subselect" value="editor%2Fstart.xed%3Ftype%3D{jparticle}%26action%3D{$action}%26id%3D{$id}%26parent%3D{$parent}"
+                       xpath="@xlink:title" xpath2="@xlink:href" objectTypes="jparticle"/>
         </jp:template>
       </xed:repeat>
+
       <xed:if test="$journal/metadata/hidden_rubricsID/hidden_rubricID">
         <xed:repeat xpath="rubrics[@class='MCRMetaClassification']/rubric[@inherited='0']" min="0" max="10">
           <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_rubricsID/hidden_rubricID" buttons="true"

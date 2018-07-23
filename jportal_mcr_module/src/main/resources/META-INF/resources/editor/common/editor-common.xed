@@ -33,9 +33,9 @@
     <xed:repeat
       xpath="participants[@class='MCRMetaLinkID']/participant[@inherited='0'][@xlink:type='locator']">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.participants_label" buttons="true"
-        classification="jportal_class_00000007" validate="subselect" myClass="col-md-8 participant_subselect">
+        classification="jportal_class_00000007" validate="subselect" myClass="col-md-8 jp-subSelect">
         <jp:template type="subselect" value="editor%2Fstart.xed%3Ftype%3D{$type}%26action%3D{$action}%26id%3D{$id}%26parent%3D{$parent}"
-          xpath="@xlink:title" xpath2="@xlink:href" />
+          xpath="@xlink:title" xpath2="@xlink:href" objectTypes="person|jpinst"/>
       </jp:template>
     </xed:repeat>
   </xed:template>

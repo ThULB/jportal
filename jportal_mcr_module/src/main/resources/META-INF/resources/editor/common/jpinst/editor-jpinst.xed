@@ -34,16 +34,16 @@
     <jp:section title="{i18n:metaData.headlines.jpinst.otherInst}">
       <jp:template name="title" i18n="metaData.headlines.jpinst.otherInst"/>
       <xed:repeat xpath="links[@class='MCRMetaLinkID']/link[@type='predecessor'][@xlink:type='locator']" min="0" max="10">
-        <jp:template name="subselect" xpath="." i18n="editormask.labels.predecessor"
-                     subselectClass="jp-personSelect-inst" myClass="col-md-8 participant_subselect" buttons="true"/>
+        <jp:template name="subselect" xpath="." xpath2="@xlink:href" i18n="editormask.labels.predecessor"
+                     myClass="col-md-8 jp-subSelect" buttons="true" objectTypes="jpinst"/>
       </xed:repeat>
       <xed:repeat xpath="links[@class='MCRMetaLinkID']/link[@type='successor'][@xlink:type='locator']" min="0" max="10">
-        <jp:template name="subselect" xpath="." i18n="editormask.labels.successor"
-                     subselectClass="jp-personSelect-inst" myClass="col-md-8 participant_subselect" buttons="true"/>
+        <jp:template name="subselect" xpath="." xpath2="@xlink:href" i18n="editormask.labels.successor"
+                     myClass="col-md-8 jp-subSelect" buttons="true" objectTypes="jpinst"/>
       </xed:repeat>
       <xed:repeat xpath="links[@class='MCRMetaLinkID']/link[@type='superior'][@xlink:type='locator']" min="0" max="10">
-        <jp:template name="subselect" xpath="." i18n="editormask.labels.superior"
-                     subselectClass="jp-personSelect-inst" myClass="col-md-8 participant_subselect" buttons="true"/>
+        <jp:template name="subselect" xpath="." xpath2="@xlink:href" i18n="editormask.labels.superior"
+                     myClass="col-md-8 jp-subSelect" buttons="true" objectTypes="jpinst"/>
       </xed:repeat>
     </jp:section>
 

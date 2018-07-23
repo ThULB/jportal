@@ -356,7 +356,7 @@
   </xsl:template>
 
   <xsl:template match="jp:template[@type='subselect']" mode="subselect">
-    <div class="jp-personSelect-name">
+    <div class="jp-subSelect-name">
       <div class="jp-name-display"></div>
       <xed:bind xpath="{@xpath}">
         <input type="text" style="display:none" />
@@ -368,17 +368,24 @@
 
 	<!-- 2 buttons for selection of person or institution _ subselect -->
     <div class="form-group">
-      <button type="button" class="btn btn-default jp-personSelect-person" tabindex="1">
-        <xed:output i18n="jp.editor.person.select" />
-      </button>
-      <button type="button" class="btn btn-default jp-personSelect-inst" tabindex="1">
-        <xed:output i18n="jp.editor.inst.select" />
-      </button>
+      <xsl:apply-templates mode="subselectButtons" select="@objectTypes"/>
     </div>
   </xsl:template>
-  
+
+
+  <xsl:template mode="subselectButtons" match="@objectTypes[contains(., '|')]|text()[contains(., '|')]">
+    <xsl:apply-templates mode="subselectButtons" select="xalan:nodeset(substring-before(.,'|'))"/>
+    <xsl:apply-templates mode="subselectButtons" select="xalan:nodeset(substring-after(.,'|'))"/>
+  </xsl:template>
+
+  <xsl:template mode="subselectButtons" match="@objectTypes[not(contains(., '|'))]|text()[not(contains(., '|'))]">
+    <button type="button" class="btn btn-default jp-subSelect-button" data-type="{.}" tabindex="1">
+      <xed:output i18n="{concat('jp.editor.select.', .)}" />
+    </button>
+  </xsl:template>
+
   <xsl:template match="jp:template[@name='subselect']" mode="input">
-    <div class="jp-personSelect-name">
+    <div class="jp-subSelect-name">
       <div class="jp-name-display"></div>
       <xed:bind xpath="@xlink:title">
         <input type="text" style="display:none" />
@@ -388,11 +395,11 @@
       </xed:bind>
     </div>
     <div class="form-group">
-      <button type="button" tabindex="1">
+      <button type="button" data-type="jpinst" tabindex="1">
         <xsl:attribute name="class">
-          <xsl:value-of select="concat('btn btn-default ', @subselectClass)" />
+          <xsl:value-of select="'btn btn-default jp-subSelect-button'" />
         </xsl:attribute>
-        <xed:output i18n="jp.editor.inst.select" />
+        <xed:output i18n="jp.editor.select.jpinst" />
       </button>
     </div>
   </xsl:template>
