@@ -185,7 +185,8 @@ public class GndUtil {
         } else if (isInstitution(objectType)) {
             return new JPInstitutionProducer().produceRawMCRObject(picaRecord);
         }
-        throw new IllegalArgumentException("Invalid object type. Cannot parse " + objectType);
+        throw new IllegalArgumentException("Invalid object type. 002@ has to be either 'Tp' or 'Tb' but is '" +
+            objectType + "'.");
     }
 
     private static boolean isPerson(String picaObjectType) {

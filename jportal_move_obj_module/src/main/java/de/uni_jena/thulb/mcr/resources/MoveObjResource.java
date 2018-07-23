@@ -12,10 +12,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.logging.log4j.LogManager;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
@@ -60,10 +60,9 @@ public class MoveObjResource {
                 try {
                     MCRObjectCommands.replaceParent(objID, newParentID);
                 } catch (MCRPersistenceException | MCRAccessException e) {
-                    e.printStackTrace();
+                    LogManager.getLogger().error(
+                        String.format("Unable to replace parent of %s with %s", objID, newParentID), e);
                     return Response.status(Status.UNAUTHORIZED).build();
-                } catch (MCRActiveLinkException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -89,7 +88,7 @@ public class MoveObjResource {
         confObj.add("parentTypes", parentTypeJson);
         String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url", "");
         if (!url.equals("")) {
-            confObj.addProperty("url", baseURL + url.substring(1, url.length()));
+            confObj.addProperty("url", baseURL + url.substring(1));
         }
 
         confObj.addProperty("baseUrl", baseURL);

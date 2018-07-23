@@ -2,7 +2,7 @@ var jp = jp || {};
 
 jp.importSRU = {
 	xml: null
-}
+};
 
 function querySRU(/*string*/ query) {
 	clearResults();
@@ -12,16 +12,16 @@ function querySRU(/*string*/ query) {
 		url: jp.baseURL + "rsc/sru/search?q=" + query,
 		success: function(data) {
 			clearResults();
-			var sruContainer = data.documentElement;
+			const sruContainer = data.documentElement;
 			if(sruContainer != null && sruContainer.children.length > 0) {
 				// just print one result, should be enough and is much
 				// easier to link with import button
-				var xml = sruContainer.children[0];
+				const xml = sruContainer.children[0];
 				jp.importSRU.xml = xmlToString(xml);
 
 				// doublet check
-				var gnd = $(xml).find("identifier[type='gnd']").text();
-				var importable = true;
+				const gnd = $(xml).find("identifier[type='gnd']").text();
+				let importable = true;
 				if(gnd != null) {
 					importable = doubletCheck(gnd);
 				} else {
@@ -29,8 +29,12 @@ function querySRU(/*string*/ query) {
 				}
 				renderHit(jp.importSRU.xml, importable);
 			} else {
-				$("#result").html("Kein Treffer.");
+				$("#result").html("<div class=\"alert alert-secondary\" role=\"alert\">Kein Treffer.</div>");
 			}
+		},
+		error: (response) => {
+            $("#result").html("<div class=\"alert alert-danger\" role=\"alert\">" + response.responseText + "</div>");
+			console.log(response);
 		},
 		dataType: "xml"
 	});
@@ -61,7 +65,7 @@ function printInternalError() {
 function appendHit(html, importable) {
 	$("#result").append(html);
 	if(importable) {
-		var link = $("<a href='javascript:void(0)'>Datensatz importieren</a>");
+		const link = $("<a href='javascript:void(0)'>Datensatz importieren</a>");
 		$("<p></p>").append(link).appendTo("#result");
 		link.click(function() {
 			clearDubletCheck();
@@ -74,7 +78,7 @@ function appendHit(html, importable) {
 							"'>Link zum Objekt</a></p>");
 				},
 				error: function(error) {
-					if(error.status == 401) {
+					if(error.status === 401) {
 						$("#result").html("Sie haben nicht die Rechte einen Datensatz anzulegen.");
 					} else {
 						console.log(error);
@@ -90,7 +94,7 @@ function appendHit(html, importable) {
 }
 
 function doubletCheck(/*string*/ gnd) {
-	var json = $.ajax({
+	const json = $.ajax({
 		type: "GET",
 		url: jp.baseURL + "servlets/solr/select?rows=1&fl=id&q=id.gnd:" + gnd + "&wt=json",
 		async: false,
@@ -98,9 +102,9 @@ function doubletCheck(/*string*/ gnd) {
 			console.log(error);
 		}
 	}).responseText;
-	var response = $.parseJSON(json).response;
+    const response = $.parseJSON(json).response;
 	if(response.numFound > 0) {
-		var id = response.docs[0].id;
+        const id = response.docs[0].id;
 		showDubletCheck("<span style='color:red'>Datensatz existiert bereits!</span> <a href='" + jp.baseURL + "receive/" + id + "'>Link zum Objekt</a>");
 		return false;
 	} else {

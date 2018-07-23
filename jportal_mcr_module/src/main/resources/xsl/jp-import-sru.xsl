@@ -19,7 +19,9 @@
         <xsl:call-template name="jp.import.sru.search" />
       </xsl:when>
       <xsl:otherwise>
-        <p>Sie haben keine Berechtigung Personen oder Institutionen zu importieren.</p>
+        <div class="alert alert-danger" role="alert">
+          Sie haben nicht die erforderlichen Berechtigungen um Personen oder Institutionen zu importieren.
+        </div>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

@@ -64,7 +64,7 @@ public class SRUResource {
             XMLOutputter out = new XMLOutputter();
             return Response.ok(out.outputString(returnElement), MediaType.APPLICATION_XML).build();
         } catch (Exception exc) {
-            throw new InternalServerErrorException("unable to parse pica record", exc);
+            throw new InternalServerErrorException("unable to parse pica record: " + exc.getMessage(), exc);
         }
     }
 
@@ -75,7 +75,7 @@ public class SRUResource {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(picaRecord);
             }
-            throw new InternalServerErrorException("unable to parse pica record", exc);
+            throw new InternalServerErrorException("unable to parse pica record: " + exc.getMessage(), exc);
         }
     }
 
