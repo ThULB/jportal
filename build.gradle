@@ -376,7 +376,9 @@ project(':jportal_webapp') {
 
         httpPort = Integer.valueOf(grettyPort)
         contextPath = '/jportal'
-        jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+        debugPort = Integer.valueOf(grettyDebugPort)
+        debugSuspend = Boolean.valueOf(grettyDebugSuspend)
+
         jvmArgs '-Xmx4096m'
 
         systemProperty "MCR.Home", mcrHome
