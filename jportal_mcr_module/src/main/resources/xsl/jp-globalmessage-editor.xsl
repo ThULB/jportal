@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-	xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-	exclude-result-prefixes="xalan mcrxml acl i18n">
+								xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+								xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+								xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+								xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+								exclude-result-prefixes="xalan mcrxml acl i18n">
 
 	<xsl:template match="globalmessage-editor">
 		<div id="jp-layout-globalmessage-editor">
@@ -66,7 +68,6 @@
 				<xsl:value-of select="i18n:translate('jp.site.globalMsgEditor.msg')" />
 			</label>
 			<div id="testCkeditor" class="col-sm-10">
-<!-- 				<textarea id="message" class="form-control" > -->
 				<textarea id="message" class="ckeditor" >
 					<xsl:value-of select="$gm/message" />
 				</textarea>
@@ -81,7 +82,7 @@
 	</xsl:template>
 
 	<xsl:template name="jp.globalmessage.editor.js">
-		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
+		<script type="text/javascript" src="{$WebApplicationBaseURL}webjars/ckeditor/4.7.0/full/ckeditor.js" />
 		<script type="text/javascript">
 		  $(document).ready(function() {
 			$('#submit').on('click', function () {
