@@ -66,17 +66,13 @@
           </xed:bind>
         </xed:repeat>
       </xed:if>
-      <xed:repeat xpath="predeces[@class='MCRMetaLink']/predece[@inherited='0'][@xlink:type='locator']" min="0" max="10">
-        <jp:template name="textInputSm" xpath="@xlink:title" i18n="editormask.labels.predecessor" buttons="true">
-          <jp:template name="textInput" xpath="." i18n="jp.editor.journal.name" placeholder="jp.editor.journal.preNameLink" small="true" />
+      <xed:repeat xpath="references[@class='MCRMetaLink']/reference[@inherited='0'][@xlink:type='locator']" min="0" max="60">
+        <jp:template name="selectInput" xpath="@label" i18n="editormask.labels.reference.source" option="true" buttons="true" noPleaseSelect="true" bottom="littleSpace">
+          <option i18n="metaData.reference.source.original" value="original" />
+          <option i18n="metaData.reference.source.reprint" value="reprint" />
+          <option i18n="metaData.reference.source.translation" value="translation" />
         </jp:template>
-        <jp:template name="textInputSm" xpath="@xlink:href">
-          <jp:template name="textInput" xpath="." i18n="jp.editor.journal.link" placeholder="jp.editor.journal.linkSite" small="true" />
-        </jp:template>
-      </xed:repeat>
-
-      <xed:repeat xpath="successors[@class='MCRMetaLink']/successor[@inherited='0'][@xlink:type='locator']" min="0" max="10">
-        <jp:template name="textInputSm" xpath="@xlink:title" i18n="editormask.labels.successor" buttons="true">
+        <jp:template name="textInputSm" xpath="@xlink:title">
           <jp:template name="textInput" xpath="." i18n="jp.editor.journal.name" placeholder="jp.editor.journal.preNameLink" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="@xlink:href">

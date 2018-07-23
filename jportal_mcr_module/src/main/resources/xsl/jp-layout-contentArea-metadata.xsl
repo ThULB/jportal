@@ -178,6 +178,11 @@
     <xsl:value-of select="@type" />
   </xsl:template>
 
+  <xsl:template mode="metadataFieldLabel" match="reference[@xlink:label]">
+    <xsl:value-of select="@type" />
+        <xsl:value-of select="i18n:translate(concat('metaData.reference.source.', @xlink:label))" />
+  </xsl:template>
+
   <xsl:template mode="metadataFieldLabel" match="*[../@class='MCRMetaClassification']">
     <xsl:variable name="tagName" select="name()" />
 

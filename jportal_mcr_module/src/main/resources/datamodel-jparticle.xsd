@@ -326,31 +326,10 @@
           <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
         </xsd:complexType>
       </xsd:element>
-      <xsd:element maxOccurs="1" minOccurs="0" name="predeces">
+      <xsd:element maxOccurs="1" minOccurs="0" name="references">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element maxOccurs="unbounded" minOccurs="0" name="predece">
-              <xsd:complexType>
-                <xsd:attribute type="xsd:integer" use="optional" name="inherited" />
-                <xsd:attribute type="mcrdefaulttype" use="optional" name="type" />
-                <xsd:attribute ref="xlink:type" />
-                <xsd:attribute use="optional" ref="xlink:href" />
-                <xsd:attribute use="optional" ref="xlink:title" />
-                <xsd:attribute use="optional" ref="xlink:label" />
-                <xsd:attribute use="optional" ref="xlink:from" />
-                <xsd:attribute use="optional" ref="xlink:to" />
-              </xsd:complexType>
-            </xsd:element>
-          </xsd:sequence>
-          <xsd:attribute fixed="MCRMetaLink" use="required" type="xsd:string" name="class" />
-          <xsd:attribute use="optional" type="xsd:boolean" name="heritable" />
-          <xsd:attribute use="optional" type="xsd:boolean" name="notinherit" />
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element maxOccurs="1" minOccurs="0" name="successors">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element maxOccurs="unbounded" minOccurs="0" name="successor">
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="reference">
               <xsd:complexType>
                 <xsd:attribute type="xsd:integer" use="optional" name="inherited" />
                 <xsd:attribute type="mcrdefaulttype" use="optional" name="type" />
