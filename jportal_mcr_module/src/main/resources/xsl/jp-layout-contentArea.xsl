@@ -110,10 +110,10 @@
                     maintitles|subtitles|participants|dates|traditions|identis|languages|rights|predeces|successors|ddcs|abstracts|notes|contentClassis1|contentClassis2|contentClassis3|contentClassis4|contentClassis5|contentClassis6|contentClassis7|maintitlesForSorting|autosort
                   </xsl:when>
                   <xsl:when test="$isVolume">
-                    maintitles|subtitles|participants|dates|traditions|identis|collationNotes|volContentClassis1|volContentClassis2|volContentClassis3|volContentClassis4|volContentClassis5|volContentClassis6|abstracts|notes|people|publicationNotes|normedPubLocations|footNotes|bibEvidences|indexFields|autosort
+                    maintitles|subtitles|participants|dates|traditions|identis|collationNotes|origins|volContentClassis1|volContentClassis2|volContentClassis3|volContentClassis4|volContentClassis5|volContentClassis6|abstracts|notes|people|publicationNotes|normedPubLocations|footNotes|bibEvidences|indexFields|autosort
                   </xsl:when>
                   <xsl:when test="$isArticle">
-                    maintitles|subtitles|participants|dates|refs|identis|sizes|keywords|abstracts|notes|types|rubrics|classispub|classispub2|classispub3|classispub4
+                    maintitles|subtitles|participants|dates|refs|identis|sizes|keywords|abstracts|notes|predeces|successors|types|rubrics|classispub|classispub2|classispub3|classispub4
                   </xsl:when>
                 </xsl:choose>
               </xsl:variable>

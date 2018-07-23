@@ -38,7 +38,8 @@
         <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:bind>
     </jp:section>
-
+    <jp:template name="textInput" xpath="origins[@class='MCRMetaLink']/origin[@type='origin'][@inherited='0'][@xlink:type='locator']/@xlink:href"
+                 i18n="editormask.labels.volume.origin"/>
     <jp:section title="{i18n:metaData.headlines.contantdiscr}">
       <jp:template name="title" i18n="metaData.headlines.contantdiscr" />
 
