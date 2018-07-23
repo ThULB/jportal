@@ -21,7 +21,8 @@ jp.subselect = {
 		var mcrid = item.attr("data-jp-mcrid");
 		var url = item.attr("data-submit-url");
 		jp.subselect.get(mcrid, function(html) {
-			metadataContainer.html(html);
+			metadataContainer.empty();
+			metadataContainer.append(html);
 			$("#selectButton").removeAttr("disabled");
 			$("#selectButton").attr("href", url);
 		});
@@ -36,8 +37,10 @@ jp.subselect = {
 			url: jp.baseURL + "rsc/render/object/" + mcrid,
 			dataType: "html"
 		}).done(function(html) {
-			jp.subselect.cache[mcrid] = html;
-			onSuccess(html);
+      let modHtml = $(html);
+      modHtml.find('.col-sm-9').removeClass('col-sm-9').addClass('col-sm-8');
+			jp.subselect.cache[mcrid] = modHtml;
+			onSuccess(modHtml);
 		});
 	}
 

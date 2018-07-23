@@ -5,8 +5,9 @@
                 xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
                 xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
                 xmlns:decoder="java.net.URLDecoder"
+                xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                exclude-result-prefixes="xalan mcrxml solrxml i18n decoder">
+                exclude-result-prefixes="jpxml xalan mcrxml solrxml i18n decoder">
 
   <xsl:variable name="_xed_subselect_session">
     <xsl:call-template name="UrlGetParam">
@@ -58,7 +59,6 @@
     <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='resultList']/*">
       <xsl:with-param name="data" select="." />
     </xsl:apply-templates>
-    <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='objectPreview']/*" />
   </xsl:template>
 
   <xsl:template mode="controllerHook" match="/jpsearchBar[@mode='subselect']">
@@ -78,22 +78,18 @@
         <xsl:with-param name="par" select="'qry'" />
       </xsl:call-template>
     </xsl:variable>
-    <xsl:attribute name="placeholder">
-      <xsl:choose>
-        <xsl:when test="$subselect.type = 'person'">
-          <xsl:value-of select="'Personenname'" />
-        </xsl:when>
-        <xsl:when test="$subselect.type = 'jpinst'">
-          <xsl:value-of select="'Institutionsname'" />
-        </xsl:when>
-      </xsl:choose>
-      <xsl:value-of select="' eingeben'" />
-    </xsl:attribute>
+
     <xsl:if test="$qry != ''">
       <xsl:attribute name="value">
         <xsl:value-of select="$qry" />
       </xsl:attribute>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@placeholder[contains(.,'{subselect.search.input.placeholder}')]">
+    <xsl:attribute name="placeholder">
+      <xsl:value-of select="i18n:translate(concat('subselect.search.input.placeholder.', $subselect.type))" />
+    </xsl:attribute>
   </xsl:template>
 
   <xsl:template mode="renderView" match="@getData[.='subselect.search.form.sort']">
@@ -115,7 +111,7 @@
 
   <xsl:template mode="renderView" match="h2[.='{subselect.type.label}']">
     <xsl:copy>
-      <xsl:value-of select="concat($subselectTypeLabel, 'enauswahl')" />
+      <xsl:value-of select="i18n:translate(concat('subselect.type.label.', $subselect.type))" />
     </xsl:copy>
   </xsl:template>
 
@@ -180,23 +176,70 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template mode="renderView" match="getData[@id='result.hit.heading']">
+  <xsl:template mode="renderView" match="getData/ref"/>
+  <xsl:template mode="renderView" match="getData/ref[contains(@objectType, $subselect.type) and @name]">
     <xsl:param name="data" />
-    <xsl:value-of select="$data/str[@name='heading']" />
+    <xsl:variable name="name" select="@name"/>
+
+    <xsl:apply-templates mode="getData" select="$data/node()[@name=$name]">
+      <xsl:with-param name="ref" select="."/>
+    </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template mode="renderView" match="getData[@id='result.hit.dateOfBirth']">
-    <xsl:param name="data" />
-    <xsl:if test="$data/str[@name='dateOfBirth']">
-      <xsl:value-of select="concat('Geburtsdatum: ', $data/str[@name='dateOfBirth'])" />
+  <xsl:template mode="getData" match="str[@name = 'ancestorPath']">
+    <xsl:apply-templates mode="ancestorPath" select="."/>
+  </xsl:template>
+
+  <xsl:template mode="ancestorPath" match="text()[contains(., '/')]">
+    <xsl:apply-templates mode="ancestorPath" select="xalan:nodeset(substring-before(.,'/'))"/>
+    <xsl:value-of select="' / '"/>
+    <xsl:apply-templates mode="ancestorPath" select="xalan:nodeset(substring-after(.,'/'))"/>
+  </xsl:template>
+
+  <xsl:template mode="ancestorPath" match="text()[not(contains(., '/'))]">
+    <xsl:if test=". != ''">
+      <xsl:call-template name="shortenString">
+        <xsl:with-param name="string"
+                        select="document(concat('mcrobject:', .))/mycoreobject/metadata/maintitles/maintitle[@inherited='0']"/>
+        <xsl:with-param name="length" select="20"/>
+      </xsl:call-template>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template mode="renderView" match="getData[@id='result.hit.dateOfDeath']">
-    <xsl:param name="data" />
-    <xsl:if test="$data/str[@name='dateOfDeath']">
-      <xsl:value-of select="concat('Sterbedatum: ', $data/str[@name='dateOfDeath'])" />
-    </xsl:if>
+  <xsl:template mode="getData" match="str[@name and contains('published|dateOfBirth|dateOfDeath', @name)]">
+    <xsl:param name="ref"/>
+
+    <xsl:apply-templates mode="prePost" select="$ref">
+      <xsl:with-param name="value" select="jpxml:formatSolrDate(., $CurrentLang)"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template mode="getData" match="str">
+    <xsl:param name="ref"/>
+
+    <xsl:apply-templates mode="prePost" select="$ref">
+      <xsl:with-param name="value" select="."/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template mode="prePost" match="ref">
+    <xsl:param name="value"/>
+
+    <xsl:apply-templates mode="getData" select="pre"/>
+    <xsl:apply-templates mode="getData" select="pre/@i18n"/>
+    <xsl:apply-templates mode="getData" select="pre/@separator"/>
+    <xsl:value-of select="$value" />
+    <xsl:apply-templates mode="getData" select="post/@i18n"/>
+    <xsl:apply-templates mode="getData" select="post/@separator"/>
+    <xsl:apply-templates mode="getData" select="post"/>
+  </xsl:template>
+
+  <xsl:template mode="getData" match="@i18n">
+    <xsl:value-of select="i18n:translate(.)"/>
+  </xsl:template>
+
+  <xsl:template mode="getData" match="@*|node()">
+    <xsl:value-of select="."/>
   </xsl:template>
 
   <xsl:template mode="renderView" match="@data-jp-mcrid[contains(.,'{result.hit.id}')]">
