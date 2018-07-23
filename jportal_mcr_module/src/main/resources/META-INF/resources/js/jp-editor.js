@@ -130,7 +130,7 @@ $(document).ready(function() {
                     newDate.date(parseInt(day));
                     format += "-DD";
                 }
-                dateInputJq.val(newDate.format(format));
+                dateInputJq.val(newDate.isValid() ? newDate.format(format) : null);
             };
 
             let addForm = function (placeHolder, maxlength, value) {
