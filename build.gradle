@@ -318,7 +318,7 @@ project(':jportal_webapp') {
             }
             def newVersion = false;
             if (!Files.exists(solrZipFile)) {
-                def solrZipURL = "http://apache.mirror.iphh.net/lucene/solr/${solrVersion}/solr-${solrVersion}.zip"
+                def solrZipURL = "${solrMirror}/${solrVersion}/solr-${solrVersion}.zip"
                 new URL(solrZipURL).withInputStream { is -> solrZipFile.withOutputStream { it << is } }
                 newVersion = true;
             }
