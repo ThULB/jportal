@@ -1,0 +1,13 @@
+.gradle/
+
+jportal_IT-TestData/build/
+jportal_acl_ip_editor_module/build/
+jportal_derivate_browser/build/
+jportal_dev_helper/build/
+jportal_doublet_finder_module/build/
+jportal_laws/build/
+jportal_mcr_module/build/
+jportal_move_obj_module/build/
+
+jportal_webapp/build/
+jportal_webapp/solr/
