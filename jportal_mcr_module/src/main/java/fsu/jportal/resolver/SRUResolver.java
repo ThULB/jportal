@@ -1,5 +1,7 @@
 package fsu.jportal.resolver;
 
+import java.util.Locale;
+
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
 import fsu.jportal.util.GndUtil;
 import org.jdom2.Document;
@@ -31,6 +33,9 @@ public class SRUResolver implements URIResolver {
 
             // record
             PicaRecord picaRecord = GndUtil.retrieveFromSRU(gnd);
+            if (picaRecord == null) {
+                throw new IllegalArgumentException(String.format(Locale.ROOT, "No record found for '%s'", gnd));
+            }
             Document mcrObjectXML = GndUtil.toMCRObjectDocument(picaRecord);
             MCRObject sruObject = new MCRObject(mcrObjectXML);
 
@@ -41,7 +46,11 @@ public class SRUResolver implements URIResolver {
             return new JDOMSource(merger.get().createXML());
         } catch (Exception exc) {
             throw new TransformerException(
-                "While retriving/merging data from sru interface with id " + id + " and gnd " + gnd, exc);
+                String
+                    .format(Locale.ROOT,
+                        "Error while retrieving/merging data from sru interface with id '%s' and gnd '%s'. Reason: %s",
+                        id, gnd, exc.getMessage()),
+                exc);
         }
     }
 
