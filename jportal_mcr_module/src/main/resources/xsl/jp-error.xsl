@@ -35,7 +35,7 @@
     <div>
       <img class="img-responsive" src="{$WebApplicationBaseURL}images/not-found.jpg" alt="not found" />
       <small class="pull-right">
-        <a href="https://creativecommons.org/licenses/by-nc-sa/2.0/">photo by lintmachine</a>
+        <a href="https://creativecommons.org/licenses/by/2.0/">photo by Matthew Henry</a>
       </small>
     </div>
   </xsl:template>
