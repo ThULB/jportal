@@ -1,9 +1,9 @@
 package fsu.jportal.resolver;
 
-import java.util.Locale;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 
-import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.jportal.util.GndUtil;
 import org.jdom2.Document;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRObjectMerger;
@@ -11,9 +11,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
+import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.jportal.util.GndUtil;
 
 @URIResolverSchema(schema = "sru")
 public class SRUResolver implements URIResolver {
@@ -34,7 +33,7 @@ public class SRUResolver implements URIResolver {
             // record
             PicaRecord picaRecord = GndUtil.retrieveFromSRU(gnd);
             if (picaRecord == null) {
-                throw new IllegalArgumentException(String.format(Locale.ROOT, "No record found for '%s'", gnd));
+                throw new IllegalArgumentException("No record found for '" + gnd + "'");
             }
             Document mcrObjectXML = GndUtil.toMCRObjectDocument(picaRecord);
             MCRObject sruObject = new MCRObject(mcrObjectXML);
@@ -46,10 +45,8 @@ public class SRUResolver implements URIResolver {
             return new JDOMSource(merger.get().createXML());
         } catch (Exception exc) {
             throw new TransformerException(
-                String
-                    .format(Locale.ROOT,
-                        "Error while retrieving/merging data from sru interface with id '%s' and gnd '%s'. Reason: %s",
-                        id, gnd, exc.getMessage()),
+                "Error while retrieving/merging data from sru interface with id '" + id + "' and gnd '" + gnd
+                    + "'. Reason: " + exc.getMessage(),
                 exc);
         }
     }
