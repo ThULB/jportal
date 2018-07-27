@@ -7,8 +7,8 @@ function UploadEntry(docID, deriID, path, file) {
     this.size = derivateBrowserTools.getReadableSize(file.size, 0);
     this.rawSize = file.size;
     this.type = file.type;
-    this.lastmodified = file.lastModifiedDate !== undefined ?
-        (file.lastModifiedDate.toLocaleDateString() + " " + file.lastModifiedDate.toLocaleTimeString()) : undefined;
+    this.lastmodified = file.lastModified !== undefined ?
+        moment(file.lastModified).format("DD.MM.YYYY HH:mm:ss") : undefined;
     this.file = file;
     this.exists = undefined;
     this.img = undefined;
