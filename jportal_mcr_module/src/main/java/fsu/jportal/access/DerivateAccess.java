@@ -1,43 +1,41 @@
 package fsu.jportal.access;
 
-import java.io.IOException;
+import static org.apache.fop.fonts.type1.AdobeStandardEncoding.e;
 
-import fsu.jportal.backend.JPObjectConfiguration;
-import fsu.jportal.util.JPComponentUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrDocument;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
 
+import fsu.jportal.backend.JPObjectConfiguration;
+import fsu.jportal.util.JPComponentUtil;
+
 public class DerivateAccess {
 
-    private static final Logger LOGGER = LogManager.getLogger(DerivateAccess.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static boolean checkPermission(String id) {
-        MCRObjectID objectID = MCRObjectID.getInstance(id);
-        String journalID = JPComponentUtil.getJournalID(objectID);
-        String accessClassName = getAccessClassName(id, journalID);
+        try {
+            MCRObjectID objectID = MCRObjectID.getInstance(id);
+            String journalID = JPComponentUtil.getJournalID(objectID);
+            String accessClassName = getAccessClassName(id, journalID);
 
-        if ("klostermann".equals(accessClassName)) {
-            try {
+            if ("klostermann".equals(accessClassName)) {
                 String query = "+id:" + id + " +published:[NOW-1YEAR TO NOW]";
                 SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
                 SolrDocument solrArticle = MCRSolrSearchUtils.first(solrClient, query);
-                if (solrArticle != null) {
-                    return checkPerm(id, journalID);
-                }
-            } catch (SolrServerException | IOException e) {
-                LOGGER.error("Error while checking derivate access for " + id, e);
-                return false;
+                return solrArticle == null || checkPerm(id, journalID);
             }
-            return true;
+            return checkPerm(id, journalID);
+        } catch (Exception exc) {
+            LOGGER.error("Error while checking derivate access for " + id, e);
+            return false;
         }
-        return checkPerm(id, journalID);
     }
 
     private static String getAccessClassName(String id, String journalID) {
@@ -45,26 +43,30 @@ public class DerivateAccess {
             JPObjectConfiguration journalConfig = new JPObjectConfiguration(journalID, "fsu.jportal.derivate.access");
             return journalConfig.get("accessClass");
         } catch (Exception exc) {
-            LOGGER.error("Unable to check permission of " + id + " and journal " + journalID
-                    + " because the journal config couldn't be loaded.", exc);
-            return null;
+            throw new MCRException("Unable to check permission of " + id + " and journal " + journalID
+                + " because the journal config couldn't be loaded.", exc);
         }
     }
 
     private static boolean checkPerm(String id, String journalID) {
-        String permission = "read-derivate";
-        MCRAccessManager.invalidPermissionCache(id, permission);
-        MCRAccessManager.invalidPermissionCache(journalID, permission);
+        try {
+            String permission = "read-derivate";
+            MCRAccessManager.invalidPermissionCache(id, permission);
+            MCRAccessManager.invalidPermissionCache(journalID, permission);
 
-        if (MCRAccessManager.hasRule(id, permission)) {
-            return MCRAccessManager.checkPermission(id, permission);
+            if (MCRAccessManager.hasRule(id, permission)) {
+                return MCRAccessManager.checkPermission(id, permission);
+            }
+
+            if (MCRAccessManager.hasRule(journalID, permission)) {
+                return MCRAccessManager.checkPermission(journalID, permission);
+            }
+
+            return MCRAccessManager.checkPermission("default", permission);
+        } catch (Exception exc) {
+            LOGGER.error("Unable to check permission of " + id + " and journal " + journalID, exc);
+            return false;
         }
-
-        if (MCRAccessManager.hasRule(journalID, permission)) {
-            return MCRAccessManager.checkPermission(journalID, permission);
-        }
-
-        return MCRAccessManager.checkPermission("default", permission);
     }
 
 }
