@@ -1,37 +1,38 @@
 function UploadEntry(docID, deriID, path, file) {
-  this.uploadID = null;
-	this.docID = docID;
-	this.deriID = deriID;
-	this.path = path;
-	this.name = file.name;
-	this.size = derivateBrowserTools.getReadableSize(file.size, 0);
-	this.rawSize = file.size;
-	this.type = file.type;
-	this.lastmodified = file.lastModifiedDate.toLocaleDateString() + " " + file.lastModifiedDate.toLocaleTimeString();
-	this.file = file;
-	this.exists = undefined;
-	this.img = undefined;
-	this.statusbar = undefined;
+    this.uploadID = null;
+    this.docID = docID;
+    this.deriID = deriID;
+    this.path = path;
+    this.name = file.name;
+    this.size = derivateBrowserTools.getReadableSize(file.size, 0);
+    this.rawSize = file.size;
+    this.type = file.type;
+    this.lastmodified = file.lastModifiedDate !== undefined ?
+        (file.lastModifiedDate.toLocaleDateString() + " " + file.lastModifiedDate.toLocaleTimeString()) : undefined;
+    this.file = file;
+    this.exists = undefined;
+    this.img = undefined;
+    this.statusbar = undefined;
     //noinspection JSUnusedGlobalSymbols
     this.inFolder = false;
     this.checkedFile = undefined;
-	this.md5 = "";
+    this.md5 = "";
 }
 
-UploadEntry.prototype.setUploadID = function(uploadID) {
-  this.uploadID = uploadID;
+UploadEntry.prototype.setUploadID = function (uploadID) {
+    this.uploadID = uploadID;
 };
 
-UploadEntry.prototype.getStatus = function() {
-	var template = $("#upload-entry-template").html();
-	var status = $(Mustache.render(template, this));
-	readImg(this.file, $(status).find("img.upload-preview-image"), this);
-	return status;
+UploadEntry.prototype.getStatus = function () {
+    var template = $("#upload-entry-template").html();
+    var status = $(Mustache.render(template, this));
+    readImg(this.file, $(status).find("img.upload-preview-image"), this);
+    return status;
 };
 
 UploadEntry.prototype.getFormData = function() {
-	if (this.exists == undefined) return undefined;
-    var data = new FormData();
+	if (this.exists === undefined) return undefined;
+    const data = new FormData();
     data.append("uploadID", this.uploadID);
     data.append("documentID", this.docID);
     data.append("derivateID", this.deriID);
@@ -45,7 +46,7 @@ UploadEntry.prototype.getFormData = function() {
 };
 
 UploadEntry.prototype.getID = function() {
-	if (this.path == ""){
+	if (this.path === ""){
 		return this.docID + "/" + this.name;
 	}
     return this.docID + this.path + "/" + this.name;
@@ -60,32 +61,32 @@ UploadEntry.prototype.isInFolder = function() {
     this.inFolder = true;
 };
 
-UploadEntry.prototype.getCheckJson = function() {
-	return {
-			file: this.name,
-			id: this.getID(),
-			fileType: this.file.type
-	};
+UploadEntry.prototype.getCheckJson = function () {
+    return {
+        file: this.name,
+        id: this.getID(),
+        fileType: this.file.type
+    };
 };
 
-UploadEntry.prototype.getaddToBrowserJson = function() {
-	var currentDate = moment();
-	return {
-			name: this.name,
-			size: this.rawSize,
-			lastmodified: currentDate.format("DD.MM.YYYY HH:mm:ss"),
-			absPath: this.getCompletePath(),
-			deriID: this.docID,
-			md5: this.md5,
-			urnEnabled: $("#btn-urnAll").data("urnEnabled")
-	};
+UploadEntry.prototype.getaddToBrowserJson = function () {
+    const currentDate = moment();
+    return {
+        name: this.name,
+        size: this.rawSize,
+        lastmodified: currentDate.format("DD.MM.YYYY HH:mm:ss"),
+        absPath: this.getCompletePath(),
+        deriID: this.docID,
+        md5: this.md5,
+        urnEnabled: $("#btn-urnAll").data("urnEnabled")
+    };
 };
 
 UploadEntry.prototype.askOverwrite = function(existingFile, deriID, path) {
 	existingFile.deriID = deriID;
 	existingFile.path = path;
-	var uploadOverwriteTemplate = $("#upload-overwrite-template").html();
-	var originalFileOutput = $(Mustache.render(uploadOverwriteTemplate, existingFile));
+	const uploadOverwriteTemplate = $("#upload-overwrite-template").html();
+	const originalFileOutput = $(Mustache.render(uploadOverwriteTemplate, existingFile));
 	derivateBrowserTools.setImgPath($(originalFileOutput).find(".overwrite-img"), deriID, path + "/" + existingFile.name);
 	$(originalFileOutput).find(".img-size").html(derivateBrowserTools.getReadableSize($(originalFileOutput).find(".img-size").html(),0));
 	$("#lightbox-upload-overwrite-original-file").html(originalFileOutput);
@@ -102,12 +103,11 @@ function readImg(file, display, upload) {
     var type = upload.type.substr(upload.type.lastIndexOf("/")+1);
 	if (!upload.type.endsWith("pdf")){
 		if ((file.size < 2097152) && supportedImg.indexOf(type) > -1){
-			if (upload.img != undefined){
+			if (upload.img !== undefined){
 				display.attr("src", upload.img);
 				$(display).siblings(".img-placeholder").addClass("hidden");
 				$(display).removeClass("hidden");
-			}
-			else{
+			} else{
 				var reader = new FileReader();
 				reader.onload =  function() {
 					display.attr("src", reader.result);
@@ -117,25 +117,23 @@ function readImg(file, display, upload) {
 				};
 				reader.readAsDataURL(file);
 			}
-		}
-        else{
+		} else {
             display.attr("src", jp.baseURL + "images/file-logo.svg");
             $(display).siblings(".img-placeholder").addClass("hidden");
             $(display).removeClass("hidden");
         }
-	}
-	else{
+	} else {
 		display.attr("src", jp.baseURL + "images/adobe-logo.svg");
 		$(display).siblings(".img-placeholder").addClass("hidden");
 		$(display).removeClass("hidden");
 	}
 }
 
-function showModalWhenReady(){
-	if ($('#lightbox-upload-overwrite').data("open")){
-		$('#lightbox-upload-overwrite').data("openagain", true);
-	}
-	else{
-		$('#lightbox-upload-overwrite').modal('show');
-	}
+function showModalWhenReady() {
+    const uploadOverwrite = $('#lightbox-upload-overwrite');
+    if (uploadOverwrite.data("open")) {
+        uploadOverwrite.data("openagain", true);
+    } else {
+        uploadOverwrite.modal('show');
+    }
 }
