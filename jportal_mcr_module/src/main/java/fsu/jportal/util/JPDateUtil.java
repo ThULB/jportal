@@ -28,6 +28,9 @@ public abstract class JPDateUtil {
      *  <li>2000</li>
      *  <li>2000-01</li>
      *  <li>2000-01-01</li>
+     *  <li>-2000</li>
+     *  <li>-2000-01</li>
+     *  <li>-2000-01-01</li>
      * </ul>
      *
      * @param dateString the date as string to parse
@@ -35,9 +38,9 @@ public abstract class JPDateUtil {
      */
     public static Temporal parse(String dateString) {
         try {
-            if (dateString.length() == 4) {
+            if (dateString.length() >= 4 && dateString.length() <= 5) {
                 return Year.parse(dateString);
-            } else if (dateString.length() == 7) {
+            } else if (dateString.length() >= 7 && dateString.length() <= 8) {
                 return YearMonth.parse(dateString);
             }
             return LocalDate.parse(dateString);
