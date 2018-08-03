@@ -1,4 +1,4 @@
-This readme describes how to add the jportal_laws module to jportal2 and create
+This readme describes how to add the jportal_laws module to jportal and create
 a sample volume.
 
 First of all you have to add the module to the docportal pom.xml.
