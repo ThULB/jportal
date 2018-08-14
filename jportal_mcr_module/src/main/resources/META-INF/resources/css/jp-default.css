@@ -706,7 +706,9 @@ p.jp-layout-metadata-list {
 	list-style: none;
 }
 
-#resultList .jp-layout-derivateList .jp-layout-derivate .thumbnail img, .jp-layout-tableOfContent .jp-layout-derivateList .jp-layout-derivate .thumbnail img {
+#resultList .jp-layout-derivateList .jp-layout-derivate .thumbnail img,
+.jp-layout-tableOfContent .jp-layout-derivateList .jp-layout-derivate .thumbnail img,
+.jp-layout-hits .jp-objectlist-thumbnail img.jp-journal-thumbnail {
 	width: 80px;
 }
 

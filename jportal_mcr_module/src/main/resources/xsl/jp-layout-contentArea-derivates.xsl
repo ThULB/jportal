@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
-  xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://fsu.jportal.xml.LayoutTools"
-  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess" xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
-  xmlns:encoder="xalan://java.net.URLEncoder" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml jpxml mcrurn acl encoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
+                xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:mcrurn="xalan://fsu.jportal.xml.LayoutTools"
+                xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+                xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess"
+                xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
+                xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+                exclude-result-prefixes="xlink xalan iview2 mcrxml mcrurn acl derivAccess layoutTools jpxml">
 
-  <xsl:template mode="derivateDisplay" match="/mycoreobject">
+<xsl:template mode="derivateDisplay" match="/mycoreobject">
     <xsl:param name="mode" select="'metadata'" />
     <xsl:param name="editable" select="'true'" />
     <xsl:param name="query" />
@@ -14,21 +20,31 @@
     <xsl:variable name="derivateLink" select="metadata/derivateLinks/derivateLink" />
     <xsl:variable name="derivate" select="structure/derobjects/derobject" />
 
-    <xsl:if test="$access and ($derivateLink or $derivate)">
-      <div class="jp-layout-derivateList">
-        <xsl:apply-templates select="metadata/derivateLinks/derivateLink" mode="derivateDisplay">
-          <xsl:with-param name="mode" select="$mode" />
-          <xsl:with-param name="editable" select="$editable" />
-          <xsl:with-param name="query" select="$query" />
-        </xsl:apply-templates>
+    <xsl:choose>
+      <xsl:when test="$access and ($derivateLink or $derivate)">
+        <div class="jp-layout-derivateList">
+          <xsl:apply-templates select="metadata/derivateLinks/derivateLink" mode="derivateDisplay">
+            <xsl:with-param name="mode" select="$mode" />
+            <xsl:with-param name="editable" select="$editable" />
+            <xsl:with-param name="query" select="$query" />
+          </xsl:apply-templates>
 
-        <xsl:apply-templates select="structure/derobjects/derobject" mode="derivateDisplay">
-          <xsl:with-param name="mode" select="$mode" />
-          <xsl:with-param name="editable" select="$editable" />
-          <xsl:with-param name="query" select="$query" />
-        </xsl:apply-templates>
-      </div>
-    </xsl:if>
+          <xsl:apply-templates select="structure/derobjects/derobject" mode="derivateDisplay">
+            <xsl:with-param name="mode" select="$mode" />
+            <xsl:with-param name="editable" select="$editable" />
+            <xsl:with-param name="query" select="$query" />
+          </xsl:apply-templates>
+        </div>
+      </xsl:when>
+      <xsl:when test="contains(@ID, '_jpjournal_')">
+        <xsl:variable name="journalImage" select="layoutTools:getJournalIconURL(@ID)" />
+        <xsl:if test="$journalImage != ''">
+          <a href="{$WebApplicationBaseURL}receive/{@ID}?&amp;q={$query}" class="thumbnail">
+            <img class="jp-journal-thumbnail" src="{$journalImage}" />
+          </a>
+        </xsl:if>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="derivateDisplay" match="derivateLink">

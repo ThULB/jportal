@@ -6,24 +6,36 @@
     <category ID="newspapers">
       <label xml:lang="de" text="Zeitungen" />
       <label xml:lang="en" text="Newspapers" />
-      <label xml:lang="pl" text="Gazeta" />
+      <label xml:lang="pl" text="Gazety" />
+      <label xml:lang="de-singular" text="Zeitung" />
+      <label xml:lang="en-singular" text="Newspaper" />
+      <label xml:lang="pl-singular" text="Gazeta" />
     </category>
     <category ID="magazines">
       <label xml:lang="de" text="Zeitschriften" />
       <label xml:lang="en" text="Magazines" />
-      <label xml:lang="pl" text="Czasopismo" />
+      <label xml:lang="pl" text="Czasopisma" />
+      <label xml:lang="de-singular" text="Zeitschrift" />
+      <label xml:lang="en-singular" text="Magazine" />
+      <label xml:lang="pl-singular" text="Czasopismo" />
     </category>
     <category ID="addressBooks">
       <label xml:lang="de" text="Adressbücher" />
       <label xml:lang="en" text="Address books" />
+      <label xml:lang="de-singular" text="Adressbuch" />
+      <label xml:lang="en-singular" text="Address book" />
     </category>
     <category ID="parliamentDocuments">
       <label xml:lang="de" text="Parlamentsschriften" />
       <label xml:lang="en" text="Parliament documents" />
+      <label xml:lang="de-singular" text="Parlamentsschrift" />
+      <label xml:lang="en-singular" text="Parliament document" />
     </category>
     <category ID="calendars">
       <label xml:lang="de" text="Kalendarien" />
       <label xml:lang="en" text="Calendars" />
+      <label xml:lang="de-singular" text="Kalender" />
+      <label xml:lang="en-singular" text="Calendar" />
     </category>
   </categories>
 </mycoreclass>

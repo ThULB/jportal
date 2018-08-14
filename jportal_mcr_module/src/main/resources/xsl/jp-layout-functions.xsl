@@ -6,7 +6,7 @@
                 xmlns:math="xalan://java.lang.Math" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
                 xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xalan math jpxml">
 
-<xsl:param name="RequestURL"/>
+  <xsl:param name="RequestURL"/>
   <xsl:param name="MCR.Piwik.baseurl"/>
   <xsl:param name="MCR.Piwik.enable"/>
   <xsl:param name="MCR.Piwik.id" select="'1'"/>
