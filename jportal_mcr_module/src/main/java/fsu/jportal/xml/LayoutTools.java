@@ -1,32 +1,40 @@
 package fsu.jportal.xml;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.resolver.LogoResolver;
 import fsu.jportal.urn.URNTools;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPComponentUtil.JPInfoProvider;
 import fsu.jportal.util.JPComponentUtil.JPObjectInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.output.DOMOutputter;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.pi.MCRPIService;
 import org.mycore.pi.MCRPersistentIdentifier;
-import org.w3c.dom.Node;
 
 public abstract class LayoutTools {
 
-    static Logger LOGGER = LogManager.getLogger(LogoResolver.class);
+    private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final Map<String, String> JOURNAL_ICON_MAP;
+
+    static {
+        JOURNAL_ICON_MAP = new HashMap<>();
+        JOURNAL_ICON_MAP.put("newspapers", "Zeitungen.svg");
+        JOURNAL_ICON_MAP.put("magazines", "Zeitschriften.svg");
+        JOURNAL_ICON_MAP.put("addressBooks", "Adressbuecher.svg");
+        JOURNAL_ICON_MAP.put("parliamentDocuments", "Parlamentsschriften.svg");
+        JOURNAL_ICON_MAP.put("calendars", "Kalendarien.svg");
+    }
 
     private static class DerivateDisplay implements JPObjectInfo<Boolean> {
         @Override
@@ -38,7 +46,7 @@ public abstract class LayoutTools {
     public static String getJournalID(String mcrID) {
         String journalID = JPComponentUtil.getJournalID(MCRObjectID.getInstance(mcrID));
         if (journalID == null) {
-            LOGGER.warn("Unable to get journal id of " + mcrID);
+            LOGGER.warn("Unable to get journal id of {}", mcrID);
             return "";
         }
         return journalID;
@@ -54,15 +62,24 @@ public abstract class LayoutTools {
 
     public static String getJournalPublished(String journalID) {
         return JPComponentUtil
-                .getPeriodical(MCRObjectID.getInstance(journalID))
-                .flatMap(journal -> journal.getDate(JPPeriodicalComponent.DateType.published))
-                .map(JPMetaDate::toString)
-                .orElse("");
+            .getPeriodical(MCRObjectID.getInstance(journalID))
+            .flatMap(journal -> journal.getDate(JPPeriodicalComponent.DateType.published))
+            .map(JPMetaDate::toString)
+            .orElse("");
+    }
+
+    public static String getJournalIconURL(String mcrID) {
+        return JPComponentUtil.getPeriodical(MCRObjectID.getInstance(mcrID))
+            .map(JPPeriodicalComponent::getJournal)
+            .flatMap(journal -> journal.getJournalTypeCategoryId("jportal_class_00000200"))
+            .map(JOURNAL_ICON_MAP::get)
+            .map(imageName -> MCRFrontendUtil.getBaseURL() + "rsc/proxy/logo/journal/" + imageName)
+            .orElse("");
     }
 
     public static String getDerivateDisplay(String derivateID) {
         JPInfoProvider infoProvider = new JPInfoProvider(derivateID,
-                                                         "/mycorederivate/derivate[not(@display) or @display!='false']");
+            "/mycorederivate/derivate[not(@display) or @display!='false']");
         return infoProvider.get(new DerivateDisplay()).toString();
     }
 
@@ -84,7 +101,6 @@ public abstract class LayoutTools {
     public static boolean hasURNAssigned(String derivID) {
         MCRPIService<MCRPersistentIdentifier> urnServiceManager = URNTools.getURNServiceManager();
         MCRObjectID derivObjID = MCRObjectID.getInstance(derivID);
-
         return urnServiceManager.isCreated(derivObjID, "");
     }
 

@@ -37,8 +37,8 @@ public class JPDerivateComponent implements JPComponent {
         derivate = new MCRDerivate();
         derivate.setId(MCRObjectID.getNextFreeId("jportal_derivate"));
         String schema = MCRConfiguration.instance()
-                                        .getString("MCR.Metadata.Config.derivate", "datamodel-derivate.xml")
-                                        .replaceAll(".xml", ".xsd");
+            .getString("MCR.Metadata.Config.derivate", "datamodel-derivate.xml")
+            .replaceAll(".xml", ".xsd");
         derivate.setSchema(schema);
 
         MCRMetaIFS ifs = new MCRMetaIFS();
@@ -158,7 +158,16 @@ public class JPDerivateComponent implements JPComponent {
      */
     public boolean isVisible() {
         return this.derivate.getDerivate().isDisplayEnabled();
-        
+
+    }
+
+    /**
+     * Returns the root MCRPath of this derivate.
+     *
+     * @return derivate path
+     */
+    public MCRPath getPath() {
+        return MCRPath.getPath(this.derivate.getId().toString(), "/");
     }
 
     @Override
@@ -184,7 +193,7 @@ public class JPDerivateComponent implements JPComponent {
                     Files.copy(in, sourcePath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (Exception exc) {
                     throw new MCRPersistenceException(
-                            "Unable to upload " + url.toString() + " to " + sourcePath.toAbsolutePath(), exc);
+                        "Unable to upload " + url.toString() + " to " + sourcePath.toAbsolutePath(), exc);
                 }
             }
         }

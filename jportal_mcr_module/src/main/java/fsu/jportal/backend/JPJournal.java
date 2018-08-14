@@ -52,14 +52,14 @@ public class JPJournal extends JPContainer {
     @Override
     public String getLanguageCode() {
         return metadataStreamNotInherited("languages", MCRMetaClassification.class)
-                .map(MCRMetaClassification::getCategId)
-                .findAny()
-                .orElse(null);
+            .map(MCRMetaClassification::getCategId)
+            .findAny()
+            .orElse(null);
     }
 
     /**
      * Sets the note for this volume.
-     * 
+     *
      * @param note note text
      */
     public void setNote(String note) {
@@ -68,7 +68,7 @@ public class JPJournal extends JPContainer {
 
     /**
      * Returns the note.
-     * 
+     *
      * @return optional note
      */
     public Optional<String> getNote() {
@@ -89,7 +89,7 @@ public class JPJournal extends JPContainer {
 
     /**
      * Returns a list of journal types this journal is labeled as.
-     * 
+     *
      * @return list of journal types
      */
     public List<MCRCategoryID> getJournalTypes() {
@@ -111,6 +111,17 @@ public class JPJournal extends JPContainer {
             MCRCategoryID cmp = new MCRCategoryID(classId, categId);
             return cmp.equals(id);
         });
+    }
+
+    /**
+     * Returns the optional journal type category identifier for the given classification.
+     *
+     * @param classId the classification identifier e.g. jportal_class_00000200
+     * @return the category id, e.g. magazines
+     */
+    public Optional<String> getJournalTypeCategoryId(String classId) {
+        return getJournalTypes().stream().filter(categId -> categId.getRootID().equals(classId))
+            .map(MCRCategoryID::getID).findFirst();
     }
 
     /**
