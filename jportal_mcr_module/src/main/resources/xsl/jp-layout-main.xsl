@@ -140,6 +140,7 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/jquery/2.1.4/dist/jquery.min.js"/>
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/js/bootstrap.min.js"/>
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/bootstrap3-dialog/1.35.4/dist/js/bootstrap-dialog.min.js"/>
+        <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/mustachejs/0.8.2/mustache.js" />
 
         <xsl:choose>

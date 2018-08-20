@@ -68,7 +68,6 @@
       </div>
     </div>
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}webjars/momentjs/2.10.6/min/moment-with-locales.js" />
     <xsl:choose>
       <xsl:when test="contains($User-Agent, 'Trident')">
         <!-- es5 scripts -->
