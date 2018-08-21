@@ -52,7 +52,7 @@
         <jp:template name="textArea" xpath="." selectXpath="@type" />
       </xed:repeat>
 
-      <xed:repeat xpath="linkedLocations[@class='JPMetaLocation']/linkedLocation[@inherited='0']" min="0" max="10">
+      <xed:repeat xpath="linkedLocations[@class='JPMetaLocation']/linkedLocation[@inherited='0']" min="0" max="50">
         <jp:template name="gnd_location" i18n="metaData.jparticle.linkedLocation" buttons="true"
                      myClass="col-md-8" xpath="." />
       </xed:repeat>
