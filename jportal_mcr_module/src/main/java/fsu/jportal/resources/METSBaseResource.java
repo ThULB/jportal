@@ -18,13 +18,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.mets.MetsVersionStore;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -35,7 +28,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
-import org.mycore.mets.misc.StructLinkGenerator;
+import org.mycore.mets.misc.AreaStructLinkGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.IDiv;
 import org.mycore.mets.model.struct.LogicalDiv;
@@ -44,6 +37,15 @@ import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.SmLink;
 import org.mycore.mets.model.struct.StructLink;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.mets.MetsVersionStore;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.MetsUtil;
 
 /**
  * <p>
@@ -172,7 +174,8 @@ public class METSBaseResource {
     private boolean syncStructLink(Mets mets) {
         try {
             StructLink oldStructLink = mets.getStructLink();
-            StructLink newStructLink = new StructLinkGenerator().generate(mets);
+            StructLink newStructLink = new AreaStructLinkGenerator().generate(mets.getPhysicalStructMap(),
+                mets.getLogicalStructMap());
             if (!oldStructLink.equals(newStructLink)) {
                 mets.setStructLink(newStructLink);
                 return true;
@@ -245,7 +248,7 @@ public class METSBaseResource {
                 MCRObjectID mcrId = MCRObjectID.getInstance(divId);
                 if (!MCRMetadataManager.exists(mcrId)) {
                     errorMap.put(div, "MyCoRe object does not exist " + divId);
-                    LOGGER.warn("LogicalStructMap @ID '" + mcrId + "' does not exists on system.");
+                    LOGGER.warn("LogicalStructMap @ID '{}' does not exists on system.", mcrId);
                     continue;
                 }
                 if (updateMaintitle(div, mcrId)) {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPObjectType;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
@@ -43,6 +45,14 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
         Mets mets = super.generate();
         enhanceOrderLabels(mets);
         return mets;
+    }
+
+    @Override
+    public Set<MCRPath> getIgnorePaths() {
+        Set<MCRPath> ignorePaths = super.getIgnorePaths();
+        ignorePaths.add(MCRPath.toMCRPath(getDerivatePath().resolve("mets.xml")));
+        ignorePaths.add(MCRPath.toMCRPath(getDerivatePath().resolve("dfgViewerMets.xml")));
+        return ignorePaths;
     }
 
     protected String getType(MCRObject obj) {
@@ -84,8 +94,8 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
             return;
         }
         JPComponentUtil.get(mcrObject.getId(), JPArticle.class)
-                       .flatMap(JPArticle::getSize)
-                       .ifPresent(size -> this.sizeMap.put(logicalDiv.getId(), size));
+            .flatMap(JPArticle::getSize)
+            .ifPresent(size -> this.sizeMap.put(logicalDiv.getId(), size));
     }
 
     /**
@@ -100,17 +110,19 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
             try {
                 MetsUtil.setOrderlabel(mets, logicalDivId, size, false);
             } catch (Exception exc) {
-                LogManager.getLogger().warn("Unable to set ORDERLABEL=" + size + " to " + logicalDivId);
+                LogManager.getLogger().warn("Unable to set ORDERLABEL={} to {}", size, logicalDivId);
             }
         });
         // try to interpolate between the physical div's who has no ORDERLABEL's yet
         MetsUtil.interpolateOrderLabels(mets);
     }
 
+    @Override
     protected String getEnclosingDerivateLinkName() {
         return "derivateLinks";
     }
 
+    @Override
     protected String getDerivateLinkName() {
         return "derivateLink";
     }

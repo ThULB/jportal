@@ -11,6 +11,7 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRPathContent;
+import org.mycore.mets.misc.AreaStructLinkGenerator;
 import org.mycore.mets.misc.StructLinkGenerator;
 import org.mycore.mets.model.IMetsElement;
 import org.mycore.mets.model.Mets;
@@ -242,9 +243,9 @@ public abstract class ENMAPConverter {
 
     protected void handleStructLink(Element enmap, Mets mets, boolean failEasy) throws IOException, Exception {
         try {
-            StructLinkGenerator structLinkGenerator = new StructLinkGenerator();
+            StructLinkGenerator structLinkGenerator = new AreaStructLinkGenerator();
             structLinkGenerator.setFailEasy(failEasy);
-            StructLink structLink = structLinkGenerator.generate(mets);
+            StructLink structLink = structLinkGenerator.generate(mets.getPhysicalStructMap(), mets.getLogicalStructMap());
             mets.setStructLink(structLink);
         } catch (Exception exc) {
             Path tempFile = Files.createTempFile("mets", ".xml");
@@ -261,7 +262,7 @@ public abstract class ENMAPConverter {
      * area elements and added to the parent div (this is only done for alto files!).
      * The resulting logical_structmap is much more compact without sacrificing to much
      * information.
-     * 
+     *
      * @param enmap
      * @param enmapDiv
      * @param mcrDiv
@@ -279,7 +280,7 @@ public abstract class ENMAPConverter {
 
     /**
      * Gets the logical subdiv by enmap div.
-     * 
+     *
      * @param enmap
      * @param enmapDiv
      * @return

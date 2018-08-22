@@ -55,7 +55,7 @@ public class PiwikCSVEnhancer {
     }
 
     public static String getJournalTitle(String journalId) throws IOException, JDOMException {
-        URL url = new URL("http://zs.thulb.uni-jena.de/receive/" + journalId + "?XSL.Style=xml");
+        URL url = new URL("https://zs.thulb.uni-jena.de/receive/" + journalId + "?XSL.Style=xml");
         URLConnection connection = url.openConnection();
         SAXBuilder b = new SAXBuilder();
         Document xml = b.build(connection.getInputStream());
