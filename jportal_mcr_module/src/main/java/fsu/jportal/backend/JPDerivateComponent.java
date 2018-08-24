@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
@@ -168,6 +169,15 @@ public class JPDerivateComponent implements JPComponent {
      */
     public MCRPath getPath() {
         return MCRPath.getPath(this.derivate.getId().toString(), "/");
+    }
+
+    /**
+     * Returns the fileset urn of this derivate.
+     *
+     * @return optional URN
+     */
+    public Optional<String> getURN() {
+        return Optional.ofNullable(this.derivate.getDerivate().getURN());
     }
 
     @Override

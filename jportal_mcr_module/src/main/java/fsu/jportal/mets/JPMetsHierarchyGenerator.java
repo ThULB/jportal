@@ -35,7 +35,7 @@ public class JPMetsHierarchyGenerator extends MCRMETSHierarchyGenerator {
     protected Map<String, String> sizeMap;
 
     @Override
-    protected void setup(String derivateId) {
+    public void setup(String derivateId) {
         super.setup(derivateId);
         this.sizeMap = new HashMap<>();
     }

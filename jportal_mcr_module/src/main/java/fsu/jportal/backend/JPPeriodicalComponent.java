@@ -6,9 +6,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import fsu.jportal.util.DerivateLinkUtil;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.JPDateUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
@@ -23,6 +20,10 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
+
+import fsu.jportal.util.DerivateLinkUtil;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPDateUtil;
 
 /**
  * Base class for jparticle, jpvolume and jpjournal.
@@ -90,11 +91,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
 
     @Override
     public String getTitle() {
-        Optional<MCRMetaLangText> maintitle = getMaintitle();
-        if (maintitle.isPresent()) {
-            return maintitle.get().getText();
-        }
-        return null;
+        return getMaintitle().map(MCRMetaLangText::getText).orElse(null);
     }
 
     /**
@@ -216,7 +213,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
         }
         Optional<JPMetaDate> oldDate = getDate(type);
         JPMetaDate jpDate;
-        if(oldDate.isPresent()) {
+        if (oldDate.isPresent()) {
             jpDate = oldDate.get();
         } else {
             jpDate = new JPMetaDate("date", type, 0);
@@ -264,7 +261,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     public Optional<JPMetaDate> getDate(String type) {
         return metadataStreamNotInherited("dates", JPMetaDate.class).filter(date -> {
             if (date.getType() == null) {
-                LOGGER.error("Invalid dates/date metadata at '" + getObject().getId() + "'. Missing type attribute.");
+                LOGGER.error("Invalid dates/date metadata at '{}'. Missing type attribute.", getObject().getId());
                 return false;
             }
             return date.getType().equals(type);
@@ -290,7 +287,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      */
     public Optional<JPMetaDate> getPublishedDate() {
         Optional<JPMetaDate> published = getDate(DateType.published.name());
-        if(published.isPresent()) {
+        if (published.isPresent()) {
             return published;
         }
         return getParent().flatMap(JPPeriodicalComponent::getPublishedDate);
@@ -342,11 +339,11 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     public List<MCRObjectID> getParticipants(JPObjectType objectType) {
         if (!(objectType.equals(JPObjectType.person) || objectType.equals(JPObjectType.jpinst))) {
             throw new IllegalArgumentException("Invalid object type for participants " + objectType.name()
-                    + ". Only person or jpinst is allowed.");
+                + ". Only person or jpinst is allowed.");
         }
         return metadataStreamNotInherited("participants", MCRMetaLinkID.class)
-                .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name()))
-                .map(MCRMetaLinkID::getXLinkHrefID).collect(Collectors.toList());
+            .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name()))
+            .map(MCRMetaLinkID::getXLinkHrefID).collect(Collectors.toList());
     }
 
     /**
@@ -360,11 +357,11 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     public List<MCRObjectID> getParticipants(JPObjectType objectType, String role) {
         if (!(objectType.equals(JPObjectType.person) || objectType.equals(JPObjectType.jpinst))) {
             throw new IllegalArgumentException("Invalid object type for participants " + objectType.name()
-                    + ". Only person or jpinst is allowed.");
+                + ". Only person or jpinst is allowed.");
         }
         return metadataStreamNotInherited("participants", MCRMetaLinkID.class)
-                .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name())).filter(typeFilter(role))
-                .map(MCRMetaLinkID::getXLinkHrefID).collect(Collectors.toList());
+            .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name())).filter(typeFilter(role))
+            .map(MCRMetaLinkID::getXLinkHrefID).collect(Collectors.toList());
     }
 
     /**
@@ -384,6 +381,15 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * @return optional legal entity
      */
     public abstract Optional<JPLegalEntity> getCreator();
+
+    /**
+     * Returns a list of all identis elements containing ppn, doi, urn etc. identifiers for this objects
+     * 
+     * @return list of identifiers as MCRMetaLangText
+     */
+    public List<MCRMetaLangText> listIdenti() {
+        return metadataStreamNotInherited("identis", MCRMetaLangText.class).collect(Collectors.toList());
+    }
 
     /**
      * Get the identifier of the given type.
@@ -414,7 +420,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
         MCRObject journal = MCRObjectUtils.getRoot(object);
         if (!journal.getId().getTypeId().equals(JPJournal.TYPE)) {
             throw new MCRException("Unable to get template of object " + journal.getId()
-                    + " because its not a journal but the root ancestor of " + object.getId() + ".");
+                + " because its not a journal but the root ancestor of " + object.getId() + ".");
         }
         return new JPJournal(journal);
     }
@@ -452,7 +458,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
         MCRObject journal = MCRObjectUtils.getRoot(object);
         if (!journal.getId().getTypeId().equals(JPJournal.TYPE)) {
             throw new MCRException("Unable to get language code of object " + journal.getId()
-                    + " because its not a journal but the root ancestor of " + object.getId() + ".");
+                + " because its not a journal but the root ancestor of " + object.getId() + ".");
         }
         return new JPJournal(journal).getLanguageCode();
     }

@@ -19,11 +19,11 @@ import org.mycore.mets.model.Mets;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.mets.ZvddDerivateMetsGenerator;
+import fsu.jportal.mets.DfgViewerMetsGenerator;
 import fsu.jportal.util.JPComponentUtil;
 
-@Path("mets/zvdd")
-public class ZvddMetsResource {
+@Path("mets/dfg")
+public class DfgViewerMetsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
@@ -45,7 +45,7 @@ public class ZvddMetsResource {
             throw new BadRequestException(
                 "Object " + id + " does not contain any derivates.");
         }
-        ZvddDerivateMetsGenerator metsGenerator = new ZvddDerivateMetsGenerator();
+        DfgViewerMetsGenerator metsGenerator = new DfgViewerMetsGenerator();
         metsGenerator.setup(derivateOptional.get().getId().toString());
         Mets mets = metsGenerator.generate();
         Document xml = mets.asDocument();
