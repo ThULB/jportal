@@ -68,7 +68,7 @@
           URN
       </dt>
       <dd class="col-sm-9">
-        <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">
+        <a href="{concat('https://nbn-resolving.org/resolver?verb=redirect&amp;identifier=', $urn)}">
           <xsl:value-of select="$urn" />
         </a>
       </dd>

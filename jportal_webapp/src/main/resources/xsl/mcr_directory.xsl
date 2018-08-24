@@ -159,7 +159,7 @@
           </td>
           <td class="metavalue">
             <xsl:variable name="dfgViewerURN" select="mcrurn:createAlternativeURN($derivdoc/mycorederivate/derivate/fileset/@urn, 'dfg')" />
-            <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $dfgViewerURN)}" title="{i18n:translate('derivate.urn.dfg-viewer')}">
+            <a href="{concat('https://nbn-resolving.org/resolver?verb=redirect&amp;identifier=', $dfgViewerURN)}" title="{i18n:translate('derivate.urn.dfg-viewer')}">
               <xsl:value-of select="$dfgViewerURN" />
             </a>
           </td>
@@ -423,7 +423,7 @@
           <tr>
             <td class="{$rowStyle}">URN: </td>
             <td colspan="7" class="{$rowStyle}">
-              <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">
+              <a href="{concat('https://nbn-resolving.org/resolver?verb=redirect&amp;identifier=', $urn)}">
                 <xsl:value-of select="$urn" />
               </a>
             </td>

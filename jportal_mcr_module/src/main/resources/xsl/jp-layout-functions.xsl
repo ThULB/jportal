@@ -85,7 +85,7 @@
         <xsl:value-of select="concat('http://d-nb.info/gnd/', ../text())" />
       </xsl:when>
       <xsl:when test=". = 'nbn'">
-        <xsl:value-of select="concat('https://nbn-resolving.org/', ../text())" />
+        <xsl:value-of select="concat('https://nbn-resolving.org/resolver?verb=redirect&amp;identifier=', ../text())" />
       </xsl:when>
       <xsl:when test=". = 'doi'">
         <xsl:value-of select="../text()"/>

@@ -85,7 +85,7 @@
   MCR.URN.NISS=frontend
 
 # URL of the master resolver at Deutsche Bibliothek
-  MCR.URN.Resolver.MasterURL=http://nbn-resolving.de/urn/resolver.pl?urn=
+  MCR.URN.Resolver.MasterURL=https://nbn-resolving.org/resolver?verb=redirect&identifier=
 
 ##############################################################################
 # PIWIK
