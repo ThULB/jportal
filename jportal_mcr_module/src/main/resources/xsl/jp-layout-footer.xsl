@@ -1,80 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="xlink mcrxml">
-
-  <xsl:param name="JP.Site.Footer.Logo.url" />
-  <xsl:param name="JP.Site.Footer.Logo.default" />
-  <xsl:param name="JP.Site.Footer.Logo.small" />
-  <xsl:param name="JP.Site.Logo.Proxy.url" />
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                exclude-result-prefixes="">
 
   <xsl:template name="jp.layout.footer">
     <div class="jp-layout-footer">
-      <xsl:apply-templates select="." mode="footer" />
+      <xsl:apply-templates select="document(concat('logo:footer:', /mycoreobject/@ID))" mode="footer"/>
     </div>
   </xsl:template>
 
-  <xsl:template match="*" mode="footer">
-    <xsl:call-template name="jp.footer.print.default" />
-  </xsl:template>
-
-  <xsl:template name="jp.footer.print.default">
-    <a href="{$JP.Site.Footer.Logo.url}">
-      <img src="{concat($WebApplicationBaseURL, $JP.Site.Footer.Logo.default)}" class="logo" />
-    </a>
-  </xsl:template>
-
-  <xsl:template name="jp.footer.print.small">
-    <a href="{$JP.Site.Footer.Logo.url}">
-      <img src="{concat($WebApplicationBaseURL, $JP.Site.Footer.Logo.small)}" class="logo" />
-    </a>
-  </xsl:template>
-
-  <xsl:template match="/mycoreobject[contains(@ID, 'jpjournal') or contains(@ID, 'jpvolume') or contains(@ID, 'jparticle')]" mode="footer">
-    <xsl:if test="$journalID != ''">
-      <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
-      <xsl:choose>
-        <xsl:when test="$journal/metadata/participants/participant[@type='owner' or @type='partner']">
-          <xsl:call-template name="jp.footer.print.ownerAndPartner">
-            <xsl:with-param name="journal" select="$journal" />
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="jp.footer.print.default" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="jp.footer.print.ownerAndPartner">
-    <xsl:param name="journal" />
+  <xsl:template match="logos" mode="footer">
     <ul>
-      <xsl:apply-templates select="$journal/metadata/participants/participant[@type='owner']" mode="footer" />
-      <xsl:apply-templates select="$journal/metadata/participants/participant[@type='partner']" mode="footer" />
-      <li>
-        <xsl:call-template name="jp.footer.print.small" />
-      </li>
+      <xsl:apply-templates select="entity" mode="footer"/>
     </ul>
   </xsl:template>
 
-  <xsl:template match="participant" mode="footer">
-    <xsl:variable name="participant" select="document(concat('mcrobject:', @xlink:href))/mycoreobject" />
-    <xsl:variable name="imgURL" select="concat($WebApplicationBaseURL,
-    $JP.Site.Logo.Proxy.url,
-    $participant/metadata/logo/url[@type='logoPlain'])" />
-    <xsl:if test="$participant/metadata/logo/url[@type='logoPlain']">
-      <li>
-        <xsl:choose>
-          <xsl:when test="$participant/metadata/urls/url">
-            <a href="{$participant/metadata/urls/url/@xlink:href}">
-              <img src="{$imgURL}" alt="{@xlink:title}" class="logo" />
-            </a>
-          </xsl:when>
-          <xsl:otherwise>
-            <img src="{$imgURL}" alt="{@xlink:title}" class="logo" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </li>
-    </xsl:if>
+  <xsl:template match="entity[@url != '']" mode="footer">
+    <li>
+      <a href="{@url}">
+        <img src="{@logoURL}" class="logo"/>
+      </a>
+    </li>
+  </xsl:template>
+
+  <xsl:template match="entity" mode="footer">
+    <li>
+      <img src="{@logoURL}" class="logo"/>
+    </li>
   </xsl:template>
 
 </xsl:stylesheet>

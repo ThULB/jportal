@@ -3,6 +3,7 @@ package fsu.jportal.backend;
 import java.util.Optional;
 
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
+import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -63,7 +64,16 @@ public class JPInstitution extends JPLegalEntity {
      */
     protected String getInstitutionName() {
         return metadataStreamNotInherited("names", MCRMetaInstitutionName.class)
-                .map(MCRMetaInstitutionName::getFullName).findFirst().orElse(null);
+            .map(MCRMetaInstitutionName::getFullName).findFirst().orElse(null);
+    }
+
+    /**
+     * Returns the URL of this institution.
+     * 
+     * @return the URL
+     */
+    public Optional<MCRMetaLink> getURL() {
+        return metadataStreamNotInherited("urls", MCRMetaLink.class).findFirst();
     }
 
     @Override

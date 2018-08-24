@@ -1,6 +1,17 @@
 package fsu.jportal.resolver;
 
-import fsu.jportal.util.JPComponentUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
@@ -9,112 +20,92 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.datamodel.metadata.MCRMetaLink;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.MCRFrontendUtil;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-import java.util.ArrayList;
-import java.util.List;
+import fsu.jportal.backend.JPInstitution;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
- * URIResolver to retrieve the logos of participant partners.
+ * URIResolver to retrieve the logos of participant partners and owners. You can choose between different xml mappers
+ * which define how the returning xml looks like. Right now there are two mappers implemented:
  * 
- * <br />
- * Use: "logo:journalID"
- * 
+ * <ul>
+ *     <li>footer: used to transform the logos of the bottom of the page</li>
+ *     <li>mods: used to create the http://www.urmel-dl.de/ns/mods-entities in the mods part for oai</li>
+ * </ul>
+ *
+ * <p>Use: logo:{mapper}:{objectID} e.g. logo:footer:jportal_journal_00000001</p>
+ *
  * @author Matthias Eichner
  */
 @URIResolverSchema(schema = "logo")
 public class LogoResolver implements URIResolver {
 
-    static Logger LOGGER = LogManager.getLogger(LogoResolver.class);
+    private static final Logger LOGGER = LogManager.getLogger(LogoResolver.class);
 
-    private static enum ParticipantRoleTypes {
-        operator, sponsor, partner;
-        public static boolean contains(String type) {
-            for (ParticipantRoleTypes participantType : ParticipantRoleTypes.values()) {
-                if (type.equals(participantType.toString())) {
-                    return true;
-                }
-            }
-            return false;
-        }
+    private static Map<String, LogoEntityXMLMapper> ENTITY_MAPPERS;
+
+    static {
+        ENTITY_MAPPERS = new HashMap<>();
+        ENTITY_MAPPERS.put("mods", new MODSLogoEntityXMLMapper());
+        ENTITY_MAPPERS.put("footer", new FooterLogoEntityXMLMapper());
     }
 
     @Override
     public Source resolve(String href, String base) throws TransformerException {
-        String journalID = href.substring(href.indexOf(":") + 1);
-        return new JDOMSource(get(journalID));
+        String[] split = href.split(":");
+        String mapperId = split[1];
+        String objectID = split.length >= 3 ? split[2] : null;
+        return new JDOMSource(get(mapperId, objectID));
     }
 
-    public static Document get(String journalID) {
-        LOGGER.info("MODS logo for " + journalID);
-        List<MODSLogoEntity> entities = new ArrayList<MODSLogoEntity>();
-        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalID));
-        MCRMetaElement participants = mcrObject.getMetadata().getMetadataElement("participants");
-        if (participants != null) {
-            for (MCRMetaInterface retrievedElem : participants) {
-                if (retrievedElem instanceof MCRMetaLinkID) {
-                    MCRMetaLinkID participant = (MCRMetaLinkID) retrievedElem;
-                    String role = participant.getType();
-                    if (role != null && ParticipantRoleTypes.contains(role)) {
-                        String participantID = participant.getXLinkHref();
-                        MCRObject participantMcrObj = MCRMetadataManager
-                            .retrieveMCRObject(MCRObjectID.getInstance(participantID));
-                        entities.add(createLogoEntity(role, participantMcrObj));
-                    }
-                }
+    public static Document get(String mapperId, String objectID) throws TransformerException {
+        LOGGER.info("MODS logo for {} mapped with {}", objectID, mapperId);
+        LogoEntityXMLMapper mapper = ENTITY_MAPPERS.get(mapperId);
+        if (mapper == null) {
+            throw new TransformerException("Unable to get logos for '" + objectID + "' with mapper '" + mapperId
+                + "' cause mapper is not defined!");
+        }
+        List<LogoEntity> entities = new ArrayList<>();
+        if (!MCRObjectID.isValid(objectID)) {
+            return mapper.toXML(entities);
+        }
+        MCRObjectID mcrObjectID = MCRObjectID.getInstance(objectID);
+        JPJournal journal = JPComponentUtil.getPeriodical(mcrObjectID)
+            .map(JPPeriodicalComponent::getJournal)
+            .orElse(null);
+        if (journal == null || journal.getParticipants().isEmpty()) {
+            return mapper.toXML(entities);
+        }
+        List<MCRMetaLinkID> participants = journal.getParticipants();
+        for (MCRMetaLinkID participant : participants) {
+            String role = participant.getType();
+            if (role != null && mapper.supportRole(role)) {
+                String participantID = participant.getXLinkHref();
+                JPComponentUtil
+                    .get(MCRObjectID.getInstance(participantID), JPInstitution.class)
+                    .ifPresent(institution -> entities.add(createLogoEntity(role, institution)));
             }
         }
-        return new MODSLogoEntityXMLMapper(entities).getXML();
+        return mapper.toXML(entities);
     }
 
-    protected static MODSLogoEntity createLogoEntity(String role, MCRObject participantMcrObj) {
-        MODSLogoEntity modsLogoEntity = new MODSLogoEntity();
-        modsLogoEntity.setName(getFullname(participantMcrObj));
-        modsLogoEntity.setRole(role);
-        modsLogoEntity.setSiteURL(getSite(participantMcrObj));
-        modsLogoEntity.setLogo(getLogoURL(participantMcrObj));
-        return modsLogoEntity;
+    protected static LogoEntity createLogoEntity(String role, JPInstitution institution) {
+        LogoEntity logoEntity = new LogoEntity();
+        logoEntity.setName(institution.getTitle());
+        logoEntity.setRole(role);
+        logoEntity.setSiteURL(institution.getURL().map(MCRMetaLink::getXLinkHref).orElse(null));
+        logoEntity.setLogo(institution.getLogo());
+        return logoEntity;
     }
 
-    protected static String getLogoURL(MCRObject participantMcrObj) {
-        MCRObjectID id = participantMcrObj.getId();
-        try {
-            return JPComponentUtil.getLegalEntity(id).get().getLogo();
-        } catch (Exception exc) {
-            LOGGER.warn("Unable to get logo of participant " + id);
-        }
-        return null;
-    }
-
-    protected static String getFullname(MCRObject participantMcrObj) {
-        MCRMetaElement names = participantMcrObj.getMetadata().getMetadataElement("names");
-        if (names != null) {
-            for (MCRMetaInterface nameElem : names) {
-                if (nameElem instanceof MCRMetaInstitutionName) {
-                    MCRMetaInstitutionName name = (MCRMetaInstitutionName) nameElem;
-                    return name.getFullName();
-                }
-            }
-        }
-        return "No Name";
-    }
-
-    protected static String getSite(MCRObject participantMcrObj) {
-        MCRMetaElement urls = participantMcrObj.getMetadata().getMetadataElement("urls");
-        if (urls != null) {
-            for (MCRMetaInterface url : urls) {
-                if (url instanceof MCRMetaLink) {
-                    return ((MCRMetaLink) url).getXLinkHref();
-                }
-            }
-        }
-        return null;
-    }
-
-    protected static class MODSLogoEntity {
+    protected static class LogoEntity {
 
         private String name;
 
@@ -158,26 +149,34 @@ public class LogoResolver implements URIResolver {
 
     }
 
-    protected static class MODSLogoEntityXMLMapper {
-        private List<MODSLogoEntity> entities;
+    protected interface LogoEntityXMLMapper {
+
+        Document toXML(List<LogoEntity> logoEntities);
+
+        boolean supportRole(String role);
+    }
+
+    protected static class MODSLogoEntityXMLMapper implements LogoEntityXMLMapper {
 
         private Namespace urmelNamespace = Namespace.getNamespace("urmel", "http://www.urmel-dl.de/ns/mods-entities");
 
-        public MODSLogoEntityXMLMapper(List<MODSLogoEntity> entities) {
-            this.entities = entities;
+        @Override
+        public boolean supportRole(String role) {
+            return Arrays.asList("operator", "sponsor", "partner").contains(role);
         }
 
-        public Document getXML() {
+        @Override
+        public Document toXML(List<LogoEntity> logoEntities) {
             Document modsLogoEntities = new Document();
             Element entitiesTag = createUrmelTag("entities");
             entitiesTag.addNamespaceDeclaration(MCRConstants.XLINK_NAMESPACE);
-            for (MODSLogoEntity entity : entities) {
+            for (LogoEntity entity : logoEntities) {
                 Element entityTag = createEntityTag(entity);
                 if (entity.getSiteURL() != null) {
                     entityTag.addContent(createSiteTag(entity.getSiteURL()));
                 }
                 if (entity.getLogo() != null) {
-                    entityTag.addContent(createLogoTag("logo", entity.getLogo()));
+                    entityTag.addContent(createLogoTag(entity.getLogo()));
                 }
                 entitiesTag.addContent(entityTag);
             }
@@ -186,8 +185,8 @@ public class LogoResolver implements URIResolver {
             return modsLogoEntities;
         }
 
-        protected Element createLogoTag(String tagName, String url) {
-            Element logoTag = createUrmelTag(tagName);
+        protected Element createLogoTag(String url) {
+            Element logoTag = createUrmelTag("logo");
             logoTag.setAttribute(createXlinkAttr("href", url));
             logoTag.setAttribute(createXlinkAttr("type", "resource"));
             return logoTag;
@@ -200,7 +199,7 @@ public class LogoResolver implements URIResolver {
             return siteTag;
         }
 
-        protected Element createEntityTag(MODSLogoEntity entity) {
+        protected Element createEntityTag(LogoEntity entity) {
             Element entityTag = createUrmelTag("entity");
             entityTag.setAttribute(createXlinkAttr("title", entity.getName()));
             entityTag.setAttribute(createXlinkAttr("type", "extended"));
@@ -215,6 +214,64 @@ public class LogoResolver implements URIResolver {
         protected Element createUrmelTag(String tagName) {
             return new Element(tagName, urmelNamespace);
         }
+    }
+
+    protected static class FooterLogoEntityXMLMapper implements LogoEntityXMLMapper {
+
+        @Override
+        public boolean supportRole(String role) {
+            return Arrays.asList("owner", "partner").contains(role);
+        }
+
+        @Override
+        public Document toXML(List<LogoEntity> logoEntities) {
+            // get default logo entity
+            LogoEntity defaulLogoEntity = getDefaultLogo(logoEntities);
+            logoEntities.add(0, defaulLogoEntity);
+
+            // create document
+            Document footer = new Document(new Element("logos"));
+            Element root = footer.getRootElement();
+
+            // remove doublets (same site url | same logo), convert to xml & add to root
+            Set<String> doublets = new HashSet<>();
+            for (LogoEntity logoEntity : logoEntities) {
+                String logo = logoEntity.getLogo();
+                String siteURL = logoEntity.getSiteURL();
+                if (logo == null || doublets.contains(logo) || doublets.contains(siteURL)) {
+                    continue;
+                }
+                doublets.add(logo);
+                doublets.add(siteURL);
+                root.addContent(toXML(logoEntity));
+            }
+            return footer;
+        }
+
+        protected Element toXML(LogoEntity logoEntity) {
+            Element entity = new Element("entity");
+            entity.setAttribute("label", logoEntity.getName() != null ? logoEntity.getName() : "");
+            entity.setAttribute("url", logoEntity.getSiteURL() != null ? logoEntity.getSiteURL() : "");
+            String basePart = MCRFrontendUtil.getBaseURL();
+            String proxyLogoPart = MCRConfiguration.instance().getString("JP.Site.Logo.Proxy.url");
+            String imagePart = logoEntity.getLogo();
+            String logoURL = basePart + (imagePart.startsWith(proxyLogoPart) ? "" : proxyLogoPart) + imagePart;
+            entity.setAttribute("logoURL", logoURL);
+            return entity;
+        }
+
+        protected LogoEntity getDefaultLogo(List<LogoEntity> logoEntities) {
+            LogoEntity defaultLogoEntity = new LogoEntity();
+            MCRConfiguration conf = MCRConfiguration.instance();
+            defaultLogoEntity.setName(conf.getString("JP.Site.Owner.label"));
+            defaultLogoEntity.setRole("owner");
+            defaultLogoEntity.setSiteURL(conf.getString("JP.Site.Footer.Logo.url"));
+            defaultLogoEntity.setLogo(
+                logoEntities.isEmpty() ? conf.getString("JP.Site.Footer.Logo.default")
+                    : conf.getString("JP.Site.Footer.Logo.small"));
+            return defaultLogoEntity;
+        }
+
     }
 
 }
