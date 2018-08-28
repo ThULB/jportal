@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+             ID="urmel_class_00000105">
+  <label xml:lang="de" text="Thüringen-Bibliographie (Thuringica)"/>
+  <categories>
+    <category ID="01">
+      <label xml:lang="de" text="01 Allgemeine Periodika und Statistik"/>
+      <category ID="012000">
+        <label xml:lang="de" text="012000 Bibliographien &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="014000">
+        <label xml:lang="de" text="014000 Zeitungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="016000">
+        <label xml:lang="de" text="016000 Zeitschriften. Kalender &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="018000">
+        <label xml:lang="de" text="018000 Allgemeine Statistik &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="10">
+      <label xml:lang="de" text="10 Allgemeine Landeskunde"/>
+      <category ID="101000">
+        <label xml:lang="de" text="101000 Allgemeine Landesbeschreibung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="103000">
+        <label xml:lang="de" text="103000 Naturkundliche Landesbeschreibung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="105000">
+        <label xml:lang="de" text="105000 Historische Landesbeschreibung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="107000">
+        <label xml:lang="de" text="107000 Geographische Landesbeschreibung &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="12">
+      <label xml:lang="de" text="12 Kartographie und Vermessungswesen"/>
+      <category ID="121000">
+        <label xml:lang="de" text="121000 Kartographie. Vermessungswesen: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="123000">
+        <label xml:lang="de" text="123000 Kartographie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="123300">
+        <label xml:lang="de" text="123300 Karteninterpretation &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="124000">
+        <label xml:lang="de" text="124000 Luftbildauswertung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="125000">
+        <label xml:lang="de" text="125000 Vermessungswesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="127000">
+        <label xml:lang="de" text="127000 Karten &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="14">
+      <label xml:lang="de" text="14 Geowissenschaften"/>
+      <category ID="141000">
+        <label xml:lang="de" text="141000 Physische Geographie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="142000">
+        <label xml:lang="de" text="142000 Geologie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="143000">
+        <label xml:lang="de" text="143000 Geophysik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="144000">
+        <label xml:lang="de" text="144000 Mineralogie. Petrologie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="145000">
+        <label xml:lang="de" text="145000 Bodenkunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="146000">
+        <label xml:lang="de" text="146000 Paläontologie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="147000">
+        <label xml:lang="de" text="147000 Hydrologie. Gewässer &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="148000">
+        <label xml:lang="de" text="148000 Meteorologie. Klima &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="16">
+      <label xml:lang="de" text="16 Biowissenschaften"/>
+      <category ID="161000">
+        <label xml:lang="de" text="161000 Biologie. Ökologie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="162010">
+        <label xml:lang="de" text="162010 Botanik: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="162020">
+        <label xml:lang="de" text="162020 Vegetation. Florenlisten &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="162030">
+        <label xml:lang="de" text="162030 Algen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="162040">
+        <label xml:lang="de" text="162040 Pilze &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="162050">
+        <label xml:lang="de" text="162050 Flechten &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="162060">
+        <label xml:lang="de" text="162060 Moose &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="162070">
+        <label xml:lang="de" text="162070 Farnpflanzen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="162080">
+        <label xml:lang="de" text="162080 Samenpflanzen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163010">
+        <label xml:lang="de" text="163010 Zoologie: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163020">
+        <label xml:lang="de" text="163020 Gliedertiere &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163030">
+        <label xml:lang="de" text="163030 Schnecken. Muscheln &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163040">
+        <label xml:lang="de" text="163040 Übrige Wirbellose &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163050">
+        <label xml:lang="de" text="163050 Fische &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163060">
+        <label xml:lang="de" text="163060 Lurche &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163070">
+        <label xml:lang="de" text="163070 Kriechtiere &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163080">
+        <label xml:lang="de" text="163080 Vögel &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="163090">
+        <label xml:lang="de" text="163090 Säugetiere &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="164000">
+        <label xml:lang="de" text="164000 Biologische Anthropologie &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="17">
+      <label xml:lang="de" text="17 Natur- und Umweltschutz"/>
+      <category ID="171000">
+        <label xml:lang="de" text="171000 Naturschutz. Umweltschutz: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="173000">
+        <label xml:lang="de" text="173000 Naturschutz. Landschaftspflege &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="175000">
+        <label xml:lang="de" text="175000 Grünflächen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="177000">
+        <label xml:lang="de" text="177000 Umweltschutz &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="20">
+      <label xml:lang="de" text="20 Historische Hilfswissenschaften"/>
+      <category ID="201000">
+        <label xml:lang="de" text="201000 Historische Hilfswissenschaften: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="202000">
+        <label xml:lang="de" text="202000 Inschriften &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="202500">
+        <label xml:lang="de" text="202500 Urkundenlehre &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="203000">
+        <label xml:lang="de" text="203000 Familienkunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="204000">
+        <label xml:lang="de" text="204000 Münzkunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="205000">
+        <label xml:lang="de" text="205000 Wappen. Flaggen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="205500">
+        <label xml:lang="de" text="205500 Siegelkunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="206000">
+        <label xml:lang="de" text="206000 Orden. Ehrenzeichen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="206500">
+        <label xml:lang="de" text="206500 Chronologie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="207000">
+        <label xml:lang="de" text="207000 Metrologie &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="22">
+      <label xml:lang="de" text="22 Vor- und Frühgeschichte. Archäologie"/>
+      <category ID="221000">
+        <label xml:lang="de" text="221000 Archäologie: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="222000">
+        <label xml:lang="de" text="222000 Vor- und Frühgeschichte: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="223000">
+        <label xml:lang="de" text="223000 Altsteinzeit. Mittelsteinzeit &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="224000">
+        <label xml:lang="de" text="224000 Jungsteinzeit &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="225000">
+        <label xml:lang="de" text="225000 Bronzezeit &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="226000">
+        <label xml:lang="de" text="226000 Vorrömische Eisenzeit &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="227000">
+        <label xml:lang="de" text="227000 Römische Kaiserzeit &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="228000">
+        <label xml:lang="de" text="228000 Archäologie Völkerwanderung. Frühmittelalter &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="229000">
+        <label xml:lang="de" text="229000 Archäologie Mittelalter. Neuzeit &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="24">
+      <label xml:lang="de" text="24 Geschichte"/>
+      <category ID="240200">
+        <label xml:lang="de" text="240200 Geschichte: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="240400">
+        <label xml:lang="de" text="240400 Geschichtsschreibung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="240600">
+        <label xml:lang="de" text="240600 Geschichtsquellen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="240800">
+        <label xml:lang="de" text="240800 Geschichtsvereine &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="241010">
+        <label xml:lang="de" text="241010 Geschichte Hochmittelalter. Spätmittelalter: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="241020">
+        <label xml:lang="de" text="241020 Ludowinger"/>
+      </category>
+      <category ID="241030">
+        <label xml:lang="de" text="241030 Grafengeschlechter &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="241050">
+        <label xml:lang="de" text="241050 Vögte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="241070">
+        <label xml:lang="de" text="241070 Pfalzgrafschaft Sachsen"/>
+      </category>
+      <category ID="241080">
+        <label xml:lang="de" text="241080 Wettiner"/>
+      </category>
+      <category ID="242010">
+        <label xml:lang="de" text="242010 Geschichte Neuzeit: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="242022">
+        <label xml:lang="de" text="242022 Ernestiner Gesamthaus"/>
+      </category>
+      <category ID="242024">
+        <label xml:lang="de" text="242024 Ältere Ernestiner"/>
+      </category>
+      <category ID="242026">
+        <label xml:lang="de" text="242026 Jüngere Ernestiner"/>
+      </category>
+      <category ID="242030">
+        <label xml:lang="de" text="242030 Albertiner &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="242040">
+        <label xml:lang="de" text="242040 Grafe"/>
+      </category>
+      <category ID="242050">
+        <label xml:lang="de" text="242050 Herre"/>
+      </category>
+      <category ID="242055">
+        <label xml:lang="de" text="242055 Reichsstädte. Reichsritterschaftliche Gebiete &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="242060">
+        <label xml:lang="de" text="242060 Fremdherrschaftliche Gebiete &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="242070">
+        <label xml:lang="de" text="242070 Land Thüringen 1920-1933"/>
+      </category>
+      <category ID="242075">
+        <label xml:lang="de" text="242075 Land Thüringen 1933-1945"/>
+      </category>
+      <category ID="242080">
+        <label xml:lang="de" text="242080 Land Thüringen 1945-1952"/>
+      </category>
+      <category ID="242085">
+        <label xml:lang="de" text="242085 Geschichte Thüringen 1953-1989"/>
+      </category>
+      <category ID="242090">
+        <label xml:lang="de" text="242090 Geschichte Thüringen ab 1990"/>
+      </category>
+    </category>
+    <category ID="26">
+      <label xml:lang="de" text="26 Militärwesen. Kriege"/>
+      <category ID="261000">
+        <label xml:lang="de" text="261000 Militärwesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="263010">
+        <label xml:lang="de" text="263010 Kriege im Mittelalter &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="263030">
+        <label xml:lang="de" text="263030 Kriege 16.-18. Jahrhundert &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="263050">
+        <label xml:lang="de" text="263050 Kriege 19.-20. Jahrhundert &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="40">
+      <label xml:lang="de" text="40 Staat. Politik"/>
+      <category ID="401000">
+        <label xml:lang="de" text="401000 Staat. Politik: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="402000">
+        <label xml:lang="de" text="402000 Staatsgrundlagen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="402500">
+        <label xml:lang="de" text="402500 Verfassung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="403000">
+        <label xml:lang="de" text="403000 Regierung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="403500">
+        <label xml:lang="de" text="403500 Parlament &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="406000">
+        <label xml:lang="de" text="406000 Politische Willensbildung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="406200">
+        <label xml:lang="de" text="406200 Parteien. Politiker &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="406400">
+        <label xml:lang="de" text="406400 Politische Gruppen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="406600">
+        <label xml:lang="de" text="406600 Wahlen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="407000">
+        <label xml:lang="de" text="407000 Politische Verfolgung &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="42">
+      <label xml:lang="de" text="42 Verwaltung"/>
+      <category ID="421000">
+        <label xml:lang="de" text="421000 Verwaltung: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="421500">
+        <label xml:lang="de" text="421500 Verwaltungsgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="422000">
+        <label xml:lang="de" text="422000 Verwaltungsrecht &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="422500">
+        <label xml:lang="de" text="422500 Verwaltungskontrolle &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="423000">
+        <label xml:lang="de" text="423000 Allgemeine Verwaltung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="424000">
+        <label xml:lang="de" text="424000 Haushaltswesen. Finanzverwaltung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="426000">
+        <label xml:lang="de" text="426000 Ordnungsverwaltung. Sicherheitsverwaltung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="426300">
+        <label xml:lang="de" text="426300 Brandbekämpfung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="426500">
+        <label xml:lang="de" text="426500 Rettungswesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="426700">
+        <label xml:lang="de" text="426700 Katastrophen. Unglücksfälle &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="44">
+      <label xml:lang="de" text="44 Recht"/>
+      <category ID="441000">
+        <label xml:lang="de" text="441000 Recht: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="442000">
+        <label xml:lang="de" text="442000 Rechtsgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="443000">
+        <label xml:lang="de" text="443000 Zivilrecht &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="444000">
+        <label xml:lang="de" text="444000 Strafrecht &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="446000">
+        <label xml:lang="de" text="446000 Rechtssoziologie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="447000">
+        <label xml:lang="de" text="447000 Rechtsphilosophie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="448000">
+        <label xml:lang="de" text="448000 Personen der Rechtspflege &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="50">
+      <label xml:lang="de" text="50 Bevölkerung"/>
+      <category ID="501000">
+        <label xml:lang="de" text="501000 Bevölkerung: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="502000">
+        <label xml:lang="de" text="502000 Bevölkerungsgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="503000">
+        <label xml:lang="de" text="503000 Bevölkerungsstruktur &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="504000">
+        <label xml:lang="de" text="504000 Bevölkerungsentwicklung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="505000">
+        <label xml:lang="de" text="505000 Bevölkerungsverschiebung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="506000">
+        <label xml:lang="de" text="506000 Bevölkerungsdichte &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="52">
+      <label xml:lang="de" text="52 Sozialverwaltung. Wohlfahrtspflege"/>
+      <category ID="521000">
+        <label xml:lang="de" text="521000 Sozialverwaltung. Wohlfahrtspflege: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="522000">
+        <label xml:lang="de" text="522000 Sozialpolitik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="523000">
+        <label xml:lang="de" text="523000 Träger der Wohlfahrtspflege &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="524000">
+        <label xml:lang="de" text="524000 Mildtätige Stiftungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="525000">
+        <label xml:lang="de" text="525000 Erziehungsfürsorge. Jugendschutz &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="526000">
+        <label xml:lang="de" text="526000 Wirtschaftsfürsorge &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="53">
+      <label xml:lang="de" text="53 Gesundheitswesen"/>
+      <category ID="531000">
+        <label xml:lang="de" text="531000 Gesundheitswesen: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="532000">
+        <label xml:lang="de" text="532000 Medizin &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="533000">
+        <label xml:lang="de" text="533000 Apothekenwesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="534000">
+        <label xml:lang="de" text="534000 Krankenversorgung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="535000">
+        <label xml:lang="de" text="535000 Hygiene &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="537000">
+        <label xml:lang="de" text="537000 Veterinärwesen &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="54">
+      <label xml:lang="de" text="54 Wirtschaft"/>
+      <category ID="540500">
+        <label xml:lang="de" text="540500 Wirtschaft: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="541000">
+        <label xml:lang="de" text="541000 Wirtschaftsgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="542000">
+        <label xml:lang="de" text="542000 Wirtschaftsstruktur &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="543000">
+        <label xml:lang="de" text="543000 Bergbau &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="543500">
+        <label xml:lang="de" text="543500 Energiewirtschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="544000">
+        <label xml:lang="de" text="544000 Wasserwirtschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="544500">
+        <label xml:lang="de" text="544500 Handwerk. Industrie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="545000">
+        <label xml:lang="de" text="545000 Technik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="545500">
+        <label xml:lang="de" text="545500 Handel &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="546000">
+        <label xml:lang="de" text="546000 Dienstleistungssektor &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="546500">
+        <label xml:lang="de" text="546500 Banken. Versicherungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="547000">
+        <label xml:lang="de" text="547000 Fremdenverkehr. Gastronomie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="547500">
+        <label xml:lang="de" text="547500 Verbraucher &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="55">
+      <label xml:lang="de" text="55 Land- und Forstwirtschaft"/>
+      <category ID="550500">
+        <label xml:lang="de" text="550500 Landwirtschaft. Forstwirtschaft: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="551000">
+        <label xml:lang="de" text="551000 Agrargeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="551500">
+        <label xml:lang="de" text="551500 Landwirtschaftsstruktur &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="552000">
+        <label xml:lang="de" text="552000 Agrarpolitik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="552500">
+        <label xml:lang="de" text="552500 Landwirtschaftliche Arbeitskräfte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="553000">
+        <label xml:lang="de" text="553000 Landwirtschaftliche Betriebslehre &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="553500">
+        <label xml:lang="de" text="553500 Bodenkultur. Flurformen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="554000">
+        <label xml:lang="de" text="554000 Ackerbau &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="555000">
+        <label xml:lang="de" text="555000 Tierzucht &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="556000">
+        <label xml:lang="de" text="556000 Milchwirtschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="557000">
+        <label xml:lang="de" text="557000 Forstwirtschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="558000">
+        <label xml:lang="de" text="558000 Jagd &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="559000">
+        <label xml:lang="de" text="559000 Fischerei &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="56">
+      <label xml:lang="de" text="56 Verkehr"/>
+      <category ID="561000">
+        <label xml:lang="de" text="561000 Verkehr: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="562000">
+        <label xml:lang="de" text="562000 Verkehrsgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="563000">
+        <label xml:lang="de" text="563000 Straßenverkehr &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="564000">
+        <label xml:lang="de" text="564000 Öffentlicher Nahverkehr &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="565000">
+        <label xml:lang="de" text="565000 Schienenverkehr. Eisenbahn &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="566000">
+        <label xml:lang="de" text="566000 Flugverkehr &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="567000">
+        <label xml:lang="de" text="567000 Schiffahrt &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="568000">
+        <label xml:lang="de" text="568000 Postwesen. Fernmeldewesen &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="57">
+      <label xml:lang="de" text="57 Siedlung"/>
+      <category ID="571000">
+        <label xml:lang="de" text="571000 Siedlung: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="572000">
+        <label xml:lang="de" text="572000 Siedlungsgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="573000">
+        <label xml:lang="de" text="573000 Kulturlandschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="574000">
+        <label xml:lang="de" text="574000 Siedlungsstandort &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="575000">
+        <label xml:lang="de" text="575000 Siedlungstypen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="576000">
+        <label xml:lang="de" text="576000 Ländliche Siedlung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="577000">
+        <label xml:lang="de" text="577000 Städtische Siedlung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="578000">
+        <label xml:lang="de" text="578000 Stadt-Umland-Beziehungen &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="58">
+      <label xml:lang="de" text="58 Raumplanung. Bauwesen. Wohnungswirtschaft"/>
+      <category ID="582000">
+        <label xml:lang="de" text="582000 Raumplanung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="584000">
+        <label xml:lang="de" text="584000 Bauwesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="586000">
+        <label xml:lang="de" text="586000 Wohnungswirtschaft &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="61">
+      <label xml:lang="de" text="61 Kirchen. Glaubensgemeinschaften"/>
+      <category ID="611000">
+        <label xml:lang="de" text="611000 Kirchen. Glaubensgemeinschaften: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="612000">
+        <label xml:lang="de" text="612000 Katholische Kirche &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="613000">
+        <label xml:lang="de" text="613000 Evangelische Kirchen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="614000">
+        <label xml:lang="de" text="614000 Kirchengeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="615000">
+        <label xml:lang="de" text="615000 Kirchen. Kapellen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="615500">
+        <label xml:lang="de" text="615500 Kirchliches Bestattungswesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="616000">
+        <label xml:lang="de" text="616000 Glaubensgemeinschaften. Sekten &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="617000">
+        <label xml:lang="de" text="617000 Judentum &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="618000">
+        <label xml:lang="de" text="618000 Nichtchristliche Religionen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="619000">
+        <label xml:lang="de" text="619000 Weltanschauungsgemeinschaften &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="70">
+      <label xml:lang="de" text="70 Volkskunde"/>
+      <category ID="701000">
+        <label xml:lang="de" text="701000 Volkskunde: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="702000">
+        <label xml:lang="de" text="702000 Brauchtum &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="703000">
+        <label xml:lang="de" text="703000 Volkswissen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="703500">
+        <label xml:lang="de" text="703500 Rechtliche Volkskunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="704000">
+        <label xml:lang="de" text="704000 Religiöse Volkskunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="704500">
+        <label xml:lang="de" text="704500 Volksglauben &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="705000">
+        <label xml:lang="de" text="705000 Literarische Volkskunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="706000">
+        <label xml:lang="de" text="706000 Volksmusik. Volkstanz &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="707000">
+        <label xml:lang="de" text="707000 Hausforschung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="707500">
+        <label xml:lang="de" text="707500 Sachvolkskunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="708000">
+        <label xml:lang="de" text="708000 Volkskunst &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="709000">
+        <label xml:lang="de" text="709000 Kleidung &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="72">
+      <label xml:lang="de" text="72 Gesellschaft"/>
+      <category ID="721000">
+        <label xml:lang="de" text="721000 Gesellschaft: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="722000">
+        <label xml:lang="de" text="722000 Kulturgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="723000">
+        <label xml:lang="de" text="723000 Sozialgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="724000">
+        <label xml:lang="de" text="724000 Sozialsysteme &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="724500">
+        <label xml:lang="de" text="724500 Sexualität &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="725000">
+        <label xml:lang="de" text="725000 Sozialstruktur &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="726000">
+        <label xml:lang="de" text="726000 Soziale Gruppen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="727000">
+        <label xml:lang="de" text="727000 Sozialer Wandel &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="728000">
+        <label xml:lang="de" text="728000 Kulturelles Leben &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="73">
+      <label xml:lang="de" text="73 Freizeit. Sport"/>
+      <category ID="731000">
+        <label xml:lang="de" text="731000 Freizeit. Sport: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="733000">
+        <label xml:lang="de" text="733000 Feiern. Feste &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="735000">
+        <label xml:lang="de" text="735000 Freizeit. Erholung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="737000">
+        <label xml:lang="de" text="737000 Sport &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="74">
+      <label xml:lang="de" text="74 Sprache"/>
+      <category ID="741000">
+        <label xml:lang="de" text="741000 Sprache: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="742000">
+        <label xml:lang="de" text="742000 Sprachgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="743000">
+        <label xml:lang="de" text="743000 Mundartforschung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="744000">
+        <label xml:lang="de" text="744000 Namenkunde &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="746000">
+        <label xml:lang="de" text="746000 Umgangssprache &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="748000">
+        <label xml:lang="de" text="748000 Sprachpflege &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="76">
+      <label xml:lang="de" text="76 Literatur"/>
+      <category ID="761000">
+        <label xml:lang="de" text="761000 Literatur: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="762000">
+        <label xml:lang="de" text="762000 Literaturwissenschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="763000">
+        <label xml:lang="de" text="763000 Literaturgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="764000">
+        <label xml:lang="de" text="764000 Literatursoziologie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="764500">
+        <label xml:lang="de" text="764500 Literarische Stoffe. Literarische Motive &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="765000">
+        <label xml:lang="de" text="765000 Literarische Gattungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="766000">
+        <label xml:lang="de" text="766000 Literarische Sammlungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="767000">
+        <label xml:lang="de" text="767000 Schriftsteller &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="78">
+      <label xml:lang="de" text="78 Bildung. Erziehung"/>
+      <category ID="780500">
+        <label xml:lang="de" text="780500 Bildungspolitik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="781000">
+        <label xml:lang="de" text="781000 Erziehungswesen: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="782000">
+        <label xml:lang="de" text="782000 Schulgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="783000">
+        <label xml:lang="de" text="783000 Allgemeinbildendes Schulwesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="784000">
+        <label xml:lang="de" text="784000 Berufliches Schulwesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="785000">
+        <label xml:lang="de" text="785000 Erwachsenenbildung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="786000">
+        <label xml:lang="de" text="786000 Außerschulische Bildungseinrichtungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="787000">
+        <label xml:lang="de" text="787000 Stiftungen für Bildung und Ausbildung &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="79">
+      <label xml:lang="de" text="79 Hochschulwesen. Wissenschaft"/>
+      <category ID="791000">
+        <label xml:lang="de" text="791000 Hochschulwesen. Wissenschaft: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="792000">
+        <label xml:lang="de" text="792000 Hochschulpolitik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="793000">
+        <label xml:lang="de" text="793000 Wissenschaftsförderung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="794000">
+        <label xml:lang="de" text="794000 Universitäten. Technische Hochschulen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="795000">
+        <label xml:lang="de" text="795000 Pädagogische Hochschulen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="796000">
+        <label xml:lang="de" text="796000 Fachhochschulen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="797000">
+        <label xml:lang="de" text="797000 Hochschullehrer &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="797500">
+        <label xml:lang="de" text="797500 Studenten &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="798000">
+        <label xml:lang="de" text="798000 Außeruniversitäre Forschung und Wissenschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="799000">
+        <label xml:lang="de" text="799000 Wissenschaftliche und kulturelle Vereinigungen &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="80">
+      <label xml:lang="de" text="80 Darstellende Kunst"/>
+      <category ID="801000">
+        <label xml:lang="de" text="801000 Darstellende Kunst: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="802000">
+        <label xml:lang="de" text="802000 Theater &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="804000">
+        <label xml:lang="de" text="804000 Filmkunst &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="806000">
+        <label xml:lang="de" text="806000 Kleinkunst &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="808000">
+        <label xml:lang="de" text="808000 Varieté. Zirkus"/>
+      </category>
+    </category>
+    <category ID="82">
+      <label xml:lang="de" text="82 Musik"/>
+      <category ID="821000">
+        <label xml:lang="de" text="821000 Musik: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="821500">
+        <label xml:lang="de" text="821500 Musikwissenschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="822000">
+        <label xml:lang="de" text="822000 Musikausbildung &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="822500">
+        <label xml:lang="de" text="822500 Musikgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="823000">
+        <label xml:lang="de" text="823000 Musikveranstaltungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="824000">
+        <label xml:lang="de" text="824000 Kirchenmusik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="825000">
+        <label xml:lang="de" text="825000 Orchester. Chöre &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="826000">
+        <label xml:lang="de" text="826000 Musikinstrumente &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="827000">
+        <label xml:lang="de" text="827000 Laienmusik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="828000">
+        <label xml:lang="de" text="828000 Musiker. Komponisten &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="84">
+      <label xml:lang="de" text="84 Bildende Kunst. Architektur"/>
+      <category ID="840500">
+        <label xml:lang="de" text="840500 Bildende Kunst. Architektur: Allgemeines &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="841000">
+        <label xml:lang="de" text="841000 Kunstwissenschaft &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="841500">
+        <label xml:lang="de" text="841500 Kunstgeschichte &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="842000">
+        <label xml:lang="de" text="842000 Kunstmuseen. Kunstsammlungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="842500">
+        <label xml:lang="de" text="842500 Kunstausstellungen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="843000">
+        <label xml:lang="de" text="843000 Architektur &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="843500">
+        <label xml:lang="de" text="843500 Baudenkmäler. Kunstdenkmäler &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="844000">
+        <label xml:lang="de" text="844000 Denkmalschutz &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="845000">
+        <label xml:lang="de" text="845000 Stadtbaukunst &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="846000">
+        <label xml:lang="de" text="846000 Plastik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="847000">
+        <label xml:lang="de" text="847000 Malerei. Graphik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="848000">
+        <label xml:lang="de" text="848000 Photographie &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="849000">
+        <label xml:lang="de" text="849000 Kunsthandwerk &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="85">
+      <label xml:lang="de" text="85 Archive. Museen"/>
+      <category ID="852000">
+        <label xml:lang="de" text="852000 Archivwesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="854000">
+        <label xml:lang="de" text="854000 Museen &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="86">
+      <label xml:lang="de" text="86 Buch- und Bibliothekswesen"/>
+      <category ID="862000">
+        <label xml:lang="de" text="862000 Buchwesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="864000">
+        <label xml:lang="de" text="864000 Bibliothekswesen &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+    <category ID="88">
+      <label xml:lang="de" text="88 Publizistik. Information"/>
+      <category ID="882000">
+        <label xml:lang="de" text="882000 Publizistik &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="884000">
+        <label xml:lang="de" text="884000 Informationswesen. Dokumentationswesen &lt;Thüringen&gt;"/>
+      </category>
+      <category ID="950000">
+        <label xml:lang="de" text="950000 Personen &lt;Thüringen&gt;"/>
+      </category>
+    </category>
+  </categories>
+</mycoreclass>
