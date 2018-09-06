@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,7 +58,7 @@ public class DerivateTools {
     static Logger LOGGER = LogManager.getLogger(DerivateTools.class);
 
     private static boolean cp(final MCRPath source, MCRPath targetDir, String newName,
-                              final Map<MCRPath, MCRPath> copyHistory) {
+        final Map<MCRPath, MCRPath> copyHistory) {
         if (newName == null) {
             newName = source.getFileName().toString();
         }
@@ -148,12 +149,12 @@ public class DerivateTools {
         return false;
     }
 
-    public static String getMaindoc(JPDerivateComponent derivate){
+    public static String getMaindoc(JPDerivateComponent derivate) {
         return derivate.getObject().getDerivate().getInternals().getMainDoc();
     }
 
     private static void moveAttachedData(JPDerivateComponent srcDerivate, Map<MCRPath, MCRPath> copyHistory)
-            throws MCRAccessException {
+        throws MCRAccessException {
         String maindoc = getMaindoc(srcDerivate);
         for (MCRPath sourceNode : copyHistory.keySet()) {
             MCRPath target = copyHistory.get(sourceNode);
@@ -245,12 +246,10 @@ public class DerivateTools {
 
                     try {
                         newFilename = matcher.replaceAll(newName);
-                    }
-                    catch (IndexOutOfBoundsException e) {
+                    } catch (IndexOutOfBoundsException e) {
                         LOGGER.info("The file " + file + " can't be renamed to " + newName + ". To many groups!");
                         return FileVisitResult.CONTINUE;
-                    }
-                    catch (IllegalArgumentException e) {
+                    } catch (IllegalArgumentException e) {
                         LOGGER.info("The new name '" + newName + "' contains illegal characters!");
                         return FileVisitResult.CONTINUE;
                     }
@@ -330,7 +329,7 @@ public class DerivateTools {
         if (!Files.isDirectory(mcrPath)) {
             try {
                 DerivateLinkUtil.deleteFileLink(mcrPath);
-            } catch(Exception exc) {
+            } catch (Exception exc) {
                 LOGGER.error("Unable to delete links of path " + mcrPath);
                 return 0;
             }
@@ -346,7 +345,7 @@ public class DerivateTools {
             Files.walkFileTree(mcrPath, new SimpleFileVisitor<java.nio.file.Path>() {
                 @Override
                 public FileVisitResult visitFile(java.nio.file.Path file, BasicFileAttributes attrs)
-                        throws IOException {
+                    throws IOException {
                     try {
                         DerivateLinkUtil.deleteFileLink(MCRPath.toMCRPath(file));
                     } catch (MCRAccessException e) {
@@ -377,7 +376,7 @@ public class DerivateTools {
      * @see #uploadFile(InputStream, long, String, String, String)
      */
     public static String uploadFileWithoutTransaction(InputStream inputStream, long filesize, String documentID,
-                                                      String derivateID, String filePath) throws Exception {
+        String derivateID, String filePath) throws Exception {
         MCRSession session = MCRSessionMgr.getCurrentSession();
         try {
             session.beginTransaction();
@@ -400,7 +399,7 @@ public class DerivateTools {
      * @return derivateId
      */
     public static String uploadFile(InputStream inputStream, long filesize, String documentID, String derivateID,
-                                    String filePath) throws IOException, MCRAccessException {
+        String filePath) throws IOException, MCRAccessException {
         if (derivateID == null) {
             String projectID = MCRConfiguration.instance().getString("MCR.Metadata.Project", "MCR");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
@@ -425,13 +424,13 @@ public class DerivateTools {
 
     public static JsonObject getChildAsJson(String derivateID, String path, String file) {
         MCRDirectory node = getRootDir(derivateID);
-        if(node == null){
+        if (node == null) {
             return null;
         }
 
         if (path != null && !"".equals(path.trim())) {
             node = (MCRDirectory) node.getChildByPath(path);
-            if(node == null){
+            if (node == null) {
                 return null;
             }
         }
@@ -494,8 +493,8 @@ public class DerivateTools {
         MCRObjectID mcrObjectID = MCRObjectID.getInstance(derivateID);
         return !addURNToFile(mcrObjectID, "").equals("")
             && URNTools
-            .registerURNs(mcrObjectID)
-            .noneMatch(pi -> pi.getRegistered() == null);
+                .registerURNs(mcrObjectID)
+                .noneMatch(pi -> pi.getRegistered() == null);
     }
 
     public static String addURNToFile(String derivatID, String path) {
@@ -504,15 +503,16 @@ public class DerivateTools {
 
     public static String addURNToFile(MCRObjectID derivID, String path) {
         MCRPIService<MCRPersistentIdentifier> dnburnGranular = MCRPIServiceManager.getInstance()
-                                                                                  .getRegistrationService(
-                                                                                          URNTools.SERVICEID);
+            .getRegistrationService(
+                URNTools.SERVICEID);
 
         MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivID);
         try {
             MCRPersistentIdentifier urn = dnburnGranular.register(derivate, path);
             return urn.asString();
-        } catch (MCRAccessException | MCRActiveLinkException | MCRPersistentIdentifierException e) {
-            LOGGER.error("Unable to add URN to file " + path);
+        } catch (ExecutionException | InterruptedException | MCRAccessException | MCRActiveLinkException
+            | MCRPersistentIdentifierException e) {
+            LOGGER.error("Unable to add URN to file {}", path);
         }
 
         return "";
@@ -533,7 +533,7 @@ public class DerivateTools {
 
         MCRDirectory root = getRootDir(derivateID);
         MCRFilesystemNode node = root;
-        if (root != null && path != null && !path.equals("")){
+        if (root != null && path != null && !path.equals("")) {
             node = root.getChildByPath(path);
         }
 
@@ -590,10 +590,9 @@ public class DerivateTools {
     public static String getMD5forFile(String derivateID, String path) {
         MCRDirectory rootDir = getRootDir(derivateID);
 
-        if(rootDir == null){
+        if (rootDir == null) {
             return "";
         }
-
 
         MCRFile mcrFile = (MCRFile) rootDir.getChildByPath(path);
         if (mcrFile != null) {
@@ -615,7 +614,7 @@ public class DerivateTools {
     public static Object checkFileType(String derivateID, String path) {
         MCRDirectory rootDir = getRootDir(derivateID);
 
-        if(rootDir == null){
+        if (rootDir == null) {
             return "";
         }
         if ("".equals(path)) {
@@ -628,8 +627,7 @@ public class DerivateTools {
         }
         if (mcrFile instanceof MCRFile) {
             return "file";
-        }
-        else {
+        } else {
             return "";
         }
     }

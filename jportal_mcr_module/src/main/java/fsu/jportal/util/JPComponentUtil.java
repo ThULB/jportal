@@ -133,13 +133,13 @@ public abstract class JPComponentUtil {
 
     public static Optional<String> getListType(String mcrID) {
         JPInfoProvider infoProvider = new JPInfoProvider(mcrID,
-                "/mycoreobject/metadata/contentClassis1/contentClassi1/@categid");
+            "/mycoreobject/metadata/contentClassis1/contentClassi1/@categid");
         return infoProvider.get(new JPSimpleAttribute());
     }
 
     public static <T extends JPComponent> T of(InputStream is, Class<T> type)
-            throws JDOMException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-            InstantiationException {
+        throws JDOMException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+        InstantiationException {
         SAXBuilder builder = new SAXBuilder();
         Document document = builder.build(is);
         MCRObject mcrObject = new MCRObject(document);
@@ -248,6 +248,22 @@ public abstract class JPComponentUtil {
             return Optional.of(new JPVolume(id));
         } else if (type.equals(JPJournal.TYPE)) {
             return Optional.of(new JPJournal(id));
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Returns a container object for the given id.
+     *
+     * @param object the mycore object
+     * @return container optional
+     */
+    public static Optional<JPContainer> getContainer(MCRObject object) {
+        String type = object.getId().getTypeId();
+        if (type.equals(JPVolume.TYPE)) {
+            return Optional.of(new JPVolume(object));
+        } else if (type.equals(JPJournal.TYPE)) {
+            return Optional.of(new JPJournal(object));
         }
         return Optional.empty();
     }

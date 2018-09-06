@@ -2,6 +2,8 @@ package fsu.jportal.backend.marc;
 
 import fsu.jportal.backend.*;
 import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.Pair;
+
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
 import org.marc4j.marc.Record;
@@ -15,14 +17,15 @@ import java.util.Map;
 public abstract class Marc21Converter {
 
     public static Record convert(JPPeriodicalComponent component) {
-        if(JPComponentUtil.is(component, JPObjectType.jpjournal)) {
+        if (JPComponentUtil.is(component, JPObjectType.jpjournal)) {
             return convert((JPJournal) component);
-        } else if(JPComponentUtil.is(component, JPObjectType.jpvolume)) {
+        } else if (JPComponentUtil.is(component, JPObjectType.jpvolume)) {
             return convert((JPVolume) component);
-        } else if(JPComponentUtil.is(component, JPObjectType.jparticle)) {
+        } else if (JPComponentUtil.is(component, JPObjectType.jparticle)) {
             return convert((JPArticle) component);
         }
-        throw new IllegalArgumentException("Invalid component " + component + " has to be jpjournal, jpvolume or jparticle!");
+        throw new IllegalArgumentException(
+            "Invalid component " + component + " has to be jpjournal, jpvolume or jparticle!");
     }
 
     public static Record convert(JPJournal journal) {
@@ -87,7 +90,8 @@ public abstract class Marc21Converter {
      * @param value the subfield value
      * @return the new datafield
      */
-    private static DataField getField(MarcFactory marcFactory, String tag, char ind1, char ind2, char code, String value) {
+    private static DataField getField(MarcFactory marcFactory, String tag, char ind1, char ind2, char code,
+        String value) {
         DataField dataField = marcFactory.newDataField(tag, ind1, ind2);
         dataField.addSubfield(marcFactory.newSubfield(code, value));
         return dataField;
@@ -102,7 +106,8 @@ public abstract class Marc21Converter {
      * @param mainPersonRole name of the person role
      * @param mainInstitutionRole name of the institution role
      */
-    private static void addShared(JPPeriodicalComponent component, MarcFactory marcFactory, List<DataField> fields, String mainPersonRole, String mainInstitutionRole) {
+    private static void addShared(JPPeriodicalComponent component, MarcFactory marcFactory, List<DataField> fields,
+        String mainPersonRole, String mainInstitutionRole) {
 
         // 024 - ID
         fields.add(getField(marcFactory, "024", '8', '0', 'a', component.getId().toString()));
@@ -140,11 +145,11 @@ public abstract class Marc21Converter {
         }
 
         // 700 - Added Entry-Personal Name
-        for (MCRObjectID personID : component.getParticipants(JPObjectType.person)) {
-            if (personID.equals(mainPersonID)) {
+        for (Pair<MCRObjectID, String> person : component.getParticipants(JPObjectType.person)) {
+            if (person.getKey().equals(mainPersonID)) {
                 continue;
             }
-            addPerson("700", marcFactory, fields, personID);
+            addPerson("700", marcFactory, fields, person.getKey());
         }
 
         // 110 - Author
@@ -158,11 +163,11 @@ public abstract class Marc21Converter {
         }
 
         // 710 - Main Entry-Corporate Name (has no main entry )
-        for (MCRObjectID jpinstID : component.getParticipants(JPObjectType.jpinst)) {
-            if (jpinstID.equals(mainInstitutionID)) {
+        for (Pair<MCRObjectID, String> jpinst : component.getParticipants(JPObjectType.jpinst)) {
+            if (jpinst.getKey().equals(mainInstitutionID)) {
                 continue;
             }
-            addInstitution("710", marcFactory, fields, jpinstID);
+            addInstitution("710", marcFactory, fields, jpinst.getKey());
         }
 
     }
@@ -192,7 +197,8 @@ public abstract class Marc21Converter {
         return dataField;
     }
 
-    private static void addPublishedDate(JPPeriodicalComponent component, MarcFactory marcFactory, List<DataField> fields) {
+    private static void addPublishedDate(JPPeriodicalComponent component, MarcFactory marcFactory,
+        List<DataField> fields) {
         // 260 Publication, Distribution, etc. (Imprint)
         component.getDate(JPPeriodicalComponent.DateType.published).ifPresent(date -> {
             DataField dataField = marcFactory.newDataField("260", '#', '#');
@@ -202,9 +208,11 @@ public abstract class Marc21Converter {
     }
 
     private static void addLanguage(JPPeriodicalComponent component, MarcFactory marcFactory, List<DataField> fields) {
-        DataField languageField = getField(marcFactory, "041", '#', '7', 'a', component.getLanguageCode());
-        languageField.addSubfield(marcFactory.newSubfield('2', "iso639-1"));
-        fields.add(languageField);
+        component.getLanguageCode().ifPresent(language -> {
+            DataField languageField = getField(marcFactory, "041", '#', '7', 'a', language);
+            languageField.addSubfield(marcFactory.newSubfield('2', "iso639-1"));
+            fields.add(languageField);
+        });
     }
 
     private static void addPerson(String marcEntry, MarcFactory marcFactory, List<DataField> fields, MCRObjectID id) {
@@ -219,7 +227,8 @@ public abstract class Marc21Converter {
         fields.add(dataField);
     }
 
-    private static void addInstitution(String marcEntry, MarcFactory marcFactory, List<DataField> fields, MCRObjectID id) {
+    private static void addInstitution(String marcEntry, MarcFactory marcFactory, List<DataField> fields,
+        MCRObjectID id) {
         JPInstitution institution = new JPInstitution(id);
         DataField dataField = marcFactory.newDataField(marcEntry, '2', '#');
         dataField.addSubfield(marcFactory.newSubfield('a', institution.getTitle()));
@@ -229,7 +238,8 @@ public abstract class Marc21Converter {
         fields.add(dataField);
     }
 
-    private static void addIdentis(String marcEntry, String idType, List<DataField> fields, JPPeriodicalComponent component, MarcFactory marcFactory) {
+    private static void addIdentis(String marcEntry, String idType, List<DataField> fields,
+        JPPeriodicalComponent component, MarcFactory marcFactory) {
         component.getIdenti(idType).ifPresent(value -> {
             fields.add(getField(marcFactory, marcEntry, '#', '#', 'a', value));
         });

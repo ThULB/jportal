@@ -29,13 +29,12 @@ public abstract class JPLegalEntity extends JPObjectComponent {
     }
 
     /**
-     * Returns the logo url. If available the logo plain is returned,
-     * if not the logo with text and otherwise null.
+     * Returns the logo url. If available the logo plain is returned, if not the logo with text.
      * 
      * @return the logo url
      */
-    public String getLogo() {
-        return getLogoPlain().orElse(getLogoPlusText().orElse(null));
+    public Optional<String> getLogo() {
+        return getLogoPlain().map(Optional::of).orElse(getLogoPlusText());
     }
 
     /**

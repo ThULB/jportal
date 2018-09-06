@@ -223,11 +223,11 @@ public class JPXMLFunctions {
             if (query.contains("&start=")) {
                 String[] queryArray = query.split("&");
                 String queryRmStartParam = Arrays.stream(queryArray)
-                                                 .filter(q -> !q.startsWith("start="))
-                                                 .collect(Collectors.joining("&"));
+                    .filter(q -> !q.startsWith("start="))
+                    .collect(Collectors.joining("&"));
 
                 return new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getPath() + "?" + queryRmStartParam)
-                        .toString();
+                    .toString();
             }
             return requestURL;
         } catch (MalformedURLException e) {
@@ -289,10 +289,10 @@ public class JPXMLFunctions {
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
             return JPComponentUtil.getPeriodical(mcrId)
-                                  .flatMap(JPPeriodicalComponent::getPublishedDate)
-                                  .map(JPMetaDate::getDateOrFrom)
-                                  .map(JPDateUtil::format)
-                                  .orElse(null);
+                .flatMap(JPPeriodicalComponent::getPublishedDate)
+                .map(JPMetaDate::getDateOrFrom)
+                .map(JPDateUtil::format)
+                .orElse(null);
         } catch (Exception exc) {
             LOGGER.error("Unable to retrieve published date of {}", id, exc);
         }
@@ -340,7 +340,7 @@ public class JPXMLFunctions {
                     return JPDateUtil.format(jpDate.getDate());
                 } else if (jpDate.getUntil() != null) {
                     return String.format("[%s TO %s]", JPDateUtil.format(jpDate.getFrom()),
-                            JPDateUtil.format(jpDate.getUntil()));
+                        JPDateUtil.format(jpDate.getUntil()));
                 }
                 return JPDateUtil.format(jpDate.getFrom());
             }).orElse(null);
@@ -368,7 +368,7 @@ public class JPXMLFunctions {
             Locale locale = new Locale(iso639Language);
             String untilText = MCRTranslation.translate("metaData.date.until", locale);
             return String.format("%s %s %s", formatDate(from, iso639Language), untilText,
-                    formatDate(until, iso639Language));
+                formatDate(until, iso639Language));
         } catch (Throwable t) {
             LOGGER.error("Unable to format solr date {}", solrDate, t);
             return "";
@@ -422,7 +422,7 @@ public class JPXMLFunctions {
     public static String getLanguage(String id) {
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
-            return JPComponentUtil.getPeriodical(mcrId).map(JPPeriodicalComponent::getLanguageCode).orElse(null);
+            return JPComponentUtil.getPeriodical(mcrId).flatMap(JPPeriodicalComponent::getLanguageCode).orElse(null);
         } catch (Exception exc) {
             LOGGER.error("Unable to retrieve language of {}", id, exc);
             return null;
@@ -457,12 +457,24 @@ public class JPXMLFunctions {
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
             Optional<JPLegalEntity> creator = JPComponentUtil.getPeriodical(mcrId)
-                                                             .flatMap(JPPeriodicalComponent::getCreator);
+                .flatMap(JPPeriodicalComponent::getCreator);
             return creator.map(JPLegalEntity::getTitle).orElse(null);
         } catch (Exception exc) {
             LOGGER.error("Unable to retrieve creator of {}", id, exc);
             return null;
         }
+    }
+
+    /**
+     * Returns the logo URL for the given image.
+     * 
+     * @param image the image e.g. thulb.svg
+     * @return the full url using the JP.Site.Logo.Proxy.url property
+     */
+    public static String getLogoURL(String image) {
+        String baseURL = MCRFrontendUtil.getBaseURL();
+        String logoPath = MCRConfiguration.instance().getString("JP.Site.Logo.Proxy.url");
+        return baseURL + logoPath + image;
     }
 
     public static String getAccessRights(String id) {
@@ -487,8 +499,8 @@ public class JPXMLFunctions {
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
             Optional<JPLegalEntity> publisher = JPComponentUtil.getPeriodical(mcrId)
-                                                               .map(JPPeriodicalComponent::getJournal)
-                                                               .flatMap(JPJournal::getCreator);
+                .map(JPPeriodicalComponent::getJournal)
+                .flatMap(JPJournal::getCreator);
             return publisher.map(JPLegalEntity::getTitle).orElse(null);
         } catch (Exception exc) {
             LOGGER.error("Unable to retrieve publisher of {}", id, exc);
@@ -630,7 +642,7 @@ public class JPXMLFunctions {
     public static String getMainFile(String id) {
         try {
             Optional<JPPeriodicalComponent> periodicalOptional = JPComponentUtil.getPeriodical(
-                    MCRObjectID.getInstance(id));
+                MCRObjectID.getInstance(id));
             if (!periodicalOptional.isPresent()) {
                 return "";
             }

@@ -24,6 +24,7 @@ import org.mycore.datamodel.metadata.MCRObjectUtils;
 import fsu.jportal.util.DerivateLinkUtil;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPDateUtil;
+import fsu.jportal.util.Pair;
 
 /**
  * Base class for jparticle, jpvolume and jpjournal.
@@ -81,12 +82,12 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      *
      * @return optional parent
      */
-    public Optional<JPPeriodicalComponent> getParent() {
+    public Optional<JPContainer> getParent() {
         MCRObjectID parent = getObject().getParent();
         if (parent == null) {
             return Optional.empty();
         }
-        return JPComponentUtil.getPeriodical(parent);
+        return JPComponentUtil.getContainer(parent);
     }
 
     @Override
@@ -321,7 +322,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
-     * Returns a list of participants of the given type.
+     * Returns a list of participants of the given role.
      *
      * @param role the role, e.g. author
      * @return list of participants
@@ -331,19 +332,25 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
-     * List all participants of the given object type (only person or jpinst is allowed).
+     * Returns a map of all participants of the given object type (only person or jpinst is allowed).
+     *
+     * <ul>
+     *     <li>key: mycore object id</li>
+     *     <li>value: role</li>
+     * </ul>
      *
      * @param objectType person or jpinst
      * @return list of participants
      */
-    public List<MCRObjectID> getParticipants(JPObjectType objectType) {
+    public List<Pair<MCRObjectID, String>> getParticipants(JPObjectType objectType) {
         if (!(objectType.equals(JPObjectType.person) || objectType.equals(JPObjectType.jpinst))) {
             throw new IllegalArgumentException("Invalid object type for participants " + objectType.name()
                 + ". Only person or jpinst is allowed.");
         }
         return metadataStreamNotInherited("participants", MCRMetaLinkID.class)
             .filter(link -> link.getXLinkHrefID().getTypeId().equals(objectType.name()))
-            .map(MCRMetaLinkID::getXLinkHrefID).collect(Collectors.toList());
+            .map(metaLinkID -> new Pair<>(metaLinkID.getXLinkHrefID(), metaLinkID.getType()))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -454,7 +461,7 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      *
      * @return the language code
      */
-    public String getLanguageCode() {
+    public Optional<String> getLanguageCode() {
         MCRObject journal = MCRObjectUtils.getRoot(object);
         if (!journal.getId().getTypeId().equals(JPJournal.TYPE)) {
             throw new MCRException("Unable to get language code of object " + journal.getId()

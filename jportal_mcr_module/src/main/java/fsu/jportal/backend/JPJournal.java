@@ -50,11 +50,10 @@ public class JPJournal extends JPContainer {
      * @return the language code
      */
     @Override
-    public String getLanguageCode() {
+    public Optional<String> getLanguageCode() {
         return metadataStreamNotInherited("languages", MCRMetaClassification.class)
             .map(MCRMetaClassification::getCategId)
-            .findAny()
-            .orElse(null);
+            .findAny();
     }
 
     /**

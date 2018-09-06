@@ -1,7 +1,6 @@
 package fsu.jportal.mets;
 
 import org.jdom2.Element;
-import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.Mets;
@@ -13,9 +12,15 @@ import org.mycore.mets.model.struct.MdWrap;
 import org.mycore.mets.model.struct.Mptr;
 
 import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPInstitution;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPPerson;
+import static fsu.jportal.mets.ZvddXMLTools.mods;
+import static fsu.jportal.mets.ZvddXMLTools.modsIdentifier;
+import static fsu.jportal.mets.ZvddXMLTools.modsName;
+import static fsu.jportal.mets.ZvddXMLTools.modsTitleInfo;
 import fsu.jportal.util.JPComponentUtil;
 
 /**
@@ -66,16 +71,19 @@ public class ZvddDerivateMetsGenerator extends DfgViewerMetsGenerator {
         Element mods = mods("mods");
 
         // identifier
-        Element mcrIdentifier = modsIdentifier("identifier", "mycore", periodical.getId().toString());
-        mods.addContent(mcrIdentifier);
         periodical.listIdenti().stream().map(text -> modsIdentifier("identifier", text.getType(), text.getText()))
             .forEach(mods::addContent);
 
         // title
-        Element title = mods("title");
-        title.setText(periodical.getTitle());
-        Element titleInfo = mods("titleInfo").addContent(title);
-        mods.addContent(titleInfo);
+        mods.addContent(modsTitleInfo(periodical.getTitle(), null));
+
+        // participants
+        periodical.getParticipants(JPObjectType.person).stream()
+            .map(personPair -> modsName(new JPPerson(personPair.getKey()), personPair.getValue(), "personal"))
+            .forEach(mods::addContent);
+        periodical.getParticipants(JPObjectType.jpinst).stream()
+            .map(jpinstPair -> modsName(new JPInstitution(jpinstPair.getKey()), jpinstPair.getValue(), "corporate"))
+            .forEach(mods::addContent);
 
         // add content
         return mods;
@@ -94,17 +102,6 @@ public class ZvddDerivateMetsGenerator extends DfgViewerMetsGenerator {
             mods.addContent(relatedItem);
         }
         return mods;
-    }
-
-    protected Element mods(String name) {
-        return new Element(name, MCRConstants.MODS_NAMESPACE);
-    }
-
-    private Element modsIdentifier(String name, String type, String value) {
-        Element identifier = mods(name);
-        identifier.setAttribute("type", type);
-        identifier.setText(value);
-        return identifier;
     }
 
 }

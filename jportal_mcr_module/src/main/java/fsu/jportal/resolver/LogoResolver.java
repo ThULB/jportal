@@ -101,7 +101,7 @@ public class LogoResolver implements URIResolver {
         logoEntity.setName(institution.getTitle());
         logoEntity.setRole(role);
         logoEntity.setSiteURL(institution.getURL().map(MCRMetaLink::getXLinkHref).orElse(null));
-        logoEntity.setLogo(institution.getLogo());
+        logoEntity.setLogo(institution.getLogo().orElse(null));
         return logoEntity;
     }
 
