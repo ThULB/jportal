@@ -1,23 +1,20 @@
 package fsu.jportal.mets;
 
-import static fsu.jportal.mets.ZvddXMLTools.dv;
-import static fsu.jportal.mets.ZvddXMLTools.mods;
-import static fsu.jportal.mets.ZvddXMLTools.modsIdentifier;
-import static fsu.jportal.mets.ZvddXMLTools.modsTitleInfo;
+import static fsu.jportal.mets.ZvddMetsTools.dv;
+import static fsu.jportal.mets.ZvddMetsTools.mods;
+import static fsu.jportal.mets.ZvddMetsTools.modsIdentifier;
+import static fsu.jportal.mets.ZvddMetsTools.modsTitleInfo;
 
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.JPMetaDate;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
@@ -39,7 +36,6 @@ import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
-import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPDateUtil;
 import fsu.jportal.xml.JPXMLFunctions;
 
@@ -68,7 +64,7 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
         // title
         mods.addContent(modsTitleInfo(journal.getTitle(), null));
         // language
-        journal.getLanguageCode().map(ZvddXMLTools::modsLanguage).ifPresent(mods::addContent);
+        journal.getLanguageCode().map(ZvddMetsTools::modsLanguage).ifPresent(mods::addContent);
         // identifier
         journal.listIdenti().stream().map(text -> modsIdentifier("identifier", text.getType(), text.getText()))
             .forEach(mods::addContent);
@@ -160,16 +156,7 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
     }
 
     protected LogicalDiv toLogicalDiv(JPVolume volume) {
-        List<String> titles = MCRObjectUtils.getAncestorsAndSelf(volume.getObject()).stream()
-            .map(JPComponentUtil::getContainer)
-            .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
-            .filter(container -> container.getType().equals(JPVolume.TYPE))
-            .map(JPVolume.class::cast)
-            .map(JPVolume::getTitle)
-            .collect(Collectors.toList());
-        Collections.reverse(titles);
-        String title = String.join(" : ", titles);
-        LogicalDiv div = new LogicalDiv("log_" + volume.getId(), "volume", title);
+        LogicalDiv div = new LogicalDiv("log_" + volume.getId(), "volume", ZvddMetsTools.getTitle(volume));
         String href = MCRFrontendUtil.getBaseURL() + "rsc/mets/zvdd/" + volume.getId();
         div.setMptr(new Mptr(href, LOCTYPE.URL));
         return div;

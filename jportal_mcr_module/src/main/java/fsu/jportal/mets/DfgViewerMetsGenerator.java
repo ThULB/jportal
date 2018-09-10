@@ -37,7 +37,6 @@ import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.tools.MCRMetsSave;
 
 import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPPeriodicalComponent;
@@ -61,7 +60,7 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
         GROUP_TO_ZOOM_LEVEL_MAP.put(FileGrp.USE_DEFAULT, "MID");
     }
 
-    protected JPPeriodicalComponent rootPeriodical;
+    protected JPVolume rootVolume;
 
     protected JPDerivateComponent derivate;
 
@@ -72,7 +71,7 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
     @Override
     public void setup(String derivateId) {
         super.setup(derivateId);
-        this.rootPeriodical = JPComponentUtil.getPeriodical(this.rootObj);
+        this.rootVolume = new JPVolume(this.rootObj);
         this.derivate = new JPDerivateComponent(this.mcrDer);
         this.periodicalMap = new LinkedHashMap<>();
         // derivate path & containing mets
@@ -90,7 +89,7 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
 
     @Override
     protected DmdSec createDmdSection() {
-        String dmdSec = "dmd_" + this.rootPeriodical.getId();
+        String dmdSec = "dmd_" + this.rootVolume.getId();
         return new DmdSec(dmdSec);
     }
 
@@ -173,7 +172,7 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
         final LogicalStructMap struct = new LogicalStructMap();
 
         // journal div & pointer
-        JPJournal journal = rootPeriodical.getJournal();
+        JPJournal journal = rootVolume.getJournal();
         LogicalDiv journalDiv = new LogicalDiv("log_" + journal.getId().toString(), "periodical", journal.getTitle());
         struct.setDivContainer(journalDiv);
 
@@ -181,14 +180,14 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
         journalDiv.setMptr(mptr);
 
         // volume itself
-        LogicalDiv volumeDiv = new LogicalDiv("log_" + rootPeriodical.getId().toString(), "volume",
-            rootPeriodical.getTitle());
-        volumeDiv.setDmdId("dmd_" + rootPeriodical.getId());
-        volumeDiv.setAmdId("amd_" + rootPeriodical.getId());
+        LogicalDiv volumeDiv = new LogicalDiv("log_" + rootVolume.getId().toString(), "volume",
+            rootVolume.getTitle());
+        volumeDiv.setDmdId("dmd_" + rootVolume.getId());
+        volumeDiv.setAmdId("amd_" + rootVolume.getId());
         journalDiv.add(volumeDiv);
 
         // struct link
-        updateStructLinkMapUsingDerivateLinks(volumeDiv, rootPeriodical.getObject(), this.fileGroups.get(0));
+        updateStructLinkMapUsingDerivateLinks(volumeDiv, rootVolume.getObject(), this.fileGroups.get(0));
 
         // hierarchy
         handleLogicalHierarchy(volumeDiv);
@@ -198,10 +197,7 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
     }
 
     protected void handleLogicalHierarchy(LogicalDiv volumeDiv) {
-        if (rootPeriodical instanceof JPContainer) {
-            ((JPContainer) rootPeriodical).getChildren()
-                .forEach(childId -> buildHierarchy(childId, volumeDiv, false));
-        }
+        rootVolume.getChildren().forEach(childId -> buildHierarchy(childId, volumeDiv, false));
     }
 
     protected Mptr getMptr(JPJournal journal) {
