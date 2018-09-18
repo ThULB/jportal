@@ -1,10 +1,18 @@
 package fsu.jportal.backend;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.mycore.common.inject.MCRInjectorConfig;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.gnd.GNDAreaCodesService;
 
 /**
  * Volume abstraction. Be aware that this class is not complete.
@@ -34,6 +42,17 @@ public class JPVolume extends JPContainer {
     @Override
     public String getType() {
         return TYPE;
+    }
+
+    /**
+     * A volume in jportal is used for many different types of objects. This returns a more specific type. E.g.
+     * issue, year, month or calendar.
+     * 
+     * @return the type of the volume
+     */
+    public String getVolumeType() {
+        JPVolumeTypeDetector typeDetector = MCRInjectorConfig.injector().getInstance(JPVolumeTypeDetector.class);
+        return typeDetector.detect(this);
     }
 
     public void setHiddenPosition(String position) {
@@ -109,10 +128,36 @@ public class JPVolume extends JPContainer {
             String replaced = hiddenPosition.replaceAll("[^0-9]", "");
             return Integer.valueOf(replaced);
         } catch (Exception exc) {
-            LOGGER.warn("Unable to parse the hidden position (" + hiddenPosition + ") of " + getObject().getId()
-                + " to an integer value.");
+            LOGGER.warn("Unable to parse the hidden position ({}) of {} to an integer value.", hiddenPosition,
+                getObject().getId());
             return 0;
         }
+    }
+
+    /**
+     * Gets the volContentClassisX content as stream.
+     *
+     * @param number the number of the content classis.
+     * @return stream of categories
+     */
+    public Stream<MCRCategoryID> streamVolContentClassis(int number) {
+        return metadataStream("volContentClassis" + number, MCRMetaClassification.class)
+            .map(mc -> new MCRCategoryID(mc.getClassId(), mc.getCategId()));
+    }
+
+    /**
+     * Checks if there is volContentClassis{number} with the given classId and categId.
+     *
+     * @param number the number of the content classis.
+     * @param classId the classification id
+     * @param categId the category id
+     * @return true if the is a class and category
+     */
+    public boolean isVolContentClassis(int number, String classId, String categId) {
+        return streamVolContentClassis(number).anyMatch(id -> {
+            MCRCategoryID cmp = new MCRCategoryID(classId, categId);
+            return cmp.equals(id);
+        });
     }
 
 }

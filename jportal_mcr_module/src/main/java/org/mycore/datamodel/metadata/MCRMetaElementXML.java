@@ -56,8 +56,8 @@ public class MCRMetaElementXML extends MCRMetaDefault {
     }
 
     @Override
-    public MCRMetaInterface clone() {
-        MCRMetaElementXML clone = new MCRMetaElementXML();
+    public MCRMetaElementXML clone() {
+        MCRMetaElementXML clone = (MCRMetaElementXML) super.clone();
         clone.setFromDOM(this.element.clone());
         return clone;
     }

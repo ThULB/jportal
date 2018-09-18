@@ -33,13 +33,17 @@
     <field name="ancestorPath"><xsl:value-of select="jpxml:getAncestorPath(../../../@ID)" /></field>
   </xsl:template>
 
-  <!-- journalID -->
+  <!-- enhance article and volume -> hidden_jpjournalID required-->
   <xsl:template match="hidden_jpjournalsID/hidden_jpjournalID[position() = 1]" mode="jportal.metadata">
+
     <xsl:variable name="objectID" select="../../../@ID"/>
     <xsl:variable name="journalID" select="text()"/>
+
+    <!-- journalID -->
     <field name="journalID">
       <xsl:value-of select="$journalID"/>
     </field>
+
     <!-- enhance article and volume with journal data -->
     <xsl:if test="contains($objectID, '_jpvolume_') or contains($objectID, '_jparticle_')">
       <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject"/>
@@ -50,6 +54,13 @@
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields2" mode="jportal.hiddenGenFields"/>
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields3" mode="jportal.hiddenGenFields"/>
       <xsl:apply-templates select="$journal/metadata/journalTypes" mode="jportal.metadata"/>
+    </xsl:if>
+
+    <!-- enhance volume -->
+    <xsl:if test="contains($objectID, '_jpvolume_')">
+      <field name="volumeType">
+        <xsl:value-of select="jpxml:getVolumeType($objectID)" />
+      </field>
     </xsl:if>
   </xsl:template>
 

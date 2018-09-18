@@ -39,6 +39,14 @@ import fsu.jportal.backend.JPVolume;
 import fsu.jportal.util.JPDateUtil;
 import fsu.jportal.xml.JPXMLFunctions;
 
+/**
+ * Zvdd implementation of a mets generator using this
+ * <a href="http://www.zvdd.de/fileadmin/AGSDD-Redaktion/METS_Anwendungsprofil_2.0.pdf">profile</a>.
+ *
+ * <p>This implementation is used for all jpjournals.</p>
+ *
+ * @author Matthias Eichner
+ */
 public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
 
     private JPJournal journal;
@@ -148,13 +156,29 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
     protected LogicalStructMap createLogicalStructMap() {
         LogicalStructMap lsm = new LogicalStructMap();
         String journalId = journal.getId().toString();
-        LogicalDiv root = new LogicalDiv("log_" + journalId, "periodical", journal.getTitle(), "amd_" + journalId,
+        LogicalDiv root = new LogicalDiv("log_" + journalId, getType(journal), journal.getTitle(), "amd_" + journalId,
             "dmd_" + journalId);
         lsm.setDivContainer(root);
         listYearVolumes(this.journal).stream().map(this::toLogicalDiv).forEach(root::add);
         return lsm;
     }
 
+    /**
+     * Returns the @TYPE attribute of the logical div of the journal.
+     * 
+     * @param journal the journal to get the type from
+     * @return the type. e.g. periodical, newspaper...
+     */
+    protected String getType(JPJournal journal) {
+        return journal.isJournalType("jportal_class_00000200", "newspapers") ? "newspaper" : "periodical";
+    }
+
+    /**
+     * Converts a volume to a logical div.
+     * 
+     * @param volume the volume to convert
+     * @return a new logical div
+     */
     protected LogicalDiv toLogicalDiv(JPVolume volume) {
         LogicalDiv div = new LogicalDiv("log_" + volume.getId(), "volume", ZvddMetsTools.getTitle(volume));
         String href = MCRFrontendUtil.getBaseURL() + "rsc/mets/zvdd/" + volume.getId();
@@ -191,7 +215,7 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
             Optional<JPMetaDate> publishedOptional = child.getDate(JPPeriodicalComponent.DateType.published);
             if (publishedOptional.isPresent()) {
                 Temporal published = publishedOptional.get().getDate();
-                if (published != null && JPDateUtil.format(published).length() <= 5) {
+                if (published != null && JPDateUtil.isYear(published)) {
                     yearVolumes.add(child);
                     continue;
                 }

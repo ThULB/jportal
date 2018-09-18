@@ -1,25 +1,23 @@
 package fsu.jportal.mets;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.mycore.common.MCRException;
-import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
+import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.File;
@@ -52,14 +50,6 @@ import fsu.jportal.util.MetsUtil;
  */
 public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
 
-    protected static Map<String, String> GROUP_TO_ZOOM_LEVEL_MAP;
-
-    static {
-        GROUP_TO_ZOOM_LEVEL_MAP = new HashMap<>();
-        GROUP_TO_ZOOM_LEVEL_MAP.put(FileGrp.USE_MIN, "MIN");
-        GROUP_TO_ZOOM_LEVEL_MAP.put(FileGrp.USE_DEFAULT, "MID");
-    }
-
     protected JPVolume rootVolume;
 
     protected JPDerivateComponent derivate;
@@ -85,6 +75,18 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
                 LogManager.getLogger().error("Unable to parse mets.xml", exc);
             }
         }
+
+        // files
+        try {
+            this.files = getFiles();
+        } catch (IOException ioExc) {
+            throw new MCRException("Unable to generate mets.xml because cannot read files.", ioExc);
+        }
+
+        // file groups
+        Collection<String> groupIds = DfgViewerFileRef.GROUP_TO_ZOOM_LEVEL_MAP.keySet();
+        this.fileGroups = groupIds.stream().map(FileGrp::new).collect(Collectors.toList());
+
     }
 
     @Override
@@ -95,76 +97,12 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
 
     @Override
     protected FileSec createFileSection() {
-        final FileSec fileSec = new FileSec();
-        try {
-            // get paths
-            ArrayList<MCRPath> ignorePaths = new ArrayList<>();
-            MCRPath derivatePath = derivate.getPath();
-            ignorePaths.add(MCRPath.toMCRPath(derivatePath.resolve("mets.xml")));
-            ignorePaths.add(MCRPath.toMCRPath(derivatePath.resolve("dfgViewerMets.xml")));
-            ignorePaths.add(MCRPath.toMCRPath(derivatePath.resolve("zvddMets.xml")));
-            List<MCRPath> filePaths = MCRMetsSave.listFiles(derivatePath, ignorePaths);
-
-            // build file refs
-            for (MCRPath file : filePaths) {
-                String contentType = MCRContentTypes.probeContentType(file);
-                if (contentType.startsWith("image/")) {
-                    // we always using image/jpeg cause we deliver with the MCRTileCombineServlet
-                    FileRef ref = buildFileRef(file, "image/jpeg");
-                    this.files.add(ref);
-                }
-            }
-
-            // build groups
-            Collection<String> groupIds = GROUP_TO_ZOOM_LEVEL_MAP.keySet();
-            this.fileGroups = groupIds.stream().map(FileGrp::new).collect(Collectors.toList());
-            this.fileGroups.forEach(fileSec::addFileGrp);
-
-            // add to file sec
-            files.forEach(fileRef -> this.fileGroups.forEach(group -> {
-                try {
-                    File file = new File(fileRef.toFileId(group), fileRef.getContentType());
-                    String href = fileRef.toFileHref(group);
-                    FLocat fLocat = new FLocat(LOCTYPE.URL, href);
-                    file.setFLocat(fLocat);
-                    group.addFile(file);
-                } catch (Exception uriExc) {
-                    LogManager.getLogger().error("Unable to resolve path " + fileRef.getPath(), uriExc);
-                }
-            }));
-
-        } catch (IOException ioExc) {
-            throw new MCRException("Unable to generate mets.xml because cannot read files.", ioExc);
-        }
-        return fileSec;
+        return ZvddMetsTools.createFileSection(this.files, this.fileGroups);
     }
 
     @Override
     protected PhysicalStructMap createPhysicalStruct() {
-        final PhysicalStructMap struct = new PhysicalStructMap();
-        final PhysicalDiv physicalDiv = new PhysicalDiv();
-        struct.setDivContainer(physicalDiv);
-
-        // add file refs
-        AtomicInteger order = new AtomicInteger(1);
-        this.files.forEach(file -> {
-            final String orderLabel = getOrderLabelOfPhysicalId(file.toPhysId());
-            final PhysicalSubDiv div = new PhysicalSubDiv(file.toPhysId(), PhysicalSubDiv.TYPE_PAGE, orderLabel);
-            div.setOrder(order.getAndIncrement());
-            this.fileGroups.forEach(group -> {
-                Fptr fptr = new Fptr(file.toFileId(group));
-                div.add(fptr);
-            });
-            physicalDiv.add(div);
-        });
-        return struct;
-    }
-
-    protected String getOrderLabelOfPhysicalId(String physId) {
-        return getOldMets().map(mets -> {
-            PhysicalDiv divContainer = mets.getPhysicalStructMap().getDivContainer();
-            return divContainer.get(physId).getOrderLabel();
-        }).orElse(null);
+        return ZvddMetsTools.createPhysicalStructMap(this.files, this.fileGroups, getOldMets().orElse(null));
     }
 
     @Override
@@ -183,7 +121,7 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
         LogicalDiv volumeDiv = new LogicalDiv("log_" + rootVolume.getId().toString(), "volume",
             rootVolume.getTitle());
         volumeDiv.setDmdId("dmd_" + rootVolume.getId());
-        volumeDiv.setAmdId("amd_" + rootVolume.getId());
+        volumeDiv.setAdmId("amd_" + rootVolume.getId());
         journalDiv.add(volumeDiv);
 
         // struct link
@@ -203,6 +141,27 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
     protected Mptr getMptr(JPJournal journal) {
         String href = MCRFrontendUtil.getBaseURL() + "rsc/mets/dfg/" + journal.getId().toString();
         return new Mptr(href, LOCTYPE.URL);
+    }
+
+    protected List<FileRef> getFiles() throws IOException {
+        List<FileRef> files = new ArrayList<>();
+        List<MCRPath> ignorePaths = new ArrayList<>();
+        MCRPath derivatePath = derivate.getPath();
+        ignorePaths.add(MCRPath.toMCRPath(derivatePath.resolve("mets.xml")));
+        ignorePaths.add(MCRPath.toMCRPath(derivatePath.resolve("dfgViewerMets.xml")));
+        ignorePaths.add(MCRPath.toMCRPath(derivatePath.resolve("zvddMets.xml")));
+        List<MCRPath> filePaths = MCRMetsSave.listFiles(derivatePath, ignorePaths);
+
+        // build file refs
+        for (MCRPath file : filePaths) {
+            String contentType = MCRContentTypes.probeContentType(file);
+            if (contentType.startsWith("image/")) {
+                // we always using image/jpeg cause we deliver with the MCRTileCombineServlet
+                FileRef ref = buildFileRef(file, "image/jpeg");
+                files.add(ref);
+            }
+        }
+        return files;
     }
 
     protected void buildHierarchy(final MCRObjectID id, final LogicalDiv parentDiv, boolean addDmdId) {
@@ -228,7 +187,7 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
 
     @Override
     protected FileRef buildFileRef(MCRPath path, String contentType) {
-        return new DfgFileRef(path, contentType);
+        return new DfgViewerFileRef(path, contentType);
     }
 
     protected Optional<JPPeriodicalComponent> getPeriodical(MCRObjectID id) {
@@ -239,49 +198,6 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
         Optional<JPPeriodicalComponent> periodicalOptional = JPComponentUtil.getPeriodical(id);
         periodicalOptional.ifPresent(jpPeriodicalComponent -> this.periodicalMap.put(id, jpPeriodicalComponent));
         return periodicalOptional;
-    }
-
-    protected static class DfgFileRef implements FileRef {
-
-        private MCRPath path;
-
-        private String contentType;
-
-        DfgFileRef(MCRPath path, String contentType) {
-            this.path = path;
-            this.contentType = contentType;
-        }
-
-        @Override
-        public String toFileId(FileGrp fileGrp) {
-            return fileGrp.getUse() + "_" + MCRMetsSave.getFileBase(path);
-        }
-
-        @Override
-        public String toFileHref(FileGrp fileGrp) {
-            String path = getPath().getOwnerRelativePath().substring(1);
-            try {
-                String imagePath = MCRXMLFunctions.encodeURIPath(path, true);
-                String zoomLevel = GROUP_TO_ZOOM_LEVEL_MAP.get(fileGrp.getUse());
-                return MCRFrontendUtil.getBaseURL() + "servlets/MCRTileCombineServlet/"
-                    + zoomLevel + "/" + getPath().getOwner() + "/" + imagePath;
-            } catch (URISyntaxException exc) {
-                throw new MCRException("Unable to encode " + path, exc);
-            }
-        }
-
-        public String toPhysId() {
-            return PhysicalSubDiv.ID_PREFIX + MCRMetsSave.getFileBase(path);
-        }
-
-        public MCRPath getPath() {
-            return path;
-        }
-
-        public String getContentType() {
-            return contentType;
-        }
-
     }
 
 }

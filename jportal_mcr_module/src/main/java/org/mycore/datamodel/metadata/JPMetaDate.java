@@ -2,11 +2,13 @@ package org.mycore.datamodel.metadata;
 
 import java.time.temporal.Temporal;
 
-import com.google.gson.JsonObject;
-import fsu.jportal.util.JPDateUtil;
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
+
+import com.google.gson.JsonObject;
+
+import fsu.jportal.util.JPDateUtil;
 
 /**
  * Date metadata class of jportal. Supports a single date (a year, a month, or a day) or a range (from -> until)
@@ -29,11 +31,6 @@ public class JPMetaDate extends MCRMetaDefault implements Comparable<JPMetaDate>
     }
 
     @Override
-    public MCRMetaInterface clone() {
-        return null;
-    }
-
-    @Override
     public void setFromDOM(Element element) throws MCRException {
         super.setFromDOM(element);
         String dateString = element.getAttributeValue("date");
@@ -43,7 +40,7 @@ public class JPMetaDate extends MCRMetaDefault implements Comparable<JPMetaDate>
             String fromString = element.getAttributeValue("from");
             if (fromString == null) {
                 LogManager.getLogger()
-                          .warn("Unable to parse either 'date' or 'from' attribute of " + element.getName());
+                    .warn("Unable to parse either 'date' or 'from' attribute of {}", element.getName());
                 return;
             }
             this.from = JPDateUtil.parse(fromString);
@@ -102,7 +99,7 @@ public class JPMetaDate extends MCRMetaDefault implements Comparable<JPMetaDate>
                 obj.addProperty("until", JPDateUtil.format(this.until));
             }
         }
-        if (this.description != null && "".equals(this.description)) {
+        if ("".equals(this.description)) {
             obj.addProperty("description", this.description);
         }
         return obj;
@@ -134,6 +131,16 @@ public class JPMetaDate extends MCRMetaDefault implements Comparable<JPMetaDate>
 
     public Temporal getDateOrFrom() {
         return this.date != null ? this.date : this.from;
+    }
+
+    @Override
+    public MCRMetaDefault clone() {
+        JPMetaDate clone = (JPMetaDate) super.clone();
+        clone.setDate(this.date);
+        clone.setFrom(this.from);
+        clone.setUntil(this.until);
+        clone.description = this.description;
+        return clone;
     }
 
     @Override

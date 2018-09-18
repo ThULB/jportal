@@ -20,9 +20,12 @@ import org.mycore.mets.model.Mets;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
-import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.impl.JPVolumeTypeDefaultDetector;
 import fsu.jportal.mets.ZvddDerivateMetsGenerator;
 import fsu.jportal.mets.ZvddJournalMetsGenerator;
+import fsu.jportal.mets.ZvddNewspaperIssueMetsGenerator;
+import fsu.jportal.mets.ZvddNewspaperYearMetsGenerator;
 import fsu.jportal.util.JPComponentUtil;
 
 @Path("mets/zvdd")
@@ -36,23 +39,48 @@ public class ZvddMetsResource {
             throw new BadRequestException(id + " is not a valid mycore identifier.");
         }
         MCRObjectID mcrObjectID = MCRObjectID.getInstance(id);
-        if (!(JPComponentUtil.is(mcrObjectID, JPObjectType.jparticle)
-            || JPComponentUtil.is(mcrObjectID, JPObjectType.jpvolume)
+        if (!(JPComponentUtil.is(mcrObjectID, JPObjectType.jpvolume)
             || JPComponentUtil.is(mcrObjectID, JPObjectType.jpjournal))) {
             throw new BadRequestException(
-                "Invalid identifier " + id + ". Type has to be jparticle, jpvolume or jpjournal.");
+                "Invalid identifier " + id + ". Type has to be jpvolume or jpjournal.");
         }
         if (JPComponentUtil.is(mcrObjectID, JPObjectType.jpjournal)) {
-            JPJournal journal = new JPJournal(mcrObjectID);
-            ZvddJournalMetsGenerator journalMetsGenerator = new ZvddJournalMetsGenerator(journal);
-            return getResponse(journalMetsGenerator);
+            return handleJournal(mcrObjectID);
         }
+        JPVolume volume = new JPVolume(mcrObjectID);
+        JPJournal journal = volume.getJournal();
+        if (journal.isJournalType("jportal_class_00000200", "newspapers")) {
+            return handleNewspaperVolume(volume);
+        } else {
+            return handleMagazineVolume(volume);
+        }
+    }
 
-        Optional<JPDerivateComponent> derivateOptional = JPComponentUtil.getPeriodical(mcrObjectID)
-            .flatMap(JPPeriodicalComponent::getFirstDerivate);
+    private Response handleJournal(MCRObjectID mcrObjectID) {
+        JPJournal journal = new JPJournal(mcrObjectID);
+        ZvddJournalMetsGenerator journalMetsGenerator = new ZvddJournalMetsGenerator(journal);
+        return getResponse(journalMetsGenerator);
+    }
+
+    private Response handleNewspaperVolume(JPVolume volume) {
+        String type = volume.getVolumeType();
+        boolean isIssue = type.equals(JPVolumeTypeDefaultDetector.JPVolumeType.issue.name());
+        if (isIssue) {
+            return getResponse(new ZvddNewspaperIssueMetsGenerator(volume));
+        }
+        boolean isYear = type.equals(JPVolumeTypeDefaultDetector.JPVolumeType.year.name());
+        if (isYear) {
+            return getResponse(new ZvddNewspaperYearMetsGenerator(volume));
+        }
+        throw new BadRequestException(
+            "Requesting invalid object '" + volume.getId() + "'. The type of the requested newspaper volume is"
+                + "'" + type + "'. But only 'issue' and 'year' are supported.");
+    }
+
+    private Response handleMagazineVolume(JPVolume volume) {
+        Optional<JPDerivateComponent> derivateOptional = volume.getFirstDerivate();
         if (!derivateOptional.isPresent()) {
-            throw new BadRequestException(
-                "Object " + id + " does not contain any derivates.");
+            throw new BadRequestException("Object " + volume.getId() + " does not contain any derivates.");
         }
         ZvddDerivateMetsGenerator metsGenerator = new ZvddDerivateMetsGenerator();
         metsGenerator.setup(derivateOptional.get().getId().toString());

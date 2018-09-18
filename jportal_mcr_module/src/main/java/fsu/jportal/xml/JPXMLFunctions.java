@@ -31,6 +31,7 @@ import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPLegalEntity;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPDateUtil;
 import fsu.jportal.util.MetsUtil;
@@ -677,6 +678,21 @@ public class JPXMLFunctions {
             return baseURL + "servlets/MCRFileNodeServlet/" + mainFile;
         } catch (Throwable t) {
             LOGGER.error("Unable to get thumbnail of {}", id, t);
+        }
+        return "";
+    }
+
+    /**
+     * Returns the volume type of the given volume.
+     *
+     * @param id a mycore object id
+     * @return the specific volume type e.g. issue
+     */
+    public static String getVolumeType(String id) {
+        try {
+            return new JPVolume(id).getVolumeType();
+        } catch (Exception exc) {
+            LOGGER.error("Unable to get volume type of '" + id + "'.", exc);
         }
         return "";
     }

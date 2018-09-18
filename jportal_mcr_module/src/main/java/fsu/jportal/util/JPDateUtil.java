@@ -75,6 +75,42 @@ public abstract class JPDateUtil {
     }
 
     /**
+     * Checks if the given temporal has a year part without month or day information. Something like 2000.
+     * 
+     * @param temporal the temporal to check
+     * @return true if the temporal has a year but not a day and/or month chrono field
+     */
+    public static boolean isYear(Temporal temporal) {
+        return temporal.isSupported(ChronoField.YEAR) &&
+            !temporal.isSupported(ChronoField.MONTH_OF_YEAR) &&
+            !temporal.isSupported(ChronoField.DAY_OF_MONTH);
+    }
+
+    /**
+     * Checks if the given temporal has a year and a month part but the day is not available. Something like 2000-10.
+     *
+     * @param temporal the temporal to check
+     * @return true if the temporal has a year and month chrono field but not a day
+     */
+    public static boolean isMonth(Temporal temporal) {
+        return temporal.isSupported(ChronoField.YEAR) &&
+            temporal.isSupported(ChronoField.MONTH_OF_YEAR) &&
+            !temporal.isSupported(ChronoField.DAY_OF_MONTH);
+    }
+
+    /**
+     * Checks if the given temporal has a year, a month and a day part. Something like 2000-10-15.
+     *
+     * @param temporal the temporal to check
+     * @return true if the temporal has a year, month and day chrono field
+     */
+    public static boolean isDay(Temporal temporal) {
+        return temporal.isSupported(ChronoField.YEAR) &&
+            temporal.isSupported(ChronoField.MONTH_OF_YEAR) &&
+            temporal.isSupported(ChronoField.DAY_OF_MONTH);
+    }
+
+    /**
      * Helper method to build a {@link LocalDate} out of a {@link Temporal}.
      * If the month or day are not present, they are set to 1.
      *
@@ -104,9 +140,8 @@ public abstract class JPDateUtil {
         }
         int year = temporal.get(ChronoField.YEAR);
         int month = temporal.isSupported(ChronoField.MONTH_OF_YEAR) ? temporal.get(ChronoField.MONTH_OF_YEAR) : 12;
-        int day = temporal.isSupported(ChronoField.DAY_OF_MONTH) ?
-                temporal.get(ChronoField.DAY_OF_MONTH) :
-                YearMonth.of(year, month).atEndOfMonth().getDayOfMonth();
+        int day = temporal.isSupported(ChronoField.DAY_OF_MONTH) ? temporal.get(ChronoField.DAY_OF_MONTH)
+            : YearMonth.of(year, month).atEndOfMonth().getDayOfMonth();
         return LocalDate.of(year, month, day);
     }
 
@@ -126,12 +161,12 @@ public abstract class JPDateUtil {
         if (date != null && !date.equals("")) {
             String split[] = date.split("-");
             switch (split.length) {
-            case 1:
-                return MCRTranslation.translate("metaData.dateYear");
-            case 2:
-                return MCRTranslation.translate("metaData.dateYearMonth");
-            case 3:
-                return MCRTranslation.translate("metaData.dateYearMonthDay");
+                case 1:
+                    return MCRTranslation.translate("metaData.dateYear");
+                case 2:
+                    return MCRTranslation.translate("metaData.dateYearMonth");
+                case 3:
+                    return MCRTranslation.translate("metaData.dateYearMonthDay");
             }
         }
         return MCRTranslation.translate("metaData.date");

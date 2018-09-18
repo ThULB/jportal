@@ -2,20 +2,42 @@ package fsu.jportal.mets;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.mets.model.MCRMETSHierarchyGenerator;
+import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.files.FLocat;
+import org.mycore.mets.model.files.File;
+import org.mycore.mets.model.files.FileGrp;
+import org.mycore.mets.model.files.FileSec;
+import org.mycore.mets.model.sections.DmdSec;
+import org.mycore.mets.model.struct.Fptr;
+import org.mycore.mets.model.struct.LOCTYPE;
+import org.mycore.mets.model.struct.MDTYPE;
+import org.mycore.mets.model.struct.MdWrap;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
 
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import com.neovisionaries.i18n.LanguageCode;
 
 import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPDerivateComponent;
+import fsu.jportal.backend.JPInstitution;
+import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPLegalEntity;
+import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPPerson;
 import fsu.jportal.backend.JPVolume;
@@ -28,6 +50,106 @@ import fsu.jportal.xml.JPXMLFunctions;
  * @author Matthias Eichner
  */
 public abstract class ZvddMetsTools {
+
+    /**
+     * Creates a mets:dmdSec for the given volume.
+     *
+     * @param volume the volume
+     * @param type the type either issue or volume
+     * @return a newly generated mets:dmdSec
+     */
+    public static DmdSec createDmdSec(JPVolume volume, String type) {
+        DmdSec dmd = new DmdSec("dmd_" + volume.getId().toString());
+        Element mods = modsYearOrIssue(volume, null, type);
+        MdWrap mdWrap = new MdWrap(MDTYPE.MODS, mods);
+        dmd.setMdWrap(mdWrap);
+        return dmd;
+    }
+
+    /**
+     * Helper method to create a mets:fileSec by the given files and groups.
+     * 
+     * @param files the files to add to the groups
+     * @param groups the available file groups
+     * @return a newly generated mets FileSec
+     */
+    public static FileSec createFileSection(List<MCRMETSHierarchyGenerator.FileRef> files, List<FileGrp> groups) {
+        final FileSec fileSec = new FileSec();
+        // get paths
+        groups.forEach(fileSec::addFileGrp);
+        // add to file sec
+        ZvddMetsTools.addFilesToGroups(files, groups);
+        return fileSec;
+    }
+
+    /**
+     * Creates the physical struct map based on the given files and groups. The old mets is optional and can be null.
+     * If there are two equal physical mets:div/@ID attributes and the oldMets is not null, then the @ORDERLABEL can be
+     * reused.
+     * 
+     * @param files the file references
+     * @param groups the file groups
+     * @param oldMets the old mets, usually the derivate/mets.xml
+     * @return a newly generated physical struct map
+     */
+    public static PhysicalStructMap createPhysicalStructMap(List<MCRMETSHierarchyGenerator.FileRef> files,
+        List<FileGrp> groups, Mets oldMets) {
+        final PhysicalStructMap struct = new PhysicalStructMap();
+        final PhysicalDiv physicalDiv = new PhysicalDiv();
+        struct.setDivContainer(physicalDiv);
+
+        // add file refs
+        AtomicInteger order = new AtomicInteger(1);
+        files.forEach(file -> {
+            final String orderLabel = getOrderLabel(oldMets, file.toPhysId());
+            final PhysicalSubDiv div = new PhysicalSubDiv(file.toPhysId(), PhysicalSubDiv.TYPE_PAGE, orderLabel);
+            div.setOrder(order.getAndIncrement());
+            groups.forEach(group -> {
+                Fptr fptr = new Fptr(file.toFileId(group));
+                div.add(fptr);
+            });
+            physicalDiv.add(div);
+        });
+        return struct;
+    }
+
+    /**
+     * Returns the @ORDERLABEL of the physical div in the mets. Returns null if there is no physical div with the given
+     * identifier.
+     * 
+     * @param mets the mets to search in
+     * @param physId the physical div identifier
+     * @return the order label of the physical div or null
+     */
+    public static String getOrderLabel(Mets mets, String physId) {
+        if (mets == null || physId == null || mets.getPhysicalStructMap() == null
+            || mets.getPhysicalStructMap().getDivContainer() == null) {
+            return null;
+        }
+        PhysicalDiv divContainer = mets.getPhysicalStructMap().getDivContainer();
+        PhysicalSubDiv physicalSubDiv = divContainer.get(physId);
+        return physicalSubDiv != null ? physicalSubDiv.getOrderLabel() : null;
+    }
+
+    /**
+     * Adds all the given files to groups.
+     * 
+     * @param files the files to add
+     * @param groups the available groups
+     */
+    public static void addFilesToGroups(List<MCRMETSHierarchyGenerator.FileRef> files, List<FileGrp> groups) {
+        files.forEach(fileRef -> groups.forEach(group -> {
+            try {
+                File file = new File(fileRef.toFileId(group), fileRef.getContentType());
+                String href = fileRef.toFileHref(group);
+                FLocat fLocat = new FLocat(LOCTYPE.URL, href);
+                file.setFLocat(fLocat);
+                group.addFile(file);
+            } catch (Exception uriExc) {
+                LogManager.getLogger().error("Unable to resolve path " + fileRef.getPath(), uriExc);
+            }
+        }));
+    }
 
     /**
      * Returns the title for a volume (year). The full title of a volume is a combination of the titles of all ancestor
@@ -72,6 +194,81 @@ public abstract class ZvddMetsTools {
             .map(MCRObjectStructure::getChildren)
             .map(List::size).mapToInt(Integer::intValue).sum();
         return order;
+    }
+
+    /**
+     * Creates a mods:mods element for the dmd section for the given periodical. This method adds:
+     * 
+     * <ul>
+     *     <li>mods:titleInfo: using the given title string</li>
+     *     <li>mods:identifier: using the identis element in the periodical (can be multiple like URN, DOI...)</li>
+     *     <li>mods:name: using participants</li>
+     * </ul>
+     *
+     * @param periodical the periodical to convert to mods
+     * @param title the title of the mods
+     * @return a new mods element
+     */
+    public static Element modsDefault(JPPeriodicalComponent periodical, String title) {
+        Element mods = mods("mods");
+
+        // identifier
+        periodical.listIdenti().stream().map(text -> modsIdentifier("identifier", text.getType(), text.getText()))
+            .forEach(mods::addContent);
+
+        // title
+        mods.addContent(modsTitleInfo(title, null));
+
+        // participants
+        periodical.getParticipants(JPObjectType.person).stream()
+            .map(personPair -> modsName(new JPPerson(personPair.getKey()), personPair.getValue()))
+            .forEach(mods::addContent);
+        periodical.getParticipants(JPObjectType.jpinst).stream()
+            .map(jpinstPair -> modsName(new JPInstitution(jpinstPair.getKey()), jpinstPair.getValue()))
+            .forEach(mods::addContent);
+
+        // add content
+        return mods;
+    }
+
+    /**
+     * Enhances the {@link #modsDefault(JPPeriodicalComponent, String)} method. Use this for year or issue based volumes.
+     * 
+     * <ul>
+     *     <li>mods:identifer: if a derivate is given the URN will be added</li>
+     *     <li>mods:recordIdentifier: for the journal as relatedItem 'host' with an optional zdb-id.</li>
+     *     <li>mods:part: also for the journal 'host' to add the order of the given volume</li>
+     * </ul>
+     * 
+     * @param volume the year volume
+     * @param derivate an optional derivate, can be null
+     * @param type the type of the volume, either volume or issue
+     * @return a new mods element
+     */
+    public static Element modsYearOrIssue(JPVolume volume, JPDerivateComponent derivate, String type) {
+        String title = type.equals("volume") ? ZvddMetsTools.getTitle(volume) : volume.getTitle();
+        Element mods = modsDefault(volume, title);
+        if (derivate != null) {
+            derivate.getURN().ifPresent(urn -> {
+                mods.addContent(0, modsIdentifier("identifier", "urn", "urn"));
+            });
+        }
+        JPJournal journal = volume.getJournal();
+        // related item host
+        Element relatedItem = mods("relatedItem").setAttribute("type", "host");
+        String isil = MCRConfiguration.instance().getString("JP.Site.ISIL", null);
+        Element recordIdentifier = modsIdentifier("recordIdentifier", "mycore", journal.getId().toString(), isil);
+        journal.getIdenti("zdb-id")
+            .map(zdbId -> modsIdentifier("identifier", "zdb", zdbId))
+            .ifPresent(relatedItem::addContent);
+        relatedItem.addContent(recordIdentifier);
+        mods.addContent(relatedItem);
+        // mods:part
+        Integer order = ZvddMetsTools.calculateOrder(volume);
+        String number = volume.getPublishedDate().map(JPMetaDate::toString).orElse(String.valueOf(order));
+        Element part = getModsPart(order, type, number);
+        mods.addContent(part);
+        return mods;
     }
 
     /**
