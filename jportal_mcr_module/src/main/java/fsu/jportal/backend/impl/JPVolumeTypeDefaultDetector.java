@@ -74,29 +74,8 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
     @Override
     public String detect(JPVolume volume) {
         List<MCRObjectID> children = volume.getChildren();
-        boolean hasChildren = !children.isEmpty();
         boolean hasDerivate = volume.getFirstDerivate().isPresent();
         Temporal publishedTemporal = volume.getPublishedTemporal().orElse(null);
-
-        // volume without any children
-        if (!hasChildren) {
-            if (hasDerivate) {
-                return JPVolumeType.volume.name();
-            }
-            return getByPublished(publishedTemporal);
-        }
-
-        // volume with articles
-        boolean hasArticles = children.stream()
-            .anyMatch(linkId -> linkId.getTypeId().equals(JPObjectType.jparticle.name()));
-        if (hasArticles) {
-            // if there are articles but no derivates -> its an issue
-            // if there is a derivate and the volume is publishedTemporal on a day -> its an issue
-            if (!hasDerivate || (publishedTemporal != null && JPDateUtil.isDay(publishedTemporal))) {
-                return JPVolumeType.issue.name();
-            }
-            return JPVolumeType.volume.name();
-        }
 
         // handle special type calendars
         boolean isCalendar = volume.getJournal().isJournalType("jportal_class_00000200", "calendars");
@@ -110,6 +89,20 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
             }
             // unknown -> probably a site -> not sure if we should define it?
             return null;
+        }
+
+        // handle volume, day and issue
+        boolean hasChildren = !children.isEmpty();
+        boolean hasArticles = children.stream()
+            .anyMatch(linkId -> linkId.getTypeId().equals(JPObjectType.jparticle.name()));
+        if (!hasChildren || hasArticles || hasDerivate) {
+            boolean isDay = publishedTemporal != null && JPDateUtil.isDay(publishedTemporal);
+            if (!hasDerivate || isDay) {
+                boolean hasVolumes = children.stream()
+                    .anyMatch(linkId -> linkId.getTypeId().equals(JPObjectType.jpvolume.name()));
+                return hasVolumes ? JPVolumeType.day.name() : JPVolumeType.issue.name();
+            }
+            return JPVolumeType.volume.name();
         }
 
         // journal

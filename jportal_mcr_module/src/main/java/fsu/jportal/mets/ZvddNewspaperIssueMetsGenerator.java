@@ -17,7 +17,6 @@ import org.mycore.mets.model.files.File;
 import org.mycore.mets.model.files.FileGrp;
 import org.mycore.mets.model.files.FileSec;
 import org.mycore.mets.model.struct.Fptr;
-import org.mycore.mets.model.struct.IStructMap;
 import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
