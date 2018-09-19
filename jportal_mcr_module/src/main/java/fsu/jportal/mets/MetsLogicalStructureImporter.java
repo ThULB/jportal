@@ -1,19 +1,26 @@
 package fsu.jportal.mets;
 
-import fsu.jportal.backend.*;
-import fsu.jportal.util.JPComponentUtil;
+import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.struct.*;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.LogicalStructMap;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.util.JPComponentUtil;
 
 public class MetsLogicalStructureImporter extends MetsImporter {
 
@@ -29,7 +36,7 @@ public class MetsLogicalStructureImporter extends MetsImporter {
             MCRObjectID ownerId = derivate.getOwnerID();
             Optional<JPContainer> optionalContainer = JPComponentUtil.getContainer(ownerId);
             if (!optionalContainer.isPresent()) {
-                LOGGER.error("Unable to retrieve " + ownerId);
+                LOGGER.error("Unable to retrieve {}", ownerId);
                 return divMap;
             }
             JPContainer container = optionalContainer.get();
@@ -56,13 +63,16 @@ public class MetsLogicalStructureImporter extends MetsImporter {
     private JPPeriodicalComponent handle(Mets mets, MCRDerivate derivate, LogicalDiv div, JPContainer parent,
         Map<LogicalDiv, JPComponent> divMap) {
         String type = div.getType();
-        if (type.toLowerCase().equals("volume")) {
-            return createVolume(mets, derivate, div, parent, divMap);
-        } else if (type.toLowerCase().equals("article")) {
-            return createArticle(mets, derivate, div, parent, divMap);
-        } else {
-            LOGGER.warn("Unable to import " + div.getId() + " because its type (" + type
-                + ") does not match volume or article.");
+        switch (type.toLowerCase()) {
+            case "volume":
+                return createVolume(mets, derivate, div, parent, divMap);
+            case "article":
+                return createArticle(mets, derivate, div, parent, divMap);
+            default:
+                LOGGER
+                    .warn("Unable to import {} because its type ({}) does not match volume or article.", div.getId(),
+                        type);
+                break;
         }
         return null;
     }
@@ -71,7 +81,7 @@ public class MetsLogicalStructureImporter extends MetsImporter {
         Map<LogicalDiv, JPComponent> divMap) {
         JPArticle article = new JPArticle();
         article.setTitle(div.getLabel());
-        article.setSize(getPageNumber(mets, div));
+        article.setSize(MetsImportUtils.getPageNumber(mets, div));
         handleDerivateLink(mets, derivate, div, article);
         return article;
     }
@@ -82,11 +92,11 @@ public class MetsLogicalStructureImporter extends MetsImporter {
         String label = div.getLabel();
         volume.setTitle(label);
         // add published date if possible
-        if (MetsImportUtils.MONTH_NAMES.containsValue(label)) {
-            Integer monthIndex = MetsImportUtils.MONTH_NAMES.inverse().get(label);
+        if (MONTH_NAMES.containsValue(label)) {
+            Integer monthIndex = MONTH_NAMES.inverse().get(label);
             MetsImportUtils.setPublishedDate(monthIndex, volume, parent);
         }
-        volume.setHiddenPosition(String.format("%04d", Integer.valueOf(div.getPositionInParent().orElse(0))));
+        volume.setHiddenPosition(String.format("%04d", div.getPositionInParent().orElse(0)));
         divMap.put(div, volume);
         div.getChildren().forEach(childDiv -> {
             JPPeriodicalComponent childComponent = handle(mets, derivate, childDiv, volume, divMap);
@@ -95,27 +105,6 @@ public class MetsLogicalStructureImporter extends MetsImporter {
             }
         });
         return volume;
-    }
-
-    /**
-     * Returns the page number of the given logical div.
-     * 
-     * @param mets
-     * @param div
-     * @return
-     */
-    private int getPageNumber(Mets mets, LogicalDiv div) {
-        // get physical container
-        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
-        PhysicalDiv divContainer = physicalStructMap.getDivContainer();
-        // get logical id
-        String logicalId = div.getId();
-        List<SmLink> links = mets.getStructLink().getSmLinkByFrom(logicalId);
-        // map phyisical div's and get the lowest by order
-        return links.stream()
-                    .map(link -> divContainer.get(link.getTo()).getPositionInParent().orElse(0))
-                    .min(Integer::compareTo)
-                    .orElse(0);
     }
 
 }

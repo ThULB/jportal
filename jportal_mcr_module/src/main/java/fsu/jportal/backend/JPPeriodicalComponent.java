@@ -270,8 +270,8 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
     }
 
     /**
-     * Returns the {@link Temporal} for the published date of this object. Be aware that this method does not go through
-     * the ancestors to find the most likley published date.
+     * Returns the {@link Temporal} for the published date of this object. Be aware that this method does NOT go through
+     * the ancestors to find the most likely published date.
      *
      * @return optional of the temporal accessor
      */

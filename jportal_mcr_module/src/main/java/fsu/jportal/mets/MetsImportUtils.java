@@ -44,25 +44,6 @@ import org.mycore.mets.model.struct.SmLink;
  */
 public class MetsImportUtils {
 
-    public static BiMap<Integer, String> MONTH_NAMES;
-
-    static {
-        MONTH_NAMES = ImmutableBiMap.<Integer, String> builder()
-                                    .put(1, "Januar")
-                                    .put(2, "Februar")
-                                    .put(3, "März")
-                                    .put(4, "April")
-                                    .put(5, "Mai")
-                                    .put(6, "Juni")
-                                    .put(7, "Juli")
-                                    .put(8, "August")
-                                    .put(9, "September")
-                                    .put(10, "Oktober")
-                                    .put(11, "November")
-                                    .put(12, "Dezember")
-                                    .build();
-    }
-
     public enum METS_TYPE {
         unknown, llz, jvb, perthes
     }

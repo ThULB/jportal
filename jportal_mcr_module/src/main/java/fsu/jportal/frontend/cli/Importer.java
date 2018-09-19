@@ -1,5 +1,7 @@
 package fsu.jportal.frontend.cli;
 
+import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,21 +26,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.collect.Lists;
-import fsu.jportal.backend.JPComponent.StoreOption;
-import fsu.jportal.backend.JPDerivateComponent;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.backend.io.HttpImportSource;
-import fsu.jportal.backend.io.ImportSink;
-import fsu.jportal.backend.io.LocalSystemSink;
-import fsu.jportal.backend.io.RecursiveImporter;
-import fsu.jportal.mets.JPMetsHierarchyGenerator;
-import fsu.jportal.mets.LLZMetsConverter;
-import fsu.jportal.mets.MetsImportUtils;
-import fsu.jportal.mets.MetsImporter;
-import fsu.jportal.mets.MetsVersionStore;
-import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -65,6 +52,23 @@ import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import com.google.common.collect.Lists;
+
+import fsu.jportal.backend.JPComponent.StoreOption;
+import fsu.jportal.backend.JPDerivateComponent;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.io.HttpImportSource;
+import fsu.jportal.backend.io.ImportSink;
+import fsu.jportal.backend.io.LocalSystemSink;
+import fsu.jportal.backend.io.RecursiveImporter;
+import fsu.jportal.mets.JPMetsHierarchyGenerator;
+import fsu.jportal.mets.LLZMetsConverter;
+import fsu.jportal.mets.MetsImportUtils;
+import fsu.jportal.mets.MetsImporter;
+import fsu.jportal.mets.MetsVersionStore;
+import fsu.jportal.util.MetsUtil;
 
 /**
  * Created by chi on 22.04.15.
@@ -354,7 +358,7 @@ public class Importer {
         Set<Integer> months = getMonths(base);
         for (Integer monthIndex : months) {
             String date = year + "-" + String.format("%02d", monthIndex);
-            String title = MetsImportUtils.MONTH_NAMES.get(monthIndex);
+            String title = MONTH_NAMES.get(monthIndex);
             try {
                 JPVolume volume = new JPVolume();
                 volume.setTitle(title);

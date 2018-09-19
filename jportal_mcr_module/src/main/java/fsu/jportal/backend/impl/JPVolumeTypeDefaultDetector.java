@@ -1,7 +1,12 @@
 package fsu.jportal.backend.impl;
 
+import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
+
 import java.time.temporal.Temporal;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -80,8 +85,9 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
         // handle special type calendars
         boolean isCalendar = volume.getJournal().isJournalType("jportal_class_00000200", "calendars");
         if (isCalendar) {
-            if (publishedTemporal != null) {
-                return getByPublished(publishedTemporal);
+            Optional<String> publishedType = getByPublished(publishedTemporal);
+            if (publishedType.isPresent()) {
+                return publishedType.get();
             }
             if (hasDerivate) {
                 boolean isPrognistic = volume.isVolContentClassis(2, "jportal_class_00000090", "prognostic");
@@ -91,6 +97,12 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
             return null;
         }
 
+        List<JPVolume> childVolumes = children.stream()
+            .filter(linkId -> linkId.getTypeId().equals(JPObjectType.jpvolume.name()))
+            .map(JPVolume::new)
+            .collect(Collectors.toList());
+        boolean hasVolumes = !childVolumes.isEmpty();
+
         // handle volume, day and issue
         boolean hasChildren = !children.isEmpty();
         boolean hasArticles = children.stream()
@@ -98,8 +110,6 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
         if (!hasChildren || hasArticles || hasDerivate) {
             boolean isDay = publishedTemporal != null && JPDateUtil.isDay(publishedTemporal);
             if (!hasDerivate || isDay) {
-                boolean hasVolumes = children.stream()
-                    .anyMatch(linkId -> linkId.getTypeId().equals(JPObjectType.jpvolume.name()));
                 return hasVolumes ? JPVolumeType.day.name() : JPVolumeType.issue.name();
             }
             return JPVolumeType.volume.name();
@@ -107,25 +117,37 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
 
         // journal
         // -> needs a jpjournal as parent
-        // -> published date should contain a from and until date
+        // -> published date should contain a from and until date OR the child volumes are years
         JPContainer parent = volume.getParent().orElse(null);
         JPMetaDate published = volume.getDate(JPPeriodicalComponent.DateType.published).orElse(null);
-        if (parent != null && JPComponentUtil.is(parent, JPObjectType.jpjournal) && published != null
-            && published.getFrom() != null && published.getUntil() != null) {
+        boolean hasParent = parent != null;
+        boolean hasFromAndUntil = hasParent && JPComponentUtil.is(parent, JPObjectType.jpjournal) && published != null
+            && published.getFrom() != null && published.getUntil() != null;
+        boolean hasYears = childVolumes.stream()
+            .map(JPVolume::getPublishedTemporal)
+            .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
+            .anyMatch(JPDateUtil::isYear);
+        if (hasParent && (hasFromAndUntil || hasYears)) {
             return JPVolumeType.journal.name();
         }
 
-        // no more info, check by published
-        return getByPublished(publishedTemporal);
+        // no more info, check by published or by title
+        return getByPublished(publishedTemporal).orElse(getByTitle(volume.getTitle()).orElse(null));
     }
 
-    private String getByPublished(Temporal published) {
-        if (published == null) {
-            // cannot determine this volume cause it does not contain any derivate nor its published date is set
-            return null;
+    private Optional<String> getByTitle(String title) {
+        if (MONTH_NAMES.containsValue(title)) {
+            return Optional.of(JPVolumeType.month.name());
         }
-        return JPDateUtil.isDay(published) ? JPVolumeType.day.name()
-            : JPDateUtil.isMonth(published) ? JPVolumeType.month.name() : JPVolumeType.year.name();
+        return Optional.empty();
+    }
+
+    private Optional<String> getByPublished(Temporal published) {
+        if (published == null) {
+            return Optional.empty();
+        }
+        return Optional.of(JPDateUtil.isDay(published) ? JPVolumeType.day.name()
+            : JPDateUtil.isMonth(published) ? JPVolumeType.month.name() : JPVolumeType.year.name());
     }
 
 }

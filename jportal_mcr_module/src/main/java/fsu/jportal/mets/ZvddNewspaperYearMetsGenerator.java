@@ -1,5 +1,7 @@
 package fsu.jportal.mets;
 
+import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
+
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
@@ -105,7 +107,7 @@ public class ZvddNewspaperYearMetsGenerator implements MCRMETSGenerator {
             int month = publishedTemporal.map(t -> t.get(ChronoField.MONTH_OF_YEAR)).orElse(1);
             if (monthDiv == null || monthDiv.getOrder() != month) {
                 dayDiv = null;
-                monthDiv = new LogicalDiv("log_month_" + month, "month", MetsImportUtils.MONTH_NAMES.get(month));
+                monthDiv = new LogicalDiv("log_month_" + month, "month", MONTH_NAMES.get(month));
                 monthDiv.setOrder(month);
                 monthDiv.setOrderLabel(String.valueOf(month));
                 rootDiv.add(monthDiv);

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import fsu.jportal.mets.MetsVersionStore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -32,11 +31,15 @@ import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.MCRMETSGeneratorFactory;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.SmLink;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
+
+import fsu.jportal.mets.MetsVersionStore;
 
 /**
  * Util class for mets.xml handling.
@@ -49,11 +52,28 @@ public abstract class MetsUtil {
 
     public static final ArrayList<Namespace> METS_NS_LIST;
 
+    public static BiMap<Integer, String> MONTH_NAMES;
+
     static {
         METS_NS_LIST = new ArrayList<>();
         METS_NS_LIST.add(MCRConstants.METS_NAMESPACE);
         METS_NS_LIST.add(MCRConstants.MODS_NAMESPACE);
         METS_NS_LIST.add(MCRConstants.XLINK_NAMESPACE);
+
+        MONTH_NAMES = ImmutableBiMap.<Integer, String> builder()
+            .put(1, "Januar")
+            .put(2, "Februar")
+            .put(3, "März")
+            .put(4, "April")
+            .put(5, "Mai")
+            .put(6, "Juni")
+            .put(7, "Juli")
+            .put(8, "August")
+            .put(9, "September")
+            .put(10, "Oktober")
+            .put(11, "November")
+            .put(12, "Dezember")
+            .build();
     }
 
     /**
@@ -191,8 +211,8 @@ public abstract class MetsUtil {
                     String probeContentType = MCRContentTypes.probeContentType(path);
                     return probeContentType.startsWith("image/");
                 } catch (Exception exc) {
-                    LOGGER.warn("Unable to probe content of " + path.toAbsolutePath().toString()
-                            + " while checking for mets.xml generation.");
+                    LOGGER.warn("Unable to probe content of {} while checking for mets.xml generation.",
+                        path.toAbsolutePath().toString());
                     return false;
                 }
             })) {
@@ -234,7 +254,7 @@ public abstract class MetsUtil {
         // generate
         Mets mets = MetsUtil.generate(derivateId);
         if (mets == null) {
-            LOGGER.error("Unable to generate mets.xml for derivate " + derivateId);
+            LOGGER.error("Unable to generate mets.xml for derivate {}", derivateId);
             return;
         }
         MCRJDOMContent newMetsContent = new MCRJDOMContent(mets.asDocument());
