@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000062">
-    <label xml:lang="de" text="Projektbezeichnung" description="Projektbezeichnung" />
-    <label xml:lang="en" text="Name of project" description="Name of project" />
-    <categories>
-        <category ID="eventWeimarJena" >
-            <label xml:lang="de" text="DFG-Projekte Ereignis Weimar-Jena" />
-        </category>
-        <category ID="religionEducation">
-            <label xml:lang="de" text="Religionspädagogik" />
-        </category>
-        <category ID="thulb" >
-            <label xml:lang="de" text="Einzelprojekte" />
-            <label xml:lang="en" text="Single projects" />
-        </category>
-        <category ID="historicalCommittee">
-            <label xml:lang="de" text="Projekte historische Kommission" />
-        </category>
-        <category ID="virtuellLibrary18thCentury">
-            <label xml:lang="de" text="Virtuelle Bibliothek des 18. Jh." />
-        </category>
-        <category ID="regionalJournals">
-            <label xml:lang="de" text="Regionalzeitschriften" />
-            <label xml:lang="en" text="Regional journals" />
-        </category>
-        <category ID="sfb-482">
-            <label xml:lang="de" text="SFB-482" />
-            <label xml:lang="en" text="SFB-482" />
-        </category>
-    </categories>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000062">
+  <label xml:lang="en" text="Name of project" description="Name of project"/>
+  <label xml:lang="de" text="Projektbezeichnung" description="Projektbezeichnung"/>
+  <categories>
+    <category ID="kp_thulex">
+      <label xml:lang="de" text="Thüringen - Legislativ &amp; Exekutiv"/>
+      <url xlink:href="http://thulex.de/" xlink:type="locator"/>
+    </category>
+    <category ID="kp_sfb">
+      <label xml:lang="de" text="Sonderforschungsbereich 482 &quot;Ereignis Weimar-Jena. Kultur um 1800&quot;"/>
+    </category>
+    <category ID="kp_thuringica">
+      <label xml:lang="de" text="Thuringica"/>
+    </category>
+    <category ID="kp_literaturzeitung">
+      <label xml:lang="de" text="Literarische Zeitschriften um 1800"/>
+    </category>
+    <category ID="kp_kirchenzs">
+      <label xml:lang="de" text="Kirchliches und schulisches Zeitschriftenwesen"/>
+    </category>
+    <category ID="kp_uniprogramm">
+      <label xml:lang="de" text="Jenaer Universitätsprogramme"/>
+    </category>
+    <category ID="kp_konzert">
+      <label xml:lang="de" text="Jenaer Konzerte"/>
+    </category>
+    <category ID="kp_zeitung">
+      <label xml:lang="de" text="Historische Tages- und Wochenzeitungen"/>
+    </category>
+    <category ID="kp_kalender">
+      <label xml:lang="de" text="Historische Kalenderblätter"/>
+    </category>
+    <category ID="kp_adr">
+      <label xml:lang="de" text="Adressbücher Thüringer Städte"/>
+    </category>
+  </categories>
 </mycoreclass>
