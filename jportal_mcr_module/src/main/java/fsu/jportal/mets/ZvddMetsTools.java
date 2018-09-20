@@ -257,11 +257,11 @@ public abstract class ZvddMetsTools {
         // related item host
         Element relatedItem = mods("relatedItem").setAttribute("type", "host");
         String isil = MCRConfiguration.instance().getString("JP.Site.ISIL", null);
-        Element recordIdentifier = modsIdentifier("recordIdentifier", "mycore", journal.getId().toString(), isil);
         journal.getIdenti("zdb-id")
             .map(zdbId -> modsIdentifier("identifier", "zdb", zdbId))
             .ifPresent(relatedItem::addContent);
-        relatedItem.addContent(recordIdentifier);
+        Element recordIdentifier = modsIdentifier("recordIdentifier", "mycore", journal.getId().toString(), isil);
+        relatedItem.addContent(mods("recordInfo").addContent(recordIdentifier));
         mods.addContent(relatedItem);
         // mods:part
         Integer order = ZvddMetsTools.calculateOrder(volume);
