@@ -32,6 +32,7 @@ import org.mycore.mets.model.struct.PhysicalSubDiv;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import com.neovisionaries.i18n.LanguageCode;
 
+import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPInstitution;
@@ -50,6 +51,20 @@ import fsu.jportal.xml.JPXMLFunctions;
  * @author Matthias Eichner
  */
 public abstract class ZvddMetsTools {
+
+    /**
+     * Creates a mets:dmdSec for the given article.
+     *
+     * @param article the article
+     * @return a newly generated mets:dmdSec
+     */
+    public static DmdSec createDmdSec(JPArticle article) {
+        DmdSec dmd = new DmdSec("dmd_" + article.getId().toString());
+        Element mods = modsDefault(article, article.getTitle());
+        MdWrap mdWrap = new MdWrap(MDTYPE.MODS, mods);
+        dmd.setMdWrap(mdWrap);
+        return dmd;
+    }
 
     /**
      * Creates a mets:dmdSec for the given volume.

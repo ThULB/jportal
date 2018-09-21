@@ -94,10 +94,10 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      */
     public List<MCRObjectID> getChildren() {
         return getObject().getStructure()
-                          .getChildren()
-                          .stream()
-                          .map(MCRMetaLinkID::getXLinkHrefID)
-                          .collect(Collectors.toList());
+            .getChildren()
+            .stream()
+            .map(MCRMetaLinkID::getXLinkHrefID)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -109,11 +109,29 @@ public abstract class JPContainer extends JPPeriodicalComponent {
      */
     public List<MCRObjectID> getChildren(JPObjectType type) {
         return getObject().getStructure()
-                          .getChildren()
-                          .stream()
-                          .map(MCRMetaLinkID::getXLinkHrefID)
-                          .filter(linkId -> linkId.getTypeId().equals(type.name()))
-                          .collect(Collectors.toList());
+            .getChildren()
+            .stream()
+            .map(MCRMetaLinkID::getXLinkHrefID)
+            .filter(linkId -> linkId.getTypeId().equals(type.name()))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a stream of children volumes.
+     *
+     * @return stream of volumes
+     */
+    public Stream<JPVolume> streamVolumes() {
+        return getChildren(JPObjectType.jpvolume).stream().map(JPVolume::new);
+    }
+
+    /**
+     * Returns a stream of children articles.
+     *
+     * @return stream of articles
+     */
+    public Stream<JPArticle> streamArticles() {
+        return getChildren(JPObjectType.jparticle).stream().map(JPArticle::new);
     }
 
     @Override

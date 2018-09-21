@@ -54,12 +54,17 @@ public class ZvddNewspaperYearMetsGenerator implements MCRMETSGenerator {
 
         // journal div & pointer
         JPJournal journal = volume.getJournal();
-        LogicalDiv journalDiv = new LogicalDiv("log_" + journal.getId().toString(), "newspaper", journal.getTitle());
+        LogicalDiv journalDiv = new LogicalDiv("log_" + journal.getId(), "newspaper", journal.getTitle());
         struct.setDivContainer(journalDiv);
 
         String href = MCRFrontendUtil.getBaseURL() + "rsc/mets/zvdd/" + journal.getId().toString();
         Mptr mptr = new Mptr(href, LOCTYPE.URL);
         journalDiv.setMptr(mptr);
+
+        // the year itself
+        LogicalDiv yearDiv = new LogicalDiv("log_" + volume.getId(), "year", volume.getTitle());
+        yearDiv.setDmdId("dmd_" + volume.getId());
+        journalDiv.add(yearDiv);
 
         // get days
         List<JPVolume> days = getDays(volume);
@@ -68,7 +73,7 @@ public class ZvddNewspaperYearMetsGenerator implements MCRMETSGenerator {
         }
 
         // build month -> day -> issue hierarchy
-        buildHierarchy(journalDiv, days);
+        buildHierarchy(yearDiv, days);
 
         return struct;
     }
