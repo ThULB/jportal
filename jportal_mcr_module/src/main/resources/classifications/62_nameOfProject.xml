@@ -36,5 +36,8 @@
     <category ID="kp_adr">
       <label xml:lang="de" text="Adressbücher Thüringer Städte"/>
     </category>
+    <category ID="kp_pgm">
+      <label xml:lang="de" text="Petermanns Geographische Mitteilungen"/>
+    </category>
   </categories>
 </mycoreclass>
