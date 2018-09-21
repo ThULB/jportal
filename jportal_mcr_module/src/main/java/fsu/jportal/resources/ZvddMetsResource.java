@@ -1,5 +1,7 @@
 package fsu.jportal.resources;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.ws.rs.BadRequestException;
@@ -10,10 +12,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRContentTypes;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
 
@@ -78,9 +83,9 @@ public class ZvddMetsResource {
     }
 
     private Response handleMagazineVolume(JPVolume volume) {
-        Optional<JPDerivateComponent> derivateOptional = volume.getFirstDerivate();
+        Optional<JPDerivateComponent> derivateOptional = findDerivate(volume);
         if (!derivateOptional.isPresent()) {
-            throw new BadRequestException("Object " + volume.getId() + " does not contain any derivates.");
+            throw new BadRequestException("Object " + volume.getId() + " does not contain a fitting derivate.");
         }
         ZvddDerivateMetsGenerator metsGenerator = new ZvddDerivateMetsGenerator();
         metsGenerator.setup(derivateOptional.get().getId().toString());
@@ -92,6 +97,29 @@ public class ZvddMetsResource {
         Document xml = mets.asDocument();
         XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
         return Response.ok(out.outputString(xml), MediaType.APPLICATION_XML).build();
+    }
+
+    /**
+     * Goes through all derivates in the given volume and finds the one where the main document is an image. This avoids
+     * using a derivate which just have a pdf.
+     * 
+     * @param volume the volume to check
+     * @return an optional derivate
+     */
+    private Optional<JPDerivateComponent> findDerivate(JPVolume volume) {
+        List<JPDerivateComponent> derivates = volume.getDerivates();
+        for (JPDerivateComponent derivate : derivates) {
+            MCRPath mainDocPath = MCRPath.toMCRPath(derivate.getPath().resolve(derivate.getMainDoc()));
+            try {
+                String contentType = MCRContentTypes.probeContentType(mainDocPath);
+                if (contentType.startsWith("image/")) {
+                    return Optional.of(derivate);
+                }
+            } catch (IOException ioException) {
+                LogManager.getLogger().error("Unable to probe content type of " + mainDocPath, ioException);
+            }
+        }
+        return Optional.empty();
     }
 
 }

@@ -14,13 +14,17 @@ import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.File;
 import org.mycore.mets.model.files.FileGrp;
 import org.mycore.mets.model.files.FileSec;
+import org.mycore.mets.model.sections.AmdSec;
+import org.mycore.mets.model.sections.DigiprovMD;
 import org.mycore.mets.model.sections.DmdSec;
+import org.mycore.mets.model.sections.RightsMD;
 import org.mycore.mets.model.struct.Fptr;
 import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.MDTYPE;
@@ -51,6 +55,83 @@ import fsu.jportal.xml.JPXMLFunctions;
  * @author Matthias Eichner
  */
 public abstract class ZvddMetsTools {
+
+    /**
+     * Helper method to build the AmdSec for the given component.
+     * 
+     * @param component the component
+     * @return a new AmdSec containing digiprovMD and rightsMD section
+     */
+    public static AmdSec createAmdSec(JPPeriodicalComponent component) {
+        AmdSec amd = new AmdSec("amd_" + component.getId().toString());
+        amd.setDigiprovMD(createDigiprovMD(component));
+        List<RightsMD> owners = component.getJournal().getParticipants("owner").stream()
+            .map(JPInstitution::new)
+            .map(ZvddMetsTools::createRightsMD)
+            .collect(Collectors.toList());
+        if (owners.isEmpty()) {
+            owners.add(ZvddMetsTools.createDefaultRightsMD());
+        }
+        owners.forEach(rightsMD -> amd.listRightsMD().add(rightsMD));
+        return amd;
+    }
+
+    /**
+     * Creates the default rightsMD using the mycore properties JP.Site.Owner.*. This method should only be used if
+     * the journals does not specify owners.
+     *
+     * @return a new rightsMD object using mycore properties
+     */
+    public static RightsMD createDefaultRightsMD() {
+        MCRConfiguration conf = MCRConfiguration.instance();
+        Element dvRights = dv("rights");
+        String label = conf.getString("JP.Site.Owner.label");
+        String logo = conf.getString("JP.Site.Footer.Logo.url");
+        String siteURL = conf.getString("JP.Site.Owner.url");
+        dvRights.addContent(dv("owner").setText(label));
+        dvRights.addContent(dv("ownerLogo").setText(logo));
+        dvRights.addContent(dv("ownerSiteURL").setText(MCRFrontendUtil.getBaseURL() + siteURL));
+        return buildRightsMD("RIGHTS", dvRights);
+    }
+
+    /**
+     * Creates a rightsMD object for the given institution.
+     *
+     * @param institution the institution to convert
+     * @return a new rightsMD object
+     */
+    public static RightsMD createRightsMD(JPInstitution institution) {
+        Element dvRights = dv("rights");
+        dvRights.addContent(dv("owner").setText(institution.getTitle()));
+        institution.getLogo()
+            .map(JPXMLFunctions::getLogoURL)
+            .map(logoURL -> dv("ownerLogo").setText(logoURL))
+            .ifPresent(dvRights::addContent);
+        institution.getURL()
+            .map(url -> dv("ownerSiteURL").setText(url.getXLinkHref()))
+            .ifPresent(dvRights::addContent);
+        return buildRightsMD("RIGHTS_" + institution.getId().toString(), dvRights);
+    }
+
+    public static RightsMD buildRightsMD(String id, Element dvRights) {
+        RightsMD rightsMD = new RightsMD(id);
+        MdWrap mdWrap = new MdWrap(MDTYPE.OTHER, dvRights);
+        mdWrap.setOtherMdType("DVRIGHTS");
+        rightsMD.setMdWrap(mdWrap);
+        return rightsMD;
+    }
+
+    public static DigiprovMD createDigiprovMD(JPPeriodicalComponent component) {
+        DigiprovMD digiprovMD = new DigiprovMD("DIGIPROV");
+        Element presentation = dv("presentation")
+            .setText(MCRFrontendUtil.getBaseURL() + "receive/" + component.getId().toString());
+        Element links = dv("links");
+        links.addContent(presentation);
+        MdWrap mdWrap = new MdWrap(MDTYPE.OTHER, links);
+        mdWrap.setOtherMdType("DVLINKS");
+        digiprovMD.setMdWrap(mdWrap);
+        return digiprovMD;
+    }
 
     /**
      * Creates a mets:dmdSec for the given article.
@@ -232,7 +313,9 @@ public abstract class ZvddMetsTools {
             .forEach(mods::addContent);
 
         // title
-        mods.addContent(modsTitleInfo(title, null));
+        if (title != null) {
+            mods.addContent(modsTitleInfo(title, null));
+        }
 
         // participants
         periodical.getParticipants(JPObjectType.person).stream()
@@ -261,7 +344,7 @@ public abstract class ZvddMetsTools {
      * @return a new mods element
      */
     public static Element modsYearOrIssue(JPVolume volume, JPDerivateComponent derivate, String type) {
-        String title = type.equals("volume") ? ZvddMetsTools.getTitle(volume) : volume.getTitle();
+        String title = type.equals("volume") ? null : volume.getTitle();
         Element mods = modsDefault(volume, title);
         if (derivate != null) {
             derivate.getURN().ifPresent(urn -> {
@@ -275,7 +358,7 @@ public abstract class ZvddMetsTools {
         journal.getIdenti("zdb-id")
             .map(zdbId -> modsIdentifier("identifier", "zdb", zdbId))
             .ifPresent(relatedItem::addContent);
-        Element recordIdentifier = modsIdentifier("recordIdentifier", "mycore", journal.getId().toString(), isil);
+        Element recordIdentifier = modsIdentifier("recordIdentifier", null, journal.getId().toString(), isil);
         relatedItem.addContent(mods("recordInfo").addContent(recordIdentifier));
         mods.addContent(relatedItem);
         // mods:part
@@ -349,14 +432,16 @@ public abstract class ZvddMetsTools {
      * Creates a new mods identifier element with the given name, type value and source.
      *
      * @param name the name of the element, usually "identifer" or "recordIdentfier"
-     * @param type the type attribute
+     * @param type the type attribute (invalid for recordIdentfier -> should be null)
      * @param value the value of the identifier
      * @param source the source attribute
      * @return an mods identifier element
      */
     public static Element modsIdentifier(String name, String type, String value, String source) {
         Element identifier = mods(name);
-        identifier.setAttribute("type", type);
+        if (type != null) {
+            identifier.setAttribute("type", type);
+        }
         if (source != null) {
             identifier.setAttribute("source", source);
         }

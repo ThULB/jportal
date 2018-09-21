@@ -4,6 +4,7 @@ import org.jdom2.Element;
 import org.mycore.common.MCRException;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.sections.AmdSec;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
@@ -12,9 +13,12 @@ import org.mycore.mets.model.struct.MdWrap;
 import org.mycore.mets.model.struct.Mptr;
 
 import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
 import static fsu.jportal.mets.ZvddMetsTools.modsDefault;
 import static fsu.jportal.mets.ZvddMetsTools.modsYearOrIssue;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * Zvdd implementation of a mets generator using this
@@ -36,6 +40,7 @@ public class ZvddDerivateMetsGenerator extends DfgViewerMetsGenerator {
         Mets mets = super.generate();
         this.periodicalMap.values().stream()
             .filter(periodical -> !periodical.getId().equals(this.rootVolume.getId()))
+            .filter(this::hasDmdId)
             .map((periodical) -> toDmdSec(periodical, modsDefault(periodical, periodical.getTitle())))
             .forEach(mets::addDmdSec);
         return mets;
@@ -47,13 +52,27 @@ public class ZvddDerivateMetsGenerator extends DfgViewerMetsGenerator {
     }
 
     @Override
+    protected AmdSec createAmdSection() {
+        return ZvddMetsTools.createAmdSec(this.rootVolume);
+    }
+
+    @Override
     protected Mptr getMptr(JPJournal journal) {
         String href = MCRFrontendUtil.getBaseURL() + "rsc/mets/zvdd/" + journal.getId().toString();
         return new Mptr(href, LOCTYPE.URL);
     }
 
     protected void handleLogicalHierarchy(LogicalDiv volumeDiv) {
-        rootVolume.getChildren().forEach(childId -> buildHierarchy(childId, volumeDiv, true));
+        rootVolume.getChildren().forEach(childId -> buildHierarchy(childId, volumeDiv));
+    }
+
+    @Override
+    protected boolean hasDmdId(JPPeriodicalComponent periodical) {
+        if (JPComponentUtil.is(periodical, JPObjectType.jpvolume)) {
+            JPVolume volume = (JPVolume) periodical;
+            return !volume.getType().equals("issue");
+        }
+        return true;
     }
 
     public DmdSec toDmdSec(JPPeriodicalComponent periodical, Element mods) {

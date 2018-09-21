@@ -102,10 +102,12 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
         // journal
         // -> needs a jpjournal as parent
         // -> published date should contain a from and until date OR the child volumes are years
+        // -> it NEVER has a derivate
         JPContainer parent = volume.getParent().orElse(null);
         JPMetaDate published = volume.getDate(JPPeriodicalComponent.DateType.published).orElse(null);
-        boolean hasParent = parent != null;
-        boolean hasFromAndUntil = hasParent && JPComponentUtil.is(parent, JPObjectType.jpjournal) && published != null
+        boolean hasJournalParent = parent != null && JPComponentUtil.is(parent, JPObjectType.jpjournal);
+        boolean hasFromAndUntil = hasJournalParent && JPComponentUtil.is(parent, JPObjectType.jpjournal)
+            && published != null
             && published.getFrom() != null && published.getUntil() != null;
         List<JPVolume> childVolumes = children.stream()
             .filter(linkId -> linkId.getTypeId().equals(JPObjectType.jpvolume.name()))
@@ -115,7 +117,8 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
             .map(JPVolume::getPublishedTemporal)
             .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
             .anyMatch(JPDateUtil::isYear);
-        if (hasParent && (hasFromAndUntil || hasYears)) {
+        boolean hasDerivate = volume.getFirstDerivate().isPresent();
+        if (!hasDerivate && hasJournalParent && (hasFromAndUntil || hasYears)) {
             return JPVolumeType.journal.name();
         }
 

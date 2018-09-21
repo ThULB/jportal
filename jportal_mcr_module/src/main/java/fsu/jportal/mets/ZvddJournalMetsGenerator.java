@@ -1,6 +1,5 @@
 package fsu.jportal.mets;
 
-import static fsu.jportal.mets.ZvddMetsTools.dv;
 import static fsu.jportal.mets.ZvddMetsTools.mods;
 import static fsu.jportal.mets.ZvddMetsTools.modsIdentifier;
 import static fsu.jportal.mets.ZvddMetsTools.modsTitleInfo;
@@ -13,15 +12,11 @@ import java.util.stream.Collectors;
 
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.sections.AmdSec;
-import org.mycore.mets.model.sections.DigiprovMD;
 import org.mycore.mets.model.sections.DmdSec;
-import org.mycore.mets.model.sections.RightsMD;
 import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
@@ -31,13 +26,11 @@ import org.mycore.mets.model.struct.Mptr;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 
 import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPInstitution;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
 import fsu.jportal.util.JPDateUtil;
-import fsu.jportal.xml.JPXMLFunctions;
 
 /**
  * Zvdd implementation of a mets generator using this
@@ -60,8 +53,9 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
         Mets mets = new Mets();
         mets.removeStructMap(PhysicalStructMap.TYPE);
         mets.addDmdSec(createDmdSec());
-        mets.addAmdSec(createAmdSec());
+        mets.addAmdSec(ZvddMetsTools.createAmdSec(journal));
         mets.addStructMap(createLogicalStructMap());
+        mets.setStructLink(null);
         return mets;
     }
 
@@ -80,77 +74,6 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
         MdWrap mdWrap = new MdWrap(MDTYPE.MODS, mods);
         dmd.setMdWrap(mdWrap);
         return dmd;
-    }
-
-    protected AmdSec createAmdSec() {
-        AmdSec amd = new AmdSec("amd_" + journal.getId().toString());
-        amd.setDigiprovMD(createDigiprovMD());
-        List<RightsMD> owners = journal.getParticipants("owner").stream()
-            .map(JPInstitution::new)
-            .map(this::createRightsMD)
-            .collect(Collectors.toList());
-        if (owners.isEmpty()) {
-            owners.add(createDefaultRightsMD());
-        }
-        owners.forEach(rightsMD -> amd.listRightsMD().add(rightsMD));
-        return amd;
-    }
-
-    /**
-     * Creates the default rightsMD using the mycore properties JP.Site.Owner.*. This method should only be used if
-     * the journals does not specify owners.
-     *
-     * @return a new rightsMD object using mycore properties
-     */
-    protected RightsMD createDefaultRightsMD() {
-        MCRConfiguration conf = MCRConfiguration.instance();
-        Element dvRights = dv("rights");
-        String label = conf.getString("JP.Site.Owner.label");
-        String logo = conf.getString("JP.Site.Footer.Logo.url");
-        String siteURL = conf.getString("JP.Site.Owner.url");
-        dvRights.addContent(dv("owner").setText(label));
-        dvRights.addContent(dv("ownerLogo").setText(logo));
-        dvRights.addContent(dv("ownerSiteURL").setText(MCRFrontendUtil.getBaseURL() + siteURL));
-        return buildRightsMD("RIGHTS", dvRights);
-    }
-
-    /**
-     * Creates a rightsMD object for the given institution.
-     *
-     * @param institution the institution to convert
-     * @return a new rightsMD object
-     */
-    protected RightsMD createRightsMD(JPInstitution institution) {
-        Element dvRights = dv("rights");
-        dvRights.addContent(dv("owner").setText(institution.getTitle()));
-        institution.getLogo()
-            .map(JPXMLFunctions::getLogoURL)
-            .map(logoURL -> dv("ownerLogo").setText(logoURL))
-            .ifPresent(dvRights::addContent);
-        institution.getURL()
-            .map(url -> dv("ownerSiteURL").setText(url.getXLinkHref()))
-            .ifPresent(dvRights::addContent);
-        return buildRightsMD("RIGHTS_" + institution.getId().toString(), dvRights);
-    }
-
-    private RightsMD buildRightsMD(String id, Element dvRights) {
-        RightsMD rightsMD = new RightsMD(id);
-        MdWrap mdWrap = new MdWrap(MDTYPE.OTHER, dvRights);
-        mdWrap.setOtherMdType("DVRIGHTS");
-        rightsMD.setMdWrap(mdWrap);
-        return rightsMD;
-    }
-
-    protected DigiprovMD createDigiprovMD() {
-        DigiprovMD digiprovMD = new DigiprovMD("DIGIPROV");
-        Element presentation = dv("presentation")
-            .setText(MCRFrontendUtil.getBaseURL() + "receive/" + journal.getId().toString());
-        Element links = dv("links");
-        links.addContent(presentation);
-        MdWrap mdWrap = new MdWrap(MDTYPE.OTHER, links);
-        mdWrap.setOtherMdType("DVLINKS");
-        digiprovMD.setMdWrap(mdWrap);
-        return digiprovMD;
     }
 
     protected LogicalStructMap createLogicalStructMap() {

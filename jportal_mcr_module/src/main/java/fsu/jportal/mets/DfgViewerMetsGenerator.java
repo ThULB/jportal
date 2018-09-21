@@ -128,7 +128,7 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
     }
 
     protected void handleLogicalHierarchy(LogicalDiv volumeDiv) {
-        rootVolume.getChildren().forEach(childId -> buildHierarchy(childId, volumeDiv, false));
+        rootVolume.getChildren().forEach(childId -> buildHierarchy(childId, volumeDiv));
     }
 
     protected Mptr getMptr(JPJournal journal) {
@@ -157,12 +157,12 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
         return files;
     }
 
-    protected void buildHierarchy(final MCRObjectID id, final LogicalDiv parentDiv, boolean addDmdId) {
+    protected void buildHierarchy(final MCRObjectID id, final LogicalDiv parentDiv) {
         getPeriodical(id).ifPresent(periodical -> {
             // add div
             String type = JPArticle.TYPE.equals(periodical.getType()) ? "article" : "issue";
             LogicalDiv childDiv = new LogicalDiv("log_" + id, type, periodical.getTitle());
-            if (addDmdId) {
+            if (hasDmdId(periodical)) {
                 childDiv.setDmdId("dmd_" + id);
             }
             parentDiv.add(childDiv);
@@ -173,9 +173,13 @@ public class DfgViewerMetsGenerator extends JPMetsHierarchyGenerator {
             // recursive children
             if (JPVolume.TYPE.equals(periodical.getType())) {
                 JPVolume volume = (JPVolume) periodical;
-                volume.getChildren().forEach(childId -> buildHierarchy(childId, childDiv, addDmdId));
+                volume.getChildren().forEach(childId -> buildHierarchy(childId, childDiv));
             }
         });
+    }
+
+    protected boolean hasDmdId(JPPeriodicalComponent periodical) {
+        return false;
     }
 
     @Override
