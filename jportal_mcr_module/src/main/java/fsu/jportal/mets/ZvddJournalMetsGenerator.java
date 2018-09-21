@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.MCRMETSGenerator;
@@ -65,6 +66,11 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
         Element mods = mods("mods");
         // title
         mods.addContent(modsTitleInfo(journal.getTitle(), null));
+        // recordInfo
+        String isil = MCRConfiguration.instance().getString("JP.Site.ISIL", null);
+        Element recordIdentifier = ZvddMetsTools
+            .modsIdentifier("recordIdenitfier", null, journal.getId().toString(), isil);
+        mods.addContent(mods("recordInfo").addContent(recordIdentifier));
         // language
         journal.getLanguageCode().map(ZvddMetsTools::modsLanguage).ifPresent(mods::addContent);
         // identifier
