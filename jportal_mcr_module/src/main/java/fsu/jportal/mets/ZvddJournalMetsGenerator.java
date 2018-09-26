@@ -4,16 +4,13 @@ import static fsu.jportal.mets.ZvddMetsTools.mods;
 import static fsu.jportal.mets.ZvddMetsTools.modsIdentifier;
 import static fsu.jportal.mets.ZvddMetsTools.modsTitleInfo;
 
-import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
@@ -29,9 +26,7 @@ import org.mycore.mets.model.struct.PhysicalStructMap;
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
-import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
-import fsu.jportal.util.JPDateUtil;
 
 /**
  * Zvdd implementation of a mets generator using this
@@ -99,7 +94,17 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
      * @return the type. e.g. periodical, newspaper...
      */
     protected String getType(JPJournal journal) {
-        return journal.isJournalType("jportal_class_00000200", "newspapers") ? "newspaper" : "periodical";
+        return isNewspaper(journal) ? "newspaper" : "periodical";
+    }
+
+    /**
+     * Checks if the given journal is a newspaper.
+     *
+     * @param journal the journal to check
+     * @return true if its a newspaper otherwise false
+     */
+    protected boolean isNewspaper(JPJournal journal) {
+        return journal.isJournalType("jportal_class_00000200", "newspapers");
     }
 
     /**
@@ -116,60 +121,42 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
     }
 
     /**
-     * Checks first if the journals has "real" year volumes. The date of the volumes is exactly a year. If there are
-     * no volumes with years we search for volumes with derivates and take those instead.
+     * Returns all "year" volumes.
+     *
+     * <ul>
+     *     <li>newspaper: volume type = "year"</li>
+     *     <li>all others: volume type = "year" & the volume has a derivate, cause they are based on the
+     *     {@link ZvddDerivateMetsGenerator}</li>
+     * </ul>
      *
      * @param journal the journal to get the year volumes
      * @return list of volumes
      */
     protected List<JPVolume> listYearVolumes(JPJournal journal) {
-        List<JPVolume> yearVolumes = listYearVolumesByDate(journal);
-        if (yearVolumes.isEmpty()) {
-            yearVolumes = listYearVolumesByDerivate(journal);
+        List<JPVolume> yearVolumes = listYearVolumesByType(journal);
+        if (isNewspaper(journal)) {
+            return yearVolumes.stream().filter(volume -> !volume.getDerivates().isEmpty()).collect(Collectors.toList());
         }
         return yearVolumes;
     }
 
     /**
-     * Runs recursive through the given container and tries to find all volumes with a published year.
+     * Runs recursive through the given container and tries to find all volumes where the volumeType = "year".
      *
      * @param container the container to search in
      * @return list of volumes
      */
-    protected List<JPVolume> listYearVolumesByDate(JPContainer container) {
+    protected List<JPVolume> listYearVolumesByType(JPContainer container) {
         List<JPVolume> yearVolumes = new ArrayList<>();
-        List<JPVolume> children = container.getChildren(JPObjectType.jpvolume).stream().map(JPVolume::new).collect(
-            Collectors.toList());
-        for (JPVolume child : children) {
-            Optional<JPMetaDate> publishedOptional = child.getDate(JPPeriodicalComponent.DateType.published);
-            if (publishedOptional.isPresent()) {
-                Temporal published = publishedOptional.get().getDate();
-                if (published != null && JPDateUtil.isYear(published)) {
-                    yearVolumes.add(child);
-                    continue;
-                }
-            }
-            yearVolumes.addAll(listYearVolumesByDate(child));
-        }
-        return yearVolumes;
-    }
-
-    /**
-     * Runs recursive through the given container and tries to find all volumes with a derivate.
-     *
-     * @param container the container to search in
-     * @return list of volumes
-     */
-    protected List<JPVolume> listYearVolumesByDerivate(JPContainer container) {
-        List<JPVolume> yearVolumes = new ArrayList<>();
-        List<JPVolume> children = container.getChildren(JPObjectType.jpvolume).stream().map(JPVolume::new).collect(
-            Collectors.toList());
-        for (JPVolume child : children) {
-            if (child.getFirstDerivate().isPresent()) {
-                yearVolumes.add(child);
+        List<JPVolume> children = container.getChildren(JPObjectType.jpvolume).stream()
+            .map(JPVolume::new)
+            .collect(Collectors.toList());
+        for (JPVolume childVolume : children) {
+            if (childVolume.isVolumeType("year")) {
+                yearVolumes.add(childVolume);
                 continue;
             }
-            yearVolumes.addAll(listYearVolumesByDerivate(child));
+            yearVolumes.addAll(listYearVolumesByType(childVolume));
         }
         return yearVolumes;
     }

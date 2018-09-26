@@ -68,18 +68,18 @@ public class ZvddMetsResource {
     }
 
     private Response handleNewspaperVolume(JPVolume volume) {
-        String type = volume.getVolumeType();
-        boolean isIssue = type.equals(JPVolumeTypeDefaultDetector.JPVolumeType.issue.name());
+        List<String> types = volume.getVolumeTypes();
+        boolean isIssue = types.contains(JPVolumeTypeDefaultDetector.JPVolumeType.issue.name());
         if (isIssue) {
             return getResponse(new ZvddNewspaperIssueMetsGenerator(volume));
         }
-        boolean isYear = type.equals(JPVolumeTypeDefaultDetector.JPVolumeType.year.name());
+        boolean isYear = types.contains(JPVolumeTypeDefaultDetector.JPVolumeType.year.name());
         if (isYear) {
             return getResponse(new ZvddNewspaperYearMetsGenerator(volume));
         }
         throw new BadRequestException(
             "Requesting invalid object '" + volume.getId() + "'. The type of the requested newspaper volume is"
-                + "'" + type + "'. But only 'issue' and 'year' are supported.");
+                + "'" + types + "'. But only 'issue' and 'year' are supported.");
     }
 
     private Response handleMagazineVolume(JPVolume volume) {

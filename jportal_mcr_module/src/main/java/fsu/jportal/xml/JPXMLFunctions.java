@@ -683,21 +683,6 @@ public class JPXMLFunctions {
     }
 
     /**
-     * Returns the volume type of the given volume.
-     *
-     * @param id a mycore object id
-     * @return the specific volume type e.g. issue
-     */
-    public static String getVolumeType(String id) {
-        try {
-            return new JPVolume(id).getVolumeType();
-        } catch (Exception exc) {
-            LOGGER.error("Unable to get volume type of '" + id + "'.", exc);
-        }
-        return "";
-    }
-
-    /**
      * Returns the appropriate mime type for the given file. For image's this will always return "image/jpeg"
      * because the MCRTileCombineServlet will serve them.
      *

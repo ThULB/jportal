@@ -3,6 +3,9 @@ package fsu.jportal.backend.impl;
 import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -68,8 +71,12 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
 
     }
 
+    protected List<String> single(String type) {
+        return type != null ? Collections.singletonList(type) : new ArrayList<>();
+    }
+
     @Override
-    public String detect(JPVolume volume) {
+    public List<String> detect(JPVolume volume) {
         List<MCRObjectID> children = volume.getChildren();
         Temporal publishedTemporal = volume.getPublishedTemporal().orElse(null);
 
@@ -78,34 +85,40 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
         if (isCalendar) {
             Optional<String> publishedType = getByPublished(publishedTemporal);
             if (publishedType.isPresent()) {
-                return publishedType.get();
+                return single(publishedType.get());
             }
             boolean hasDerivate = volume.getFirstDerivate().isPresent();
             if (hasDerivate) {
                 boolean isPrognistic = volume.isVolContentClassis(2, "jportal_class_00000090", "prognostic");
-                return isPrognistic ? JPVolumeType.prognostic.name() : JPVolumeType.calendar.name();
+                return isPrognistic ? single(JPVolumeType.prognostic.name()) : single(JPVolumeType.calendar.name());
             }
             // unknown -> probably a site -> not sure if we should define it?
             return null;
         }
 
-        // issue
+        // issue and year at the same time
         boolean hasArticles = children.stream()
             .anyMatch(linkId -> linkId.getTypeId().equals(JPObjectType.jparticle.name()));
-        boolean hasChildren = !children.isEmpty();
+        JPContainer parent = volume.getParent().orElse(null);
+        boolean hasJournalParent = parent != null && JPComponentUtil.is(parent, JPObjectType.jpjournal);
         boolean hasPublishedDate = publishedTemporal != null;
+        boolean isYear = hasPublishedDate && JPDateUtil.isYear(publishedTemporal);
+        if (hasArticles && hasJournalParent && isYear) {
+            return Arrays.asList(JPVolumeType.issue.name(), JPVolumeType.year.name());
+        }
+
+        // just the issue issue
+        boolean hasChildren = !children.isEmpty();
         boolean isDay = hasPublishedDate && JPDateUtil.isDay(publishedTemporal);
         if (hasArticles || (!hasChildren && (!hasPublishedDate || isDay))) {
-            return JPVolumeType.issue.name();
+            return single(JPVolumeType.issue.name());
         }
 
         // journal
         // -> needs a jpjournal as parent
         // -> published date should contain a from and until date OR the child volumes are years
         // -> it NEVER has a derivate
-        JPContainer parent = volume.getParent().orElse(null);
         JPMetaDate published = volume.getDate(JPPeriodicalComponent.DateType.published).orElse(null);
-        boolean hasJournalParent = parent != null && JPComponentUtil.is(parent, JPObjectType.jpjournal);
         boolean hasFromAndUntil = hasJournalParent && JPComponentUtil.is(parent, JPObjectType.jpjournal)
             && published != null
             && published.getFrom() != null && published.getUntil() != null;
@@ -119,11 +132,11 @@ public class JPVolumeTypeDefaultDetector implements JPVolumeTypeDetector {
             .anyMatch(JPDateUtil::isYear);
         boolean hasDerivate = volume.getFirstDerivate().isPresent();
         if (!hasDerivate && hasJournalParent && (hasFromAndUntil || hasYears)) {
-            return JPVolumeType.journal.name();
+            return single(JPVolumeType.journal.name());
         }
 
         // no more info, check by published or by title
-        return getByPublished(publishedTemporal).orElse(getByTitle(volume.getTitle()).orElse(null));
+        return single(getByPublished(publishedTemporal).orElse(getByTitle(volume.getTitle()).orElse(null)));
     }
 
     private Optional<String> getByTitle(String title) {

@@ -199,7 +199,7 @@ public class JPPiwikReport {
         }
 
         JPPiwikReport report = new JPPiwikReport(args[0]);
-        Collection<PiwikResult> results = report.getPiwikResults(2017);
+        Collection<PiwikResult> results = report.getPiwikResults(2018);
         /*results = JPPiwikReport
                 .filter(results, "+journalType:jportal_class_00000200\\:parliamentDocuments +objectType:jpjournal");*/
         JPPiwikReport.updateJournalLabels(results);

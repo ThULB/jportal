@@ -185,10 +185,10 @@ public class ZvddNewspaperIssueMetsGenerator extends JPMetsHierarchyGenerator {
                 break;
             }
             JPVolume parentVolume = (JPVolume) parent;
-            String volumeType = parentVolume.getVolumeType();
-            if (volumeType.equals("year")) {
+            List<String> volumeTypes = parentVolume.getVolumeTypes();
+            if (volumeTypes.contains("year")) {
                 year = parentVolume;
-            } else if (volumeType.equals("day")) {
+            } else if (volumeTypes.contains("day")) {
                 day = parentVolume;
             }
             parentOptional = parentVolume.getParent();

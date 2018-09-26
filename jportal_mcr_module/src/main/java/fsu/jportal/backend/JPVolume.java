@@ -47,12 +47,22 @@ public class JPVolume extends JPContainer {
     /**
      * A volume in jportal is used for many different types of objects. This returns a more specific type. E.g.
      * issue, year, month or calendar.
-     * 
-     * @return the type of the volume
+     *
+     * @return types of the volume or an empty list if its not specified, unknown or cannot be detected
      */
-    public String getVolumeType() {
+    public List<String> getVolumeTypes() {
         JPVolumeTypeDetector typeDetector = MCRInjectorConfig.injector().getInstance(JPVolumeTypeDetector.class);
         return typeDetector.detect(this);
+    }
+
+    /**
+     * Checks if this volume has the given type.
+     * 
+     * @param type the type to check
+     * @return true if this volume is of the same type
+     */
+    public boolean isVolumeType(String type) {
+        return getVolumeTypes().contains(type);
     }
 
     public void setHiddenPosition(String position) {

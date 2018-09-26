@@ -1,5 +1,7 @@
 package fsu.jportal.backend;
 
+import java.util.List;
+
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -15,9 +17,9 @@ public interface JPVolumeTypeDetector {
      * Detects the type of the given volume.
      *
      * @param object the mycore object
-     * @return type of the volume or null if its not specified, unknown or cannot be detected
+     * @return types of the volume or an empty list if its not specified, unknown or cannot be detected
      */
-    default String detect(MCRObject object) {
+    default List<String> detect(MCRObject object) {
         return detect(new JPVolume(object));
     }
 
@@ -25,9 +27,9 @@ public interface JPVolumeTypeDetector {
      * Detects the type of the given volume.
      *
      * @param id mycore object id of the volume
-     * @return type of the volume or null if its not specified, unknown or cannot be detected
+     * @return types of the volume or an empty list if its not specified, unknown or cannot be detected
      */
-    default String detect(MCRObjectID id) {
+    default List<String> detect(MCRObjectID id) {
         return detect(new JPVolume(id));
     }
 
@@ -35,8 +37,8 @@ public interface JPVolumeTypeDetector {
      * Detects the type of the given volume.
      * 
      * @param volume the volume to check
-     * @return type of the volume or null if its not specified, unknown or cannot be detected
+     * @return types of the volume or an empty list if its not specified, unknown or cannot be detected
      */
-    String detect(JPVolume volume);
+    List<String> detect(JPVolume volume);
 
 }

@@ -12,7 +12,7 @@
     <xsl:apply-templates mode="jportal.link" select="*"/>
     <xsl:apply-templates mode="jportal.category" select="*"/>
     <xsl:call-template name="jportal.metadata.date.published">
-      <xsl:with-param name="ID" select="../@ID" />
+      <xsl:with-param name="ID" select="../@ID"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -28,9 +28,15 @@
 
   <!-- parent, order & ancestorPath -->
   <xsl:template match="parents/parent" mode="structure" priority="1">
-    <field name="parent"><xsl:value-of select="@xlink:href" /></field>
-    <field name="order"><xsl:value-of select="jpxml:getOrder(../../../@ID)" /></field>
-    <field name="ancestorPath"><xsl:value-of select="jpxml:getAncestorPath(../../../@ID)" /></field>
+    <field name="parent">
+      <xsl:value-of select="@xlink:href"/>
+    </field>
+    <field name="order">
+      <xsl:value-of select="jpxml:getOrder(../../../@ID)"/>
+    </field>
+    <field name="ancestorPath">
+      <xsl:value-of select="jpxml:getAncestorPath(../../../@ID)"/>
+    </field>
   </xsl:template>
 
   <!-- enhance article and volume -> hidden_jpjournalID required-->
@@ -58,9 +64,12 @@
 
     <!-- enhance volume -->
     <xsl:if test="contains($objectID, '_jpvolume_')">
-      <field name="volumeType">
-        <xsl:value-of select="jpxml:getVolumeType($objectID)" />
-      </field>
+      <xsl:variable name="volumeTypes" select="document(concat('volumeType:', $objectID))/types"/>
+      <xsl:for-each select="$volumeTypes/type">
+        <field name="volumeType">
+          <xsl:value-of select="text()"/>
+        </field>
+      </xsl:for-each>
     </xsl:if>
   </xsl:template>
 
@@ -91,7 +100,7 @@
     </field>
   </xsl:template>
 
-  <xsl:template match="maintitle[@inherited='0']" mode="jportal.journal" >
+  <xsl:template match="maintitle[@inherited='0']" mode="jportal.journal">
     <field name="journalTitle">
       <xsl:value-of select="text()"/>
     </field>
@@ -129,25 +138,25 @@
     <field name="date.{@type}">
       <xsl:choose>
         <xsl:when test="@date != ''">
-          <xsl:value-of select="@date" />
+          <xsl:value-of select="@date"/>
         </xsl:when>
         <xsl:when test="@from != '' and @until != ''">
-          <xsl:value-of select="concat('[', @from, ' TO ', @until, ']')" />
+          <xsl:value-of select="concat('[', @from, ' TO ', @until, ']')"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="@from" />
+          <xsl:value-of select="@from"/>
         </xsl:otherwise>
       </xsl:choose>
     </field>
     <xsl:if test="text()">
       <field name="dates">
-        <xsl:value-of select="text()" />
+        <xsl:value-of select="text()"/>
       </field>
     </xsl:if>
   </xsl:template>
 
   <xsl:template name="jportal.metadata.date.published">
-    <xsl:param name="ID" />
+    <xsl:param name="ID"/>
     <xsl:variable name="published" select="jpxml:getPublishedSolrDateRange($ID)"/>
     <xsl:if test="$published">
       <field name="published">
@@ -300,10 +309,12 @@
   </xsl:template>
 
   <!-- contentClassi and volContentClassi -->
-  <xsl:template match="*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]" mode="jportal.metadata">
+  <xsl:template match="*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]"
+                mode="jportal.metadata">
     <xsl:apply-templates select="*" mode="jportal.classification"/>
   </xsl:template>
-  <xsl:template match="*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]" mode="jportal.journal">
+  <xsl:template match="*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]"
+                mode="jportal.journal">
     <xsl:apply-templates select="*" mode="jportal.classification"/>
   </xsl:template>
 

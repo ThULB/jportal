@@ -2,6 +2,7 @@ package fsu.jportal.mets;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -65,14 +66,16 @@ public abstract class ZvddMetsTools {
     public static AmdSec createAmdSec(JPPeriodicalComponent component) {
         AmdSec amd = new AmdSec("amd_" + component.getId().toString());
         amd.setDigiprovMD(createDigiprovMD(component));
-        List<RightsMD> owners = component.getJournal().getParticipants("owner").stream()
+        // the FIRST owner is the main owner, because there is only one rightsMD section allowed
+        Optional<RightsMD> mainOwner = component.getJournal().getParticipants("owner").stream()
             .map(JPInstitution::new)
             .map(ZvddMetsTools::createRightsMD)
-            .collect(Collectors.toList());
-        if (owners.isEmpty()) {
-            owners.add(ZvddMetsTools.createDefaultRightsMD());
+            .findFirst();
+        if (mainOwner.isPresent()) {
+            amd.listRightsMD().add(mainOwner.get());
+        } else {
+            amd.listRightsMD().add(createDefaultRightsMD());
         }
-        owners.forEach(rightsMD -> amd.listRightsMD().add(rightsMD));
         return amd;
     }
 
