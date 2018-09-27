@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fsu.jportal.backend.JPComponent;
@@ -44,8 +42,8 @@ import org.mycore.mets.model.struct.SmLink;
  */
 public class MetsImportUtils {
 
-    public enum METS_TYPE {
-        unknown, llz, jvb, perthes
+    public enum MetsType {
+        unknown, enmap, llz, jvb, perthes
     }
 
     /**
@@ -187,12 +185,14 @@ public class MetsImportUtils {
 
     /**
      * Returns the type of the document.
+     *
+     * TODO: be aware that the llz type will not be detected!
      * 
      * @param doc mets.xml document
-     * @return enum of 'llz' | 'jvb' | 'perthes' | 'unknown' 
+     * @return enum of 'enmap' | 'jvb' | 'perthes' | 'unknown'
      */
-    public static METS_TYPE determineType(Document doc) {
-        METS_TYPE type = METS_TYPE.unknown;
+    public static MetsType determineType(Document doc) {
+        MetsType type = MetsType.unknown;
         if (MetsUtil.isENMAP(doc)) {
             Element mets = doc.getRootElement();
             XPathExpression<Text> titleExp = XPathFactory.instance().compile(
@@ -200,11 +200,11 @@ public class MetsImportUtils {
                 MetsUtil.METS_NS_LIST);
             Text title = titleExp.evaluateFirst(mets);
             if (title != null && title.getText().equals("Jenaer Volksblatt")) {
-                type = METS_TYPE.jvb;
+                type = MetsType.jvb;
             } else if (title != null && title.getText().endsWith("_Perthes")) {
-                type = METS_TYPE.perthes;
+                type = MetsType.perthes;
             } else {
-                type = METS_TYPE.llz;
+                type = MetsType.enmap;
             }
         }
         return type;
@@ -220,15 +220,17 @@ public class MetsImportUtils {
      */
     public static ENMAPConverter getConverter(Document metsXML) throws ConvertException {
         // load mets
-        METS_TYPE type = MetsImportUtils.determineType(metsXML);
+        MetsType type = MetsImportUtils.determineType(metsXML);
         // convert
         ENMAPConverter converter;
-        if (type.equals(METS_TYPE.llz)) {
+        if (type.equals(MetsType.llz)) {
             converter = new LLZMetsConverter();
-        } else if (type.equals(METS_TYPE.jvb)) {
+        } else if (type.equals(MetsType.jvb)) {
             converter = new JVBMetsConverter();
-        } else if (type.equals(METS_TYPE.perthes)) {
+        } else if (type.equals(MetsType.perthes)) {
             converter = new PerthesMetsConverter();
+        }else if (type.equals(MetsType.enmap)) {
+            converter = new ENMAPConverter();
         } else {
             throw new ConvertException("Unknown type. It should be either 'llz', 'jvb' or 'perthes'.");
         }

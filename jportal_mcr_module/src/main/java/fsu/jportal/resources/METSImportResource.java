@@ -29,13 +29,12 @@ import com.google.gson.JsonObject;
 import fsu.jportal.mets.BlockReferenceException;
 import fsu.jportal.mets.ConvertException;
 import fsu.jportal.mets.ENMAPConverter;
-import fsu.jportal.mets.JVBMetsImporter;
 import fsu.jportal.mets.LLZMetsImporter;
+import fsu.jportal.mets.MCRMetsImporter;
 import fsu.jportal.mets.MetsImportException;
 import fsu.jportal.mets.MetsImportUtils;
-import fsu.jportal.mets.MetsImportUtils.METS_TYPE;
+import fsu.jportal.mets.MetsImportUtils.MetsType;
 import fsu.jportal.mets.MetsImporter;
-import fsu.jportal.mets.PerthesMetsImporter;
 import fsu.jportal.util.MetsUtil;
 
 @Path("mets/import")
@@ -66,8 +65,8 @@ public class METSImportResource {
         } catch (Exception exc) {
             throw new InternalServerErrorException("Unable to check mets.xml for derivate " + derivateId, exc);
         }
-        METS_TYPE type = MetsImportUtils.determineType(doc);
-        if (!type.equals(METS_TYPE.unknown)) {
+        MetsType type = MetsImportUtils.determineType(doc);
+        if (!type.equals(MetsType.unknown)) {
             try {
                 Mets mets = convert(derivateId, doc, true);
                 validate(derivateId, mets);
@@ -94,16 +93,14 @@ public class METSImportResource {
         // build document stuff
         Document enmapMetsXML = MetsUtil.getMetsXMLasDocument(derivateId);
         Mets mcrMets = convert(derivateId, enmapMetsXML, false);
-        METS_TYPE type = MetsImportUtils.determineType(enmapMetsXML);
+        MetsType type = MetsImportUtils.determineType(enmapMetsXML);
 
         // import mets
         MetsImporter importer;
-        if (type.equals(METS_TYPE.jvb)) {
-            importer = new JVBMetsImporter();
-        } else if (type.equals(METS_TYPE.llz)) {
+        if (type.equals(MetsType.jvb) || type.equals(MetsType.perthes) || type.equals(MetsType.enmap)) {
+            importer = new MCRMetsImporter();
+        } else if (type.equals(MetsType.llz)) {
             importer = new LLZMetsImporter();
-        } else if (type.equals(METS_TYPE.perthes)) {
-            importer = new PerthesMetsImporter();
         } else {
             throw new MetsImportException("Unable to get importer class due type is not supported: " + type);
         }

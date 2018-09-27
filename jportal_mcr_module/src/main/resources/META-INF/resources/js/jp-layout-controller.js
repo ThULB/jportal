@@ -581,13 +581,13 @@ $(document).ready(function () {
 
   dialog.on("show.bs.modal", function (e) {
     $.get(jp.baseURL + "rsc/mets/import/check/" + dialog.attr("data-id")).done(function (e) {
-      if (e.type == "unknown") {
+      if (e.type === 'unknown') {
         failed({
           msg: "Unbekanntes mets.xml Dokument. Bitte wenden Sie sich an den Administrator."
         });
       } else if (e.error) {
         failed(e);
-      } else if (e.type == "llz" || e.type == 'jvb' || e.type == 'perthes') {
+      } else if (e.type === 'llz' || e.type === 'jvb' || e.type === 'perthes' || e.type === 'enmap') {
         importable();
       } else {
         failed(e);

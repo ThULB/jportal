@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * 
  * @author Matthias Eichner
  */
-public abstract class ENMAPConverter {
+public class ENMAPConverter {
 
     private static Logger LOGGER = LogManager.getLogger(ENMAPConverter.class);
 
@@ -245,7 +245,8 @@ public abstract class ENMAPConverter {
         try {
             StructLinkGenerator structLinkGenerator = new AreaStructLinkGenerator();
             structLinkGenerator.setFailEasy(failEasy);
-            StructLink structLink = structLinkGenerator.generate(mets.getPhysicalStructMap(), mets.getLogicalStructMap());
+            StructLink structLink = structLinkGenerator.generate(mets.getPhysicalStructMap(),
+                mets.getLogicalStructMap());
             mets.setStructLink(structLink);
         } catch (Exception exc) {
             Path tempFile = Files.createTempFile("mets", ".xml");
@@ -302,12 +303,12 @@ public abstract class ENMAPConverter {
         String id = enmapDiv.getAttributeValue("ID");
         String type = enmapDiv.getAttributeValue("TYPE");
         String label = enmapDiv.getAttributeValue("LABEL");
-        if(type == null) {
+        if (type == null) {
             LOGGER.warn("@TYPE of " + id + " is null.");
         } else {
             type = type.toLowerCase(Locale.ROOT);
         }
-        if(label == null) {
+        if (label == null) {
             LOGGER.warn("@LABEL of " + id + " is null.");
         } else {
             label = label.trim();
@@ -498,7 +499,7 @@ public abstract class ENMAPConverter {
                     ref.alto = alto;
                     refs.add(ref);
                 } else {
-                    LOGGER.error("Unable to find ALTO file for id: " + fileID);
+                    LOGGER.error("Unable to find ALTO file for id: {}", fileID);
                 }
             }
             return refs;
