@@ -709,10 +709,10 @@ public class JPXMLFunctions {
      * @return "artifact id" "version" "timestamp"
      */
     public static String getMCRVersion() {
-        return getVersion(MCRObject.class, "MCR-Artifact-Id", "Implementation-Version", null);
+        return getVersion(MCRObject.class, "MCR-Artifact-Id", "Implementation-Version", "Built-By");
     }
 
-    public static String getVersion(Class<?> clazz, String artifactKey, String versionKey, String timestampKey) {
+    public static String getVersion(Class<?> clazz, String artifactKey, String versionKey, String extraAttr) {
         String errorMessage = "unable to determine version of " + clazz.getSimpleName();
         try {
             String className = clazz.getSimpleName() + ".class";
@@ -725,7 +725,7 @@ public class JPXMLFunctions {
             Attributes attr = manifest.getMainAttributes();
             String artifact = artifactKey != null ? attr.getValue(artifactKey) : "";
             String version = versionKey != null ? attr.getValue(versionKey) : "";
-            String timestamp = timestampKey != null ? attr.getValue(timestampKey) : "";
+            String timestamp = extraAttr != null ? attr.getValue(extraAttr) : "";
             return String.format("%s %s %s", artifact, version, timestamp);
         } catch (Exception exc) {
             LOGGER.error(errorMessage, exc);
