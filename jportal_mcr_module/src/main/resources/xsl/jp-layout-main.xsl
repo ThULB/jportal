@@ -81,6 +81,11 @@
   </xsl:variable>
   <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing"/>
 
+  <xsl:variable name="callApplyTemplateHTML">
+    <callApplyTemplate></callApplyTemplate>
+  </xsl:variable>
+  <xsl:variable name="callApplyTemplate" select="xalan:nodeset($callApplyTemplateHTML)/callApplyTemplate"/>
+
   <xsl:template name="renderLayout">
     <html>
       <head>
@@ -96,6 +101,7 @@
 
         <!-- add html stuff to head for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/head/top/*"/>
+        <xsl:apply-templates select="$callApplyTemplate" mode="insert-html-head-top"/>
         <link href="{$WebApplicationBaseURL}webjars/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <link href="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen"/>
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css"/>
@@ -163,6 +169,7 @@
 
         <!-- add html stuff to head for MyCoReWebPage -->
         <xsl:copy-of select="/MyCoReWebPage/head/bottom/*"/>
+        <xsl:apply-templates select="$callApplyTemplate" mode="insert-html-head-bottom"/>
       </head>
       <body>
         <div class="background">
@@ -197,9 +204,10 @@
 
           <!-- delete -->
           <xsl:call-template name="jp.object.editing.delete.dialog"/>
-          <!-- add html stuff to end of body for MyCoReWebPage -->
-          <xsl:copy-of select="/MyCoReWebPage/body/*"/>
         </div>
+        <!-- add html stuff to end of body for MyCoReWebPage -->
+        <xsl:copy-of select="/MyCoReWebPage/body/*"/>
+        <xsl:apply-templates select="$callApplyTemplate" mode="insert-html-body"/>
       </body>
     </html>
   </xsl:template>
