@@ -700,7 +700,8 @@ public class JPXMLFunctions {
      * @return "artifact id" "version" "timestamp"
      */
     public static String getJPortalVersion() {
-        return getVersion(JPXMLFunctions.class, "MCR-Artifact-Id", "version", "timestamp");
+        return getManifestAttributes(JPXMLFunctions.class,"MCR-Artifact-Id", "version", "timestamp")
+                .collect(Collectors.joining(" "));
     }
 
     /**
@@ -709,28 +710,29 @@ public class JPXMLFunctions {
      * @return "artifact id" "version" "timestamp"
      */
     public static String getMCRVersion() {
-        return getVersion(MCRObject.class, "MCR-Artifact-Id", "Implementation-Version", "Built-By");
+        return getManifestAttributes(MCRObject.class, "MCR-Artifact-Id", "Implementation-Version", "timestamp", "Built-By")
+                .collect(Collectors.joining(" "));
     }
 
-    public static String getVersion(Class<?> clazz, String artifactKey, String versionKey, String extraAttr) {
+    private static Stream<String> getManifestAttributes(Class<?> clazz, String... attrNames) {
         String errorMessage = "unable to determine version of " + clazz.getSimpleName();
         try {
             String className = clazz.getSimpleName() + ".class";
             String classPath = clazz.getResource(className).toString();
             if (!classPath.startsWith("jar")) {
-                return errorMessage;
+                return Stream.of(errorMessage);
             }
             String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
             Manifest manifest = new Manifest(new URL(manifestPath).openStream());
             Attributes attr = manifest.getMainAttributes();
-            String artifact = artifactKey != null ? attr.getValue(artifactKey) : "";
-            String version = versionKey != null ? attr.getValue(versionKey) : "";
-            String timestamp = extraAttr != null ? attr.getValue(extraAttr) : "";
-            return String.format("%s %s %s", artifact, version, timestamp);
+
+            return Arrays.asList(attrNames)
+                  .stream()
+                  .map(attr::getValue);
         } catch (Exception exc) {
             LOGGER.error(errorMessage, exc);
         }
-        return errorMessage;
-    }
 
+        return Stream.of(errorMessage);
+    }
 }
