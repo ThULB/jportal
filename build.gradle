@@ -164,7 +164,6 @@ project(':jportal_mcr_module') {
         compile 'org.easymock:easymock:3.2'
         compile 'xmlunit:xmlunit:1.3'
         compile 'javax.xml.bind:jaxb-api:2.2.1'
-        compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
         compile 'com.google.inject:guice:4.1.0'
         compile 'org.marc4j:marc4j:2.8.2'
         compile 'com.neovisionaries:nv-i18n:1.23'
@@ -286,11 +285,17 @@ project(':jportal_webapp') {
 
     dependencies {
         h2db "com.h2database:h2:1.4.197"
-        gretty configurations.h2db
+        //gretty configurations.h2db
     }
 
     ext.appName = "jportal"
     ext.mcrHome = System.getProperty("user.home") + "/.mycore"
+
+    // -PmcrHome=/abs/path/to/mcrHome
+    if(project.hasProperty('mycoreHome')){
+        ext.mcrHome = project.property("mycoreHome");
+        println "Set mycore Home to " + mcrHome;
+    }
 
     ext.appPath = "$mcrHome/$appName"
     ext.confDir = "$project.projectDir/config"
@@ -346,6 +351,7 @@ project(':jportal_webapp') {
     }
 
     task runH2DB(type: JavaFork) {
+        println "H2DB using path " + appPath;
         classpath = configurations.h2db
         main = "org.h2.tools.Server"
         args = ["-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()]
@@ -359,6 +365,8 @@ project(':jportal_webapp') {
     }
 
     task runSolr(type: Exec) {
+        println "Solr home " + appPath + '/solr-home';
+        println "Solr server path " + solrServerPath;
         workingDir solrServerPath.toAbsolutePath().toString()
         ignoreExitValue true
         commandLine './bin/solr', 'restart', '-noprompt'
@@ -388,6 +396,7 @@ project(':jportal_webapp') {
     }
 
     task runSystem {
+        println "Run system using mcr path " + mcrHome;
         dependsOn configApp
         dependsOn runH2DB
         dependsOn runSolr

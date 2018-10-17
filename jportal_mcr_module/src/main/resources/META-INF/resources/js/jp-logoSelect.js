@@ -1,5 +1,5 @@
 $(function() {
-	var logoURLBase = jp.baseURL + "rsc/proxy/logo/";
+	var logoURLBase = jp.baseURL + "logo/";
 	checkIfEdit();
 
 	$("#thumbLogoPlain, #thumbLogoText").click(function() {

@@ -57,6 +57,24 @@
   </servlet>
 
   <servlet>
+    <servlet-name>LogoProxyServlet</servlet-name>
+    <servlet-class>fsu.jportal.servlet.LogoProxyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoProxyServlet</servlet-name>
+    <url-pattern>/logo/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>PDFProxyServlet</servlet-name>
+    <servlet-class>fsu.jportal.servlet.PDFProxyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PDFProxyServlet</servlet-name>
+    <url-pattern>/pdf/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>MCRDFGThumbServlet</servlet-name>
     <servlet-class>org.mycore.iview2.frontend.MCRThumbnailServlet</servlet-class>
     <init-param>

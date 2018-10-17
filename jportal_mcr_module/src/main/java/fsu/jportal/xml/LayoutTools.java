@@ -73,7 +73,7 @@ public abstract class LayoutTools {
             .map(JPPeriodicalComponent::getJournal)
             .flatMap(journal -> journal.getJournalTypeCategoryId("jportal_class_00000200"))
             .map(JOURNAL_ICON_MAP::get)
-            .map(imageName -> MCRFrontendUtil.getBaseURL() + "rsc/proxy/logo/journal/" + imageName)
+            .map(imageName -> MCRFrontendUtil.getBaseURL() + "logo/journal/" + imageName)
             .orElse("");
     }
 
