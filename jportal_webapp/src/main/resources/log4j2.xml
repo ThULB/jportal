@@ -13,6 +13,12 @@
       <TimeBasedTriggeringPolicy />
       <SizeBasedTriggeringPolicy size="20 MB"/>
     </RollingFile>
+    <RollingFile name="RollingDebugLogFile" fileName="${sys:Debug.log}/debug.log"
+                 filePattern="${sys:Debug.log}/debug-%d{yyyMMdd}-%i.log">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <TimeBasedTriggeringPolicy />
+      <SizeBasedTriggeringPolicy size="20 MB"/>
+    </RollingFile>
   </Appenders>
   <Loggers>
     <Root level="info">
@@ -23,6 +29,15 @@
     <!--</Logger>-->
     <Logger name="org.mycore.urn.rest.URNProcessor" level="info" additivity="false">
       <AppenderRef ref="RollingURNLogFile"/>
+    </Logger>
+    <Logger name="org.mycore.common.MCRSession" level="debug" additivity="false">
+      <AppenderRef ref="RollingDebugLogFile"/>
+    </Logger>
+    <Logger name="org.mycore.frontend.servlets.MCRServlet" level="debug" additivity="false">
+      <AppenderRef ref="RollingDebugLogFile"/>
+    </Logger>
+    <Logger name="org.mycore.frontend.jersey.filter.MCRSessionHookFilter" level="debug" additivity="false">
+      <AppenderRef ref="RollingDebugLogFile"/>
     </Logger>
   </Loggers>
 </Configuration>
