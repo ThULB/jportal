@@ -263,7 +263,7 @@
         </xsl:choose>
       </xsl:attribute>
       <xsl:variable name="participant" select="document(concat('mcrobject:',@xlink:href))/mycoreobject" />
-      
+
       <!-- identifier -->
       <xsl:variable name="gnd" select="layoutTools:getIdentifier(@xlink:href, 'gnd')" />
       <xsl:variable name="ppn" select="layoutTools:getIdentifier(@xlink:href, 'ppn')" />
@@ -355,7 +355,14 @@
       <xsl:variable name="dateOfDeath" select="$participant/metadata/def.dateOfDeath/dateOfDeath" />
       <xsl:if test="$dateOfBirth | $dateOfDeath">
         <mods:namePart type="date">
-          <xsl:value-of select="concat($dateOfBirth,' - ',$dateOfDeath)" />
+          <xsl:variable name="_dateOfDeath">
+            <xsl:choose>
+            <xsl:when test="$dateOfDeath != ''">
+              <xsl:value-of select="concat(' - ',$dateOfDeath)" />
+            </xsl:when>
+          </xsl:choose>
+          </xsl:variable>
+          <xsl:value-of select="concat($dateOfBirth,$_dateOfDeath)" />
         </mods:namePart>
       </xsl:if>
     </mods:name>
@@ -435,6 +442,9 @@
   <xsl:template mode="jp.mods.extension" match="mycoreobject">
     <mods:extension>
       <urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
+        <xsl:comment>
+          template mode="jp.mods.extension" match="mycoreobject"
+        </xsl:comment>
         <xsl:call-template name="ownerEntity">
           <xsl:with-param name="type" select="'operator'" />
         </xsl:call-template>
