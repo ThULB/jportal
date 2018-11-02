@@ -162,7 +162,7 @@ public class LogoResolver implements URIResolver {
 
         @Override
         public boolean supportRole(String role) {
-            return Arrays.asList("operator", "sponsor", "partner").contains(role);
+            return Arrays.asList("owner", "operator", "sponsor", "partner").contains(role);
         }
 
         @Override
@@ -187,7 +187,11 @@ public class LogoResolver implements URIResolver {
 
         protected Element createLogoTag(String url) {
             Element logoTag = createUrmelTag("logo");
-            logoTag.setAttribute(createXlinkAttr("href", url));
+            //
+            String basePart = MCRFrontendUtil.getBaseURL();
+            String proxyLogoPart = MCRConfiguration.instance().getString("JP.Site.Logo.Proxy.url");
+            String logoURL = basePart + (url.startsWith(proxyLogoPart) ? "" : proxyLogoPart) + url;
+            logoTag.setAttribute(createXlinkAttr("href", logoURL));
             logoTag.setAttribute(createXlinkAttr("type", "resource"));
             return logoTag;
         }
