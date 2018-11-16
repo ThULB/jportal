@@ -442,9 +442,6 @@
   <xsl:template mode="jp.mods.extension" match="mycoreobject">
     <mods:extension>
       <urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
-        <xsl:comment>
-          template mode="jp.mods.extension" match="mycoreobject"
-        </xsl:comment>
         <xsl:call-template name="ownerEntity">
           <xsl:with-param name="type" select="'operator'" />
         </xsl:call-template>
