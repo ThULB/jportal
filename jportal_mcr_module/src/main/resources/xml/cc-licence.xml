@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licence type
+pdm: Kennzeichnung als Public Domain,
+cc0: Lizensierung unter CC0-Lizenz,
+cc-by: Lizensierung unter CC-BY-Lizenz,
+cc-by-sa: Lizensierung unter CC-BY-SA-Lizenz,
+cc-by-nd: Lizensierung unter CC-BY-ND-Lizenz,
+cc-by-nc: Lizensierung unter CC-BY-NC-Lizenz,
+cc-by-nc-sa: Lizensierung unter CC-BY-NC-SA-Lizenz,
+cc-by-nc-nd: Lizensierung unter CC-BY-NC-ND-Lizenz,
+reserved: sonstiger Rechtevorbehalt.
+-->
+<licence>
+    <type name="cc0" url="https://creativecommons.org/publicdomain/zero/1.0/legalcode" img="cc-zero.svg"/>
+    <type name="cc-by" url="https://creativecommons.org/licenses/by/4.0/legalcode" img="by.svg"/>
+    <type name="cc-by-nd" url="https://creativecommons.org/licenses/by-nd/4.0/legalcode" img="by-nd.svg"/>
+    <type name="cc-by-nc" url="https://creativecommons.org/licenses/by-nc/4.0/legalcode" img="by-nc.eu.svg"/>
+    <type name="cc-by-nc-sa" url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode" img="by-nc-sa.eu.svg"/>
+    <type name="cc-by-nc-nd" url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode" img="by-nc-nd.eu.svg"/>
+</licence>
