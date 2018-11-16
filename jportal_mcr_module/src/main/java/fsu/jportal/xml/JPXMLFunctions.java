@@ -1,5 +1,7 @@
 package fsu.jportal.xml;
 
+import static org.apache.solr.common.params.CommonParams.*;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +40,11 @@ import fsu.jportal.util.MetsUtil;
 import fsu.jportal.util.ResolverUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.params.ModifiableSolrParams;
 import org.jdom2.input.DOMBuilder;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
@@ -46,6 +53,7 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -55,6 +63,7 @@ import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.MCRURL;
 import org.mycore.services.i18n.MCRTranslation;
+import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -734,5 +743,36 @@ public class JPXMLFunctions {
         }
 
         return Stream.of(errorMessage);
+    }
+
+    public static String getLicence(String id){
+        MCRObjectID mcrObjectID = MCRObjectID.getInstance(id);
+        String typeId = mcrObjectID.getTypeId();
+
+        if(typeId.equals("derivate")){
+            MCRDerivate mcrDerivate = MCRMetadataManager.retrieveMCRDerivate(mcrObjectID);
+            mcrObjectID = mcrDerivate.getOwnerID();
+        }
+
+        String cc0Exclude = MCRConfiguration.instance()
+                                        .getString("JP.CC0.Exclude", "");
+        SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
+        ModifiableSolrParams params = new ModifiableSolrParams();
+        params.set(START, START_DEFAULT);
+        params.set(ROWS, ROWS_DEFAULT);
+        params.set(Q, String.format("+id:%s %s", mcrObjectID.toString(), cc0Exclude));
+        QueryResponse solrResponse = null;
+        try {
+            solrResponse = solrClient.query(params);
+            SolrDocumentList solrResults = solrResponse.getResults();
+
+            return solrResults.getNumFound() > 0 ?  "cc0" : "reserved";
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "reserved";
     }
 }

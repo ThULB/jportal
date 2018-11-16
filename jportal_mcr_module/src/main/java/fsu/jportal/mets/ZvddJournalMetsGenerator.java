@@ -14,6 +14,7 @@ import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
+import org.mycore.mets.model.files.FileSec;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
@@ -52,6 +53,11 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
         mets.addAmdSec(ZvddMetsTools.createAmdSec(journal));
         mets.addStructMap(createLogicalStructMap());
         mets.setStructLink(null);
+
+        if(mets.getFileSec().getFileGroups().isEmpty()){
+            mets.setFileSec(null);
+        }
+
         return mets;
     }
 

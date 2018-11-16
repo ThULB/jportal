@@ -12,6 +12,7 @@ import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.JPMetaDate;
+import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
@@ -56,6 +57,70 @@ import fsu.jportal.xml.JPXMLFunctions;
  * @author Matthias Eichner
  */
 public abstract class ZvddMetsTools {
+    public interface Institution {
+            String getTitle();
+            Optional<String> getLogoURL();
+            Optional<String> getURL();
+            String getID();
+    }
+
+    public static Institution wrap(JPInstitution institution){
+        return new Institution() {
+            @Override
+            public String getTitle() {
+                return institution.getTitle();
+            }
+
+            @Override
+            public Optional<String> getLogoURL() {
+                return institution.getLogo()
+                                  .map(JPXMLFunctions::getLogoURL);
+            }
+
+            @Override
+            public Optional<String> getURL() {
+                return institution.getURL()
+                                  .map(MCRMetaLink::getXLinkHref);
+            }
+
+            @Override
+            public String getID() {
+                return "RIGHTS_" + institution.getId().toString();
+            }
+        };
+    }
+
+    /**
+     * Creates the default Institution using the mycore properties JP.Site.Owner.*. This method should only be used if
+     * the journals does not specify owners.
+     *
+     * @return a new rightsMD object using mycore properties
+     */
+    public static Institution defaultInst(){
+        MCRConfiguration conf = MCRConfiguration.instance();
+        return new Institution() {
+            @Override
+            public String getTitle() {
+                return conf.getString("JP.Site.Owner.label");
+            }
+
+            @Override
+            public Optional<String> getLogoURL() {
+                return Optional.ofNullable(conf.getString("JP.Site.Footer.Logo.url"));
+            }
+
+            @Override
+            public Optional<String> getURL() {
+                return Optional.ofNullable(conf.getString("JP.Site.Owner.url"))
+                               .map(MCRFrontendUtil.getBaseURL()::concat);
+            }
+
+            @Override
+            public String getID() {
+                return "RIGHTS";
+            }
+        };
+    }
 
     /**
      * Helper method to build the AmdSec for the given component.
@@ -64,37 +129,23 @@ public abstract class ZvddMetsTools {
      * @return a new AmdSec containing digiprovMD and rightsMD section
      */
     public static AmdSec createAmdSec(JPPeriodicalComponent component) {
-        AmdSec amd = new AmdSec("amd_" + component.getId().toString());
+        String id = component.getId().toString();
+        AmdSec amd = new AmdSec("amd_" + id);
         amd.setDigiprovMD(createDigiprovMD(component));
         // the FIRST owner is the main owner, because there is only one rightsMD section allowed
-        Optional<RightsMD> mainOwner = component.getJournal().getParticipants("owner").stream()
-            .map(JPInstitution::new)
-            .map(ZvddMetsTools::createRightsMD)
-            .findFirst();
-        if (mainOwner.isPresent()) {
-            amd.listRightsMD().add(mainOwner.get());
-        } else {
-            amd.listRightsMD().add(createDefaultRightsMD());
-        }
-        return amd;
-    }
+        Institution mainOwner = component
+                .getJournal()
+                .getParticipants("owner")
+                .stream()
+                .findFirst()
+                .map(JPInstitution::new)
+                .map(ZvddMetsTools::wrap)
+                .orElse(defaultInst());
 
-    /**
-     * Creates the default rightsMD using the mycore properties JP.Site.Owner.*. This method should only be used if
-     * the journals does not specify owners.
-     *
-     * @return a new rightsMD object using mycore properties
-     */
-    public static RightsMD createDefaultRightsMD() {
-        MCRConfiguration conf = MCRConfiguration.instance();
-        Element dvRights = dv("rights");
-        String label = conf.getString("JP.Site.Owner.label");
-        String logo = conf.getString("JP.Site.Footer.Logo.url");
-        String siteURL = conf.getString("JP.Site.Owner.url");
-        dvRights.addContent(dv("owner").setText(label));
-        dvRights.addContent(dv("ownerLogo").setText(logo));
-        dvRights.addContent(dv("ownerSiteURL").setText(MCRFrontendUtil.getBaseURL() + siteURL));
-        return buildRightsMD("RIGHTS", dvRights);
+        String licence = JPXMLFunctions.getLicence(id);
+        amd.listRightsMD().add(createRightsMD(mainOwner, licence));
+
+        return amd;
     }
 
     /**
@@ -103,17 +154,19 @@ public abstract class ZvddMetsTools {
      * @param institution the institution to convert
      * @return a new rightsMD object
      */
-    public static RightsMD createRightsMD(JPInstitution institution) {
+    public static RightsMD createRightsMD(Institution institution, String licence) {
         Element dvRights = dv("rights");
         dvRights.addContent(dv("owner").setText(institution.getTitle()));
-        institution.getLogo()
-            .map(JPXMLFunctions::getLogoURL)
-            .map(logoURL -> dv("ownerLogo").setText(logoURL))
-            .ifPresent(dvRights::addContent);
+        institution.getLogoURL()
+                   .map(logoURL -> dv("ownerLogo").setText(logoURL))
+                   .ifPresent(dvRights::addContent);
+
         institution.getURL()
-            .map(url -> dv("ownerSiteURL").setText(url.getXLinkHref()))
-            .ifPresent(dvRights::addContent);
-        return buildRightsMD("RIGHTS_" + institution.getId().toString(), dvRights);
+                   .map(url -> dv("ownerSiteURL").setText(url))
+                   .ifPresent(dvRights::addContent);
+
+        dvRights.addContent(dv("licence").setText(licence));
+        return buildRightsMD(institution.getID(), dvRights);
     }
 
     public static RightsMD buildRightsMD(String id, Element dvRights) {
