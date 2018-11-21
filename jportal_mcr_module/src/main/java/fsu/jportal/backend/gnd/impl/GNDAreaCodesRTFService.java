@@ -2,7 +2,9 @@ package fsu.jportal.backend.gnd.impl;
 
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -42,7 +44,13 @@ public class GNDAreaCodesRTFService implements GNDAreaCodesService {
             Namespace skosNS = rootElement.getNamespace("skos");
             Namespace rdfNS = rootElement.getNamespace("rdf");
             Namespace rdfsNS = rootElement.getNamespace("rdfs");
-            rootElement.getChildren("Concept", skosNS).forEach(concept -> {
+
+            Function<Element, Stream<Element>> nestedConcept = concept -> findNestedConcept(concept, skosNS);
+
+            rootElement.getChildren("Concept", skosNS)
+                       .stream()
+                       .flatMap(nestedConcept)
+                       .forEach(concept -> {
                 String areaCode = concept.getAttributeValue("about", rdfNS);
                 String gndId = concept.getChildren("seeAlso", rdfsNS).stream()
                     .map(seeAlso -> seeAlso.getAttributeValue("resource", rdfNS))
@@ -52,10 +60,22 @@ public class GNDAreaCodesRTFService implements GNDAreaCodesService {
                     this.data.put(areaCode.substring(areaCode.lastIndexOf('#') + 1), gndId);
                 }
             });
+
         } catch (Exception exc) {
             LogManager.getLogger()
                 .error("Unable to load or parse 'https://d-nb.info/standards/vocab/gnd/geographic-area-code.rdf'", exc);
         }
+    }
+
+    private Stream<Element> findNestedConcept(Element concept, Namespace skosNS){
+        ArrayList<Element> conceptList = new ArrayList<>();
+        conceptList.add(concept);
+
+        Optional.ofNullable(concept.getChild("broader", skosNS))
+                .map(b -> b.getChild("Concept", skosNS))
+                .ifPresent(c -> conceptList.add(c));
+
+        return conceptList.stream();
     }
 
     /**
