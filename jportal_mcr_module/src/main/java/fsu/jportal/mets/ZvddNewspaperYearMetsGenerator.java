@@ -45,7 +45,17 @@ public class ZvddNewspaperYearMetsGenerator implements MCRMETSGenerator {
         Mets mets = new Mets();
         mets.removeStructMap(PhysicalStructMap.TYPE);
         mets.addDmdSec(ZvddMetsTools.createDmdSec(volume, "volume"));
+        mets.addAmdSec(ZvddMetsTools.createAmdSec(volume));
         mets.addStructMap(createLogicalStructMap());
+
+        if(mets.getFileSec().getFileGroups().isEmpty()){
+            mets.setFileSec(null);
+        }
+
+        if(mets.getStructLink().getSmLinks().isEmpty()){
+            mets.setFileSec(null);
+        }
+
         return mets;
     }
 
@@ -62,7 +72,9 @@ public class ZvddNewspaperYearMetsGenerator implements MCRMETSGenerator {
         journalDiv.setMptr(mptr);
 
         // the year itself
-        LogicalDiv yearDiv = new LogicalDiv("log_" + volume.getId(), "year", volume.getTitle());
+        String publishedDate = ZvddMetsTools.getPublishedDate(volume);
+
+        LogicalDiv yearDiv = new LogicalDiv("log_" + volume.getId(), "year", publishedDate);
         yearDiv.setDmdId("dmd_" + volume.getId());
         journalDiv.add(yearDiv);
 
@@ -125,7 +137,7 @@ public class ZvddNewspaperYearMetsGenerator implements MCRMETSGenerator {
             if (!issues.isEmpty()) {
                 int day = publishedTemporal.map(t -> t.get(ChronoField.DAY_OF_MONTH)).orElse(1);
                 if (dayDiv == null || dayDiv.getOrder() != day) {
-                    dayDiv = new LogicalDiv("log_day_" + day, "day", String.valueOf(day));
+                    dayDiv = new LogicalDiv("log_day_" + day + "_" + month, "day", String.valueOf(day));
                     dayDiv.setOrder(day);
                     dayDiv.setOrderLabel(String.valueOf(day));
                     monthDiv.add(dayDiv);

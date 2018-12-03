@@ -119,11 +119,15 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
      * @param volume the volume to convert
      * @return a new logical div
      */
-    protected LogicalDiv toLogicalDiv(JPVolume volume) {
-        LogicalDiv div = new LogicalDiv("log_" + volume.getId(), "volume", ZvddMetsTools.getTitle(volume));
+    protected LogicalDiv toLogicalDiv(JPVolume volume, String type) {
+        LogicalDiv div = new LogicalDiv("log_" + volume.getId(), type, ZvddMetsTools.getTitle(volume));
         String href = MCRFrontendUtil.getBaseURL() + "rsc/mets/zvdd/" + volume.getId();
         div.setMptr(new Mptr(href, LOCTYPE.URL));
         return div;
+    }
+
+    protected LogicalDiv toLogicalDiv(JPVolume volume) {
+        return toLogicalDiv(volume, "year");
     }
 
     /**

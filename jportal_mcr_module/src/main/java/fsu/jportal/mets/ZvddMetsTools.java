@@ -57,6 +57,15 @@ import fsu.jportal.xml.JPXMLFunctions;
  * @author Matthias Eichner
  */
 public abstract class ZvddMetsTools {
+
+    public static String getPublishedDate(JPVolume volume) {
+        Integer order = calculateOrder(volume);
+        return volume
+                .getPublishedDate()
+                .map(JPMetaDate::toString)
+                .orElse(String.valueOf(order));
+    }
+
     public interface Institution {
             String getTitle();
             Optional<String> getLogoURL();
@@ -420,7 +429,7 @@ public abstract class ZvddMetsTools {
         // mods:part
         Integer order = ZvddMetsTools.calculateOrder(volume);
         String number = volume.getPublishedDate().map(JPMetaDate::toString).orElse(String.valueOf(order));
-        Element part = getModsPart(order, type, number);
+        Element part = getModsPart(number, type, number);
         mods.addContent(part);
         return mods;
     }
@@ -541,9 +550,9 @@ public abstract class ZvddMetsTools {
      * @param detailNumber the detail number like the published date
      * @return a new mods part element
      */
-    public static Element getModsPart(Integer order, String detailType, String detailNumber) {
+    public static Element getModsPart(String order, String detailType, String detailNumber) {
         Element part = mods("part")
-            .setAttribute("order", String.valueOf(order))
+            .setAttribute("order", order)
             .setAttribute("type", "host");
         Element detail = mods("detail").setAttribute("type", detailType);
         Element number = mods("number").setText(detailNumber);

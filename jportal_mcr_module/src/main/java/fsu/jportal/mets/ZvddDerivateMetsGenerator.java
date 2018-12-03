@@ -34,6 +34,13 @@ import fsu.jportal.util.JPComponentUtil;
  * @author Matthias Eichner
  */
 public class ZvddDerivateMetsGenerator extends DfgViewerMetsGenerator {
+    public ZvddDerivateMetsGenerator() {
+    }
+
+    public ZvddDerivateMetsGenerator(String id) {
+        this();
+        setup(id);
+    }
 
     @Override
     public synchronized Mets generate() throws MCRException {

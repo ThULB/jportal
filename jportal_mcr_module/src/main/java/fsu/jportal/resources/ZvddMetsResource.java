@@ -83,6 +83,15 @@ public class ZvddMetsResource {
     }
 
     private Response handleMagazineVolume(JPVolume volume) {
+//        return findDerivate(volume)
+//                .map(JPDerivateComponent::getId)
+//                .map(MCRObjectID::toString)
+//                .map(ZvddDerivateMetsGenerator::new)
+//                .map(this::getResponse)
+//                .orElseThrow(() ->
+//                        new BadRequestException("Object " + volume.getId() + " does not contain a fitting derivate."));
+
+
         Optional<JPDerivateComponent> derivateOptional = findDerivate(volume);
         if (!derivateOptional.isPresent()) {
             throw new BadRequestException("Object " + volume.getId() + " does not contain a fitting derivate.");

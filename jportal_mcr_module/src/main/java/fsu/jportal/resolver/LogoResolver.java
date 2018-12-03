@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.transform.Source;
@@ -34,7 +35,7 @@ import fsu.jportal.util.JPComponentUtil;
 /**
  * URIResolver to retrieve the logos of participant partners and owners. You can choose between different xml mappers
  * which define how the returning xml looks like. Right now there are two mappers implemented:
- * 
+ *
  * <ul>
  *     <li>footer: used to transform the logos of the bottom of the page</li>
  *     <li>mods: used to create the http://www.urmel-dl.de/ns/mods-entities in the mods part for oai</li>
@@ -88,11 +89,15 @@ public class LogoResolver implements URIResolver {
             String role = participant.getType();
             if (role != null && mapper.supportRole(role)) {
                 String participantID = participant.getXLinkHref();
-                JPComponentUtil
-                    .get(MCRObjectID.getInstance(participantID), JPInstitution.class)
-                    .ifPresent(institution -> entities.add(createLogoEntity(role, institution)));
+                MCRObjectID mcrID = MCRObjectID.getInstance(participantID);
+                if (JPInstitution.TYPE.equals(mcrID.getTypeId())) {
+                    JPComponentUtil
+                            .get(mcrID, JPInstitution.class)
+                            .ifPresent(institution -> entities.add(createLogoEntity(role, institution)));
+                }
             }
         }
+
         return mapper.toXML(entities);
     }
 
