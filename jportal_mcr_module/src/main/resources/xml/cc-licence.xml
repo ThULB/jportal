@@ -14,6 +14,7 @@ reserved: sonstiger Rechtevorbehalt.
 <licence>
     <type name="cc0" url="https://creativecommons.org/publicdomain/zero/1.0/legalcode" img="cc-zero.svg"/>
     <type name="cc-by" url="https://creativecommons.org/licenses/by/4.0/legalcode" img="by.svg"/>
+    <type name="cc-by-sa" url="https://creativecommons.org/licenses/by-sa/4.0/legalcode" img="by-sa.svg"/>
     <type name="cc-by-nd" url="https://creativecommons.org/licenses/by-nd/4.0/legalcode" img="by-nd.svg"/>
     <type name="cc-by-nc" url="https://creativecommons.org/licenses/by-nc/4.0/legalcode" img="by-nc.eu.svg"/>
     <type name="cc-by-nc-sa" url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode" img="by-nc-sa.eu.svg"/>

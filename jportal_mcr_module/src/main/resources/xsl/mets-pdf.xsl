@@ -3,14 +3,14 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 xmlns:mets="http://www.loc.gov/METS/"
-                xmlns:dv="http://dfg-viewer.de/"
-                xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                exclude-result-prefixes="xsl xlink mets mods"
 >
 
   <xsl:param name="ThumbnailBaseURL" select="concat($ServletsBaseURL,'MCRDFGThumbnail/')" />
   <xsl:param name="ImageBaseURL" select="concat($ServletsBaseURL,'MCRTileCombineServlet/')" />
-  <xsl:param name="CCImageURL" select="concat($WebApplicationBaseURL,'images/cc/')" />
   <xsl:include href="mets-dfgProfile.xsl" />
+  <xsl:include href="copynodes.xsl" />
 
   <xsl:template match="mets:div[$masterFileGrp/mets:file/@ID=mets:fptr/@FILEID]">
     <xsl:copy>
@@ -52,34 +52,5 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="mets:amdSec">
-    <xsl:copy>
-      <xsl:attribute name="ID">
-        <xsl:value-of select="@ID"/>
-      </xsl:attribute>
-      <xsl:variable name="id" select="substring-after(@ID, 'amd_')"/>
-      <xsl:variable name="cc-licence" select="document('../xml/cc-licence.xml')/licence"/>
-      <xsl:variable name="licence" select="jpxml:getLicence($id)"/>
-      <mets:rightsMD ID="{concat('RIGHTS_', $id)}">
-          <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="DVRIGHTS">
-              <mets:xmlData>
-                  <dv:rights>
-                    <dv:licence>
-                      <xsl:if test="$cc-licence/type[@name=$licence]">
-                        <xsl:attribute name="img">
-                          <xsl:value-of select="concat($CCImageURL, $cc-licence/type[@name=$licence]/@img)"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="url">
-                          <xsl:value-of select="$cc-licence/type[@name=$licence]/@url"/>
-                        </xsl:attribute>
-                      </xsl:if>
-                      <xsl:value-of select="$licence"/>
-                    </dv:licence>
-                  </dv:rights>
-              </mets:xmlData>
-          </mets:mdWrap>
-      </mets:rightsMD>
-    </xsl:copy>
-  </xsl:template>
-
+  <!-- see PDF-STUFF in metsmeta-dfg.xsl for further PDF related transformation -->
 </xsl:stylesheet>

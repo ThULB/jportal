@@ -107,5 +107,4 @@
       </mets:mdWrap>
     </mets:dmdSec>
   </xsl:template>
-
 </xsl:stylesheet>

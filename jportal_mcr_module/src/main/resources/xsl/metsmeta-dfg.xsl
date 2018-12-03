@@ -433,6 +433,7 @@
           <mods:mods>
             <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject" />
             <xsl:apply-templates mode="jp.mods.extension" select="$sourcedoc/mycoreobject" />
+            <xsl:apply-templates mode="copyRight" select="$sourcedoc/mycoreobject"/>
           </mods:mods>
         </mets:xmlData>
       </mets:mdWrap>
@@ -448,6 +449,19 @@
         <xsl:apply-templates mode="entities" select="." />
       </urmel:entities>
     </mods:extension>
+  </xsl:template>
+
+  <xsl:param name="CCImageURL" select="concat($WebApplicationBaseURL,'images/cc/')" />
+
+  <xsl:template mode="copyRight" match="mycoreobject">
+    <xsl:variable name="cc-licence" select="document('../xml/cc-licence.xml')/licence"/>
+    <xsl:variable name="licence" select="jpxml:getLicence(@ID)"/>
+
+    <mods:accessCondition>
+      <licence type="{$licence}"
+               imgURL="{concat($CCImageURL, $cc-licence/type[@name=$licence]/@img)}"
+               href="{$cc-licence/type[@name=$licence]/@url}"/>
+    </mods:accessCondition>
   </xsl:template>
 
 </xsl:stylesheet>
