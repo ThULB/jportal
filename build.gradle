@@ -1,10 +1,10 @@
 import java.nio.file.Files
 import java.nio.file.Paths
-import com.github.jengelman.gradle.plugins.processes.tasks.JavaFork
+//import com.github.jengelman.gradle.plugins.processes.tasks.JavaFork
 
 plugins {
-    id 'org.gretty' version '2.2.0' apply false
-    id 'com.github.johnrengelman.processes' version '0.4.1' apply false
+    id 'org.gretty' version '2.2.0'
+    //id 'com.github.johnrengelman.processes' version '0.4.1' apply false
 }
 
 def resourcePaths = new HashSet<File>();
@@ -228,7 +228,7 @@ project(':jportal_IT-TestData') {
 project(':jportal_webapp') {
     apply plugin: 'war'
     apply plugin: 'org.gretty'
-    apply plugin: 'com.github.johnrengelman.processes'
+//    apply plugin: 'com.github.johnrengelman.processes'
 
     configurations {
         runtime.exclude group: "org.slf4j", module: "slf4j-nop"
@@ -350,35 +350,35 @@ project(':jportal_webapp') {
         }
     }
 
-    task runH2DB(type: JavaFork) {
-        println "H2DB using path " + appPath;
-        classpath = configurations.h2db
-        main = "org.h2.tools.Server"
-        args = ["-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()]
-    }
+//    task runH2DB(type: JavaFork) {
+//        println "H2DB using path " + appPath;
+//        classpath = configurations.h2db
+//        main = "org.h2.tools.Server"
+//        args = ["-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()]
+//    }
 
-    task stopH2DB(type: JavaExec) {
-        classpath = configurations.h2db
-        main = "org.h2.tools.Server"
-        args = ["-tcpShutdown", "tcp://localhost:9092"]
-        ignoreExitValue true
-    }
+//    task stopH2DB(type: JavaExec) {
+//        classpath = configurations.h2db
+//        main = "org.h2.tools.Server"
+//        args = ["-tcpShutdown", "tcp://localhost:9092"]
+//        ignoreExitValue true
+//    }
 
-    task runSolr(type: Exec) {
-        println "Solr home " + appPath + '/solr-home';
-        println "Solr server path " + solrServerPath;
-        workingDir solrServerPath.toAbsolutePath().toString()
-        ignoreExitValue true
-        commandLine './bin/solr', 'restart', '-noprompt'
-        args '-s', appPath + '/solr-home'
-        args '-p', solrPort
-    }
+//    task runSolr(type: Exec) {
+//        println "Solr home " + appPath + '/solr-home';
+//        println "Solr server path " + solrServerPath;
+//        workingDir solrServerPath.toAbsolutePath().toString()
+//        ignoreExitValue true
+//        commandLine './bin/solr', 'restart', '-noprompt'
+//        args '-s', appPath + '/solr-home'
+//        args '-p', solrPort
+//    }
 
-    task stopSolr(type: Exec) {
-        workingDir solrServerPath.toAbsolutePath().toString()
-        ignoreExitValue true
-        commandLine './bin/solr', 'stop'
-    }
+//    task stopSolr(type: Exec) {
+//        workingDir solrServerPath.toAbsolutePath().toString()
+//        ignoreExitValue true
+//        commandLine './bin/solr', 'stop'
+//    }
 
     gretty {
         servletContainer 'tomcat9'
@@ -395,17 +395,17 @@ project(':jportal_webapp') {
         systemProperty "URN.log", "$appPath/urnlog"
     }
 
-    task runSystem {
-        println "Run system using mcr path " + mcrHome;
-        dependsOn configApp
-        dependsOn runH2DB
-        dependsOn runSolr
-    }
-
-    task stopSystem {
-        dependsOn stopSolr
-        dependsOn stopH2DB
-    }
+//    task runSystem {
+//        println "Run system using mcr path " + mcrHome;
+//        dependsOn configApp
+//        dependsOn runH2DB
+//        dependsOn runSolr
+//    }
+//
+//    task stopSystem {
+//        dependsOn stopSolr
+//        dependsOn stopH2DB
+//    }
 
 }
 
@@ -417,5 +417,5 @@ configurations.all {
 }
 
 wrapper {
-    gradleVersion = '4.5'
+    gradleVersion = '5.1.1'
 }
