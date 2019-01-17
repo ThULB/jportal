@@ -754,6 +754,25 @@ public class JPXMLFunctions {
             mcrObjectID = mcrDerivate.getOwnerID();
         }
 
+        List<MCRObjectID> ownerList = JPComponentUtil
+                .getPeriodical(mcrObjectID)
+                .map(JPPeriodicalComponent::getJournal)
+                .map(journal -> journal.getParticipants("owner"))
+                .orElse(Collections.emptyList());
+
+        if(ownerList.isEmpty()){
+            return "reserved";
+        }
+
+        boolean thulbIsOwner = ownerList
+                .stream()
+                .map(MCRObjectID::toString)
+                .anyMatch(mcrID -> mcrID.equals("jportal_jpinst_00000001"));
+
+        if(!thulbIsOwner){
+            return "cc-by-nc-sa";
+        }
+
         String cc0Exclude = MCRConfiguration.instance()
                                         .getString("JP.CC0.Exclude", "");
         SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
