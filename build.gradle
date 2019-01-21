@@ -357,28 +357,43 @@ project(':jportal_webapp') {
 //        args = ["-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()]
 //    }
 
-//    task stopH2DB(type: JavaExec) {
+    task runH2DB(type: Exec) {
+        println "H2DB using path " + appPath;
 //        classpath = configurations.h2db
+        println configurations.h2db.asPath
 //        main = "org.h2.tools.Server"
-//        args = ["-tcpShutdown", "tcp://localhost:9092"]
-//        ignoreExitValue true
-//    }
+//        args = ["-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()]
 
-//    task runSolr(type: Exec) {
-//        println "Solr home " + appPath + '/solr-home';
-//        println "Solr server path " + solrServerPath;
-//        workingDir solrServerPath.toAbsolutePath().toString()
-//        ignoreExitValue true
-//        commandLine './bin/solr', 'restart', '-noprompt'
-//        args '-s', appPath + '/solr-home'
-//        args '-p', solrPort
-//    }
+        workingDir Paths.get(appPath, "h2db").toString()
+        ignoreExitValue true
+        commandLine 'nohup', 'java'
+        args '-cp', configurations.h2db.asPath
+        args 'org.h2.tools.Server'
+        args "-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()
+    }
 
-//    task stopSolr(type: Exec) {
-//        workingDir solrServerPath.toAbsolutePath().toString()
-//        ignoreExitValue true
-//        commandLine './bin/solr', 'stop'
-//    }
+    task stopH2DB(type: JavaExec) {
+        classpath = configurations.h2db
+        main = "org.h2.tools.Server"
+        args = ["-tcpShutdown", "tcp://localhost:9092"]
+        ignoreExitValue true
+    }
+
+    task runSolr(type: Exec) {
+        println "Solr home " + appPath + '/solr-home';
+        println "Solr server path " + solrServerPath;
+        workingDir solrServerPath.toAbsolutePath().toString()
+        ignoreExitValue true
+        commandLine './bin/solr', 'restart', '-noprompt'
+        args '-s', appPath + '/solr-home'
+        args '-p', solrPort
+    }
+
+    task stopSolr(type: Exec) {
+        workingDir solrServerPath.toAbsolutePath().toString()
+        ignoreExitValue true
+        commandLine './bin/solr', 'stop'
+    }
 
     gretty {
         servletContainer 'tomcat9'
@@ -395,17 +410,17 @@ project(':jportal_webapp') {
         systemProperty "URN.log", "$appPath/urnlog"
     }
 
-//    task runSystem {
-//        println "Run system using mcr path " + mcrHome;
-//        dependsOn configApp
+    task runSystem {
+        println "Run system using mcr path " + mcrHome;
+        dependsOn configApp
 //        dependsOn runH2DB
-//        dependsOn runSolr
-//    }
-//
-//    task stopSystem {
-//        dependsOn stopSolr
+        dependsOn runSolr
+    }
+
+    task stopSystem {
+        dependsOn stopSolr
 //        dependsOn stopH2DB
-//    }
+    }
 
 }
 
