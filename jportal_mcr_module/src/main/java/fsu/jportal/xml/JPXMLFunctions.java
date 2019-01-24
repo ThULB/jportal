@@ -736,8 +736,9 @@ public class JPXMLFunctions {
             Attributes attr = manifest.getMainAttributes();
 
             return Arrays.asList(attrNames)
-                  .stream()
-                  .map(attr::getValue);
+                    .stream()
+                    .map(attr::getValue)
+                    .filter(val -> val != null);
         } catch (Exception exc) {
             LOGGER.error(errorMessage, exc);
         }
