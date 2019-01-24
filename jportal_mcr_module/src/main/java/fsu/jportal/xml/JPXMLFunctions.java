@@ -477,7 +477,7 @@ public class JPXMLFunctions {
 
     /**
      * Returns the logo URL for the given image.
-     * 
+     *
      * @param image the image e.g. thulb.svg
      * @return the full url using the JP.Site.Logo.Proxy.url property
      */
@@ -754,27 +754,37 @@ public class JPXMLFunctions {
             mcrObjectID = mcrDerivate.getOwnerID();
         }
 
-        List<MCRObjectID> ownerList = JPComponentUtil
+        String role = MCRConfiguration
+                .instance()
+                .getString("JP.Licence.Default.When.Role", "owner");
+
+        String objectIDInRole = MCRConfiguration
+                .instance()
+                .getString("JP.Licence.Default.When.ID", "jportal_jpinst_00000001");
+
+        String defaultLicence = MCRConfiguration
+                .instance()
+                .getString("JP.Licence.Default", "cc0");
+
+        String altLicence = MCRConfiguration
+                .instance()
+                .getString("JP.Licence.Alternate", "cc-by-nc-sa");
+
+        boolean objIsInRole =JPComponentUtil
                 .getPeriodical(mcrObjectID)
                 .map(JPPeriodicalComponent::getJournal)
-                .map(journal -> journal.getParticipants("owner"))
-                .orElse(Collections.emptyList());
-
-        if(ownerList.isEmpty()){
-            return "reserved";
-        }
-
-        boolean thulbIsOwner = ownerList
-                .stream()
+                .map(journal -> journal.getParticipants(role))
+                .map(List::stream)
+                .orElse(Stream.empty())
                 .map(MCRObjectID::toString)
-                .anyMatch(mcrID -> mcrID.equals("jportal_jpinst_00000001"));
+                .anyMatch(mcrID -> mcrID.equals(objectIDInRole));
 
-        if(!thulbIsOwner){
-            return "cc-by-nc-sa";
+        if(!objIsInRole){
+            return altLicence;
         }
 
         String cc0Exclude = MCRConfiguration.instance()
-                                        .getString("JP.CC0.Exclude", "");
+                                        .getString("JP.Licence.Default.Exclude", "");
         SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();
         params.set(START, START_DEFAULT);
@@ -785,13 +795,13 @@ public class JPXMLFunctions {
             solrResponse = solrClient.query(params);
             SolrDocumentList solrResults = solrResponse.getResults();
 
-            return solrResults.getNumFound() > 0 ?  "cc0" : "reserved";
+            return solrResults.getNumFound() > 0 ?  defaultLicence : altLicence;
         } catch (SolrServerException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return "reserved";
+        return "cc-by-nc-sa";
     }
 }

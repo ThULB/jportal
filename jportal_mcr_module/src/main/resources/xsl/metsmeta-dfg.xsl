@@ -457,11 +457,13 @@
     <xsl:variable name="cc-licence" select="document('../xml/cc-licence.xml')/licence"/>
     <xsl:variable name="licence" select="jpxml:getLicence(@ID)"/>
 
-    <mods:accessCondition>
-      <licence type="{$licence}"
-               imgURL="{concat($CCImageURL, $cc-licence/type[@name=$licence]/@img)}"
-               href="{$cc-licence/type[@name=$licence]/@url}"/>
-    </mods:accessCondition>
+    <xsl:if test="$licence != 'reserved'">
+      <mods:accessCondition>
+        <licence type="{$licence}"
+                 imgURL="{concat($CCImageURL, $cc-licence/type[@name=$licence]/@img)}"
+                 href="{$cc-licence/type[@name=$licence]/@url}"/>
+      </mods:accessCondition>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
