@@ -7,7 +7,7 @@
 
 
 ### REQUIREMENTS
-* JAVA 8 JDK
+* JAVA 11 JDK
 * GRADLE
 
 
