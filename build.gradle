@@ -395,7 +395,7 @@ project(':jportal_webapp') {
         dependsOn configTomcat
     }
 
-    task runTomcat(type: Exec) {
+    task runApp(type: Exec) {
         println "MCR home $mcrHome";
         println "Tomcat server path $tomcatServerPath";
         workingDir Paths.get(confDir, "tomcat")

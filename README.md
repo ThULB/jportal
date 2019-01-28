@@ -7,7 +7,7 @@
 
 
 ### REQUIREMENTS
-* JAVA 8 JDK
+* JAVA 11 JDK
 * GRADLE
 
 
@@ -19,7 +19,7 @@ Go to the checked out jportal project.
 
 We use gradle as our build system. If you checked out jportal the first time run the following command. This will build and start solr (search engine), h2 (database) and the web application.
 
-    ./gradlew build runSystem appRun
+    ./gradlew build runSystem runApp
 
 After the command is processed you find the application [here](http://localhost:8291/jportal "jportal") and solr [here](http://localhost:8391/solr "solr").
 
@@ -32,7 +32,7 @@ server are still running. To stop those enter
 
 Usually its is not necessary to start and stop solr and the database while developing. You can just rebuild the web application.
 
-    ./gradlew clean build appRun
+    ./gradlew clean build runApp
 
 ### DEPLOY JPORTAL
 After building jportal (see [RUN JPORTAL](#run-jportal)) a *.war file will be created in *jportal2/jportal_webapp/build/libs/*. You can use this war in your preferred servlet container.
