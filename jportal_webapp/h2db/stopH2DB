@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+nohup java -cp $1 org.h2.tools.Server -tcpShutdown tcp://localhost:9092 &> $2&

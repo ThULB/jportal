@@ -1,11 +1,5 @@
 import java.nio.file.Files
 import java.nio.file.Paths
-//import com.github.jengelman.gradle.plugins.processes.tasks.JavaFork
-
-plugins {
-    id 'org.gretty' version '2.2.0'
-    //id 'com.github.johnrengelman.processes' version '0.4.1' apply false
-}
 
 def resourcePaths = new HashSet<File>();
 
@@ -227,8 +221,6 @@ project(':jportal_IT-TestData') {
 
 project(':jportal_webapp') {
     apply plugin: 'war'
-    apply plugin: 'org.gretty'
-//    apply plugin: 'com.github.johnrengelman.processes'
 
     configurations {
         runtime.exclude group: "org.slf4j", module: "slf4j-nop"
@@ -285,13 +277,11 @@ project(':jportal_webapp') {
 
     dependencies {
         h2db "com.h2database:h2:1.4.197"
-        //gretty configurations.h2db
     }
 
     ext.appName = "jportal"
     ext.mcrHome = System.getProperty("user.home") + "/.mycore"
 
-    // -PmcrHome=/abs/path/to/mcrHome
     if(project.hasProperty('mycoreHome')){
         ext.mcrHome = project.property("mycoreHome");
         println "Set mycore Home to " + mcrHome;
@@ -307,12 +297,65 @@ project(':jportal_webapp') {
     def solrZipFile = solrBasePath.resolve("solr-${solrVersion}.zip");
     def solrServerPath = solrBasePath.resolve("server");
 
+    def tomcatBasePath = Paths.get(projectDir.getAbsolutePath(), "tomcat");
+    def tomcatZipFile = tomcatBasePath.resolve("apache-tomcat-9.0.14.zip");
+    def tomcatServerPath = tomcatBasePath.resolve("server");
+
+    task configTomcat {
+        doLast {
+
+            //Tomcat
+            if (!Files.exists(tomcatBasePath)) {
+                Files.createDirectory(tomcatBasePath);
+            }
+            def newTomcatVersion = false;
+            if (!Files.exists(tomcatZipFile)) {
+                new URL(tomcatZipURL).withInputStream { is -> tomcatZipFile.withOutputStream { it << is } }
+                newTomcatVersion = true;
+            }
+
+            // extract
+            if (!Files.exists(tomcatServerPath) || newTomcatVersion) {
+                if (Files.exists(tomcatServerPath) && newTomcatVersion) {
+                    println "There is probably a new Tomcat version. Delete old folder..."
+                    delete tomcatServerPath.toAbsolutePath().toString()
+                }
+                println "Tomcat not installed. Installing into " + tomcatServerPath + "..."
+                Files.createDirectories(tomcatServerPath);
+                def ignoreRootDir = tomcatRoot
+                copy {
+                    from zipTree(tomcatZipFile.toAbsolutePath().toString()).matching { include "$ignoreRootDir/**" }
+                    fileMode 0757
+                    into tomcatServerPath.toAbsolutePath().toString()
+                    eachFile { fcp ->
+                        fcp.path = fcp.path.replaceFirst("^$ignoreRootDir", '')
+                    }
+                    includeEmptyDirs false
+                }
+            }
+
+            def confFolder = tomcatServerPath.resolve("conf").toString()
+            copy {
+                from file("$confDir/tomcat/server.xml")
+                into confFolder
+            }
+        }
+    }
+
+    task linkWar(type: Exec) {
+        workingDir tomcatServerPath.resolve("webapps")
+        commandLine 'ln', '-sf', war.archivePath.toString(), './jportal.war'
+    }
+
+    configTomcat.finalizedBy linkWar
+
     task configApp {
         doLast {
             // copy config/*
             copy {
                 from(confDir) {
                     include "**"
+                    exclude "**/tomcat"
                 }
                 into appPath
             }
@@ -348,35 +391,32 @@ project(':jportal_webapp') {
                 }
             }
         }
+
+        dependsOn configTomcat
     }
 
-//    task runH2DB(type: JavaFork) {
-//        println "H2DB using path " + appPath;
-//        classpath = configurations.h2db
-//        main = "org.h2.tools.Server"
-//        args = ["-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()]
-//    }
+    task runTomcat(type: Exec) {
+        println "MCR home $mcrHome";
+        println "Tomcat server path $tomcatServerPath";
+        workingDir Paths.get(confDir, "tomcat")
+        commandLine './runTomcat', mcrHome, tomcatServerPath
+    }
 
     task runH2DB(type: Exec) {
-        println "H2DB using path " + appPath;
-//        classpath = configurations.h2db
-        println configurations.h2db.asPath
-//        main = "org.h2.tools.Server"
-//        args = ["-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()]
-
-        workingDir Paths.get(appPath, "h2db").toString()
+        workingDir Paths.get(projectDir.getAbsolutePath(), "h2db")
         ignoreExitValue true
-        commandLine 'nohup', 'java'
-        args '-cp', configurations.h2db.asPath
-        args 'org.h2.tools.Server'
-        args "-tcp", "-tcpAllowOthers", "-webAllowOthers", "-baseDir", Paths.get(appPath, "h2db").toString()
+        commandLine './runH2DB'
+        args configurations.h2db.asPath
+        args Paths.get(appPath, "h2db").toString()
+        args Paths.get(project.buildDir.getAbsolutePath(), "tmp/h2db.out").toString()
     }
 
-    task stopH2DB(type: JavaExec) {
-        classpath = configurations.h2db
-        main = "org.h2.tools.Server"
-        args = ["-tcpShutdown", "tcp://localhost:9092"]
+    task stopH2DB(type: Exec) {
+        workingDir Paths.get(projectDir.getAbsolutePath(), "h2db")
         ignoreExitValue true
+        commandLine './stopH2DB'
+        args configurations.h2db.asPath
+        args Paths.get(project.buildDir.getAbsolutePath(), "tmp/h2db.out").toString()
     }
 
     task runSolr(type: Exec) {
@@ -395,31 +435,16 @@ project(':jportal_webapp') {
         commandLine './bin/solr', 'stop'
     }
 
-    gretty {
-        servletContainer 'tomcat9'
-
-        httpPort = Integer.valueOf(grettyPort)
-        contextPath = '/jportal'
-        debugPort = Integer.valueOf(grettyDebugPort)
-        debugSuspend = Boolean.valueOf(grettyDebugSuspend)
-
-        jvmArgs '-Xmx4096m'
-
-        systemProperty "MCR.Home", mcrHome
-        systemProperty "MCR.AppName", "jportal"
-        systemProperty "URN.log", "$appPath/urnlog"
-    }
-
     task runSystem {
         println "Run system using mcr path " + mcrHome;
         dependsOn configApp
-//        dependsOn runH2DB
+        dependsOn runH2DB
         dependsOn runSolr
     }
 
     task stopSystem {
         dependsOn stopSolr
-//        dependsOn stopH2DB
+        dependsOn stopH2DB
     }
 
 }
