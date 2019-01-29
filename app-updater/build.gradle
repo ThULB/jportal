@@ -22,53 +22,54 @@ dependencies {
     app "fsu.thulb:jportal_webapp:2.+@war"
 }
 
-task updateApp << {
-    def webAppPath = project.property("webAppPath")
-    def warPath = project.property("warPath")
-    def date = new Date()
-    def formattedDate = date.format('yyyyMMdd-HHmmss')
-    def warFileName = "jportal_webapp_${formattedDate}.war"
-    def absWarPath = "${warPath}/${warFileName}"
+task updateApp {
+    doLast {
+        def webAppPath = project.property("webAppPath")
+        def warPath = project.property("warPath")
+        def date = new Date()
+        def formattedDate = date.format('yyyyMMdd-HHmmss')
+        def warFileName = "jportal_webapp_${formattedDate}.war"
+        def absWarPath = "${warPath}/${warFileName}"
 
-    copy {
-        println "# Copy ${configurations.app.singleFile} to ${absWarPath}"
-        from configurations.app.singleFile
-        into warPath
-        rename 'jportal_webapp(.*).war', warFileName
-    }
-
-    files(webAppPath, absWarPath).each { f ->
-        if (!f.exists()) {
-            throw new GradleException("${f.absolutePath} does not exists!")
+        copy {
+            println "# Copy ${configurations.app.singleFile} to ${absWarPath}"
+            from configurations.app.singleFile
+            into warPath
+            rename 'jportal_webapp(.*).war', warFileName
         }
-    }
 
-    if (file("${webAppPath}/ROOT").exists()) {
+        files(webAppPath, absWarPath).each { f ->
+            if (!f.exists()) {
+                throw new GradleException("${f.absolutePath} does not exists!")
+            }
+        }
+
+        if (file("${webAppPath}/ROOT").exists()) {
+            exec {
+                println "# Delete ${webAppPath}/ROOT"
+                workingDir webAppPath
+                commandLine 'rm', '-r', "ROOT"
+            }
+        }
+
         exec {
-            println "# Delete ${webAppPath}/ROOT"
+            println "# Unlink ${webAppPath}/ROOT.war"
             workingDir webAppPath
-            commandLine 'rm', '-r', "ROOT"
+            commandLine 'unlink', "ROOT.war"
         }
+
+        exec {
+            println "# Link ${absWarPath} to ${webAppPath}/ROOT.war"
+            workingDir webAppPath
+            commandLine 'ln', '-s', absWarPath, "./ROOT.war"
+        }
+
+        exec {
+            println "# Delete ${configurations.app.singleFile}"
+            commandLine 'rm', configurations.app.singleFile
+        }
+
     }
-
-    exec {
-        println "# Unlink ${webAppPath}/ROOT.war"
-        workingDir webAppPath
-        commandLine 'unlink', "ROOT.war"
-    }
-
-    exec {
-        println "# Link ${absWarPath} to ${webAppPath}/ROOT.war"
-        workingDir webAppPath
-        commandLine 'ln', '-s', absWarPath, "./ROOT.war"
-    }
-
-    exec {
-        println "# Delete ${configurations.app.singleFile}"
-        commandLine 'rm', configurations.app.singleFile
-    }
-
-
 }
 
 updateApp.onlyIf {
