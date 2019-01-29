@@ -402,6 +402,15 @@ project(':jportal_webapp') {
         commandLine './runTomcat', mcrHome, tomcatServerPath
     }
 
+    task stopApp(type: Exec) {
+        println "MCR home $mcrHome";
+        println "Tomcat server path $tomcatServerPath";
+        workingDir tomcatServerPath.resolve("bin")
+        commandLine './shutdown.sh'
+    }
+
+    runApp.finalizedBy stopApp
+
     task runH2DB(type: Exec) {
         workingDir Paths.get(projectDir.getAbsolutePath(), "h2db")
         ignoreExitValue true
