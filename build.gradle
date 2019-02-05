@@ -27,6 +27,8 @@ allprojects {
 
         jcenter()
     }
+    
+    
 }
 
 subprojects {
@@ -103,6 +105,12 @@ subprojects {
             into "$project.buildDir/resources/main/META-INF"
         }
     }
+
+    compileJava {
+        options.compilerArgs << '-Xlint:deprecation'
+        options.compilerArgs << '-Xlint:unchecked'
+    }
+
 }
 
 project(':jportal_mcr_module') {
