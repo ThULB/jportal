@@ -20,7 +20,6 @@ import org.w3c.dom.NodeList;
 
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -66,8 +65,7 @@ public abstract class ImprintUtil {
     public static XNodeSet getLinks(ExpressionContext context, String objID) {
         String prop = getJournalConf(objID).get("link");
         Gson gson = new Gson();
-        Map<String, String> map = new HashMap<>();
-        map = gson.fromJson(prop, map.getClass());
+        Map<String, String> map = gson.fromJson(prop, HashMap.class);
         XNodeSet result = null;
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

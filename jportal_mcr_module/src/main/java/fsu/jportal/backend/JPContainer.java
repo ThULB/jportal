@@ -1,5 +1,6 @@
 package fsu.jportal.backend;
 
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -162,7 +163,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
                 String orderAttribute = sortByElement.getAttributeValue("order");
                 Order order = orderAttribute != null ? Order.valueOf(orderAttribute.toUpperCase()) : null;
                 if (JPSorter.class.isAssignableFrom(forName)) {
-                    return new Pair<>((JPSorter) forName.newInstance(), order);
+                    return new Pair<>((JPSorter) forName.getDeclaredConstructor().newInstance(), order);
                 } else {
                     throw new MCRException("The sorter class " + forName.getName() + " is not a subclass of JPSorter.");
                 }

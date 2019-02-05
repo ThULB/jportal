@@ -105,7 +105,7 @@ public class Importer {
 
         // get importer
         Class<? extends MetsImporter> importerClass = Class.forName(importerClassName).asSubclass(MetsImporter.class);
-        MetsImporter importer = importerClass.newInstance();
+        MetsImporter importer = importerClass.getDeclaredConstructor().newInstance();
 
         MetsImportUtils.importMets(derivateId, mets, importer);
     }

@@ -7,6 +7,7 @@ import org.mycore.common.xml.MCRURIResolver.MCRResolverProvider;
 
 import javax.xml.transform.URIResolver;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Enumeration;
@@ -40,12 +41,18 @@ public class JPResolverProvider implements MCRResolverProvider {
                         URIResolverSchema schemaAnnot = resolverClass.getAnnotation(URIResolverSchema.class);
                         if(schemaAnnot != null){
                             String schema = schemaAnnot.schema();
-                            Object resolverObj = resolverClass.newInstance();
-                            if(resolverObj instanceof URIResolver){
-                                resolverMap.put(schema, (URIResolver)resolverObj);
-                                LOGGER.info("Add " + className + " with schema " + schema);
+                            try {
+                                Object resolverObj = resolverClass.getDeclaredConstructor().newInstance();
+                                if(resolverObj instanceof URIResolver){
+                                    resolverMap.put(schema, (URIResolver)resolverObj);
+                                    LOGGER.info("Add " + className + " with schema " + schema);
+                                }
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchMethodException e) {
+                                e.printStackTrace();
                             }
-                            
+
                         }
                     }
                 }

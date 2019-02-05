@@ -44,6 +44,7 @@ public class URNMigration {
     public static void migrateDiff(String serviceID) {
         String query = "SELECT A.mcrid, A.mcrurn, A.path, A.filename, A.registered, A.dfg "
                 + "from mcrurn A LEFT JOIN mcrpi B ON (A.mcrurn = B.identifier) where B.identifier is NULL";
+        @SuppressWarnings("unchecked")
         List<Object[]> resultList = getNativeQuery(query).getResultList();
         migrateResultList(serviceID, resultList);
     }
@@ -111,6 +112,7 @@ public class URNMigration {
             qlString = qlString + " where mcrid = '" + derivID + "'";
         }
 
+        @SuppressWarnings("unchecked")
         List<Object[]> resultList = getNativeQuery(qlString).getResultList();
         migrateResultList(serviceID, resultList);
     }

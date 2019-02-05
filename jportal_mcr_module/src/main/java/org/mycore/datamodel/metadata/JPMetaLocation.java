@@ -73,7 +73,7 @@ public class JPMetaLocation extends MCRMetaDefault {
      */
     public List<BigDecimal> getData() {
         if (this.spatial == null) {
-            this.spatial = new MCRMetaSpatial("temp", null, null, 0);
+            this.spatial = new MCRMetaSpatial("temp", null, 0);
         }
         return this.spatial.getData();
     }

@@ -37,6 +37,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.concurrent.*;
 
+import javax.persistence.criteria.CriteriaQuery;
+
 public class InitHandler extends MCRInitHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(InitHandler.class);
@@ -105,7 +107,9 @@ public class InitHandler extends MCRInitHandler {
     }
 
     public boolean isTableEmpty(Class<?> clazz) {
-        return session.createCriteria(clazz).setMaxResults(1).list().isEmpty();
+        CriteriaQuery<?> query = session.getCriteriaBuilder()
+                                        .createQuery(clazz);
+        return session.createQuery(query).setMaxResults(1).list().isEmpty();
     }
 
     private void createClass() {
