@@ -53,7 +53,7 @@ public class ZvddNewspaperYearMetsGenerator implements MCRMETSGenerator {
         }
 
         if(mets.getStructLink().getSmLinks().isEmpty()){
-            mets.setFileSec(null);
+            mets.setStructLink(null);
         }
 
         return mets;
