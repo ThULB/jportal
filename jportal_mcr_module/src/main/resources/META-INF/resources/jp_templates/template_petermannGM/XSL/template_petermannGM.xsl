@@ -16,16 +16,16 @@
 
   <xsl:template match="/mycoreobject" mode="template_petermannGM">
     <xsl:variable name="published_from">
-      <xsl:value-of select="//date[@type='published_from']" />
+      <xsl:value-of select="//date[@type='from']" />
     </xsl:variable>
     <xsl:variable name="published_until">
-      <xsl:value-of select="//date[@type='published_until']" />
+      <xsl:value-of select="//date[@type='until']" />
     </xsl:variable>
 
     <xsl:variable name="pubYear">
       <xsl:choose>
         <xsl:when test="($published_from != '') and ($published_until != '')">
-          <xsl:value-of select="concat($published_from, '_', $published_until)"/>
+          <xsl:value-of select="concat('_', $published_from, '_', $published_until)"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="''"/>
@@ -38,7 +38,7 @@
         var baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
 
         var pubYear = '<xsl:value-of select="$pubYear" />';
-        $('#header').css('background-image', 'url(' + baseURL + 'jp_templates/template_petermannGM/IMAGES/logo_' + pubYear +'.png)');
+        $('#header').css('background-image', 'url(' + baseURL + 'jp_templates/template_petermannGM/IMAGES/logo' + pubYear +'.png)');
       });
     </script>
   </xsl:template>
