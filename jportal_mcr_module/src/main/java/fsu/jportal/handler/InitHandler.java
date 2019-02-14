@@ -106,10 +106,10 @@ public class InitHandler extends MCRInitHandler {
 
     }
 
-    public boolean isTableEmpty(Class<?> clazz) {
+    public boolean isTableEmpty(Class clazz) {
         CriteriaQuery<?> query = session.getCriteriaBuilder()
                                         .createQuery(clazz);
-        return session.createQuery(query).setMaxResults(1).list().isEmpty();
+        return session.createQuery(query.select(query.from(clazz))).setMaxResults(1).list().isEmpty();
     }
 
     private void createClass() {
