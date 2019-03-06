@@ -548,7 +548,9 @@ var derivateBrowserDerivateView = (function () {
         else {
             $("#browser-table-wrapper").removeClass("browser-table-empty");
         }
+        var totalSize = 0;
         $.each(data.children, function(i, file) {
+            totalSize = totalSize + file.size;
             file.deriID = deriID;
             file.urnEnabled = data.urnEnabled;
             file.lastmodifiedValue = moment(file.lastmodified, "DD.MM.YYYY HH:mm:ss").format("x");
@@ -564,6 +566,9 @@ var derivateBrowserDerivateView = (function () {
                 addFolderToView(file, data.absPath);
             }
         });
+        if (data.size == null || data.size == undefined || data.size == 0) {
+			$("#derivat-panel-size").html(derivateBrowserTools.getReadableSize(totalSize, 0));
+		}
         $("#derivate-browser").removeClass("hidden");
         $("#browser-table-sort-click").find(".glyphicon").addClass("hidden");
         $("#browser-table-sort").stupidsort('asc');
