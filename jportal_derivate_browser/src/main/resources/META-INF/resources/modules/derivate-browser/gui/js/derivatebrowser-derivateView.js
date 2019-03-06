@@ -634,7 +634,7 @@ var derivateBrowserDerivateView = (function () {
 
     /**
      * @property parentName
-     * @property parentSize
+     * @property size
      * @property parentLastMod
      * @property hasURN
      */
@@ -644,7 +644,7 @@ var derivateBrowserDerivateView = (function () {
             var panelName = $("#derivat-panel-name");
             if ($(panelName).html() != data.parentName){
                 $(panelName).html(data.parentName);
-                $("#derivat-panel-size").html(derivateBrowserTools.getReadableSize(data.parentSize, 0));
+                $("#derivat-panel-size").html(derivateBrowserTools.getReadableSize(data.size, 0));
                 $("#derivat-panel-last").html(data.parentLastMod);
                 deriName = data.parentName;
             }
@@ -869,15 +869,18 @@ var derivateBrowserDerivateView = (function () {
 
     //ajax Methods
     function getDerivate(deriID, path, filename){
+		$("#editor-loading").removeClass("hidden");
         $.ajax({
             url: "./" + deriID + path,
             type: "GET",
             dataType: "json",
             success: function(data) {
+				$("#editor-loading").addClass("hidden");
                 showDerivatOrFolder(deriID, data, filename);
             },
             error: function(error) {
                 console.log(error);
+				$("#editor-loading").addClass("hidden");
                 derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.loadFailed", deriID), false);
             }
         });

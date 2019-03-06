@@ -549,7 +549,7 @@ public class DerivateTools {
         return json;
     }
 
-    private static boolean isDisplayEnabled(String derivateID) {
+    public static boolean isDisplayEnabled(String derivateID) {
         MCRDerivate derObj = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateID));
         return derObj.getDerivate().isDisplayEnabled();
     }
@@ -601,7 +601,7 @@ public class DerivateTools {
         return "";
     }
 
-    private static boolean urnEnabled() {
+    public static boolean urnEnabled() {
         String urnObjects = "";
         try {
             urnObjects = MCRConfiguration.instance().getString("MCR.URN.Enabled.Objects");

@@ -3,6 +3,7 @@ package fsu.jportal.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
@@ -34,6 +34,7 @@ import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.mycore.access.MCRAccessException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.niofs.MCRFileAttributes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.frontend.fileupload.MCRUploadHelper;
@@ -43,6 +44,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import fsu.jportal.backend.DerivateDirectoryTools;
 import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.backend.DocumentTools;
 import fsu.jportal.backend.JPUploader;
@@ -65,13 +67,18 @@ public class DerivateBrowserResource {
     @GET
     @Path("{derivID}{path:(/.*)*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response browsePath(@PathParam("derivID") String derivID, @PathParam("path") String path,
-        @DefaultValue("false") @QueryParam("noChilds") boolean noChilds) {
-        JsonObject derivateJson = DerivateTools.getDerivateAsJson(derivID, path, noChilds);
-        if (derivateJson == null) {
-            return Response.serverError().build();
+    public Response browsePath(@PathParam("derivID") String derivID, @PathParam("path") String path) {
+        MCRPath mcrPath = MCRPath.getPath(derivID, path);
+        MCRFileAttributes fileAttributes;
+        try {
+            fileAttributes = Files.readAttributes(mcrPath, MCRFileAttributes.class);
+        } catch (IOException e) {
+            throw new WebApplicationException("Unable to find " + derivID + path, e);
         }
-        return Response.ok(derivateJson.toString()).build();
+        if (fileAttributes.isDirectory()) {
+            return DerivateDirectoryTools.serveDirectory(mcrPath, fileAttributes);
+        }
+        return Response.serverError().build();
     }
 
     @GET
