@@ -306,7 +306,10 @@ project(':jportal_webapp') {
     def solrServerPath = solrBasePath.resolve("server");
 
     def tomcatBasePath = Paths.get(projectDir.getAbsolutePath(), "tomcat");
-    def tomcatZipFile = tomcatBasePath.resolve("apache-tomcat-9.0.14.zip");
+    def tomcatZipURLObj = new URL(tomcatZipURL);
+    def tomcatURLPath = tomcatZipURLObj.getPath();
+    def pathParts = tomcatURLPath.split("/");
+    def tomcatZipFile = pathParts[pathParts.length - 1];
     def tomcatServerPath = tomcatBasePath.resolve("server");
 
     task configTomcat {
@@ -318,7 +321,7 @@ project(':jportal_webapp') {
             }
             def newTomcatVersion = false;
             if (!Files.exists(tomcatZipFile)) {
-                new URL(tomcatZipURL).withInputStream { is -> tomcatZipFile.withOutputStream { it << is } }
+                tomcatZipURLObj.withInputStream { is -> tomcatZipFile.withOutputStream { it << is } }
                 newTomcatVersion = true;
             }
 
@@ -330,7 +333,7 @@ project(':jportal_webapp') {
                 }
                 println "Tomcat not installed. Installing into " + tomcatServerPath + "..."
                 Files.createDirectories(tomcatServerPath);
-                def ignoreRootDir = tomcatRoot
+                def ignoreRootDir = tomcatZipFile.replaceAll(".zip","");
                 copy {
                     from zipTree(tomcatZipFile.toAbsolutePath().toString()).matching { include "$ignoreRootDir/**" }
                     fileMode 0757
@@ -349,7 +352,7 @@ project(':jportal_webapp') {
             }
         }
     }
-
+    
     task linkWar(type: Exec) {
         workingDir tomcatServerPath.resolve("webapps")
         commandLine 'ln', '-sf', war.archivePath.toString(), './jportal.war'
