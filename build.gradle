@@ -309,7 +309,7 @@ project(':jportal_webapp') {
     def tomcatZipURLObj = new URL(tomcatZipURL);
     def tomcatURLPath = tomcatZipURLObj.getPath();
     def pathParts = tomcatURLPath.split("/");
-    def tomcatZipFile = pathParts[pathParts.length - 1];
+    def tomcatZipFile = tomcatBasePath.resolve(pathParts[pathParts.length - 1]);
     def tomcatServerPath = tomcatBasePath.resolve("server");
 
     task configTomcat {
@@ -333,7 +333,7 @@ project(':jportal_webapp') {
                 }
                 println "Tomcat not installed. Installing into " + tomcatServerPath + "..."
                 Files.createDirectories(tomcatServerPath);
-                def ignoreRootDir = tomcatZipFile.replaceAll(".zip","");
+                def ignoreRootDir = tomcatZipFile.getFileName().toString().replaceAll(".zip","");
                 copy {
                     from zipTree(tomcatZipFile.toAbsolutePath().toString()).matching { include "$ignoreRootDir/**" }
                     fileMode 0757
@@ -355,7 +355,8 @@ project(':jportal_webapp') {
     
     task linkWar(type: Exec) {
         workingDir tomcatServerPath.resolve("webapps")
-        commandLine 'ln', '-sf', war.archivePath.toString(), './jportal.war'
+        def archivePath = war.destinationDirectory.get().toString() + "/" + war.archiveFileName.get(); 
+        commandLine 'ln', '-sf', archivePath, './jportal.war'
     }
 
     configTomcat.finalizedBy linkWar
