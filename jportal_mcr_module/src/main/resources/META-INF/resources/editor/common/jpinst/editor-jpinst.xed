@@ -107,6 +107,7 @@
            option="true" validate="interdependentSelect">
           <option i18n="metaData.person.gnd" value="gnd" />
           <option i18n="metaData.person.ppn" value="ppn" />
+          <option i18n="metaData.person.ppn" value="isil" />
         </jp:template>
         <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:repeat>
