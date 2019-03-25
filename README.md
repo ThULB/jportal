@@ -32,7 +32,7 @@ server are still running. To stop those enter
 
 Usually its is not necessary to start and stop solr and the database while developing. You can just rebuild the web application.
 
-    ./gradlew clean build runApp
+    ./gradlew clean build runApp [-PmycoreHome=/Path/to/your/.mcrHome]
 
 ### DEPLOY JPORTAL
 After building jportal (see [RUN JPORTAL](#run-jportal)) a *.war file will be created in *jportal2/jportal_webapp/build/libs/*. You can use this war in your preferred servlet container.
