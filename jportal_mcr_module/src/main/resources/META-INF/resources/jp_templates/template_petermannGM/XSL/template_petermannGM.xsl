@@ -12,6 +12,9 @@
     <xsl:call-template name="template_date">
       <xsl:with-param name="mcrObj" select="$mcrObj"/>
     </xsl:call-template>
+    <xsl:call-template name="template_maintitle">
+      <xsl:with-param name="mcrObj" select="$mcrObj"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_petermannGM">
