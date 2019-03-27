@@ -67,6 +67,19 @@
         <jp:template name="textArea" xpath="." i18n="editormask.labels.abstract" buttons="true" />
       </xed:repeat>
 
+
+      <xed:bind xpath="licences[@class='MCRMetaLangText']/licence[@inherited='0'][@form='plain']" >
+        <select id="cc-licence-select" default="cc0">
+          <option value="cc0"><xed:output i18n="metaData.licence.cc0" /></option>
+          <option value="cc-by"><xed:output i18n="metaData.licence.cc-by" /></option>
+          <option value="cc-by-sa"><xed:output i18n="metaData.licence.cc-by-sa" /></option>
+          <option value="cc-by-nd"><xed:output i18n="metaData.licence.cc-by-nd" /></option>
+          <option value="cc-by-nc"><xed:output i18n="metaData.licence.cc-by-nc" /></option>
+          <option value="cc-by-nc-sa"><xed:output i18n="metaData.licence.cc-by-nc-sa" /></option>
+          <option value="cc-by-nc-nd"><xed:output i18n="metaData.licence.cc-by-nc-nd" /></option>
+        </select>
+      </xed:bind>
+
       <jp:template name="textArea" xpath="notes[@class='MCRMetaLangText']/note[@inherited='0'][@form='plain']" i18n="editormask.labels.note" />
 
       <jp:template name="dynamicBinding" type="jpjournal" />

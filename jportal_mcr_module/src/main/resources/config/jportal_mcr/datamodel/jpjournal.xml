@@ -45,6 +45,10 @@
         <element name="abstracts" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='3' length="4096" />
         </element>
+        <!-- licence -->
+        <element name="licences" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="licence" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="4096" />
+        </element>
         <!-- type = issn | isbn | nbn | doi | misc. -->
         <element name="identis" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
