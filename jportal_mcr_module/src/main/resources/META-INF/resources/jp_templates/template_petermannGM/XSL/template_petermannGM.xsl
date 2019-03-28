@@ -12,17 +12,14 @@
     <xsl:call-template name="template_date">
       <xsl:with-param name="mcrObj" select="$mcrObj"/>
     </xsl:call-template>
-    <xsl:call-template name="template_maintitle">
-      <xsl:with-param name="mcrObj" select="$mcrObj"/>
-    </xsl:call-template>
-  </xsl:template>
+</xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_petermannGM">
     <xsl:variable name="published_from">
-      <xsl:value-of select="//date[@type='from']" />
+      <xsl:value-of select="metadata/dates/date[@type='published']/@from" />
     </xsl:variable>
     <xsl:variable name="published_until">
-      <xsl:value-of select="//date[@type='until']" />
+      <xsl:value-of select="metadata/dates/date[@type='published']/@until" />
     </xsl:variable>
 
     <xsl:variable name="pubYear">
