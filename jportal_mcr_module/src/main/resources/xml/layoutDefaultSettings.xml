@@ -78,6 +78,7 @@
   <i18n tag="successor">editormask.labels.successor</i18n>
   <i18n tag="function">editormask.labels.function</i18n>
   <i18n tag="origins">editormask.labels.volume.origin</i18n>
+  <i18n tag="licence">metaData.licence.label</i18n>
 
   <numPerPage for="volume">40</numPerPage>
   <numPerPage for="article">5</numPerPage>
