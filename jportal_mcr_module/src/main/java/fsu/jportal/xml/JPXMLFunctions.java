@@ -755,6 +755,16 @@ public class JPXMLFunctions {
             mcrObjectID = mcrDerivate.getOwnerID();
         }
 
+        Optional<JPJournal> jpJournal = JPComponentUtil
+                .getPeriodical(mcrObjectID)
+                .map(JPPeriodicalComponent::getJournal);
+
+        Optional<String> licence = jpJournal.flatMap(JPJournal::getLicence);
+
+        if(licence.isPresent()){
+            return licence.get();
+        }
+
         String role = MCRConfiguration
                 .instance()
                 .getString("JP.Licence.Default.When.Role", "owner");
@@ -771,9 +781,7 @@ public class JPXMLFunctions {
                 .instance()
                 .getString("JP.Licence.Alternate", "cc-by-nc-sa");
 
-        boolean objIsInRole =JPComponentUtil
-                .getPeriodical(mcrObjectID)
-                .map(JPPeriodicalComponent::getJournal)
+        boolean objIsInRole = jpJournal
                 .map(journal -> journal.getParticipants(role))
                 .map(List::stream)
                 .orElse(Stream.empty())

@@ -44,6 +44,10 @@ public class JPJournal extends JPContainer {
         return getText("hidden_templates", null).orElse(null);
     }
 
+    public Optional<String> getLicence() {
+        return getText("licences", null);
+    }
+
     /**
      * Returns the ISO 639-1 language code of this journal.
      *
