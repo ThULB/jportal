@@ -71,7 +71,7 @@ subprojects {
     }
 
     dependencies {
-        testCompile 'org.jmockit:jmockit:1.20'
+        testCompile 'org.jmockit:jmockit:1.46'
         testCompile 'junit:junit:4.12'
         testCompile 'com.github.tomakehurst:wiremock:1.57'
         testCompile 'org.apache.logging.log4j:log4j-api:$log4jVersion'
