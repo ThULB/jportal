@@ -1,12 +1,15 @@
 package fsu.jportal.frontend.cli;
 
 import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,15 +20,14 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import fsu.jportal.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -68,19 +70,19 @@ import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.MetsImportUtils;
 import fsu.jportal.mets.MetsImporter;
 import fsu.jportal.mets.MetsVersionStore;
-import fsu.jportal.util.MetsUtil;
 
 /**
  * Created by chi on 22.04.15.
+ *
  * @author Huu Chi Vu
  */
 @MCRCommandGroup(name = "JPortal Importer")
 public class Importer {
 
-    static Logger LOGGER = LogManager.getLogger(Importer.class);
+    private static Logger LOGGER = LogManager.getLogger(Importer.class);
 
     @MCRCommand(syntax = "importObj {0} {1}",
-                help = "importObj webappURL id")
+            help = "importObj webappURL id")
     public static void importObj(String urlStr, String id) {
         HttpImportSource httpImportSource = new HttpImportSource(urlStr, id);
         ImportSink localSystem = new LocalSystemSink(urlStr);
@@ -90,12 +92,12 @@ public class Importer {
     /**
      * Does a mets.xml import.
      *
-     * @param derivateId the derivate requires a mets.xml inside
+     * @param derivateId        the derivate requires a mets.xml inside
      * @param importerClassName the mets importer class
      * @throws Exception something went wrong
      */
     @MCRCommand(syntax = "importMets {0} {1}",
-                help = "importMets {derivateId} {fully qualified classname of the importer}")
+            help = "importMets {derivateId} {fully qualified classname of the importer}")
     public static void importMets(String derivateId, String importerClassName) throws Exception {
         MetsImportUtils.checkPermission(derivateId);
 
@@ -111,7 +113,7 @@ public class Importer {
     }
 
     @MCRCommand(syntax = "fixLLZ {0} {1}",
-                help = "fixLLZ {mycore object id} {path to the mets with the coordination}")
+            help = "fixLLZ {mycore object id} {path to the mets with the coordination}")
     public static void fixLLZ(String targetID, String pathToCoordsMets) throws Exception {
         // get object
         MCRObjectID objId = MCRObjectID.getInstance(targetID);
@@ -184,10 +186,10 @@ public class Importer {
                         .forEach(area -> {
                             String oldId = area.getFileId();
                             String href = llzMets.getFileSec()
-                                                 .getFileGroup("ALTO")
-                                                 .getFileById(oldId)
-                                                 .getFLocat()
-                                                 .getHref();
+                                    .getFileGroup("ALTO")
+                                    .getFileById(oldId)
+                                    .getFLocat()
+                                    .getHref();
                             String newId = newMets.getFileSec().getFileGroup("ALTO").getFileByHref(href).getId();
                             area.setFileId(newId);
                         });
@@ -205,9 +207,9 @@ public class Importer {
     /**
      * Builds the hierarchy for the given fromDiv. The hierarchy list contains
      * the index position for each level. The list starts with the root element
-     * index. 
+     * index.
      *
-     * @param fromDiv where to start
+     * @param fromDiv   where to start
      * @param hierarchy index hierarchy
      */
     private static void buildDivHierarchy(LogicalDiv fromDiv, List<Integer> hierarchy) {
@@ -251,8 +253,8 @@ public class Importer {
     }
 
     @MCRCommand(syntax = "jvbEasyImport {0} {1} {2}",
-                help = "Imports a whole jvb year more easy." + " {year} (1890)" + " {goobiId} (25636)"
-                        + " {mntPath} (where the goobi id will be mounted locally)")
+            help = "Imports a whole jvb year more easy." + " {year} (1890)" + " {goobiId} (25636)"
+                    + " {mntPath} (where the goobi id will be mounted locally)")
     public static List<String> jvbEasyImport(String year, String goobiId, String mntPath) throws Exception {
         // unmount always
         try {
@@ -345,10 +347,10 @@ public class Importer {
     }
 
     @MCRCommand(syntax = "jvbImport {0} {1} {2} {3}",
-                help = "Imports a whole jvb year." + " {target mycore object} (jportal_jpvolume_00134247)"
-                        + " {base path to the JVB_* folders (/mcr/jp/tmp/mnt/images/OCRausInnsbruck/1890)}"
-                        + " {ocr folder (mcralto|mcraltok)}"
-                        + " {image path (/mcr/jp/tmp/mnt/images/Jenaer_Volksblatt_1890_167758667_JVB_tif)}")
+            help = "Imports a whole jvb year." + " {target mycore object} (jportal_jpvolume_00134247)"
+                    + " {base path to the JVB_* folders (/mcr/jp/tmp/mnt/images/OCRausInnsbruck/1890)}"
+                    + " {ocr folder (mcralto|mcraltok)}"
+                    + " {image path (/mcr/jp/tmp/mnt/images/Jenaer_Volksblatt_1890_167758667_JVB_tif)}")
     public static List<String> jvbImport(String targetID, String ocrPath, String ocrFolder, String imgPath)
             throws IOException {
         List<String> commands = new ArrayList<>();
@@ -378,9 +380,9 @@ public class Importer {
     }
 
     @MCRCommand(syntax = "jvbImportMonth {0} {1} {2} {3} {4}",
-                help = "Imports the nr of a single month. {target mycore object} {month} {path to the innsbruck folder} {ocr folder} {image path}")
+            help = "Imports the nr of a single month. {target mycore object} {month} {path to the innsbruck folder} {ocr folder} {image path}")
     public static List<String> jvbImportMonth(String targetID, String month, String ocrPath, String ocrFolder,
-            String imgPath) throws IOException {
+                                              String imgPath) throws IOException {
         List<String> commands = new ArrayList<>();
         Path base = Paths.get(ocrPath);
         getNrs(base).stream().map(Path::getFileName).map(Path::toString).forEach(monthFolder -> {
@@ -412,7 +414,7 @@ public class Importer {
     }
 
     @MCRCommand(syntax = "jvbUpload {0} {1} {2}",
-                help = "uploads the files to a number. {target mycore object} {path to alto files} {path to img files}")
+            help = "uploads the files to a number. {target mycore object} {path to alto files} {path to img files}")
     public static void jvbUpload(String targetID, String altoPath, String imgPath)
             throws IOException, MCRPersistenceException, MCRAccessException {
         JPDerivateComponent derivate = new JPDerivateComponent();
@@ -477,4 +479,161 @@ public class Importer {
         numbers.forEach(System.out::println);
     }
 
+    @MCRCommand(syntax = "importFromGoobi {0} {1} {2}",
+            help = "Import files to {target mycore object} {path to Goobi} {goobi IDs separated by spaces}")
+    public static void importFromGoobi(String journalID, String pathToGoobi, String goobiIDs) {
+        if (!journalExists(journalID)) {
+            return;
+        }
+
+        String prefix = "(?<prefix>Thueringische_Feuerwehrzeitung)";
+        String ppn = "(?<ppn>[0-9]*)";
+        String date = "(?<date>[0-9]*)";
+        String nrs = "(?<nr>[0-9]*)";
+        String page = "(?<page>[0-9]*)";
+        String filePartsRegex = String.join("_", prefix, ppn, date, nrs, page) + ".tif";
+        String regex = String.format("(?<path>[\\w\\W]*(?<fileName>%s))", filePartsRegex);
+
+        GroupPattern fileNamePattern = new GroupPattern(regex);
+
+        Predicate<String> fileFilter = p -> p.contains("_tif/") && !p.contains("sicher") && p.endsWith(".tif");
+
+        DateFormatUtil dateFormatUtil = new DateFormatUtil(Locale.GERMANY);
+        Function<String, String> yearFormat = dateFormatUtil.format("yyyyMMdd", "yyyy");
+        Function<String, String> monthFormat = dateFormatUtil.format("yyyyMMdd", "yyyy-MM");
+        Function<String, String> monthNameFormat = dateFormatUtil.format("yyyy-MM", "MMMM");
+        Function<String, String> nrFormat = dateFormatUtil.format("yyyyMMdd", "EEEE', den ' dd. MMMM yyyy");
+        Function<String, String> nrRevFormat = dateFormatUtil.format("EEEE', den ' dd. MMMM yyyy", "yyyy-MM-dd");
+        Function<MapUtil<String, String>, String> nrLabel = m -> m.getAndMap("nr", "Nr. "::concat)
+                .concat(" : ")
+                .concat(m.getAndMap("date", nrFormat));
+        Predicate<MapUtil<String, String>> numberNot_00 = f -> !f.get("nr").equals("00");
+        Function<MapUtil<String, String>, String> year = f -> f.getAndMap("date", yearFormat);
+        Function<MapUtil<String, String>, String> month = f -> f.getAndMap("date", monthFormat);
+
+        getFilesFromDir(pathToGoobi, fileFilter, goobiIDs.split(" "))
+                .sorted()
+                .map(fileNamePattern::parse)
+                .map(MapUtil::new)
+                .filter(numberNot_00)
+                .collect(groupingBy(year, TreeMap::new,
+                        groupingBy(month, TreeMap::new,
+                                groupingBy(nrLabel, TreeMap::new, toList()))))
+                .forEach((y, months) -> createVolume(y, y, journalID)
+                        .ifPresent(yearMcrObj -> {
+                            String yearMcrObjID = yearMcrObj.getObject().getId().toString();
+
+                            months.forEach((m, nr) -> createVolume(monthNameFormat.apply(m), m, yearMcrObjID)
+                                    .ifPresent((monthMcrObj) -> {
+                                        String monthMcrObjID = monthMcrObj.getObject().getId().toString();
+                                        nr.forEach((n, files) -> {
+                                            String[] nrDate = n.split(" : ");
+                                            createVolume(n, nrRevFormat.apply(nrDate[1]), monthMcrObjID)
+                                                    .ifPresent(nrMcrObj -> {
+                                                        String nrMcrObjID = nrMcrObj.getObject().getId().toString();
+                                                        List<String> fileNames = files.stream()
+                                                                .map(f -> f.get("path"))
+                                                                .collect(Collectors.toList());
+                                                        createDerivate(nrMcrObjID, fileNames);
+                                                    });
+                                        });
+                                    }));
+                        }));
+    }
+
+    private static Optional<JPDerivateComponent> createDerivate(String ownerID, List<String> filePaths) {
+        try {
+            JPDerivateComponent derivate = new JPDerivateComponent();
+            MCRMarkManager.instance().mark(derivate.getId(), MCRMarkManager.Operation.IMPORT);
+            boolean noMaindocSet = true;
+            for (String filePathStr : filePaths) {
+                Path filePath = Paths.get(filePathStr);
+                URL fileURL = filePath.toUri().toURL();
+                String fileNameStr = filePath.getFileName().toString();
+
+                if (noMaindocSet) {
+                    derivate.setMainDoc(fileNameStr);
+                    noMaindocSet = false;
+                }
+
+                derivate.add(fileURL, fileNameStr);
+            }
+
+            JPVolume volume = new JPVolume(ownerID);
+            volume.addDerivate(derivate);
+            volume.store(StoreOption.derivate);
+            MCRMarkManager.instance().remove(derivate.getId());
+
+            return Optional.of(derivate);
+        } catch (MCRAccessException | MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<JPVolume> createVolume(String title, String date, String parentID) {
+        String yearQuery = "+parent:" + parentID + " +date.published:" + date;
+
+        List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getMainSolrClient(), yearQuery);
+        if (!ids.isEmpty()) {
+            LOGGER.error("Volume with published date " + date + " allready exist in " + parentID + "!");
+            return Optional.empty();
+        }
+
+        try {
+            JPVolume volume = new JPVolume();
+            volume.setTitle(title);
+            volume.setDate(date, JPPeriodicalComponent.DateType.published.name());
+            volume.setParent(parentID);
+            volume.store();
+
+            return Optional.of(volume);
+        } catch (MCRAccessException e) {
+            LOGGER.error("Could not create volume {}.", title);
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
+
+    private static boolean journalExists(String journalID) {
+        MCRObjectID journalObjID = MCRObjectID.getInstance(journalID);
+        if (!journalObjID.getTypeId().equals("jpjournal")) {
+            LOGGER.error(journalID + " is not a journal.");
+            return false;
+        }
+
+        if (!MCRMetadataManager.exists(journalObjID)) {
+            LOGGER.error(journalID + " does not exist.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private static Stream<String> getFilesFromDir(String goobiPath, Predicate<String> fileFilter, String... goobiIDs) {
+        Path path = Paths.get(goobiPath);
+
+        if (!Files.exists(path)) {
+            LOGGER.error(path.toString() + " does not exist.");
+            return Stream.empty();
+        }
+
+        return Stream.of(goobiIDs)
+                .map(path::resolve)
+                .flatMap(Importer::walk)
+                .map(Path::toString)
+                .filter(fileFilter);
+    }
+
+    private static Stream<Path> walk(Path path) {
+        try {
+            return Files.walk(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Stream.empty();
+    }
 }
