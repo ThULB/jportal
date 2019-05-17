@@ -2,6 +2,7 @@ package fsu.jportal.util;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +31,7 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.solr.MCRSolrClientFactory;
@@ -67,15 +69,15 @@ public class GndUtil {
      */
     public static Optional<String> getGND(MCRObject mcrObject) {
         return StreamSupport.stream(mcrObject.getMetadata().spliterator(), false)
-                            .filter(me -> me.getTag().equals("def.identifier"))
-                            .flatMap(me -> StreamSupport.stream(me.spliterator(), false))
-                            .filter(meta -> meta instanceof MCRMetaLangText)
-                            .map(meta -> (MCRMetaLangText) meta)
-                            .filter(meta -> Optional.ofNullable(meta.getType())
-                                                    .filter(s -> s.toLowerCase(Locale.ROOT).equals("gnd"))
-                                                    .isPresent())
-                            .map(MCRMetaLangText::getText)
-                            .findFirst();
+                .filter(me -> me.getTag().equals("def.identifier"))
+                .flatMap(me -> StreamSupport.stream(me.spliterator(), false))
+                .filter(meta -> meta instanceof MCRMetaLangText)
+                .map(meta -> (MCRMetaLangText) meta)
+                .filter(meta -> Optional.ofNullable(meta.getType())
+                        .filter(s -> s.toLowerCase(Locale.ROOT).equals("gnd"))
+                        .isPresent())
+                .map(MCRMetaLangText::getText)
+                .findFirst();
     }
 
     /**
@@ -122,11 +124,11 @@ public class GndUtil {
      * returns the record which has the required fields. E.g. 065A.
      *
      * <p>
-     *     <a href="http://sru.gbv.de/gbvcat?query=pica.num+%3D+"4037680-1"&version=1.1&operation=searchRetrieve&recordSchema=picaxml&recordPacking=xml&maximumRecords=2&startRecord=1">
-     *         double record example</a>
+     * <a href="http://sru.gbv.de/gbvcat?query=pica.num+%3D+"4037680-1"&version=1.1&operation=searchRetrieve&recordSchema=picaxml&recordPacking=xml&maximumRecords=2&startRecord=1">
+     * double record example</a>
      * </p>
      *
-     * @param gndId gnd identifier
+     * @param gndId          gnd identifier
      * @param requiredFields list of fields which are required to be in the record
      * @return a <code>PicaRecord</code> instance or null when there is no such record
      * @throws ConnectException is thrown when cannot connect to gbv sru interface
@@ -154,18 +156,30 @@ public class GndUtil {
 
     private static Document retrieveFromSRU(String query, int numRecords) throws ConnectException {
         SRUQueryParser queryParser = new SRUQueryParser(GBVKeywordStore.getInstance());
-        SRUConnector connector = SRUConnectorFactory.getSRUConnector(SRUConnectorFactory.GBV_SRU_STANDARD_CONNECTION,
-                queryParser.parse(query));
+
+        SRUConnector connector = getSRUConnection(queryParser.parse(query));
         connector.setMaximumRecords(numRecords);
         return connector.getDocument();
+    }
+
+    private static SRUConnector getSRUConnection(String query) {
+        String sruConnectionURL = MCRConfiguration.instance()
+                .getString("JP.SRU.Connection.url", "https://sru.k10plus.de/k10plus");
+        try {
+            return SRUConnectorFactory.getSRUConnector(sruConnectionURL, query);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**
      * Converts the given pica record to mycore object.
      *
      * @param picaRecord the pica record to convert
-     * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      * @return new mycore object
+     * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      */
     public static MCRObject toMCRObject(PicaRecord picaRecord) throws IOException {
         return new MCRObject(toMCRObjectDocument(picaRecord));
@@ -175,8 +189,8 @@ public class GndUtil {
      * Converts the given pica record to a mycore xml object.
      *
      * @param picaRecord the pica record to convert
-     * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      * @return jdom2 document
+     * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      */
     public static Document toMCRObjectDocument(PicaRecord picaRecord) throws IOException {
         String objectType = picaRecord.getValue("002@", "0");
@@ -186,7 +200,7 @@ public class GndUtil {
             return new JPInstitutionProducer().produceRawMCRObject(picaRecord);
         }
         throw new IllegalArgumentException("Invalid object type. 002@ has to be either 'Tp' or 'Tb' but is '" +
-            objectType + "'.");
+                objectType + "'.");
     }
 
     private static boolean isPerson(String picaObjectType) {
