@@ -491,7 +491,54 @@ $(document).ready(function () {
         failed(e);
         return;
       }
-      $.post(jp.baseURL + "rsc/urn/update/" + derivID).done(function (e) {
+      success();
+    }).fail(function (e) {
+      console.log(e);
+      failed(e);
+    });
+  });
+
+  dialog.on("hidden.bs.modal", function () {
+    location.reload();
+  });
+
+  function failed(e) {
+    dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+    if (e.status == "401") {
+      dialogContent.html("Sie haben nicht die notwendige Berechtigung, um die DOI zu vergeben!");
+    } else {
+      dialogContent.html("Es ist ein Fehler bei der Generierung aufgetreten. Bitte wenden Sie sich an den Administrator.\n"
+          + e.message + "\n" + e.stacktrace);
+    }
+  }
+
+  function success() {
+    dialogIcon.html("<i class='fa fa-3x fa-check' />");
+    dialogContent.html("Die DOI wurde erfolgreich vergeben!");
+  }
+
+});
+
+//DOI GENERATE
+$(document).ready(function () {
+  var dialog = $("#generateDOIDialog");
+  var generateButton = $("#generateDOIDialogStart");
+  var dialogIcon = $("#generateDOIDialogIcon");
+  var dialogContent = $("#generateDOIDialogContent");
+
+
+  generateButton.click(function () {
+    dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
+    dialogContent.html("DOI wird vergeben. Bitte warten...");
+    generateButton.attr("disabled", "disabled");
+    let objID = dialog.attr("data-id");
+
+    $.post(jp.baseURL + "rsc/pi/registration/service/Datacite/" + objID).done(function (e) {
+      if (e.error) {
+        failed(e);
+        return;
+      }
+      $.post(jp.baseURL + "rsc/urn/update/" + objID).done(function (e) {
         if (e.error) {
           failed(e);
           return;
