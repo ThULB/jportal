@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -479,13 +480,39 @@ public class Importer {
         numbers.forEach(System.out::println);
     }
 
+    @MCRCommand(syntax = "importFromGoobi {0} {1}",
+            help = "Import files to {target mycore object} {path to files}")
+    public static void importFromGoobi(String journalID, String pathToGoobi) {
+        Path path = Paths.get(pathToGoobi);
+        Supplier<Stream<MapUtil<String, String>>> filesSupplier = () ->
+                Stream.of(pathToGoobi)
+                .map(Paths::get)
+                .flatMap(Importer::walk)
+                        .filter(Files::isRegularFile)
+                .map(Path::toString)
+                .sorted()
+                .map(Importer::parseFileName)
+                        .map(MapUtil::new);
+        importFromGoobi(journalID, filesSupplier);
+    }
+
     @MCRCommand(syntax = "importFromGoobi {0} {1} {2}",
             help = "Import files to {target mycore object} {path to Goobi} {goobi IDs separated by spaces}")
     public static void importFromGoobi(String journalID, String pathToGoobi, String goobiIDs) {
-        if (!journalExists(journalID)) {
-            return;
-        }
+        Predicate<String> fileFilter = p -> p.contains("_tif/") && !p.contains("sicher") && p.endsWith(".tif");
+        Predicate<MapUtil<String, String>> numberNot_00 = f -> !f.get("nr").equals("00");
 
+        Supplier<Stream<MapUtil<String, String>>> filesSupplier = () ->
+                getFilesFromDir(pathToGoobi, fileFilter, goobiIDs.split(" "))
+                        .sorted()
+                        .map(Importer::parseFileName)
+                        .map(MapUtil::new)
+                        .filter(numberNot_00);
+
+        importFromGoobi(journalID, filesSupplier);
+    }
+
+    public static HashMap<String, String> parseFileName(String fileName) {
         String prefix = "(?<prefix>Thueringische_Feuerwehrzeitung)";
         String ppn = "(?<ppn>[0-9]*)";
         String date = "(?<date>[0-9]*)";
@@ -496,7 +523,13 @@ public class Importer {
 
         GroupPattern fileNamePattern = new GroupPattern(regex);
 
-        Predicate<String> fileFilter = p -> p.contains("_tif/") && !p.contains("sicher") && p.endsWith(".tif");
+        return fileNamePattern.parse(fileName);
+    }
+
+    public static void importFromGoobi(String journalID, Supplier<Stream<MapUtil<String, String>>> filesSupplier) {
+        if (!journalExists(journalID)) {
+            return;
+        }
 
         DateFormatUtil dateFormatUtil = new DateFormatUtil(Locale.GERMANY);
         Function<String, String> yearFormat = dateFormatUtil.format("yyyyMMdd", "yyyy");
@@ -507,15 +540,11 @@ public class Importer {
         Function<MapUtil<String, String>, String> nrLabel = m -> m.getAndMap("nr", "Nr. "::concat)
                 .concat(" : ")
                 .concat(m.getAndMap("date", nrFormat));
-        Predicate<MapUtil<String, String>> numberNot_00 = f -> !f.get("nr").equals("00");
+
         Function<MapUtil<String, String>, String> year = f -> f.getAndMap("date", yearFormat);
         Function<MapUtil<String, String>, String> month = f -> f.getAndMap("date", monthFormat);
 
-        getFilesFromDir(pathToGoobi, fileFilter, goobiIDs.split(" "))
-                .sorted()
-                .map(fileNamePattern::parse)
-                .map(MapUtil::new)
-                .filter(numberNot_00)
+        filesSupplier.get()
                 .collect(groupingBy(year, TreeMap::new,
                         groupingBy(month, TreeMap::new,
                                 groupingBy(nrLabel, TreeMap::new, toList()))))
@@ -572,14 +601,53 @@ public class Importer {
         return Optional.empty();
     }
 
-    private static Optional<JPVolume> createVolume(String title, String date, String parentID) {
+    private static HashMap<String, JPVolume> volCache = new HashMap<>();
+
+    private static Optional<JPVolume> getVolumeFromCache(String title, String date, String parentID) {
+        String key = String.join("_", title, date, parentID);
+        return Optional.ofNullable(volCache.get(key));
+    }
+
+    private static Optional<JPVolume> searchVolInSys(String title, String date, String parentID) {
         String yearQuery = "+parent:" + parentID + " +date.published:" + date;
 
         List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getMainSolrClient(), yearQuery);
-        if (!ids.isEmpty()) {
-            LOGGER.error("Volume with published date " + date + " allready exist in " + parentID + "!");
+        int resultSize = ids.size();
+        if (resultSize == 1) {
             return Optional.empty();
         }
+
+        if (resultSize == 0) {
+            LOGGER.warn("No Volume with published date " + date + " in " + parentID + " was found!");
+        } else {
+            LOGGER.warn(resultSize + " volumes with published date " + date + " in " + parentID + " was found!");
+        }
+
+        return Optional.empty();
+    }
+
+    private static Optional<JPVolume> createVolume(String title, String date, String parentID) {
+//        String yearQuery = "+parent:" + parentID + " +date.published:" + date;
+//
+//        List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getMainSolrClient(), yearQuery);
+//        if (!ids.isEmpty()) {
+//            LOGGER.error("Volume with published date " + date + " allready exist in " + parentID + "!");
+//            return Optional.empty();
+//        }
+
+        String yearQuery = "+maintitle:" + title + " +parent:" + parentID + " +date.published:" + date;
+
+        List<String> ids = MCRSolrSearchUtils.listIDs(MCRSolrClientFactory.getMainSolrClient(), yearQuery);
+        int resultSize = ids.size();
+        if (resultSize == 1) {
+            return Optional.of(new JPVolume(ids.get(0)));
+        }
+
+        if (resultSize > 1) {
+            LOGGER.warn(resultSize + " volumes with published date " + date + " in " + parentID + " was found!");
+            return Optional.empty();
+        }
+
 
         try {
             JPVolume volume = new JPVolume();
@@ -612,6 +680,7 @@ public class Importer {
         return true;
     }
 
+
     private static Stream<String> getFilesFromDir(String goobiPath, Predicate<String> fileFilter, String... goobiIDs) {
         Path path = Paths.get(goobiPath);
 
@@ -622,9 +691,14 @@ public class Importer {
 
         return Stream.of(goobiIDs)
                 .map(path::resolve)
-                .flatMap(Importer::walk)
-                .map(Path::toString)
+                .flatMap(Importer::walkPaths)
                 .filter(fileFilter);
+    }
+
+    private static Stream<String> walkPaths(Path... paths) {
+        return Stream.of(paths)
+                .flatMap(Importer::walk)
+                .map(Path::toString);
     }
 
     private static Stream<Path> walk(Path path) {
