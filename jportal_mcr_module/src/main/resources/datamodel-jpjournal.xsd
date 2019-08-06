@@ -2,6 +2,17 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" elementFormDefault="qualified">
   <xsd:import schemaLocation="xml-2001.xsd" namespace="http://www.w3.org/XML/1998/namespace" />
   <xsd:import schemaLocation="xlink-2008-06.xsd" namespace="http://www.w3.org/1999/xlink" />
+    <xsd:attributeGroup name="structureInheritance">
+        <xsd:attribute name="heritable" type="xsd:boolean" fixed="false" use="optional" />
+        <xsd:attribute name="notinherit" type="xsd:boolean" fixed="true" use="optional" />
+    </xsd:attributeGroup>
+    <xsd:attributeGroup name="supportedXlinks">
+        <xsd:attribute ref="xlink:href" use="required" />
+        <xsd:attribute ref="xlink:title" />
+        <xsd:attribute ref="xlink:type" use="required" fixed="locator" />
+        <xsd:attribute ref="xlink:label" />
+        <xsd:attribute ref="xlink:role" />
+    </xsd:attributeGroup>
   <xsd:simpleType name="mcrdefaulttype">
     <xsd:restriction base="xsd:string">
       <xsd:maxLength value="256" />
@@ -71,30 +82,27 @@
           <xsd:attribute use="optional" type="xsd:boolean" name="notinherit" />
         </xsd:complexType>
       </xsd:element>
-      <xsd:element maxOccurs="1" minOccurs="0" name="derobjects">
+      <xsd:element name="derobjects">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element maxOccurs="unbounded" minOccurs="0" name="derobject">
-              <xsd:complexType>
-                <xsd:attribute type="xsd:integer" use="optional" name="inherited" />
-                <xsd:attribute type="mcrdefaulttype" use="optional" name="type" />
-                <xsd:attribute ref="xlink:type" />
-                <xsd:attribute use="optional" ref="xlink:href" />
-                <xsd:attribute use="optional" ref="xlink:title" />
-                <xsd:attribute use="optional" ref="xlink:label" />
-                <xsd:attribute use="optional" ref="xlink:from" />
-                <xsd:attribute use="optional" ref="xlink:to" />
-              </xsd:complexType>
-            </xsd:element>
+            <xsd:element maxOccurs="unbounded" ref="derobject" />
           </xsd:sequence>
-          <xsd:attribute fixed="MCRMetaLinkID" use="required" type="xsd:string" name="class" />
-          <xsd:attribute use="optional" type="xsd:boolean" name="heritable" />
-          <xsd:attribute use="optional" type="xsd:boolean" name="notinherit" />
+          <xsd:attribute name="class" use="required" type="xsd:string" fixed="MCRMetaEnrichedLinkID" />
+          <xsd:attributeGroup ref="structureInheritance" />
         </xsd:complexType>
       </xsd:element>
     </xsd:sequence>
     <xsd:attribute ref="xml:lang" />
   </xsd:complexType>
+    <xsd:element name="derobject">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:any maxOccurs="unbounded" minOccurs="0" processContents="lax" />
+            </xsd:sequence>
+            <xsd:attribute name="inherited" use="required" type="xsd:integer" fixed="0" />
+            <xsd:attributeGroup ref="supportedXlinks" />
+        </xsd:complexType>
+    </xsd:element>
   <xsd:complexType name="MCRObjectMetadata">
     <xsd:all>
       <xsd:element maxOccurs="1" minOccurs="1" name="maintitles">
