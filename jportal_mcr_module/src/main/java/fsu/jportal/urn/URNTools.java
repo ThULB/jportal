@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.output.DOMOutputter;
+import org.mycore.access.MCRAccessException;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRException;
@@ -71,7 +72,12 @@ public class URNTools {
                     mcrFileMetadata.setName(urn.getAdditional());
                 }
             }
-            MCRMetadataManager.updateMCRDerivateXML(derivate);
+            try {
+                MCRMetadataManager.update(derivate);
+            } catch (MCRAccessException e) {
+                LOGGER.error("Could not update URN " + urn + " for object " + id.toString());
+                e.printStackTrace();
+            }
         }
     }
 

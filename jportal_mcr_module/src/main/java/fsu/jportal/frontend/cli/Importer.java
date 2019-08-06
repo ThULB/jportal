@@ -37,11 +37,7 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRMarkManager;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.datamodel.metadata.*;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
@@ -315,7 +311,7 @@ public class Importer {
         // - delete derivate
         MCRObjectID mcrYearId = MCRObjectID.getInstance(yearId);
         MCRObject mcrYear = MCRMetadataManager.retrieveMCRObject(mcrYearId);
-        List<MCRMetaLinkID> derivates = mcrYear.getStructure().getDerivates();
+        List<MCRMetaEnrichedLinkID> derivates = mcrYear.getStructure().getDerivates();
         if (!derivates.stream().map(MCRMetaLinkID::getXLinkHrefID).allMatch(derivateId -> {
             try {
                 MCRMetadataManager.deleteMCRDerivate(derivateId);

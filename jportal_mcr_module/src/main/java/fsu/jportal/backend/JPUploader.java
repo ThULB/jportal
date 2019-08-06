@@ -111,6 +111,8 @@ public abstract class JPUploader {
             uploadHandler.finishUpload();
         } catch (IOException exc) {
             LOGGER.error("Unable to finish upload for " + uploadHandler.getDerivateID(), exc);
+        } catch (MCRAccessException e) {
+            e.printStackTrace();
         } finally {
             uploadHandler.unregister();
         }

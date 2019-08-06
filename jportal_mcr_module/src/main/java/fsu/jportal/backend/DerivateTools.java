@@ -419,7 +419,12 @@ public class DerivateTools {
         JPDerivateComponent derivateComponent = new JPDerivateComponent(derivateID);
         MCRDerivate mcrDerivate = derivateComponent.getObject();
         mcrDerivate.getDerivate().getInternals().setMainDoc(path);
-        MCRMetadataManager.updateMCRDerivateXML(mcrDerivate);
+        try {
+            MCRMetadataManager.update(mcrDerivate);
+        } catch (MCRAccessException e) {
+            LOGGER.error("Could not update derivate " + derivateID);
+            e.printStackTrace();
+        }
     }
 
     public static JsonObject getChildAsJson(String derivateID, String path, String file) {

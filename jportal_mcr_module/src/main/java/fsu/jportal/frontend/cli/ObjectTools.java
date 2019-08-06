@@ -37,13 +37,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.*;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
@@ -307,7 +301,7 @@ public class ObjectTools {
         List<MCRMetaLinkID> linkList = mcrObj.getStructure().getChildren();
         for (MCRMetaLinkID link : linkList) {
             MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(link.getXLinkHref()));
-            List<MCRMetaLinkID> derivateLinkList = mcrChild.getStructure().getDerivates();
+            List<MCRMetaEnrichedLinkID> derivateLinkList = mcrChild.getStructure().getDerivates();
             for (MCRMetaLinkID derivateLink : derivateLinkList) {
                 MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(
                         MCRObjectID.getInstance(derivateLink.getXLinkHref()));

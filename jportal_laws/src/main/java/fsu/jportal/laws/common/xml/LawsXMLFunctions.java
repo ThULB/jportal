@@ -13,13 +13,7 @@ import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFileMetadataManager;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaIFS;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectDerivate;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.*;
 import org.w3c.dom.Document;
 
 public abstract class LawsXMLFunctions {
@@ -43,7 +37,7 @@ public abstract class LawsXMLFunctions {
             return null;
         }
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
-        List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
+        List<MCRMetaEnrichedLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
         for (MCRMetaLinkID derLink : metaLinkList) {
             String derID = derLink.getXLinkHref();
             MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derID));
@@ -91,7 +85,7 @@ public abstract class LawsXMLFunctions {
             return null;
         }
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
-        List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
+        List<MCRMetaEnrichedLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
         for (MCRMetaLinkID derLink : metaLinkList) {
             String derID = derLink.getXLinkHref();
             MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derID));
