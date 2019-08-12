@@ -108,7 +108,7 @@ subprojects {
 
     compileJava {
         options.compilerArgs << '-Xlint:deprecation'
-        options.compilerArgs << '-Xlint:unchecked'
+        //options.compilerArgs << '-Xlint:unchecked'
     }
 
 }

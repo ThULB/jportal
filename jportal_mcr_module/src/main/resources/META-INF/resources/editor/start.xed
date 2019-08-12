@@ -37,7 +37,7 @@
           <!-- called when $gnd and $id is available -->
           <xed:source uri="sru:{$id}:{$gnd}" />
           <!-- called when $id is available -->
-          <xed:source uri="mcrobject:{$id}" />
+          <xed:source uri="xslStyle:mycoreobject-derivPreproc:mcrobject:{$id}" />
           <xed:bind xpath="/mycoreobject[@version='2.0']">
             <span id="journalID" style="display:none">
               <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed" ref="journalID" />

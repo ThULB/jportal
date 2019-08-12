@@ -82,10 +82,10 @@
           <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="derobjects">
+      <xsd:element maxOccurs="1" minOccurs="0" name="derobjects">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element maxOccurs="unbounded" ref="derobject" />
+            <xsd:element maxOccurs="unbounded" minOccurs="0" ref="derobject" />
           </xsd:sequence>
           <xsd:attribute name="class" use="required" type="xsd:string" fixed="MCRMetaEnrichedLinkID" />
           <xsd:attributeGroup ref="structureInheritance" />
