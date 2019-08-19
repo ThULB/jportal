@@ -251,32 +251,10 @@ public class Importer {
 
     @MCRCommand(syntax = "jvbEasyImport {0} {1} {2}",
             help = "Imports a whole jvb year more easy." + " {year} (1890)" + " {goobiId} (25636)"
-                    + " {mntPath} (where the goobi id will be mounted locally)")
+                    + " {mntPath} (where the goobi is mounted locally)")
     public static List<String> jvbEasyImport(String year, String goobiId, String mntPath) throws Exception {
-        // unmount always
-        try {
-            Process unmount = Runtime.getRuntime().exec("fusermount -u " + mntPath);
-            unmount.waitFor();
-        } catch (Exception exc) {
-            LOGGER.error("unable to unmount " + mntPath, exc);
-            return Lists.newArrayList();
-        }
-        // mount
-        try {
-            String mntCommand = "sshfs root@141.35.20.232:/opt/digiverso/goobi/metadata/" + goobiId + " " + mntPath
-                    + " -o allow_root";
-            Process mount = Runtime.getRuntime().exec(mntCommand);
-            if (!mount.waitFor(1, TimeUnit.MINUTES)) {
-                LOGGER.error("timeout while mount '" + mntCommand + "'");
-                return Lists.newArrayList();
-            }
-
-        } catch (Exception exc) {
-            LOGGER.error("unable to mount " + mntPath, exc);
-            return Lists.newArrayList();
-        }
         // check mounted files
-        Path imagesPath = Paths.get(mntPath).resolve("images");
+        Path imagesPath = Paths.get(mntPath +  goobiId + "/").resolve("images");
         if (!Files.exists(imagesPath)) {
             throw new FileNotFoundException(
                     "there should be an images folder " + imagesPath.toAbsolutePath().toString());
@@ -421,6 +399,16 @@ public class Importer {
             for (Path alto : altoStream) {
                 String altoFileName = alto.getFileName().toString();
                 String imgFileName = altoFileName.replaceAll(".xml", ".tif");
+                Path filePath = Paths.get(imgPath).resolve(imgFileName);
+                if (!Files.exists(filePath)) {
+                    imgFileName = altoFileName.replaceAll(".xml", ".TIF");
+                    filePath = Paths.get(imgPath).resolve(imgFileName);
+                    if (!Files.exists(filePath)) {
+                        LOGGER.error("Unable to add file to derivate");
+                        throw new FileNotFoundException(
+                            "there should be an image " + filePath.toAbsolutePath().toString());
+                    }
+                }
                 if (mainDoc == null) {
                     derivate.setMainDoc(imgFileName);
                     mainDoc = imgFileName;
