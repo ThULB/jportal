@@ -395,8 +395,11 @@ public class Importer {
         JPDerivateComponent derivate = new JPDerivateComponent();
         MCRMarkManager.instance().mark(derivate.getId(), MCRMarkManager.Operation.IMPORT);
         try (DirectoryStream<Path> altoStream = Files.newDirectoryStream(Paths.get(altoPath), "*.xml")) {
+            List<Path> altoList = new ArrayList<>();
+            altoStream.forEach(altoList::add);
+            altoList.sort(Comparator.comparing(Path::toString));
             String mainDoc = null;
-            for (Path alto : altoStream) {
+            for (Path alto : altoList) {
                 String altoFileName = alto.getFileName().toString();
                 String imgFileName = altoFileName.replaceAll(".xml", ".tif");
                 Path filePath = Paths.get(imgPath).resolve(imgFileName);
@@ -453,6 +456,7 @@ public class Importer {
                 paths.add(path);
             });
         }
+        paths.sort(Comparator.comparing(Path::toString));
         return paths;
     }
 
