@@ -3,19 +3,19 @@
     <label xml:lang="de" text="Documnenttyp" description="Documnenttyp" />
     <label xml:lang="en" text="Document type" description="Document type" />
     <categories>
-        <category ID="year" counter="0">
+        <category ID="year">
             <label xml:lang="de" text="Jahr" />
             <label xml:lang="en" text="Year" />
         </category>
-        <category ID="calender" counter="0">
+        <category ID="calender">
             <label xml:lang="de" text="Kalendarium" />
             <label xml:lang="en" text="Calendar" />
         </category>
-        <category ID="prognostic" counter="0">
+        <category ID="prognostic">
             <label xml:lang="de" text="Prognostikum" />
             <label xml:lang="en" text="Prognostic" />
         </category>
-        <category ID="site" counter="0">
+        <category ID="site">
             <label xml:lang="de" text="Seite" />
             <label xml:lang="en" text="Site" />
         </category>
