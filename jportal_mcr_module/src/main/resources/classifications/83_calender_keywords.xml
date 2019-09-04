@@ -3,7 +3,7 @@
     <label xml:lang="de" text="Schlagworte" description="Schlagworte" />
     <label xml:lang="en" text="Keywords" description="Keywords" />
     <categories>
-        <category ID="Saturn" counter="0">
+        <category ID="Saturn">
             <label xml:lang="de" text="Saturn" />
         </category>
     </categories>

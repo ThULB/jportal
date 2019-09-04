@@ -3,26 +3,26 @@
     <label xml:lang="de" text="Bearbeitungsstatus" description="Bearbeitungsstatus" />
     <label xml:lang="en" text="State of working progress" description="State of working progress" />
     <categories>
-        <category ID="a1" counter="0">
+        <category ID="a1">
             <label xml:lang="de" text="A1 - Zeitschrift angelegt" />
         </category>
-        <category ID="b1" counter="0">
+        <category ID="b1">
             <label xml:lang="de" text="B1 - Bandstruktur fertig erstellt und Digitalisate hochgeladen" />
         </category>
-        <category ID="c1" counter="0">
+        <category ID="c1">
             <label xml:lang="de" text="C1 - Zuordnung zu Projekten vorgenommen" />
         </category>
-        <category ID="d1" counter="0">
+        <category ID="d1">
             <label xml:lang="de" text="D1 - Bandstruktur mit Digitalisaten fertig, UrMEL-AG informiert" />
         </category>
-        <category ID="e1" counter="0">
+        <category ID="e1">
             <label xml:lang="de" text="E1 - Inhaltliche Erschließung (EZB, ZDB) u.in Nachweißsystemen registriert" />
         </category>
-        <category ID="f1" counter="0">
+        <category ID="f1">
             <label xml:lang="de" text="F1 - Tiefenerschließung durch UrMEL-AG beendet" />
         </category>
 
-        <category ID="z" counter="1">
+        <category ID="z">
             <label xml:lang="de" text="Z - Zeitschrift komplett erschlossen und fertig" />
         </category>
     </categories>
