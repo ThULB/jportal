@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    ports:
+      - 50000:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - db.env
+
+  solr:
+    image: solr:slim
+    ports:
+      - "8391:8983"
+    volumes:
+      - solr:/var/solr
+      - ../config/solr-home:/opt/jpsolrhome
+    environment:
+      - SOLR_HOME=/opt/jpsolrhome
+
+  app:
+    build: ./app
+    restart: always
+    ports:
+      - "8080:8080"
+      - "8295:8000"
+    volumes:
+      - ../build/libs/jportal_webapp-2.0.19-SNAPSHOT.war:/usr/local/tomcat/webapps/jportal.war
+      - ./app/mycore.properties:/mcrHome/jportal/mycore.properties
+      - ./app/persistence.xml:/mcrHome/jportal/resources/META-INF/persistence.xml
+    env_file:
+      - app.env
+    depends_on:
+      - db
+      - solr
+
+volumes:
+  db:
+  solr:
