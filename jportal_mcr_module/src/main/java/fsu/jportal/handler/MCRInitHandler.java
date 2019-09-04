@@ -4,6 +4,7 @@ import fsu.jportal.backend.ACLTools;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.events.MCRStartupHandler;
 import org.mycore.user2.MCRUserCommands;
@@ -47,10 +48,12 @@ public abstract class MCRInitHandler implements MCRStartupHandler.AutoExecutable
     private void closeSession() {
         transaction.commit();
         session.close();
+        MCRSessionMgr.lock();
     }
 
     private void startSession() {
         session = MCRHIBConnection.instance().getSession();
+        MCRSessionMgr.unlock();
         transaction = session.beginTransaction();
     }
 
