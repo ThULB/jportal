@@ -31,6 +31,7 @@ public class Service extends MCRDOIService {
 
     @Override
     public synchronized MCRDigitalObjectIdentifier register(MCRBase obj, String additional, boolean updateObject) throws MCRAccessException, MCRActiveLinkException, MCRPersistentIdentifierException, ExecutionException, InterruptedException {
+        // check journal config if allowed
         MCRXSLTransformer transformer = MCRXSLTransformer.getInstance("xsl/mycoreobject-datacite.xsl");
         try {
             MCRContent dataciteXML = transformer.transform(new MCRJDOMContent(obj.createXML()));

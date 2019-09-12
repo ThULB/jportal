@@ -158,6 +158,22 @@
           </xsl:if>
         </div>
       </div>
+      <xsl:if test="$isJournal">
+        <div class=" row">
+          <div class="jp-layout-maintitle">Journal Konfigurieren</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 col-sm-4">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" value="allow.DOI"/>
+                DOI-Vergabe erlaubt
+              </label>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalConf.js" />
+      </xsl:if>
       <xsl:if test="$updatePerm = 'true'">
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-upload.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}rsc/derivatebrowser/gui/js/derivatebrowser-tools.js" />

@@ -1,8 +1,12 @@
 package fsu.jportal.backend.conf;
 
+import fsu.jportal.domain.model.JPProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.*;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +41,70 @@ public class ObjConfiguration {
                 .map(ObjConfiguration::loadProperties);
     }
 
+    public Optional<JPProperties> loadJPProperties(String propType) {
+        return JPObjectConfigurationPaths.getObjProperties(objID, propType, "json")
+                .filter(Files::exists)
+                .map(this::unmarshallJPProperties);
+    }
+
+    private JPProperties unmarshallJPProperties(Path path) {
+        try {
+            InputStream propIS = Files.newInputStream(path);
+            JAXBContext jaxbContext = JAXBContext.newInstance(JPProperties.class);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            unmarshaller.setProperty("eclipselink.media-type", MediaType.APPLICATION_JSON);
+            unmarshaller.setProperty("eclipselink.json.include-root", false);
+            StreamSource propsStreamSource = new StreamSource(propIS);
+            JPProperties props = unmarshaller.unmarshal(propsStreamSource, JPProperties.class).getValue();
+
+            return props;
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void saveJPProperties(String propType, JPProperties properties) {
+        JPObjectConfigurationPaths.getObjProperties(objID, propType, "json")
+                .map(this::createFileIfNeeded)
+                .ifPresent(path -> marshallJPProperties(properties, path));
+    }
+
+    private void marshallJPProperties(JPProperties properties, Path path) {
+        try {
+            OutputStream propOS = Files.newOutputStream(path);
+            JAXBContext jaxbContext = JAXBContext.newInstance(JPProperties.class);
+
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.setProperty("eclipselink.media-type", "application/json");
+            marshaller.setProperty("eclipselink.json.include-root", false);
+
+            marshaller.marshal(properties, propOS);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PropertyException e) {
+            e.printStackTrace();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Path createFileIfNeeded(Path path) {
+        if (!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return path;
+    }
+
     public Optional<Properties> addProperties(Map prosMap, String type) {
         Optional<Path> objProperties = JPObjectConfigurationPaths.getObjProperties(objID, type);
         Properties properties = objProperties
@@ -52,7 +120,7 @@ public class ObjConfiguration {
         try {
             boolean created = propsFile.createNewFile();
 
-            if(created){
+            if (created) {
                 LOGGER.info("Created property file " + propsFile.getAbsolutePath());
             }
 

@@ -22,4 +22,9 @@ public class JPObjectConfigurationPaths {
                 .map(p -> p.resolve(type + ".properties"));
     }
 
+    public static Optional<Path> getObjProperties(String journalId, String propType, String format){
+        return getConfPath(journalId)
+                .map(p -> p.resolve(propType + "." + format));
+    }
+
 }

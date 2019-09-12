@@ -1,16 +1,19 @@
 package fsu.jportal.resources;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import fsu.jportal.backend.conf.ObjConfiguration;
-import org.mycore.common.config.MCRConfiguration;
+import fsu.jportal.domain.model.JPProperties;
+import org.mycore.access.MCRAccessManager;
+import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
+import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Path("objConf")
 public class JPObjectConfigurationResource {
@@ -29,28 +32,35 @@ public class JPObjectConfigurationResource {
 
     @GET
     @Path("{id}/{type}")
-    public Response properties(@PathParam("id") String id, @PathParam("type") String type){
-        Map<Object, Object> propertiesMap = ObjConfiguration.of(id)
-                .getProperties(type)
-                .map(Properties::entrySet)
-                .map(Set::stream)
-                .orElse(Stream.empty())
-                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-
-        Gson gson = new Gson();
-        return Response.ok(gson.toJson(propertiesMap)).build();
+    @Produces(MediaType.APPLICATION_JSON)
+    public JPProperties properties(@PathParam("id") String id, @PathParam("type") String type){
+        return ObjConfiguration.of(id)
+                .loadJPProperties(type)
+                .orElseGet(JPProperties::new);
     }
 
-//    @PUT
-//    @Path("{id}/{type}")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response addProperties(String data, @PathParam("id") String id, @PathParam("type") String type){
-//        Gson gson = new Gson();
-//        Map propsMap = gson.fromJson(data, Map.class);
-//        ObjConfiguration.of(id)
-//                .addProperties(propsMap, type)
-//                .map(Response::);
-//
-//        return Response.created().build()
-//    }
+    @GET
+    @Path("props")
+    @Produces(MediaType.APPLICATION_JSON)
+    public JPProperties getProps() throws JAXBException {
+        JPProperties jpProperties = new JPProperties();
+        jpProperties.setProperty("foo", "bar");
+
+        return jpProperties;
+    }
+
+    @PUT
+    @Path("{id}/{type}")
+    @Consumes(MediaType.APPLICATION_JSON)
+//    @MCRRestrictedAccess(JPObjectConfigurationResourceAccess.class)
+    public void addProperties(JPProperties properties, @PathParam("id") String id, @PathParam("type") String type){
+        ObjConfiguration.of(id).saveJPProperties(type, properties);
+    }
+
+    private static class JPObjectConfigurationResourceAccess implements MCRResourceAccessChecker {
+        @Override
+        public boolean isPermitted(ContainerRequestContext containerRequestContext) {
+            return MCRAccessManager.checkPermission("update-objectConf");
+        }
+    }
 }
