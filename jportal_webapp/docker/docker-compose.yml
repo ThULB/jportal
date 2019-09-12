@@ -32,6 +32,7 @@ services:
       - ../build/libs/jportal_webapp-2.0.19-SNAPSHOT.war:/usr/local/tomcat/webapps/jportal.war
       - ./app/mycore.properties:/mcrHome/jportal/mycore.properties
       - ./app/persistence.xml:/mcrHome/jportal/resources/META-INF/persistence.xml
+      - ./data:/mcrHome/jportal/data
     env_file:
       - app.env
     depends_on:
