@@ -11,7 +11,7 @@ function loadKeywords() {
 	});
 
 	mainDiv.appendTo($("#main"));
-	
+
 	if(containsKeyword('keywordIndex')){
 		$("#keywordIndex").click();
 	}
@@ -28,13 +28,14 @@ function toggleKeyword(element, linkId, parents) {
 }
 
 function loadKeyword(element, keyword, parents) {
-	if(keyword == "") {
+	var keywordsDecoded = decodeCategId(keyword);
+	if(keywordsDecoded == "") {
 		$.get(jp.baseURL + "rsc/classifications/jportal_class_00000083/", function(data) {
 			attachToElement(element, data, parents);
 		});
 	} else{
-		parents = parents + "," + keyword;
-		$.get(jp.baseURL + "rsc/classifications/jportal_class_00000083/" + keyword, function(data) {
+		parents = parents + "," + keywordsDecoded;
+		$.get(jp.baseURL + "rsc/classifications/jportal_class_00000083/" + keywordsDecoded, function(data) {
 			attachToElement(element, data, parents);
 		});
 	}
@@ -47,7 +48,9 @@ function attachToElement(element, keywords, parents) {
 		if (keyword.haslink == true){
 			var li = $("<li></li>").appendTo(ul);
 			if (keyword.haschildren == true){
-				$("<span class='placeholder expander expand' id='" + keyword.id.categid + "' />").appendTo(li).click(function() {
+				var categIdEncoded = encodeCategId(keyword.id.categid);
+
+				$("<span class='placeholder expander expand' id='" + categIdEncoded + "' />").appendTo(li).click(function() {
 					toggleKeyword($(this), "a_" + $(this).attr("id"), parents + "," + $(this).attr("id"));
 				}).one("click", function() {
 					loadKeyword($(this).parent(), $(this).attr("id"), parents);
@@ -55,23 +58,36 @@ function attachToElement(element, keywords, parents) {
 			} else {
 				$("<span class='placeholder' id='" + keyword.id.categid + "' />").appendTo(li);
 			}
-			
-			var a = $("<a id='a_"+ keyword.id.categid + "' />");
+
+
+			var a = $("<a id='a_"+ categIdEncoded + "' />");
 			var categID = keyword.id.categid.replace(/ /g, "\\ ").replace(
-					/[(]/g, "\\(").replace(/[)]/g, "\\)");
+				/[(]/g, "\\(").replace(/[)]/g, "\\)");
 			var docUrl = document.URL.split("#");
 			docUrl = docUrl[0];
 			a.text(keyword.labels[0].text);
-			a.attr("href", jp.baseURL + "servlets/solr/select?q=+volContentClassi1:" + categID + "&XSL.returnURL=" + docUrl + "&XSL.returnHash=" + parents +"&XSL.returnID=" + docID); 
+			a.attr("href", jp.baseURL + "servlets/solr/select?q=+volContentClassi1:" + categID + "&XSL.returnURL=" + docUrl + "&XSL.returnHash=" + parents +"&XSL.returnID=" + docID);
 			a.appendTo(li);
-			
-			if(containsKeyword(keyword.id.categid)){
-				$("#" + keyword.id.categid).click();
-				$("#a_" + keyword.id.categid).addClass("jp-layout-colorBlue");
+
+
+			if(containsKeyword(categIdEncoded)){
+				$("#" + categIdEncoded).click();
+				$("#a_" + categIdEncoded).addClass("jp-layout-colorBlue");
 			}
 		}
 	}
 }
+
+function encodeCategId(categId){
+	return categId.replace(/ /g, "_sp_").replace(
+		/[(]/g, "_lbr_").replace(/[)]/g, "_rbr_");
+}
+
+function decodeCategId(categId){
+	return categId.replace(/_sp_/g, " ").replace(
+		/_lbr_/g, "(").replace(/_rbr_/g, ")");
+}
+
 
 function containsKeyword(toSearch){
 	var keywords = startKeyword.split(",");
@@ -82,4 +98,3 @@ function containsKeyword(toSearch){
 	}
 	return false;
 }
-
