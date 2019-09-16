@@ -79,13 +79,21 @@ function attachToElement(element, keywords, parents) {
 }
 
 function encodeCategId(categId){
-	return categId.replace(/ /g, "_sp_").replace(
-		/[(]/g, "_lbr_").replace(/[)]/g, "_rbr_");
+	return categId
+		.replace(/ /g, "_sp_")
+		.replace(/[(]/g, "_lbr_")
+		.replace(/[)]/g, "_rbr_")
+		.replace(/[<]/g, "_lt_")
+		.replace(/[>]/g, "_grt_");
 }
 
 function decodeCategId(categId){
-	return categId.replace(/_sp_/g, " ").replace(
-		/_lbr_/g, "(").replace(/_rbr_/g, ")");
+	return categId
+		.replace(/_sp_/g, " ")
+		.replace(/_lbr_/g, "(")
+		.replace(/_rbr_/g, ")")
+		.replace(/_lt_/g, "<")
+		.replace(/_grt_/g, ">");
 }
 
 
