@@ -21,6 +21,7 @@
   <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
   <xsl:variable name="currentObjID" select="/mycoreobject/@ID" />
   <xsl:variable name="currentType" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
+  <xsl:variable name="createJournal" select="acl:checkPermission('POOLPRIVILEGE', 'create-jpjournal')" />
   <xsl:variable name="updatePerm" select="acl:checkPermission($currentObjID,'writedb')" />
   <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,'deletedb')" />
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
@@ -158,7 +159,7 @@
           </xsl:if>
         </div>
       </div>
-      <xsl:if test="$isJournal">
+      <xsl:if test="$isJournal and $createJournal">
         <div class=" row">
           <div class="jp-layout-maintitle">Journal Konfigurieren</div>
         </div>
@@ -166,10 +167,17 @@
           <div class="col-xs-6 col-sm-4">
             <div class="checkbox">
               <label>
-                <input type="checkbox" value="allow.DOI"/>
+                <input class="journalConfCheckbox" type="checkbox" value="DOI.allow.{$currentObjID}"/>
                 DOI-Vergabe erlaubt
               </label>
             </div>
+          </div>
+        </div>
+        <div id="failModal" class="fail-modal">
+          <!-- Modal content -->
+          <div class="fail-modal-content">
+            <span class="fail-close">&#215;</span>
+            <p id="failModalText">Some text in the Modal..</p>
           </div>
         </div>
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalConf.js" />

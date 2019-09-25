@@ -52,15 +52,15 @@ public class JPObjectConfigurationResource {
     @PUT
     @Path("{id}/{type}")
     @Consumes(MediaType.APPLICATION_JSON)
-//    @MCRRestrictedAccess(JPObjectConfigurationResourceAccess.class)
+    @MCRRestrictedAccess(JPObjectConfigurationResourceAccess.class)
     public void addProperties(JPProperties properties, @PathParam("id") String id, @PathParam("type") String type){
         ObjConfiguration.of(id).saveJPProperties(type, properties);
     }
 
-    private static class JPObjectConfigurationResourceAccess implements MCRResourceAccessChecker {
+    public static class JPObjectConfigurationResourceAccess implements MCRResourceAccessChecker {
         @Override
         public boolean isPermitted(ContainerRequestContext containerRequestContext) {
-            return MCRAccessManager.checkPermission("update-objectConf");
+            return MCRAccessManager.checkPermission("create-jpjournal");
         }
     }
 }
