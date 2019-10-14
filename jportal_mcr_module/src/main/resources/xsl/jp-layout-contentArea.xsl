@@ -159,28 +159,39 @@
           </xsl:if>
         </div>
       </div>
-      <xsl:if test="$isJournal and $createJournal">
-        <div class=" row">
-          <div class="jp-layout-maintitle">Journal Konfigurieren</div>
-        </div>
-        <div class="row">
-          <div class="col-xs-6 col-sm-4">
-            <div class="checkbox">
-              <label>
-                <input class="journalConfCheckbox" type="checkbox" value="DOI.allow.{$currentObjID}"/>
-                DOI-Vergabe erlaubt
-              </label>
+      <xsl:if test="$createJournal">
+        <xsl:if test="$isJournal">
+          <div class=" row">
+            <div class="jp-layout-maintitle">Journal Konfigurieren</div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6 col-sm-4">
+              <div class="checkbox">
+                <label>
+                  <input class="journalConfCheckbox" type="checkbox" value="DOI.allow.{$currentObjID}"/>
+                  DOI-Vergabe erlaubt
+                </label>
+              </div>
+            </div>
+          </div>
+        </xsl:if>
+        <div id="failModal" class="jp-modal">
+          <!-- Modal content -->
+          <div class="jp-modal-content">
+            <div class="jp-modal-header">
+              <h5 class="jp-modal-title">Some title...</h5>
+              <button class="jp-modal-close">
+                <span>&#215;</span>
+              </button>
+            </div>
+            <div class="jp-modal-body">
+              <p>Some text in the Modal..</p>
             </div>
           </div>
         </div>
-        <div id="failModal" class="fail-modal">
-          <!-- Modal content -->
-          <div class="fail-modal-content">
-            <span class="fail-close">&#215;</span>
-            <p id="failModalText">Some text in the Modal..</p>
-          </div>
-        </div>
-        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalConf.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/tools/http.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/doi/DOIConfig.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/doi/GUI.js" />
       </xsl:if>
       <xsl:if test="$updatePerm = 'true'">
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-upload.js" />

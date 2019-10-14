@@ -147,7 +147,7 @@
           <label name="Versionsgeschichte" href="{$WebApplicationBaseURL}jp-history.xml?XSL.id={/mycoreobject/@ID}" />
         </item>
         <item>
-          <label id="doiButton" name="DOI-Vergabe" post="{$WebApplicationBaseURL}rsc/pi/registration/service/Datacite/{/mycoreobject/@ID}" />
+          <label name="DOI-Vergabe" id="jp-doi-button" href="#" />
         </item>
       </item>
     </menu>
@@ -306,56 +306,6 @@
       <xsl:copy-of select="@*" />
       <xsl:value-of select="@name" />
     </a>
-  </xsl:template>
-
-  <xsl:template mode="menuLabel" match="label[@post]">
-    <button id="{@id}" type="submit"><xsl:value-of select="@name"/></button>
-    <script type="text/javascript">
-      $(document).ready(function() {
-          $("#<xsl:value-of select="@id" />").click(function() {
-            var xhttp = new XMLHttpRequest();
-            var url = "<xsl:value-of select="@post" />";
-
-            $.ajax({
-                url: url,
-                type: "POST",
-                statusCode: {
-                    200: function() {
-                        alert('OK');
-                    },
-                    500: function(error) {
-                        var errorJSON = error.responseJSON;
-                        if(errorJSON.code === "384"){
-                            alert('Missing tags: ' + errorJSON.translatedAdditionalInformation);
-                        }
-                    }
-                }
-            });
-
-            <!--
-            /*
-            xhttp.open('POST', url, true);
-            xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-            xhttp.onreadystatechange = function() {//Call a function when the state changes.
-                if(xhttp.readyState === 4) {
-                    if(xhttp.status === 200){
-                        alert('OK');
-                    }else if(xhttp.status === 500){
-                        var errorJSON = JSON.parse(xhttp.responseText);
-                        if(errorJSON.code === "384"){
-                            alert('Missing tags: ' + errorJSON.translatedAdditionalInformation);
-                        }
-                    }else {
-                        alert('ERROR: ' + xhttp.status);
-                    }
-                }
-            };
-            xhttp.send()*/
-            -->
-            });
-      });
-    </script>
   </xsl:template>
 
   <xsl:template mode="menuLabel" match="label[@ref]|link[@ref]">

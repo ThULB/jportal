@@ -3,6 +3,7 @@ package fsu.jportal.resources;
 import com.google.gson.Gson;
 import fsu.jportal.backend.conf.ObjConfiguration;
 import fsu.jportal.domain.model.JPProperties;
+import fsu.jportal.domain.model.JPUser;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
@@ -62,5 +63,18 @@ public class JPObjectConfigurationResource {
         public boolean isPermitted(ContainerRequestContext containerRequestContext) {
             return MCRAccessManager.checkPermission("create-jpjournal");
         }
+    }
+
+    @GET
+    @Path("userinfo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public JPUser userInfo(){
+        return JPUser.info();
+    }
+
+    @GET
+    @Path("userinfo/{role}")
+    public Boolean isUserInRole(@PathParam("role") String role){
+        return JPUser.isUserInRole(role);
     }
 }

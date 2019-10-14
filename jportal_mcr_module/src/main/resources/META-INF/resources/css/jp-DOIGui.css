@@ -1,8 +1,8 @@
 /* The Modal (background) */
-.fail-modal {
+.jp-modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 11; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -12,26 +12,44 @@
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+.jp-modal-header {
+    display: flex;
+    padding: 16px;
+    align-items: flex-start;
+    border-bottom: solid 1px #e2dddd;
+}
+
+.jp-modal-title {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+}
 /* Modal Content/Box */
-.fail-modal-content {
+.jp-modal-content {
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 40%; /* Could be more or less, depending on screen size */
     border-radius: 10px;
 }
 
+.jp-modal-body {
+    padding: 16px;
+}
+
 /* The Close Button */
-.fail-close {
+.jp-modal-close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
+    margin: -1rem -1rem -1rem auto;
+    background-color: transparent;
+    border: none;
 }
 
-.fail-close:hover,
-.fail-close:focus {
+.jp-modal-close:hover,
+.jp-modal-close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
