@@ -7,7 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "devDependencies": {
-        "bower": "~1.4.1",
+        "bower": "~1.8.8",
         "grunt-cli": "~0.1.6",
         "grunt": "~0.4.2",
         "grunt-typescript": "^0.2.8",
