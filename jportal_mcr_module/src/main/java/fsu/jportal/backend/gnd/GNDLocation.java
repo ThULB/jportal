@@ -5,24 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import fsu.jportal.util.Pair;
+
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * A GNDLocation object consists of a gnd identifier, a label, an area code and a geographic coordinate (lat/lng).
  */
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE)
 public class GNDLocation {
 
+    @XmlElement
     private String id;
 
+    @XmlElement
     private String label;
 
+    @XmlElement
     private List<String> areaCodes;
 
+    @XmlElement
     private BigDecimal latitude;
 
+    @XmlElement
     private BigDecimal longitude;
 
     public void setId(String id) {
