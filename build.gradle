@@ -161,8 +161,8 @@ project(':jportal_mcr_module') {
         compile 'org.apache.logging.log4j:log4j-core:$log4jVersion'
         compile "org.glassfish.jersey.test-framework:jersey-test-framework-core:$jerseyVersion"
         compile "org.glassfish.jersey.core:jersey-server:$jerseyVersion"
-        compile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.moxy', version: '2.7.4'
-        compile group: 'org.glassfish.jersey.media', name: 'jersey-media-moxy', version: '2.29'
+        //compile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.moxy', version: '2.7.4'
+        //compile group: 'org.glassfish.jersey.media', name: 'jersey-media-moxy', version: '2.29'
         compile group: 'javax.json', name: 'javax.json-api', version: '1.1.4'
         compile group: 'org.glassfish', name: 'javax.json', version: '1.1.4'
 //        compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.4'
