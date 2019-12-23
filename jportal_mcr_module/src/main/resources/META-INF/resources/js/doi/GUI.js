@@ -106,7 +106,7 @@ function getMissingTags(missingTagsStr){
 
 function addCssStyle() {
     let linkEl = document.createElement("link");
-    linkEl.setAttribute("href", "/jportal/css/jp-DOIGui.css");
+    linkEl.setAttribute("href", jp.baseURL + "css/jp-DOIGui.css");
     linkEl.setAttribute("rel", "stylesheet");
     linkEl.setAttribute("type", "text/css");
 
