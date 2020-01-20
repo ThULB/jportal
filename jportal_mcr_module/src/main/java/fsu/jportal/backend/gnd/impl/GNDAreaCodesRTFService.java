@@ -1,21 +1,19 @@
 package fsu.jportal.backend.gnd.impl;
 
-import java.net.URL;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
+import fsu.jportal.backend.gnd.GNDAreaCodesService;
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
-import fsu.jportal.backend.gnd.GNDAreaCodesService;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.net.URL;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -71,11 +69,18 @@ public class GNDAreaCodesRTFService implements GNDAreaCodesService {
         ArrayList<Element> conceptList = new ArrayList<>();
         conceptList.add(concept);
 
-        Optional.ofNullable(concept.getChild("broader", skosNS))
-                .map(b -> b.getChild("Concept", skosNS))
-                .ifPresent(c -> conceptList.add(c));
+        getNestedConcept(conceptList, concept, skosNS);
 
         return conceptList.stream();
+    }
+
+    private void getNestedConcept(ArrayList<Element> conceptList, Element concept, Namespace skosNS){
+        Optional.ofNullable(concept.getChild("broader", skosNS))
+                .map(b -> b.getChild("Concept", skosNS))
+                .ifPresent(c -> {
+                    conceptList.add(c);
+                    getNestedConcept(conceptList, c, skosNS);
+                } );
     }
 
     /**
