@@ -169,7 +169,7 @@ jp.sort.object = {
       let endPage = Math.min(currentPage + (Math.max(4 - currentPage, 1)), numPages - 1);
 
       addPaginatorPage(paginator, 1, currentPage);
-      if(endPage > 1) {
+      if(endPage >= 1) {
         if(currentPage >= 4) {
           paginator.append("<li class='plain'><span>...</span></li>");
         }
