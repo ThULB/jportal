@@ -51,7 +51,10 @@ public class FSStore extends MCRCStoreIFS2 {
     }
 
     @Override
-    protected void doDeleteContent(String s) throws Exception {
-        throw new Exception("This store do not support write operation!" );
+    protected void doDeleteContent(String storageId) throws Exception {
+        boolean deleted = getLocalFile(storageId).delete();
+        if (!deleted) {
+            throw new Exception("Could not delete content with storage ID " + storageId);
+        }
     }
 }
