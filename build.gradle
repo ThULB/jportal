@@ -258,7 +258,6 @@ project(':jportal_webapp') {
     apply plugin: 'war'
 
     task sourceWar(type: War) {
-        archiveClassifier = "sources"
     }
 
     publishing {
