@@ -2,15 +2,17 @@ group 'fsu.thulb'
 version '1.0-SNAPSHOT'
 
 allprojects {
-    def releaseURL = "http://artifactory.mycore.de/mycore-releases"
-    def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
+    //def releaseURL = "http://artifactory.mycore.de/mycore-releases"
+    //def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
+    def githubURL = "https://maven.pkg.github.com/ThULB/jportal"
 
     repositories {
         mavenLocal()
 
-        maven { url releaseURL }
+        //maven { url releaseURL }
 
-        maven { url snapshotsURL }
+        //maven { url snapshotsURL }
+        maven { url githubURL }
     }
 }
 
