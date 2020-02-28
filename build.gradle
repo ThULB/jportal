@@ -36,6 +36,7 @@ subprojects {
     apply plugin: 'maven'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
+    apply plugin: 'maven-publish'
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
 
@@ -66,6 +67,24 @@ subprojects {
                 repository(url: "http://artifactory.mycore.de/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'}-local") {
                     authentication(userName: mavenUser, password: mavenPassword)
                 }
+            }
+        }
+    }
+    
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/ThULB")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
             }
         }
     }
