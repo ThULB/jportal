@@ -86,7 +86,7 @@ subprojects {
 
     publishing {
         publications {
-            maven(MavenPublication) {
+            gpr(MavenPublication) {
                 from(components.java)
             }
         }
@@ -262,7 +262,7 @@ project(':jportal_webapp') {
 
     publishing {
         publications {
-            maven(MavenPublication) {
+            gpr(MavenPublication) {
                 artifact sourceWar
             }
         }
