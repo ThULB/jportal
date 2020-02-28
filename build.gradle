@@ -84,13 +84,13 @@ subprojects {
         }
     }
 
-    publishing {
+    /*publishing {
         publications {
             gpr(MavenPublication) {
                 from(components.java)
             }
         }
-    }
+    }*/
     
     dependencies {
         testCompile 'org.jmockit:jmockit:1.46'
@@ -257,13 +257,10 @@ project(':jportal_IT-TestData') {
 project(':jportal_webapp') {
     apply plugin: 'war'
 
-    task sourceWar(type: War) {
-    }
-
     publishing {
         publications {
             gpr(MavenPublication) {
-                artifact sourceWar
+                from(components.java)
             }
         }
     }
