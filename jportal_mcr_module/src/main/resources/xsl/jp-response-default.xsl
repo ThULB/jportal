@@ -339,11 +339,13 @@
 
   <xsl:template mode="searchHitDataField" match="str[@name='objectType' and text() = 'jpjournal']">
     <xsl:variable name="journalType" select="../arr[@name='journalType']/str/text()"/>
-    <xsl:variable name="classlink" select="concat('classification:metadata:0:children:',$journalType)" />
-    <xsl:call-template name="jp.printClass">
-      <xsl:with-param name="nodes" select="document($classlink)/mycoreclass/categories/category" />
-      <xsl:with-param name="lang" select="concat($CurrentLang, '-singular')" />
-    </xsl:call-template>
+    <xsl:if test="$journalType != ''">
+      <xsl:variable name="classlink" select="concat('classification:metadata:0:children:',$journalType)"/>
+      <xsl:call-template name="jp.printClass">
+        <xsl:with-param name="nodes" select="document($classlink)/mycoreclass/categories/category"/>
+        <xsl:with-param name="lang" select="concat($CurrentLang, '-singular')"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="searchHitDataField" match="str[@name='objectType' and text() = 'jpvolume']">
