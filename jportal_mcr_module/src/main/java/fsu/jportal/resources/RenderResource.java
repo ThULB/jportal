@@ -52,7 +52,8 @@ public class RenderResource {
 
     protected Response getHTML(MCRContent content) {
         try {
-            MCRContentTransformer transformer = MCRLayoutTransformerFactory.getTransformer("jp-layout-object");
+            MCRLayoutTransformerFactory transformerFactory = new MCRLayoutTransformerFactory();
+            MCRContentTransformer transformer = transformerFactory.getTransformer("jp-layout-object");
             MCRContent htmlContent = transformer.transform(content);
             return Response.ok(htmlContent.asString(), MediaType.TEXT_HTML).build();
         } catch(Exception exc) {

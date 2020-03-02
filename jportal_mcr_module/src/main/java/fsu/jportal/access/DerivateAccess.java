@@ -1,7 +1,5 @@
 package fsu.jportal.access;
 
-import static org.apache.fop.fonts.type1.AdobeStandardEncoding.e;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -33,7 +31,7 @@ public class DerivateAccess {
             }
             return checkPerm(id, journalID);
         } catch (Exception exc) {
-            LOGGER.error("Error while checking derivate access for " + id, e);
+            LOGGER.error("Error while checking derivate access for " + id, exc);
             return false;
         }
     }

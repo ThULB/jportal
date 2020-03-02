@@ -4,6 +4,8 @@
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" exclude-result-prefixes="derivateLinkUtil xlink acl mcrxml xalan xsi solrxml">
 
+  <xsl:include href="classificationEditor.xsl" />
+
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
   <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
   <xsl:variable name="hasSourceOfLink" select="/mycoreobject/structure/derobjects/derobject[@xlink:href = substring-before($bookmarkedImage,'/')]" />
