@@ -4,3 +4,9 @@ img[data-id="ToolbarImage"] {
   height: 26px; 
   width: 96px;
 }
+
+.btn-secondary {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
