@@ -22,6 +22,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
+import org.mycore.imagetiler.input.MCRChannelImageInputStreamSpi;
 import org.mycore.solr.MCRSolrCore;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.xml.sax.SAXParseException;
@@ -37,6 +38,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.concurrent.*;
 
+import javax.imageio.spi.IIORegistry;
+import javax.imageio.spi.ImageInputStreamSpi;
 import javax.persistence.criteria.CriteriaQuery;
 
 public class InitHandler extends MCRInitHandler {
@@ -56,8 +59,15 @@ public class InitHandler extends MCRInitHandler {
     @Override
     protected void run() {
         initCLI();
-
+        initSPI();
         initSolr();
+    }
+
+    private void initSPI() {
+        //add file channel support for ImageIO
+        LOGGER.info("Register service provider " + MCRChannelImageInputStreamSpi.class.getCanonicalName());
+        IIORegistry.getDefaultInstance()
+                .registerServiceProvider(new MCRChannelImageInputStreamSpi(), ImageInputStreamSpi.class);
     }
 
     @Override
