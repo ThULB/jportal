@@ -17,7 +17,7 @@ jp.history = jp.history || {
         return;
       }
       var td = $(this).find('.userAction');
-      td.append("<i class='fa fa-undo' style='cursor: pointer;' onclick='jp.history.onClickRestore(" + rev + ")'></i>");
+      td.append("<i class='fas fa-undo' style='cursor: pointer;' onclick='jp.history.onClickRestore(" + rev + ")'></i>");
     });
     $(".versionRow").mouseleave(function() {
       $(this).find('.userAction').empty();

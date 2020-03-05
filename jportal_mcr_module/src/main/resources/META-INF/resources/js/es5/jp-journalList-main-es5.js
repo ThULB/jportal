@@ -519,7 +519,7 @@ jp.journalList.view = {
       return;
     }
     var spinner = document.createElement("i");
-    spinner.classList.add("fa", "fa-circle-o-notch", "fa-spin", "fa-2x", "jp-journalList-spinner");
+    spinner.classList.add("fas", "fa-circle-notch", "fa-spin", "fa-2x", "jp-journalList-spinner");
     jp.journalList.view.resultList.insertBefore(spinner, jp.journalList.view.resultList.firstChild);
   }
 

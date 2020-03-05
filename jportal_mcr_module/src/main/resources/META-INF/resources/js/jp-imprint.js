@@ -116,7 +116,7 @@ let ImprintEditor = function (objID, type) {
 				else {
 					$("#imprint-no-imprint").removeClass("hidden");
 					selectImprint($(".standard-elm"));
-					$(".standard-elm").append("<i class='fa fa-2x fa-check current-imprint'></i>");
+					$(".standard-elm").append("<i class='fas fa-2x fa-check current-imprint'></i>");
 				}
 			},
 			error: function() {
@@ -235,14 +235,14 @@ let ImprintEditor = function (objID, type) {
 					if (data == "") {
 						$("#imprint-no-link").removeClass("hidden");
 						selectImprint($(".standard-elm"));
-						$(".standard-elm").append("<i class='fa fa-2x fa-check current-imprint'></i>");
+						$(".standard-elm").append("<i class='fas fa-2x fa-check current-imprint'></i>");
 					}
 					else {
 						if (currentType == "greeting") {
 							data = "Begrüßung";
 						}
 						selectImprint(getImprintWithName(data));
-						getImprintWithName(data).append("<i class='fa fa-2x fa-check current-imprint'></i>");
+						getImprintWithName(data).append("<i class='fas fa-2x fa-check current-imprint'></i>");
 					}
 				},
 				500: function () {

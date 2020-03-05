@@ -302,11 +302,11 @@
                       <xsl:with-param name="value" select="$previewsRowStart"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                  <i class="fa fa-angle-left active" aria-hidden="true"/>
+                  <i class="fas fa-angle-left active" aria-hidden="true"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <i class="fa fa-angle-left inactive" aria-hidden="true"/>
+                <i class="fas fa-angle-left inactive" aria-hidden="true"/>
               </xsl:otherwise>
             </xsl:choose>
           </li>
@@ -337,11 +337,11 @@
                       <xsl:with-param name="value" select="$nextRowStart"/>
                     </xsl:call-template>
                   </xsl:attribute>
-                  <i class="fa fa-angle-right active" aria-hidden="true"/>
+                  <i class="fas fa-angle-right active" aria-hidden="true"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <i class="fa fa-angle-right inactive" aria-hidden="true"/>
+                <i class="fas fa-angle-right inactive" aria-hidden="true"/>
               </xsl:otherwise>
             </xsl:choose>
           </li>

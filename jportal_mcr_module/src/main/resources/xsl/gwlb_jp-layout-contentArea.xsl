@@ -109,8 +109,8 @@
               <a class="dt-collapse collapsed" data-toggle="collapse" data-target="#collapse1" >
                 <span class="jp-layout-facet-group-head" id="portal">
                 Autorenportal
-                <i class="fa fa-sort-asc" />
-                <i class="fa fa-sort-desc" />
+                <i class="fas fa-sort-up" />
+                <i class="fas fa-sort-down" />
                 </span>
               </a>
               <div id="collapse1" class="collapse">
@@ -138,8 +138,8 @@
               <a class="dt-collapse collapsed" data-toggle="collapse" data-target="#collapse1">
                 <span class="jp-layout-facet-group-head" id="portal">
                   Autorenportal
-                  <i class="fa fa-sort-asc" />
-                  <i class="fa fa-sort-desc" />
+                  <i class="fas fa-sort-up" />
+                  <i class="fas fa-sort-down" />
                 </span>
               </a>
               <div id="collapse1" class="collapse">
@@ -380,8 +380,8 @@
           <span class="jp-layout-facet-group-head">
             Links
           </span>
-          <i class="fa fa-sort-asc"></i>
-          <i class="fa fa-sort-desc"></i>
+          <i class="fas fa-sort-up"></i>
+          <i class="fas fa-sort-down"></i>
         </a>
         <div class="list-group jp-list-group-special" id="jp-journal-link-list">
           <div id="jp-tableOfContent" class="jp-layout-tableOfContent list-group jp-list-group-special">

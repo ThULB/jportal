@@ -102,7 +102,8 @@
         <!-- add html stuff to head for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/head/top/*"/>
         <xsl:apply-templates select="$callApplyTemplate" mode="insert-html-head-top"/>
-        <link href="{$WebApplicationBaseURL}webjars/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="{$WebApplicationBaseURL}webjars/font-awesome/5.12.0/css/fontawesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="{$WebApplicationBaseURL}webjars/font-awesome/5.12.0/css/solid.min.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}webjars/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen"/>
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css"/>
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css"/>

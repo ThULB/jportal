@@ -16,7 +16,7 @@
 			<ol class="col-sm-10 breadcrumb jp-layout-mcbreadcrumb">
 				<li>
 					<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
-						<i class="fa fa-reply" aria-hidden="true"></i>
+						<i class="fas fa-reply" aria-hidden="true"></i>
 						Zeitschriftenserver der VZG
 					</a>
 				</li>
@@ -98,7 +98,7 @@
 						</xsl:variable>
 						<li>
 							<a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
-								<i class="fa fa-reply" aria-hidden="true"></i>
+								<i class="fas fa-reply" aria-hidden="true"></i>
 								Zeitschriftenserver der VZG
 							</a>
 						</li>

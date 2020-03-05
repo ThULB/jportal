@@ -604,6 +604,7 @@ p.jp-layout-metadata-list {
 
 .jp-input-with-groupaddon {
 	border-right: none;
+	border-left: none;
 	box-shadow:none;
 }
 
@@ -1037,16 +1038,16 @@ textarea {
 	color: #008CC9;
 }
 
-.dt-collapse .fa-sort-asc{
+.dt-collapse .fa-sort-up{
 	float: right;
 	padding-top: 7px;
 }
 
-.dt-collapse.collapsed .fa-sort-asc, .dt-collapse .fa-sort-desc{
+.dt-collapse.collapsed .fa-sort-up, .dt-collapse .fa-sort-down{
 	display: none;	
 }
 
-.dt-collapse.collapsed .fa-sort-desc {
+.dt-collapse.collapsed .fa-sort-down {
 	display: inline-block;
 	float: right; 
 }

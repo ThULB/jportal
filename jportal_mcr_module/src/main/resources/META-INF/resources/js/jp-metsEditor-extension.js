@@ -1,7 +1,8 @@
 $(document).ready(function () {
 
   // load css stuff
-  $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', baseURL + 'webjars/font-awesome/4.7.0/css/font-awesome.min.css'));
+  $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', baseURL + 'webjars/font-awesome/5.12.0/css/fontawesome.min.css'));
+  $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', baseURL + 'webjars/font-awesome/5.12.0/css/solid.min.css'));
 
   // load js stuff
   $.getScript(baseURL + "webjars/bootstrap3-dialog/1.35.4/dist/js/bootstrap-dialog.min.js");
@@ -38,7 +39,7 @@ $(document).ready(function () {
         const sruDialogInfo = $(
           "<div style='text-align: center;'>" +
           "<p>Die Mets-Datei wird mit der JPortal Objekt Struktur abgeglichen. Bitte warten...</p>" +
-          "<p><i class='fa fa-3x fa-circle-o-notch fa-spin'></i></p>" +
+          "<p><i class='fas fa-3x fa-circle-notch fa-spin'></i></p>" +
           "</div>"
         );
         $.ajax({

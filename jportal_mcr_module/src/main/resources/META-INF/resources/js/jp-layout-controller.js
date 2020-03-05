@@ -239,7 +239,7 @@ function updateSearchbar() {
   function activateJournalSearch() {
     searchField.attr("placeholder", journalSearchLabel);
     searchField.attr("title", journalSearchLabel);
-    setDrowDownIcon("fa-newspaper-o");
+    setDrowDownIcon("fa-newspaper");
     removeHiddenFields();
     appendJournalSearchFields();
   }
@@ -271,7 +271,7 @@ function updateSearchbar() {
 
   function setDrowDownIcon(iconClass) {
     searchDropDownButton.find("i").remove();
-    searchDropDownButton.prepend("<i class='fa fa-fw " + iconClass + "'></i>");
+    searchDropDownButton.prepend("<i class='fas fa-fw " + iconClass + "'></i>");
   }
 
 }
@@ -365,7 +365,7 @@ $(document).ready(function () {
   });
 
   function appendSpinner(node) {
-    node.append("<i class='fa fa-circle-o-notch fa-spin'></i>");
+    node.append("<i class='fas fa-circle-notch fa-spin'></i>");
   }
 
 });
@@ -441,7 +441,7 @@ $(document).ready(function () {
   var dialogContent = $("#generateMetsDialogContent");
 
   generateButton.click(function () {
-    dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
+    dialogIcon.html("<i class='fas fa-3x fa-circle-notch fa-spin' />");
     dialogContent.html("mets.xml wird generiert. Bitte warten...");
     generateButton.attr("disabled", "disabled");
     $.get(jp.baseURL + "rsc/mets/base/generate/" + dialog.attr("data-id")).done(function (e) {
@@ -457,7 +457,7 @@ $(document).ready(function () {
   });
 
   function failed(e) {
-    dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+    dialogIcon.html("<i class='fas fa-3x fa-ban' />");
     if (e.status == "401") {
       dialogContent.html("Sie haben nicht die notwendige Berechtigung um die mets.xml neu zu generieren!");
     } else {
@@ -466,7 +466,7 @@ $(document).ready(function () {
   }
 
   function success() {
-    dialogIcon.html("<i class='fa fa-3x fa-check' />");
+    dialogIcon.html("<i class='fas fa-3x fa-check' />");
     dialogContent.html("Die mets.xml wurde erfolgreich generiert!");
   }
 
@@ -481,7 +481,7 @@ $(document).ready(function () {
 
 
   generateButton.click(function () {
-    dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
+    dialogIcon.html("<i class='fas fa-3x fa-circle-notch fa-spin' />");
     dialogContent.html("URN wird vergeben. Bitte warten...");
     generateButton.attr("disabled", "disabled");
     let derivID = dialog.attr("data-id");
@@ -503,7 +503,7 @@ $(document).ready(function () {
   });
 
   function failed(e) {
-    dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+    dialogIcon.html("<i class='fas fa-3x fa-ban' />");
     if (e.status == "401") {
       dialogContent.html("Sie haben nicht die notwendige Berechtigung, um die DOI zu vergeben!");
     } else {
@@ -513,7 +513,7 @@ $(document).ready(function () {
   }
 
   function success() {
-    dialogIcon.html("<i class='fa fa-3x fa-check' />");
+    dialogIcon.html("<i class='fas fa-3x fa-check' />");
     dialogContent.html("Die DOI wurde erfolgreich vergeben!");
   }
 
@@ -528,7 +528,7 @@ $(document).ready(function () {
 
 
   generateButton.click(function () {
-    dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
+    dialogIcon.html("<i class='fas fa-3x fa-circle-notch fa-spin' />");
     dialogContent.html("DOI wird vergeben. Bitte warten...");
     generateButton.attr("disabled", "disabled");
     let objID = dialog.attr("data-id");
@@ -559,7 +559,7 @@ $(document).ready(function () {
   });
 
   function failed(e) {
-    dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+    dialogIcon.html("<i class='fas fa-3x fa-ban' />");
     if (e.status == "401") {
       dialogContent.html("Sie haben nicht die notwendige Berechtigung, um die URN zu vergeben!");
     } else {
@@ -568,7 +568,7 @@ $(document).ready(function () {
   }
 
   function success() {
-    dialogIcon.html("<i class='fa fa-3x fa-check' />");
+    dialogIcon.html("<i class='fas fa-3x fa-check' />");
     dialogContent.html("Die URN wurde erfolgreich vergeben!");
   }
 
@@ -581,7 +581,7 @@ $(document).ready(function () {
   var dialogContent = $("#updateURNDialogContent");
 
   generateButton.click(function () {
-    dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin' />");
+    dialogIcon.html("<i class='fas fa-3x fa-circle-notch fa-spin' />");
     dialogContent.html("URL der URN wird aktulisiert. Bitte warten...");
     generateButton.attr("disabled", "disabled");
     $.post(jp.baseURL + "rsc/urn/update/" + dialog.attr("data-id")).done(function (e) {
@@ -601,7 +601,7 @@ $(document).ready(function () {
   });
 
   function failed(e) {
-    dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+    dialogIcon.html("<i class='fas fa-3x fa-ban' />");
     if (e.status == "401") {
       dialogContent.html("Sie haben nicht die notwendige Berechtigung, um die URL der URN zu aktualisieren!");
     } else {
@@ -610,7 +610,7 @@ $(document).ready(function () {
   }
 
   function success() {
-    dialogIcon.html("<i class='fa fa-3x fa-check' />");
+    dialogIcon.html("<i class='fas fa-3x fa-check' />");
     dialogContent.html("Die URN wurde erfolgreich vergeben!");
   }
 
@@ -646,14 +646,14 @@ $(document).ready(function () {
   });
 
   function importable() {
-    dialogIcon.html("<i class='fa fa-3x fa-check' />");
+    dialogIcon.html("<i class='fas fa-3x fa-check' />");
     dialogContent.html("Überprüfung erfolgreich. Sie können den Importvorgang jetzt starten.");
     startImportButton.removeAttr("disabled");
     startImportButton.on("click", startImport);
   }
 
   function failed(e) {
-    dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+    dialogIcon.html("<i class='fas fa-3x fa-ban' />");
     if (typeof e.error === 'string') {
       dialogContent.html(e.error);
     } else if (e.error != null && typeof e.error === 'object') {
@@ -686,11 +686,11 @@ $(document).ready(function () {
   }
 
   function startImport() {
-    dialogIcon.html("<i class='fa fa-3x fa-circle-o-notch fa-spin'></i>");
+    dialogIcon.html("<i class='fas fa-3x fa-circle-notch fa-spin'></i>");
     dialogContent.html("Importiere. Bitte warten...");
     startImportButton.remove();
     $.post(jp.baseURL + "rsc/mets/import/import/" + dialog.attr("data-id")).done(function (data) {
-      dialogIcon.html("<i class='fa fa-3x fa-check' />");
+      dialogIcon.html("<i class='fas fa-3x fa-check' />");
       dialogContent.html("Import erfolgreich!");
       console.log(data);
       closeButton.on("click", function () {
@@ -698,7 +698,7 @@ $(document).ready(function () {
       });
     }).fail(function (e) {
       console.log(e);
-      dialogIcon.html("<i class='fa fa-3x fa-ban' />");
+      dialogIcon.html("<i class='fas fa-3x fa-ban' />");
       var msg = "Es ist ein Fehler während des Importvorgangs aufgetreten. " +
           "Bitte wenden Sie sich an den Adminstrator!"
       if (e.status == "401") {
@@ -722,7 +722,7 @@ $(document).ready(function () {
         var html = $(
             "<div style='text-align: center'>" +
             "<p>Katalogdatenbank wird angefragt. Bitte warten...</p>" +
-            "<p><i class='fa fa-3x fa-circle-o-notch fa-spin'></i></p>" +
+            "<p><i class='fas fa-3x fa-circle-notch fa-spin'></i></p>" +
             "</div>"
         );
         return handleMessage(html, dialogRef);

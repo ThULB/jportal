@@ -46,12 +46,12 @@ $(document).ready(function() {
 		dialog.removeClass("text-danger");
 
 		if(deletable) {
-			imageDiv.html("<i class='fa fa-warning fa-5x'></i>");
+			imageDiv.html("<i class='fas fa-exclamation-triangle fa-5x'></i>");
 			infoDiv.html("Sind Sie sicher, daß Sie <b>" + objectTitle + "</b> löschen wollen?");
 			submitButton.removeClass("hidden");
 			closeButton.text("Abbrechen");
 		} else {
-			imageDiv.html("<i class='fa fa-ban fa-5x'></i>");
+			imageDiv.html("<i class='fas fa-ban fa-5x'></i>");
 			infoDiv.html("Dieses Dokument enthält Digitalisate. Löschen nicht möglich!");
 		}
 	}
@@ -60,7 +60,7 @@ $(document).ready(function() {
 		closeButton.text("Schließen");
 		submitButton.addClass("hidden");
 
-		imageDiv.html("<i class='fa fa-circle-o-notch fa-spin fa-5x'></i>");
+		imageDiv.html("<i class='fas fa-circle-notch fa-spin fa-5x'></i>");
 		infoDiv.html("Dokument wird gelöscht. Bitte warten...");
 
 		
@@ -77,13 +77,13 @@ $(document).ready(function() {
 					contentType : 'application/xhtml+xml'
 				});
 			}
-			imageDiv.html("<i class='fa fa-check fa-5x'></i>");
+			imageDiv.html("<i class='fas fa-check fa-5x'></i>");
 			infoDiv.html("Löschen erfolgreich!");
 			closeButton.on("click", onCloseClicked);
 		}).error(function(error, xhr) {
 			title.text("Es ist ein Fehler beim Löschen aufgetreten");
 			dialog.addClass("text-danger");
-			imageDiv.html("<i class='fa fa-exclamation fa-5x'></i>");
+			imageDiv.html("<i class='fas fa-exclamation fa-5x'></i>");
 			if(error.status == 404) {
 				infoDiv.html("<p class='text-danger'>Das Dokument wurde bereits gelöscht.</p>");
 			} else if(error.status == 401) {

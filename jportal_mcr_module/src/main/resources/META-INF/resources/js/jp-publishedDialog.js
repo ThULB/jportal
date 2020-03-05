@@ -29,8 +29,8 @@ jp.PublishedDialog = function(options) {
 	this.fromText = $("<div></div>");
 	this.untilText = $("<div></div>");
 
-	this.zoomInButton = $("<a href='javascript:void(0)' class='btn btn-default disabled'><i class='fa fa-search-plus'></i></a>");
-	this.zoomOutButton = $("<a href='javascript:void(0)' class='btn btn-default disabled' style='margin-right: 4px;'><i class='fa fa-search-minus'></i></a>");
+	this.zoomInButton = $("<a href='javascript:void(0)' class='btn btn-default disabled'><i class='fas fa-search-plus'></i></a>");
+	this.zoomOutButton = $("<a href='javascript:void(0)' class='btn btn-default disabled' style='margin-right: 4px;'><i class='fas fa-search-minus'></i></a>");
 	this.filterButton = $("<a href='javascript:void(0)' class='btn btn-primary'>" + options.filterButtonText + "</a>");
 
 	this.zoomInButton.on("click", $.proxy(this.onZoomIn, this));
@@ -62,7 +62,7 @@ jp.PublishedDialog.prototype.onDialogShow = function() {
 }
 
 jp.PublishedDialog.prototype.updateChart = function() {
-	this.renderContent("<div class='text-center'><i class='fa fa-spinner fa-spin'></i></div>");
+	this.renderContent("<div class='text-center'><i class='fas fa-spinner fa-spin'></i></div>");
 	var that = this;
 	return this.query.execute().then(function(data) {
 		if(data == null) {

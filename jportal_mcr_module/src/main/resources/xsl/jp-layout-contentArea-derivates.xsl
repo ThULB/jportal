@@ -136,7 +136,7 @@
                         <div class="modal-body">
                           <div class="row">
                             <div class="col-md-2" id="generateURNDialogIcon" style="text-align: center;">
-                              <i class='fa fa-3x fa-question-circle'></i>
+                              <i class='fas fa-3x fa-question-circle'></i>
                             </div>
                             <div class="col-md-10" id="generateURNDialogContent">
                               Sind Sie sich sicher das Sie URN vergeben möchten. Diese wäre permanent und kann nicht
@@ -164,7 +164,7 @@
                         <div class="modal-body">
                           <div class="row">
                             <div class="col-md-2" id="updateURNDialogIcon" style="text-align: center;">
-                              <i class='fa fa-3x fa-question-circle'></i>
+                              <i class='fas fa-3x fa-question-circle'></i>
                             </div>
                             <div class="col-md-10" id="updateURNDialogContent">
                               Sind Sie sich sicher das Sie URL der URN aktualisieren möchten. Diese wäre permanent,
@@ -202,7 +202,7 @@
                     <div class="modal-body">
                       <div class="row">
                         <div class="col-md-2" id="generateMetsDialogIcon" style="text-align: center;">
-                          <i class='fa fa-3x fa-question-circle'></i>
+                          <i class='fas fa-3x fa-question-circle'></i>
                         </div>
                         <div class="col-md-10" id="generateMetsDialogContent">
                           Sind Sie sich sicher das Sie die aktuelle mets.xml überschreiben wollen?
@@ -231,7 +231,7 @@
                     <div class="modal-body">
                       <div class="row">
                         <div class="col-md-2" id="importMetsDialogIcon">
-                          <i class='fa fa-3x fa-circle-o-notch fa-spin'></i>
+                          <i class='fas fa-3x fa-circle-notch fa-spin'></i>
                         </div>
                         <div class="col-md-10" id="importMetsDialogContent">
                           Derivat wird überprüft. Bitte warten...
@@ -272,7 +272,7 @@
     <a href="{$href}" class="jp-thumbnail thumbnail"
        data-img="{$WebApplicationBaseURL}servlets/MCRTileCombineServlet/MIN/{$derivID}/{$file}?centerThumb=no">
       <div class="jp-layout-hidden-Button"/>
-      <i class='fa fa-circle-o-notch fa-spin jp-thumbnail-spinner'/>
+      <i class='fas fa-circle-notch fa-spin jp-thumbnail-spinner'/>
     </a>
   </xsl:template>
 
@@ -305,7 +305,7 @@
         </xsl:choose>
       </xsl:attribute>
       <div class="jp-layout-hidden-Button"/>
-      <i class='fa fa-circle-o-notch fa-spin jp-thumbnail-spinner'/>
+      <i class='fas fa-circle-notch fa-spin jp-thumbnail-spinner'/>
     </a>
   </xsl:template>
 

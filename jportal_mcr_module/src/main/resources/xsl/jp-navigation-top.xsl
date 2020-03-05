@@ -112,7 +112,7 @@
       <li>
         <!-- edit object -->
         <div class="btn-group jp-navigation-topHeader-Dropdown">
-          <button type="button" class="btn btn-default dropdown-toggle fa fa-bars"
+          <button type="button" class="btn btn-default dropdown-toggle fas fa-bars"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"/>
           <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
             <xsl:copy-of select="$objectEditing/*"/>
