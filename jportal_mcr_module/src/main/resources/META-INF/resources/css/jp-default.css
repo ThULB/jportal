@@ -602,6 +602,10 @@ p.jp-layout-metadata-list {
 	background: rgba(255,255,255,0.8);
 }
 
+#searchBar .jp-input-with-groupaddon {
+	border-left: none;
+}
+
 .jp-input-with-groupaddon {
 	border-right: none;
 	box-shadow:none;
@@ -1037,16 +1041,16 @@ textarea {
 	color: #008CC9;
 }
 
-.dt-collapse .fa-sort-asc{
+.dt-collapse .fa-sort-up{
 	float: right;
 	padding-top: 7px;
 }
 
-.dt-collapse.collapsed .fa-sort-asc, .dt-collapse .fa-sort-desc{
+.dt-collapse.collapsed .fa-sort-up, .dt-collapse .fa-sort-down{
 	display: none;	
 }
 
-.dt-collapse.collapsed .fa-sort-desc {
+.dt-collapse.collapsed .fa-sort-down {
 	display: inline-block;
 	float: right; 
 }
@@ -1577,7 +1581,7 @@ body {
 	padding-left: 8px;
 }
 
-.jp-pagination .fa {
+.jp-pagination .fas {
 	line-height: 25px;
 	width: 25px;
 	height: 25px;

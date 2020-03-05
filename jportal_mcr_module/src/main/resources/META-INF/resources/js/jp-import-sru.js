@@ -128,7 +128,7 @@ function clearDubletCheck() {
 }
 
 function showLoading() {
-	$("#result").append("<i class='fa fa-spinner fa-spin'></i>");
+	$("#result").append("<i class='fas fa-spinner fa-spin'></i>");
 }
 
 function xmlToString(xmlData) {

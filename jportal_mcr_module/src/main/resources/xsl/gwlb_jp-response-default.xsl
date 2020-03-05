@@ -456,8 +456,8 @@
         <span class="jp-layout-facet-group-head">
           <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
         </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
+        <i class="fas fa-sort-up"></i>
+        <i class="fas fa-sort-down"></i>
       </a>
       <div class="collapse in list-group jp-list-group-special" id="{@name}_{$colapsedId}">
         <xsl:apply-templates select="int" mode="facetField" />

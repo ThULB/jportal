@@ -219,8 +219,8 @@
           <span class="jp-layout-facet-group-head">
             Inhalt
           </span>
-          <i class="fa fa-sort-asc"></i>
-          <i class="fa fa-sort-desc"></i>
+          <i class="fas fa-sort-up"></i>
+          <i class="fas fa-sort-down"></i>
         </a>
         <div class="collapse in list-group jp-list-group-special" id="jp-journal-child-list">
           <div class="jp-layout-tableOfContent list-group jp-list-group-special">
@@ -287,8 +287,8 @@
         <span class="jp-layout-facet-group-head">
           <xsl:value-of select="$catTxt"/>
         </span>
-        <i class="fa fa-sort-asc"></i>
-        <i class="fa fa-sort-desc"></i>
+        <i class="fas fa-sort-up"></i>
+        <i class="fas fa-sort-down"></i>
       </a>
       <div class="collapse in list-group jp-list-group-special" id="jp-journal-volume-list">
         <div id="jp-tableOfContent -vol" class="jp-layout-tableOfContent list-group jp-list-group-special">

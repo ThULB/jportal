@@ -428,23 +428,23 @@
       <span class="jp-layout-facet-group-head">
         <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))"/>
       </span>
-      <i class="fa fa-sort-asc"></i>
-      <i class="fa fa-sort-desc"></i>
+      <i class="fas fa-sort-up"></i>
+      <i class="fas fa-sort-down"></i>
     </a>
     <div class="collapse in list-group jp-list-group-special" id="{@name}">
       <div style="display: flex;">
         <div style="display: flex; flex-direction: column; justify-content: space-between; margin-right: 8px;">
           <a id="{@name}_accept_button" href="javascript:void(0)" type="button"
              class="btn btn-xs btn-primary disabled" role="button">
-            <i class="fa fa-check"></i>
+            <i class="fas fa-check"></i>
           </a>
           <a id="{@name}_popup_button" href="javascript:void(0)" type="button"
              class="btn btn-xs btn-default" role="button">
-            <i class="fa fa-bar-chart"></i>
+            <i class="fas fa-chart-bar"></i>
           </a>
           <a id="{@name}_cancel_button" href="javascript:void(0)" type="button"
              class="btn btn-xs btn-danger disabled" role="button">
-            <i class="fa fa-times"></i>
+            <i class="fas fa-times"></i>
           </a>
         </div>
         <div>
@@ -457,7 +457,7 @@
             </span>
           </div>
           <div class="text-center">
-            <i class="fa fa-angle-down"></i>
+            <i class="fas fa-angle-down"></i>
           </div>
           <div class='input-group date' id='{@name}_to'>
             <input type='text' class="form-control"/>
@@ -522,8 +522,8 @@
       <span class="jp-layout-facet-group-head">
         <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))"/>
       </span>
-      <i class="fa fa-sort-asc"></i>
-      <i class="fa fa-sort-desc"></i>
+      <i class="fas fa-sort-up"></i>
+      <i class="fas fa-sort-down"></i>
     </a>
     <div class="collapse in list-group jp-list-group-special jp-facet-list" id="{@name}">
       <!-- select int nodes where parent attribute is not present-->

@@ -483,7 +483,7 @@ jp.sort.level = {
     }
     tr += "</td>";
     tr += "<td><button type='button' class='btn btn-default btn-sm' onclick='jp.sort.level.removeRow(`" + row.id + "`)'>";
-    tr += "<i class='fa fa-minus' aria-hidden='true'></i>";
+    tr += "<i class='fas fa-minus' aria-hidden='true'></i>";
     tr += "</button></td>";
     tr += "</tr>";
     container.append(tr);

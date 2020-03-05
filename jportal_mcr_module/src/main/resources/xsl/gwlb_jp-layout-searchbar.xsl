@@ -94,12 +94,12 @@
                     <xsl:if test="$journalID != ''">
                       <li>
                         <a href="javascript:void(0)" id="globalSearchOption">
-                          <i class="fa fa-fw fa-globe" />
+                          <i class="fas fa-fw fa-globe" />
                         </a>
                       </li>
                       <li>
                         <a href="javascript:void(0)" id="journalSearchOption">
-                          <i class="fa fa-fw fa-book" />
+                          <i class="fas fa-fw fa-book" />
                         </a>
                       </li>
                     </xsl:if>
@@ -113,7 +113,7 @@
       	                        <xsl:value-of select="concat('?journalID=', $journalID)" />
       	                      </xsl:if>
       	                  </xsl:attribute>
-                            <i class="fa fa-fw fa-search-plus" />
+                            <i class="fas fa-fw fa-search-plus" />
                             <xsl:value-of select="i18n:translate('jp.metadata.search.advanced')" />
                           </a>
                         </xsl:when>
@@ -128,7 +128,7 @@
   			                  <xsl:value-of select="concat('&amp;journalID=', $journalID)" />
   			                </xsl:if>
   			              </xsl:attribute>
-                            <i class="fa fa-fw fa-search-plus" />
+                            <i class="fas fa-fw fa-search-plus" />
                             <xsl:value-of select="i18n:translate('jp.metadata.search.advancedEdit')" />
                           </a>
                         </xsl:otherwise>
@@ -159,7 +159,7 @@
             <!-- edit object -->
             <xsl:if test="$objectEditing//li/a">
               <div class="dropdown dropdown-menu-right pull-right jp-layout-object-editing-container">
-                <button class="btn btn-default fa fa-gear dropdown-toggle" type="button" data-toggle="dropdown" />
+                <button class="btn btn-default fas fa-cog dropdown-toggle" type="button" data-toggle="dropdown" />
                 <ul class="jp-layout-object-editing-menu dropdown-menu dropdown-menu-right" role="menu">
                   <xsl:copy-of select="$objectEditing/*" />
                 </ul>
