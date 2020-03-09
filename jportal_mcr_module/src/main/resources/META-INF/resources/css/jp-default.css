@@ -602,6 +602,10 @@ p.jp-layout-metadata-list {
 	background: rgba(255,255,255,0.8);
 }
 
+#searchBar .jp-input-with-groupaddon {
+	border-left: none;
+}
+
 .jp-input-with-groupaddon {
 	border-right: none;
 	border-left: none;
@@ -1578,7 +1582,7 @@ body {
 	padding-left: 8px;
 }
 
-.jp-pagination .fa {
+.jp-pagination .fas {
 	line-height: 25px;
 	width: 25px;
 	height: 25px;

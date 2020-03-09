@@ -52,7 +52,7 @@ public abstract class TestUtils {
   }
   
   public static void clickCreatSelect(WebDriver driver, String which) {
-  	driver.findElement(By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']")).click();
+  	driver.findElement(By.xpath("//button[@class='btn btn-default fas fa-cog dropdown-toggle']")).click();
   	driver.findElement(By.name(which)).click();
   }
   

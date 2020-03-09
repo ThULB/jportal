@@ -110,6 +110,7 @@
         <link href="{$WebApplicationBaseURL}css/jp-move-obj.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}webjars/font-awesome/5.12.0/css/fontawesome.min.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}webjars/font-awesome/5.12.0/css/solid.min.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}webjars/font-awesome/5.12.0/css/regular.min.css" rel="stylesheet" type="text/css" />
 
 
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin-ext,cyrillic' rel='stylesheet' type='text/css' />

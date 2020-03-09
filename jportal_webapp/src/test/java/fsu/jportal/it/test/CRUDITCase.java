@@ -20,7 +20,7 @@ public class CRUDITCase extends BaseIntegrationTest {
     @Test
     public void createPerson() throws Exception {
         WebDriverWait wait = new WebDriverWait(DRIVER, 2);
-        By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
+        By adminButton = By.xpath("//button[@class='btn btn-default fas fa-cog dropdown-toggle']");
         wait.until(ExpectedConditions.elementToBeClickable(adminButton));
         DRIVER.findElement(adminButton).click();
 
@@ -93,7 +93,7 @@ public class CRUDITCase extends BaseIntegrationTest {
     @Test
     public void createInstitution() throws Exception {
         WebDriverWait wait = new WebDriverWait(DRIVER, 2);
-        By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
+        By adminButton = By.xpath("//button[@class='btn btn-default fas fa-cog dropdown-toggle']");
         wait.until(ExpectedConditions.elementToBeClickable(adminButton));
         DRIVER.findElement(adminButton).click();
 
@@ -428,7 +428,7 @@ public class CRUDITCase extends BaseIntegrationTest {
     public void delete() throws Exception {
         WebDriverWait wait = new WebDriverWait(DRIVER, 2);
         // create
-        By adminButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
+        By adminButton = By.xpath("//button[@class='btn btn-default fas fa-cog dropdown-toggle']");
         wait.until(ExpectedConditions.elementToBeClickable(adminButton));
         DRIVER.findElement(adminButton).click();
 
@@ -438,7 +438,7 @@ public class CRUDITCase extends BaseIntegrationTest {
         assertEquals("header does not match", "Uni Jena", DRIVER.findElement(By.id("jp-maintitle")).getText());
 
         // delete
-        By deletButton = By.xpath("//button[@class='btn btn-default fa fa-gear dropdown-toggle']");
+        By deletButton = By.xpath("//button[@class='btn btn-default fas fa-cog dropdown-toggle']");
         wait.until(ExpectedConditions.elementToBeClickable(deletButton));
         DRIVER.findElement(deletButton).click();
 

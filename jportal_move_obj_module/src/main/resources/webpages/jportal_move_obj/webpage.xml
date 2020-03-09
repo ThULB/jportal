@@ -53,17 +53,17 @@
                 <text i18n="mom.label.popup.3" />
               </p>
               <p>
-                <i class="fa fa-lg fa-spinner fa-spin"></i>
+                <i class="fas fa-lg fa-spinner fa-spin"></i>
               </p>
             </div>
             <div id="mom_move_popup_arrow"></div>
           </div>
           <button id="mom_button_move" type="button" class="btn btn-primary mom_button disabled">
-            <i class="fa fa-lg fa-arrow-right"></i>
+            <i class="fas fa-lg fa-arrow-right"></i>
             <text i18n="mom.label.move" />
           </button>
           <button id="mom_button_move_cancel" type="button" class="btn btn-danger mom_button">
-            <i class="fa fa-lg fa-minus-circle"></i>
+            <i class="fas fa-lg fa-minus-circle"></i>
             <text i18n="mom.label.cancel" />
           </button>
         </div>
@@ -79,7 +79,7 @@
                 <input id="mom_search" class="form-control" type="text" placeholder="i18n:mom.label.search" />
                 <span class="input-group-btn">
                   <button id="mom_search_button" class="btn btn-default" type="button">
-                    <i class="fa fa-lg fa-search"></i>
+                    <i class="fas fa-lg fa-search"></i>
                   </button>
                 </span>
               </div>
