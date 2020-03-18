@@ -333,18 +333,36 @@ var derivateBrowserUpload = (function () {
     }
 
     function existsCheck() {
-        var json = {
-            "deriID": derivateBrowserTools.getCurrentDocID(),
-            "path": derivateBrowserTools.getCurrentPath(),
-            "files": []
-        };
+        let derivId = derivateBrowserTools.getCurrentDocID();
+        let path = derivateBrowserTools.getCurrentPath();
+        let derivateFiles = new DerivateFiles();
+
         for (var i=0, len=currentUploadList.length; i<len; i++) {
+            /* currentUploadList
+            [
+                {
+                    "uploadID":null,
+                    "docID":"jportal_derivate_00000004",
+                    "deriID":"jportal_derivate_00000004",
+                    "path":"",
+                    "name":"TG571023.JPG",
+                    "size":"6.96 MB",
+                    "rawSize":7301024,
+                    "type":"image/jpeg",
+                    "lastmodified":"07.03.2020 23:42:32",
+                    "file":{},
+                    "statusbar":{"0":{},"length":1},"inFolder":false,"md5":""
+                 }
+            ]
+            * */
             if (currentUploadList[i].exists == undefined) {
-                json.files.push(currentUploadList[i].getCheckJson());
+                let fileName = currentUploadList[i].getCheckJson().file;
+                let currentFile = new File(derivId, path + "/" + fileName);
+                derivateFiles.add(currentFile);
             }
         }
-        if (json.files.length > 0) {
-            doExistsCheck(json);
+        if (derivateFiles.getFiles().length > 0) {
+            doExistsCheck(derivateFiles);
         }
         else {
             if (!uploadRunning) {
@@ -354,9 +372,44 @@ var derivateBrowserUpload = (function () {
     }
 
     function addDataToFileList(data) {
+        /* data
+        [
+            {
+                "file":"TG571023.JPG",
+                "id":"jportal_derivate_00000004/TG571023.JPG",
+                "fileType":"image/jpeg",
+                "exists":"1",
+                "existingFile":{"name":"TG571023.JPG","size":7301024,"lastmodified":"11.03.2020 09:09:17"}
+            }
+        ]
+        * */
+
+        /* new
+        [
+            {
+                "derivId":"jportal_derivate_00000004",
+                "exists":1,
+                "lastModifiedTime":"11.03.2020 09:09:17",
+                "path":"/TG571023.JPG",
+                "size":7301024,
+                "status":0,
+                "type":""
+             }
+        ]
+        * */
         for (var i = 0, len = data.length; i < len; i++) {
             var checkedFile = data[i];
-            var file = getFileFromArray(checkedFile.id);
+            let fileArrayID = checkedFile.derivId + checkedFile.path;
+            var file = getFileFromArray(fileArrayID);
+            /*
+            {"uploadID":null,
+            "docID":"jportal_derivate_00000004",
+            "deriID":"jportal_derivate_00000004",
+            "path":"","name":"TG571023.JPG","size":"6.96 MB",
+            "rawSize":7301024,"type":"image/jpeg",
+            "lastmodified":"07.03.2020 23:42:32","file":{},
+            "statusbar":{"0":{},"length":1},"inFolder":false,"md5":""}
+            * */
             if (file != undefined){
                 file.exists = checkedFile.exists;
                 file.checkedFile = checkedFile;
@@ -372,7 +425,7 @@ var derivateBrowserUpload = (function () {
                 return false;
             }
             if (upload.exists == "1" && !overwriteAll) {
-                upload.askOverwrite(upload.checkedFile.existingFile, currentDeriID, currentPath);
+                upload.askOverwrite(upload.checkedFile, currentDeriID, currentPath);
             }
             if (upload.exists == "0" || overwriteAll) {
                 uploadFile(upload);
@@ -711,6 +764,9 @@ var derivateBrowserUpload = (function () {
             data: JSON.stringify(json),
             statusCode: {
                 200: function (data) {
+                    /*
+                    {"deriID":"jportal_derivate_00000004","path":"","files":[{"file":"TG571023.JPG","id":"jportal_derivate_00000004/TG571023.JPG","fileType":"image/jpeg","exists":"1","existingFile":{"name":"TG571023.JPG","size":7301024,"lastmodified":"11.03.2020 09:09:17"}}]}
+                    * */
                     addDataToFileList(data.files);
                     if (!uploadRunning) {
                         uploadRunning = true;

@@ -131,27 +131,24 @@ var derivateBrowserMoveAndLink = (function () {
                     }
                 }
                 if (($(dropObj).closest(".folder").length > 0) && $(dragElm).hasClass("folder")) {
-                    var moveTo = $(dropObj).closest(".folder");
+                    let moveTo = $(dropObj).closest(".folder");
                     if (!$(moveTo).hasClass("faded") && !($(dragElm).parent().closest(".folder")[0] == $(moveTo)[0])) {
                         if ((!$(moveTo).hasClass("derivat") && !$(moveTo).hasClass("article")) || ($(moveTo).hasClass("article") && $(dragElm).hasClass("derivat"))) {
                             if (!($(moveTo).hasClass("journal") && $(dragElm).hasClass("article"))) {
                                 dragObj.remove();
-                                var json = [];
+                                let docs = new MoveDocs();
+                                let newParentId = $(moveTo).data("docID");
                                 if ($(dragElm).hasClass("aktiv")) {
                                     $(".aktiv").each(function () {
-                                        json.push({
-                                            "objId": $(this).data("docID"),
-                                            "newParentId": $(moveTo).data("docID")
-                                        });
+                                        let objId = $(this).data("docID");
+                                        docs.addDoc(objId, newParentId);
                                     });
                                 }
                                 else {
-                                    json.push({
-                                        "objId": $(dragElm).data("docID"),
-                                        "newParentId": $(moveTo).data("docID")
-                                    });
+                                    let objId = $(dragElm).data("docID");
+                                    docs.addDoc(objId, newParentId);
                                 }
-                                moveDocTo(json);
+                                moveDocTo(docs);
                             }
                         }
                     }
@@ -195,11 +192,15 @@ var derivateBrowserMoveAndLink = (function () {
             data: JSON.stringify(json),
             statusCode: {
                 200: function (data) {
-                    derivateBrowserTools.newAsyncMonitor(data.length, derivateBrowserTools.goTo);
-                    $.each(data, function (i , elm) {
-                        if (elm.success) {
-                            $("body").trigger("removeDocPerID", elm.objId);
-                            $("body").trigger("addDoc", elm.objId);
+                    let moveDocs = Object.setPrototypeOf(data, MoveDocs.prototype);
+                    let docs = moveDocs.getDocs();
+                    derivateBrowserTools.newAsyncMonitor(docs.length, derivateBrowserTools.goTo);
+                    $.each(docs, function (i , elm) {
+                        let currentDoc = Object.setPrototypeOf(elm, MoveDoc.prototype);
+                        if (currentDoc.isSuccessful()) {
+                            let objId = currentDoc.getObjId();
+                            $("body").trigger("removeDocPerID", objId);
+                            $("body").trigger("addDoc", objId);
                         }
                         else {
                             derivateBrowserTools.doneAsync(elm.newParentId);

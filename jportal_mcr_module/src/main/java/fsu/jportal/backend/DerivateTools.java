@@ -119,16 +119,20 @@ public class DerivateTools {
         String[] sourcePathArray = sourcePath.split(":");
         MCRPath sourceNode = MCRPath.getPath(sourcePathArray[0], sourcePathArray[1]);
 
-        if (!Files.exists(sourceNode)) {
-            LOGGER.info("cp: source " + sourcePath + " does not exists (not copied)");
-            return false;
-        }
-
         String[] targetPathArray = targetPath.split(":");
         MCRPath targetNode = MCRPath.getPath(targetPathArray[0], targetPathArray[1]);
 
+        return cp(sourceNode, targetNode, delAfterCopy);
+    }
+
+    public static boolean cp(MCRPath sourceNode, MCRPath targetNode, boolean delAfterCopy) throws MCRAccessException {
+        if (!Files.exists(sourceNode)) {
+            LOGGER.info("cp: source " + sourceNode + " does not exists (not copied)");
+            return false;
+        }
+
         if (!Files.exists(targetNode)) {
-            LOGGER.info("cp: target " + targetPath + " does not exists (not copied)");
+            LOGGER.info("cp: target " + targetNode + " does not exists (not copied)");
             return false;
         }
         String newFileName = null;
@@ -290,6 +294,10 @@ public class DerivateTools {
     }
 
     public static boolean mv(String sourcePath, String targetPath) throws MCRAccessException {
+        return cp(sourcePath, targetPath, true);
+    }
+
+    public static boolean mv(MCRPath sourcePath, MCRPath targetPath) throws MCRAccessException {
         return cp(sourcePath, targetPath, true);
     }
 

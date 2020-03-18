@@ -39,18 +39,16 @@ var derivateBrowserDerivateView = (function () {
         });
 
         $("body").on("click", "#lightbox-alert-delete-confirm", function () {
-            var json = {
-                files: []
-            };
+            let derivateFiles = new DerivateFiles();
+
             derivateBrowserTools.showLoadingScreen();
             $(".delete").each(function () {
-                var json2 = {
-                    "deriID": $(this).data("deriID"),
-                    "path": $(this).data("path")
-                };
-                json.files.push(json2);
+                let derivId = $(this).data("deriID");
+                let path = $(this).data("path");
+                let file = new File(derivId, path);
+                derivateFiles.add(file);
             });
-            deleteMultipleFiles(json);
+            deleteMultipleFiles(derivateFiles);
             $("#lightbox-alert-delete").modal('hide');
         });
 
@@ -284,25 +282,16 @@ var derivateBrowserDerivateView = (function () {
         
         $("body").on("click", "span.btn-new-urn", function () {
             var entry = $(this).parents(".browser-table-entry");
-            var json = {
-                "deriID": entry.data("deriID"),
-                "completeDeri": false,
-                "files": []
-            };
-            var json2 = {
-                "path": entry.data("path")
-            };
-            json.files.push(json2);
-            addURN(json);
+
+            let derivId = entry.data("deriID");
+            let path = entry.data("path");
+            let file = new File(derivId, path);
+            addURN(file);
         });
 
         $("body").on("click", "#btn-urnAll", function () {
-            var json = {
-                "deriID": derivateBrowserTools.getCurrentDocID(),
-                "completeDeri": true,
-                "files": []
-            };
-            addURN(json);
+            let derivId = derivateBrowserTools.getCurrentDocID();
+            addURNAll(derivId);
             //$("#derivat-panel-buttons").addClass("hidden");
         });
 
@@ -385,35 +374,37 @@ var derivateBrowserDerivateView = (function () {
 
         $("body").on("click", "#lightbox-multi-move-confirm", function () {
             if ($(".target-folder-selected").length > 0) {
-                var moveTo = $("#target-panel-childlist div.folder-name").html() + ":" + $(".target-folder-selected").attr("data-path");
-                var json = {
-                    "moveTo": moveTo,
-                    "files": []
-                };
+                let targetDerivId = $("#target-panel-childlist div.folder-name").html();
+                let targetPath = $(".target-folder-selected").attr("data-path");
+                let moveTo = new File(targetDerivId, targetPath);
+
+                let derivateFiles = new DerivateFiles();
+                derivateFiles.setTarget(moveTo)
 
                 if ($(".glyphicon-check").length > 0) {
                     var entrys = $(".browser-table-entry").filter(function () {
                         return $(this).data("checked") == true;
                     });
                     entrys.each(function () {
-                        var file = $(this).data("deriID") + ":" + $(this).data("path");
-                        var path = "/";
-                        var type = "file";
+                        let derivId = $(this).data("deriID");
+                        let path = $(this).data("path");
+                        let file = new File(derivId, path);
+
+                        let type = "file";
                         if ($(this).hasClass("browser-table-folder")) {
                             type = "folder";
                         }
-                        if (file != moveTo && $(this).data("deriID") + ":" + derivateBrowserTools.getCurrentPath() != moveTo) {
-                            var json2 = {
-                                "file": file,
-                                "type": type
-                            };
-                            json.files.push(json2);
+
+                        file.setType(type);
+
+                        if (!file.equals(moveTo) && derivateBrowserTools.getCurrentPath() !== moveTo.getPath()) {
+                            derivateFiles.add(file);
                         }
                     });
                 }
                 $(this).attr("disabled", true);
                 $(this).append('<span class="glyphicon glyphicon-refresh button-spinner" aria-hidden="true"></span>');
-                moveFiles(json);
+                moveFiles(derivateFiles);
             }
             else {
                 derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.move.targetFolder"), false);
@@ -943,7 +934,7 @@ var derivateBrowserDerivateView = (function () {
     function deleteMultipleFiles(json) {
         $.ajax({
             url: "multiple",
-            type: "DELETE",
+            type: "PUT",
             contentType: 'application/json',
             dataType: "json",
             data: JSON.stringify(json),
@@ -1094,23 +1085,37 @@ var derivateBrowserDerivateView = (function () {
             data: JSON.stringify(json),
             statusCode: {
                 200: function (data) {
-                    if (json.completeDeri) {
-                        getDerivate(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
+                    let file = Object.setPrototypeOf(data, File.prototype);
+                    let derivID = file.getDerivId();
+                    let path = file.getPath();
+                    let urn = file.getURN();
+
+                    if (urn != "") {
+                        $(".browser-table-file").filter(function () {
+                            return ($(this).data("deriID") == derivID) && ($(this).data("path") == path);
+                        }).find("td.browser-table-file-urn").html(urn);
+                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.success"), true)
+                    } else {
+                        derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.error"), false);
                     }
-                    else {
-                        var dID = data.deriID;
-                        $.each(data.files, function (i, file) {
-                            if (file.URN != "") {
-                                $(".browser-table-file").filter(function () {
-                                    return ($(this).data("deriID") == dID) && ($(this).data("path") == file.path);
-                                }).find("td.browser-table-file-urn").html(file.URN);
-                                derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.success"), true)
-                            }
-                            else {
-                                derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.error"), false);
-                            }
-                        });
-                    }
+                },
+                500: function () {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.error"), false);
+                },
+                401: function () {
+                    derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.noPermission"), false);
+                }
+            }
+        });
+    }
+
+    function addURNAll(derivId) {
+        $.ajax({
+            url: "addURN/" + derivId,
+            type: "POST",
+            statusCode: {
+                200: function () {
+                    getDerivate(derivateBrowserTools.getCurrentDocID(), derivateBrowserTools.getCurrentPath());
                 },
                 500: function () {
                     derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.urn.error"), false);
@@ -1131,19 +1136,26 @@ var derivateBrowserDerivateView = (function () {
             data: JSON.stringify(json),
             statusCode: {
                 200: function (data) {
-                    var notMoved = 0;
-                    $.each(data.files, function (i, oneFile) {
-                        if (oneFile.status == "1") {
-                            var deriID = oneFile.file.substr(0, oneFile.file.indexOf(":"));
-                            var path = oneFile.file.substr(oneFile.file.indexOf(":") + 1);
-                            var name = oneFile.file.substr(oneFile.file.lastIndexOf("/") + 1);
+                    let notMoved = 0;
+                    Object.setPrototypeOf(data.target, File.prototype);
+                    let moveToPath = data.target.getPath();
+
+                    $.each(data.files, function (i, file) {
+                        Object.setPrototypeOf(file, File.prototype);
+
+
+                        if (file.getStatus() === 1){
+                            let derivId = file.getDerivId();
+                            let path = file.getPath();
+                            let name = path.replace(/^.*[\\\/]/, '');
+
                             removeFileWithPath(path);
-                            $("body").trigger("removeDocPerID", [deriID, path]);
-                            if (oneFile.type == "folder") {
-                                $("body").trigger("addChildToDerivat", [name, path, deriID, data.moveTo.substr(oneFile.file.indexOf(":") + 1)])
+                            $("body").trigger("removeDocPerID", [derivId, path]);
+                            if (file.type == "folder") {
+                                $("body").trigger("addChildToDerivat", [name, path, derivId, moveToPath])
                             }
                             else {
-                                $("body").trigger("removeFile", deriID + path);
+                                $("body").trigger("removeFile", derivId + path);
                             }
                         }
                         else {

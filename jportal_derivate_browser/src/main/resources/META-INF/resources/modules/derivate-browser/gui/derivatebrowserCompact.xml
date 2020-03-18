@@ -17,6 +17,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
         <script type="text/javascript" src="gui/js/derivatebrowser-compact.js"></script>
+        <script type="text/javascript" src="gui/js/derivatebrowser-helper-class.js"></script>
         <script type="text/javascript" src="gui/js/derivatebrowser-uploadEntry.js"></script>
         <script type="text/javascript" src="gui/js/derivatebrowser-upload.js"></script>
         <script type="text/javascript" src="gui/js/derivatebrowser-derivateView.js"></script>

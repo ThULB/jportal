@@ -83,11 +83,38 @@ UploadEntry.prototype.getaddToBrowserJson = function () {
 };
 
 UploadEntry.prototype.askOverwrite = function(existingFile, deriID, path) {
-	existingFile.deriID = deriID;
-	existingFile.path = path;
+    /* data -> existing file
+       [
+           {
+               "file":"TG571023.JPG",
+               "id":"jportal_derivate_00000004/TG571023.JPG",
+               "fileType":"image/jpeg",
+               "exists":"1",
+               "existingFile":{"name":"TG571023.JPG","size":7301024,"lastmodified":"11.03.2020 09:09:17"}
+           }
+       ]
+       * */
+
+    /* new existingFile
+        [
+            {
+                "derivId":"jportal_derivate_00000004",
+                "exists":1,
+                "lastModifiedTime":"11.03.2020 09:09:17",
+                "path":"/TG571023.JPG",
+                "size":7301024,
+                "status":0,
+                "type":""
+             }
+        ]
+        * */
+	//existingFile.deriID = deriID;
+	//existingFile.path = path;
+	let derivId = existingFile.derivId;
+	let filepath = existingFile.path;
 	const uploadOverwriteTemplate = $("#upload-overwrite-template").html();
 	const originalFileOutput = $(Mustache.render(uploadOverwriteTemplate, existingFile));
-	derivateBrowserTools.setImgPath($(originalFileOutput).find(".overwrite-img"), deriID, path + "/" + existingFile.name);
+	derivateBrowserTools.setImgPath($(originalFileOutput).find(".overwrite-img"), derivId, filepath);
 	$(originalFileOutput).find(".img-size").html(derivateBrowserTools.getReadableSize($(originalFileOutput).find(".img-size").html(),0));
 	$("#lightbox-upload-overwrite-original-file").html(originalFileOutput);
 	

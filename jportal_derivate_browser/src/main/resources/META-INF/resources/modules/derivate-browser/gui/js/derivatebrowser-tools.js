@@ -434,9 +434,10 @@ var derivateBrowserTools = (function() {
   function deleteDocument(json, callback, parentID) {
     $.ajax({
       url: "docs",
-      type: "DELETE",
+      type: "PUT",
       data: JSON.stringify(json),
       dataType: "json",
+      contentType: "application/json",
       success: function(data) {
         callback(data, parentID);
         derivateBrowserTools.alert(derivateBrowserTools.getI18n("db.alert.document.deleted"), true);
