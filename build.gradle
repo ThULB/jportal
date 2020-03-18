@@ -99,6 +99,11 @@ subprojects {
         testCompile 'org.apache.logging.log4j:log4j-api:$log4jVersion'
         testCompile 'org.apache.logging.log4j:log4j-core:$log4jVersion'
         testCompile 'org.seleniumhq.selenium:selenium-java:2.53.0'
+        testCompile 'org.glassfish.jersey.test-framework:jersey-test-framework-core:2.30.1'
+        testCompile 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:2.30.1'
+        testCompile 'org.glassfish.jersey.bundles.repackaged:jersey-guava:2.25.1'
+
+
     }
 
     if (project.name != 'jportal_webapp') {
