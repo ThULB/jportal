@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'fsu.thulb'
+version '2.0.19-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(":jportal_urn")
+    compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    compile group: 'jakarta.ws.rs', name: 'jakarta.ws.rs-api', version: '2.1.6'
+    compile group: 'jakarta.servlet', name: 'jakarta.servlet-api', version: '4.0.3'
+
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
