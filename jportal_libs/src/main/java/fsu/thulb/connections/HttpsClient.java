@@ -16,7 +16,7 @@
  * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package fsu.thulb.urn;
+package fsu.thulb.connections;
 
 import java.io.IOException;
 import java.net.URI;

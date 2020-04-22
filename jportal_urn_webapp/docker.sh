@@ -1,0 +1,1 @@
+docker run -it --rm -p 9090:8080 -p 8000:8000 -v ./build/libs/jportal_urn_webapp-2.0.19-SNAPSHOT.war:/usr/local/tomcat/webapps/dnb.war -e "JAVA_OPTS=-Xdebug -DDB.configDir=/dbConf" -e "JPDA_ADDRESS=*:8000" -e "JPDA_TRANSPORT=dt_socket" -v /path/to/conf/db:/dbConf tomcat:9-jdk11-openjdk-slim /usr/local/tomcat/bin/catalina.sh jpda run

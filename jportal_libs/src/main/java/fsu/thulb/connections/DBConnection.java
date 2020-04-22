@@ -87,7 +87,9 @@ public class DBConnection {
             LOGGER.info("Connection to " + getUrl() + " closed!");
         }
 
-        SSHTunnel.close(this.sshSession);
+        if(this.sshSession != null){
+            SSHTunnel.close(this.sshSession);
+        }
     }
 
     public void execUpdate(String updateQuery) {

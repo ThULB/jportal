@@ -157,6 +157,8 @@ project(':jportal_mcr_module') {
         testCompile 'org.hibernate:hibernate-hikaricp:5.2.2.Final'
         testCompile 'com.h2database:h2:1.4.197'
 
+        compile project(":jportal_libs")
+
         // mycore
         compile "org.mycore:mycore-base:$mcrVersion"
         compile "org.mycore:mycore-solr:$mcrVersion"

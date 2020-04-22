@@ -16,7 +16,7 @@
  * along with MyCoRe.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package fsu.thulb.urn;
+package fsu.thulb.connections.urn;
 
 import java.net.URI;
 import java.time.Instant;
@@ -34,6 +34,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import fsu.thulb.connections.HttpsClient;
+import fsu.thulb.model.EpicurLite;
 import static org.apache.http.entity.ContentType.APPLICATION_XML;
 
 /**
@@ -70,6 +72,11 @@ public class DNBURNRestClient {
         URI baseServiceURI = baseUriBuilder.build();
         URI updateURI = baseUriBuilder.path("links").build();
         CloseableHttpResponse response = HttpsClient.head(baseServiceURI);
+
+        if(response == null){
+            LOGGER.warn("Could not get a response for URL ", baseServiceURI.toString());
+            return Optional.empty();
+        }
 
         StatusLine statusLine = response.getStatusLine();
 

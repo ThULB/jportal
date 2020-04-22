@@ -101,7 +101,8 @@
        replication is in use, this should match the replication
        configuration.
     -->
-  <dataDir>${solr.data.dir:}</dataDir>
+<!--  <dataDir>${solr.data.dir:}</dataDir>-->
+  <dataDir>/opt/jpsolrdata/${solr.core.name}</dataDir>
 
   <!-- JPortal modification - use classic schema definition and not managed schema -->
   <schemaFactory class="ClassicIndexSchemaFactory"/>

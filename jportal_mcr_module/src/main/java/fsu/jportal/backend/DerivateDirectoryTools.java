@@ -16,6 +16,9 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URLConnection;
@@ -244,6 +247,8 @@ public class DerivateDirectoryTools {
         }
     }
 
+    @XmlTransient
+    @XmlSeeAlso({File.class, Directory.class})
     private abstract static class DirectoryEntry implements Comparable<DirectoryEntry> {
         private String name;
 

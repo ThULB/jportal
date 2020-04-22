@@ -7,20 +7,37 @@ services:
     ports:
       - 50000:5432
     volumes:
-      - db:/var/lib/postgresql/data
+      - ./data/appDB:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     env_file:
       - db.env
+    hostname: db
 
   solr:
     image: solr:slim
     ports:
       - "8391:8983"
     volumes:
-      - solr:/var/solr
-      - ../config/solr-home:/opt/jpsolrhome
+      - ./data/solr:/var/solr
+      - ./solr-home:/opt/jpsolrhome
+      - ./data/solr-data:/opt/jpsolrdata
     environment:
       - SOLR_HOME=/opt/jpsolrhome
+      - TZ=Europe/Berlin
+    hostname: solr
+
+  dnbUrn:
+    image: tomcat:9-jdk11-openjdk-slim
+    ports:
+      - "9090:8080"
+    volumes:
+      - ../jportal_urn_webapp/build/libs/jportal_urn_webapp-2.0.19-SNAPSHOT.war:/usr/local/tomcat/webapps/dnb.war
+      - ./data/dnb:/db
+      - ./db-config/dbConnection.xml:/db-config/dbConnection.xml
+    environment:
+      - JAVA_OPTS=-DDB.configDir=/db-config
+      - TZ=Europe/Berlin
+    hostname: dnburn
 
   app:
     build: ./app
@@ -29,16 +46,14 @@ services:
       - "8080:8080"
       - "8295:8000"
     volumes:
-      - ../build/libs/jportal_webapp-2.0.19-SNAPSHOT.war:/usr/local/tomcat/webapps/jportal.war
+      - ../jportal_webapp/build/libs/jportal_webapp-2.0.19-SNAPSHOT.war:/usr/local/tomcat/webapps/jportal.war
+      - ./data/mcrHome/jportal:/mcrHome/jportal
+      - ./data/mcrHome/data:/mcrHome/jportal/data
       - ./app/mycore.properties:/mcrHome/jportal/mycore.properties
       - ./app/persistence.xml:/mcrHome/jportal/resources/META-INF/persistence.xml
-      - ./data:/mcrHome/jportal/data
     env_file:
       - app.env
     depends_on:
       - db
       - solr
-
-volumes:
-  db:
-  solr:
+      - dnbUrn

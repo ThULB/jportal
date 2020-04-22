@@ -514,7 +514,7 @@ $(document).ready(function () {
 
   function success() {
     dialogIcon.html("<i class='fas fa-3x fa-check' />");
-    dialogContent.html("Die DOI wurde erfolgreich vergeben!");
+    dialogContent.html("Die URN wurde erfolgreich vergeben!");
   }
 
 });
@@ -569,7 +569,7 @@ $(document).ready(function () {
 
   function success() {
     dialogIcon.html("<i class='fas fa-3x fa-check' />");
-    dialogContent.html("Die URN wurde erfolgreich vergeben!");
+    dialogContent.html("Die DOI wurde erfolgreich vergeben!");
   }
 
 });

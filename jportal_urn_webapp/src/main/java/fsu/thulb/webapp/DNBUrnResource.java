@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -24,7 +22,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import fsu.thulb.urn.EpicurLite;
+import fsu.thulb.model.EpicurLite;
+import fsu.thulb.persistence.DNBUrnStorage;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 /**
@@ -35,37 +34,42 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 @Path("/")
 public class DNBUrnResource {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static Map<String, EpicurLite> urns = new ConcurrentHashMap<>();
 
     @Context
     private UriInfo info;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public UrnList get(){
+    public UrnList get() throws Exception {
         UrnList urnList = new UrnList();
-        urnList.addAll(urns.values());
+        DNBUrnStorage urnStorage = getUrnStorage();
+        urnList.addAll(urnStorage.values());
         return urnList;
     }
 
     @GET()
     @Path("urns/{urn}")
-    public Response getUrn(@PathParam("urn") String urn){
+    public Response getUrn(@PathParam("urn") String urn) throws Exception {
         LOGGER.info("Get urns!");
-        if(urns.containsKey(urn)){
+        DNBUrnStorage urnStorage = getUrnStorage();
+        if(urnStorage.containsKey(urn)){
             return Response.noContent().build();
         } else {
             return Response.status(NOT_FOUND).build();
         }
     }
 
+    private DNBUrnStorage getUrnStorage() throws Exception {
+        return DNBUrnStorage.instance();
+    }
+
     @PUT
     @Path("urns/{urn}")
     @Consumes(MediaType.APPLICATION_XML)
-    public Response putUrn(EpicurLite epicurLite, @PathParam("urn") String urn){
-        urns.put(urn, epicurLite);
-
-        urns.forEach((u,e) -> LOGGER.info("Putted: " + u + " - " + e.getURL()));
+    public Response putUrn(EpicurLite epicurLite, @PathParam("urn") String urn) throws Exception {
+        LOGGER.info("Put: " + urn + " - " + epicurLite.getURL());
+        DNBUrnStorage urnStorage = getUrnStorage();
+        urnStorage.put(urn, epicurLite);
 
         return Response
                 .created(info.getRequestUri())
@@ -76,10 +80,11 @@ public class DNBUrnResource {
     @POST
     @Path("urns/{urn}/links")
     @Consumes(MediaType.APPLICATION_XML)
-    public Response postUrn(EpicurLite epicurLite, @PathParam("urn") String urn){
-        urns.put(urn, epicurLite);
+    public Response postUrn(EpicurLite epicurLite, @PathParam("urn") String urn) throws Exception {
+        LOGGER.info("Post: " + urn + " - " + epicurLite.getURL());
+        DNBUrnStorage urnStorage = getUrnStorage();
+        urnStorage.update(urn, epicurLite);
 
-        urns.forEach((u,e) -> LOGGER.info("Posted: " + u + " - " + e.getURL()));
         return Response
                 .noContent()
                 .lastModified(new Date())

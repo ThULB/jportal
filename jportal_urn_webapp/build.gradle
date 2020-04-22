@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    compile project(":jportal_urn")
+    compile project(":jportal_libs")
     compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
     compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
     compile group: 'jakarta.ws.rs', name: 'jakarta.ws.rs-api', version: '2.1.6'
