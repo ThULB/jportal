@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -60,6 +61,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.MCRURL;
 import org.mycore.services.i18n.MCRTranslation;
@@ -166,6 +168,10 @@ public class JPXMLFunctions {
      * @return true if the mets is importable
      */
     public static boolean isMetsImportable(String derivateId) {
+        if (!Files.exists(MCRPath.getPath(derivateId, "/mets.xml"))){
+            return false;
+        }
+
         boolean enmapMets = isENMAPMets(derivateId);
         boolean children = hasChildren(derivateId);
         return enmapMets && !children;
