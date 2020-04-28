@@ -19,7 +19,7 @@ import org.mycore.pi.urn.MCRDNBURN;
  */
 public class URNGranularJobService extends MCRPIService<MCRDNBURN> {
     private final Logger LOGGER = LogManager.getLogger();
-    private final String JOBSERVICECLASS = "JOBSERVICECLASS";
+    private final String REGISTRYSERVICECLASS = "REGISTRYSERVICECLASS";
 
     public URNGranularJobService(String registrationServiceID) {
         super(registrationServiceID, MCRDNBURN.TYPE);
@@ -27,10 +27,10 @@ public class URNGranularJobService extends MCRPIService<MCRDNBURN> {
 
     @Override
     public synchronized MCRDNBURN register(MCRBase obj, String additional, boolean updateObject) throws MCRAccessException, MCRActiveLinkException, MCRPersistentIdentifierException, ExecutionException, InterruptedException {
-        String serviceClass = getProperties().get(JOBSERVICECLASS);
+        String serviceClass = getProperties().get(REGISTRYSERVICECLASS);
 
         if(serviceClass == null || "".equals(serviceClass)){
-            String errMsg = REGISTRATION_CONFIG_PREFIX + getServiceID() + "." + JOBSERVICECLASS + " not Set!";
+            String errMsg = REGISTRATION_CONFIG_PREFIX + getServiceID() + "." + REGISTRYSERVICECLASS + " not Set!";
             throw new MCRConfigurationException(errMsg);
         }
 

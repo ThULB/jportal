@@ -1,7 +1,7 @@
 package fsu.jportal.backend.pi.urn;
 
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
@@ -10,6 +10,7 @@ import org.mycore.common.MCRUserInformation;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobAction;
 import org.mycore.services.queuedjob.MCRJobQueue;
+import org.mycore.services.queuedjob.MCRJobStatus;
 
 /**
  * Created by chi on 14.04.20
@@ -42,5 +43,47 @@ public class URNJobUtils {
 
     interface JobRunner {
         void run() throws ExecutionException;
+    }
+
+    public static boolean localRegistryInProgress(String derivateId){
+        Iterator<MCRJob> newJobs = MCRJobQueue.getInstance(DNBUrnLocalRegistryAction.class).iterator();
+        while (newJobs.hasNext()){
+            MCRJob job = newJobs.next();
+
+            DNBUrnLocalRegistryAction urnLocalRegistryAction = new DNBUrnLocalRegistryAction(job);
+            return urnLocalRegistryAction.isJobOf(derivateId, "");
+        }
+
+        Iterator<MCRJob> watingJobs = MCRJobQueue.getInstance(DNBUrnLocalRegistryAction.class)
+                .iterator(MCRJobStatus.PROCESSING);
+
+        while (watingJobs.hasNext()){
+            MCRJob job = watingJobs.next();
+
+            DNBUrnLocalRegistryAction urnLocalRegistryAction = new DNBUrnLocalRegistryAction(job);
+            return urnLocalRegistryAction.isJobOf(derivateId, "");
+        }
+        return false;
+    }
+
+    public static boolean remoteRegistryInProgress(String urn){
+        Iterator<MCRJob> newJobs = MCRJobQueue.getInstance(DNBUrnRemoteRegistryAction.class).iterator();
+        while (newJobs.hasNext()){
+            MCRJob job = newJobs.next();
+
+            DNBUrnRemoteRegistryAction remoteRegistryAction = new DNBUrnRemoteRegistryAction(job);
+            return remoteRegistryAction.hasUrn(urn);
+        }
+
+        Iterator<MCRJob> watingJobs = MCRJobQueue.getInstance(DNBUrnLocalRegistryAction.class)
+                .iterator(MCRJobStatus.PROCESSING);
+
+        while (watingJobs.hasNext()){
+            MCRJob job = watingJobs.next();
+
+            DNBUrnRemoteRegistryAction urnRemoteRegistryAction = new DNBUrnRemoteRegistryAction(job);
+            return urnRemoteRegistryAction.hasUrn(urn);
+        }
+        return false;
     }
 }

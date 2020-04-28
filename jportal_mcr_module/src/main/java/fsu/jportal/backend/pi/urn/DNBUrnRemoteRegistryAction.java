@@ -11,10 +11,6 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.MCRBase;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.pi.MCRPIManager;
 import org.mycore.pi.backend.MCRPI;
 import org.mycore.services.queuedjob.MCRJob;
@@ -123,5 +119,18 @@ public class DNBUrnRemoteRegistryAction extends MCRJobAction {
     @Override
     public void rollback() {
 
+    }
+
+    public boolean hasUrn(String derivateId, String additional) {
+        String jobDerivId = this.job.getParameter(DERIVATEID);
+        String jobAdditional = this.job.getParameter(ADDITIONAL);
+
+        return jobDerivId.equals(derivateId) && jobAdditional.equals(additional);
+    }
+
+    public boolean hasUrn(String urn) {
+        String jobUrn = this.job.getParameter(URN);
+
+        return jobUrn.equals(urn);
     }
 }

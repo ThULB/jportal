@@ -5,11 +5,12 @@
                 xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
                 xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
                 xmlns:mcrurn="xalan://fsu.jportal.xml.LayoutTools"
+                xmlns:urnJob="xalan://fsu.jportal.backend.pi.urn.URNJobUtils"
                 xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
                 xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess"
                 xmlns:layoutTools="xalan://fsu.jportal.xml.LayoutTools"
                 xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
-                exclude-result-prefixes="xlink xalan iview2 mcrxml mcrurn acl derivAccess layoutTools jpxml">
+                exclude-result-prefixes="xlink xalan iview2 mcrxml mcrurn urnJob acl derivAccess layoutTools jpxml">
 
   <xsl:param name="WebApplicationBaseURL"/>
   <xsl:param name="JP.Site.Logo.Proxy.url"/>
@@ -124,7 +125,14 @@
               <xsl:choose>
                 <xsl:when test="not(mcrurn:hasURNAssigned(@xlink:href))">
                   <li>
-                    <a href="#" data-toggle="modal" data-target="#generateURNDialog">URN vergeben</a>
+                    <xsl:choose>
+                      <xsl:when test="urnJob:localRegistryInProgress(@xlink:href)">
+                        <span>URN Vergabe in Arbeit...</span>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <a href="#" data-toggle="modal" data-target="#generateURNDialog">URN vergeben</a>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </li>
                   <div class="modal fade" id="generateURNDialog" tabindex="-1" role="dialog" data-backdrop="static"
                        data-id="{@xlink:href}">

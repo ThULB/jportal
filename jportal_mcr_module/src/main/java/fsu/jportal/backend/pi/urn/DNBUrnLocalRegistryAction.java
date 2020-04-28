@@ -70,10 +70,19 @@ public class DNBUrnLocalRegistryAction extends MCRJobAction {
         URNJobUtils.execAsJanistorUser(() -> runJob());
     }
 
+    private void runJob(MCRDerivate derivate, String additional) throws ExecutionException {
+        try {
+            // check if derivate has to many scans -> use job or not
+            getService().register(derivate, additional, true);
+            createRemoteRegistryJobs(derivate);
+        } catch (MCRAccessException | MCRActiveLinkException | MCRPersistentIdentifierException | InterruptedException e) {
+            throw new ExecutionException(e);
+        }
+    }
+
     private void runJob() throws ExecutionException {
-        MCRUser currentUser = MCRUserManager.getCurrentUser();
-        LOGGER.info("Current User: " + currentUser.getUserID());
         String additional = this.job.getParameter(ADDITIONAL);
+        //what if derivate has allready some existing urns?
         //check if additional is not empty string -> single Job
         try {
             MCRDerivate derivate = getDerivate();
@@ -106,9 +115,13 @@ public class DNBUrnLocalRegistryAction extends MCRJobAction {
 
     }
 
-    private MCRPIService<MCRDNBURN> getService() {
+    private MCRPIService<MCRDNBURN> getService() throws ExecutionException {
         String serviceClassName = this.job.getParameter(SERVICECLASS);
         String serviceId = this.job.getParameter(SERVICEID);
+
+        return getService(serviceClassName, serviceId);
+    }
+    private MCRPIService<MCRDNBURN> getService(String serviceClassName, String serviceId) throws ExecutionException {
         try {
             Object service = MCRClassTools.forName(serviceClassName)
                     .getConstructor(String.class)
@@ -116,16 +129,9 @@ public class DNBUrnLocalRegistryAction extends MCRJobAction {
             if (service instanceof MCRPIService){
                 return (MCRPIService<MCRDNBURN>) service;
             }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (InstantiationException | IllegalAccessException |
+                InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+            throw new ExecutionException(e);
         }
 
         return null;
@@ -135,5 +141,12 @@ public class DNBUrnLocalRegistryAction extends MCRJobAction {
         String objIdStr = this.job.getParameter(DERIVATEID);
         MCRObjectID mcrObjectID = MCRObjectID.getInstance(objIdStr);
         return MCRMetadataManager.retrieveMCRDerivate(mcrObjectID);
+    }
+
+    public boolean isJobOf(String derivateId, String additional){
+        String jobDerivId = this.job.getParameter(DERIVATEID);
+        String jobAdditional = this.job.getParameter(ADDITIONAL);
+
+        return jobDerivId.equals(derivateId) && jobAdditional.equals(additional);
     }
 }

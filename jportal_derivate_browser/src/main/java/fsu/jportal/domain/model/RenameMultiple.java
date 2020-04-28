@@ -1,6 +1,7 @@
 package fsu.jportal.domain.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by chi on 18.03.20
@@ -43,6 +44,9 @@ public class RenameMultiple {
     }
 
     public Response[] getResponseList(){
+        if(responses == null){
+            responses = new ArrayList<>();
+        }
         return responses.toArray(new Response[responses.size()]);
     }
 
