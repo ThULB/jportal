@@ -1204,7 +1204,7 @@ var derivateBrowserDerivateView = (function () {
 
     function renameMultiple(deriID, pattern, newname){
         var json = {
-            deriID: deriID,
+            derivId: deriID,
             pattern: pattern,
             newName: newname
         };
