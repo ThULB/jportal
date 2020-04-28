@@ -11,6 +11,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -240,43 +242,38 @@ public class DerivateTools {
         MCRDerivate mcrDerivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateID));
         String mainDoc = mcrDerivate.getDerivate().getInternals().getMainDoc();
 
-        Files.walkFileTree(derivateRoot, new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                throws IOException {
-                Matcher matcher = patternObj.matcher(file.getFileName().toString());
-                if (matcher.matches()) {
-                    String newFilename;
+        try(Stream<Path> files = Files.walk(derivateRoot)){
+            files.filter(f -> !f.getRoot().equals(f))
+                    .filter(f -> patternObj.matcher(f.getFileName().toString()).find())
+                    .sorted(Comparator.reverseOrder())
+                    .forEach(f -> {
+                        try {
+                            Matcher matcher = patternObj.matcher(f.getFileName().toString());
+                            String newFilename = matcher.replaceAll(newName);
+                            mvSingleFile(MCRPath.toMCRPath(f), MCRPath.toMCRPath(f.resolveSibling(newFilename)));
 
-                    try {
-                        newFilename = matcher.replaceAll(newName);
-                    } catch (IndexOutOfBoundsException e) {
-                        LOGGER.info("The file " + file + " can't be renamed to " + newName + ". To many groups!");
-                        return FileVisitResult.CONTINUE;
-                    } catch (IllegalArgumentException e) {
-                        LOGGER.info("The new name '" + newName + "' contains illegal characters!");
-                        return FileVisitResult.CONTINUE;
-                    }
+                            if (MCRPath.toMCRPath(f).getOwnerRelativePath().equals(mainDoc)) {
+                                String path = f.toString().substring(0, f.toString().lastIndexOf("/") + 1)
+                                        + newFilename;
+                                DerivateTools.setAsMain(f.toString().substring(0, f.toString().lastIndexOf(":")),
+                                        path.substring(path.lastIndexOf(":") + 1));
+                            }
 
-                    try {
-                        mvSingleFile(MCRPath.toMCRPath(file), MCRPath.toMCRPath(file.resolveSibling(newFilename)));
-                    } catch (MCRAccessException e) {
-                        e.printStackTrace();
-                        return FileVisitResult.CONTINUE;
-                    }
-
-                    if (MCRPath.toMCRPath(file).getOwnerRelativePath().equals(mainDoc)) {
-                        String path = file.toString().substring(0, file.toString().lastIndexOf("/") + 1) + newFilename;
-                        DerivateTools.setAsMain(file.toString().substring(0, file.toString().lastIndexOf(":")),
-                            path.substring(path.lastIndexOf(":") + 1));
-                    }
-
-                    LOGGER.info("The file " + file + " was renamed to " + newFilename);
-                    resultMap.put(file.getFileName().toString(), newFilename);
-                }
-                return FileVisitResult.CONTINUE;
-            }
-        });
+                            LOGGER.info("The file " + f + " was renamed to " + newFilename);
+                            resultMap.put(f.getFileName().toString(), newFilename);
+                        } catch (IndexOutOfBoundsException e) {
+                            LOGGER.info("The file " + f + " can't be renamed to " + newName + ". To many groups!");
+                        } catch (IllegalArgumentException e) {
+                            LOGGER.info("The new name '" + newName + "' contains illegal characters!");
+                        } catch (MCRAccessException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return resultMap;
     }
 
