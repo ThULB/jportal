@@ -20,6 +20,7 @@ import org.mycore.pi.urn.MCRDNBURN;
 public class URNGranularJobService extends MCRPIService<MCRDNBURN> {
     private final Logger LOGGER = LogManager.getLogger();
     private final String REGISTRYSERVICECLASS = "REGISTRYSERVICECLASS";
+    private final String MAXNUMFILES = "MAXNUMFILES";
 
     public URNGranularJobService(String registrationServiceID) {
         super(registrationServiceID, MCRDNBURN.TYPE);
@@ -28,14 +29,27 @@ public class URNGranularJobService extends MCRPIService<MCRDNBURN> {
     @Override
     public synchronized MCRDNBURN register(MCRBase obj, String additional, boolean updateObject) throws MCRAccessException, MCRActiveLinkException, MCRPersistentIdentifierException, ExecutionException, InterruptedException {
         String serviceClass = getProperties().get(REGISTRYSERVICECLASS);
+        String maxNumFilesProp = getProperties().get(MAXNUMFILES);
 
         if(serviceClass == null || "".equals(serviceClass)){
             String errMsg = REGISTRATION_CONFIG_PREFIX + getServiceID() + "." + REGISTRYSERVICECLASS + " not Set!";
             throw new MCRConfigurationException(errMsg);
         }
 
-        DNBUrnLocalRegistryAction.addJob(getServiceID(),serviceClass, obj, additional);
+        String maxNumFilesPropName = REGISTRATION_CONFIG_PREFIX + getServiceID() + "." + MAXNUMFILES;
+        if(maxNumFilesProp == null || "".equals(maxNumFilesProp)){
+            String errMsg = maxNumFilesPropName + " not Set!";
+            throw new MCRConfigurationException(errMsg);
+        }
 
+        long maxFiles = 10;
+        try {
+            maxFiles = Long.parseLong(maxNumFilesProp);
+        }catch (NumberFormatException e){
+            throw new MCRConfigurationException("Wrong number format in " + maxNumFilesPropName + ": " + maxNumFilesProp);
+        }
+
+        URNJob.register(getServiceID(),serviceClass, obj, additional, maxFiles);
         return new MCRDNBURN("inProgress","");
     }
 

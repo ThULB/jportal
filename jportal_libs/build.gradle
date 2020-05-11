@@ -14,6 +14,7 @@ repositories {
 dependencies {
     compile group: 'com.jcraft', name: 'jsch', version: '0.1.55'
     compile group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
+    compile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.moxy', version: '2.7.4'
 
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.13'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.12'
