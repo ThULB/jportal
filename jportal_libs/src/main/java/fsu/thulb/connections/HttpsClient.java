@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -110,35 +111,42 @@ public class HttpsClient {
         return null;
     }
 
-    public static CloseableHttpResponse put(URI uri, String contentType, String data) {
-        return request(HttpPut::new, uri, contentType, new StringEntity(data, "UTF-8"));
+    public static <T> T put(URI uri, String contentType, String data, ResponseHandler<T> responseHandler) {
+        return request(HttpPut::new, uri, contentType, new StringEntity(data, "UTF-8"), responseHandler);
     }
 
-    public static CloseableHttpResponse post(URI url, String contentType, String data) {
-        return request(HttpPost::new, url, contentType, new StringEntity(data, "UTF-8"));
+    public static <T> T post(URI url, String contentType, String data, ResponseHandler<T> responseHandler) {
+        return request(HttpPost::new, url, contentType, new StringEntity(data, "UTF-8"), responseHandler);
     }
 
-    public static <R extends HttpEntityEnclosingRequestBase> CloseableHttpResponse request(
+    public static <R extends HttpEntityEnclosingRequestBase, T> T request(
             Supplier<R> requestSupp, URI uri,
-            String contentType, HttpEntity entity) {
+            String contentType, HttpEntity entity, ResponseHandler<T> responseHandler) {
 
         Supplier<CloseableHttpClient> httpClientSupplier = getHttpClientSupplier(uri);
         if (httpClientSupplier == null) {
             return null;
         }
 
-        try (CloseableHttpClient httpClient = httpClientSupplier.get()) {
+        CloseableHttpClient httpClient = httpClientSupplier.get();
+        try {
             R request = requestSupp.get();
             request.setURI(uri);
             request.setHeader("content-type", contentType);
             request.setConfig(noRedirect());
             request.setEntity(entity);
 
-            return httpClient.execute(request);
+            return httpClient.execute(request, responseHandler);
         } catch (ClientProtocolException e) {
             LOGGER.error("There is a HTTP protocol error for URL: {}", uri, e);
         } catch (IOException e) {
             LOGGER.error("There is a problem or the connection was aborted for URL: {}", uri, e);
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;

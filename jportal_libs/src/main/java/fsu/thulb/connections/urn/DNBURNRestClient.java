@@ -28,6 +28,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.JAXBException;
 
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -122,6 +123,7 @@ public class DNBURNRestClient {
      */
     private static Optional<Date> registerNew(EpicurLite epicurLite, URI baseServiceURI) {
         String urn = epicurLite.getURN();
+        String url = epicurLite.getURL();
 
         String epicurLiteStr;
         try {
@@ -131,8 +133,12 @@ public class DNBURNRestClient {
             return Optional.empty();
         }
 
-        CloseableHttpResponse response = HttpsClient.put(baseServiceURI, APPLICATION_XML.toString(), epicurLiteStr);
+        return HttpsClient.put(baseServiceURI, APPLICATION_XML.toString(), epicurLiteStr,
+                r -> registerNewHandler(r, baseServiceURI, urn, url, epicurLiteStr));
+    }
 
+    private static Optional<Date> registerNewHandler(HttpResponse response, URI baseServiceURI, String urn,
+                                                     String url, String epicurLiteStr) {
         StatusLine statusLine = response.getStatusLine();
 
         if (statusLine == null) {
@@ -141,7 +147,6 @@ public class DNBURNRestClient {
         }
 
         int putStatus = statusLine.getStatusCode();
-        String url = epicurLite.getURL();
 
         switch (putStatus) {
             case HttpStatus.SC_CREATED:
@@ -182,6 +187,7 @@ public class DNBURNRestClient {
 
     private static Optional<Date> update(EpicurLite epicurLite, URI updateURI) {
         String urn = epicurLite.getURN();
+        String url = epicurLite.getURL();
 
         String epicurLiteStr;
         try {
@@ -191,7 +197,11 @@ public class DNBURNRestClient {
             return Optional.empty();
         }
 
-        CloseableHttpResponse response = HttpsClient.post(updateURI, APPLICATION_XML.toString(), epicurLiteStr);
+        return HttpsClient.post(updateURI, APPLICATION_XML.toString(), epicurLiteStr,
+                r -> updateHandler(r, updateURI, urn, url));
+    }
+
+    private static Optional<Date> updateHandler(HttpResponse response, URI updateURI, String urn, String url) {
         StatusLine statusLine = response.getStatusLine();
 
         if (statusLine == null) {
@@ -200,7 +210,6 @@ public class DNBURNRestClient {
         }
 
         int postStatus = statusLine.getStatusCode();
-        String url = epicurLite.getURL();
 
         switch (postStatus) {
             case HttpStatus.SC_NO_CONTENT:
