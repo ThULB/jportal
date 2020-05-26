@@ -424,12 +424,8 @@ public abstract class JPPeriodicalComponent extends JPObjectComponent {
      * @return the journal
      */
     public JPJournal getJournal() {
-        MCRObject journal = MCRObjectUtils.getRoot(object);
-        if (!journal.getId().getTypeId().equals(JPJournal.TYPE)) {
-            throw new MCRException("Unable to get template of object " + journal.getId()
-                + " because its not a journal but the root ancestor of " + object.getId() + ".");
-        }
-        return new JPJournal(journal);
+
+        return MetadataManager.getJournal(object);
     }
 
     /**

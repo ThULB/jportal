@@ -44,7 +44,7 @@ public abstract class JPContainer extends JPPeriodicalComponent {
     }
 
     public JPContainer(MCRObjectID mcrId) {
-        this(MCRMetadataManager.retrieveMCRObject(mcrId));
+        this(MetadataManager.retrieveMCRObject(mcrId));
     }
 
     public JPContainer(MCRObject mcrObject) {

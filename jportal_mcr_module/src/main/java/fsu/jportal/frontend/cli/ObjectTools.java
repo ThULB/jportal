@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.ImportSource;
 import fsu.jportal.backend.io.LocalExportSink;
@@ -52,7 +53,7 @@ public class ObjectTools {
                 syntax = "export import object {0}")
     public static void exportImport(String objectID)
             throws MCRPersistenceException, MCRAccessException {
-        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
+        MCRObject mcrObject = MetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
         MCRMetadataManager.update(mcrObject);
     }
 
@@ -207,7 +208,7 @@ public class ObjectTools {
     @MCRCommand(help = "merges all descendants derivates of the given object to the given layer. @see collapse command",
                 syntax = "layer collapse {0} {1}")
     public static List<String> layerCollapse(String objectId, String layerAsString) {
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
+        MCRObject mcrObj = MetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
         List<String> layerIds = getLayerIds(mcrObj, Integer.valueOf(layerAsString));
 
         List<String> cmdList = new ArrayList<>();
@@ -232,7 +233,7 @@ public class ObjectTools {
             if (layer == 1) {
                 ids.add(childId);
             } else {
-                MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(childId));
+                MCRObject mcrChild = MetadataManager.retrieveMCRObject(MCRObjectID.getInstance(childId));
                 ids.addAll(getLayerIds(mcrChild, layer - 1));
             }
         }
@@ -243,7 +244,7 @@ public class ObjectTools {
                 syntax = "collapse {0}")
     public static List<String> collapse(String objectId) {
         MCRObjectID mcrObjId = MCRObjectID.getInstance(objectId);
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
+        MCRObject mcrObj = MetadataManager.retrieveMCRObject(mcrObjId);
 
         // get all derivates in descendants
         Map<MCRDerivate, MCRObject> derivateMap = getDescendants(mcrObj);
@@ -300,7 +301,7 @@ public class ObjectTools {
         Map<MCRDerivate, MCRObject> idMap = new HashMap<>();
         List<MCRMetaLinkID> linkList = mcrObj.getStructure().getChildren();
         for (MCRMetaLinkID link : linkList) {
-            MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(link.getXLinkHref()));
+            MCRObject mcrChild = MetadataManager.retrieveMCRObject(MCRObjectID.getInstance(link.getXLinkHref()));
             List<MCRMetaEnrichedLinkID> derivateLinkList = mcrChild.getStructure().getDerivates();
             for (MCRMetaLinkID derivateLink : derivateLinkList) {
                 MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(
@@ -337,7 +338,7 @@ public class ObjectTools {
             LOGGER.error(objectId + " does not exist!");
             return null;
         }
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+        MCRObject mcrObj = MetadataManager.retrieveMCRObject(mcrId);
         MCRObject journal = mcrObj;
         if (!journal.getId().getTypeId().equals("jpjournal")) {
             journal = getRoot(mcrObj);
@@ -358,7 +359,7 @@ public class ObjectTools {
             LOGGER.error(objectId + " does not exist!");
             return null;
         }
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+        MCRObject mcrObj = MetadataManager.retrieveMCRObject(mcrId);
         setHiddenJournalID(mcrObj, hiddenJournalID);
         List<String> commandList = new ArrayList<String>();
         for (MCRMetaLinkID childID : mcrObj.getStructure().getChildren()) {
@@ -406,7 +407,7 @@ public class ObjectTools {
         List<MCRObject> ancestorList = new ArrayList<>();
         while (mcrObject.hasParent()) {
             MCRObjectID parentID = mcrObject.getStructure().getParentID();
-            MCRObject parent = MCRMetadataManager.retrieveMCRObject(parentID);
+            MCRObject parent = MetadataManager.retrieveMCRObject(parentID);
             ancestorList.add(parent);
             mcrObject = parent;
         }

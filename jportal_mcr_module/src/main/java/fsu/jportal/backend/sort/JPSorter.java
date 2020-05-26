@@ -6,6 +6,7 @@ import java.util.List;
 
 import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.util.JPComponentUtil;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -41,7 +42,7 @@ public interface JPSorter {
         try {
             children.stream()
                     .map(MCRMetaLinkID::getXLinkHrefID)
-                    .map(MCRMetadataManager::retrieveMCRObject)
+                    .map(MetadataManager::retrieveMCRObject)
                     .map(JPComponentUtil::getPeriodical)
                     .sorted(getSortComparator(order))
                     .map(JPPeriodicalComponent::getObject)

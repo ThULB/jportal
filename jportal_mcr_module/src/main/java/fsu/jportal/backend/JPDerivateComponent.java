@@ -65,7 +65,7 @@ public class JPDerivateComponent implements JPComponent {
      * @param mcrId a mycore object id
      */
     public JPDerivateComponent(MCRObjectID mcrId) {
-        this(MCRMetadataManager.retrieveMCRDerivate(mcrId));
+        this(MetadataManager.retrieveMCRDerivate(mcrId));
     }
 
     /**

@@ -14,6 +14,7 @@ import org.mycore.mets.model.struct.LogicalStructMap;
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.MetadataManager;
 
 /**
  * Default importer for the MCRPROFILE mets.
@@ -28,7 +29,7 @@ public class MCRMetsImporter extends MetsImporter {
             // get corresponding mycore objects
             MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivateId);
             MCRObjectID volumeId = derivate.getOwnerID();
-            MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(volumeId);
+            MCRObject mcrObject = MetadataManager.retrieveMCRObject(volumeId);
             JPVolume volume = new JPVolume(mcrObject);
 
             // run through mets

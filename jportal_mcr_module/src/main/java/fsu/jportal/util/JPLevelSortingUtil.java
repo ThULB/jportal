@@ -19,6 +19,7 @@ import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.backend.sort.JPLevelSorting;
 import fsu.jportal.backend.sort.JPLevelSorting.Level;
 import fsu.jportal.backend.sort.JPMagicSorter;
@@ -186,7 +187,7 @@ public abstract class JPLevelSortingUtil {
             if (level != null) {
                 applySorter(objectID, level.getSorterClass(), level.getOrder());
             }
-            MCRObject object = MCRMetadataManager.retrieveMCRObject(objectID);
+            MCRObject object = MetadataManager.retrieveMCRObject(objectID);
             List<MCRMetaLinkID> children = object.getStructure().getChildren();
             if (children.isEmpty()) {
                 return;

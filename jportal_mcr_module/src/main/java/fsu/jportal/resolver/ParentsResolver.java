@@ -1,6 +1,7 @@
 package fsu.jportal.resolver;
 
 import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.util.JPComponentUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,7 +64,7 @@ public class ParentsResolver implements URIResolver {
         if (objectId.getTypeId().equals("derivate")) {
             objectId = MCRMetadataManager.retrieveMCRDerivate(objectId).getDerivate().getMetaLink().getXLinkHrefID();
         }
-        MCRObject child = MCRMetadataManager.retrieveMCRObject(objectId);
+        MCRObject child = MetadataManager.retrieveMCRObject(objectId);
         List<MCRObject> parentList = MCRObjectUtils.getAncestors(child);
         String referer = objectId.toString();
         int inherited = 1;

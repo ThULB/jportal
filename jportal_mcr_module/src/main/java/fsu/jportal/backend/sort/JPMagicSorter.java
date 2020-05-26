@@ -113,7 +113,7 @@ public class JPMagicSorter implements JPSorter {
      */
     protected boolean canSortedByHiddenPosition(JPContainer container) {
         List<MCRObjectID> children = container.getChildren();
-        long count = children.stream().map(MCRMetadataManager::retrieveMCRObject).filter(volume -> {
+        long count = children.stream().map(MetadataManager::retrieveMCRObject).filter(volume -> {
             return volume.getMetadata().findFirst("hidden_positions").isPresent();
         }).count();
         return children.size() == count;
@@ -129,7 +129,7 @@ public class JPMagicSorter implements JPSorter {
      */
     protected boolean canSortedByPublishedDate(JPContainer container) {
         List<MCRObjectID> children = container.getChildren();
-        long count = children.stream().map(MCRMetadataManager::retrieveMCRObject).filter(volume -> {
+        long count = children.stream().map(MetadataManager::retrieveMCRObject).filter(volume -> {
             return volume.getMetadata().findFirst("dates", "published").isPresent();
         }).count();
         return children.size() == count;

@@ -61,7 +61,7 @@ public abstract class JPObjectComponent implements JPComponent {
      * @param mcrId a mycore object id
      */
     public JPObjectComponent(MCRObjectID mcrId) {
-        this(MCRMetadataManager.retrieveMCRObject(mcrId));
+        this(MetadataManager.retrieveMCRObject(mcrId));
     }
 
     /**

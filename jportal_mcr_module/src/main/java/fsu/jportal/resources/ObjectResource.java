@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fsu.jportal.backend.MetadataManager;
 import static org.mycore.access.MCRAccessManager.*;
 
 @Path("object")
@@ -38,7 +39,7 @@ public class ObjectResource {
     public Response get(@PathParam("id") String id, @Context HttpHeaders httpHeaders) {
         MCRObjectID mcrId = MCRJerseyUtil.getID(id);
         MCRJerseyUtil.checkPermission(mcrId, PERMISSION_READ);
-        MCRObject object = MCRMetadataManager.retrieveMCRObject(mcrId);
+        MCRObject object = MetadataManager.retrieveMCRObject(mcrId);
         for (MediaType mediaType : httpHeaders.getAcceptableMediaTypes()) {
             if (mediaType.equals(MediaType.APPLICATION_JSON_TYPE)) {
                 return getJSON(object);
@@ -72,7 +73,7 @@ public class ObjectResource {
                 MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(mcrId);
                 MCRMetadataManager.delete(mcrDer);
             } else {
-                MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+                MCRObject mcrObj = MetadataManager.retrieveMCRObject(mcrId);
                 MCRMetadataManager.delete(mcrObj);
             }
         } catch (MCRAccessException mcrActExc) {

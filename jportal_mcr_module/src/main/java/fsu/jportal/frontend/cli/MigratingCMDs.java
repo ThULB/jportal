@@ -1,6 +1,7 @@
 package fsu.jportal.frontend.cli;
 
 import fsu.jportal.backend.JPDerivateComponent;
+import fsu.jportal.backend.MetadataManager;
 import static fsu.jportal.util.ImprintUtil.getJournalConf;
 
 import java.io.File;
@@ -254,7 +255,7 @@ public class MigratingCMDs {
         syntax = "fix children of volume {0}")
     public static void fixVolumeChildren(String volumeId) throws MCRPersistenceException, IOException {
         MCRObjectID mcrVolumeId = MCRObjectID.getInstance(volumeId);
-        MCRObject volume = MCRMetadataManager.retrieveMCRObject(mcrVolumeId);
+        MCRObject volume = MetadataManager.retrieveMCRObject(mcrVolumeId);
         List<MCRMetaLinkID> toRemove = new ArrayList<>();
         List<MCRMetaLinkID> children = volume.getStructure().getChildren();
         int oldSize = children.size();

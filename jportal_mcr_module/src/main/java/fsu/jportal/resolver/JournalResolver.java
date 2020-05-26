@@ -10,6 +10,8 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
+import fsu.jportal.backend.MetadataManager;
+
 /**
  * Gets the journal by any children id. For creating new objects the 'parent'
  * part id is used, for editing objects the 'id' part is used as a reference object. 
@@ -29,7 +31,7 @@ public class JournalResolver implements URIResolver {
         if (objectId == null && parentId == null) {
             throw new IllegalArgumentException("Cannot get journal id without any reference: " + href);
         }
-        MCRObject refObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId != null ? objectId
+        MCRObject refObject = MetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId != null ? objectId
             : parentId));
         MCRObject journal = MCRObjectUtils.getRoot(refObject);
         if (journal == null) {

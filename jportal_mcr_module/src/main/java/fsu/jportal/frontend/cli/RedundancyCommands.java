@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import fsu.jportal.backend.MetadataManager;
 import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
 
 @MCRCommandGroup(name = "JP doubletOf Commands")
@@ -117,7 +118,7 @@ public class RedundancyCommands{
             return;
         }
 
-        MCRObject sourceMCRObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(sourceId));
+        MCRObject sourceMCRObject = MetadataManager.retrieveMCRObject(MCRObjectID.getInstance(sourceId));
 
         // ArrayList for equal elements
         ArrayList<Element> equalElements = new ArrayList<>();

@@ -4,6 +4,8 @@ import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.backend.JPObjectComponent;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.MetadataManager;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -51,7 +53,7 @@ public class LLZMetsImporter extends MetsImporter {
             // get corresponding mycore objects
             derivate = MCRMetadataManager.retrieveMCRDerivate(derivateId);
             MCRObjectID volumeId = derivate.getOwnerID();
-            MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(volumeId);
+            MCRObject mcrObject = MetadataManager.retrieveMCRObject(volumeId);
             JPVolume volume = new JPVolume(mcrObject);
 
             // run through mets

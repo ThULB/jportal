@@ -18,6 +18,8 @@ import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPPerson;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.MetadataManager;
+
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -54,7 +56,7 @@ public abstract class JPComponentUtil {
             MCRObjectID mcrid = MCRObjectID.getInstance(id);
             List<Object> nodes = new ArrayList<>();
             if (MCRMetadataManager.exists(mcrid)) {
-                Document xml = MCRMetadataManager.retrieve(mcrid).createXML();
+                Document xml = MetadataManager.retrieve(mcrid).createXML();
                 for (String xpath : xpathList) {
                     XPathExpression<Object> exp = XPathFactory.instance().compile(xpath);
                     Object node = exp.evaluateFirst(xml);
@@ -354,12 +356,12 @@ public abstract class JPComponentUtil {
      * @return the order of the given child
      */
     public static Integer getOrder(MCRObjectID id) {
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(id);
+        MCRObject mcrObj = MetadataManager.retrieveMCRObject(id);
         MCRObjectID parentId = mcrObj.getStructure().getParentID();
         if (parentId == null) {
             return null;
         }
-        MCRObject parentObj = MCRMetadataManager.retrieveMCRObject(parentId);
+        MCRObject parentObj = MetadataManager.retrieveMCRObject(parentId);
         List<MCRMetaLinkID> children = parentObj.getStructure().getChildren();
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i).getXLinkHrefID().equals(id)) {

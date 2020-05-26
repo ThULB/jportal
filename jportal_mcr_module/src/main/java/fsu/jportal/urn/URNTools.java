@@ -44,6 +44,8 @@ import org.mycore.pi.urn.rest.MCRDerivateURNUtils;
 import org.mycore.pi.urn.rest.MCREpicurLite;
 import org.w3c.dom.NodeList;
 
+import fsu.jportal.backend.MetadataManager;
+
 public class URNTools {
     private static Logger LOGGER = LogManager.getLogger();
 
@@ -197,12 +199,12 @@ public class URNTools {
     }
 
     public static List<MCRPIRegistrationInfo> getURNsForDerivate(MCRObjectID derivateID) {
-        return MCRPIManager.getInstance().getRegistered(MCRMetadataManager.retrieveMCRObject(derivateID));
+        return MCRPIManager.getInstance().getRegistered(MetadataManager.retrieveMCRObject(derivateID));
     }
 
     public static List<MCRPIRegistrationInfo> getURNsForDerivateAndPath(MCRObjectID derivateID, String path) {
         path = path.equals("/") ? "" : path;
-        MCRObject object = MCRMetadataManager.retrieveMCRObject(derivateID);
+        MCRObject object = MetadataManager.retrieveMCRObject(derivateID);
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MCRPIRegistrationInfo> getQuery = cb.createQuery(MCRPIRegistrationInfo.class);

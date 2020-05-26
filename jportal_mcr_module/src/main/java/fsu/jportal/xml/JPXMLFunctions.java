@@ -1,5 +1,6 @@
 package fsu.jportal.xml;
 
+import fsu.jportal.backend.MetadataManager;
 import static org.apache.solr.common.params.CommonParams.*;
 
 import java.io.FileNotFoundException;
@@ -204,9 +205,9 @@ public class JPXMLFunctions {
     private static boolean hasChildren(String derivateId) {
         try {
             MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
-            MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(mcrDerivateId);
+            MCRDerivate derivate = MetadataManager.retrieveMCRDerivate(mcrDerivateId);
             MCRObjectID ownerID = derivate.getOwnerID();
-            MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(ownerID);
+            MCRObject mcrObject = MetadataManager.retrieveMCRObject(ownerID);
             return mcrObject.getStructure().getChildren().size() > 0;
         } catch (Exception exc) {
             LOGGER.error("Unable to check if the owner of the {} has any children.", derivateId, exc);
@@ -537,7 +538,7 @@ public class JPXMLFunctions {
         try {
             StringBuilder path = new StringBuilder();
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+            MCRObject mcrObj = MetadataManager.retrieveMCRObject(mcrId);
             List<MCRObject> ancestorsAndSelf = MCRObjectUtils.getAncestors(mcrObj);
             Collections.reverse(ancestorsAndSelf);
             ancestorsAndSelf.forEach(obj -> path.append(obj.getId()).append("/"));
@@ -757,7 +758,7 @@ public class JPXMLFunctions {
         String typeId = mcrObjectID.getTypeId();
 
         if(typeId.equals("derivate")){
-            MCRDerivate mcrDerivate = MCRMetadataManager.retrieveMCRDerivate(mcrObjectID);
+            MCRDerivate mcrDerivate = MetadataManager.retrieveMCRDerivate(mcrObjectID);
             mcrObjectID = mcrDerivate.getOwnerID();
         }
 

@@ -1,5 +1,6 @@
 package fsu.jportal.mets;
 
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.mycore.common.MCRException;
@@ -29,7 +30,7 @@ public class JPMETSGeneratorSelector implements MCRMETSGeneratorFactory.MCRMETSG
         MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(derId);
         // get mycore object
         MCRObjectID objId = mcrDer.getDerivate().getMetaLink().getXLinkHrefID();
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(objId);
+        MCRObject mcrObj = MetadataManager.retrieveMCRObject(objId);
 
         // there is an mets.xml and we don't have children -> just update the mets.xml
         if (MetsUtil.hasMets(derId.toString()) && mcrObj.getStructure().getChildren().isEmpty()) {

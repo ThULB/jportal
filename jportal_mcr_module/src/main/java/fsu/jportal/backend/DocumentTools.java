@@ -21,7 +21,7 @@ public class DocumentTools {
                     MCRMetadataManager.delete(mcrDer);
                     return 1; //OK
                 } else {
-                    MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+                    MCRObject mcrObj = MetadataManager.retrieveMCRObject(mcrId);
                     MCRMetadataManager.delete(mcrObj);
                     return 1; //OK
                 }

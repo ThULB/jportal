@@ -15,7 +15,6 @@ import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.mets.model.Mets;
@@ -48,6 +47,7 @@ import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPPerson;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.xml.JPXMLFunctions;
 
@@ -323,7 +323,7 @@ public abstract class ZvddMetsTools {
      * @return the title of the volume
      */
     public static String getTitle(JPVolume volume) {
-        List<String> titles = MCRObjectUtils.getAncestorsAndSelf(volume.getObject()).stream()
+        List<String> titles = MetadataManager.getAncestorsAndSelf(volume.getObject()).stream()
             .map(JPComponentUtil::getContainer)
             .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
             .filter(container -> container.getType().equals(JPVolume.TYPE))
@@ -349,7 +349,7 @@ public abstract class ZvddMetsTools {
             return 0;
         }
         int order = parent.getChildren().indexOf(volume.getId());
-        order += MCRObjectUtils.getAncestors(volume.getObject()).stream()
+        order += MetadataManager.getAncestors(volume.getObject()).stream()
             .filter(o -> !o.getId().equals(parent.getId()))
             .map(MCRObject::getStructure)
             .map(MCRObjectStructure::getChildren)
@@ -429,9 +429,21 @@ public abstract class ZvddMetsTools {
         // mods:part
         Integer order = ZvddMetsTools.calculateOrder(volume);
         String number = volume.getPublishedDate().map(JPMetaDate::toString).orElse(String.valueOf(order));
+        Element dateIssued = getModsDateIssued(number);
+        mods.addContent(dateIssued);
         Element part = getModsPart(number, type, number);
         mods.addContent(part);
         return mods;
+    }
+
+    private static Element getModsDateIssued(String number) {
+        Element originInfo = mods("originInfo");
+        originInfo.setAttribute("eventType", "publication");
+        Element dateIssued = mods("dateIssued");
+        dateIssued.setAttribute("encoding","iso8601");
+        dateIssued.addContent(number);
+        originInfo.addContent(dateIssued);
+        return originInfo;
     }
 
     /**

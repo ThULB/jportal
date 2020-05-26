@@ -12,6 +12,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.util.GndUtil;
 
 @URIResolverSchema(schema = "sru")
@@ -28,7 +29,7 @@ public class SRUResolver implements URIResolver {
 
         try {
             MCRObjectID mcrId = MCRObjectID.getInstance(id);
-            MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(mcrId);
+            MCRObject mcrObject = MetadataManager.retrieveMCRObject(mcrId);
 
             // record
             PicaRecord picaRecord = GndUtil.retrieveFromSRU(gnd);

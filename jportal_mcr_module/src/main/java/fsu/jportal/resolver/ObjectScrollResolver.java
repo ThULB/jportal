@@ -1,6 +1,7 @@
 package fsu.jportal.resolver;
 
 import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.util.JPComponentUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,7 +47,7 @@ public class ObjectScrollResolver implements URIResolver {
         if (!MCRMetadataManager.exists(mcrID)) {
             return new JDOMSource(scrollElement);
         }
-        MCRObject object = MCRMetadataManager.retrieveMCRObject(mcrID);
+        MCRObject object = MetadataManager.retrieveMCRObject(mcrID);
         // get parent
         MCRObjectID parentID = object.getStructure().getParentID();
         if (parentID == null) {

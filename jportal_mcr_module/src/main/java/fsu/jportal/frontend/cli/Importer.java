@@ -1,5 +1,6 @@
 package fsu.jportal.frontend.cli;
 
+import fsu.jportal.backend.MetadataManager;
 import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -114,7 +115,7 @@ public class Importer {
     public static void fixLLZ(String targetID, String pathToCoordsMets) throws Exception {
         // get object
         MCRObjectID objId = MCRObjectID.getInstance(targetID);
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(objId);
+        MCRObject mcrObj = MetadataManager.retrieveMCRObject(objId);
         // get derivate
         MCRObjectID derId = mcrObj.getStructure().getDerivates().get(0).getXLinkHrefID();
 
@@ -288,7 +289,7 @@ public class Importer {
         // empty volume
         // - delete derivate
         MCRObjectID mcrYearId = MCRObjectID.getInstance(yearId);
-        MCRObject mcrYear = MCRMetadataManager.retrieveMCRObject(mcrYearId);
+        MCRObject mcrYear = MetadataManager.retrieveMCRObject(mcrYearId);
         List<MCRMetaEnrichedLinkID> derivates = mcrYear.getStructure().getDerivates();
         if (!derivates.stream().map(MCRMetaLinkID::getXLinkHrefID).allMatch(derivateId -> {
             try {

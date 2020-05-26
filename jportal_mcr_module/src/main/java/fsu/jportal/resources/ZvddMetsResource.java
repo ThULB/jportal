@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -26,6 +27,7 @@ import fsu.jportal.backend.JPDerivateComponent;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.backend.impl.JPVolumeTypeDefaultDetector;
 import fsu.jportal.mets.ZvddDerivateMetsGenerator;
 import fsu.jportal.mets.ZvddJournalMetsGenerator;
@@ -39,7 +41,7 @@ public class ZvddMetsResource {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     @Path("{id}")
-    public Response get(@PathParam("id") String id) {
+    public Response get(@PathParam("id") String id, @QueryParam("remotely") boolean remotely) {
         if (!MCRObjectID.isValid(id)) {
             throw new BadRequestException(id + " is not a valid mycore identifier.");
         }
@@ -49,16 +51,26 @@ public class ZvddMetsResource {
             throw new BadRequestException(
                 "Invalid identifier " + id + ". Type has to be jpvolume or jpjournal.");
         }
+
+        if(remotely){
+            MetadataManager.setRemotely(true);
+        }
+
+        Response response;
         if (JPComponentUtil.is(mcrObjectID, JPObjectType.jpjournal)) {
-            return handleJournal(mcrObjectID);
-        }
-        JPVolume volume = new JPVolume(mcrObjectID);
-        JPJournal journal = volume.getJournal();
-        if (journal.isJournalType("jportal_class_00000200", "newspapers")) {
-            return handleNewspaperVolume(volume);
+            response = handleJournal(mcrObjectID);
         } else {
-            return handleMagazineVolume(volume);
+            JPVolume volume = new JPVolume(mcrObjectID);
+            JPJournal journal = volume.getJournal();
+            if (journal.isJournalType("jportal_class_00000200", "newspapers")) {
+                response = handleNewspaperVolume(volume);
+            } else {
+                response = handleMagazineVolume(volume);
+            }
         }
+
+        MetadataManager.setRemotely(false);
+        return response;
     }
 
     private Response handleJournal(MCRObjectID mcrObjectID) {

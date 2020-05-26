@@ -1,6 +1,8 @@
 package fsu.jportal.xml;
 
 import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.MetadataManager;
+
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
@@ -20,7 +22,7 @@ public class MCRObjConnector {
     private MCRObject mcrObject;
 
     public MCRObjConnector(String journalID) {
-        mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalID));
+        mcrObject = MetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalID));
     }
 
     public String getRubric() {

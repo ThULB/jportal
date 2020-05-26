@@ -1,8 +1,13 @@
 package fsu.jportal.mets;
 
 import java.nio.file.Files;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
+import java.time.temporal.Temporal;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,6 +44,7 @@ import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.MetadataManager;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.MetsUtil;
 
@@ -88,6 +94,7 @@ public class ZvddNewspaperIssueMetsGenerator extends JPMetsHierarchyGenerator {
         // create mets
         Mets mets = new Mets();
         mets.addDmdSec(ZvddMetsTools.createDmdSec(this.volume, "issue"));
+        mets.addAmdSec(ZvddMetsTools.createAmdSec(volume));
         this.articles.stream().map(ZvddMetsTools::createDmdSec).forEach(mets::addDmdSec);
 
         mets.setFileSec(createFileSec());
@@ -111,8 +118,8 @@ public class ZvddNewspaperIssueMetsGenerator extends JPMetsHierarchyGenerator {
 
     protected List<MCRMETSHierarchyGenerator.FileRef> getFiles() {
         try {
-            Mets mets = MetsUtil.getMets(derivate.getId().toString());
-            List<JPPeriodicalComponent> descendantsAndSelf = MCRObjectUtils
+            Mets mets = MetadataManager.getMets(derivate);
+            List<JPPeriodicalComponent> descendantsAndSelf = MetadataManager
                 .getDescendantsAndSelf(volume.getObject())
                 .stream()
                 .map(JPComponentUtil::getPeriodical)
@@ -138,7 +145,7 @@ public class ZvddNewspaperIssueMetsGenerator extends JPMetsHierarchyGenerator {
         List<JPDerivateComponent> derivates = component.getDerivates();
         if (!derivates.isEmpty()) {
             for (JPDerivateComponent derivate : derivates) {
-                if (Files.exists(derivate.getPath().resolve("mets.xml"))) {
+                if(MetadataManager.hasMetsFile(derivate)){
                     return derivate;
                 }
             }
@@ -204,16 +211,23 @@ public class ZvddNewspaperIssueMetsGenerator extends JPMetsHierarchyGenerator {
         addMptr(year, yearDiv);
 
         // add month
-        int month = volume.getPublishedDate()
-            .map(JPMetaDate::getDateOrFrom)
+        Optional<Temporal> publishedDate = volume.getPublishedDate()
+                .map(JPMetaDate::getDateOrFrom);
+        int month = publishedDate
             .map(t -> t.get(ChronoField.MONTH_OF_YEAR)).orElse(1);
         LogicalDiv monthDiv = new LogicalDiv("log_month_" + month, "month", year.getTitle());
+        publishedDate.map(LocalDate::from)
+                .map(d -> d.format(DateTimeFormatter.ofPattern("YYYY-MM")))
+                .ifPresent(monthDiv::setOrderLabel);
         yearDiv.add(monthDiv);
 
         // day if present
         LogicalDiv parentIssueDiv = monthDiv;
         if (day != null) {
             LogicalDiv dayDiv = new LogicalDiv("log_" + day.getId(), "day", day.getTitle());
+            publishedDate.map(LocalDate::from)
+                    .map(d -> d.format(DateTimeFormatter.ofPattern("YYYY-MM-dd")))
+                    .ifPresent(dayDiv::setOrderLabel);
             monthDiv.add(dayDiv);
             parentIssueDiv = dayDiv;
         }
