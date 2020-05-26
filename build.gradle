@@ -9,6 +9,17 @@ def getDate() {
     return formattedDate
 }
 
+ext.getCurrentBranchName = {
+    new ByteArrayOutputStream().withStream { os ->
+        exec {
+            executable = "git"
+            args = ["rev-parse", "--abbrev-ref", "HEAD"]
+            standardOutput = os
+        }
+        return os.toString().replaceAll("\n", "")
+    }
+}
+
 allprojects {
     apply plugin: 'maven-publish'
 
@@ -120,6 +131,7 @@ subprojects {
                 attributes("MCR-Application-Module": "$project.name")
                 attributes("MCR-Artifact-Id": "$project.name")
                 attributes("version": "$project.version")
+                attributes("branch": getCurrentBranchName())
                 attributes("timestamp": getDate())
             }
         }

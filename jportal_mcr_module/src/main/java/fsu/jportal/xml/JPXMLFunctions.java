@@ -716,7 +716,7 @@ public class JPXMLFunctions {
      * @return "artifact id" "version" "timestamp"
      */
     public static String getJPortalVersion() {
-        return getManifestAttributes(JPXMLFunctions.class,"MCR-Artifact-Id", "version", "timestamp")
+        return getManifestAttributes(JPXMLFunctions.class,"MCR-Artifact-Id", "version", "branch", "timestamp")
                 .collect(Collectors.joining(" "));
     }
 
