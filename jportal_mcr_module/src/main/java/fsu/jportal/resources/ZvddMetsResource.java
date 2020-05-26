@@ -52,25 +52,27 @@ public class ZvddMetsResource {
                 "Invalid identifier " + id + ". Type has to be jpvolume or jpjournal.");
         }
 
-        if(remotely){
-            MetadataManager.setRemotely(true);
-        }
-
-        Response response;
-        if (JPComponentUtil.is(mcrObjectID, JPObjectType.jpjournal)) {
-            response = handleJournal(mcrObjectID);
-        } else {
-            JPVolume volume = new JPVolume(mcrObjectID);
-            JPJournal journal = volume.getJournal();
-            if (journal.isJournalType("jportal_class_00000200", "newspapers")) {
-                response = handleNewspaperVolume(volume);
-            } else {
-                response = handleMagazineVolume(volume);
+        try {
+            if (remotely) {
+                MetadataManager.setRemotely(true);
             }
-        }
 
-        MetadataManager.setRemotely(false);
-        return response;
+            Response response;
+            if (JPComponentUtil.is(mcrObjectID, JPObjectType.jpjournal)) {
+                response = handleJournal(mcrObjectID);
+            } else {
+                JPVolume volume = new JPVolume(mcrObjectID);
+                JPJournal journal = volume.getJournal();
+                if (journal.isJournalType("jportal_class_00000200", "newspapers")) {
+                    response = handleNewspaperVolume(volume);
+                } else {
+                    response = handleMagazineVolume(volume);
+                }
+            }
+            return response;
+        }finally {
+            MetadataManager.setRemotely(false);
+        }
     }
 
     private Response handleJournal(MCRObjectID mcrObjectID) {

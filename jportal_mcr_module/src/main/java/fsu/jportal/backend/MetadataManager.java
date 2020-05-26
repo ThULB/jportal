@@ -59,7 +59,7 @@ public class MetadataManager {
     private static <T> T getRemotely(MCRObjectID mcrId, MCRObjFromURI<T> supplier) {
         String urlConf = MCRConfiguration.instance().getString(REMOTE_XML);
         if(urlConf == null || "".equals(urlConf)){
-            throw new RuntimeException("Property " + REMOTE_XML + " not set.");
+            return throwRuntimeException(REMOTE_XML);
         }
 
         String urlStr = String.format(urlConf, mcrId.toString());
@@ -70,6 +70,11 @@ public class MetadataManager {
             e.printStackTrace();
             throw new RuntimeException("Could not resolve object at url " + urlStr, e);
         }
+    }
+
+    private static <T> T throwRuntimeException(String remoteXml) {
+        setRemotely(false);
+        throw new RuntimeException("Property " + remoteXml + " not set.");
     }
 
     public static MCRBase retrieve(MCRObjectID mcrId) {
@@ -145,7 +150,7 @@ public class MetadataManager {
         String derivateId = derivate.getObject().getId().toString();
         String urlConf = MCRConfiguration.instance().getString(REMOTE_METS);
         if(urlConf == null || "".equals(urlConf)){
-            throw new RuntimeException("Property " + REMOTE_METS + " not set.");
+            throwRuntimeException(REMOTE_METS);
         }
         String urlStr = String.format(urlConf, derivateId);
         CloseableHttpResponse head = HttpsClient
@@ -162,7 +167,7 @@ public class MetadataManager {
 
         String urlConf = MCRConfiguration.instance().getString(REMOTE_METS);
         if(urlConf == null || "".equals(urlConf)){
-            throw new RuntimeException("Property " + REMOTE_METS + " not set.");
+            throwRuntimeException(REMOTE_METS);
         }
         String urlStr = String.format(urlConf, derivateId);
 
