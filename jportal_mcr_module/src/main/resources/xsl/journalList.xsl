@@ -78,6 +78,7 @@
       </xsl:otherwise>
     </xsl:choose>
 
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalList-init.js"/>
   </xsl:template>
 
   <!-- =================================================================== -->

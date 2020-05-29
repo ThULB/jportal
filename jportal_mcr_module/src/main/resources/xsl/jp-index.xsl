@@ -15,7 +15,7 @@
       </div>
       <div class="info container">
         Das von der Thüringer Universitäts- und Landesbibliothek Jena (ThULB) betriebene Portal journals@UrMEL bietet
-        freien Zugang zu über 1.000 Zeitschriften und Zeitungen in digitaler Form.
+        freien Zugang zu <span id="journalsNum">1000</span> Zeitschriften und Zeitungen in digitaler Form.
       </div>
       <div id="portfolio" class="container">
         <nav>
@@ -25,5 +25,15 @@
         </nav>
       </div>
     </div>
+    <xsl:choose>
+      <xsl:when test="contains($User-Agent, 'Trident')">
+        <!-- es5 scripts -->
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/es5/jp-journalList-main-es5.js" />
+      </xsl:when>
+      <xsl:otherwise>
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalList-main.js" />
+      </xsl:otherwise>
+    </xsl:choose>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-journalsNum.js" />
   </xsl:template>
 </xsl:stylesheet>

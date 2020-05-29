@@ -524,5 +524,3 @@ jp.journalList.view = {
   }
 
 };
-
-jp.journalList.init();
