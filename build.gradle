@@ -21,8 +21,6 @@ ext.getCurrentBranchName = {
 }
 
 allprojects {
-    apply plugin: 'maven-publish'
-
     def releaseURL = "http://artifactory.mycore.de/mycore-releases"
     def snapshotsURL = "http://artifactory.mycore.de/mycore-snapshots"
     def sonatypeSnapshotsURL = "https://oss.sonatype.org/content/repositories/snapshots"
@@ -39,19 +37,6 @@ allprojects {
         maven { url snapshotsURL }
 
         jcenter()
-    }
-
-    publishing {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/ThULB/jportal")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
-            }
-        }
     }
 }
 
@@ -95,14 +80,6 @@ subprojects {
         }
     }
 
-    /*publishing {
-        publications {
-            gpr(MavenPublication) {
-                from(components.java)
-            }
-        }
-    }*/
-    
     dependencies {
         testCompile 'org.jmockit:jmockit:1.46'
         testCompile 'junit:junit:4.12'
@@ -275,14 +252,6 @@ project(':jportal_IT-TestData') {
 
 project(':jportal_webapp') {
     apply plugin: 'war'
-
-    publishing {
-        publications {
-            gpr(MavenPublication) {
-                from(components.java)
-            }
-        }
-    }
 
     configurations {
         runtime.exclude group: "org.slf4j", module: "slf4j-nop"
