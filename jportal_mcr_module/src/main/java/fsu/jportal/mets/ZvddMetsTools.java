@@ -431,9 +431,20 @@ public abstract class ZvddMetsTools {
         String number = volume.getPublishedDate().map(JPMetaDate::toString).orElse(String.valueOf(order));
         Element dateIssued = getModsDateIssued(number);
         mods.addContent(dateIssued);
+        Element location = getLocation(isil);
+        mods.addContent(location);
         Element part = getModsPart(number, type, number);
         mods.addContent(part);
         return mods;
+    }
+
+    private static Element getLocation(String isil) {
+        Element location = mods("location");
+        location.setAttribute("authority", "ISIL");
+        Element physicalLocation = mods("physicalLocation");
+        physicalLocation.addContent(isil);
+        location.addContent(physicalLocation);
+        return location;
     }
 
     private static Element getModsDateIssued(String number) {
