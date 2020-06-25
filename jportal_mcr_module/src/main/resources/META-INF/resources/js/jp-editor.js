@@ -1,6 +1,48 @@
-$(document).ready(function() {
+var jp = jp || {};
+jp.editor = {};
+
+jp.editor.init = function() {
 	// create date fields
 	createDate();
+
+	let journalsDates = undefined;
+
+    function getJournalDates(func){
+	    if(journalsDates === undefined){
+            const journalID = document.getElementById("journalID").textContent;
+            const getJournalDatesURL = jp.baseURL + "rsc/object/journalDates/" + journalID;
+
+            jp.util.getJSON(getJournalDatesURL)
+                .then((d) => {
+                    let publishedDate = d.find(date => date.type === "published");
+                    journalsDates = {
+                        startDate: undefined,
+                        endDate: undefined,
+                        error: undefined
+                    };
+
+                    if(publishedDate !== undefined) {
+                        if (publishedDate.date) {
+                            journalsDates.startDate = new Date(publishedDate.date);
+                        } else if (publishedDate.from) {
+                            journalsDates.startDate = new Date(publishedDate.from);
+                        }
+
+                        if (publishedDate.until) {
+                            journalsDates.endDate = new Date(publishedDate.until);
+                        }
+                    }
+
+                    func(journalsDates);
+                })
+                .catch(error => {
+                    journalsDates = {error: error};
+                    func(journalsDates);
+                });
+        } else {
+	        func(journalsDates);
+        }
+    }
 
     $("select.dynamicBinding").change(function() {
 	  updateBindings();
@@ -80,10 +122,8 @@ $(document).ready(function() {
 
     }
 
-    $.fn.dateCombiner = function () {
-        let elements = this;
-
-        elements.each(function (index, dateInput) {
+    function dateCombiner(dateInput) {
+        //elements.each(function (index, dateInput) {
 
             /*
              * error if yyyy-_-dd or _-mm-dd
@@ -92,10 +132,10 @@ $(document).ready(function() {
              * can add missed 0  ---> year = 2  now complete to  year = 0002  automatically on original input
              *
              * */
-            let combineDate = function () {
-                const year = forms["Jahr"].val();
-                const month = forms["Monat"].val();
-                const day = forms["Tag"].val();
+            let combineDate = function (pubishedDates) {
+                const year = forms["Jahr"].value;
+                const month = forms["Monat"].value;
+                const day = forms["Tag"].value;
 
                 // error handling
                 const errorTargetDiv = forms["Tag"];
@@ -117,6 +157,9 @@ $(document).ready(function() {
                     return;
                 }
 
+                console.log("journalDates: " + JSON.stringify(pubishedDates))
+
+
                 // set date
                 let format = "YYYY";
                 const newDate = moment({
@@ -130,82 +173,110 @@ $(document).ready(function() {
                     newDate.date(parseInt(day));
                     format += "-DD";
                 }
-                dateInputJq.val(newDate.isValid() ? newDate.format(format) : null);
+                dateInput.value = newDate.isValid() ? newDate.format(format) : null;
             };
 
             let addForm = function (placeHolder, maxlength, value) {
-                forms[placeHolder] = jQuery(inputBase);
-                forms[placeHolder].attr("placeholder", placeHolder);
-                forms[placeHolder].attr("maxlength", maxlength);
-                forms[placeHolder].attr("title", "Eingabe nur als Zahl möglich!");
-                forms[placeHolder].val(value);
-                forms[placeHolder].on("keyup click", combineDate);
-                forms[placeHolder].insertAfter(dateInputJq);
+                forms[placeHolder] = Object.assign(document.createElement("input"), inputBase);
+                forms[placeHolder].placeholder = placeHolder;
+                forms[placeHolder].maxlength = maxlength;
+                forms[placeHolder].title = "Eingabe nur als Zahl möglich!";
+                forms[placeHolder].value = value;
+                forms[placeHolder].oninput = e => {
+                    //wait 500ms for input then exec combineDate
+                    let saveOnInput = e.target.oninput;
+                    e.target.oninput = undefined;
+                    setTimeout(() => {
+                        getJournalDates(d => combineDate(d));
+                        e.target.oninput = saveOnInput;
+                    }, 500);
+                };
+
+                //insertAfter
+                dateInput.parentNode.insertBefore(forms[placeHolder], dateInput.nextSibling);
+                //forms[placeHolder].insertAfter(dateInputJq);
             };
 
-            const dateInputJq = jQuery(dateInput);
+            dateInput.style.display = "none";
+
+            //const dateInputJq = jQuery(dateInput);
             /* original input hidden */
-            dateInputJq.css({
-                "display": "none"
-            });
+            //dateInputJq.css({
+            //    "display": "none"
+            //});
             const forms = {};
-            const inputBase = '<input class="form-control" style="width: 33.3%;">';
-            const originalDate = dateInputJq.val();
+            //const inputBase = '<input class="form-control" style="width: 33.3%;">';
+            const inputBase = {className: "form-control", style: "width: 33.3%;"};
+            const originalDate = dateInput.value;
             const isBC = originalDate.startsWith("-");
             const splitDate = isBC ? originalDate.substring(1).split("-") : originalDate.split("-");
 
             addForm("Tag", 2, splitDate[2]);
             addForm("Monat", 2, splitDate[1]);
             addForm("Jahr", 5, (isBC ? "-" : "") + splitDate[0]);
-        });
+
+        //});
     };
 
-    $(".date-field").dateCombiner();
+    document.querySelectorAll(".date-field")
+        .forEach(dateCombiner)
 
     function errorOutput(errorText, element) {
-        if (element.parent().find(".jp-layout-errorBox").length === 0) {
-            element.parent().addClass("has-error");
-            $('<div role="alert" class="jp-layout-errorBox alert alert-danger">' + errorText + '</div>').insertAfter(element);
+        if (element.parentNode.querySelectorAll(".jp-layout-errorBox").length === 0) {
+            element.parentNode.classList.add("has-error");
+            let alertDiv = document.createElement("div");
+            alertDiv.className = "jp-layout-errorBox alert alert-danger";
+            alertDiv.role = "alert";
+            alertDiv.textContent = errorText;
+            //insertAfter
+            element.parentNode.insertBefore(alertDiv, element.nextSibling);
         }
     }
 
     function killError(element) {
-        element.parent().removeClass("has-error");
-        element.parent().find(".jp-layout-errorBox").remove();
+        element.parentNode.classList.remove("has-error");
+        let errorBox = element.parentNode.querySelector(".jp-layout-errorBox");
+        if(errorBox !== null && errorBox !== undefined){
+            errorBox.remove();
+        }
     }
 
-});
+};
 
 // jparticle - gnd location
-$(document).ready(function () {
-  $(".jp-gnd-location-form").each(function () {
-    const form = $(this);
-    const searchInput = $("<input type='text' class='form-control' maxlength='32' placeholder='GND ID' />");
-    form.prepend(searchInput);
-    loadData(form, searchInput);
-    form.find("button").on("click", () => {
-      let id = searchInput.val();
-      const url = jp.baseURL + "rsc/gnd/location/" + id;
-      jp.util.getJSON(url).then((data) => {
-        if(data.label == null) {
-          BootstrapDialog.alert('There is no pica+ field "065A a" for this record!');
-          return;
-        }
-        setData(id, data.label, data.latitude, data.longitude, data.areaCode, form);
-      }).catch((error) => {
-        BootstrapDialog.alert('Error while getting record data from server. If you think this is an error please' +
-          ' contact your administrator!');
-        console.log(error);
-      })
+jp.editor.articleGNDLocation = function () {
+    document.querySelectorAll(".jp-gnd-location-form")
+        .forEach((form) => {
+            let searchInput = document.createElement("input");
+            searchInput.className = "form-control";
+            searchInput.type = "text";
+            searchInput.placeholder = "GND ID";
+
+            form.insertBefore(searchInput, form.firstChild);
+            loadData(form, searchInput);
+            form.querySelector("button").onclick = () => {
+                const id = searchInput.value;
+                const url = jp.baseURL + "rsc/gnd/location/" + id;
+                jp.util.getJSON(url).then((data) => {
+                    if (data.label == null) {
+                        BootstrapDialog.alert('There is no pica+ field "065A a" for this record!');
+                        return;
+                    }
+                    setData(id, data.label, data.latitude, data.longitude, data.areaCode, form);
+                }).catch((error) => {
+                    BootstrapDialog.alert('Error while getting record data from server. If you think this is an error please' +
+                        ' contact your administrator!');
+                    console.log(error);
+                })
+            }
     });
-  });
 
   function loadData(form, searchInput) {
-    const inputDiv = form.prev(".jp-gnd-location-input");
-    const id = inputDiv.find(".jp-gnd-location-input-id").val();
-    const label = inputDiv.find(".jp-gnd-location-input-label").val();
-    const areaCode = inputDiv.find(".jp-gnd-location-input-areaCode").val();
-    const data = inputDiv.find(".jp-gnd-location-input-data").val();
+    const inputDiv = form.previousElementSibling;
+    const id = inputDiv.querySelector(".jp-gnd-location-input-id").value;
+    const label = inputDiv.querySelector(".jp-gnd-location-input-label").value;
+    const areaCode = inputDiv.querySelector(".jp-gnd-location-input-areaCode").value;
+    const data = inputDiv.querySelector(".jp-gnd-location-input-data").value;
     if (id !== "") {
       searchInput.val(id);
     }
@@ -214,22 +285,24 @@ $(document).ready(function () {
       if(areaCode !== "") {
         display += " [" + areaCode +"]"
       }
-      inputDiv.find(".jp-gnd-location-input-display").html(display);
+      inputDiv.querySelector(".jp-gnd-location-input-display").textContent = display;
     }
   }
 
   function setData(id, label, lat, lng, areaCode, form) {
-    const inputDiv = form.prev(".jp-gnd-location-input");
-    inputDiv.find(".jp-gnd-location-input-id").val(id);
-    inputDiv.find(".jp-gnd-location-input-label").val(label);
-    inputDiv.find(".jp-gnd-location-input-areaCode").val(areaCode);
+    const inputDiv = form.previousElementSibling;
+    inputDiv.querySelector(".jp-gnd-location-input-id").value = id;
+    inputDiv.querySelector(".jp-gnd-location-input-label").value = label;
+    inputDiv.querySelector(".jp-gnd-location-input-areaCode").value = areaCode;
     if(lat !== null && lng !== null) {
-      inputDiv.find(".jp-gnd-location-input-data").val(lat + "," + lng);
-      inputDiv.find(".jp-gnd-location-input-display").html(label + " (" + lat + "," + lng + ")");
+      inputDiv.querySelector(".jp-gnd-location-input-data").value = lat + "," + lng;
+      inputDiv.querySelector(".jp-gnd-location-input-display")
+          .textContent = label + " (" + lat + "," + lng + ")";
     } else {
-      inputDiv.find(".jp-gnd-location-input-data").val(null);
-      inputDiv.find(".jp-gnd-location-input-display").html(label + " (keine Koordinaten gefunden!)");
+      inputDiv.querySelector(".jp-gnd-location-input-data").value = null;
+      inputDiv.querySelector(".jp-gnd-location-input-display")
+          .textContent = label + " (keine Koordinaten gefunden!)";
     }
   }
 
-});
+};
