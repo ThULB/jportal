@@ -44,28 +44,32 @@ jp.editor.init = function() {
         }
     }
 
-    $("select.dynamicBinding").change(function() {
-	  updateBindings();
-    });
+    const onChangeEvent = new Event("onchange");
+    document.querySelectorAll("select.dynamicBinding")
+        .foreach(select => {
+            if(select.onchange !== updateBindings){
+                select.onchange = updateBindings;
+                select.dispatchEvent(onChangeEvent);
+            }
+        });
 
-	function updateBindings() {
-	  $("select.dynamicBinding").each(function() {
-	    let on = $(this).attr("on");
+	function updateBindings(event) {
+	    const currentSelect = event.target;
+	    let on = currentSelect.getAttribute("on");
 	    if(on == null) {
 	      return;
 	    }
-        let row = $(this).closest(".row");
+
+        let row = currentSelect.closest(".row");
         let classid = on.split(":")[0];
         let categid = on.split(":")[1];
-        let dependentBinding = $("select.dynamicBinding[data-classid='" + classid + "']");
+        let dependentBinding = document.querySelector("select.dynamicBinding[data-classid='" + classid + "']");
         let display = (categid === dependentBinding.val()) ? "block" : "none";
         if(display === "none") {
-          $(this).val("");
+          currentSelect.value = "";
         }
 	    row.css("display", display);
-	  });
 	}
-	updateBindings();
 
     function createDate() {
 
@@ -123,8 +127,6 @@ jp.editor.init = function() {
     }
 
     function dateCombiner(dateInput) {
-        //elements.each(function (index, dateInput) {
-
             /*
              * error if yyyy-_-dd or _-mm-dd
              * error by letters, day 01 - 31, month 01 - 12
@@ -194,7 +196,6 @@ jp.editor.init = function() {
 
                 //insertAfter
                 dateInput.parentNode.insertBefore(forms[placeHolder], dateInput.nextSibling);
-                //forms[placeHolder].insertAfter(dateInputJq);
             };
 
             dateInput.style.display = "none";
@@ -214,8 +215,6 @@ jp.editor.init = function() {
             addForm("Tag", 2, splitDate[2]);
             addForm("Monat", 2, splitDate[1]);
             addForm("Jahr", 5, (isBC ? "-" : "") + splitDate[0]);
-
-        //});
     };
 
     document.querySelectorAll(".date-field")
