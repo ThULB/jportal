@@ -56,30 +56,42 @@
     </xsl:for-each>
 
     <!-- Origin Info -->
-    <xsl:if test="./metadata/dates/date">
-      <mods:originInfo>
-        <xsl:if test="./metadata/dates/date[@type='published']">
-          <xsl:choose>
-            <xsl:when test="./metadata/dates/date[@type='published']/@date">
-              <mods:dateIssued encoding="iso8601">
-                <xsl:value-of select="./metadata/dates/date[@type='published']/@date" />
-              </mods:dateIssued>
-            </xsl:when>
-            <xsl:otherwise>
-              <mods:dateIssued point="start" encoding="iso8601">
-                <xsl:value-of select="./metadata/dates/date[@type='published']/@from" />
-              </mods:dateIssued>
-              <xsl:if test="./metadata/dates/date[@type='published']/@until">
-                <mods:dateIssued point="end" encoding="iso8601">
-                  <xsl:value-of select="./metadata/dates/date[@type='published']/@until" />
+    <xsl:choose>
+      <xsl:when test="./metadata/dates/date">
+        <mods:originInfo>
+          <xsl:if test="./metadata/dates/date[@type='published']">
+            <xsl:choose>
+              <xsl:when test="./metadata/dates/date[@type='published']/@date">
+                <mods:dateIssued encoding="iso8601">
+                  <xsl:value-of select="./metadata/dates/date[@type='published']/@date"/>
                 </mods:dateIssued>
-              </xsl:if>
-            </xsl:otherwise>
-          </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                <mods:dateIssued point="start" encoding="iso8601">
+                  <xsl:value-of select="./metadata/dates/date[@type='published']/@from"/>
+                </mods:dateIssued>
+                <xsl:if test="./metadata/dates/date[@type='published']/@until">
+                  <mods:dateIssued point="end" encoding="iso8601">
+                    <xsl:value-of select="./metadata/dates/date[@type='published']/@until"/>
+                  </mods:dateIssued>
+                </xsl:if>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
+          <xsl:apply-templates select="./metadata/dates/date[@type != 'published']" mode="otherDate"/>
+        </mods:originInfo>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="published" select="jpxml:getPublishedISODate(@ID)"/>
+        <xsl:if test="$published">
+          <mods:originInfo>
+            <mods:dateOther encoding="iso8601" type="published">
+              <xsl:value-of select="$published"/>
+            </mods:dateOther>
+          </mods:originInfo>
         </xsl:if>
-        <xsl:apply-templates select="./metadata/dates/date[@type != 'published']" mode="otherDate" />
-      </mods:originInfo>
-    </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
 
     <!-- Note -->
     <xsl:for-each select="./metadata/notes/note[@type='annotation' and @inherited=0]">
