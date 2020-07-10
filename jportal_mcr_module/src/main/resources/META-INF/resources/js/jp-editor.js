@@ -44,12 +44,11 @@ jp.editor.init = function() {
         }
     }
 
-    const onChangeEvent = new Event("onchange");
     document.querySelectorAll("select.dynamicBinding")
-        .foreach(select => {
+        .forEach(select => {
             if(select.onchange !== updateBindings){
                 select.onchange = updateBindings;
-                select.dispatchEvent(onChangeEvent);
+                select.dispatchEvent(new Event("change"));
             }
         });
 
@@ -73,56 +72,60 @@ jp.editor.init = function() {
 
     function createDate() {
 
-        $(".jpdate-group").each(function() {
-            let group = $( this );
+        document.querySelectorAll(".jpdate-group")
+            .forEach(group => {
+                // select
+                let dateSelect = group.querySelector("input[value=date]");
+                let rangeSelect = group.querySelector("input[value=range]");
+                dateSelect.onchange = onChangeDateSelect;
+                rangeSelect.onchange = onChangeDateSelect;
 
-            // select
-            let dateSelect = group.find("input[value=date]");
-            let rangeSelect = group.find("input[value=range]");
-            dateSelect.on("change", onChangeDateSelect);
-            rangeSelect.on("change", onChangeDateSelect);
+                // dates
+                let inputGroup = group.querySelectorAll(".input-group");
+                let dateInputGroup = inputGroup[0];
+                let fromInputGroup = inputGroup[1];
+                let untilInputGroup = inputGroup[2];
+                let dateInput = dateInputGroup.querySelector("input.date-field");
+                let fromInput = fromInputGroup.querySelector("input.date-field");
+                let untilInput = untilInputGroup.querySelector("input.date-field");
+                let dateFrom = fromInput.value;
 
-            // dates
-            let dateInputGroup = $(group.find(".input-group")[0]);
-            let fromInputGroup = $(group.find(".input-group")[1]);
-            let untilInputGroup = $(group.find(".input-group")[2]);
-            let dateInput = dateInputGroup.find("input.date-field");
-            let fromInput = fromInputGroup.find("input.date-field");
-            let untilInput = untilInputGroup.find("input.date-field");
-            let dateFrom = fromInput.val();
-
-            // init dates on start
-            if(dateFrom !== null && dateFrom !== undefined && dateFrom !== "") {
-                rangeSelect.prop("checked", true).change();
-            } else {
-                dateSelect.prop("checked", true).change();
-            }
-
-            // clear dates before submit
-            group.closest("form").submit(function() {
-                if(dateSelect.prop("checked")) {
-                    fromInput.val(null);
-                    untilInput.val(null);
+                // init dates on start
+                if (dateFrom !== null && dateFrom !== undefined && dateFrom !== "") {
+                    //rangeSelect.prop("checked", true).change();
+                    rangeSelect.checked = true;
+                    rangeSelect.dispatchEvent(new Event("change"));
                 } else {
-                    dateInput.val(null);
+                    //dateSelect.prop("checked", true).change();
+                    dateSelect.checked = true;
+                    dateSelect.dispatchEvent(new Event("change"));
                 }
-                return true;
+
+                // clear dates before submit
+                group.closest("form").onsubmit = () => {
+                    if (dateSelect.checked) {
+                        fromInput.value = null;
+                        untilInput.value = null;
+                    } else {
+                        dateInput.value = null;
+                    }
+                    return true;
+                };
+
+                function onChangeDateSelect(e) {
+                    let value = e.target.value;
+                    if (value === "date") {
+                        dateInputGroup.style.display = "table";
+                        fromInputGroup.style.display = "none";
+                        untilInputGroup.style.display = "none";
+                    } else {
+                        dateInputGroup.style.display = "none";
+                        fromInputGroup.style.display = "table";
+                        untilInputGroup.style.display = "table";
+                    }
+                }
+
             });
-
-            function onChangeDateSelect(e) {
-                let value = e.target.value;
-                if(value === "date") {
-                    dateInputGroup.show();
-                    fromInputGroup.hide();
-                    untilInputGroup.hide();
-                } else {
-                    dateInputGroup.hide();
-                    fromInputGroup.show();
-                    untilInputGroup.show();
-                }
-            }
-
-        });
 
     }
 
@@ -159,9 +162,6 @@ jp.editor.init = function() {
                     return;
                 }
 
-                console.log("journalDates: " + JSON.stringify(pubishedDates))
-
-
                 // set date
                 let format = "YYYY";
                 const newDate = moment({
@@ -183,7 +183,7 @@ jp.editor.init = function() {
                 forms[placeHolder].placeholder = placeHolder;
                 forms[placeHolder].maxlength = maxlength;
                 forms[placeHolder].title = "Eingabe nur als Zahl möglich!";
-                forms[placeHolder].value = value;
+                forms[placeHolder].value = value !== undefined ? value :  "";
                 forms[placeHolder].oninput = e => {
                     //wait 500ms for input then exec combineDate
                     let saveOnInput = e.target.oninput;
