@@ -72,7 +72,14 @@
             </xed:bind>
           </xed:bind>
           <xed:if test="$type != 'jpinst'">
+          	<script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-util.js" class="jp-db-load jp-db-reload"/>
           	<script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-editor.js" class="jp-db-load jp-db-reload"/>
+            <script type="text/javascript">
+              (function() {
+                    jp.editor.init();
+                    jp.editor.articleGNDLocation();
+              })();
+            </script>
           </xed:if>
         </xed:when>
         <xed:otherwise>

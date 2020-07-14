@@ -1,90 +1,204 @@
-$(document).ready(function() {
+var jp = jp || {};
+jp.editor = {};
+jp.editor.dates = {
+    range: false,
+    date: undefined,
+    from: undefined,
+    until: undefined
+}
+
+jp.editor.journalDates = undefined;
+
+jp.editor.init = function() {
 	// create date fields
 	createDate();
 
-    $("select.dynamicBinding").change(function() {
-	  updateBindings();
-    });
+	function newDate(dateStr) {
+	    let date = new Date(dateStr);
 
-	function updateBindings() {
-	  $("select.dynamicBinding").each(function() {
-	    let on = $(this).attr("on");
+	    return isNaN(date) ? undefined : date;
+    }
+    function getJournalDates(func){
+	    if(jp.editor.journalDates === undefined){
+            const journalID = document.getElementById("journalID").textContent;
+            const getJournalDatesURL = jp.baseURL + "rsc/object/journalDates/" + journalID;
+
+            jp.util.getJSON(getJournalDatesURL)
+                .then((d) => {
+                    let publishedDate = d.find(date => date.type === "published");
+                    jp.editor.journalDates = {
+                        startDate: undefined,
+                        endDate: undefined,
+                        error: undefined
+                    };
+
+                    if(publishedDate !== undefined) {
+                        if (publishedDate.date) {
+                            jp.editor.journalDates.startDate = newDate(publishedDate.date);
+                        } else if (publishedDate.from) {
+                            jp.editor.journalDates.startDate = newDate(publishedDate.from);
+                        }
+
+                        if (publishedDate.until) {
+                            jp.editor.journalDates.endDate = newDate(publishedDate.until);
+                        }
+                    }
+
+                    func(jp.editor.journalDates);
+                })
+                .catch(error => {
+                    jp.editor.journalDates = {error: error};
+                    func(jp.editor.journalDates);
+                });
+        } else {
+	        func(jp.editor.journalDates);
+        }
+    }
+
+    function formatDate(date) {
+        let fullYear = date.getFullYear();
+        let month = date.getMonth()+1;
+        let day = date.getDay();
+        return [fullYear, month.toString().padStart(2, '0'), day.toString().padStart(2, '0')].join("-");
+    }
+
+    function checkDatesForLogicalErrors(journalDates, errorTargetDiv) {
+        if(jp.editor.dates.range){
+            if(jp.editor.dates.from !== undefined){
+                let dateFrom = jp.editor.dates.from.getTime();
+                let journalDateFrom = jp.editor.journalDates.startDate;
+
+                if(journalDateFrom !== undefined && dateFrom < journalDateFrom) {
+                    errorOutput("Das Anfangsdatum darf nicht vor dem Erscheinungsdatum der Zeitschrift "
+                        + formatDate(journalDateFrom) + " liegen.", errorTargetDiv);
+                    return;
+                }
+
+                if (jp.editor.dates.until !== undefined) {
+                    let dateUntil = jp.editor.dates.until.getTime();
+
+                    if (dateUntil < dateFrom) {
+                        errorOutput("Das Enddatum sollte in der Zeit nach dem Anfangsdatum sein.", errorTargetDiv);
+                        return;
+                    }
+
+                    let journalDateUntil = jp.editor.journalDates.endDate;
+
+                    if (journalDateUntil !== undefined && journalDateUntil < dateUntil) {
+                        errorOutput("Das Anfangsdatum darf nicht nach dem Ende des Erscheinungsdatum der Zeitschrift "
+                            + formatDate(journalDateUntil) + " liegen.", errorTargetDiv);
+                        return;
+                    }
+                }
+            }
+        } else {
+            if(jp.editor.dates.date !== undefined){
+                let journalDateFrom = jp.editor.journalDates.startDate;
+                let journalDateUntil = jp.editor.journalDates.endDate;
+
+                if(journalDateFrom != undefined && jp.editor.dates.date < journalDateFrom) {
+                    errorOutput("Das Datum darf nicht vor dem Erscheinungsdatum der Zeitschrift "
+                        + formatDate(journalDateFrom) + " liegen.", errorTargetDiv);
+                    return;
+                }
+
+                if(journalDateUntil !== undefined && journalDateUntil < jp.editor.dates.date) {
+                    errorOutput("Das Datum darf nicht nach dem Ende des Erscheinungsdatum der Zeitschrift "
+                        + formatDate(journalDateUntil) + " liegen.", errorTargetDiv);
+                    return;
+                }
+            }
+        }
+    }
+
+    document.querySelectorAll("select.dynamicBinding")
+        .forEach(select => {
+            if(select.onchange !== updateBindings){
+                select.onchange = updateBindings;
+                select.dispatchEvent(new Event("change"));
+            }
+        });
+
+	function updateBindings(event) {
+	    const currentSelect = event.target;
+	    let on = currentSelect.getAttribute("on");
 	    if(on == null) {
 	      return;
 	    }
-        let row = $(this).closest(".row");
+
+        let row = currentSelect.closest(".row");
         let classid = on.split(":")[0];
         let categid = on.split(":")[1];
-        let dependentBinding = $("select.dynamicBinding[data-classid='" + classid + "']");
+        let dependentBinding = document.querySelector("select.dynamicBinding[data-classid='" + classid + "']");
         let display = (categid === dependentBinding.val()) ? "block" : "none";
         if(display === "none") {
-          $(this).val("");
+          currentSelect.value = "";
         }
 	    row.css("display", display);
-	  });
 	}
-	updateBindings();
 
     function createDate() {
 
-        $(".jpdate-group").each(function() {
-            let group = $( this );
+        document.querySelectorAll(".jpdate-group")
+            .forEach(group => {
+                // select
+                let dateSelect = group.querySelector("input[value=date]");
+                let rangeSelect = group.querySelector("input[value=range]");
+                dateSelect.onchange = onChangeDateSelect;
+                rangeSelect.onchange = onChangeDateSelect;
 
-            // select
-            let dateSelect = group.find("input[value=date]");
-            let rangeSelect = group.find("input[value=range]");
-            dateSelect.on("change", onChangeDateSelect);
-            rangeSelect.on("change", onChangeDateSelect);
+                // dates
+                let inputGroup = group.querySelectorAll(".input-group");
+                let dateInputGroup = inputGroup[0];
+                let fromInputGroup = inputGroup[1];
+                let untilInputGroup = inputGroup[2];
+                let dateInput = dateInputGroup.querySelector("input.date-field");
+                let fromInput = fromInputGroup.querySelector("input.date-field");
+                let untilInput = untilInputGroup.querySelector("input.date-field");
+                let dateFrom = fromInput.value;
 
-            // dates
-            let dateInputGroup = $(group.find(".input-group")[0]);
-            let fromInputGroup = $(group.find(".input-group")[1]);
-            let untilInputGroup = $(group.find(".input-group")[2]);
-            let dateInput = dateInputGroup.find("input.date-field");
-            let fromInput = fromInputGroup.find("input.date-field");
-            let untilInput = untilInputGroup.find("input.date-field");
-            let dateFrom = fromInput.val();
-
-            // init dates on start
-            if(dateFrom !== null && dateFrom !== undefined && dateFrom !== "") {
-                rangeSelect.prop("checked", true).change();
-            } else {
-                dateSelect.prop("checked", true).change();
-            }
-
-            // clear dates before submit
-            group.closest("form").submit(function() {
-                if(dateSelect.prop("checked")) {
-                    fromInput.val(null);
-                    untilInput.val(null);
+                // init dates on start
+                if (dateFrom !== null && dateFrom !== undefined && dateFrom !== "") {
+                    //rangeSelect.prop("checked", true).change();
+                    rangeSelect.checked = true;
+                    rangeSelect.dispatchEvent(new Event("change"));
                 } else {
-                    dateInput.val(null);
+                    //dateSelect.prop("checked", true).change();
+                    dateSelect.checked = true;
+                    dateSelect.dispatchEvent(new Event("change"));
                 }
-                return true;
+
+                // clear dates before submit
+                group.closest("form").onsubmit = () => {
+                    if (dateSelect.checked) {
+                        fromInput.value = null;
+                        untilInput.value = null;
+                    } else {
+                        dateInput.value = null;
+                    }
+                    return true;
+                };
+
+                function onChangeDateSelect(e) {
+                    let value = e.target.value;
+                    if (value === "date") {
+                        jp.editor.dates.range = false;
+                        dateInputGroup.style.display = "table";
+                        fromInputGroup.style.display = "none";
+                        untilInputGroup.style.display = "none";
+                    } else {
+                        jp.editor.dates.range = true;
+                        dateInputGroup.style.display = "none";
+                        fromInputGroup.style.display = "table";
+                        untilInputGroup.style.display = "table";
+                    }
+                }
+
             });
-
-            function onChangeDateSelect(e) {
-                let value = e.target.value;
-                if(value === "date") {
-                    dateInputGroup.show();
-                    fromInputGroup.hide();
-                    untilInputGroup.hide();
-                } else {
-                    dateInputGroup.hide();
-                    fromInputGroup.show();
-                    untilInputGroup.show();
-                }
-            }
-
-        });
 
     }
 
-    $.fn.dateCombiner = function () {
-        let elements = this;
-
-        elements.each(function (index, dateInput) {
-
+    function dateCombiner(dateInput) {
             /*
              * error if yyyy-_-dd or _-mm-dd
              * error by letters, day 01 - 31, month 01 - 12
@@ -93,9 +207,9 @@ $(document).ready(function() {
              *
              * */
             let combineDate = function () {
-                const year = forms["Jahr"].val();
-                const month = forms["Monat"].val();
-                const day = forms["Tag"].val();
+                const year = forms["Jahr"].value;
+                const month = forms["Monat"].value;
+                const day = forms["Tag"].value;
 
                 // error handling
                 const errorTargetDiv = forms["Tag"];
@@ -106,7 +220,7 @@ $(document).ready(function() {
                 } else if(month === "" && day !== "") {
                     errorOutput("Die Monatsangabe fehlt!", errorTargetDiv);
                     return;
-                } else if(year.match(/[^-][^\d]/g) != null) {
+                } else if(year.match(/[^-^\d]/g) != null) {
                     errorOutput("Bitte Achten Sie darauf das sie nur Zahlen eingeben. Bsp: 1990, 1500, 50, -50", errorTargetDiv);
                     return;
                 } else if(parseInt(month) < 1 || parseInt(month) > 12) {
@@ -130,82 +244,141 @@ $(document).ready(function() {
                     newDate.date(parseInt(day));
                     format += "-DD";
                 }
-                dateInputJq.val(newDate.isValid() ? newDate.format(format) : null);
+                dateInput.value = newDate.isValid() ? newDate.format(format) : null;
+                dateInput.dispatchEvent(new Event("change"));
             };
 
             let addForm = function (placeHolder, maxlength, value) {
-                forms[placeHolder] = jQuery(inputBase);
-                forms[placeHolder].attr("placeholder", placeHolder);
-                forms[placeHolder].attr("maxlength", maxlength);
-                forms[placeHolder].attr("title", "Eingabe nur als Zahl möglich!");
-                forms[placeHolder].val(value);
-                forms[placeHolder].on("keyup click", combineDate);
-                forms[placeHolder].insertAfter(dateInputJq);
+                forms[placeHolder] = Object.assign(document.createElement("input"), inputBase);
+                forms[placeHolder].placeholder = placeHolder;
+                forms[placeHolder].maxlength = maxlength;
+                forms[placeHolder].title = "Eingabe nur als Zahl möglich!";
+                forms[placeHolder].value = value !== undefined ? value :  "";
+                forms[placeHolder].oninput = e => {
+                    //wait 500ms for input then exec combineDate
+                    let saveOnInput = e.target.oninput;
+                    e.target.oninput = undefined;
+                    setTimeout(() => {
+                        combineDate();
+                        e.target.oninput = saveOnInput;
+                    }, 500);
+                };
+                forms[placeHolder].onblur = e => {
+                    //wait 500ms for input then exec combineDate
+                    let saveOnInput = e.target.oninput;
+                    e.target.oninput = undefined;
+                    setTimeout(() => {
+                        getJournalDates(d => checkDatesForLogicalErrors(d, forms["Tag"]));
+                        e.target.oninput = saveOnInput;
+                    }, 500);
+                };
+
+                //insertAfter
+                dateInput.parentNode.insertBefore(forms[placeHolder], dateInput.nextSibling);
             };
 
-            const dateInputJq = jQuery(dateInput);
+            dateInput.style.display = "none";
+
+            //const dateInputJq = jQuery(dateInput);
             /* original input hidden */
-            dateInputJq.css({
-                "display": "none"
-            });
+            //dateInputJq.css({
+            //    "display": "none"
+            //});
             const forms = {};
-            const inputBase = '<input class="form-control" style="width: 33.3%;">';
-            const originalDate = dateInputJq.val();
+            //const inputBase = '<input class="form-control" style="width: 33.3%;">';
+            const inputBase = {className: "form-control", style: "width: 33.3%;"};
+            const originalDate = dateInput.value;
             const isBC = originalDate.startsWith("-");
             const splitDate = isBC ? originalDate.substring(1).split("-") : originalDate.split("-");
 
             addForm("Tag", 2, splitDate[2]);
             addForm("Monat", 2, splitDate[1]);
             addForm("Jahr", 5, (isBC ? "-" : "") + splitDate[0]);
-        });
     };
 
-    $(".date-field").dateCombiner();
+	function setDatesFromInput(input) {
+        let dateInputNameSplit = input.name.split("@");
+
+        if(dateInputNameSplit.length === 2 && dateInputNameSplit[1] !== ""){
+            let dateType = dateInputNameSplit[1]
+            let date = newDate(input.value);
+            if(date !== undefined) {
+                jp.editor.dates[dateType] = date;
+            }
+        }
+    }
+
+    document.querySelectorAll(".date-field")
+        .forEach(input => {
+            setDatesFromInput(input);
+            input.onchange = e => setDatesFromInput(e.target);
+
+            dateCombiner(input)
+        })
 
     function errorOutput(errorText, element) {
-        if (element.parent().find(".jp-layout-errorBox").length === 0) {
-            element.parent().addClass("has-error");
-            $('<div role="alert" class="jp-layout-errorBox alert alert-danger">' + errorText + '</div>').insertAfter(element);
+        if (element.parentNode.querySelectorAll(".jp-layout-errorBox").length === 0) {
+            element.parentNode.classList.add("has-error");
+            let alertDiv = document.createElement("div");
+            alertDiv.className = "jp-layout-errorBox alert alert-danger";
+            alertDiv.role = "alert";
+            alertDiv.textContent = errorText;
+            //insertAfter
+            element.parentNode.insertBefore(alertDiv, element.nextSibling);
         }
+
+        let saveButton = document.querySelector("input[name='_xed_submit_servlet:UpdateObjectServlet']");
+        saveButton.disabled = true;
+
     }
 
     function killError(element) {
-        element.parent().removeClass("has-error");
-        element.parent().find(".jp-layout-errorBox").remove();
+        element.parentNode.classList.remove("has-error");
+        let errorBox = element.parentNode.querySelector(".jp-layout-errorBox");
+        if(errorBox !== null && errorBox !== undefined){
+            errorBox.remove();
+        }
+
+        let saveButton = document.querySelector("input[name='_xed_submit_servlet:UpdateObjectServlet']");
+        saveButton.disabled = false;
     }
 
-});
+};
 
 // jparticle - gnd location
-$(document).ready(function () {
-  $(".jp-gnd-location-form").each(function () {
-    const form = $(this);
-    const searchInput = $("<input type='text' class='form-control' maxlength='32' placeholder='GND ID' />");
-    form.prepend(searchInput);
-    loadData(form, searchInput);
-    form.find("button").on("click", () => {
-      let id = searchInput.val();
-      const url = jp.baseURL + "rsc/gnd/location/" + id;
-      jp.util.getJSON(url).then((data) => {
-        if(data.label == null) {
-          BootstrapDialog.alert('There is no pica+ field "065A a" for this record!');
-          return;
-        }
-        setData(id, data.label, data.latitude, data.longitude, data.areaCode, form);
-      }).catch((error) => {
-        BootstrapDialog.alert('Error while getting record data from server. If you think this is an error please' +
-          ' contact your administrator!');
-        console.log(error);
-      })
+jp.editor.articleGNDLocation = function () {
+    document.querySelectorAll(".jp-gnd-location-form")
+        .forEach((form) => {
+            let searchInput = document.createElement("input");
+            searchInput.className = "form-control";
+            searchInput.type = "text";
+            searchInput.placeholder = "GND ID";
+
+            form.insertBefore(searchInput, form.firstChild);
+            loadData(form, searchInput);
+            form.querySelector("button").onclick = () => {
+                const id = searchInput.value;
+                const url = jp.baseURL + "rsc/gnd/location/" + id;
+                jp.util.getJSON(url).then((data) => {
+                    if (data.label == null) {
+                        BootstrapDialog.alert('There is no pica+ field "065A a" for this record!');
+                        return;
+                    }
+                    setData(id, data.label, data.latitude, data.longitude, data.areaCode, form);
+                }).catch((error) => {
+                    BootstrapDialog.alert('Error while getting record data from server. If you think this is an error please' +
+                        ' contact your administrator!');
+                    console.log(error);
+                })
+            }
     });
-  });
 
   function loadData(form, searchInput) {
-    const inputDiv = form.prev(".jp-gnd-location-input");
-    const id = inputDiv.find(".jp-gnd-location-input-id").val();
-    const label = inputDiv.find(".jp-gnd-location-input-label").val();
-    const areaCode = inputDiv.find(".jp-gnd-location-input-areaCode").val();
-    const data = inputDiv.find(".jp-gnd-location-input-data").val();
+    const inputDiv = form.previousElementSibling;
+    const id = inputDiv.querySelector(".jp-gnd-location-input-id").value;
+    const label = inputDiv.querySelector(".jp-gnd-location-input-label").value;
+    const areaCode = inputDiv.querySelector(".jp-gnd-location-input-areaCode").value;
+    const data = inputDiv.querySelector(".jp-gnd-location-input-data").value;
     if (id !== "") {
       searchInput.val(id);
     }
@@ -214,22 +387,24 @@ $(document).ready(function () {
       if(areaCode !== "") {
         display += " [" + areaCode +"]"
       }
-      inputDiv.find(".jp-gnd-location-input-display").html(display);
+      inputDiv.querySelector(".jp-gnd-location-input-display").textContent = display;
     }
   }
 
   function setData(id, label, lat, lng, areaCode, form) {
-    const inputDiv = form.prev(".jp-gnd-location-input");
-    inputDiv.find(".jp-gnd-location-input-id").val(id);
-    inputDiv.find(".jp-gnd-location-input-label").val(label);
-    inputDiv.find(".jp-gnd-location-input-areaCode").val(areaCode);
+    const inputDiv = form.previousElementSibling;
+    inputDiv.querySelector(".jp-gnd-location-input-id").value = id;
+    inputDiv.querySelector(".jp-gnd-location-input-label").value = label;
+    inputDiv.querySelector(".jp-gnd-location-input-areaCode").value = areaCode;
     if(lat !== null && lng !== null) {
-      inputDiv.find(".jp-gnd-location-input-data").val(lat + "," + lng);
-      inputDiv.find(".jp-gnd-location-input-display").html(label + " (" + lat + "," + lng + ")");
+      inputDiv.querySelector(".jp-gnd-location-input-data").value = lat + "," + lng;
+      inputDiv.querySelector(".jp-gnd-location-input-display")
+          .textContent = label + " (" + lat + "," + lng + ")";
     } else {
-      inputDiv.find(".jp-gnd-location-input-data").val(null);
-      inputDiv.find(".jp-gnd-location-input-display").html(label + " (keine Koordinaten gefunden!)");
+      inputDiv.querySelector(".jp-gnd-location-input-data").value = null;
+      inputDiv.querySelector(".jp-gnd-location-input-display")
+          .textContent = label + " (keine Koordinaten gefunden!)";
     }
   }
 
-});
+};
