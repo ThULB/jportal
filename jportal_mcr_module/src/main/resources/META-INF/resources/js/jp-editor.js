@@ -1,21 +1,32 @@
 var jp = jp || {};
 jp.editor = {};
+jp.editor.dates = {
+    range: false,
+    date: undefined,
+    from: undefined,
+    until: undefined
+}
+
+jp.editor.journalDates = undefined;
 
 jp.editor.init = function() {
 	// create date fields
 	createDate();
 
-	let journalsDates = undefined;
+	function newDate(dateStr) {
+	    let date = new Date(dateStr);
 
+	    return isNaN(date) ? undefined : date;
+    }
     function getJournalDates(func){
-	    if(journalsDates === undefined){
+	    if(jp.editor.journalDates === undefined){
             const journalID = document.getElementById("journalID").textContent;
             const getJournalDatesURL = jp.baseURL + "rsc/object/journalDates/" + journalID;
 
             jp.util.getJSON(getJournalDatesURL)
                 .then((d) => {
                     let publishedDate = d.find(date => date.type === "published");
-                    journalsDates = {
+                    jp.editor.journalDates = {
                         startDate: undefined,
                         endDate: undefined,
                         error: undefined
@@ -23,24 +34,80 @@ jp.editor.init = function() {
 
                     if(publishedDate !== undefined) {
                         if (publishedDate.date) {
-                            journalsDates.startDate = new Date(publishedDate.date);
+                            jp.editor.journalDates.startDate = newDate(publishedDate.date);
                         } else if (publishedDate.from) {
-                            journalsDates.startDate = new Date(publishedDate.from);
+                            jp.editor.journalDates.startDate = newDate(publishedDate.from);
                         }
 
                         if (publishedDate.until) {
-                            journalsDates.endDate = new Date(publishedDate.until);
+                            jp.editor.journalDates.endDate = newDate(publishedDate.until);
                         }
                     }
 
-                    func(journalsDates);
+                    func(jp.editor.journalDates);
                 })
                 .catch(error => {
-                    journalsDates = {error: error};
-                    func(journalsDates);
+                    jp.editor.journalDates = {error: error};
+                    func(jp.editor.journalDates);
                 });
         } else {
-	        func(journalsDates);
+	        func(jp.editor.journalDates);
+        }
+    }
+
+    function formatDate(date) {
+        let fullYear = date.getFullYear();
+        let month = date.getMonth()+1;
+        let day = date.getDay();
+        return [fullYear, month.toString().padStart(2, '0'), day.toString().padStart(2, '0')].join("-");
+    }
+
+    function checkDatesForLogicalErrors(journalDates, errorTargetDiv) {
+        if(jp.editor.dates.range){
+            if(jp.editor.dates.from !== undefined){
+                let dateFrom = jp.editor.dates.from.getTime();
+                let journalDateFrom = jp.editor.journalDates.startDate;
+
+                if(journalDateFrom !== undefined && dateFrom < journalDateFrom) {
+                    errorOutput("Das Anfangsdatum darf nicht vor dem Erscheinungsdatum der Zeitschrift "
+                        + formatDate(journalDateFrom) + " liegen.", errorTargetDiv);
+                    return;
+                }
+
+                if (jp.editor.dates.until !== undefined) {
+                    let dateUntil = jp.editor.dates.until.getTime();
+
+                    if (dateUntil < dateFrom) {
+                        errorOutput("Das Enddatum sollte in der Zeit nach dem Anfangsdatum sein.", errorTargetDiv);
+                        return;
+                    }
+
+                    let journalDateUntil = jp.editor.journalDates.endDate;
+
+                    if (journalDateUntil !== undefined && journalDateUntil < dateUntil) {
+                        errorOutput("Das Anfangsdatum darf nicht nach dem Ende des Erscheinungsdatum der Zeitschrift "
+                            + formatDate(journalDateUntil) + " liegen.", errorTargetDiv);
+                        return;
+                    }
+                }
+            }
+        } else {
+            if(jp.editor.dates.date !== undefined){
+                let journalDateFrom = jp.editor.journalDates.startDate;
+                let journalDateUntil = jp.editor.journalDates.endDate;
+
+                if(journalDateFrom != undefined && jp.editor.dates.date < journalDateFrom) {
+                    errorOutput("Das Datum darf nicht vor dem Erscheinungsdatum der Zeitschrift "
+                        + formatDate(journalDateFrom) + " liegen.", errorTargetDiv);
+                    return;
+                }
+
+                if(journalDateUntil !== undefined && journalDateUntil < jp.editor.dates.date) {
+                    errorOutput("Das Datum darf nicht nach dem Ende des Erscheinungsdatum der Zeitschrift "
+                        + formatDate(journalDateUntil) + " liegen.", errorTargetDiv);
+                    return;
+                }
+            }
         }
     }
 
@@ -115,10 +182,12 @@ jp.editor.init = function() {
                 function onChangeDateSelect(e) {
                     let value = e.target.value;
                     if (value === "date") {
+                        jp.editor.dates.range = false;
                         dateInputGroup.style.display = "table";
                         fromInputGroup.style.display = "none";
                         untilInputGroup.style.display = "none";
                     } else {
+                        jp.editor.dates.range = true;
                         dateInputGroup.style.display = "none";
                         fromInputGroup.style.display = "table";
                         untilInputGroup.style.display = "table";
@@ -137,7 +206,7 @@ jp.editor.init = function() {
              * can add missed 0  ---> year = 2  now complete to  year = 0002  automatically on original input
              *
              * */
-            let combineDate = function (pubishedDates) {
+            let combineDate = function () {
                 const year = forms["Jahr"].value;
                 const month = forms["Monat"].value;
                 const day = forms["Tag"].value;
@@ -151,7 +220,7 @@ jp.editor.init = function() {
                 } else if(month === "" && day !== "") {
                     errorOutput("Die Monatsangabe fehlt!", errorTargetDiv);
                     return;
-                } else if(year.match(/[^-][^\d]/g) != null) {
+                } else if(year.match(/[^-^\d]/g) != null) {
                     errorOutput("Bitte Achten Sie darauf das sie nur Zahlen eingeben. Bsp: 1990, 1500, 50, -50", errorTargetDiv);
                     return;
                 } else if(parseInt(month) < 1 || parseInt(month) > 12) {
@@ -176,6 +245,7 @@ jp.editor.init = function() {
                     format += "-DD";
                 }
                 dateInput.value = newDate.isValid() ? newDate.format(format) : null;
+                dateInput.dispatchEvent(new Event("change"));
             };
 
             let addForm = function (placeHolder, maxlength, value) {
@@ -189,7 +259,16 @@ jp.editor.init = function() {
                     let saveOnInput = e.target.oninput;
                     e.target.oninput = undefined;
                     setTimeout(() => {
-                        getJournalDates(d => combineDate(d));
+                        combineDate();
+                        e.target.oninput = saveOnInput;
+                    }, 500);
+                };
+                forms[placeHolder].onblur = e => {
+                    //wait 500ms for input then exec combineDate
+                    let saveOnInput = e.target.oninput;
+                    e.target.oninput = undefined;
+                    setTimeout(() => {
+                        getJournalDates(d => checkDatesForLogicalErrors(d, forms["Tag"]));
                         e.target.oninput = saveOnInput;
                     }, 500);
                 };
@@ -217,8 +296,25 @@ jp.editor.init = function() {
             addForm("Jahr", 5, (isBC ? "-" : "") + splitDate[0]);
     };
 
+	function setDatesFromInput(input) {
+        let dateInputNameSplit = input.name.split("@");
+
+        if(dateInputNameSplit.length === 2 && dateInputNameSplit[1] !== ""){
+            let dateType = dateInputNameSplit[1]
+            let date = newDate(input.value);
+            if(date !== undefined) {
+                jp.editor.dates[dateType] = date;
+            }
+        }
+    }
+
     document.querySelectorAll(".date-field")
-        .forEach(dateCombiner)
+        .forEach(input => {
+            setDatesFromInput(input);
+            input.onchange = e => setDatesFromInput(e.target);
+
+            dateCombiner(input)
+        })
 
     function errorOutput(errorText, element) {
         if (element.parentNode.querySelectorAll(".jp-layout-errorBox").length === 0) {
@@ -230,6 +326,10 @@ jp.editor.init = function() {
             //insertAfter
             element.parentNode.insertBefore(alertDiv, element.nextSibling);
         }
+
+        let saveButton = document.querySelector("input[name='_xed_submit_servlet:UpdateObjectServlet']");
+        saveButton.disabled = true;
+
     }
 
     function killError(element) {
@@ -238,6 +338,9 @@ jp.editor.init = function() {
         if(errorBox !== null && errorBox !== undefined){
             errorBox.remove();
         }
+
+        let saveButton = document.querySelector("input[name='_xed_submit_servlet:UpdateObjectServlet']");
+        saveButton.disabled = false;
     }
 
 };
