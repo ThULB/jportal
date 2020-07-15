@@ -1,8 +1,24 @@
 package fsu.jportal.resources;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import java.io.StringReader;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -12,22 +28,25 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.JPMetaDate;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import java.io.StringReader;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.MetadataManager;
-import static org.mycore.access.MCRAccessManager.*;
+import fsu.jportal.util.JPComponentUtil;
+import static org.mycore.access.MCRAccessManager.PERMISSION_DELETE;
+import static org.mycore.access.MCRAccessManager.PERMISSION_READ;
+import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
 
 @Path("object")
 public class ObjectResource {
@@ -48,6 +67,28 @@ public class ObjectResource {
             }
         }
         return getXML(object);
+    }
+
+    @GET
+    @Path("journalDates/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getJournalDates(@PathParam("id") String id) {
+        MCRObjectID mcrId = MCRJerseyUtil.getID(id);
+        MCRJerseyUtil.checkPermission(mcrId, PERMISSION_READ);
+        JsonObject responseJson = new JsonObject();
+        if (JPComponentUtil.is(mcrId, JPObjectType.jpjournal)) {
+            JPJournal journal = new JPJournal(mcrId);
+            JsonArray datesJson = journal.getDates()
+                    .stream()
+                    .map(JPMetaDate::createJSON)
+                    .collect(JsonArray::new, JsonArray::add, (a1, a2) -> a1.addAll(a2));
+
+            responseJson.add("dates", datesJson);
+            return Response.status(Status.OK).entity(datesJson.toString()).type(MediaType.APPLICATION_JSON).build();
+        }
+
+        responseJson.addProperty("error", "Object " + id + " is no JP Journal!");
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity(responseJson.toString()).build();
     }
 
     private Response getJSON(MCRObject object) {
