@@ -21,6 +21,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>ZVDDJPortalProvider</servlet-name>
+    <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ZVDDJPortalProvider</servlet-name>
+    <url-pattern>/zvdd</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>OAIJPortalDFGProvider</servlet-name>
     <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
   </servlet>
