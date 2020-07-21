@@ -339,7 +339,7 @@ jp.editor.init = function() {
             errorBox.remove();
         }
 
-        let saveButton = document.querySelector("input[name='_xed_submit_servlet:UpdateObjectServlet']");
+        let saveButton = document.querySelector("input[name^='_xed_submit_servlet:']");
         saveButton.disabled = false;
     }
 
