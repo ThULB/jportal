@@ -380,7 +380,7 @@ jp.editor.articleGNDLocation = function () {
     const areaCode = inputDiv.querySelector(".jp-gnd-location-input-areaCode").value;
     const data = inputDiv.querySelector(".jp-gnd-location-input-data").value;
     if (id !== "") {
-      searchInput.val(id);
+      searchInput.value = id;
     }
     if(label !== "") {
       let display = label + " (" + data + ")";
@@ -408,3 +408,8 @@ jp.editor.articleGNDLocation = function () {
   }
 
 };
+
+(function() {
+    jp.editor.init();
+    jp.editor.articleGNDLocation();
+})();
