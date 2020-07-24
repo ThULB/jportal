@@ -130,7 +130,7 @@ jp.editor.init = function() {
         let classid = on.split(":")[0];
         let categid = on.split(":")[1];
         let dependentBinding = document.querySelector("select.dynamicBinding[data-classid='" + classid + "']");
-        let display = (categid === dependentBinding.val()) ? "block" : "none";
+        let display = (categid === dependentBinding.value) ? "block" : "none";
         if(display === "none") {
           currentSelect.value = "";
         }
