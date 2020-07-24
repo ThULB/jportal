@@ -231,14 +231,24 @@ jp.journalList = {
 };
 
 jp.journalList.view = {
-  hitCount: document.getElementById("document_hits"),
-  facets: document.getElementById("document_type"),
-  tabs: document.getElementById("tabNav").getElementsByTagName("li"),
+  hitCount: undefined,
+  facets: undefined,
+  tabs: undefined,
   selectedTab: undefined,
-  resultList: document.getElementById("objectList"),
-  filter: document.getElementById("atozFilter"),
-  clearFilterButton: document.getElementById("atozFilterRemoveButton"),
-  clearFilterButtonIcon: document.getElementById("atozFilterRemoveIcon"),
+  resultList: undefined,
+  filter: undefined,
+  clearFilterButton: undefined,
+  clearFilterButtonIcon: undefined,
+
+  init : () => {
+        jp.journalList.view.hitCount = document.getElementById("document_hits");
+        jp.journalList.view.facets = document.getElementById("document_type");
+        jp.journalList.view.tabs = document.getElementById("tabNav").getElementsByTagName("li");
+        jp.journalList.view.resultList = document.getElementById("objectList");
+        jp.journalList.view.filter = document.getElementById("atozFilter");
+        jp.journalList.view.clearFilterButton = document.getElementById("atozFilterRemoveButton");
+        jp.journalList.view.clearFilterButtonIcon = document.getElementById("atozFilterRemoveIcon");
+  },
 
   renderHitCount: (num) => {
     let text = num === 1 ? jp.journalList.translation["jp.journallist.periodical"] :
