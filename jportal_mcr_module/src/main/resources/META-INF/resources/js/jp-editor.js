@@ -8,10 +8,12 @@ jp.editor.dates = {
 }
 
 jp.editor.journalDates = undefined;
+jp.editor.currentType = undefined;
 
 jp.editor.init = function() {
 	// create date fields
 	createDate();
+    jp.editor.currentType = document.querySelector("#currentType").textContent;
 
 	function newDate(dateStr) {
 	    let date = new Date(dateStr);
@@ -48,6 +50,7 @@ jp.editor.init = function() {
                 })
                 .catch(error => {
                     jp.editor.journalDates = {error: error};
+                    console.log(error);
                     func(jp.editor.journalDates);
                 });
         } else {
@@ -66,7 +69,7 @@ jp.editor.init = function() {
         if(jp.editor.dates.range){
             if(jp.editor.dates.from !== undefined){
                 let dateFrom = jp.editor.dates.from.getTime();
-                let journalDateFrom = jp.editor.journalDates.startDate;
+                let journalDateFrom = journalDates.startDate;
 
                 if(journalDateFrom !== undefined && dateFrom < journalDateFrom) {
                     errorOutput("Das Anfangsdatum darf nicht vor dem Erscheinungsdatum der Zeitschrift "
@@ -82,7 +85,7 @@ jp.editor.init = function() {
                         return;
                     }
 
-                    let journalDateUntil = jp.editor.journalDates.endDate;
+                    let journalDateUntil = journalDates.endDate;
 
                     if (journalDateUntil !== undefined && journalDateUntil < dateUntil) {
                         errorOutput("Das Anfangsdatum darf nicht nach dem Ende des Erscheinungsdatum der Zeitschrift "
@@ -134,7 +137,7 @@ jp.editor.init = function() {
         if(display === "none") {
           currentSelect.value = "";
         }
-	    row.css("display", display);
+	    row.style.display = display;
 	}
 
     function createDate() {
@@ -263,15 +266,18 @@ jp.editor.init = function() {
                         e.target.oninput = saveOnInput;
                     }, 500);
                 };
-                forms[placeHolder].onblur = e => {
-                    //wait 500ms for input then exec combineDate
-                    let saveOnInput = e.target.oninput;
-                    e.target.oninput = undefined;
-                    setTimeout(() => {
-                        getJournalDates(d => checkDatesForLogicalErrors(d, forms["Tag"]));
-                        e.target.oninput = saveOnInput;
-                    }, 500);
-                };
+
+                if (jp.editor.currentType !== undefined && jp.editor.currentType !== 'jpjournal') {
+                    forms[placeHolder].onblur = e => {
+                        //wait 500ms for input then exec combineDate
+                        let saveOnInput = e.target.oninput;
+                        e.target.oninput = undefined;
+                        setTimeout(() => {
+                            getJournalDates(d => checkDatesForLogicalErrors(d, forms["Tag"]));
+                            e.target.oninput = saveOnInput;
+                        }, 500);
+                    };
+                }
 
                 //insertAfter
                 dateInput.parentNode.insertBefore(forms[placeHolder], dateInput.nextSibling);
@@ -327,7 +333,7 @@ jp.editor.init = function() {
             element.parentNode.insertBefore(alertDiv, element.nextSibling);
         }
 
-        let saveButton = document.querySelector("input[name='_xed_submit_servlet:UpdateObjectServlet']");
+        let saveButton = document.querySelector("input[name^='_xed_submit_servlet:']");
         saveButton.disabled = true;
 
     }
