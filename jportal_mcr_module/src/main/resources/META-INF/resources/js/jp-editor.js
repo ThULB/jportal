@@ -93,7 +93,6 @@ jp.editor.init = function() {
             && checkDateUntil(date, journalDateUntil, errorTargetDiv);
     }
 
-
     function checkDatesForLogicalErrors(journalDates, errorTargetDiv, type) {
         if (jp.editor.dates.range) {
             if (jp.editor.dates.from !== undefined) {
