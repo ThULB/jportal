@@ -29,20 +29,20 @@ jp.editor.init = function() {
                 .then((d) => {
                     let publishedDate = d.find(date => date.type === "published");
                     jp.editor.journalDates = {
-                        startDate: undefined,
-                        endDate: undefined,
+                        from: undefined,
+                        until: undefined,
                         error: undefined
                     };
 
                     if(publishedDate !== undefined) {
                         if (publishedDate.date) {
-                            jp.editor.journalDates.startDate = newDate(publishedDate.date);
+                            jp.editor.journalDates.from = newDate(publishedDate.date);
                         } else if (publishedDate.from) {
-                            jp.editor.journalDates.startDate = newDate(publishedDate.from);
+                            jp.editor.journalDates.from = newDate(publishedDate.from);
                         }
 
                         if (publishedDate.until) {
-                            jp.editor.journalDates.endDate = newDate(publishedDate.until);
+                            jp.editor.journalDates.until = newDate(publishedDate.until);
                         }
                     }
 
@@ -54,60 +54,71 @@ jp.editor.init = function() {
                     func(jp.editor.journalDates);
                 });
         } else {
-	        func(jp.editor.journalDates);
+            func(jp.editor.journalDates);
         }
     }
 
     function formatDate(date) {
         let fullYear = date.getFullYear();
-        let month = date.getMonth()+1;
+        let month = date.getMonth() + 1;
         let day = date.getDay();
         return [fullYear, month.toString().padStart(2, '0'), day.toString().padStart(2, '0')].join("-");
     }
 
-    function checkDatesForLogicalErrors(journalDates, errorTargetDiv) {
-        if(jp.editor.dates.range){
-            if(jp.editor.dates.from !== undefined){
-                let dateFrom = jp.editor.dates.from.getTime();
-                let journalDateFrom = journalDates.startDate;
+    function checkDateFrom(date, journalDateFrom, errorTargetDiv) {
+        if (journalDateFrom !== undefined && date < journalDateFrom) {
+            errorOutput("Das Datum darf nicht vor dem Erscheinungsdatum (" + formatDate(journalDateFrom)
+                 + ") der Zeitschrift liegen.", errorTargetDiv);
+            return false;
+        }
 
-                if(journalDateFrom !== undefined && dateFrom < journalDateFrom) {
-                    errorOutput("Das Anfangsdatum darf nicht vor dem Erscheinungsdatum der Zeitschrift "
-                        + formatDate(journalDateFrom) + " liegen.", errorTargetDiv);
+        return true;
+    }
+
+    function checkDateUntil(date, journalDateUntil, errorTargetDiv) {
+        if (journalDateUntil !== undefined && journalDateUntil < date) {
+            errorOutput("Das Datum darf nicht nach dem Ende des Erscheinungsdatum ("
+                + formatDate(journalDateUntil) + ") der Zeitschrift liegen.", errorTargetDiv);
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkDateRange(date, journalDates, errorTargetDiv) {
+        let journalDateFrom = journalDates.from;
+        let journalDateUntil = journalDates.until;
+
+        return checkDateFrom(date, journalDateFrom, errorTargetDiv)
+            && checkDateUntil(date, journalDateUntil, errorTargetDiv);
+    }
+
+
+    function checkDatesForLogicalErrors(journalDates, errorTargetDiv, type) {
+        if (jp.editor.dates.range) {
+            if (jp.editor.dates.from !== undefined) {
+                let dateFrom = jp.editor.dates.from;
+
+                if (type === "from" && !checkDateRange(dateFrom, journalDates, errorTargetDiv)) {
                     return;
                 }
 
-                if (jp.editor.dates.until !== undefined) {
-                    let dateUntil = jp.editor.dates.until.getTime();
+                if (type === "until" && jp.editor.dates.until !== undefined) {
+                    let dateUntil = jp.editor.dates.until;
 
                     if (dateUntil < dateFrom) {
                         errorOutput("Das Enddatum sollte in der Zeit nach dem Anfangsdatum sein.", errorTargetDiv);
                         return;
                     }
 
-                    let journalDateUntil = journalDates.endDate;
-
-                    if (journalDateUntil !== undefined && journalDateUntil < dateUntil) {
-                        errorOutput("Das Anfangsdatum darf nicht nach dem Ende des Erscheinungsdatum der Zeitschrift "
-                            + formatDate(journalDateUntil) + " liegen.", errorTargetDiv);
+                    if (!checkDateRange(dateUntil, journalDates, errorTargetDiv)) {
                         return;
                     }
                 }
             }
         } else {
-            if(jp.editor.dates.date !== undefined){
-                let journalDateFrom = jp.editor.journalDates.startDate;
-                let journalDateUntil = jp.editor.journalDates.endDate;
-
-                if(journalDateFrom != undefined && jp.editor.dates.date < journalDateFrom) {
-                    errorOutput("Das Datum darf nicht vor dem Erscheinungsdatum der Zeitschrift "
-                        + formatDate(journalDateFrom) + " liegen.", errorTargetDiv);
-                    return;
-                }
-
-                if(journalDateUntil !== undefined && journalDateUntil < jp.editor.dates.date) {
-                    errorOutput("Das Datum darf nicht nach dem Ende des Erscheinungsdatum der Zeitschrift "
-                        + formatDate(journalDateUntil) + " liegen.", errorTargetDiv);
+            if(jp.editor.dates.date !== undefined) {
+                if (!checkDateRange(jp.editor.dates.date, journalDates, errorTargetDiv)) {
                     return;
                 }
             }
@@ -273,7 +284,8 @@ jp.editor.init = function() {
                         let saveOnInput = e.target.oninput;
                         e.target.oninput = undefined;
                         setTimeout(() => {
-                            getJournalDates(d => checkDatesForLogicalErrors(d, forms["Tag"]));
+                            getJournalDates(d =>
+                                checkDatesForLogicalErrors(d, forms["Tag"], typeOfDateField(dateInput)));
                             e.target.oninput = saveOnInput;
                         }, 500);
                     };
@@ -302,15 +314,21 @@ jp.editor.init = function() {
             addForm("Jahr", 5, (isBC ? "-" : "") + splitDate[0]);
     };
 
-	function setDatesFromInput(input) {
+	function typeOfDateField(input){
         let dateInputNameSplit = input.name.split("@");
 
         if(dateInputNameSplit.length === 2 && dateInputNameSplit[1] !== ""){
-            let dateType = dateInputNameSplit[1]
-            let date = newDate(input.value);
-            if(date !== undefined) {
-                jp.editor.dates[dateType] = date;
-            }
+            return dateInputNameSplit[1];
+        } else {
+            throw new Error("Coud not get type from name: " + input.name);
+        }
+    }
+
+    function setDatesFromInput(input) {
+        let type = typeOfDateField(input);
+        let date = newDate(input.value);
+        if (date !== undefined) {
+            jp.editor.dates[type] = date;
         }
     }
 
