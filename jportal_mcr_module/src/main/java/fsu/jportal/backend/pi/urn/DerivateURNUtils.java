@@ -32,7 +32,6 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.ifs.MCRFileNodeServlet;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaIFS;
@@ -43,6 +42,8 @@ import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
 
+import fsu.jportal.backend.mcr.JPConfig;
+
 /**
  * Created by chi on 07.02.17.
  *
@@ -51,8 +52,11 @@ import org.mycore.frontend.MCRFrontendUtil;
 public class DerivateURNUtils {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final String SUPPORTED_CONTENT_TYPE = MCRConfiguration.instance().getString(
-        "MCR.URN.URNGranular.SupportedContentTypes", "");
+    private static final String SUPPORTED_CONTENT_TYPE ;
+
+    static {
+        SUPPORTED_CONTENT_TYPE = JPConfig.getString("MCR.URN.URNGranular.SupportedContentTypes", "");
+    }
 
     public static URL getURL(String derivateID, String additional, String urn) {
         try {

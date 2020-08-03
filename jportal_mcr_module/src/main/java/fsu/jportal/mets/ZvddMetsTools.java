@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -47,7 +46,8 @@ import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPPerson;
 import fsu.jportal.backend.JPVolume;
-import fsu.jportal.backend.MetadataManager;
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.backend.mcr.MetadataManager;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.xml.JPXMLFunctions;
 
@@ -106,21 +106,20 @@ public abstract class ZvddMetsTools {
      * @return a new rightsMD object using mycore properties
      */
     public static Institution defaultInst(){
-        MCRConfiguration conf = MCRConfiguration.instance();
         return new Institution() {
             @Override
             public String getTitle() {
-                return conf.getString("JP.Site.Owner.label");
+                return JPConfig.getStringOrThrow("JP.Site.Owner.label");
             }
 
             @Override
             public Optional<String> getLogoURL() {
-                return Optional.ofNullable(conf.getString("JP.Site.Footer.Logo.url"));
+                return JPConfig.getString("JP.Site.Footer.Logo.url");
             }
 
             @Override
             public Optional<String> getURL() {
-                return Optional.ofNullable(conf.getString("JP.Site.Owner.url"))
+                return JPConfig.getString("JP.Site.Owner.url")
                                .map(MCRFrontendUtil.getBaseURL()::concat);
             }
 
@@ -419,7 +418,7 @@ public abstract class ZvddMetsTools {
         JPJournal journal = volume.getJournal();
         // related item host
         Element relatedItem = mods("relatedItem").setAttribute("type", "host");
-        String isil = MCRConfiguration.instance().getString("JP.Site.ISIL", null);
+        String isil = JPConfig.getString("JP.Site.ISIL", null);
         journal.getIdenti("zdb-id")
             .map(zdbId -> modsIdentifier("identifier", "zdb", zdbId))
             .ifPresent(relatedItem::addContent);

@@ -1,12 +1,12 @@
 package fsu.jportal.frontend.iview;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.viewer.configuration.MCRViewerConfiguration;
 import org.mycore.viewer.configuration.MCRViewerDefaultConfigurationStrategy;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class JPortalIViewConfigurationStrategy extends MCRViewerDefaultConfigurationStrategy {
 

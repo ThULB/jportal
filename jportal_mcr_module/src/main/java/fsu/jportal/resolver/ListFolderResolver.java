@@ -1,15 +1,17 @@
 package fsu.jportal.resolver;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.Namespace;
-import org.jdom2.transform.JDOMSource;
-import org.mycore.common.config.MCRConfiguration;
+import java.io.File;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
-import java.io.File;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.transform.JDOMSource;
+
+import fsu.jportal.backend.mcr.JPConfig;
 
 @URIResolverSchema(schema = "templates")
 public class ListFolderResolver implements URIResolver{
@@ -35,7 +37,7 @@ public class ListFolderResolver implements URIResolver{
         
         if(href.startsWith(PROPPREFIX)){
             String property = href.replaceAll(PROPPREFIX, "");
-            href = MCRConfiguration.instance().getString(property);
+            href = JPConfig.getStringOrThrow(property);
         }
         return href;
     }

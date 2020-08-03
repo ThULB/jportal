@@ -1,12 +1,13 @@
 package fsu.jportal.resolver;
 
-import fsu.jportal.frontend.GlobalMessageFile;
+import java.io.IOException;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
-import java.io.IOException;
+
+import fsu.jportal.frontend.GlobalMessageFile;
 
 /**
  * get the file from .mycore/jportal/data/config/jp-globalmessage.xml

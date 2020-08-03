@@ -1,5 +1,9 @@
 package fsu.jportal.mets;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.mycore.datamodel.ifs.MCRDirectory;
@@ -14,10 +18,6 @@ import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.SmLink;
 import org.mycore.mets.tools.MCRMetsSave;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
 
 public class MetsTools {
     static class MetsContainer {

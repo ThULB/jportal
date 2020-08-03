@@ -1,7 +1,5 @@
 package fsu.jportal.mets;
 
-import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
-
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
@@ -23,6 +21,7 @@ import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPVolume;
 import fsu.jportal.util.JPDateUtil;
+import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
 
 /**
  * Zvdd implementation of a mets generator using this

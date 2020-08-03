@@ -1,11 +1,12 @@
 package fsu.jportal.mocks;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 import static fsu.jportal.xml.stream.XMLStreamReaderUtils.toStream;
 

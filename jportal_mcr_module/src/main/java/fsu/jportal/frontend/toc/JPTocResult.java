@@ -1,13 +1,14 @@
 package fsu.jportal.frontend.toc;
 
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPLegalEntity;
-import fsu.jportal.util.JPDateUtil;
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPLegalEntity;
+import fsu.jportal.util.JPDateUtil;
 
 /**
  * Base POJO for table of content entry.

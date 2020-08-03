@@ -1,11 +1,10 @@
 package fsu.jportal.mocks;
 
-import fsu.jportal.xml.stream.DerivateFileInfo;
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import static fsu.jportal.xml.JPMCRObjXMLElementName.child;
+import fsu.jportal.xml.stream.DerivateFileInfo;
 
 /**
  * Created by chi on 14.11.16.

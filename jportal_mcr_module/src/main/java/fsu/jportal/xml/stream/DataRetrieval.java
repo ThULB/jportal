@@ -1,8 +1,9 @@
 package fsu.jportal.xml.stream;
 
-import javax.xml.stream.XMLStreamReader;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.stream.XMLStreamReader;
 
 /**
  * Created by chi on 11.10.16.

@@ -1,10 +1,10 @@
 package fsu.jportal.util;
 
-import org.mycore.datamodel.ifs.MCRDirectory;
-import org.mycore.datamodel.ifs.MCRFilesystemNode;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.mycore.datamodel.ifs.MCRDirectory;
+import org.mycore.datamodel.ifs.MCRFilesystemNode;
 
 
 

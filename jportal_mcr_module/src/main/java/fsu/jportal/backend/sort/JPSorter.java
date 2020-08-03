@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.MetadataManager;
-import fsu.jportal.util.JPComponentUtil;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
+
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.mcr.MetadataManager;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * Base interface for sorting children of journals and volumes.

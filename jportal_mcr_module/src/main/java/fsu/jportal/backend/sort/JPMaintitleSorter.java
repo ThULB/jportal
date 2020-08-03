@@ -1,10 +1,10 @@
 package fsu.jportal.backend.sort;
 
-import fsu.jportal.backend.JPPeriodicalComponent;
-
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.Locale;
+
+import fsu.jportal.backend.JPPeriodicalComponent;
 
 /**
  * Orders the children by their maintitle.

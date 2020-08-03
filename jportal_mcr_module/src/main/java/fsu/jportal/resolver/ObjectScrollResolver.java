@@ -1,33 +1,22 @@
 package fsu.jportal.resolver;
 
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.MetadataManager;
-import fsu.jportal.util.JPComponentUtil;
+import java.util.List;
+import java.util.Optional;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.URIResolver;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.jdom2.*;
-import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
+import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRTextResolver;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.solr.MCRSolrClientFactory;
-import org.mycore.solr.search.MCRSolrURL;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.mcr.MetadataManager;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * Resolves the previous and the next object.

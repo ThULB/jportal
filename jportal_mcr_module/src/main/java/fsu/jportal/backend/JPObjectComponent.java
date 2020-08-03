@@ -23,6 +23,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import fsu.jportal.backend.mcr.MetadataManager;
+
 /**
  * Base component for person, jpinst, jparticle, jpvolume and jpjournal.
  * 

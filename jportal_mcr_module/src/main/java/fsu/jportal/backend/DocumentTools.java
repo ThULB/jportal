@@ -10,6 +10,8 @@ import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 
+import fsu.jportal.backend.mcr.MetadataManager;
+
 public class DocumentTools {
 
     public static int delete(String documentID) {

@@ -1,9 +1,9 @@
 package fsu.jportal.backend.sort;
 
-import fsu.jportal.backend.JPPeriodicalComponent;
-
 import java.time.LocalDateTime;
 import java.util.Comparator;
+
+import fsu.jportal.backend.JPPeriodicalComponent;
 
 /**
  * Sort objects by their &lt;servedate type="createdate" /&gt;.

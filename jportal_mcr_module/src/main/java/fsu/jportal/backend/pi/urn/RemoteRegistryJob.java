@@ -10,12 +10,12 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.pi.MCRPIManager;
 import org.mycore.pi.backend.MCRPI;
 import org.mycore.services.queuedjob.MCRJob;
 
+import fsu.jportal.backend.mcr.JPConfig;
 import fsu.thulb.connections.urn.DNBURNRestClient;
 import fsu.thulb.model.EpicurLite;
 
@@ -26,15 +26,15 @@ import fsu.thulb.model.EpicurLite;
  */
 public class RemoteRegistryJob {
     public static void runRemoteRegistryJob(MCRJob job) throws ExecutionException {
-        String username = MCRConfiguration.instance().getString("MCR.URN.DNB.Credentials.Login", null);
-        String password = MCRConfiguration.instance().getString("MCR.URN.DNB.Credentials.Password", null);
+        String username = JPConfig.getString("MCR.URN.DNB.Credentials.Login", null);
+        String password = JPConfig.getString("MCR.URN.DNB.Credentials.Password", null);
 
         if (username == null || password == null || username.length() == 0 || password.length() == 0) {
             Exception e = new Exception("Please set MCR.URN.DNB.Credentials.Login and MCR.URN.DNB.Credentials.Password");
             throw new ExecutionException(e);
         }
 
-        String dnbURLStr = MCRConfiguration.instance().getString("MCR.URN.DNB.URL", null);
+        String dnbURLStr = JPConfig.getString("MCR.URN.DNB.URL", null);
         try {
             URI dnbURL = new URI(dnbURLStr);
             UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);

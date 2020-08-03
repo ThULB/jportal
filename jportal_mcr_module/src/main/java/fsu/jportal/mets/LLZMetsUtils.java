@@ -1,8 +1,13 @@
 package fsu.jportal.mets;
 
-import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.jportal.util.GndUtil;
-import fsu.jportal.util.MetsUtil;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import org.apache.solr.client.solrj.SolrServerException;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -19,13 +24,9 @@ import org.mycore.mets.model.IMetsElement;
 import org.mycore.mets.validator.validators.SchemaValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
+import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.jportal.util.GndUtil;
+import fsu.jportal.util.MetsUtil;
 
 public abstract class LLZMetsUtils {
 

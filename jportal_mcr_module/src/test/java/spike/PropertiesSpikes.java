@@ -1,10 +1,15 @@
 package spike;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Properties;
+
 import org.apache.commons.io.output.WriterOutputStream;
 import org.junit.Test;
-
-import java.io.*;
-import java.util.Properties;
 
 public class PropertiesSpikes {
     @Test

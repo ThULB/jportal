@@ -3,9 +3,10 @@ package fsu.jportal.backend.pica;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
 import org.jdom2.Element;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
+
+import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
 
 public class JPPersonProducer extends PersonProducer {
 

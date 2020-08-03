@@ -1,7 +1,5 @@
 package fsu.jportal.backend.impl;
 
-import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
-
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +19,7 @@ import fsu.jportal.backend.JPVolume;
 import fsu.jportal.backend.JPVolumeTypeDetector;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPDateUtil;
+import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
 
 /**
  * The default jportal volume type detector.

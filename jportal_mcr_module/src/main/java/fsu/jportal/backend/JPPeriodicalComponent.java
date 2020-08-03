@@ -21,6 +21,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
 
+import fsu.jportal.backend.mcr.MetadataManager;
 import fsu.jportal.util.DerivateLinkUtil;
 import fsu.jportal.util.JPComponentUtil;
 import fsu.jportal.util.JPDateUtil;

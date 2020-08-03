@@ -1,9 +1,5 @@
 package fsu.jportal.xml.stream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javax.xml.stream.XMLStreamReader;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,7 +7,14 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.*;
+import javax.xml.stream.XMLStreamReader;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by chi on 04.10.16.

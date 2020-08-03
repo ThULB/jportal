@@ -11,9 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.transform.JDOMSource;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRURIResolver;
 
+import fsu.jportal.backend.mcr.JPConfig;
 import fsu.jportal.mets.ZVDDMetsGenerator;
 import fsu.jportal.util.GroupPattern;
 
@@ -56,7 +56,7 @@ public class ZVDDOAIMetsResolver implements URIResolver {
     }
 
     private Source resolveWithXSL(String mcrId, String format) throws TransformerException {
-        String oaiId = MCRConfiguration.instance().getString("OAIRepositoryIdentifier", "noOaiIdentifier");
+        String oaiId = JPConfig.getString("OAIRepositoryIdentifier", "noOaiIdentifier");
         String hrefTmp = "xslStyle:jp2{0}?identifier={1}:mcrobject:{2}";
         String href = MessageFormat.format(hrefTmp, format, oaiId, mcrId);
         return MCRURIResolver.instance().resolve(href, "");

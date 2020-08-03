@@ -1,9 +1,10 @@
 package fsu.jportal.mocks;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 /**
  * Created by chi on 09.09.16.

@@ -1,8 +1,5 @@
 package fsu.jportal.resources;
 
-import static fsu.jportal.util.ImprintUtil.getImprintID;
-import static fsu.jportal.util.ImprintUtil.getJournalConf;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
@@ -50,6 +47,8 @@ import fsu.jportal.backend.ImprintFS;
 import fsu.jportal.backend.ImprintManager;
 import fsu.jportal.backend.JPObjectConfiguration;
 import fsu.jportal.util.ImprintUtil;
+import static fsu.jportal.util.ImprintUtil.getImprintID;
+import static fsu.jportal.util.ImprintUtil.getJournalConf;
 import fsu.jportal.xml.MCRWebpage;
 import fsu.jportal.xml.XMLTools;
 

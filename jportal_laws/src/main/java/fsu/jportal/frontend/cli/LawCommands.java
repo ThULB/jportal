@@ -2,7 +2,6 @@ package fsu.jportal.frontend.cli;
 
 import java.io.InputStream;
 
-import fsu.jportal.backend.JPPeriodicalComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -20,6 +19,7 @@ import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
 import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
 import fsu.jportal.laws.common.xml.LawsXMLFunctions;
 

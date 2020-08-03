@@ -1,8 +1,9 @@
 package fsu.jportal.resources;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.function.Function;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -11,10 +12,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.function.Function;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import fsu.jportal.backend.mcr.JPConfig;
 
 @Path("proxy")
 public class ProxyResource {
@@ -59,6 +60,6 @@ public class ProxyResource {
     }
 
     private String getProperty(String property) {
-        return MCRConfiguration.instance().getString(property, null);
+        return JPConfig.getString(property, null);
     }
 }

@@ -1,6 +1,8 @@
 package fsu.jportal.backend.io;
 
-import fsu.jportal.backend.ImportDerivateObject;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
@@ -11,8 +13,7 @@ import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import fsu.jportal.backend.ImportDerivateObject;
 
 /**
  * Created by chi on 24.04.15.

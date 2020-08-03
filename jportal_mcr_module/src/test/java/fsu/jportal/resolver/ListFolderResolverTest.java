@@ -1,5 +1,11 @@
 package fsu.jportal.resolver;
 
+import java.io.IOException;
+import java.text.MessageFormat;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -11,13 +17,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.mycore.common.config.MCRConfiguration;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import java.io.IOException;
-import java.text.MessageFormat;
-
+import fsu.jportal.backend.mcr.JPConfig;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -66,7 +67,7 @@ public class ListFolderResolverTest {
     public void testResolveProperties() throws Exception {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
         String propName = "test.folder";
-        MCRConfiguration.instance().set(propName, tmpFolder.getRoot().getAbsolutePath());
+        JPConfig.set(propName, tmpFolder.getRoot().getAbsolutePath());
         
         ListFolderResolver templateNameListResolver = new ListFolderResolver();
         Source resolve = templateNameListResolver.resolve("templates:prop:" + propName, "");

@@ -8,12 +8,6 @@ import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.UUID;
-
 /**
  * Created by chi on 01.06.17.
  *

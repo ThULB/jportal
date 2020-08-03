@@ -1,9 +1,18 @@
 package fsu.jportal.urn;
 
+import java.util.Optional;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+import javax.servlet.ServletContext;
+
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.events.MCRShutdownHandler;
 import org.mycore.common.events.MCRStartupHandler;
 import org.mycore.pi.MCRPIRegistrationInfo;
@@ -12,14 +21,7 @@ import org.mycore.pi.urn.rest.MCRDerivateURNUtils;
 import org.mycore.pi.urn.rest.MCREpicurLite;
 import org.mycore.pi.urn.rest.MCRURNGranularRESTRegistrationTask;
 
-import javax.servlet.ServletContext;
-import java.util.Optional;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import fsu.jportal.backend.mcr.JPConfig;
 
 /**
  * @author shermann
@@ -93,8 +95,8 @@ public class URNRESTRegistrationStarter
     }
 
     public Optional<UsernamePasswordCredentials> getUsernamePassword() {
-        String username = MCRConfiguration.instance().getString("MCR.URN.DNB.Credentials.Login", null);
-        String password = MCRConfiguration.instance().getString("MCR.URN.DNB.Credentials.Password", null);
+        String username = JPConfig.getString("MCR.URN.DNB.Credentials.Login", null);
+        String password = JPConfig.getString("MCR.URN.DNB.Credentials.Password", null);
 
         if (username == null || password == null || username.length() == 0 || password.length() == 0) {
             LOGGER.warn("Could not instantiate " + this.getClass().getName()

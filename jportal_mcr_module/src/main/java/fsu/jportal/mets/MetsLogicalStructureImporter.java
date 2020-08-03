@@ -1,7 +1,5 @@
 package fsu.jportal.mets;
 
-import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,6 +19,7 @@ import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
 import fsu.jportal.util.JPComponentUtil;
+import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
 
 public class MetsLogicalStructureImporter extends MetsImporter {
 

@@ -14,7 +14,7 @@ import org.mycore.mets.model.struct.LogicalStructMap;
 import fsu.jportal.backend.JPArticle;
 import fsu.jportal.backend.JPComponent;
 import fsu.jportal.backend.JPVolume;
-import fsu.jportal.backend.MetadataManager;
+import fsu.jportal.backend.mcr.MetadataManager;
 
 /**
  * Default importer for the MCRPROFILE mets.

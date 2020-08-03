@@ -13,12 +13,14 @@ import java.util.Optional;
 
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaIFS;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
+
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.backend.mcr.MetadataManager;
 
 /**
  * MyCoRe derivate abstraction for jportal.
@@ -37,9 +39,10 @@ public class JPDerivateComponent implements JPComponent {
     public JPDerivateComponent() {
         derivate = new MCRDerivate();
         derivate.setId(MCRObjectID.getNextFreeId("jportal_derivate"));
-        String schema = MCRConfiguration.instance()
-            .getString("MCR.Metadata.Config.derivate", "datamodel-derivate.xml")
-            .replaceAll(".xml", ".xsd");
+
+        String schema = JPConfig.getString("MCR.Metadata.Config.derivate")
+                .map(propVal -> propVal.replaceAll(".xml", ".xsd"))
+                .orElse("datamodel-derivate.xsd");
         derivate.setSchema(schema);
 
         MCRMetaIFS ifs = new MCRMetaIFS();

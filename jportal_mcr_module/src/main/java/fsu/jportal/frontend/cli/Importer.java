@@ -1,10 +1,5 @@
 package fsu.jportal.frontend.cli;
 
-import fsu.jportal.backend.MetadataManager;
-import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,15 +16,22 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import fsu.jportal.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -38,7 +40,12 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRMarkManager;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
@@ -63,11 +70,19 @@ import fsu.jportal.backend.io.HttpImportSource;
 import fsu.jportal.backend.io.ImportSink;
 import fsu.jportal.backend.io.LocalSystemSink;
 import fsu.jportal.backend.io.RecursiveImporter;
+import fsu.jportal.backend.mcr.MetadataManager;
 import fsu.jportal.mets.JPMetsHierarchyGenerator;
 import fsu.jportal.mets.LLZMetsConverter;
 import fsu.jportal.mets.MetsImportUtils;
 import fsu.jportal.mets.MetsImporter;
 import fsu.jportal.mets.MetsVersionStore;
+import fsu.jportal.util.DateFormatUtil;
+import fsu.jportal.util.GroupPattern;
+import fsu.jportal.util.MapUtil;
+import fsu.jportal.util.MetsUtil;
+import static fsu.jportal.util.MetsUtil.MONTH_NAMES;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by chi on 22.04.15.
