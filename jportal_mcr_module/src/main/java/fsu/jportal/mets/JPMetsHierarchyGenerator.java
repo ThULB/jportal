@@ -7,10 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPObjectType;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.MetsUtil;
 import org.apache.logging.log4j.LogManager;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -19,6 +15,11 @@ import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.MCRMETSHierarchyGenerator;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
+
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.MetsUtil;
 
 /**
  * Uses the mycore mets hierarchy generator and adds the support for ALTO files. This includes

@@ -8,18 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPInstitution;
-import fsu.jportal.backend.JPJournal;
-import fsu.jportal.backend.JPLegalEntity;
-import fsu.jportal.backend.JPObjectType;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.JPPerson;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.backend.MetadataManager;
-
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -32,6 +20,18 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPInstitution;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPLegalEntity;
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPPerson;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.mcr.MetadataManager;
 
 /**
  * Utility class for jportal components.

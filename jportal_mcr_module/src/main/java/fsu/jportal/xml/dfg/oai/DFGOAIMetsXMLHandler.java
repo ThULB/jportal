@@ -13,16 +13,17 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import fsu.jportal.xml.stream.DerivateFileInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRContentInputStream;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRContentTypes;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
+
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.xml.stream.DerivateFileInfo;
 
 public class DFGOAIMetsXMLHandler {
 
@@ -73,7 +74,7 @@ public class DFGOAIMetsXMLHandler {
 
     private static class MCRBackend {
         public static String oaiId() {
-            return MCRConfiguration.instance().getString("OAIRepositoryIdentifier", "noOaiIdentifier");
+            return JPConfig.getString("OAIRepositoryIdentifier", "noOaiIdentifier");
         }
 
         public static Stream<DerivateFileInfo> ifs(String derivateID) {

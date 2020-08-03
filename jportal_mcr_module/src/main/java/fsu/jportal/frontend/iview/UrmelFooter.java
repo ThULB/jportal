@@ -22,16 +22,6 @@
  */
 package fsu.jportal.frontend.iview;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.backend.jpa.MCREntityManagerProvider;
-import org.mycore.iview2.frontend.MCRFooterInterface;
-import org.mycore.pi.backend.MCRPI;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import javax.persistence.PersistenceException;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
@@ -43,6 +33,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import javax.persistence.PersistenceException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.backend.jpa.MCREntityManagerProvider;
+import org.mycore.iview2.frontend.MCRFooterInterface;
+import org.mycore.pi.backend.MCRPI;
 
 /**
  * @author Thomas Scheffler (yagee)

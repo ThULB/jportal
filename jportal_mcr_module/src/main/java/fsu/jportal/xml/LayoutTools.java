@@ -5,12 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import fsu.jportal.backend.JPLegalEntity;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.urn.URNTools;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.JPComponentUtil.JPInfoProvider;
-import fsu.jportal.util.JPComponentUtil.JPObjectInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRSessionMgr;
@@ -20,6 +14,13 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.pi.MCRPIService;
 import org.mycore.pi.MCRPersistentIdentifier;
+
+import fsu.jportal.backend.JPLegalEntity;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.urn.URNTools;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPComponentUtil.JPInfoProvider;
+import fsu.jportal.util.JPComponentUtil.JPObjectInfo;
 
 public abstract class LayoutTools {
 

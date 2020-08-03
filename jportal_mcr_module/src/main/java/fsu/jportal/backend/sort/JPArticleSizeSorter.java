@@ -1,13 +1,18 @@
 package fsu.jportal.backend.sort;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.util.RomanNumeral;
-import fsu.jportal.util.JPComponentUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.RomanNumeral;
 
 /**
  * Default implementation to sort jparticle's by their size.

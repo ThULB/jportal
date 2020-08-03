@@ -1,10 +1,8 @@
 package fsu.jportal.mets;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPObjectComponent;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.backend.MetadataManager;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,9 +14,11 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPObjectComponent;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.mcr.MetadataManager;
 
 /**
  * LLZ METS importer class.

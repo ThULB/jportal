@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response.StatusType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-//import org.mycore.access.mcrimpl.MCRAccessControlSystem;
 import org.mycore.access.mcrimpl.MCRAccessRule;
 import org.mycore.access.mcrimpl.MCRRuleStore;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
@@ -37,6 +36,8 @@ import fsu.jportal.parser.IPJsonArray;
 import fsu.jportal.parser.IPMap;
 import fsu.jportal.parser.IPRuleParser;
 import fsu.jportal.parser.IPRuleParser.IPRuleParseException;
+
+//import org.mycore.access.mcrimpl.MCRAccessControlSystem;
 
 @Path("IPRule/{objID}")
 @MCRRestrictedAccess(IPRuleAccess.class)

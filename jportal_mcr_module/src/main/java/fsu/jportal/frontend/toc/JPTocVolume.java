@@ -1,11 +1,12 @@
 package fsu.jportal.frontend.toc;
 
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.JPVolume;
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
 
 /**
  * POJO representation for "table of content" entry of an jportal volume.

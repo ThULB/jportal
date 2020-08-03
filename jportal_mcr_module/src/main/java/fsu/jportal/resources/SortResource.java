@@ -20,17 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import fsu.jportal.backend.JPComponent.StoreOption;
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.sort.JPLevelSorting;
-import fsu.jportal.backend.sort.JPSorter;
-import fsu.jportal.backend.sort.JPSorter.Order;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.JPLevelSortingUtil;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
@@ -39,6 +28,19 @@ import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.index.MCRSolrIndexer;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import fsu.jportal.backend.JPComponent.StoreOption;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.backend.sort.JPSorter;
+import fsu.jportal.backend.sort.JPSorter.Order;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPLevelSortingUtil;
 
 /**
  * Resource to handle jportal sorting. 

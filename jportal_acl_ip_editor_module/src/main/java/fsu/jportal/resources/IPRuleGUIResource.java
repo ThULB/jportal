@@ -19,8 +19,8 @@ import javax.xml.transform.stream.StreamSource;
 import org.jdom2.transform.JDOMResult;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
-import org.xml.sax.SAXException;
 import org.mycore.frontend.MCRFrontendUtil;
+import org.xml.sax.SAXException;
 
 import fsu.jportal.xml.XMLTools;
 

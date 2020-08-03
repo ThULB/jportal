@@ -1,12 +1,13 @@
 package spike;
 
-import org.junit.Test;
+import java.io.InputStream;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.InputStream;
+
+import org.junit.Test;
 
 public class Export {
 

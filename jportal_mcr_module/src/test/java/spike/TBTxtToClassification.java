@@ -1,8 +1,5 @@
 package spike;
 
-import static org.mycore.common.MCRConstants.XML_NAMESPACE;
-import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,6 +9,9 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+
+import static org.mycore.common.MCRConstants.XML_NAMESPACE;
+import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
 
 /**
  * Converts the thueringen bibliography to a mycore classification. (One time use class)

@@ -1,25 +1,35 @@
 package spike;
 
-import fsu.jportal.mets.ConvertException;
-import fsu.jportal.mets.ENMAPConverter;
-import fsu.jportal.mets.MetsImportUtils;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationLoaderFactory;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.validator.METSValidator;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import java.io.*;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.mets.ConvertException;
+import fsu.jportal.mets.ENMAPConverter;
+import fsu.jportal.mets.MetsImportUtils;
 
 public class ENMAPChecker {
 
@@ -105,7 +115,7 @@ public class ENMAPChecker {
         System.setProperty("MCR.Home", "~/.mycore/jportal/");
         System.setProperty("MCR.AppName", "jportal");
         Map<String, String> properties = MCRConfigurationLoaderFactory.getConfigurationLoader().load();
-        MCRConfiguration.instance().initialize(properties, true);
+        JPConfig.initialize(properties, true);
 
         // convert
         Path metsFile = Paths.get("/data/mnt/images/ThULB_129489832_1941_Perthes/mets.xml");

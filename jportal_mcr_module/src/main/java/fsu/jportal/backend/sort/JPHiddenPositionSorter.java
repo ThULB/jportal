@@ -1,12 +1,13 @@
 package fsu.jportal.backend.sort;
 
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.util.JPComponentUtil;
+import java.util.Comparator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Comparator;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * Default implementation to sort jpvolume's by their hidden_position.

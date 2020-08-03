@@ -3,13 +3,14 @@ package fsu.jportal.resolver;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 
-import fsu.jportal.backend.JPObjectType;
-import fsu.jportal.frontend.toc.JPTocResults;
-import fsu.jportal.xml.JPXMLFunctions;
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.frontend.toc.JPTocResults;
+import fsu.jportal.xml.JPXMLFunctions;
 
 /**
  * Created by chi on 08.09.15.

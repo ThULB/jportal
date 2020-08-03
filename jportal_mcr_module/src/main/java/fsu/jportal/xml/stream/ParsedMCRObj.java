@@ -1,11 +1,11 @@
 package fsu.jportal.xml.stream;
 
-import fsu.jportal.xml.JPMCRObjXMLElementName;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import fsu.jportal.xml.JPMCRObjXMLElementName;
 
 /**
  * Created by chi on 13.10.16.

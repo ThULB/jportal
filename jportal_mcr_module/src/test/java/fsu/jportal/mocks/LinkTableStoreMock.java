@@ -1,11 +1,11 @@
 package fsu.jportal.mocks;
 
-import org.mycore.datamodel.common.MCRLinkTableInterface;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.mycore.datamodel.common.MCRLinkTableInterface;
 
 public class LinkTableStoreMock implements MCRLinkTableInterface{
 

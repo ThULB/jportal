@@ -1,7 +1,5 @@
 package fsu.jportal.solr;
 
-import static org.mycore.solr.MCRSolrConstants.SOLR_CONFIG_PREFIX;
-
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,11 +13,13 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.logging.log4j.LogManager;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.solr.index.strategy.MCRSolrFileStrategy;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
+
+import fsu.jportal.backend.mcr.JPConfig;
+import static org.mycore.solr.MCRSolrConstants.SOLR_CONFIG_PREFIX;
 
 /**
  * JPortal implementation of which files should be send to solr.
@@ -41,7 +41,7 @@ public class JPSolrFileStrategy implements MCRSolrFileStrategy {
     private final static List<String> IGNORE_XML_FILES = Arrays.asList("alto", "mets");
 
     static {
-        String acceptPattern = MCRConfiguration.instance().getString(SOLR_CONFIG_PREFIX + "MimeTypeStrategy.Pattern");
+        String acceptPattern = JPConfig.getStringOrThrow(SOLR_CONFIG_PREFIX + "MimeTypeStrategy.Pattern");
         IGNORE_PATTERN = Pattern.compile(acceptPattern);
     }
 

@@ -12,20 +12,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent.StoreOption;
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPJournal;
-import fsu.jportal.backend.JPObjectConfiguration;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.backend.MetadataManager;
-import fsu.jportal.backend.sort.JPLevelSorting;
-import fsu.jportal.backend.sort.JPLevelSorting.Level;
-import fsu.jportal.backend.sort.JPMagicSorter;
-import fsu.jportal.backend.sort.JPPublishedSorter;
-import fsu.jportal.backend.sort.JPSorter;
-import fsu.jportal.backend.sort.JPSorter.Order;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -33,13 +19,27 @@ import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.common.MCRMarkManager.Operation;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.index.MCRSolrIndexer;
 import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent.StoreOption;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPObjectConfiguration;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.mcr.MetadataManager;
+import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.backend.sort.JPLevelSorting.Level;
+import fsu.jportal.backend.sort.JPMagicSorter;
+import fsu.jportal.backend.sort.JPPublishedSorter;
+import fsu.jportal.backend.sort.JPSorter;
+import fsu.jportal.backend.sort.JPSorter.Order;
 
 /**
  * Helper class to support level sorting on journals.

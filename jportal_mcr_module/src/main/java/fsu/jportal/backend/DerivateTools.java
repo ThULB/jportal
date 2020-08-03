@@ -21,14 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import fsu.jportal.gson.DerivateTypeAdapter;
-import fsu.jportal.gson.FileNodeWrapper;
-import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
-import fsu.jportal.mets.MetsTools;
-import fsu.jportal.urn.URNTools;
-import fsu.jportal.util.DerivateLinkUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
@@ -36,8 +28,6 @@ import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
@@ -55,6 +45,17 @@ import org.mycore.pi.MCRPIServiceManager;
 import org.mycore.pi.MCRPersistentIdentifier;
 import org.mycore.pi.backend.MCRPI;
 import org.mycore.pi.exceptions.MCRPersistentIdentifierException;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.gson.DerivateTypeAdapter;
+import fsu.jportal.gson.FileNodeWrapper;
+import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
+import fsu.jportal.mets.MetsTools;
+import fsu.jportal.urn.URNTools;
+import fsu.jportal.util.DerivateLinkUtil;
 
 public class DerivateTools {
     static Logger LOGGER = LogManager.getLogger(DerivateTools.class);
@@ -406,7 +407,8 @@ public class DerivateTools {
     public static String uploadFile(InputStream inputStream, long filesize, String documentID, String derivateID,
         String filePath) throws IOException, MCRAccessException {
         if (derivateID == null) {
-            String projectID = MCRConfiguration.instance().getString("MCR.Metadata.Project", "MCR");
+
+            String projectID = JPConfig.getString("MCR.Metadata.Project", "MCR");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
         }
         MCRUploadHandlerIFS handler = new MCRUploadHandlerIFS(documentID, derivateID);
@@ -612,13 +614,9 @@ public class DerivateTools {
     }
 
     public static boolean urnEnabled() {
-        String urnObjects = "";
-        try {
-            urnObjects = MCRConfiguration.instance().getString("MCR.URN.Enabled.Objects");
-        } catch (MCRConfigurationException e) {
-            LOGGER.info("Property MCR.URN.Enabled.Object not set, URN allocation not possible.");
-        }
-        return urnObjects.contains("derivate");
+        return JPConfig.getString("MCR.URN.Enabled.Objects")
+                .map(config -> config.contains("derivate"))
+                .orElse(false);
     }
 
     public static Object checkFileType(String derivateID, String path) {

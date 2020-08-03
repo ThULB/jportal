@@ -1,24 +1,5 @@
 package fsu.jportal.backend;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.Ordering;
-import fsu.jportal.urn.URNTools;
-import org.apache.logging.log4j.LogManager;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.niofs.MCRFileAttributes;
-import org.mycore.datamodel.niofs.MCRMD5AttributeView;
-import org.mycore.datamodel.niofs.MCRPath;
-
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlTransient;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URLConnection;
@@ -32,6 +13,27 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.Response;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.apache.logging.log4j.LogManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRFileAttributes;
+import org.mycore.datamodel.niofs.MCRMD5AttributeView;
+import org.mycore.datamodel.niofs.MCRPath;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Ordering;
+
+import fsu.jportal.urn.URNTools;
 
 public class DerivateDirectoryTools {
 

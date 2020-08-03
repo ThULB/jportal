@@ -1,10 +1,10 @@
 package fsu.jportal.frontend.cli;
 
-import org.mycore.frontend.cli.annotation.MCRCommand;
-import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.mycore.frontend.cli.annotation.MCRCommand;
+import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
 @MCRCommandGroup(name = "User Group Tools")
 public class UsersGroupsTools {

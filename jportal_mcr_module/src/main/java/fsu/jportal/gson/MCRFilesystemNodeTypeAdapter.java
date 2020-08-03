@@ -5,15 +5,16 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import org.mycore.common.MCRJSONTypeAdapter;
+import org.mycore.datamodel.ifs.MCRFile;
+import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.niofs.MCRPathUtils;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import org.mycore.common.MCRJSONTypeAdapter;
-import org.mycore.datamodel.ifs.MCRFile;
-import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.niofs.MCRPathUtils;
 
 public class MCRFilesystemNodeTypeAdapter extends MCRJSONTypeAdapter<MCRFilesystemNode> {
 

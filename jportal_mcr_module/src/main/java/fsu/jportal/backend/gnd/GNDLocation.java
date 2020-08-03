@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import fsu.jportal.util.Pair;
-
 import javax.xml.bind.annotation.XmlElement;
+
+import fsu.jportal.util.Pair;
 
 /**
  * A GNDLocation object consists of a gnd identifier, a label, an area code and a geographic coordinate (lat/lng).

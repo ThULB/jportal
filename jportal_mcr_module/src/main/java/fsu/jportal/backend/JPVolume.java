@@ -2,7 +2,6 @@ package fsu.jportal.backend;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.mycore.common.inject.MCRInjectorConfig;
@@ -11,8 +10,6 @@ import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import fsu.jportal.backend.gnd.GNDAreaCodesService;
 
 /**
  * Volume abstraction. Be aware that this class is not complete.

@@ -1,11 +1,5 @@
 package fsu.jportal.mets;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.niofs.MCRPath;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +8,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRPath;
+
+import fsu.jportal.backend.mcr.JPConfig;
 
 /**
  * This is just a simple helper store to version mets.xml
@@ -28,7 +29,7 @@ public class MetsVersionStore {
     private static Path STORE_PATH;
 
     static {
-        String mcrDataDir = MCRConfiguration.instance().getString("MCR.datadir");
+        String mcrDataDir = JPConfig.getStringOrThrow("MCR.datadir");
         STORE_PATH = Paths.get(mcrDataDir, "metsStore");
     }
 

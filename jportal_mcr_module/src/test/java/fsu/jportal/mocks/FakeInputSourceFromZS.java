@@ -1,10 +1,5 @@
 package fsu.jportal.mocks;
 
-import fsu.jportal.xml.stream.XMLStreamReaderUtils;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -17,6 +12,12 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
+import fsu.jportal.xml.stream.XMLStreamReaderUtils;
 
 /**
  * Created by chi on 29.09.16.

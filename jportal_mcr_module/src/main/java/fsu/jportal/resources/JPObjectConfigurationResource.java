@@ -1,20 +1,28 @@
 package fsu.jportal.resources;
 
-import com.google.gson.Gson;
-import fsu.jportal.backend.conf.ObjConfiguration;
-import fsu.jportal.domain.model.JPProperties;
-import fsu.jportal.domain.model.JPUser;
-import org.mycore.access.MCRAccessManager;
-import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
-import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import org.mycore.access.MCRAccessManager;
+import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
+import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
+
+import com.google.gson.Gson;
+
+import fsu.jportal.backend.conf.ObjConfiguration;
+import fsu.jportal.domain.model.JPProperties;
+import fsu.jportal.domain.model.JPUser;
 
 @Path("objConf")
 public class JPObjectConfigurationResource {

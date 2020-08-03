@@ -1,13 +1,13 @@
 package fsu.jportal.backend;
 
+import java.util.ArrayList;
+
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-
-import java.util.ArrayList;
 
 /**
  * Created by michel on 07.07.15.

@@ -1,6 +1,14 @@
 package spike;
 
-import fsu.jportal.mets.ABBYYtoALTOConverter;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -8,10 +16,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.mets.validator.validators.ValidationException;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import fsu.jportal.mets.ABBYYtoALTOConverter;
 
 public class LLZFixer {
 

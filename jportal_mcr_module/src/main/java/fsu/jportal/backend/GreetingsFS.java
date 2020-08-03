@@ -1,7 +1,13 @@
 package fsu.jportal.backend;
 
-import com.google.common.base.Charsets;
-import fsu.jportal.resolver.JournalFilesResolver;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.JDOMException;
@@ -9,9 +15,9 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.content.MCRContent;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import com.google.common.base.Charsets;
+
+import fsu.jportal.resolver.JournalFilesResolver;
 
 public class GreetingsFS {
 

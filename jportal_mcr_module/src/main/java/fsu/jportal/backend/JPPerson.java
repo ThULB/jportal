@@ -1,12 +1,22 @@
 package fsu.jportal.backend;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.metadata.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import org.mycore.datamodel.metadata.MCRMetaClassification;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaXML;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
  * Person abstraction. Be aware this class is not fully implemented.

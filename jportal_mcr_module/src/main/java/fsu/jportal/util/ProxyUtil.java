@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
+
+import fsu.jportal.backend.mcr.JPConfig;
 
 /**
  * Created by chi on 17.10.18.
@@ -38,7 +39,7 @@ public class ProxyUtil {
     }
 
     public static String getProperty(String property) {
-        return MCRConfiguration.instance().getString(property, null);
+        return JPConfig.getString(property, null);
     }
 
     public static Consumer<Exception> errorHandler(HttpServletRequest req) {

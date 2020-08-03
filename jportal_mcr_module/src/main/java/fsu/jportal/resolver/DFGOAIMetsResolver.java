@@ -1,11 +1,9 @@
 package fsu.jportal.resolver;
 
-import fsu.jportal.xml.dfg.oai.DFGOAIMetsXMLHandler;
-import fsu.jportal.xml.stream.ParserUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.common.xml.MCRURIResolver;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -14,10 +12,14 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.Optional;
-import java.util.function.Consumer;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mycore.common.xml.MCRURIResolver;
+
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.xml.dfg.oai.DFGOAIMetsXMLHandler;
+import fsu.jportal.xml.stream.ParserUtils;
 
 /**
  * Created by chi on 17.10.16.
@@ -60,13 +62,13 @@ public class DFGOAIMetsResolver implements URIResolver {
     }
 
     public static Source oaiDCXSL(String href) throws TransformerException {
-        String id = MCRConfiguration.instance().getString("OAIRepositoryIdentifier", "noOaiIdentifier");
+        String id = JPConfig.getString("OAIRepositoryIdentifier", "noOaiIdentifier");
         String objectId = href.split(":")[1];
         return MCRURIResolver.instance().resolve("xslStyle:jp2oai_dc?identifier=" + id + ":mcrobject:" + objectId, "");
     }
 
     private static Source dfgMetsXSL(String href) {
-        String id = MCRConfiguration.instance().getString("OAIRepositoryIdentifier", "noOaiIdentifier");
+        String id = JPConfig.getString("OAIRepositoryIdentifier", "noOaiIdentifier");
         String uriTmp = "xslStyle:jp2mets-dfg?identifier=" + id + ":mcrobject:";
         return Optional.of(href)
                        .filter(uri -> uri.startsWith("dfgOai:"))

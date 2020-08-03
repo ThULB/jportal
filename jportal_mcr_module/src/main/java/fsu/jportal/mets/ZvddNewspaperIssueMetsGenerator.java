@@ -1,13 +1,10 @@
 package fsu.jportal.mets;
 
-import java.nio.file.Files;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -17,7 +14,6 @@ import java.util.stream.Collectors;
 
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.JPMetaDate;
-import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.misc.DefaultStructLinkGenerator;
@@ -44,9 +40,8 @@ import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPPeriodicalComponent;
 import fsu.jportal.backend.JPVolume;
-import fsu.jportal.backend.MetadataManager;
+import fsu.jportal.backend.mcr.MetadataManager;
 import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.MetsUtil;
 
 /**
  * Zvdd implementation of a mets generator using this

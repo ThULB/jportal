@@ -5,10 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import fsu.jportal.backend.DerivateTools;
-import fsu.jportal.backend.ImportDerivateObject;
-import fsu.jportal.backend.ImportFileObject;
-import fsu.jportal.frontend.cli.Importer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -25,6 +21,11 @@ import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+
+import fsu.jportal.backend.DerivateTools;
+import fsu.jportal.backend.ImportDerivateObject;
+import fsu.jportal.backend.ImportFileObject;
+import fsu.jportal.frontend.cli.Importer;
 
 /**
  * Created by michel on 07.07.15.

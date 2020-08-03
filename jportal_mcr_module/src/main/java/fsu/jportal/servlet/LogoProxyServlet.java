@@ -1,8 +1,5 @@
 package fsu.jportal.servlet;
 
-import static fsu.jportal.util.ProxyUtil.getConnection;
-import static fsu.jportal.util.ProxyUtil.getProperty;
-
 import java.io.IOException;
 import java.util.Optional;
 
@@ -13,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static fsu.jportal.util.ProxyUtil.getConnection;
+import static fsu.jportal.util.ProxyUtil.getProperty;
 
 /**
  * Created by chi on 17.10.18.

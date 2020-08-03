@@ -1,17 +1,17 @@
 package spike;
 
+import java.io.IOException;
+
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
 
-import java.io.IOException;
-
+import fsu.jportal.backend.mcr.JPConfig;
 import static org.junit.Assert.assertNotNull;
 
 
@@ -20,7 +20,7 @@ public class MCRObjectSpike {
     @Before
     public void init() {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
-        MCRConfiguration.instance().set("MCR.Metadata.Type.person", "true");
+        JPConfig.set("MCR.Metadata.Type.person", "true");
     }
 
     @Test

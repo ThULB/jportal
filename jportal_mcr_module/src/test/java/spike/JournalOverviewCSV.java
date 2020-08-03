@@ -1,19 +1,5 @@
 package spike;
 
-import org.apache.solr.common.params.ModifiableSolrParams;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.common.config.MCRConfigurationLoaderFactory;
-import org.mycore.solr.MCRSolrCore;
-import org.mycore.solr.search.MCRSolrSearchUtils;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +10,21 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.apache.solr.common.params.ModifiableSolrParams;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.config.MCRConfigurationLoaderFactory;
+import org.mycore.solr.MCRSolrCore;
+import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import fsu.jportal.backend.mcr.JPConfig;
 
 /**
  * Creates a CSV of all journals with id, maintitle, EZB, ZDB and the Projektbezeichnung.
@@ -131,7 +132,7 @@ public class JournalOverviewCSV {
         System.setProperty("MCR.Home", "~/.mycore/jportal/");
         System.setProperty("MCR.AppName", "jportal");
         Map<String, String> properties = MCRConfigurationLoaderFactory.getConfigurationLoader().load();
-        MCRConfiguration.instance().initialize(properties, true);
+        JPConfig.initialize(properties, true);
 
         JournalOverviewCSV journalCSV = new JournalOverviewCSV();
         Element projectClassification = journalCSV.loadClassification("jportal_class_00000062").getRootElement();

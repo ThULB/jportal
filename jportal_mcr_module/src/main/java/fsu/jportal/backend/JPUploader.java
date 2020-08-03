@@ -1,22 +1,24 @@
 package fsu.jportal.backend;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalListener;
-import com.google.common.cache.RemovalNotification;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
+
+import fsu.jportal.backend.mcr.JPConfig;
 
 /**
  * Helper class to upload in a bundled MCRUploadHandlerIFS session.
@@ -62,7 +64,7 @@ public abstract class JPUploader {
      */
     public static UUID start(String documentID, String derivateID, int numFiles) {
         if (derivateID == null) {
-            String projectID = MCRConfiguration.instance().getString("MCR.Metadata.Project", "jportal");
+            String projectID = JPConfig.getString("MCR.Metadata.Project", "jportal");
             derivateID = MCRObjectID.getNextFreeId(projectID + '_' + "derivate").toString();
         }
         UUID uuid = UUID.randomUUID();

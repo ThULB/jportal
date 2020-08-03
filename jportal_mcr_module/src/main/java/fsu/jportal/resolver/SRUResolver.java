@@ -7,12 +7,11 @@ import javax.xml.transform.URIResolver;
 import org.jdom2.Document;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.datamodel.common.MCRObjectMerger;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.jportal.backend.MetadataManager;
+import fsu.jportal.backend.mcr.MetadataManager;
 import fsu.jportal.util.GndUtil;
 
 @URIResolverSchema(schema = "sru")
