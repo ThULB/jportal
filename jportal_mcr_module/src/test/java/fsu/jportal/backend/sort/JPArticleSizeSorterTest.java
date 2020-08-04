@@ -1,9 +1,9 @@
 package fsu.jportal.backend.sort;
 
-import fsu.jportal.backend.sort.JPSorter.Order;
 import org.junit.Test;
 import org.mycore.common.MCRTestCase;
 
+import fsu.jportal.backend.sort.JPSorter.Order;
 import static org.junit.Assert.assertTrue;
 
 public class JPArticleSizeSorterTest extends MCRTestCase {

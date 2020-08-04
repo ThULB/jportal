@@ -1,8 +1,7 @@
 package fsu.jportal.backend.marc;
 
-import fsu.jportal.backend.*;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.Pair;
+import java.util.List;
+import java.util.Map;
 
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.MarcFactory;
@@ -11,8 +10,15 @@ import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 
-import java.util.List;
-import java.util.Map;
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPInstitution;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPPerson;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.Pair;
 
 public abstract class Marc21Converter {
 

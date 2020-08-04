@@ -1,14 +1,15 @@
 package fsu.jportal.resolver;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRURIResolver.MCRXslIncludeHrefs;
-
-import javax.servlet.ServletContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * <p>

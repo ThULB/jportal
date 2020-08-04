@@ -1,12 +1,12 @@
 package fsu.jportal.backend.event;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.mycore.common.MCRTestCase;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

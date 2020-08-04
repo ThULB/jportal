@@ -1,7 +1,6 @@
 package fsu.jportal.domain.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by chi on 18.03.20

@@ -1,21 +1,21 @@
 package fsu.jportal.backend.marc;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Map;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPJournal;
-import fsu.jportal.backend.JPVolume;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.junit.Test;
 import org.marc4j.marc.Record;
 import org.mycore.common.MCRStoreTestCase;
 import org.mycore.datamodel.metadata.MCRObject;
+
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPVolume;
+import static org.junit.Assert.assertNotNull;
 
 public class Marc21ConverterTest extends MCRStoreTestCase {
 

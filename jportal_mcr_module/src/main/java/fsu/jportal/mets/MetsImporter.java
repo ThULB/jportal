@@ -1,8 +1,12 @@
 package fsu.jportal.mets;
 
-import fsu.jportal.backend.JPArticle;
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.util.MetsUtil;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Attribute;
@@ -19,12 +23,9 @@ import org.mycore.mets.model.struct.PhysicalDiv;
 import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.SmLink;
 
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.util.MetsUtil;
 
 /**
  * Base class for mets importing.

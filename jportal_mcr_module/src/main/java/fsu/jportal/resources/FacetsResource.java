@@ -1,8 +1,21 @@
 package fsu.jportal.resources;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import fsu.jportal.util.ResolverUtil;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.StringJoiner;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -13,23 +26,12 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.config.MCRConfiguration;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.util.ResolverUtil;
 
 /**
  * Created by Huu Chi Vu on 15.06.17.
@@ -47,12 +49,11 @@ public class FacetsResource {
     @Path("excluded")
     @Produces(MediaType.APPLICATION_JSON)
     public Response excluded() {
-        String[] classIDs = MCRConfiguration.instance().getString("JP.Exclude.Facet", "")
-                                            .split(",");
-        JsonArray jsonArray = new JsonArray(classIDs.length);
+        List<String> classIDs = JPConfig.getStrings("JP.Exclude.Facet");
+        JsonArray jsonArray = new JsonArray(classIDs.size());
 
-        for (int i = 0; i < classIDs.length; i++) {
-            jsonArray.add(classIDs[i]);
+        for (String classID : classIDs) {
+            jsonArray.add(classID);
         }
 
         return Response.ok(jsonArray.toString()).build();
@@ -190,13 +191,13 @@ public class FacetsResource {
                 labelsMap.add(id, labelJson);
             });
 
-            String[] classIDs = MCRConfiguration.instance()
-                                                .getString("JP.Exclude.Facet", "")
-                                                .split(",");
-            JsonArray excludedFacets = new JsonArray(classIDs.length);
+            List<String> classIDs = JPConfig.getStrings("JP.Exclude.Facet");
 
-            for (int i = 0; i < classIDs.length; i++) {
-                excludedFacets.add(classIDs[i]);
+            JsonArray excludedFacets = new JsonArray(classIDs.size());
+
+            for (String classID : classIDs) {
+                excludedFacets.add(classID);
+
             }
 
             JsonObject jsonObject = new JsonObject();

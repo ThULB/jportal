@@ -1,9 +1,5 @@
 package fsu.jportal.frontend.cli;
 
-import fsu.jportal.backend.JPDerivateComponent;
-import fsu.jportal.backend.MetadataManager;
-import static fsu.jportal.util.ImprintUtil.getJournalConf;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,7 +8,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.xml.transform.Source;
@@ -20,18 +15,11 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
-import fsu.jportal.backend.JPObjectConfiguration;
-import fsu.jportal.backend.sort.JPLevelSorting;
-import fsu.jportal.resolver.JournalFilesResolver;
-import fsu.jportal.util.JPLevelSortingUtil;
-import fsu.jportal.util.MetsUtil;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.params.ModifiableSolrParams;
 import org.hibernate.Session;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -46,7 +34,6 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRXSLTransformation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -56,9 +43,16 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-import org.mycore.mets.model.Mets;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.search.MCRSolrSearchUtils;
+
+import fsu.jportal.backend.JPObjectConfiguration;
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.backend.mcr.MetadataManager;
+import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.resolver.JournalFilesResolver;
+import static fsu.jportal.util.ImprintUtil.getJournalConf;
+import fsu.jportal.util.JPLevelSortingUtil;
 
 @MCRCommandGroup(name = "JP Migrating Commands")
 public class MigratingCMDs {
@@ -93,9 +87,9 @@ public class MigratingCMDs {
                 "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext",
                 Filters.element());
 
-        String mcrBaseDir = MCRConfiguration.instance().getString("MCR.basedir");
+        String mcrBaseDir = JPConfig.getStringOrThrow("MCR.basedir");
         String webappDir = mcrBaseDir + "/build/webapps";
-        String journalFileBase = MCRConfiguration.instance().getString("JournalFileFolder");
+        String journalFileBase = JPConfig.getStringOrThrow("JournalFileFolder");
 
         for (String journalID : journalIDs) {
             Document journalXML;
@@ -142,7 +136,7 @@ public class MigratingCMDs {
                 "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()",
                 Filters.text());
         //load navigation.xml
-        String mcrBaseDir = MCRConfiguration.instance().getString("MCR.basedir");
+        String mcrBaseDir = JPConfig.getStringOrThrow("MCR.basedir");
         String navigationDir = mcrBaseDir + "/build/webapps/config/navigation.xml";
         File navigationXMLFile = new File(navigationDir);
         SAXBuilder builder = new SAXBuilder();

@@ -1,20 +1,14 @@
 package fsu.jportal.mets;
 
-import static fsu.jportal.mets.ZvddMetsTools.mods;
-import static fsu.jportal.mets.ZvddMetsTools.modsIdentifier;
-import static fsu.jportal.mets.ZvddMetsTools.modsTitleInfo;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
-import org.mycore.mets.model.files.FileSec;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
@@ -28,6 +22,10 @@ import fsu.jportal.backend.JPContainer;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
 import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.mcr.JPConfig;
+import static fsu.jportal.mets.ZvddMetsTools.mods;
+import static fsu.jportal.mets.ZvddMetsTools.modsIdentifier;
+import static fsu.jportal.mets.ZvddMetsTools.modsTitleInfo;
 
 /**
  * Zvdd implementation of a mets generator using this
@@ -68,7 +66,7 @@ public class ZvddJournalMetsGenerator implements MCRMETSGenerator {
         // title
         mods.addContent(modsTitleInfo(journal.getTitle(), null));
         // recordInfo
-        String isil = MCRConfiguration.instance().getString("JP.Site.ISIL", null);
+        String isil = JPConfig.getString("JP.Site.ISIL", "");
         Element recordIdentifier = ZvddMetsTools
             .modsIdentifier("recordIdenitfier", null, journal.getId().toString(), isil);
         mods.addContent(mods("recordInfo").addContent(recordIdentifier));

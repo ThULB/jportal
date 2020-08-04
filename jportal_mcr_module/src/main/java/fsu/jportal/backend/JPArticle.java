@@ -1,12 +1,9 @@
 package fsu.jportal.backend;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.mycore.common.MCRClassTools;
-import org.mycore.common.MCRTextResolver;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;

@@ -1,17 +1,19 @@
 package fsu.jportal.handler;
 
-import fsu.jportal.backend.ACLTools;
+import java.nio.file.Paths;
+
+import javax.servlet.ServletContext;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.events.MCRStartupHandler;
 import org.mycore.user2.MCRUserCommands;
 import org.mycore.user2.MCRUserManager;
 
-import javax.servlet.ServletContext;
-import java.nio.file.Paths;
+import fsu.jportal.backend.ACLTools;
+import fsu.jportal.backend.mcr.JPConfig;
 
 /**
  * Created by chi on 11.11.15.
@@ -59,7 +61,7 @@ public abstract class MCRInitHandler implements MCRStartupHandler.AutoExecutable
 
     private void initSuperUser() {
         info("superuser ...");
-        String superuser = MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName", "administrator");
+        String superuser = JPConfig.getString("MCR.Users.Superuser.UserName", "administrator");
         if (!MCRUserManager.exists(superuser)) {
             MCRUserCommands.initSuperuser();
         }

@@ -15,7 +15,6 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.logging.log4j.LogManager;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
@@ -27,6 +26,7 @@ import com.google.gson.JsonPrimitive;
 
 import de.uni_jena.thulb.mcr.acl.MoveObjectAccess;
 import fsu.jportal.backend.MetaDataTools;
+import fsu.jportal.backend.mcr.JPConfig;
 
 @Path("moveObj")
 @MCRRestrictedAccess(MoveObjectAccess.class)
@@ -74,9 +74,9 @@ public class MoveObjResource {
     @Path("confJS")
     public Response confJS() {
         JsonObject confObj = new JsonObject();
-        String sort = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.sort");
-        String parentField = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.parentField");
-        List<String> parentTypes = MCRConfiguration.instance().getStrings("MCR.Module.Move.Obj.parentTypes");
+        String sort = JPConfig.getStringOrThrow("MCR.Module.Move.Obj.sort");
+        String parentField = JPConfig.getStringOrThrow("MCR.Module.Move.Obj.parentField");
+        List<String> parentTypes = JPConfig.getStrings("MCR.Module.Move.Obj.parentTypes");
         JsonArray parentTypeJson = new JsonArray();
         for (String parentType : parentTypes) {
             parentTypeJson.add(new JsonPrimitive(parentType));
@@ -86,7 +86,7 @@ public class MoveObjResource {
         confObj.addProperty("sort", sort);
         confObj.addProperty("parentField", parentField);
         confObj.add("parentTypes", parentTypeJson);
-        String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url", "");
+        String url = JPConfig.getString("MCR.Module.Move.Obj.Url", "");
         if (!url.equals("")) {
             confObj.addProperty("url", baseURL + url.substring(1));
         }

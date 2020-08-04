@@ -1,11 +1,12 @@
 package org.mycore.datamodel.metadata;
 
-import com.google.gson.JsonObject;
 import org.jdom2.Attribute;
 import org.jdom2.Content;
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRXMLHelper;
+
+import com.google.gson.JsonObject;
 
 /**
  * Simpler version of {@link MCRMetaXML} with support of a single xml element instead of multiple content.

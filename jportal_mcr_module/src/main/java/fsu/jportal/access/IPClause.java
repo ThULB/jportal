@@ -3,12 +3,13 @@ package fsu.jportal.access;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import fsu.jportal.parser.IPAddress;
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Element;
 import org.mycore.access.mcrimpl.MCRAccessData;
 import org.mycore.access.mcrimpl.MCRIPClause;
 import org.mycore.parsers.bool.MCRIPCondition;
+
+import fsu.jportal.parser.IPAddress;
 
 public class IPClause implements MCRIPCondition {
 

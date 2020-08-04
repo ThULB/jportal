@@ -5,12 +5,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPObjectType;
-import fsu.jportal.util.JPComponentUtil;
 import org.jdom2.Element;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * Table of content result POJO.

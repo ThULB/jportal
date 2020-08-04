@@ -11,13 +11,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import fsu.archiv.mycore.sru.GBVKeywordStore;
-import fsu.archiv.mycore.sru.SRUQueryParser;
-import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
-import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
-import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
-import fsu.jportal.backend.pica.JPInstitutionProducer;
-import fsu.jportal.backend.pica.JPPersonProducer;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -31,12 +24,20 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.sru.SRUConnector;
 import org.mycore.sru.SRUConnectorFactory;
+
+import fsu.archiv.mycore.sru.GBVKeywordStore;
+import fsu.archiv.mycore.sru.SRUQueryParser;
+import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
+import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.backend.pica.JPInstitutionProducer;
+import fsu.jportal.backend.pica.JPPersonProducer;
 
 public class GndUtil {
 
@@ -163,8 +164,7 @@ public class GndUtil {
     }
 
     private static SRUConnector getSRUConnection(String query) {
-        String sruConnectionURL = MCRConfiguration.instance()
-                .getString("JP.SRU.Connection.url", "https://sru.k10plus.de/k10plus");
+        String sruConnectionURL = JPConfig.getString("JP.SRU.Connection.url", "https://sru.k10plus.de/k10plus");
         try {
             return SRUConnectorFactory.getSRUConnector(sruConnectionURL, query);
         } catch (MalformedURLException e) {

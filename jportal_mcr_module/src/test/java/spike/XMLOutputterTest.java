@@ -1,14 +1,15 @@
 package spike;
 
-import junit.framework.TestCase;
+import java.io.File;
+import java.io.FileOutputStream;
+
 import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Ignore;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import junit.framework.TestCase;
 
 @Ignore
 public class XMLOutputterTest extends TestCase {

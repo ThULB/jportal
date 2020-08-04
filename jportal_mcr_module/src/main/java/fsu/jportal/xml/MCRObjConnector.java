@@ -1,16 +1,21 @@
 package fsu.jportal.xml;
 
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.MetadataManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.*;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
-import java.util.ArrayList;
-import java.util.List;
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.mcr.MetadataManager;
 
 /**
  * TODO: move some of this code to {@link JPComponent} API.

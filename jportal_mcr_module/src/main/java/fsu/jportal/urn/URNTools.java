@@ -23,7 +23,6 @@ import org.mycore.access.MCRAccessException;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRFileMetadata;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -44,7 +43,8 @@ import org.mycore.pi.urn.rest.MCRDerivateURNUtils;
 import org.mycore.pi.urn.rest.MCREpicurLite;
 import org.w3c.dom.NodeList;
 
-import fsu.jportal.backend.MetadataManager;
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.backend.mcr.MetadataManager;
 
 public class URNTools {
     private static Logger LOGGER = LogManager.getLogger();
@@ -168,8 +168,8 @@ public class URNTools {
     }
 
     public static Optional<UsernamePasswordCredentials> getUsernamePassword() {
-        String username = MCRConfiguration.instance().getString("MCR.URN.DNB.Credentials.Login", null);
-        String password = MCRConfiguration.instance().getString("MCR.URN.DNB.Credentials.Password", null);
+        String username = JPConfig.getString("MCR.URN.DNB.Credentials.Login", null);
+        String password = JPConfig.getString("MCR.URN.DNB.Credentials.Password", null);
 
         if (username == null || password == null || username.length() == 0 || password.length() == 0) {
             LOGGER.warn("Please set MCR.URN.DNB.Credentials.Login and MCR.URN.DNB.Credentials.Password");

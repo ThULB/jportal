@@ -1,11 +1,30 @@
 package fsu.jportal.mets;
 
-import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
-import fsu.jportal.mets.LLZMetsUtils.FileHrefStrategy;
-import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdom2.*;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
@@ -18,19 +37,21 @@ import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.FLocat;
 import org.mycore.mets.model.files.File;
 import org.mycore.mets.model.files.FileGrp;
-import org.mycore.mets.model.struct.*;
+import org.mycore.mets.model.struct.Area;
+import org.mycore.mets.model.struct.Fptr;
+import org.mycore.mets.model.struct.LOCTYPE;
+import org.mycore.mets.model.struct.LogicalDiv;
+import org.mycore.mets.model.struct.LogicalStructMap;
+import org.mycore.mets.model.struct.PhysicalDiv;
+import org.mycore.mets.model.struct.PhysicalStructMap;
+import org.mycore.mets.model.struct.PhysicalSubDiv;
+import org.mycore.mets.model.struct.Seq;
+import org.mycore.mets.model.struct.StructLink;
 import org.xml.sax.SAXException;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import fsu.jportal.mets.LLZMetsUtils.AltoHrefStrategy;
+import fsu.jportal.mets.LLZMetsUtils.FileHrefStrategy;
+import fsu.jportal.mets.LLZMetsUtils.TiffHrefStrategy;
 
 /**
  * Converts an ENMAP Profile mets.xml to a MYCORE Profile mets.xml.

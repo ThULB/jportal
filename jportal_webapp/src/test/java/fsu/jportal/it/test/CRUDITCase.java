@@ -1,18 +1,20 @@
 package fsu.jportal.it.test;
 
-import static org.junit.Assert.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import static org.hamcrest.CoreMatchers.containsString;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fsu.jportal.it.BaseIntegrationTest;
 import fsu.jportal.it.TestUtils;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class CRUDITCase extends BaseIntegrationTest {
 

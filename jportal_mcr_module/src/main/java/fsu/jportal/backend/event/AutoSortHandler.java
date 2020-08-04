@@ -1,23 +1,24 @@
 package fsu.jportal.backend.event;
 
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.sort.JPLevelSorting;
-import fsu.jportal.backend.sort.JPLevelSorting.Level;
-import fsu.jportal.backend.sort.JPSorter;
-import fsu.jportal.backend.sort.JPSorter.Order;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.JPLevelSortingUtil;
+import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.common.MCRMarkManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-import java.util.Optional;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.backend.sort.JPLevelSorting;
+import fsu.jportal.backend.sort.JPLevelSorting.Level;
+import fsu.jportal.backend.sort.JPSorter;
+import fsu.jportal.backend.sort.JPSorter.Order;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPLevelSortingUtil;
 
 /**
  * Each journal or volume can have a {@link JPSorter} which enables
@@ -113,12 +114,13 @@ public class AutoSortHandler extends MCREventHandlerBase {
      */
     private void addDefaultSorter(JPContainer container) {
         try {
-            MCRConfiguration config = MCRConfiguration.instance();
-            String defaultSorterClassString = config.getString("JP.Metadata.AutoSort.defaultClass", null);
+            String defaultSorterClassString = JPConfig
+                    .getString("JP.Metadata.AutoSort.defaultClass", null);
             if (defaultSorterClassString == null) {
                 return;
             }
-            String defaultSorterOrder = config.getString("JP.Metadata.AutoSort.defaultOrder", Order.ASCENDING.name());
+            String defaultSorterOrder = JPConfig
+                    .getString("JP.Metadata.AutoSort.defaultOrder", Order.ASCENDING.name());
             Class<? extends JPSorter> sorterClass = Class.forName(defaultSorterClassString).asSubclass(JPSorter.class);
             Order order = Order.valueOf(defaultSorterOrder);
             container.setSortBy(sorterClass, order);

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.xml.transform.Source;
@@ -21,7 +20,6 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -30,6 +28,7 @@ import org.mycore.frontend.MCRFrontendUtil;
 import fsu.jportal.backend.JPInstitution;
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.mcr.JPConfig;
 import fsu.jportal.util.JPComponentUtil;
 
 /**
@@ -194,7 +193,7 @@ public class LogoResolver implements URIResolver {
             Element logoTag = createUrmelTag("logo");
             //
             String basePart = MCRFrontendUtil.getBaseURL();
-            String proxyLogoPart = MCRConfiguration.instance().getString("JP.Site.Logo.Proxy.url");
+            String proxyLogoPart = JPConfig.getStringOrThrow("JP.Site.Logo.Proxy.url");
             String logoURL = basePart + (url.startsWith(proxyLogoPart) ? "" : proxyLogoPart) + url;
             logoTag.setAttribute(createXlinkAttr("href", logoURL));
             logoTag.setAttribute(createXlinkAttr("type", "resource"));
@@ -262,7 +261,7 @@ public class LogoResolver implements URIResolver {
             entity.setAttribute("label", logoEntity.getName() != null ? logoEntity.getName() : "");
             entity.setAttribute("url", logoEntity.getSiteURL() != null ? logoEntity.getSiteURL() : "");
             String basePart = MCRFrontendUtil.getBaseURL();
-            String proxyLogoPart = MCRConfiguration.instance().getString("JP.Site.Logo.Proxy.url");
+            String proxyLogoPart = JPConfig.getStringOrThrow("JP.Site.Logo.Proxy.url");
             String imagePart = logoEntity.getLogo();
             String logoURL = basePart + (imagePart.startsWith(proxyLogoPart) ? "" : proxyLogoPart) + imagePart;
             entity.setAttribute("logoURL", logoURL);
@@ -271,13 +270,12 @@ public class LogoResolver implements URIResolver {
 
         protected LogoEntity getDefaultLogo(List<LogoEntity> logoEntities) {
             LogoEntity defaultLogoEntity = new LogoEntity();
-            MCRConfiguration conf = MCRConfiguration.instance();
-            defaultLogoEntity.setName(conf.getString("JP.Site.Owner.label"));
+            defaultLogoEntity.setName(JPConfig.getStringOrThrow("JP.Site.Owner.label"));
             defaultLogoEntity.setRole("owner");
-            defaultLogoEntity.setSiteURL(conf.getString("JP.Site.Footer.Logo.url"));
+            defaultLogoEntity.setSiteURL(JPConfig.getStringOrThrow("JP.Site.Footer.Logo.url"));
             defaultLogoEntity.setLogo(
-                logoEntities.isEmpty() ? conf.getString("JP.Site.Footer.Logo.default")
-                    : conf.getString("JP.Site.Footer.Logo.small"));
+                logoEntities.isEmpty() ? JPConfig.getStringOrThrow("JP.Site.Footer.Logo.default")
+                    : JPConfig.getStringOrThrow("JP.Site.Footer.Logo.small"));
             return defaultLogoEntity;
         }
 

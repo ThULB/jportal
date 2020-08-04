@@ -2,8 +2,9 @@ package fsu.jportal.backend.sort;
 
 import java.util.Comparator;
 
-import fsu.jportal.backend.JPPeriodicalComponent;
 import org.mycore.datamodel.metadata.JPMetaDate;
+
+import fsu.jportal.backend.JPPeriodicalComponent;
 
 /**
  * Orders the children by their published date.

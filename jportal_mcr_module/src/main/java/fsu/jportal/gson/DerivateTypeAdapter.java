@@ -9,13 +9,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import fsu.jportal.urn.URNTools;
 import org.apache.logging.log4j.LogManager;
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
@@ -23,6 +16,15 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPathUtils;
 import org.mycore.pi.MCRPIRegistrationInfo;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+
+import fsu.jportal.urn.URNTools;
 
 public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWrapper> {
 

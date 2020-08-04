@@ -1,28 +1,48 @@
 package fsu.jportal.xml.dfg.oai;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import fsu.jportal.xml.JPMCRObjXMLElementName;
-import fsu.jportal.xml.stream.ParsedMCRObj;
-import fsu.jportal.xml.stream.ParsedXML.ElementData;
-import fsu.jportal.xml.stream.ParserUtils;
-import org.apache.logging.log4j.LogManager;
-
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static fsu.jportal.xml.JPMCRObjXMLElementName.*;
-import static fsu.jportal.xml.stream.XMLStreamReaderUtils.*;
-import static fsu.jportal.xml.stream.XMLStreamWriterUtils.*;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+
+import org.apache.logging.log4j.LogManager;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
+import fsu.jportal.xml.JPMCRObjXMLElementName;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.date;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.identi;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.keyword;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.language;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.maintitle;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.note;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.participant;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.size;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.subtitle;
+import fsu.jportal.xml.stream.ParsedMCRObj;
+import fsu.jportal.xml.stream.ParsedXML.ElementData;
+import fsu.jportal.xml.stream.ParserUtils;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.hasType;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.isInherited;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.matchElement;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.parse;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.attr;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.element;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.fragment;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.text;
 
 /**
  * Created by chi on 09.10.16.

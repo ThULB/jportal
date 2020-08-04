@@ -1,8 +1,5 @@
 package fsu.jportal.xml;
 
-import fsu.jportal.backend.MetadataManager;
-import static org.apache.solr.common.params.CommonParams.*;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,18 +25,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import fsu.jportal.backend.JPComponent;
-import fsu.jportal.backend.JPContainer;
-import fsu.jportal.backend.JPDerivateComponent;
-import fsu.jportal.backend.JPJournal;
-import fsu.jportal.backend.JPLegalEntity;
-import fsu.jportal.backend.JPObjectType;
-import fsu.jportal.backend.JPPeriodicalComponent;
-import fsu.jportal.backend.JPVolume;
-import fsu.jportal.util.JPComponentUtil;
-import fsu.jportal.util.JPDateUtil;
-import fsu.jportal.util.MetsUtil;
-import fsu.jportal.util.ResolverUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -49,16 +34,13 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.jdom2.input.DOMBuilder;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.JPMetaDate;
 import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectUtils;
@@ -70,6 +52,25 @@ import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import fsu.jportal.backend.JPComponent;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPDerivateComponent;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPLegalEntity;
+import fsu.jportal.backend.JPObjectType;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.backend.mcr.MetadataManager;
+import fsu.jportal.util.JPComponentUtil;
+import fsu.jportal.util.JPDateUtil;
+import fsu.jportal.util.MetsUtil;
+import fsu.jportal.util.ResolverUtil;
+import static org.apache.solr.common.params.CommonParams.Q;
+import static org.apache.solr.common.params.CommonParams.ROWS;
+import static org.apache.solr.common.params.CommonParams.ROWS_DEFAULT;
+import static org.apache.solr.common.params.CommonParams.START;
+import static org.apache.solr.common.params.CommonParams.START_DEFAULT;
 
 public class JPXMLFunctions {
 
@@ -96,7 +97,7 @@ public class JPXMLFunctions {
     public static Document getLanguages() {
         Document document = BUILDER_LOCAL.get().newDocument();
         try {
-            String languagesString = MCRConfiguration.instance().getString("MCR.Metadata.Languages");
+            String languagesString = JPConfig.getStringOrThrow("MCR.Metadata.Languages");
             String[] languagesArray = languagesString.split(",");
             LOGGER.debug(languagesArray);
             Element languages = document.createElement("languages");
@@ -490,7 +491,7 @@ public class JPXMLFunctions {
      */
     public static String getLogoURL(String image) {
         String baseURL = MCRFrontendUtil.getBaseURL();
-        String logoPath = MCRConfiguration.instance().getString("JP.Site.Logo.Proxy.url");
+        String logoPath = JPConfig.getStringOrThrow("JP.Site.Logo.Proxy.url");
         return baseURL + logoPath + image;
     }
 
@@ -640,8 +641,10 @@ public class JPXMLFunctions {
      */
     public static boolean isExcludedFacet(String classID) {
         try {
-            String[] classIDs = MCRConfiguration.instance().getString("JP.Exclude.Facet", "").split(",");
-            return Stream.of(classIDs).anyMatch(classID::contains);
+            List<String> classIDs = JPConfig.getStrings("JP.Exclude.Facet");
+
+            return classIDs.stream()
+                    .anyMatch(classID::contains);
         } catch (Throwable t) {
             LOGGER.error("Unable to if facet is excluded {}", classID, t);
             return false;
@@ -772,20 +775,16 @@ public class JPXMLFunctions {
             return licence.get();
         }
 
-        String role = MCRConfiguration
-                .instance()
+        String role = JPConfig
                 .getString("JP.Licence.Default.When.Role", "owner");
 
-        String objectIDInRole = MCRConfiguration
-                .instance()
+        String objectIDInRole = JPConfig
                 .getString("JP.Licence.Default.When.ID", "jportal_jpinst_00000001");
 
-        String defaultLicence = MCRConfiguration
-                .instance()
+        String defaultLicence = JPConfig
                 .getString("JP.Licence.Default", "cc0");
 
-        String altLicence = MCRConfiguration
-                .instance()
+        String altLicence = JPConfig
                 .getString("JP.Licence.Alternate", "cc-by-nc-sa");
 
         boolean objIsInRole = jpJournal
@@ -799,7 +798,7 @@ public class JPXMLFunctions {
             return altLicence;
         }
 
-        String cc0Exclude = MCRConfiguration.instance()
+        String cc0Exclude = JPConfig
                                         .getString("JP.Licence.Default.Exclude", "");
         SolrClient solrClient = MCRSolrClientFactory.getMainSolrClient();
         ModifiableSolrParams params = new ModifiableSolrParams();

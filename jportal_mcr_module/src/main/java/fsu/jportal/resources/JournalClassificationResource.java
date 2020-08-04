@@ -1,8 +1,16 @@
 package fsu.jportal.resources;
 
 
-import com.google.gson.Gson;
-import fsu.jportal.xml.MCRObjConnector;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import org.mycore.common.MCRJSONManager;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -11,14 +19,9 @@ import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.frontend.classeditor.json.MCRJSONCategory;
 import org.mycore.frontend.classeditor.resources.MCRClassificationEditorResource;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.google.gson.Gson;
+
+import fsu.jportal.xml.MCRObjConnector;
 
 @Path("classifications/jp/{id}")
 public class JournalClassificationResource extends MCRClassificationEditorResource {

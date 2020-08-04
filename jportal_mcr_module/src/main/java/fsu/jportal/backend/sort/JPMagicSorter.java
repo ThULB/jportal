@@ -1,13 +1,18 @@
 package fsu.jportal.backend.sort;
 
-import fsu.jportal.backend.*;
-import fsu.jportal.util.JPComponentUtil;
-import org.mycore.common.MCRException;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
-
 import java.util.Comparator;
 import java.util.List;
+
+import org.mycore.common.MCRException;
+import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.JPArticle;
+import fsu.jportal.backend.JPContainer;
+import fsu.jportal.backend.JPJournal;
+import fsu.jportal.backend.JPPeriodicalComponent;
+import fsu.jportal.backend.JPVolume;
+import fsu.jportal.backend.mcr.MetadataManager;
+import fsu.jportal.util.JPComponentUtil;
 
 /**
  * This is the default {@link JPSorter} implementation for the zs.thulb.uni-jena.de

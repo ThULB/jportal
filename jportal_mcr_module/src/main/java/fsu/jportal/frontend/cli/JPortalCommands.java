@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import fsu.jportal.backend.DerivateTools;
-import fsu.jportal.util.DerivateLinkUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -39,6 +37,9 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.xml.sax.SAXException;
+
+import fsu.jportal.backend.DerivateTools;
+import fsu.jportal.util.DerivateLinkUtil;
 
 @MCRCommandGroup(name = "JP Commands")
 public class JPortalCommands {

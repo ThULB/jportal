@@ -1,6 +1,5 @@
 package fsu.jportal.backend;
 
-import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,10 +9,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import fsu.jportal.backend.event.AutoSortHandler;
-import fsu.jportal.backend.sort.JPSorter;
-import fsu.jportal.backend.sort.JPSorter.Order;
-import fsu.jportal.util.Pair;
 import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
@@ -21,9 +16,14 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaElementXML;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.jportal.backend.event.AutoSortHandler;
+import fsu.jportal.backend.mcr.MetadataManager;
+import fsu.jportal.backend.sort.JPSorter;
+import fsu.jportal.backend.sort.JPSorter.Order;
+import fsu.jportal.util.Pair;
 
 /**
  * Component that can contain other components as children.

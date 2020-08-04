@@ -1,23 +1,58 @@
 package fsu.jportal.xml.dfg.oai;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static fsu.jportal.xml.JPMCRObjXMLElementName.child;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.component;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.date;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.derivateLink;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.derobject;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.identi;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.journalType;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.keyword;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.language;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.maintitle;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.mycoreobject;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.note;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.participant;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.servdate;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.size;
+import static fsu.jportal.xml.JPMCRObjXMLElementName.subtitle;
+import static fsu.jportal.xml.dfg.oai.DmdSec.dmdSecXMLFragment;
 import fsu.jportal.xml.stream.DerivateFileInfo;
 import fsu.jportal.xml.stream.ParsedMCRObj;
 import fsu.jportal.xml.stream.ParsedXML.ElementData;
 import fsu.jportal.xml.stream.ParserUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static fsu.jportal.xml.JPMCRObjXMLElementName.*;
-import static fsu.jportal.xml.dfg.oai.DmdSec.dmdSecXMLFragment;
-import static fsu.jportal.xml.stream.XMLStreamReaderUtils.*;
-import static fsu.jportal.xml.stream.XMLStreamWriterUtils.*;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.at;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.hasType;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.isInherited;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.matchElement;
+import static fsu.jportal.xml.stream.XMLStreamReaderUtils.parse;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.attr;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.defaultNamespace;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.document;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.element;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.namespace;
+import static fsu.jportal.xml.stream.XMLStreamWriterUtils.text;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 

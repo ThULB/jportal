@@ -2,8 +2,6 @@ package fsu.jportal.backend.pi.urn;
 
 import java.util.concurrent.ExecutionException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobAction;
 

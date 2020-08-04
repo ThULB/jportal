@@ -1,5 +1,8 @@
 package fsu.jportal.backend.event;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -13,9 +16,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.index.MCRSolrIndexer;
 import org.mycore.solr.search.MCRSolrSearchUtils;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static fsu.jportal.util.ImprintUtil.getImprintID;
 

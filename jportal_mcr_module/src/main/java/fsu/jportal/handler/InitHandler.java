@@ -1,6 +1,24 @@
 package fsu.jportal.handler;
 
-import fsu.jportal.util.JarResource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import javax.imageio.spi.IIORegistry;
+import javax.imageio.spi.ImageInputStreamSpi;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -14,7 +32,6 @@ import org.jdom2.Document;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.jpa.access.MCRACCESSRULE;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRStreamContent;
 import org.mycore.common.xml.MCRXMLParserFactory;
 import org.mycore.datamodel.classifications2.MCRCategory;
@@ -27,20 +44,8 @@ import org.mycore.solr.MCRSolrCore;
 import org.mycore.solr.classification.MCRSolrClassificationUtil;
 import org.xml.sax.SAXParseException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.concurrent.*;
-
-import javax.imageio.spi.IIORegistry;
-import javax.imageio.spi.ImageInputStreamSpi;
-import javax.persistence.criteria.CriteriaQuery;
+import fsu.jportal.backend.mcr.JPConfig;
+import fsu.jportal.util.JarResource;
 
 public class InitHandler extends MCRInitHandler {
 
@@ -110,7 +115,7 @@ public class InitHandler extends MCRInitHandler {
             cliClassName.insert(0, "%MCR.CLI.Classes.External%");
             HashMap<String, String> props = new HashMap<>();
             props.put("MCR.CLI.Classes.External", cliClassName.toString());
-            MCRConfiguration.instance().initialize(props, false);
+            JPConfig.initialize(props, false);
             //            info("found CLI classes " + cliClassName);
         }
 

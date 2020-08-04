@@ -42,7 +42,7 @@ import com.google.gson.JsonObject;
 
 import fsu.jportal.backend.JPJournal;
 import fsu.jportal.backend.JPObjectType;
-import fsu.jportal.backend.MetadataManager;
+import fsu.jportal.backend.mcr.MetadataManager;
 import fsu.jportal.util.JPComponentUtil;
 import static org.mycore.access.MCRAccessManager.PERMISSION_DELETE;
 import static org.mycore.access.MCRAccessManager.PERMISSION_READ;

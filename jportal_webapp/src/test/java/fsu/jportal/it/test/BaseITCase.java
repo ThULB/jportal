@@ -1,8 +1,5 @@
 package fsu.jportal.it.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -12,6 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fsu.jportal.it.BaseIntegrationTest;
 import fsu.jportal.it.TestUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BaseITCase extends BaseIntegrationTest {
 

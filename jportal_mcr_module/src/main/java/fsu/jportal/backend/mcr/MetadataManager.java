@@ -1,4 +1,4 @@
-package fsu.jportal.backend;
+package fsu.jportal.backend.mcr;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,7 +15,6 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -27,6 +26,8 @@ import org.mycore.datamodel.metadata.MCRObjectUtils;
 import org.mycore.mets.model.Mets;
 import org.xml.sax.SAXParseException;
 
+import fsu.jportal.backend.JPDerivateComponent;
+import fsu.jportal.backend.JPJournal;
 import fsu.jportal.util.MetsUtil;
 import fsu.thulb.connections.HttpsClient;
 
@@ -57,10 +58,7 @@ public class MetadataManager {
     }
 
     private static <T> T getRemotely(MCRObjectID mcrId, MCRObjFromURI<T> supplier) {
-        String urlConf = MCRConfiguration.instance().getString(REMOTE_XML);
-        if(urlConf == null || "".equals(urlConf)){
-            return throwRuntimeException(REMOTE_XML);
-        }
+        String urlConf = JPConfig.getStringOrThrow(REMOTE_XML);
 
         String urlStr = String.format(urlConf, mcrId.toString());
         try {
@@ -148,10 +146,8 @@ public class MetadataManager {
         }
 
         String derivateId = derivate.getObject().getId().toString();
-        String urlConf = MCRConfiguration.instance().getString(REMOTE_METS);
-        if(urlConf == null || "".equals(urlConf)){
-            throwRuntimeException(REMOTE_METS);
-        }
+        String urlConf = JPConfig.getStringOrThrow(REMOTE_METS);
+
         String urlStr = String.format(urlConf, derivateId);
         CloseableHttpResponse head = HttpsClient
                 .head(urlStr);
@@ -165,10 +161,8 @@ public class MetadataManager {
             return MetsUtil.getMets(derivateId);
         }
 
-        String urlConf = MCRConfiguration.instance().getString(REMOTE_METS);
-        if(urlConf == null || "".equals(urlConf)){
-            throwRuntimeException(REMOTE_METS);
-        }
+        String urlConf = JPConfig.getStringOrThrow(REMOTE_METS);
+
         String urlStr = String.format(urlConf, derivateId);
 
         URL url = new URL(urlStr);

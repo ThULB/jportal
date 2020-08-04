@@ -1,13 +1,13 @@
 package fsu.jportal.backend.conf;
 
-import org.mycore.common.config.MCRConfiguration;
-
 import java.nio.file.Path;
 import java.util.Optional;
 
+import fsu.jportal.backend.mcr.JPConfig;
+
 public class JPObjectConfigurationPaths {
     public static Optional<Path> getJournalFilesFolder(){
-        String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
+        String journalFileFolderPath = JPConfig.getStringOrThrow("JournalFileFolder");
         return Optional.ofNullable(journalFileFolderPath)
                 .map(Path::of);
     }

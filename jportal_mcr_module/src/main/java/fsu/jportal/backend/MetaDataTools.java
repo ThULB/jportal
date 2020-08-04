@@ -1,8 +1,14 @@
 package fsu.jportal.backend;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.InternalServerErrorException;
+
 import org.apache.logging.log4j.LogManager;
 import org.jdom2.Document;
-import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -13,13 +19,6 @@ import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.InternalServerErrorException;
 
 public class MetaDataTools {
     /**

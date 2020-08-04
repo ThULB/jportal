@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
-import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
 import org.apache.logging.log4j.LogManager;
 
+import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
 import fsu.jportal.backend.gnd.GNDLocation;
 import fsu.jportal.backend.gnd.GNDLocationService;
 import fsu.jportal.backend.gnd.GNDLocationServiceException;
