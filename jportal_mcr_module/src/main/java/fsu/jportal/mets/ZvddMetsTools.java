@@ -254,8 +254,10 @@ public abstract class ZvddMetsTools {
      */
     public static PhysicalStructMap createPhysicalStructMap(List<MCRMETSHierarchyGenerator.FileRef> files,
         List<FileGrp> groups, Mets oldMets) {
+        String oldPhysicalDivId = oldMets.getPhysicalStructMap().getDivContainer().getId();
         final PhysicalStructMap struct = new PhysicalStructMap();
         final PhysicalDiv physicalDiv = new PhysicalDiv();
+        physicalDiv.setId(oldPhysicalDivId);
         struct.setDivContainer(physicalDiv);
 
         // add file refs
@@ -422,8 +424,8 @@ public abstract class ZvddMetsTools {
         journal.getIdenti("zdb-id")
             .map(zdbId -> modsIdentifier("identifier", "zdb", zdbId))
             .ifPresent(relatedItem::addContent);
-        Element recordIdentifier = modsIdentifier("recordIdentifier", null, journal.getId().toString(), isil);
-        relatedItem.addContent(mods("recordInfo").addContent(recordIdentifier));
+        Element relatedRecordInfo = getModsRedordInfo(journal.getId().toString(), isil);
+        relatedItem.addContent(relatedRecordInfo);
         mods.addContent(relatedItem);
         // mods:part
         Integer order = ZvddMetsTools.calculateOrder(volume);
@@ -434,7 +436,14 @@ public abstract class ZvddMetsTools {
         mods.addContent(location);
         Element part = getModsPart(number, type, number);
         mods.addContent(part);
+        Element redordInfo = getModsRedordInfo(volume.getId().toString(), isil);
+        mods.addContent(redordInfo);
         return mods;
+    }
+
+    private static Element getModsRedordInfo(String id, String isil) {
+        Element recordIdentifier = modsIdentifier("recordIdentifier", null, id, isil);
+        return mods("recordInfo").addContent(recordIdentifier);
     }
 
     private static Element getLocation(String isil) {
