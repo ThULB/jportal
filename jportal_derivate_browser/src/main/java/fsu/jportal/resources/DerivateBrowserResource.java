@@ -286,7 +286,7 @@ public class DerivateBrowserResource {
         // List<String> fileTypes = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
         // if (fileTypes.contains(type)) {
         if (overwrite) {
-            MCRPath mcrFilePath = MCRPath.getPath(uploadHandler.getDocumentID(), path + "/" + filename);
+            MCRPath mcrFilePath = MCRPath.getPath(uploadHandler.getDerivateID(), path + "/" + filename);
             if (DerivateTools.delete(mcrFilePath) != 1) {
                 throw new WebApplicationException(
                     "Unable to delete/overwrite " + filePath + " while uploading " + filename);
