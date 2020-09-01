@@ -14,6 +14,14 @@ public class RenameMultiple {
     private String pattern;
     private ArrayList<Response> responses;
 
+    public ArrayList<Response> getResponses() {
+        if(responses == null){
+            responses = new ArrayList<>();
+        }
+
+        return responses;
+    }
+
     public String getDerivId() {
         return derivId;
     }
@@ -39,14 +47,11 @@ public class RenameMultiple {
     }
 
     public void add(Response resp){
-        this.responses.add(resp);
+        getResponses().add(resp);
     }
 
     public Response[] getResponseList(){
-        if(responses == null){
-            responses = new ArrayList<>();
-        }
-        return responses.toArray(new Response[responses.size()]);
+        return getResponses().toArray(new Response[responses.size()]);
     }
 
     public String getFileName() {
