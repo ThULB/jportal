@@ -253,7 +253,7 @@ public class DerivateTools {
                             String newFilename = matcher.replaceAll(newName);
                             mvSingleFile(MCRPath.toMCRPath(f), MCRPath.toMCRPath(f.resolveSibling(newFilename)));
 
-                            if (MCRPath.toMCRPath(f).getOwnerRelativePath().equals(mainDoc)) {
+                            if (f.getFileName().toString().equals(mainDoc)) {
                                 String path = f.toString().substring(0, f.toString().lastIndexOf("/") + 1)
                                         + newFilename;
                                 DerivateTools.setAsMain(f.toString().substring(0, f.toString().lastIndexOf(":")),
